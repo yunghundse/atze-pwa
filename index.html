@@ -383,9 +383,14 @@ select.ri{appearance:none;-webkit-appearance:none}
   <div class="ob-step active" id="ob1">
     <div class="rprog"><div class="rp done"></div><div class="rp"></div><div class="rp"></div><div class="rp"></div></div>
     <h2>Über dich</h2>
-    <div class="rsub">Name und Alter für dein Profil.</div>
+    <div class="rsub">Name und Geburtsdatum für dein Profil.</div>
     <input class="ri" id="obName" type="text" placeholder="Vorname" maxlength="20" oninput="chkOb()">
-    <input class="ri" id="obAge" type="number" placeholder="Alter (18+)" min="18" max="99" oninput="chkOb()">
+    <div class="pe-section">Geburtsdatum</div>
+    <div style="display:flex;gap:8px">
+      <select class="ri" id="obBDay" onchange="chkOb()"><option value="">Tag</option></select>
+      <select class="ri" id="obBMonth" onchange="chkOb()"><option value="">Monat</option></select>
+      <select class="ri" id="obBYear" onchange="chkOb()"><option value="">Jahr</option></select>
+    </div>
     <input class="ri" id="obInsta" type="text" placeholder="@instagram (optional)">
     <input class="ri" id="obTiktok" type="text" placeholder="@tiktok (optional)">
     <button class="rnext" id="obNext1" disabled onclick="obStep(2)">Weiter</button>
@@ -393,14 +398,16 @@ select.ri{appearance:none;-webkit-appearance:none}
   <div class="ob-step" id="ob2">
     <button class="ob-back" onclick="obStep(1)">←</button>
     <div class="rprog"><div class="rp done"></div><div class="rp done"></div><div class="rp"></div><div class="rp"></div></div>
-    <h2>Was suchst du?</h2>
-    <div class="rsub">Damit wir dir die richtigen Leute zeigen.</div>
+    <h2>Wer bist du?</h2>
+    <div class="rsub">Erzähl den anderen etwas über dich.</div>
     <div class="pe-section">Ich bin</div>
     <div class="chip-row" id="obGender"></div>
-    <div class="pe-section">Ich suche</div>
-    <div class="chip-row" id="obSeek"></div>
     <div class="pe-section">Beziehungsstatus</div>
     <div class="chip-row" id="obStatus"></div>
+    <div class="pe-section">Was treibt dich hierher?</div>
+    <div class="chip-row" id="obSeek"></div>
+    <div class="pe-section">Über mich</div>
+    <textarea class="ri" id="obBio" placeholder="Party-Animal, Sangria-Liebhaber, immer gut drauf... Erzähl was über dich!" rows="3" style="resize:none;font-family:inherit"></textarea>
     <button class="rnext" onclick="obStep(3)">Weiter</button>
   </div>
   <div class="ob-step" id="ob3">
@@ -408,6 +415,10 @@ select.ri{appearance:none;-webkit-appearance:none}
     <div class="rprog"><div class="rp done"></div><div class="rp done"></div><div class="rp done"></div><div class="rp"></div></div>
     <h2>Dein Verein</h2>
     <div class="rsub">Zeig deine Farben auf deinem Profil.</div>
+    <div style="margin-bottom:12px">
+      <input class="ri" id="obCustomClub" type="text" placeholder="✏️ Eigenen Verein eintragen..." maxlength="30" oninput="pickCustomClub(this.value)">
+    </div>
+    <div class="pe-section">Oder wähle aus</div>
     <div class="league-tabs" id="leagueTabs"></div>
     <div class="club-grid" id="clubGrid"></div>
     <button class="rnext" onclick="obStep(4)">Weiter</button>
@@ -495,7 +506,7 @@ var GAMES = [
   {name:'Ich hab noch nie...',icon:'🙈',desc:'Wer trinkt? Wer lügt?',players:'3-12',cards:['...einen Sangria-Eimer alleine getrunken','...im Bierkönig auf der Bühne getanzt','...am Strand eingeschlafen','...jemanden auf Malle geküsst','...meinen Flug fast verpasst','...auf einer Bootsparty gewesen','...beim Megapark-Karaoke gesungen','...den Sonnenaufgang am Ballermann gesehen','...in der Schinkenstraße getanzt','...ein Tattoo auf Malle bekommen']},
   {name:'Trink-Roulette',icon:'🎰',desc:'Zufall entscheidet',players:'2-20',cards:['Alle mit Sonnenbrille trinken!','Wer zuletzt auf Malle war trinkt!','Der/die Jüngste trinkt!','Alle Singles trinken!','Wer Instagram offen hat trinkt!','Der letzte der aufsteht trinkt!','Alle BVB-Fans trinken!','Wer am weitesten vom Hotel weg ist trinkt!','Wasserfall!','Alle mit Flip-Flops trinken!']}
 ];
-var obData = {gender:'',seek:'',status:'',club:''};
+var obData = {gender:'',seek:'',status:'',club:'',bio:'',birthdate:''};
 var authMode = 'signup'; // or 'login'
 var curGame = null, gameIdx = 0, cIdx = 0;
 
@@ -597,9 +608,10 @@ window.authEmail = async function(){
   if(!email || !pass || pass.length < 6){toast('Bitte E-Mail und Passwort (min. 6 Zeichen) eingeben');return}
 
   if(authMode === 'signup'){
-    var {error} = await sb.auth.signUp({email: email, password: pass});
+    var {data: signUpData, error} = await sb.auth.signUp({email: email, password: pass});
     if(error){toast('Fehler: ' + error.message);return}
-    toast('Bestätigungs-E-Mail gesendet! Prüfe dein Postfach.');
+    if(!signUpData.session){toast('Bestätigungs-E-Mail gesendet! Prüfe dein Postfach.');return}
+    toast('Willkommen! 🌴');
   } else {
     var {error} = await sb.auth.signInWithPassword({email: email, password: pass});
     if(error){toast('Fehler: ' + error.message);return}
@@ -659,8 +671,15 @@ async function loadUser(authUser){
 // ============================================
 function showOnboarding(authUser){
   document.getElementById('onboard').classList.remove('gone');
+  // Build birthdate selects
+  var bd=document.getElementById('obBDay'),bm=document.getElementById('obBMonth'),by=document.getElementById('obBYear');
+  if(bd&&bd.children.length<=1){
+    for(var i=1;i<=31;i++)bd.innerHTML+='<option value="'+i+'">'+i+'</option>';
+    ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'].forEach(function(m,i){bm.innerHTML+='<option value="'+(i+1)+'">'+m+'</option>'});
+    var cy=new Date().getFullYear();for(var y=cy-18;y>=cy-80;y--)by.innerHTML+='<option value="'+y+'">'+y+'</option>';
+  }
   buildChips('obGender',['Mann','Frau','Divers','Non-Binary'],'',function(v){obData.gender=v});
-  buildChips('obSeek',['Männer','Frauen','Alle'],'',function(v){obData.seek=v});
+  buildChips('obSeek',['Party-Crew finden','Leute kennenlernen','Feiern & Spaß','Dating','Alles mitnehmen'],'',function(v){obData.seek=v});
   buildChips('obStatus',['Single','Vergeben','Kompliziert','Offen'],'',function(v){obData.status=v});
   var dl=document.getElementById('dsgvoList');
   if(dl)dl.innerHTML=[{l:'Standort',d:'Venues und Crew in deiner Nähe.',r:1,on:1},{l:'Push-Benachrichtigungen',d:'AtzeShot, Matches, Deals.',r:0,on:1},{l:'Kamera',d:'AtzeShot & Profilfotos.',r:0,on:1},{l:'Anonyme Nutzungsanalyse',d:'Hilft uns die App zu verbessern.',r:0,on:0}].map(function(i){return '<div class="dsgvo-item"><div class="dtxt"><h4>'+i.l+(i.r?' (erforderlich)':'')+'</h4><p>'+i.d+'</p></div><button class="dtog'+(i.on?' on':'')+'" onclick="this.classList.toggle(\'on\')"></button></div>'}).join('');
@@ -672,21 +691,43 @@ window.obStep = function(n){
   if(n===3) buildClubPicker();
 };
 window.chkOb = function(){
-  var n=document.getElementById('obName').value.trim(),a=document.getElementById('obAge').value;
-  document.getElementById('obNext1').disabled=!(n.length>=2&&a>=18&&a<=99);
+  var n=document.getElementById('obName').value.trim();
+  var d=document.getElementById('obBDay').value;
+  var m=document.getElementById('obBMonth').value;
+  var y=document.getElementById('obBYear').value;
+  var valid = n.length>=2 && d && m && y;
+  if(valid){
+    var bd=new Date(+y,+m-1,+d);
+    var today=new Date();
+    var age=today.getFullYear()-bd.getFullYear();
+    if(today.getMonth()<bd.getMonth()||(today.getMonth()===bd.getMonth()&&today.getDate()<bd.getDate()))age--;
+    valid = age >= 18;
+  }
+  document.getElementById('obNext1').disabled=!valid;
+};
+window.pickCustomClub = function(v){
+  if(v.trim().length>0){
+    document.querySelectorAll('.club-item').forEach(function(c){c.classList.remove('picked')});
+    obData.club=v.trim();
+  }
 };
 
 window.finishOnboard = async function(){
   var name = esc(document.getElementById('obName').value.trim());
-  var age = +document.getElementById('obAge').value;
+  var d=document.getElementById('obBDay').value, m=document.getElementById('obBMonth').value, y=document.getElementById('obBYear').value;
+  var birthdate = y+'-'+(m<10?'0'+m:m)+'-'+(d<10?'0'+d:d);
+  var bd=new Date(+y,+m-1,+d), today=new Date();
+  var age=today.getFullYear()-bd.getFullYear();
+  if(today.getMonth()<bd.getMonth()||(today.getMonth()===bd.getMonth()&&today.getDate()<bd.getDate()))age--;
   var insta = esc(document.getElementById('obInsta').value.trim());
   var tiktok = esc(document.getElementById('obTiktok').value.trim());
+  var bio = esc((document.getElementById('obBio')?.value||'').trim());
 
   var {data:{user}} = await sb.auth.getUser();
   if(!user){toast('Fehler — bitte neu einloggen');return}
 
   var {error} = await sb.from('profiles').update({
-    name: name, age: age, insta: insta, tiktok: tiktok,
+    name: name, age: age, birthdate: birthdate, bio: bio, insta: insta, tiktok: tiktok,
     gender: obData.gender, seek: obData.seek, status: obData.status, club: obData.club
   }).eq('user_id', user.id);
 
@@ -942,7 +983,7 @@ function buildClubPicker(){
   var lgs=Object.keys(CLUBS);
   tabs.innerHTML=lgs.map(function(l,i){return '<div class="ltab'+(i===0?' active':'')+'" onclick="pickLg('+i+')">'+l+'</div>'}).join('');
   window.pickLg=function(i){document.querySelectorAll('.ltab').forEach(function(t,j){t.classList.toggle('active',j===i)});grid.innerHTML=CLUBS[lgs[i]].map(function(c){return '<div class="club-item'+(obData.club===c?' picked':'')+'" onclick="pickClub(this,\''+c.replace(/'/g,"\\'")+'\')">'+esc(c)+'</div>'}).join('')};
-  window.pickClub=function(el,n){document.querySelectorAll('.club-item').forEach(function(c){c.classList.remove('picked')});el.classList.add('picked');obData.club=n};
+  window.pickClub=function(el,n){document.querySelectorAll('.club-item').forEach(function(c){c.classList.remove('picked')});el.classList.add('picked');obData.club=n;var ci=document.getElementById('obCustomClub');if(ci)ci.value=''};
   window.pickLg(0);
 }
 
