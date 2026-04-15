@@ -1501,8 +1501,8 @@ function buildApp(){
   initMap();
   initCMap();
 
-  // Build nav bar
-  buildNavBar();
+  // Apply nav labels (i18n)
+  applyLang();
 
   // Party features
   try{buildLeaderboard()}catch(e){console.error('buildLeaderboard failed:',e)}
@@ -1526,27 +1526,6 @@ function buildApp(){
   requestPushPermission();
 }
 
-function buildNavBar(){
-  var nav = document.getElementById('navBar');
-  if(!nav) return;
-  nav.innerHTML = '';
-  var navItems = [
-    {icon:'📡',label:t('nav_radar'),scr:'screen-nearby'},
-    {icon:'🔥',label:t('nav_deals'),scr:'screen-deals'},
-    {icon:'👥',label:t('nav_crew'),scr:'screen-crew'},
-    {icon:'💬',label:t('nav_match'),scr:'screen-match',centerBtn:true},
-    {icon:'🎫',label:t('nav_profil'),scr:'screen-profile'}
-  ];
-  navItems.forEach(function(item){
-    if(item.centerBtn){
-      nav.innerHTML += '<button class="crew-center-btn active" onclick="showScreen(\''+item.scr+'\')"><div class="ni">'+item.icon+'</div><span>'+item.label+'</span></button>';
-    } else {
-      nav.innerHTML += '<button onclick="showScreen(\''+item.scr+'\')"'+
-        (item.scr==='screen-match'?' class="active"':'')+'>'+
-        '<div class="ni">'+item.icon+'</div><span>'+item.label+'</span></button>';
-    }
-  });
-}
 
 // ============================================
 // DEALS / AFFILIATE
