@@ -493,6 +493,7 @@ select.ri{appearance:none;-webkit-appearance:none}
 /* ATZE SHOT */
 #atzeShotOv .drink-display{padding-top:60px}
 #shotFeed::-webkit-scrollbar{display:none}
+@keyframes activePulse{0%,100%{box-shadow:0 0 0 0 rgba(52,199,89,.4)}50%{box-shadow:0 0 0 6px rgba(52,199,89,0)}}
 </style>
 </head>
 <body>
@@ -735,7 +736,31 @@ select.ri{appearance:none;-webkit-appearance:none}
       <div class="map-full"><div id="radarMap"></div><div class="map-fade"></div></div>
       <div class="stories" id="storiesBar"></div>
       <div class="radar-content">
+        <div class="active-counter anim" id="activeCounter" style="margin:0 14px 8px;display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;background:rgba(52,199,89,.06);border:1px solid rgba(52,199,89,.12)">
+          <div class="active-dot" style="width:8px;height:8px;border-radius:50%;background:var(--green);animation:activePulse 2s ease infinite"></div>
+          <span style="font-size:13px;font-weight:700"><span id="activeCount">0</span> Atzen online</span>
+          <span style="font-size:11px;color:var(--t3);margin-left:auto">auf Mallorca</span>
+        </div>
+        <div class="quick-stats anim" id="quickStats" style="margin:0 14px 8px;display:flex;gap:8px">
+          <div onclick="go('match',document.querySelectorAll('#navBar button')[3])" style="flex:1;padding:10px;border-radius:12px;background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--glass-border);text-align:center;cursor:pointer">
+            <div style="font-size:18px;font-weight:900;color:#FF6B6B" id="qsMatches">0</div>
+            <div style="font-size:9px;font-weight:700;color:var(--t3);text-transform:uppercase">Matches</div>
+          </div>
+          <div onclick="go('crew',document.querySelectorAll('#navBar button')[2])" style="flex:1;padding:10px;border-radius:12px;background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--glass-border);text-align:center;cursor:pointer">
+            <div style="font-size:18px;font-weight:900;color:var(--green)" id="qsCrew">0</div>
+            <div style="font-size:9px;font-weight:700;color:var(--t3);text-transform:uppercase">Crew</div>
+          </div>
+          <div onclick="go('profile',document.querySelectorAll('#navBar button')[4])" style="flex:1;padding:10px;border-radius:12px;background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--glass-border);text-align:center;cursor:pointer">
+            <div style="font-size:18px;font-weight:900;color:var(--o)" id="qsSangrias">0</div>
+            <div style="font-size:9px;font-weight:700;color:var(--t3);text-transform:uppercase">🍹 Sangrias</div>
+          </div>
+        </div>
         <div class="mood-bar glass anim"><div class="mb-label">Vibe</div><div class="mood-emojis" id="moodBar"></div></div>
+        <div class="island-mood anim" id="islandMood" style="margin:0 14px 10px;padding:12px 14px;border-radius:12px;background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--glass-border);display:none">
+          <div style="font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">🏝️ Stimmung auf der Insel</div>
+          <div id="islandMoodContent" style="font-size:14px;font-weight:700"></div>
+          <div id="islandMoodBar" style="display:flex;gap:3px;margin-top:8px;height:6px"></div>
+        </div>
         <div class="weather-card glass anim" id="weatherCard" style="margin:0 14px 10px;padding:14px 16px;display:flex;align-items:center;gap:14px;cursor:pointer" onclick="refreshWeather()">
           <div id="weatherIcon" style="font-size:36px">☀️</div>
           <div style="flex:1">
@@ -1641,6 +1666,14 @@ function buildApp(){
   // Initial nearby build
   buildNearby();
 
+  // Radar widgets (non-blocking)
+  touchActive();
+  updateActiveCounter();
+  updateQuickStats();
+  updateIslandMood();
+  // Refresh active counter every 60 seconds
+  setInterval(function(){ touchActive(); updateActiveCounter(); }, 60000);
+
   // Fetch weather for Mallorca
   fetchWeather();
 
@@ -2484,6 +2517,70 @@ window.refreshWeather = function(){
   toast('Wetter wird aktualisiert...');
   fetchWeather();
 };
+
+// ============================================
+// ACTIVE COUNTER, QUICK STATS, ISLAND MOOD
+// ============================================
+function updateActiveCounter(){
+  sb.rpc('get_active_user_count').then(function(res){
+    var count = res.data || 0;
+    var el = document.getElementById('activeCount');
+    if(el) el.textContent = count;
+  }).catch(function(e){ console.warn('Active count failed:', e); });
+}
+
+function updateQuickStats(){
+  var matchEl = document.getElementById('qsMatches');
+  var crewEl = document.getElementById('qsCrew');
+  var sangriasEl = document.getElementById('qsSangrias');
+  if(matchEl) matchEl.textContent = ME._matchCount || 0;
+  if(sangriasEl) sangriasEl.textContent = ME.points || 0;
+  // Get crew count from matches where is_match=true
+  sb.from('matches').select('*', {count:'exact', head:true})
+    .eq('from_user', ME.user_id).eq('is_match', true)
+    .then(function(res){
+      if(crewEl) crewEl.textContent = res.count || 0;
+    }).catch(function(e){ console.warn('Crew count failed:', e); });
+}
+
+function updateIslandMood(){
+  sb.rpc('get_mood_stats').then(function(res){
+    var moods = res.data;
+    if(!moods || moods.length === 0){
+      document.getElementById('islandMood').style.display = 'none';
+      return;
+    }
+    document.getElementById('islandMood').style.display = 'block';
+    var total = 0;
+    moods.forEach(function(m){ total += parseInt(m.count); });
+    var topMood = moods[0];
+    var pct = Math.round((parseInt(topMood.count) / total) * 100);
+
+    var moodLabels = {'🥳':'Party-Modus','🔥':'On Fire','💃':'Tanz-Laune','🍻':'Bier-Zeit','🌴':'Chill-Vibes','🍹':'Cocktail-Hour','😎':'Cool & Relaxed','🤪':'Crazy Night','💤':'Ausschlafen','🌅':'Sunset-Mood'};
+    var label = moodLabels[topMood.mood] || 'Gut drauf';
+
+    document.getElementById('islandMoodContent').innerHTML = topMood.mood + ' ' + label + ' — <span style="color:var(--o)">' + pct + '%</span> der Atzen';
+
+    // Build mood bar
+    var barHtml = '';
+    var moodColors = {'🥳':'#FFD60A','🔥':'#FF6D2E','💃':'#BF5AF2','🍻':'#FF9500','🌴':'#34C759','🍹':'#FF6B6B','😎':'#0A84FF','🤪':'#FF3B30','💤':'#8E8E93','🌅':'#FF9500'};
+    moods.forEach(function(m){
+      var w = Math.round((parseInt(m.count) / total) * 100);
+      var col = moodColors[m.mood] || 'var(--o)';
+      barHtml += '<div title="'+m.mood+' '+w+'%" style="flex:'+w+';height:100%;border-radius:3px;background:'+col+'"></div>';
+    });
+    document.getElementById('islandMoodBar').innerHTML = barHtml;
+  }).catch(function(e){
+    console.warn('Island mood failed:', e);
+    document.getElementById('islandMood').style.display = 'none';
+  });
+}
+
+function touchActive(){
+  if(ME && ME.user_id){
+    sb.rpc('touch_active', {p_user_id: ME.user_id}).catch(function(e){ console.warn('Touch active failed:', e); });
+  }
+}
 
 // ============================================
 // PHOTO UPLOAD
