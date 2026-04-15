@@ -414,6 +414,18 @@ select.ri{appearance:none;-webkit-appearance:none}
   <p>Laden...</p>
 </div>
 
+<!-- LANGUAGE PICKER -->
+<div class="agegate" id="langPicker" style="display:none">
+  <div class="ag-logo">atze<span>.</span></div>
+  <p class="ag-sub" id="langPickerTitle">Sprache wählen</p>
+  <div style="width:100%;max-width:340px;display:flex;flex-direction:column;gap:10px;margin-top:20px">
+    <button class="abtn primary" style="display:flex;align-items:center;justify-content:center;gap:10px" onclick="pickLang('de')">🇩🇪 Deutsch</button>
+    <button class="abtn primary" style="background:var(--bg3);color:#fff;display:flex;align-items:center;justify-content:center;gap:10px" onclick="pickLang('en')">🇬🇧 English</button>
+    <button class="abtn primary" style="background:var(--bg3);color:#fff;display:flex;align-items:center;justify-content:center;gap:10px" onclick="pickLang('es')">🇪🇸 Español</button>
+  </div>
+  <div class="ag-legal">butterbread tech GmbH · butterbread-tech.com</div>
+</div>
+
 <!-- AGE GATE -->
 <div class="agegate gone" id="agegate">
   <div class="ag-logo">atze<span>.</span></div>
@@ -582,7 +594,7 @@ select.ri{appearance:none;-webkit-appearance:none}
       <div id="dealsContent"></div>
       <div class="deal-disclosure">⚠️ Affiliate-Hinweis: Einige Links sind Partnerlinks. Bei einer Buchung/Kauf erhalten wir eine kleine Provision — für dich ändert sich der Preis nicht. butterbread tech GmbH · DSGVO-konform · Server EU</div>
     </div></div>
-    <div class="scr" id="screen-profile"><div class="prof-hero"><div class="prof-ava-wrap"><div class="prof-ava"><img id="profAvaImg" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80"></div><div class="prof-ava-edit" onclick="openPhotoUpload()">📷</div></div><h2><span id="profName">Laden...</span></h2><div class="handle" id="profHandle"></div><div class="prof-badges-row" id="profBadges"></div></div><div class="prof-vibe" id="profVibe"></div><div class="prof-socials" id="profSocials"></div><div class="prof-stats glass"><div class="pstat"><div class="pn" id="stM">0</div><div class="pl">Matches</div></div><div class="pstat"><div class="pn" id="stCrew">0</div><div class="pl">Crew</div></div><div class="pstat"><div class="pn" id="stPts">0</div><div class="pl">Punkte</div></div></div><div class="premium-cta" id="premCta" onclick="toast('Premium kommt bald!')"><h3>✨ atze Premium</h3><div class="pc-sub">Keine Werbung · Unlimited Swipes · VIP</div><div class="pc-btn">Ab 2,99€</div></div><div class="pmenu"><div class="pmi" onclick="openLegal('dsgvo')"><div class="pmi-icon b">🛡</div><span class="pmi-label">Datenschutz</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openLegal('impressum')"><div class="pmi-icon gr">📄</div><span class="pmi-label">Impressum</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openLegal('agb')"><div class="pmi-icon gr">📝</div><span class="pmi-label">AGB</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="editSocials()"><div class="pmi-icon o">📱</div><span class="pmi-label">Social Media verknüpfen</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openColorPicker()"><div class="pmi-icon o">🎨</div><span class="pmi-label">Profilfarbe ändern</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="requestVerification()"><div class="pmi-icon b">✓</div><span class="pmi-label">Verifizierung <span style="font-size:11px;font-weight:600;color:var(--t3)" id="verStatus"></span></span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="showBlockedUsers()"><div class="pmi-icon gr">🚫</div><span class="pmi-label">Blockierte Nutzer</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openLegal('affiliate')"><div class="pmi-icon o">🤝</div><span class="pmi-label">Affiliate-Hinweis</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="exportData()"><div class="pmi-icon b">📦</div><span class="pmi-label">Meine Daten exportieren</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="deleteAccount()"><div class="pmi-icon gr" style="background:rgba(255,59,48,.08)">🗑</div><span class="pmi-label" style="color:var(--fire)">Account löschen</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="logOut()"><div class="pmi-icon gr">🚪</div><span class="pmi-label" style="color:var(--fire)">Ausloggen</span></div></div></div>
+    <div class="scr" id="screen-profile"><div class="prof-hero"><div class="prof-ava-wrap"><div class="prof-ava"><img id="profAvaImg" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80"></div><div class="prof-ava-edit" onclick="openPhotoUpload()">📷</div></div><h2><span id="profName">Laden...</span></h2><div class="handle" id="profHandle"></div><div class="prof-badges-row" id="profBadges"></div></div><div class="prof-vibe" id="profVibe"></div><div class="prof-socials" id="profSocials"></div><div class="prof-stats glass"><div class="pstat"><div class="pn" id="stM">0</div><div class="pl">Matches</div></div><div class="pstat"><div class="pn" id="stCrew">0</div><div class="pl">Crew</div></div><div class="pstat"><div class="pn" id="stPts">0</div><div class="pl">Punkte</div></div></div><div class="premium-cta" id="premCta" onclick="toast('Premium kommt bald!')"><h3>✨ atze Premium</h3><div class="pc-sub">Keine Werbung · Unlimited Swipes · VIP</div><div class="pc-btn">Ab 2,99€</div></div><div class="pmenu"><div class="pmi" onclick="openLegal('dsgvo')"><div class="pmi-icon b">🛡</div><span class="pmi-label">Datenschutz</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openLegal('impressum')"><div class="pmi-icon gr">📄</div><span class="pmi-label">Impressum</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openLegal('agb')"><div class="pmi-icon gr">📝</div><span class="pmi-label">AGB</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="editProfile()"><div class="pmi-icon o">✏️</div><span class="pmi-label">Profil bearbeiten</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="editSocials()"><div class="pmi-icon o">📱</div><span class="pmi-label">Social Media verknüpfen</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openColorPicker()"><div class="pmi-icon o">🎨</div><span class="pmi-label">Profilfarbe ändern</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="requestVerification()"><div class="pmi-icon b">✓</div><span class="pmi-label">Verifizierung <span style="font-size:11px;font-weight:600;color:var(--t3)" id="verStatus"></span></span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="showBlockedUsers()"><div class="pmi-icon gr">🚫</div><span class="pmi-label">Blockierte Nutzer</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openLegal('moderation')"><div class="pmi-icon b">⚖</div><span class="pmi-label">Moderations-Transparenz</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openLegal('affiliate')"><div class="pmi-icon o">🤝</div><span class="pmi-label">Affiliate-Hinweis</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="exportData()"><div class="pmi-icon b">📦</div><span class="pmi-label">Meine Daten exportieren</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="deleteAccount()"><div class="pmi-icon gr" style="background:rgba(255,59,48,.08)">🗑</div><span class="pmi-label" style="color:var(--fire)">Account löschen</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openLanguagePicker()"><div class="pmi-icon gr">🌐</div><span class="pmi-label">Sprache</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="logOut()"><div class="pmi-icon gr">🚪</div><span class="pmi-label" style="color:var(--fire)">Ausloggen</span></div></div></div>
   </main>
   <nav id="navBar">
     <button class="active" onclick="go('radar',this)"><span class="ni">📍</span>Radar</button>
@@ -640,6 +652,385 @@ var curGame = null, gameIdx = 0, cIdx = 0;
 function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
 
 // ============================================
+// i18n - LANGUAGE SYSTEM
+// ============================================
+var LANG_KEY = 'atze_lang';
+var curLang = localStorage.getItem(LANG_KEY) || 'de';
+
+var I18N = {
+  de: {
+    // Age Gate
+    ag_title: 'Die Party-App für die Playa de Palma.',
+    ag_warning: 'Diese App ist nur für Personen ab 18 Jahren.',
+    ag_day: 'Tag', ag_month: 'Monat', ag_year: 'Jahr',
+    ag_confirm: 'Alter bestätigen',
+    ag_under18: 'Ich bin unter 18',
+    // Auth
+    auth_tag: 'Finde die besten Parties.<br>Verlier nie wieder deine Crew.',
+    auth_apple: ' Apple', auth_google: 'G Google',
+    auth_or: 'oder',
+    auth_email_btn: 'Mit E-Mail anmelden',
+    auth_email_ph: 'E-Mail-Adresse',
+    auth_pass_ph: 'Passwort (min. 6 Zeichen)',
+    auth_signup: 'Registrieren', auth_login: 'Einloggen',
+    auth_has_account: 'Schon ein Konto?', auth_no_account: 'Noch kein Konto?',
+    auth_terms: 'Mit der Anmeldung akzeptierst du die <a href="#" onclick="event.preventDefault();openLegal(\'agb\')">AGB</a> und <a href="#" onclick="event.preventDefault();openLegal(\'dsgvo\')">Datenschutz</a> der butterbread tech GmbH.',
+    // Onboarding
+    ob1_title: 'Über dich', ob1_sub: 'Name und Geburtsdatum für dein Profil.',
+    ob_firstname: 'Vorname', ob_birthday: 'Geburtsdatum',
+    ob_social: 'Social Media',
+    ob_insta_ph: '📸 Instagram Username (optional)',
+    ob_tiktok_ph: '🎵 TikTok Username (optional)',
+    ob_snap_ph: '👻 Snapchat Username (optional)',
+    ob_next: 'Weiter',
+    ob2_title: 'Wer bist du?', ob2_sub: 'Erzähl den anderen etwas über dich.',
+    ob_iam: 'Ich bin', ob_status: 'Beziehungsstatus',
+    ob_seek: 'Was treibt dich hierher?', ob_about: 'Über mich',
+    ob_bio_ph: 'Party-Animal, Sangria-Liebhaber, immer gut drauf...',
+    ob3_title: 'Dein Verein', ob3_sub: 'Zeig deine Farben auf deinem Profil.',
+    ob_custom_club: '✏️ Eigenen Verein eintragen...', ob_or_select: 'Oder wähle aus',
+    ob4_title: 'Dein Profilbild', ob4_sub: 'Lade ein angemessenes Foto für dein Profil hoch.',
+    ob_photo_warning: '📸 Bitte nur angemessene Fotos hochladen. Verstöße gegen Nutzungsrichtlinien führen zur Sperrung.',
+    ob_choose_photo: '📷 Foto wählen', ob_later: 'Später', ob_save: 'Speichern',
+    ob5_title: 'Datenschutz', ob5_sub: 'Deine Daten. Deine Kontrolle.',
+    ob_go: "Los geht's!",
+    // DSGVO items
+    dsgvo_location: 'Standort', dsgvo_location_desc: 'Venues und Crew in deiner Nähe. Du kannst die App auch ohne Standort nutzen.',
+    dsgvo_push: 'Push-Benachrichtigungen', dsgvo_push_desc: 'AtzeShot, Matches, Deals.',
+    dsgvo_camera: 'Kamera', dsgvo_camera_desc: 'AtzeShot & Profilfotos.',
+    dsgvo_analytics: 'Anonyme Nutzungsanalyse', dsgvo_analytics_desc: 'Hilft uns die App zu verbessern.',
+    dsgvo_required: '(erforderlich)', dsgvo_footer: 'butterbread tech GmbH · butterbread-tech.com · AES-256 verschlüsselt · Server EU (Frankfurt) · DSGVO-konform',
+    // Nav
+    nav_radar: 'Radar', nav_deals: 'Deals', nav_crew: 'Crew', nav_match: 'Match', nav_profil: 'Profil',
+    // Radar
+    vibe: 'Vibe', tonight: 'Heute Abend', loading: 'Lädt...',
+    join_tonight: 'Ich bin dabei', crew_nearby: '👥 Crew in der Nähe',
+    location_loading: 'Standort wird geladen...',
+    // Match
+    all: 'Alle', age: 'Alter', city: 'Wohnort', club: 'Verein',
+    no_profiles: 'Keine neuen Leute', no_profiles_sub: 'Ändere deine Filter oder schau später nochmal vorbei!',
+    chat_soon: 'Chat kommt bald!',
+    // Crew
+    invite_crew: 'Crew einladen', invite_sub: 'Teile deinen Invite-Link!',
+    crew_members: 'Crew-Mitglieder', your_crew: 'Deine Crew',
+    no_crew: 'Noch keine Crew-Mitglieder. Lade Freunde ein!',
+    your_matches: 'Deine Matches', no_matches: 'Matche mit Leuten um sie hier zu sehen!',
+    community_title: '🌍 Community', community_sub: 'Triff tausende Atzen in der Community — kommt bald!',
+    party_games: 'Party-Spiele', players: 'Spieler',
+    // Deals
+    deals_exclusive: 'Exklusiv für Atzen', deals_title: 'Deals & Rabatte',
+    deals_sub: 'Handverlesene Angebote für deine Malle-Reise',
+    deals_all: '🔥 Alle Deals', deals_pre: '✈️ Vor dem Abflug',
+    deals_on: '🌴 Auf der Insel', deals_gear: '🎒 Must-Haves',
+    deals_disclosure: '⚠️ Affiliate-Hinweis: Einige Links sind Partnerlinks. Bei einer Buchung/Kauf erhalten wir eine kleine Provision — für dich ändert sich der Preis nicht. butterbread tech GmbH · DSGVO-konform · Server EU',
+    // Profile
+    matches_label: 'Matches', crew_label: 'Crew', points_label: 'Punkte',
+    premium_title: '✨ atze Premium', premium_sub: 'Keine Werbung · Unlimited Swipes · VIP', premium_price: 'Ab 2,99€',
+    premium_soon: 'Premium kommt bald!',
+    menu_privacy: 'Datenschutz', menu_imprint: 'Impressum', menu_terms: 'AGB',
+    menu_socials: 'Social Media verknüpfen', menu_color: 'Profilfarbe ändern',
+    menu_verify: 'Verifizierung', menu_blocked: 'Blockierte Nutzer',
+    menu_affiliate: 'Affiliate-Hinweis', menu_export: 'Meine Daten exportieren',
+    menu_delete: 'Account löschen', menu_logout: 'Ausloggen',
+    menu_edit_profile: 'Profil bearbeiten', menu_language: 'Sprache',
+    // SOS
+    sos_title: '🚨 SOS NOTFALL', sos_sub: 'Deine Crew wird sofort mit deinem Standort benachrichtigt.',
+    sos_112: '🚨 Notruf 112', sos_crew: '📢 SOS an Crew',
+    sos_hospital: '🏥 Hospital Son Llàtzer', sos_taxi: '🚕 Taxi Palma',
+    sos_embassy: '🇩🇪 Deutsche Botschaft', sos_cancel: 'Abbrechen',
+    // Toasts
+    toast_blocked: 'Nutzer blockiert 🚫', toast_unblocked: 'Nutzer entblockt ✅',
+    toast_photo_saved: 'Profilbild gespeichert! 📸', toast_photo_deleted: 'Profilbild gelöscht',
+    toast_color_saved: 'Profilfarbe gespeichert! 🎨',
+    toast_socials_saved: 'Socials aktualisiert! ✅',
+    toast_reported: 'Nutzer gemeldet. Danke! 🙏',
+    toast_export: 'Daten exportiert! 📦',
+    toast_poked: 'wurde angestupst! 👋',
+    toast_poke_wait: 'Schon angestupst! Warte eine Stunde.',
+    // Report
+    report_title: 'Nutzer melden', report_why: 'Warum möchtest du diesen Nutzer melden?',
+    report_submit: 'Melden',
+    // Gender options
+    gender_man: 'Mann', gender_woman: 'Frau', gender_diverse: 'Divers', gender_nb: 'Non-Binary',
+    // Seek options
+    seek_crew: 'Party-Crew finden', seek_meet: 'Leute kennenlernen', seek_party: 'Feiern & Spaß', seek_dating: 'Dating', seek_all: 'Alles mitnehmen',
+    // Status options
+    status_single: 'Single', status_taken: 'Vergeben', status_complicated: 'Kompliziert', status_open: 'Offen',
+    // Misc
+    close: 'Schließen', block: 'Blockieren', unblock: 'Entblocken', report: 'Melden',
+    no_blocked: 'Keine blockierten Nutzer.',
+    blocked_users: 'Blockierte Nutzer',
+    its_a_match: "It's a Match!",
+    match_sub: 'Ihr wollt beide zusammen feiern',
+    keep_swiping: 'Weiter swipen',
+    checkin: '📍 Einchecken (+50)', route: '🗺 Route', share: '📤 Teilen',
+    delete_confirm1: 'Account wirklich löschen? Alle Daten werden unwiderruflich gelöscht.',
+    delete_confirm2: '⚠️ WARNUNG: Dies kann nicht rückgängig gemacht werden. Account wirklich löschen?',
+    nearby_activate: 'Aktiviere deinen Standort um Crew in der Nähe zu sehen.',
+    nearby_match_first: 'Matche mit Leuten um sie hier zu sehen!',
+    nearby_no_location: 'Keine Crew-Mitglieder mit Standort in der Nähe.',
+    nearby_nobody: 'Gerade keine Crew in der Nähe.',
+    poke: 'Anstupsen 👋', poked: 'Angestupst ✓',
+    away: 'entfernt',
+    color_title: '🎨 Profilfarbe', color_sub: 'Ab 6 eingeladenen Freunden freigeschaltet!',
+    invite_unlock: 'Lade 6 Freunde ein um Farben freizuschalten!',
+    colors_unlocked: '🎨 Profilfarben freigeschaltet!',
+    crew_max: 'Max. 8 Crew-Mitglieder erreicht!',
+    notif_title: 'Benachrichtigungen', notif_empty: 'Noch keine Benachrichtigungen.',
+    game_title: 'Spiel', game_next: 'Nächste Karte', game_tap: 'Tippe für die nächste Karte',
+    // Profile edit
+    edit_name: 'Name', edit_bio: 'Bio', edit_gender: 'Geschlecht', edit_status: 'Status',
+    edit_seek: 'Suche', edit_club: 'Verein', edit_save: 'Speichern',
+    edit_title: 'Profil bearbeiten',
+    profile_saved: 'Profil gespeichert! ✅',
+    // Moderation
+    mod_transparency: 'Moderations-Transparenz',
+    mod_72h: 'Wir bearbeiten alle Meldungen innerhalb von 72 Stunden.',
+    mod_appeal: 'Einspruch einlegen',
+    mod_appeal_sent: 'Einspruch eingereicht. Wir melden uns per E-Mail.',
+    // Language
+    lang_title: 'Sprache wählen',
+    lang_changed: 'Sprache geändert!'
+  },
+  en: {
+    ag_title: 'The party app for Playa de Palma.',
+    ag_warning: 'This app is for users aged 18 and above only.',
+    ag_day: 'Day', ag_month: 'Month', ag_year: 'Year',
+    ag_confirm: 'Confirm age',
+    ag_under18: "I'm under 18",
+    auth_tag: 'Find the best parties.<br>Never lose your crew again.',
+    auth_apple: ' Apple', auth_google: 'G Google',
+    auth_or: 'or',
+    auth_email_btn: 'Sign up with email',
+    auth_email_ph: 'Email address',
+    auth_pass_ph: 'Password (min. 6 characters)',
+    auth_signup: 'Sign up', auth_login: 'Log in',
+    auth_has_account: 'Already have an account?', auth_no_account: "Don't have an account?",
+    auth_terms: 'By signing up you accept the <a href="#" onclick="event.preventDefault();openLegal(\'agb\')">Terms</a> and <a href="#" onclick="event.preventDefault();openLegal(\'dsgvo\')">Privacy Policy</a> of butterbread tech GmbH.',
+    ob1_title: 'About you', ob1_sub: 'Your name and birthday for your profile.',
+    ob_firstname: 'First name', ob_birthday: 'Birthday',
+    ob_social: 'Social Media',
+    ob_insta_ph: '📸 Instagram username (optional)',
+    ob_tiktok_ph: '🎵 TikTok username (optional)',
+    ob_snap_ph: '👻 Snapchat username (optional)',
+    ob_next: 'Next',
+    ob2_title: 'Who are you?', ob2_sub: 'Tell others about yourself.',
+    ob_iam: 'I am', ob_status: 'Relationship status',
+    ob_seek: 'What brings you here?', ob_about: 'About me',
+    ob_bio_ph: 'Party animal, sangria lover, always good vibes...',
+    ob3_title: 'Your club', ob3_sub: 'Show your colors on your profile.',
+    ob_custom_club: '✏️ Enter your club...', ob_or_select: 'Or choose',
+    ob4_title: 'Your profile photo', ob4_sub: 'Upload an appropriate photo for your profile.',
+    ob_photo_warning: '📸 Please only upload appropriate photos. Violations will lead to a ban.',
+    ob_choose_photo: '📷 Choose photo', ob_later: 'Later', ob_save: 'Save',
+    ob5_title: 'Privacy', ob5_sub: 'Your data. Your control.',
+    ob_go: "Let's go!",
+    dsgvo_location: 'Location', dsgvo_location_desc: 'Venues and crew nearby. You can use the app without location.',
+    dsgvo_push: 'Push notifications', dsgvo_push_desc: 'AtzeShot, matches, deals.',
+    dsgvo_camera: 'Camera', dsgvo_camera_desc: 'AtzeShot & profile photos.',
+    dsgvo_analytics: 'Anonymous analytics', dsgvo_analytics_desc: 'Helps us improve the app.',
+    dsgvo_required: '(required)', dsgvo_footer: 'butterbread tech GmbH · butterbread-tech.com · AES-256 encrypted · Server EU (Frankfurt) · GDPR compliant',
+    nav_radar: 'Radar', nav_deals: 'Deals', nav_crew: 'Crew', nav_match: 'Match', nav_profil: 'Profile',
+    vibe: 'Vibe', tonight: 'Tonight', loading: 'Loading...',
+    join_tonight: "I'm in!", crew_nearby: '👥 Crew nearby',
+    location_loading: 'Loading location...',
+    all: 'All', age: 'Age', city: 'City', club: 'Club',
+    no_profiles: 'No new people', no_profiles_sub: 'Change your filters or check back later!',
+    chat_soon: 'Chat coming soon!',
+    invite_crew: 'Invite crew', invite_sub: 'Share your invite link!',
+    crew_members: 'Crew members', your_crew: 'Your Crew',
+    no_crew: 'No crew members yet. Invite friends!',
+    your_matches: 'Your Matches', no_matches: 'Match with people to see them here!',
+    community_title: '🌍 Community', community_sub: 'Meet thousands in the community — coming soon!',
+    party_games: 'Party Games', players: 'Players',
+    deals_exclusive: 'Exclusive for Atzen', deals_title: 'Deals & Discounts',
+    deals_sub: 'Handpicked offers for your Malle trip',
+    deals_all: '🔥 All Deals', deals_pre: '✈️ Before takeoff',
+    deals_on: '🌴 On the island', deals_gear: '🎒 Must-haves',
+    deals_disclosure: '⚠️ Affiliate notice: Some links are partner links. We receive a small commission on bookings/purchases — the price stays the same for you. butterbread tech GmbH · GDPR compliant · Server EU',
+    matches_label: 'Matches', crew_label: 'Crew', points_label: 'Points',
+    premium_title: '✨ atze Premium', premium_sub: 'No ads · Unlimited swipes · VIP', premium_price: 'From €2.99',
+    premium_soon: 'Premium coming soon!',
+    menu_privacy: 'Privacy', menu_imprint: 'Imprint', menu_terms: 'Terms',
+    menu_socials: 'Link social media', menu_color: 'Change profile color',
+    menu_verify: 'Verification', menu_blocked: 'Blocked users',
+    menu_affiliate: 'Affiliate info', menu_export: 'Export my data',
+    menu_delete: 'Delete account', menu_logout: 'Log out',
+    menu_edit_profile: 'Edit profile', menu_language: 'Language',
+    sos_title: '🚨 SOS EMERGENCY', sos_sub: 'Your crew will be notified with your location immediately.',
+    sos_112: '🚨 Emergency 112', sos_crew: '📢 SOS to crew',
+    sos_hospital: '🏥 Hospital Son Llàtzer', sos_taxi: '🚕 Taxi Palma',
+    sos_embassy: '🇩🇪 German Embassy', sos_cancel: 'Cancel',
+    toast_blocked: 'User blocked 🚫', toast_unblocked: 'User unblocked ✅',
+    toast_photo_saved: 'Profile photo saved! 📸', toast_photo_deleted: 'Profile photo deleted',
+    toast_color_saved: 'Profile color saved! 🎨',
+    toast_socials_saved: 'Socials updated! ✅',
+    toast_reported: 'User reported. Thank you! 🙏',
+    toast_export: 'Data exported! 📦',
+    toast_poked: 'was poked! 👋',
+    toast_poke_wait: 'Already poked! Wait an hour.',
+    report_title: 'Report user', report_why: 'Why do you want to report this user?',
+    report_submit: 'Report',
+    gender_man: 'Male', gender_woman: 'Female', gender_diverse: 'Diverse', gender_nb: 'Non-Binary',
+    seek_crew: 'Find party crew', seek_meet: 'Meet people', seek_party: 'Party & Fun', seek_dating: 'Dating', seek_all: 'Everything',
+    status_single: 'Single', status_taken: 'Taken', status_complicated: 'Complicated', status_open: 'Open',
+    close: 'Close', block: 'Block', unblock: 'Unblock', report: 'Report',
+    no_blocked: 'No blocked users.',
+    blocked_users: 'Blocked Users',
+    its_a_match: "It's a Match!",
+    match_sub: 'You both want to party together',
+    keep_swiping: 'Keep swiping',
+    checkin: '📍 Check in (+50)', route: '🗺 Route', share: '📤 Share',
+    delete_confirm1: 'Really delete your account? All data will be permanently deleted.',
+    delete_confirm2: '⚠️ WARNING: This cannot be undone. Really delete account?',
+    nearby_activate: 'Enable location to see crew nearby.',
+    nearby_match_first: 'Match with people to see them here!',
+    nearby_no_location: 'No crew members with location nearby.',
+    nearby_nobody: 'No crew nearby right now.',
+    poke: 'Poke 👋', poked: 'Poked ✓',
+    away: 'away',
+    color_title: '🎨 Profile Color', color_sub: 'Unlocked after inviting 6 friends!',
+    invite_unlock: 'Invite 6 friends to unlock colors!',
+    colors_unlocked: '🎨 Profile colors unlocked!',
+    crew_max: 'Max 8 crew members reached!',
+    notif_title: 'Notifications', notif_empty: 'No notifications yet.',
+    game_title: 'Game', game_next: 'Next card', game_tap: 'Tap for the next card',
+    edit_name: 'Name', edit_bio: 'Bio', edit_gender: 'Gender', edit_status: 'Status',
+    edit_seek: 'Looking for', edit_club: 'Club', edit_save: 'Save',
+    edit_title: 'Edit Profile',
+    profile_saved: 'Profile saved! ✅',
+    mod_transparency: 'Moderation Transparency',
+    mod_72h: 'We process all reports within 72 hours.',
+    mod_appeal: 'File appeal',
+    mod_appeal_sent: 'Appeal submitted. We will contact you via email.',
+    lang_title: 'Choose language',
+    lang_changed: 'Language changed!'
+  },
+  es: {
+    ag_title: 'La app de fiestas para Playa de Palma.',
+    ag_warning: 'Esta aplicación es solo para mayores de 18 años.',
+    ag_day: 'Día', ag_month: 'Mes', ag_year: 'Año',
+    ag_confirm: 'Confirmar edad',
+    ag_under18: 'Soy menor de 18',
+    auth_tag: 'Encuentra las mejores fiestas.<br>No pierdas nunca a tu crew.',
+    auth_apple: ' Apple', auth_google: 'G Google',
+    auth_or: 'o',
+    auth_email_btn: 'Registrarse con email',
+    auth_email_ph: 'Correo electrónico',
+    auth_pass_ph: 'Contraseña (mín. 6 caracteres)',
+    auth_signup: 'Registrarse', auth_login: 'Iniciar sesión',
+    auth_has_account: '¿Ya tienes cuenta?', auth_no_account: '¿No tienes cuenta?',
+    auth_terms: 'Al registrarte aceptas los <a href="#" onclick="event.preventDefault();openLegal(\'agb\')">Términos</a> y la <a href="#" onclick="event.preventDefault();openLegal(\'dsgvo\')">Política de Privacidad</a> de butterbread tech GmbH.',
+    ob1_title: 'Sobre ti', ob1_sub: 'Tu nombre y fecha de nacimiento para tu perfil.',
+    ob_firstname: 'Nombre', ob_birthday: 'Fecha de nacimiento',
+    ob_social: 'Redes sociales',
+    ob_insta_ph: '📸 Usuario de Instagram (opcional)',
+    ob_tiktok_ph: '🎵 Usuario de TikTok (opcional)',
+    ob_snap_ph: '👻 Usuario de Snapchat (opcional)',
+    ob_next: 'Siguiente',
+    ob2_title: '¿Quién eres?', ob2_sub: 'Cuéntale a los demás sobre ti.',
+    ob_iam: 'Soy', ob_status: 'Estado sentimental',
+    ob_seek: '¿Qué te trae aquí?', ob_about: 'Sobre mí',
+    ob_bio_ph: 'Fiestero, amante de la sangría, siempre de buen rollo...',
+    ob3_title: 'Tu equipo', ob3_sub: 'Muestra tus colores en tu perfil.',
+    ob_custom_club: '✏️ Escribe tu equipo...', ob_or_select: 'O elige',
+    ob4_title: 'Tu foto de perfil', ob4_sub: 'Sube una foto apropiada para tu perfil.',
+    ob_photo_warning: '📸 Solo fotos apropiadas. Las infracciones llevarán al bloqueo.',
+    ob_choose_photo: '📷 Elegir foto', ob_later: 'Más tarde', ob_save: 'Guardar',
+    ob5_title: 'Privacidad', ob5_sub: 'Tus datos. Tu control.',
+    ob_go: '¡Vamos!',
+    dsgvo_location: 'Ubicación', dsgvo_location_desc: 'Locales y crew cerca de ti. Puedes usar la app sin ubicación.',
+    dsgvo_push: 'Notificaciones push', dsgvo_push_desc: 'AtzeShot, matches, ofertas.',
+    dsgvo_camera: 'Cámara', dsgvo_camera_desc: 'AtzeShot y fotos de perfil.',
+    dsgvo_analytics: 'Análisis anónimo', dsgvo_analytics_desc: 'Nos ayuda a mejorar la app.',
+    dsgvo_required: '(obligatorio)', dsgvo_footer: 'butterbread tech GmbH · butterbread-tech.com · Cifrado AES-256 · Servidor UE (Frankfurt) · Conforme al RGPD',
+    nav_radar: 'Radar', nav_deals: 'Ofertas', nav_crew: 'Crew', nav_match: 'Match', nav_profil: 'Perfil',
+    vibe: 'Vibe', tonight: 'Esta noche', loading: 'Cargando...',
+    join_tonight: '¡Me apunto!', crew_nearby: '👥 Crew cercana',
+    location_loading: 'Cargando ubicación...',
+    all: 'Todos', age: 'Edad', city: 'Ciudad', club: 'Club',
+    no_profiles: 'Nadie nuevo', no_profiles_sub: '¡Cambia tus filtros o vuelve más tarde!',
+    chat_soon: '¡Chat próximamente!',
+    invite_crew: 'Invitar crew', invite_sub: '¡Comparte tu enlace de invitación!',
+    crew_members: 'Miembros del crew', your_crew: 'Tu Crew',
+    no_crew: 'Sin miembros aún. ¡Invita amigos!',
+    your_matches: 'Tus Matches', no_matches: '¡Haz match para verlos aquí!',
+    community_title: '🌍 Comunidad', community_sub: 'Conoce a miles en la comunidad — ¡próximamente!',
+    party_games: 'Juegos de fiesta', players: 'Jugadores',
+    deals_exclusive: 'Exclusivo para Atzen', deals_title: 'Ofertas y descuentos',
+    deals_sub: 'Ofertas seleccionadas para tu viaje a Malle',
+    deals_all: '🔥 Todas', deals_pre: '✈️ Antes del vuelo',
+    deals_on: '🌴 En la isla', deals_gear: '🎒 Imprescindibles',
+    deals_disclosure: '⚠️ Aviso de afiliados: Algunos enlaces son de socios. Recibimos una pequeña comisión — el precio no cambia para ti. butterbread tech GmbH · Conforme al RGPD · Servidor UE',
+    matches_label: 'Matches', crew_label: 'Crew', points_label: 'Puntos',
+    premium_title: '✨ atze Premium', premium_sub: 'Sin anuncios · Swipes ilimitados · VIP', premium_price: 'Desde 2,99€',
+    premium_soon: '¡Premium próximamente!',
+    menu_privacy: 'Privacidad', menu_imprint: 'Aviso legal', menu_terms: 'Términos',
+    menu_socials: 'Vincular redes', menu_color: 'Cambiar color de perfil',
+    menu_verify: 'Verificación', menu_blocked: 'Usuarios bloqueados',
+    menu_affiliate: 'Info de afiliados', menu_export: 'Exportar mis datos',
+    menu_delete: 'Eliminar cuenta', menu_logout: 'Cerrar sesión',
+    menu_edit_profile: 'Editar perfil', menu_language: 'Idioma',
+    sos_title: '🚨 SOS EMERGENCIA', sos_sub: 'Tu crew será notificada con tu ubicación inmediatamente.',
+    sos_112: '🚨 Emergencia 112', sos_crew: '📢 SOS al crew',
+    sos_hospital: '🏥 Hospital Son Llàtzer', sos_taxi: '🚕 Taxi Palma',
+    sos_embassy: '🇩🇪 Embajada alemana', sos_cancel: 'Cancelar',
+    toast_blocked: 'Usuario bloqueado 🚫', toast_unblocked: 'Usuario desbloqueado ✅',
+    toast_photo_saved: '¡Foto guardada! 📸', toast_photo_deleted: 'Foto eliminada',
+    toast_color_saved: '¡Color guardado! 🎨',
+    toast_socials_saved: '¡Redes actualizadas! ✅',
+    toast_reported: '¡Usuario reportado. Gracias! 🙏',
+    toast_export: '¡Datos exportados! 📦',
+    toast_poked: '¡fue tocado! 👋',
+    toast_poke_wait: '¡Ya tocado! Espera una hora.',
+    report_title: 'Reportar usuario', report_why: '¿Por qué quieres reportar a este usuario?',
+    report_submit: 'Reportar',
+    gender_man: 'Hombre', gender_woman: 'Mujer', gender_diverse: 'Diverso', gender_nb: 'No binario',
+    seek_crew: 'Encontrar crew', seek_meet: 'Conocer gente', seek_party: 'Fiesta y diversión', seek_dating: 'Citas', seek_all: 'De todo',
+    status_single: 'Soltero/a', status_taken: 'En pareja', status_complicated: 'Complicado', status_open: 'Abierto/a',
+    close: 'Cerrar', block: 'Bloquear', unblock: 'Desbloquear', report: 'Reportar',
+    no_blocked: 'Sin usuarios bloqueados.',
+    blocked_users: 'Usuarios Bloqueados',
+    its_a_match: '¡Es un Match!',
+    match_sub: 'Ambos queréis salir de fiesta juntos',
+    keep_swiping: 'Seguir deslizando',
+    checkin: '📍 Check in (+50)', route: '🗺 Ruta', share: '📤 Compartir',
+    delete_confirm1: '¿Eliminar cuenta? Todos los datos serán eliminados permanentemente.',
+    delete_confirm2: '⚠️ ADVERTENCIA: Esto no se puede deshacer. ¿Eliminar cuenta?',
+    nearby_activate: 'Activa tu ubicación para ver crew cercana.',
+    nearby_match_first: '¡Haz match para verlos aquí!',
+    nearby_no_location: 'Sin crew con ubicación cercana.',
+    nearby_nobody: 'Sin crew cerca ahora.',
+    poke: 'Tocar 👋', poked: 'Tocado ✓',
+    away: 'de distancia',
+    color_title: '🎨 Color de perfil', color_sub: '¡Desbloqueado tras invitar a 6 amigos!',
+    invite_unlock: '¡Invita a 6 amigos para desbloquear colores!',
+    colors_unlocked: '🎨 ¡Colores desbloqueados!',
+    crew_max: '¡Máximo 8 miembros alcanzado!',
+    notif_title: 'Notificaciones', notif_empty: 'Sin notificaciones.',
+    game_title: 'Juego', game_next: 'Siguiente carta', game_tap: 'Toca para la siguiente carta',
+    edit_name: 'Nombre', edit_bio: 'Bio', edit_gender: 'Género', edit_status: 'Estado',
+    edit_seek: 'Busco', edit_club: 'Club', edit_save: 'Guardar',
+    edit_title: 'Editar Perfil',
+    profile_saved: '¡Perfil guardado! ✅',
+    mod_transparency: 'Transparencia de moderación',
+    mod_72h: 'Procesamos todas las denuncias en 72 horas.',
+    mod_appeal: 'Presentar recurso',
+    mod_appeal_sent: 'Recurso enviado. Te contactaremos por email.',
+    lang_title: 'Elegir idioma',
+    lang_changed: '¡Idioma cambiado!'
+  }
+};
+
+function t(key){ return (I18N[curLang] && I18N[curLang][key]) || (I18N['de'] && I18N['de'][key]) || key; }
+
+function setLang(lang){
+  curLang = lang;
+  localStorage.setItem(LANG_KEY, lang);
+  document.documentElement.lang = lang;
+}
+
+// ============================================
 // INIT
 // ============================================
 document.addEventListener('DOMContentLoaded', async function(){
@@ -677,27 +1068,65 @@ document.addEventListener('DOMContentLoaded', async function(){
 // ============================================
 function showAgeGate(){
   document.getElementById('loadingScreen').classList.add('gone');
+  if(!localStorage.getItem(LANG_KEY)){
+    document.getElementById('langPicker').style.display='flex';
+    return;
+  }
   if(localStorage.aok === '1'){
     showAuth();
   } else {
     document.getElementById('agegate').classList.remove('gone');
     fillAgeSelects();
+    applyLang();
   }
+}
+
+window.pickLang = function(lang){
+  setLang(lang);
+  document.getElementById('langPicker').style.display='none';
+  document.getElementById('agegate').classList.remove('gone');
+  fillAgeSelects();
+  applyLang();
+};
+
+function applyLang(){
+  document.documentElement.lang = curLang;
+  // Age gate
+  var agSub = document.querySelector('.agegate .ag-sub');
+  if(agSub && agSub.id !== 'langPickerTitle') agSub.textContent = t('ag_title');
+  var agWarn = document.querySelector('.age-warning');
+  if(agWarn) agWarn.textContent = t('ag_warning');
+  // Age gate button
+  var agBtn = document.querySelector('.agegate .abtn.primary');
+  if(agBtn && agBtn.textContent.includes('Alter')) agBtn.textContent = t('ag_confirm');
+  var agUn18 = document.querySelector('.agegate .abtn.ghost');
+  if(agUn18) agUn18.textContent = t('ag_under18');
+  // Nav buttons
+  var navBtns = document.querySelectorAll('#navBar button');
+  var navLabels = ['nav_radar','nav_deals','nav_crew','nav_match','nav_profil'];
+  navBtns.forEach(function(btn,i){
+    var label = btn.querySelector('.ni+span') || btn.querySelector('span:nth-of-type(2)');
+    if(label && navLabels[i]) label.textContent = t(navLabels[i]);
+  });
 }
 
 function fillAgeSelects(){
   var ds=document.getElementById('agDay'),ms=document.getElementById('agMonth'),ys=document.getElementById('agYear');
   for(var i=1;i<=31;i++)ds.innerHTML+='<option value="'+i+'">'+i+'</option>';
-  ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'].forEach(function(m,i){ms.innerHTML+='<option value="'+(i+1)+'">'+m+'</option>'});
+  // Use translated month names
+  var months = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
+  if(curLang === 'en') months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  if(curLang === 'es') months = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  months.forEach(function(m,i){ms.innerHTML+='<option value="'+(i+1)+'">'+m+'</option>'});
   var cy=new Date().getFullYear();for(var y=cy-16;y>=cy-80;y--)ys.innerHTML+='<option value="'+y+'">'+y+'</option>';
 }
 
 window.checkAge = function(){
   var d=+document.getElementById('agDay').value,m=+document.getElementById('agMonth').value,y=+document.getElementById('agYear').value;
-  if(!d||!m||!y){toast('Bitte Geburtsdatum eingeben');return}
+  if(!d||!m||!y){toast(t('ag_day')+' '+t('ag_month')+' '+t('ag_year'));return}
   var bday=new Date(y,m-1,d),today=new Date(),age=today.getFullYear()-bday.getFullYear();
   if(today.getMonth()<bday.getMonth()||(today.getMonth()===bday.getMonth()&&today.getDate()<bday.getDate()))age--;
-  if(age<18){toast('Du musst mindestens 18 sein.');return}
+  if(age<18){toast(curLang==='de'?'Du musst mindestens 18 sein.':(curLang==='es'?'Debes tener al menos 18 años.':'You must be at least 18.'));return}
   localStorage.aok='1';
   document.getElementById('agegate').classList.add('gone');
   showAuth();
@@ -714,10 +1143,10 @@ window.toggleEmailForm = function(){
 
 window.toggleAuthMode = function(){
   authMode = authMode === 'signup' ? 'login' : 'signup';
-  document.getElementById('authSubmit').textContent = authMode === 'signup' ? 'Registrieren' : 'Einloggen';
+  document.getElementById('authSubmit').textContent = authMode === 'signup' ? t('auth_signup') : t('auth_login');
   document.getElementById('authSwitch').innerHTML = authMode === 'signup'
-    ? 'Schon ein Konto? <span>Einloggen</span>'
-    : 'Noch kein Konto? <span>Registrieren</span>';
+    ? t('auth_has_account') + ' <span>' + t('auth_login') + '</span>'
+    : t('auth_no_account') + ' <span>' + t('auth_signup') + '</span>';
 };
 
 window.authWith = async function(provider){
@@ -915,6 +1344,7 @@ window.finishOnboard = async function(){
 // BUILD APP
 // ============================================
 function buildApp(){
+  applyLang();
   buildMoodBar();
   buildVenues();
   buildStories();
@@ -926,6 +1356,9 @@ function buildApp(){
   updateProfile();
   initMap();
   initCMap();
+
+  // Build nav bar
+  buildNavBar();
 
   // Tonight
   if(VENUES.length > 0){
@@ -940,6 +1373,28 @@ function buildApp(){
 
   // Request push notifications
   requestPushPermission();
+}
+
+function buildNavBar(){
+  var nav = document.getElementById('navBar');
+  if(!nav) return;
+  nav.innerHTML = '';
+  var navItems = [
+    {icon:'📡',label:t('nav_radar'),scr:'screen-nearby'},
+    {icon:'🔥',label:t('nav_deals'),scr:'screen-deals'},
+    {icon:'👥',label:t('nav_crew'),scr:'screen-crew'},
+    {icon:'💬',label:t('nav_match'),scr:'screen-match',centerBtn:true},
+    {icon:'🎫',label:t('nav_profil'),scr:'screen-profile'}
+  ];
+  navItems.forEach(function(item){
+    if(item.centerBtn){
+      nav.innerHTML += '<button class="crew-center-btn active" onclick="showScreen(\''+item.scr+'\')"><div class="ni">'+item.icon+'</div><span>'+item.label+'</span></button>';
+    } else {
+      nav.innerHTML += '<button onclick="showScreen(\''+item.scr+'\')"'+
+        (item.scr==='screen-match'?' class="active"':'')+'>'+
+        '<div class="ni">'+item.icon+'</div><span>'+item.label+'</span></button>';
+    }
+  });
 }
 
 // ============================================
@@ -1380,10 +1835,11 @@ function buildClubPicker(){
 window.openLegal=function(type){
   document.getElementById('bsImg').src='https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=60';
   var c='';
-  if(type==='dsgvo')c='<h2>Datenschutzerklärung</h2><div class="bs-desc" style="font-size:12px;line-height:1.7"><strong>Verantwortlicher gem. Art. 4 Abs. 7 DSGVO</strong><br>butterbread tech GmbH<br>Geschäftsführer: Jan<br>Web: butterbread-tech.com<br>E-Mail: datenschutz@butterbread-tech.com<br><br><strong>1. Erhebung personenbezogener Daten</strong><br>Profildaten, Standortdaten (nur bei aktiver Nutzung), Kameradaten (nur AtzeShot), Nutzungsdaten (anonymisiert). Rechtsgrundlage: Art. 6 Abs. 1 DSGVO.<br><br><strong>2. Sicherheit</strong><br>AES-256. Server: EU Frankfurt. TLS 1.3.<br><br><strong>3. Betroffenenrechte (Art. 15-22)</strong><br>Auskunft, Berichtigung, Löschung, Einschränkung, Übertragbarkeit, Widerspruch.<br><br><strong>4. Tracking</strong><br>Keine Cookies. Keine Drittanbieter-Tracker.<br><br><strong>5. Kontakt</strong><br>datenschutz@butterbread-tech.com<br><br>Stand: April 2026</div><div class="bs-actions"><button class="bs-btn orange" onclick="closeBS()">Schließen</button></div>';
+  if(type==='dsgvo')c='<h2>Datenschutzerklärung</h2><div class="bs-desc" style="font-size:12px;line-height:1.7"><strong>Verantwortlicher gem. Art. 4 Abs. 7 DSGVO</strong><br>butterbread tech GmbH<br>Geschäftsführer: Jan<br>Web: butterbread-tech.com<br>E-Mail: datenschutz@butterbread-tech.com<br><br><strong>1. Datenkategorien & Rechtsgrundlagen</strong><br><strong>Profildaten</strong> (Name, Geburtsdatum, Geschlecht, Bio, Fotos): Rechtsgrundlage Art. 6 Abs. 1 b DSGVO (Erfüllung Nutzungsvertrag). Speicherdauer: Bis zur Accountlöschung.<br><strong>Standortdaten:</strong> Rechtsgrundlage Art. 6 Abs. 1 a DSGVO (Einwilligung). Speicherdauer: Nur aktuelle Position, nicht archiviert. Du kannst Standort jederzeit deaktivieren.<br><strong>Kameradaten:</strong> Nur bei AtzeShot-Feature. Rechtsgrundlage Art. 6 Abs. 1 a DSGVO (Einwilligung). Speicherdauer: Nur während aktiven Uploads.<br><strong>Nutzungsdaten:</strong> Anonymisiert, keine IP-Tracking. Rechtsgrundlage Art. 6 Abs. 1 a DSGVO.<br><br><strong>2. Drittanbieter</strong><br>Supabase (Auth, Database, Storage) - Server in der EU (Frankfurt). Alle Daten AES-256 verschlüsselt.<br><br><strong>3. Speicherdauer</strong><br>Profildaten: Bis zur Accountlöschung.<br>Standortdaten: Nur letzte bekannte Position (keine Historie).<br>Nach Accountlöschung: Vollständig und irreversibel gelöscht.<br><br><strong>4. Betroffenenrechte (Art. 15-22 DSGVO)</strong><br>• Auskunft (Art. 15): Export deiner Daten möglich<br>• Berichtigung (Art. 16): Profilbearbeitung<br>• Löschung (Art. 17): Accountlöschung<br>• Einschränkung (Art. 18): Nicht automatisch implementiert<br>• Datenportabilität (Art. 20): Über Export-Funktion<br>• Widerspruch (Art. 21): datenschutz@butterbread-tech.com<br><br><strong>5. Aufsichtsbehörde</strong><br>Landesbeauftragte für Datenschutz und Informationsfreiheit Baden-Württemberg (falls zuständig) oder deine lokale Behörde.<br><br><strong>6. Keine Cookies, Keine Tracker</strong><br>Wir verwenden keine Tracking-Cookies oder Drittanbieter-Analytics.<br><br><strong>Kontakt: datenschutz@butterbread-tech.com</strong><br>Stand: April 2026</div><div class="bs-actions"><button class="bs-btn orange" onclick="closeBS()">Schließen</button></div>';
   else if(type==='impressum')c='<h2>Impressum</h2><div class="bs-desc" style="font-size:12px;line-height:1.7"><strong>Angaben gemäß §5 TMG</strong><br><br>butterbread tech GmbH<br>Geschäftsführer: Jan<br>Web: butterbread-tech.com<br>E-Mail: hello@butterbread-tech.com<br><br><strong>Registergericht:</strong> [wird nach Eintragung ergänzt]<br><strong>HRB:</strong> [wird nach Eintragung ergänzt]<br><br>Stand: April 2026</div><div class="bs-actions"><button class="bs-btn orange" onclick="closeBS()">Schließen</button></div>';
   else if(type==='agb')c='<h2>AGB</h2><div class="bs-desc" style="font-size:12px;line-height:1.7"><strong>§1 Geltungsbereich</strong><br>Diese AGB gelten für die atze-App der butterbread tech GmbH.<br><br><strong>§2 Registrierung</strong><br>Mindestalter 18 Jahre. Wahrheitsgemäße Angaben. Ein Konto pro Person.<br><br><strong>§3 Premium</strong><br>1 Woche 2,99€, 1 Monat 4,99€/Monat, Saison 9,99€. Kündigung jederzeit. 14-Tage-Widerrufsrecht.<br><br><strong>§4 Verhaltensregeln</strong><br>Kein Mobbing, Belästigung, Diskriminierung. Verstoß = Sperrung.<br><br><strong>§5 Datenschutz</strong><br>Siehe Datenschutzerklärung. DSGVO-konform.<br><br>Stand: April 2026</div><div class="bs-actions"><button class="bs-btn orange" onclick="closeBS()">Schließen</button></div>';
   else if(type==='affiliate')c='<h2>Affiliate-Hinweis</h2><div class="bs-desc" style="font-size:12px;line-height:1.7"><strong>Transparenzhinweis gemäß TMG & UWG</strong><br><br>Die atze-App enthält Affiliate-/Partnerlinks. Wenn du über diese Links Produkte oder Dienstleistungen buchst oder kaufst, erhält die butterbread tech GmbH eine Provision vom jeweiligen Anbieter.<br><br><strong>Für dich ändert sich der Preis nicht.</strong><br><br><strong>Unsere Partner (Auszug):</strong><br>Check24, HanseMerkur, Booking.com, GetYourGuide, Megapark, Amazon, GoPro, Douglas, Sunny Cars, TheFork, Tiqets, Welcome Pickups, Holidayparking, Flaconi, DJI<br><br><strong>Netzwerke:</strong><br>Awin, Belboon, Amazon PartnerNet, Booking Affiliate Partner, Direkt-Partnerschaften<br><br><strong>Tracking:</strong><br>Wir verwenden anonymisierte Sub-IDs zur Zuordnung. Es werden keine personenbezogenen Daten an Partner übermittelt. DSGVO-konform.<br><br><strong>Qualitätsstandards:</strong><br>• Keine Dropshipping/Fake-Shops<br>• Kein Gambling/Sportwetten<br>• Nur etablierte DE/EU-Brands<br>• App-Store-Policy-konform<br><br>Stand: April 2026<br>butterbread tech GmbH · butterbread-tech.com</div><div class="bs-actions"><button class="bs-btn orange" onclick="closeBS()">Schließen</button></div>';
+  else if(type==='moderation')c='<h2>'+t('mod_transparency')+'</h2><div class="bs-desc" style="font-size:12px;line-height:1.7"><strong>Meldungsverfahren</strong><br>Wenn du einen Nutzer meldest, überprüft unser Moderationsteam:<br>• Verstoß gegen Nutzungsrichtlinien<br>• Unangemessene Inhalte<br>• Belästigung oder Mobbing<br><br><strong>Verarbeitungszeit: '+t('mod_72h')+'</strong><br><br><strong>Mögliche Maßnahmen</strong><br>• Warnung (für Erstverstöße)<br>• Temporäre Sperrung (7-30 Tage)<br>• Permanente Sperrung<br><br><strong>Gründe für Sperrung</strong><br>• Fake-Profile / Catfishing<br>• Sexuelle Belästigung oder unangemessene Inhalte<br>• Hate Speech oder Diskriminierung<br>• Spam oder kommerzielle Nutzung<br>• Kinderschutz-Verstöße<br><br><strong>'+t('mod_appeal')+'</strong><br>Du kannst gegen jede Moderationsentscheidung Einspruch erheben. Sende eine E-Mail an moderation@butterbread-tech.com mit:<br>• Dein Nutzername<br>• Beschreibung warum die Entscheidung falsch ist<br>• Relevante Screenshots<br><br><button class="bs-btn orange" style="width:100%;margin-top:12px;cursor:pointer" onclick="window.location.href=\'mailto:moderation@butterbread-tech.com?subject=Appeal\';toast(t(\'mod_appeal_sent\'))">'+t('mod_appeal')+'</button><br><br>Stand: April 2026</div><div class="bs-actions"><button class="bs-btn orange" onclick="closeBS()">Schließen</button></div>';
   document.getElementById('bsContent').innerHTML=c;
   document.getElementById('bsheet').classList.add('show');
 };
@@ -1393,7 +1849,7 @@ window.openLegal=function(type){
 // ============================================
 window.openNoti=function(){
   document.getElementById('bsImg').src='https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=800&q=60';
-  document.getElementById('bsContent').innerHTML='<h2>Benachrichtigungen</h2><div style="padding:40px 0;text-align:center;color:var(--t3)"><div style="font-size:32px;margin-bottom:8px">🔔</div><p style="font-size:13px">Noch keine Benachrichtigungen.</p></div><div class="bs-actions"><button class="bs-btn orange" onclick="closeBS()">Schließen</button></div>';
+  document.getElementById('bsContent').innerHTML='<h2>'+t('notif_title')+'</h2><div style="padding:40px 0;text-align:center;color:var(--t3)"><div style="font-size:32px;margin-bottom:8px">🔔</div><p style="font-size:13px">'+t('notif_empty')+'</p></div><div class="bs-actions"><button class="bs-btn orange" onclick="closeBS()">'+t('close')+'</button></div>';
   document.getElementById('bsheet').classList.add('show');
 };
 
@@ -1404,6 +1860,66 @@ window.logOut = async function(){
   await sb.auth.signOut();
   localStorage.removeItem('aok');
   window.location.reload();
+};
+
+// ============================================
+// PROFILE EDIT
+// ============================================
+window.editProfile = async function(){
+  if(!ME) return;
+  var {data:{user}} = await sb.auth.getUser();
+  var c = '<h2>'+t('edit_title')+'</h2><div class="bs-desc"><div style="display:flex;flex-direction:column;gap:12px">';
+  c += '<div><label style="font-size:12px;font-weight:600">'+t('edit_name')+'</label><input class="ri" id="epName" type="text" placeholder="'+t('edit_name')+'" value="'+esc(ME.name)+'"></div>';
+  c += '<div><label style="font-size:12px;font-weight:600">'+t('edit_bio')+'</label><textarea class="ri" id="epBio" style="min-height:80px;resize:none" placeholder="'+t('ob_bio_ph')+'">'+esc(ME.bio||'')+'</textarea></div>';
+  c += '<div><label style="font-size:12px;font-weight:600">'+t('edit_gender')+'</label><select class="ri" id="epGender"><option value="">-</option><option value="Mann">'+t('gender_man')+'</option><option value="Frau">'+t('gender_woman')+'</option><option value="Divers">'+t('gender_diverse')+'</option><option value="Non-Binary">'+t('gender_nb')+'</option></select></div>';
+  c += '<div><label style="font-size:12px;font-weight:600">'+t('edit_status')+'</label><select class="ri" id="epStatus"><option value="">-</option><option value="Single">'+t('status_single')+'</option><option value="Vergeben">'+t('status_taken')+'</option><option value="Kompliziert">'+t('status_complicated')+'</option><option value="Offen">'+t('status_open')+'</option></select></div>';
+  c += '<div><label style="font-size:12px;font-weight:600">'+t('edit_seek')+'</label><select class="ri" id="epSeek"><option value="">-</option><option value="Party-Crew finden">'+t('seek_crew')+'</option><option value="Leute kennenlernen">'+t('seek_meet')+'</option><option value="Feiern & Spaß">'+t('seek_party')+'</option><option value="Dating">'+t('seek_dating')+'</option><option value="Alles mitnehmen">'+t('seek_all')+'</option></select></div>';
+  c += '<div><label style="font-size:12px;font-weight:600">'+t('edit_club')+'</label><input class="ri" id="epClub" type="text" placeholder="'+t('edit_club')+'" value="'+esc(ME.club||'')+'"></div>';
+  c += '</div></div><div class="bs-actions"><button class="bs-btn orange" onclick="saveEditProfile()">'+t('edit_save')+'</button></div>';
+  document.getElementById('bsContent').innerHTML = c;
+  document.getElementById('bsheet').classList.add('show');
+  // Set current values
+  if(ME.gender) document.getElementById('epGender').value = ME.gender;
+  if(ME.status) document.getElementById('epStatus').value = ME.status;
+  if(ME.seek) document.getElementById('epSeek').value = ME.seek;
+};
+
+window.saveEditProfile = async function(){
+  var {data:{user}} = await sb.auth.getUser();
+  if(!user) return;
+  var name = document.getElementById('epName').value.trim();
+  if(!name){toast(t('edit_name'));return}
+  var updates = {
+    name: name,
+    bio: document.getElementById('epBio').value.trim(),
+    gender: document.getElementById('epGender').value,
+    status: document.getElementById('epStatus').value,
+    seek: document.getElementById('epSeek').value,
+    club: document.getElementById('epClub').value.trim()
+  };
+  toast(curLang==='de'?'Wird gespeichert...':(curLang==='es'?'Guardando...':'Saving...'));
+  var {error} = await sb.from('profiles').update(updates).eq('user_id',user.id);
+  if(error){toast('Fehler: '+error.message);return}
+  Object.assign(ME, updates);
+  toast(t('profile_saved'));
+  document.getElementById('bsheet').classList.remove('show');
+  updateProfile();
+};
+
+window.openLanguagePicker = function(){
+  var c = '<h2>'+t('lang_title')+'</h2><div class="bs-desc" style="display:flex;flex-direction:column;gap:8px;margin-top:12px">';
+  c += '<button class="bs-btn" style="background:'+(curLang==='de'?'var(--o)':'var(--bg3)')+';color:#fff;text-align:left" onclick="changeLang(\'de\');toast(t(\'lang_changed\'))">🇩🇪 Deutsch'+(curLang==='de'?' ✓':'')+' </button>';
+  c += '<button class="bs-btn" style="background:'+(curLang==='en'?'var(--o)':'var(--bg3)')+';color:#fff;text-align:left" onclick="changeLang(\'en\');toast(t(\'lang_changed\'))">🇬🇧 English'+(curLang==='en'?' ✓':'')+' </button>';
+  c += '<button class="bs-btn" style="background:'+(curLang==='es'?'var(--o)':'var(--bg3)')+';color:#fff;text-align:left" onclick="changeLang(\'es\');toast(t(\'lang_changed\'))">🇪🇸 Español'+(curLang==='es'?' ✓':'')+' </button>';
+  c += '</div><div class="bs-actions"><button class="bs-btn orange" onclick="closeBS()">'+t('close')+'</button></div>';
+  document.getElementById('bsContent').innerHTML = c;
+  document.getElementById('bsheet').classList.add('show');
+};
+
+window.changeLang = function(lang){
+  setLang(lang);
+  openLanguagePicker();
+  updateProfile();
 };
 
 // ============================================
