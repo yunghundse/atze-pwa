@@ -986,7 +986,7 @@ var userMarker = null, userAccCircle = null, userLat = 0, userLng = 0;
 function initMap(){
   var c=document.getElementById('radarMap');if(!c||rMap)return;
   rMap=L.map(c,{zoomControl:0,attributionControl:0,scrollWheelZoom:true,maxZoom:20,minZoom:12}).setView(PC,17);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:20,attribution:''}).addTo(rMap);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{maxZoom:20,attribution:''}).addTo(rMap);
   VENUES.forEach(function(v){
     var d=document.createElement('div');d.className='pin pin-'+v.type;d.textContent=v.emoji;
     L.marker([v.lat,v.lng],{icon:L.divIcon({html:d.outerHTML,className:'',iconSize:[44,44],iconAnchor:[22,22]})}).addTo(rMap)
@@ -1018,7 +1018,7 @@ function initMap(){
 function initCMap(){
   var c=document.getElementById('crewMap');if(!c||cMap)return;
   cMap=L.map(c,{zoomControl:0,attributionControl:0,scrollWheelZoom:true,maxZoom:20}).setView(PC,17);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:20,attribution:''}).addTo(cMap);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{maxZoom:20,attribution:''}).addTo(cMap);
   var u=document.createElement('div');u.className='pin-user';
   window._crewUserMarker = L.marker(PC,{icon:L.divIcon({html:u.outerHTML,className:'',iconSize:[16,16],iconAnchor:[8,8]})}).addTo(cMap);
   // Center on user if available
