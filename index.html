@@ -234,13 +234,25 @@ select.ri{appearance:none;-webkit-appearance:none}
 .game-players{font-size:10px;color:var(--o);font-weight:700;margin-top:3px}
 
 /* DEALS */
-.deals-coming{padding:68px 20px 90px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100%;text-align:center}
-.dc-icon{font-size:56px;margin-bottom:16px}
-.dc-title{font-size:24px;font-weight:900;margin-bottom:6px}
-.dc-sub{font-size:14px;color:var(--t2);line-height:1.6;margin-bottom:24px;max-width:300px}
-.dc-badge{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border-radius:14px;background:rgba(255,109,46,.08);border:1px solid rgba(255,109,46,.12);font-size:13px;font-weight:700;color:var(--o);cursor:pointer}
-.dc-partners{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:12px}
-.dc-partner{padding:8px 14px;border-radius:10px;background:var(--bg3);font-size:11px;font-weight:600;color:var(--t2)}
+.deals-wrap{padding:68px 0 90px}
+.deals-tabs{display:flex;gap:6px;padding:8px 14px;overflow-x:auto;scrollbar-width:none}.deals-tabs::-webkit-scrollbar{display:none}
+.dtab{padding:8px 16px;border-radius:20px;background:var(--bg3);border:1px solid var(--brd);color:var(--t2);font-size:12px;font-weight:700;white-space:nowrap;cursor:pointer;flex-shrink:0;transition:all .15s}.dtab.active{background:var(--o);color:#fff;border-color:var(--o)}
+.deal-phase{padding:10px 14px 0}
+.deal-phase-label{font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.deal-phase-label .dpl-dot{width:6px;height:6px;border-radius:50%;background:var(--o)}
+.deal-card{background:var(--bg3);border:1px solid var(--brd);border-radius:var(--r);padding:14px;margin-bottom:10px;cursor:pointer;transition:all .15s;position:relative;overflow:hidden}
+.deal-card:active{transform:scale(.98)}
+.deal-card:hover{border-color:rgba(255,109,46,.2)}
+.deal-card-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.deal-icon{width:42px;height:42px;border-radius:10px;background:rgba(255,109,46,.08);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.deal-card-top h4{font-size:14px;font-weight:800;line-height:1.2}.deal-card-top .deal-net{font-size:10px;color:var(--t3);margin-top:1px}
+.deal-card p{font-size:12px;color:var(--t2);line-height:1.5;margin-bottom:10px}
+.deal-cta{display:inline-flex;align-items:center;gap:5px;padding:8px 16px;border-radius:10px;background:var(--o);color:#fff;font-size:12px;font-weight:700;border:none;cursor:pointer;transition:all .15s}
+.deal-cta:active{transform:scale(.95)}
+.deal-tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px}
+.deal-tag{padding:3px 8px;border-radius:6px;font-size:10px;font-weight:600;background:rgba(255,255,255,.04);color:var(--t3)}
+.deal-tag.com{background:rgba(52,199,89,.08);color:var(--green)}
+.deal-disclosure{margin:16px 14px 0;padding:10px 12px;border-radius:8px;background:rgba(255,255,255,.02);font-size:10px;color:var(--t3);line-height:1.5}
 
 /* PROFILE */
 .prof-hero{text-align:center;padding:80px 20px 16px}
@@ -472,13 +484,22 @@ select.ri{appearance:none;-webkit-appearance:none}
     </div>
     <div class="scr" id="screen-match"><div class="match-area"><div class="match-filters"><div class="mf-chip active" onclick="toast('Filter kommt bald!')">⚙ Filter</div><div class="mf-chip" id="mfAge">18-35</div><div class="mf-chip" id="mfSeek">Alle</div></div><div class="match-stack" id="matchStack"></div><div class="mactions"><button class="ma sm" onclick="rewind()">↩</button><button class="ma nope" onclick="doSwipe('left')">✕</button><button class="ma super" onclick="superLike()">⭐</button><button class="ma like" onclick="doSwipe('right')">🔥</button><button class="ma sm" onclick="toast('Chat kommt bald!')">💬</button></div></div></div>
     <div class="scr" id="screen-crew"><div class="crew-map-full"><div id="crewMap"></div></div><div class="crew-content"><div class="crew-invite glass" onclick="inviteCrew()"><div class="ci-icon">📲</div><div><h4>Crew einladen</h4><p>Teile deinen Invite-Link!</p></div></div><div class="sec-label">Deine Crew</div><div id="crewList"><p style="padding:14px;color:var(--t3);font-size:13px">Noch keine Crew-Mitglieder. Lade Freunde ein!</p></div><div class="sec-label">Party-Spiele</div><div id="gameList"></div></div></div>
-    <div class="scr" id="screen-deals"><div class="deals-coming"><div class="dc-icon">🤝</div><div class="dc-title">Deals kommen bald</div><div class="dc-sub">Wir arbeiten mit den besten Locations auf Mallorca zusammen, um euch exklusive Deals zu bringen.</div><div class="dc-badge" onclick="toast('Du wirst benachrichtigt!')">🔔 Benachrichtige mich</div><div class="dc-partners"><span class="dc-partner">Bierkönig</span><span class="dc-partner">Megapark</span><span class="dc-partner">Oberbayern</span><span class="dc-partner">Purobeach</span></div></div></div>
-    <div class="scr" id="screen-profile"><div class="prof-hero"><div class="prof-ava-wrap"><div class="prof-ava"><img id="profAvaImg" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80"></div><div class="prof-ava-edit" onclick="toast('Profil bearbeiten kommt bald!')">✏</div></div><h2><span id="profName">Laden...</span></h2><div class="handle" id="profHandle"></div><div class="prof-badges-row" id="profBadges"></div></div><div class="prof-stats glass"><div class="pstat"><div class="pn" id="stM">0</div><div class="pl">Matches</div></div><div class="pstat"><div class="pn" id="stCrew">0</div><div class="pl">Crew</div></div><div class="pstat"><div class="pn" id="stPts">0</div><div class="pl">Punkte</div></div></div><div class="premium-cta" id="premCta" onclick="toast('Premium kommt bald!')"><h3>✨ atze Premium</h3><div class="pc-sub">Keine Werbung · Unlimited Swipes · VIP</div><div class="pc-btn">Ab 2,99€</div></div><div class="pmenu"><div class="pmi" onclick="openLegal('dsgvo')"><div class="pmi-icon b">🛡</div><span class="pmi-label">Datenschutz</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openLegal('impressum')"><div class="pmi-icon gr">📄</div><span class="pmi-label">Impressum</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openLegal('agb')"><div class="pmi-icon gr">📝</div><span class="pmi-label">AGB</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="logOut()"><div class="pmi-icon gr">🚪</div><span class="pmi-label" style="color:var(--fire)">Ausloggen</span></div></div></div>
+    <div class="scr" id="screen-deals"><div class="deals-wrap">
+      <div class="deals-tabs" id="dealsTabs">
+        <div class="dtab active" onclick="showDeals('all',this)">Alle Deals</div>
+        <div class="dtab" onclick="showDeals('pre',this)">✈️ Vor der Reise</div>
+        <div class="dtab" onclick="showDeals('on',this)">📍 Vor Ort</div>
+        <div class="dtab" onclick="showDeals('gear',this)">🎒 Gear & Packliste</div>
+      </div>
+      <div id="dealsContent"></div>
+      <div class="deal-disclosure">⚠️ Affiliate-Hinweis: Einige Links sind Partnerlinks. Bei einer Buchung/Kauf erhalten wir eine kleine Provision — für dich ändert sich der Preis nicht. butterbread tech GmbH · DSGVO-konform · Server EU</div>
+    </div></div>
+    <div class="scr" id="screen-profile"><div class="prof-hero"><div class="prof-ava-wrap"><div class="prof-ava"><img id="profAvaImg" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80"></div><div class="prof-ava-edit" onclick="toast('Profil bearbeiten kommt bald!')">✏</div></div><h2><span id="profName">Laden...</span></h2><div class="handle" id="profHandle"></div><div class="prof-badges-row" id="profBadges"></div></div><div class="prof-stats glass"><div class="pstat"><div class="pn" id="stM">0</div><div class="pl">Matches</div></div><div class="pstat"><div class="pn" id="stCrew">0</div><div class="pl">Crew</div></div><div class="pstat"><div class="pn" id="stPts">0</div><div class="pl">Punkte</div></div></div><div class="premium-cta" id="premCta" onclick="toast('Premium kommt bald!')"><h3>✨ atze Premium</h3><div class="pc-sub">Keine Werbung · Unlimited Swipes · VIP</div><div class="pc-btn">Ab 2,99€</div></div><div class="pmenu"><div class="pmi" onclick="openLegal('dsgvo')"><div class="pmi-icon b">🛡</div><span class="pmi-label">Datenschutz</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openLegal('impressum')"><div class="pmi-icon gr">📄</div><span class="pmi-label">Impressum</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openLegal('agb')"><div class="pmi-icon gr">📝</div><span class="pmi-label">AGB</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openLegal('affiliate')"><div class="pmi-icon o">🤝</div><span class="pmi-label">Affiliate-Hinweis</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="logOut()"><div class="pmi-icon gr">🚪</div><span class="pmi-label" style="color:var(--fire)">Ausloggen</span></div></div></div>
   </main>
   <nav id="navBar">
     <button class="active" onclick="go('radar',this)"><span class="ni">📍</span>Radar</button>
     <button onclick="go('match',this)"><span class="ni">🔥</span>Match<span class="match-dot"></span></button>
-    <button class="shot-btn" onclick="toast('AtzeShot kommt bald!')">📸</button>
+    <button onclick="go('deals',this)"><span class="ni">🤝</span>Deals</button>
     <button onclick="go('crew',this)"><span class="ni">👯</span>Crew</button>
     <button onclick="go('profile',this)"><span class="ni">👤</span>Profil</button>
   </nav>
@@ -506,6 +527,24 @@ var GAMES = [
   {name:'Ich hab noch nie...',icon:'🙈',desc:'Wer trinkt? Wer lügt?',players:'3-12',cards:['...einen Sangria-Eimer alleine getrunken','...im Bierkönig auf der Bühne getanzt','...am Strand eingeschlafen','...jemanden auf Malle geküsst','...meinen Flug fast verpasst','...auf einer Bootsparty gewesen','...beim Megapark-Karaoke gesungen','...den Sonnenaufgang am Ballermann gesehen','...in der Schinkenstraße getanzt','...ein Tattoo auf Malle bekommen']},
   {name:'Trink-Roulette',icon:'🎰',desc:'Zufall entscheidet',players:'2-20',cards:['Alle mit Sonnenbrille trinken!','Wer zuletzt auf Malle war trinkt!','Der/die Jüngste trinkt!','Alle Singles trinken!','Wer Instagram offen hat trinkt!','Der letzte der aufsteht trinkt!','Alle BVB-Fans trinken!','Wer am weitesten vom Hotel weg ist trinkt!','Wasserfall!','Alle mit Flip-Flops trinken!']}
 ];
+var AFFILIATES = [
+  {phase:'pre',icon:'✈️',partner:'Check24 Flüge',net:'Belboon',com:'~2%',desc:'Günstige Flüge nach Mallorca finden und direkt buchen.',cta:'Flug schnappen',url:'https://www.check24.de/flug/?pid=ATZE_{subid}',tags:['Flüge','Ø 350€']},
+  {phase:'pre',icon:'🛡',partner:'HanseMerkur Reiseversicherung',net:'Awin',com:'15-22%',desc:'Reiserücktritt, Krankenversicherung & mehr. Sorglos auf Malle.',cta:'Abgesichert reisen',url:'https://www.hansemerkur.de/reiseversicherung?awc=ATZE_{subid}',tags:['Versicherung','Ø 45€']},
+  {phase:'pre',icon:'🅿️',partner:'Holidayparking',net:'Awin',com:'6-8%',desc:'Parkplatz am Flughafen vorab sichern. Günstiger als vor Ort.',cta:'Parkplatz sichern',url:'https://www.holidayparking.de/?awc=ATZE_{subid}',tags:['Parken','Ø 55€']},
+  {phase:'pre',icon:'🚗',partner:'Sunny Cars Mietwagen',net:'Awin',com:'5%',desc:'Alles-inklusive Mietwagen auf Mallorca. Ohne versteckte Kosten.',cta:'Auto auf Malle',url:'https://www.sunnycars.de/?awc=ATZE_{subid}&destination=PMI',tags:['Mietwagen','Ø 280€']},
+  {phase:'pre',icon:'🏨',partner:'Booking.com Hotels',net:'Booking Affiliate',com:'25-40%',desc:'Hotels, Apartments & Fincas an der Playa. Bestpreisgarantie.',cta:'Bude sichern',url:'https://www.booking.com/searchresults.de.html?dest_id=PMI&aid=ATZE_{subid}',tags:['Hotels','Ø 600€']},
+  {phase:'on',icon:'🎉',partner:'GetYourGuide',net:'Awin',com:'8%',desc:'Bootspartys, Katamaran-Touren, Club-Crawls auf Mallorca.',cta:'Erlebnis buchen',url:'https://www.getyourguide.de/palma-de-mallorca-l189/?partner_id=ATZE_{subid}',tags:['Erlebnisse','Ø 60€/Pers.']},
+  {phase:'on',icon:'🎵',partner:'Megapark / Bierkönig',net:'Direkt-API',com:'10-15%',desc:'Tickets für die legendären Clubs an der Playa. Skip the line.',cta:'Ticket sichern',url:'https://www.megapark.de/tickets/?ref=atze&subid={subid}',tags:['Club-Tickets','Live']},
+  {phase:'on',icon:'🚐',partner:'Welcome Pickups',net:'Direkt',com:'10%',desc:'Privater Flughafen-Transfer nach Palma. Fahrer wartet auf euch.',cta:'Transfer bestellen',url:'https://www.welcomepickups.com/transfer/palma-airport/?ref=atze_{subid}',tags:['Transfer','Ø 35€']},
+  {phase:'on',icon:'🎟',partner:'Tiqets',net:'Awin',com:'6%',desc:'Wasserparks, Jeep-Safaris, Höhlen-Touren — für den Tag.',cta:'Tagestour buchen',url:'https://www.tiqets.com/de/mallorca-c66550/?partner=atze&subid={subid}',tags:['Tagesausflüge','Ø 50€']},
+  {phase:'on',icon:'🍽',partner:'TheFork',net:'Awin',com:'3-5€ fix',desc:'Restaurants auf Mallorca mit Rabatt. Für die ganze Crew reservieren.',cta:'Tisch reservieren',url:'https://www.thefork.de/restaurant/palma-de-mallorca?awc=ATZE_{subid}',tags:['Restaurant','Gruppe']},
+  {phase:'gear',icon:'🎒',partner:'Amazon Party-Gear',net:'Amazon PartnerNet',com:'1-10%',desc:'Bucket Hats, Trinkflaschen, wasserdichte Hüllen — die Atze-Packliste.',cta:'Packliste checken',url:'https://www.amazon.de/s?k=mallorca+party+set&tag=atze-app-21&subid={subid}',tags:['Party-Gear','Packliste']},
+  {phase:'gear',icon:'📹',partner:'GoPro',net:'Awin',com:'5-8%',desc:'Die besten Momente auf Malle in 4K festhalten. Waterproof.',cta:'Momente filmen',url:'https://gopro.com/de/d/hero-cameras?awc=ATZE_{subid}',tags:['Kamera','Ø 350€']},
+  {phase:'gear',icon:'☀️',partner:'Douglas',net:'Awin',com:'5-8%',desc:'Sonnenschutz, After-Sun & Pflege für die Malle-Woche.',cta:'Sonnenschutz holen',url:'https://www.douglas.de/de/c/sonnenschutz?awc=ATZE_{subid}',tags:['Sonnenschutz','Pflege']},
+  {phase:'gear',icon:'💆',partner:'Flaconi',net:'Awin',com:'8-12%',desc:'Parfum, Skincare & Bestseller für die Reise. Schnelle Lieferung.',cta:'Pflege einpacken',url:'https://www.flaconi.de/pflege/?awc=ATZE_{subid}',tags:['Beauty','Ø 45€']},
+  {phase:'gear',icon:'🚁',partner:'DJI Drohnen',net:'Awin',com:'3-5%',desc:'Epische Drohnen-Shots über der Playa. Content Creator auf Malle.',cta:'Drohne mitnehmen',url:'https://store.dji.com/de/?awc=ATZE_{subid}',tags:['Drohne','Content']}
+];
+
 var obData = {gender:'',seek:'',status:'',club:'',bio:'',birthdate:''};
 var authMode = 'signup'; // or 'login'
 var curGame = null, gameIdx = 0, cIdx = 0;
@@ -747,6 +786,7 @@ function buildApp(){
   buildStories();
   buildCards();
   buildGames();
+  buildDeals('all');
   updateProfile();
   initMap();
   initCMap();
@@ -760,6 +800,47 @@ function buildApp(){
 
   document.getElementById('sNum').textContent = ME.streak || 0;
 }
+
+// ============================================
+// DEALS / AFFILIATE
+// ============================================
+var PHASE_LABELS = {pre:'✈️ Vor der Reise',on:'📍 Auf Mallorca',gear:'🎒 Gear & Packliste'};
+
+function buildDeals(filter){
+  var c = document.getElementById('dealsContent');
+  if(!c) return;
+  var items = filter === 'all' ? AFFILIATES : AFFILIATES.filter(function(a){return a.phase === filter});
+  var phases = filter === 'all' ? ['pre','on','gear'] : [filter];
+  var html = '';
+  phases.forEach(function(ph){
+    var phItems = items.filter(function(a){return a.phase === ph});
+    if(phItems.length === 0) return;
+    html += '<div class="deal-phase"><div class="deal-phase-label"><span class="dpl-dot"></span>'+PHASE_LABELS[ph]+'</div>';
+    phItems.forEach(function(a){
+      html += '<div class="deal-card" onclick="openDeal(\''+a.url+'\')">';
+      html += '<div class="deal-card-top"><div class="deal-icon">'+a.icon+'</div><div><h4>'+esc(a.partner)+'</h4><div class="deal-net">'+esc(a.net)+' · Provision: '+a.com+'</div></div></div>';
+      html += '<div class="deal-tags">'+a.tags.map(function(t){return '<span class="deal-tag">'+t+'</span>'}).join('')+'<span class="deal-tag com">'+a.com+'</span></div>';
+      html += '<p>'+esc(a.desc)+'</p>';
+      html += '<button class="deal-cta">'+esc(a.cta)+' →</button>';
+      html += '</div>';
+    });
+    html += '</div>';
+  });
+  c.innerHTML = html;
+}
+
+window.showDeals = function(filter, el){
+  document.querySelectorAll('.dtab').forEach(function(t){t.classList.remove('active')});
+  if(el) el.classList.add('active');
+  buildDeals(filter);
+};
+
+window.openDeal = function(url){
+  // Replace {subid} with user ID for tracking
+  var uid = ME && ME.user_id ? ME.user_id.substring(0,8) : 'anon';
+  var finalUrl = url.replace(/\{subid\}/g, uid);
+  window.open(finalUrl, '_blank');
+};
 
 // ============================================
 // VENUES & MAP
@@ -996,6 +1077,7 @@ window.openLegal=function(type){
   if(type==='dsgvo')c='<h2>Datenschutzerklärung</h2><div class="bs-desc" style="font-size:12px;line-height:1.7"><strong>Verantwortlicher gem. Art. 4 Abs. 7 DSGVO</strong><br>butterbread tech GmbH<br>Geschäftsführer: Jan<br>Web: butterbread-tech.com<br>E-Mail: datenschutz@butterbread-tech.com<br><br><strong>1. Erhebung personenbezogener Daten</strong><br>Profildaten, Standortdaten (nur bei aktiver Nutzung), Kameradaten (nur AtzeShot), Nutzungsdaten (anonymisiert). Rechtsgrundlage: Art. 6 Abs. 1 DSGVO.<br><br><strong>2. Sicherheit</strong><br>AES-256. Server: EU Frankfurt. TLS 1.3.<br><br><strong>3. Betroffenenrechte (Art. 15-22)</strong><br>Auskunft, Berichtigung, Löschung, Einschränkung, Übertragbarkeit, Widerspruch.<br><br><strong>4. Tracking</strong><br>Keine Cookies. Keine Drittanbieter-Tracker.<br><br><strong>5. Kontakt</strong><br>datenschutz@butterbread-tech.com<br><br>Stand: April 2026</div><div class="bs-actions"><button class="bs-btn orange" onclick="closeBS()">Schließen</button></div>';
   else if(type==='impressum')c='<h2>Impressum</h2><div class="bs-desc" style="font-size:12px;line-height:1.7"><strong>Angaben gemäß §5 TMG</strong><br><br>butterbread tech GmbH<br>Geschäftsführer: Jan<br>Web: butterbread-tech.com<br>E-Mail: hello@butterbread-tech.com<br><br><strong>Registergericht:</strong> [wird nach Eintragung ergänzt]<br><strong>HRB:</strong> [wird nach Eintragung ergänzt]<br><br>Stand: April 2026</div><div class="bs-actions"><button class="bs-btn orange" onclick="closeBS()">Schließen</button></div>';
   else if(type==='agb')c='<h2>AGB</h2><div class="bs-desc" style="font-size:12px;line-height:1.7"><strong>§1 Geltungsbereich</strong><br>Diese AGB gelten für die atze-App der butterbread tech GmbH.<br><br><strong>§2 Registrierung</strong><br>Mindestalter 18 Jahre. Wahrheitsgemäße Angaben. Ein Konto pro Person.<br><br><strong>§3 Premium</strong><br>1 Woche 2,99€, 1 Monat 4,99€/Monat, Saison 9,99€. Kündigung jederzeit. 14-Tage-Widerrufsrecht.<br><br><strong>§4 Verhaltensregeln</strong><br>Kein Mobbing, Belästigung, Diskriminierung. Verstoß = Sperrung.<br><br><strong>§5 Datenschutz</strong><br>Siehe Datenschutzerklärung. DSGVO-konform.<br><br>Stand: April 2026</div><div class="bs-actions"><button class="bs-btn orange" onclick="closeBS()">Schließen</button></div>';
+  else if(type==='affiliate')c='<h2>Affiliate-Hinweis</h2><div class="bs-desc" style="font-size:12px;line-height:1.7"><strong>Transparenzhinweis gemäß TMG & UWG</strong><br><br>Die atze-App enthält Affiliate-/Partnerlinks. Wenn du über diese Links Produkte oder Dienstleistungen buchst oder kaufst, erhält die butterbread tech GmbH eine Provision vom jeweiligen Anbieter.<br><br><strong>Für dich ändert sich der Preis nicht.</strong><br><br><strong>Unsere Partner (Auszug):</strong><br>Check24, HanseMerkur, Booking.com, GetYourGuide, Megapark, Amazon, GoPro, Douglas, Sunny Cars, TheFork, Tiqets, Welcome Pickups, Holidayparking, Flaconi, DJI<br><br><strong>Netzwerke:</strong><br>Awin, Belboon, Amazon PartnerNet, Booking Affiliate Partner, Direkt-Partnerschaften<br><br><strong>Tracking:</strong><br>Wir verwenden anonymisierte Sub-IDs zur Zuordnung. Es werden keine personenbezogenen Daten an Partner übermittelt. DSGVO-konform.<br><br><strong>Qualitätsstandards:</strong><br>• Keine Dropshipping/Fake-Shops<br>• Kein Gambling/Sportwetten<br>• Nur etablierte DE/EU-Brands<br>• App-Store-Policy-konform<br><br>Stand: April 2026<br>butterbread tech GmbH · butterbread-tech.com</div><div class="bs-actions"><button class="bs-btn orange" onclick="closeBS()">Schließen</button></div>';
   document.getElementById('bsContent').innerHTML=c;
   document.getElementById('bsheet').classList.add('show');
 };
