@@ -95,9 +95,7 @@ main{flex:1;overflow:hidden;position:relative}
 .auth-tag{font-size:16px;color:var(--t2);margin-bottom:28px;line-height:1.6}
 .rbtn{width:100%;padding:15px;border:none;border-radius:14px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:8px;transition:all .15s var(--ease)}
 .rbtn:active{transform:scale(.97)}
-.rbtn.apple{background:#fff;color:#000}.rbtn.google{background:#4285F4;color:#fff}.rbtn.email{background:var(--glass);color:#fff;border:1px solid var(--glass-border);backdrop-filter:blur(20px);box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
-.auth-or{text-align:center;color:var(--t3);font-size:12px;margin:12px 0;position:relative}.auth-or::before,.auth-or::after{content:'';position:absolute;top:50%;width:calc(50% - 20px);height:1px;background:rgba(255,255,255,.08)}.auth-or::before{left:0}.auth-or::after{right:0}
-.auth-form{display:none;flex-direction:column;gap:8px;margin-top:12px}
+.auth-form{display:flex;flex-direction:column;gap:10px;margin-top:16px}
 .auth-form.show{display:flex}
 .auth-terms{text-align:center;font-size:11px;color:var(--t3);margin-top:16px;line-height:1.5}
 .auth-terms a{color:var(--t2);text-decoration:underline}
@@ -526,21 +524,25 @@ select.ri{appearance:none;-webkit-appearance:none}
 
 <!-- AUTH -->
 <div class="auth-screen gone" id="authScreen">
-  <div class="auth-bg"><img src="https://images.unsplash.com/photo-1533104816931-20fa691ff6ca?w=900&q=80"><div class="auth-ov"></div></div>
+  <div class="auth-bg"><img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=900&q=80"><div class="auth-ov"></div></div>
   <div class="auth-content">
     <div class="auth-brand">atze<span>.</span></div>
-    <div class="auth-tag">Finde die besten Parties.<br>Verlier nie wieder deine Crew.</div>
-    <button class="rbtn apple" onclick="authWith('apple')"> Apple</button>
-    <button class="rbtn google" onclick="authWith('google')">G Google</button>
-    <div class="auth-or">oder</div>
-    <button class="rbtn email" id="emailToggle" onclick="toggleEmailForm()">Mit E-Mail anmelden</button>
-    <div class="auth-form" id="emailForm">
-      <input class="ri" id="authEmail" type="email" placeholder="E-Mail-Adresse">
-      <input class="ri" id="authPass" type="password" placeholder="Passwort (min. 6 Zeichen)">
+    <div class="auth-tag">Finde die besten Parties.<br>Verlier nie wieder deine Crew. 🌴</div>
+    <div class="auth-form show" id="emailForm">
+      <input class="ri" id="authEmail" type="email" placeholder="E-Mail-Adresse" autocomplete="email">
+      <input class="ri" id="authPass" type="password" placeholder="Passwort (min. 6 Zeichen)" autocomplete="current-password">
       <button class="abtn primary" id="authSubmit" onclick="authEmail()">Registrieren</button>
     </div>
     <div class="auth-switch" id="authSwitch" onclick="toggleAuthMode()">Schon ein Konto? <span>Einloggen</span></div>
-    <div class="auth-terms">Mit der Anmeldung akzeptierst du die <a href="#" onclick="event.preventDefault();openLegal('agb')">AGB</a> und <a href="#" onclick="event.preventDefault();openLegal('dsgvo')">Datenschutz</a> der butterbread tech GmbH.</div>
+    <div class="auth-terms">Mit der Anmeldung akzeptierst du die <a href="#" onclick="event.preventDefault();openLegalAuth('agb')">AGB</a> und <a href="#" onclick="event.preventDefault();openLegalAuth('dsgvo')">Datenschutz</a> der butterbread tech GmbH.</div>
+  </div>
+</div>
+
+<!-- LEGAL OVERLAY FOR AUTH SCREEN -->
+<div id="legalAuthOv" style="position:fixed;inset:0;z-index:999999;background:rgba(0,0,0,.95);backdrop-filter:blur(20px);display:none;flex-direction:column;overflow-y:auto;padding:20px">
+  <div style="max-width:430px;margin:0 auto;width:100%">
+    <button onclick="document.getElementById('legalAuthOv').style.display='none'" style="position:sticky;top:0;z-index:2;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.1);border:none;color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;margin-bottom:16px">✕</button>
+    <div id="legalAuthContent" style="color:var(--t);font-size:13px;line-height:1.7"></div>
   </div>
 </div>
 
@@ -1298,10 +1300,6 @@ function showAuth(){
   document.getElementById('authScreen').classList.remove('gone');
 }
 
-window.toggleEmailForm = function(){
-  document.getElementById('emailForm').classList.toggle('show');
-};
-
 window.toggleAuthMode = function(){
   authMode = authMode === 'signup' ? 'login' : 'signup';
   document.getElementById('authSubmit').textContent = authMode === 'signup' ? t('auth_signup') : t('auth_login');
@@ -1310,29 +1308,47 @@ window.toggleAuthMode = function(){
     : t('auth_no_account') + ' <span>' + t('auth_signup') + '</span>';
 };
 
-window.authWith = async function(provider){
-  toast('Anmeldung mit ' + provider + '...');
-  var {error} = await sb.auth.signInWithOAuth({
-    provider: provider,
-    options: { redirectTo: window.location.origin + window.location.pathname }
-  });
-  if(error) toast('Fehler: ' + error.message);
-};
-
 window.authEmail = async function(){
   var email = document.getElementById('authEmail').value.trim();
   var pass = document.getElementById('authPass').value;
-  if(!email || !pass || pass.length < 6){toast('Bitte E-Mail und Passwort (min. 6 Zeichen) eingeben');return}
+  if(!email){toast('Bitte E-Mail eingeben');return}
+  if(!pass || pass.length < 6){toast('Passwort muss mindestens 6 Zeichen haben');return}
 
-  if(authMode === 'signup'){
-    var {data: signUpData, error} = await sb.auth.signUp({email: email, password: pass});
-    if(error){toast('Fehler: ' + error.message);return}
-    if(!signUpData.session){toast('Bestätigungs-E-Mail gesendet! Prüfe dein Postfach.');return}
-    toast('Willkommen! 🌴');
-  } else {
-    var {error} = await sb.auth.signInWithPassword({email: email, password: pass});
-    if(error){toast('Fehler: ' + error.message);return}
+  var btn = document.getElementById('authSubmit');
+  btn.disabled = true;
+  btn.textContent = 'Laden...';
+
+  try {
+    if(authMode === 'signup'){
+      var {data: signUpData, error} = await sb.auth.signUp({email: email, password: pass});
+      if(error){toast('Fehler: ' + error.message);btn.disabled=false;btn.textContent='Registrieren';return}
+      if(signUpData.session){
+        toast('Willkommen! 🌴');
+        return;
+      }
+      if(signUpData.user && !signUpData.session){
+        toast('Bestätigungs-E-Mail gesendet! Prüfe dein Postfach.');
+        btn.disabled=false;btn.textContent='Registrieren';
+        return;
+      }
+    } else {
+      var {data, error} = await sb.auth.signInWithPassword({email: email, password: pass});
+      if(error){toast('Fehler: ' + error.message);btn.disabled=false;btn.textContent='Einloggen';return}
+    }
+  } catch(e) {
+    console.error('authEmail error:', e);
+    toast('Ein Fehler ist aufgetreten. Bitte versuche es erneut.');
+    btn.disabled=false;
+    btn.textContent = authMode === 'signup' ? 'Registrieren' : 'Einloggen';
   }
+};
+
+window.openLegalAuth=function(type){
+  var c='';
+  if(type==='agb') c='<h2 style="font-size:22px;font-weight:900;margin-bottom:16px">AGB</h2><div style="color:var(--t2)"><strong>§1 Geltungsbereich</strong><br>Diese AGB gelten für die atze-App der butterbread tech GmbH.<br><br><strong>§2 Registrierung</strong><br>Mindestalter 18 Jahre. Wahrheitsgemäße Angaben. Ein Konto pro Person.<br><br><strong>§3 Premium</strong><br>1 Woche 2,99€, 1 Monat 4,99€/Monat, Saison 9,99€. Kündigung jederzeit. 14-Tage-Widerrufsrecht.<br><br><strong>§4 Verhaltensregeln</strong><br>Kein Mobbing, Belästigung, Diskriminierung. Verstoß = Sperrung.<br><br><strong>§5 Datenschutz</strong><br>Siehe Datenschutzerklärung. DSGVO-konform.<br><br>Stand: April 2026</div>';
+  else if(type==='dsgvo') c='<h2 style="font-size:22px;font-weight:900;margin-bottom:16px">Datenschutzerklärung</h2><div style="color:var(--t2)"><strong>Verantwortlicher gem. Art. 4 Abs. 7 DSGVO</strong><br>butterbread tech GmbH<br>Web: butterbread-tech.com<br>E-Mail: datenschutz@butterbread-tech.com<br><br><strong>1. Datenkategorien</strong><br>Profildaten (Name, Geburtsdatum, Geschlecht, Bio, Fotos): Art. 6 Abs. 1 b DSGVO.<br>Standortdaten: Art. 6 Abs. 1 a DSGVO (Einwilligung, optional).<br>Kameradaten: Nur bei Upload, Art. 6 Abs. 1 a DSGVO.<br><br><strong>2. Drittanbieter</strong><br>Supabase (Server EU Frankfurt). AES-256 verschlüsselt.<br><br><strong>3. Betroffenenrechte (Art. 15-22)</strong><br>Auskunft, Berichtigung, Löschung, Datenportabilität.<br>Kontakt: datenschutz@butterbread-tech.com<br><br><strong>4. Keine Cookies, Keine Tracker</strong><br><br>Stand: April 2026</div>';
+  document.getElementById('legalAuthContent').innerHTML=c;
+  document.getElementById('legalAuthOv').style.display='flex';
 };
 
 // ============================================
@@ -1343,44 +1359,48 @@ async function loadUser(authUser){
   document.getElementById('authScreen').classList.add('gone');
   document.getElementById('agegate').classList.add('gone');
 
-  // Get profile
-  var {data: profile} = await sb.from('profiles').select('*').eq('user_id', authUser.id).single();
+  try {
+    var {data: profile, error: profileError} = await sb.from('profiles').select('*').eq('user_id', authUser.id).single();
 
-  if(!profile || !profile.name || profile.name === 'Neuer Atze'){
-    // Show onboarding
+    if(profileError || !profile || !profile.name || profile.name === 'Neuer Atze'){
+      document.getElementById('loadingScreen').classList.add('gone');
+      showOnboarding(authUser);
+      return;
+    }
+
+    ME = profile;
+
+    // Load venues
+    var {data: venues} = await sb.from('venues').select('*').order('crowd_count', {ascending: false});
+    VENUES = venues || [];
+
+    // Load profiles for matching (exclude self, exclude already swiped)
+    var {data: swiped} = await sb.from('matches').select('to_user').eq('from_user', authUser.id);
+    var swipedIds = (swiped || []).map(function(s){return s.to_user});
+    swipedIds.push(authUser.id);
+
+    var q = sb.from('profiles').select('*').not('user_id', 'in', '('+swipedIds.join(',')+')');
+    var {data: profiles} = await q;
+    PROFILES = profiles || [];
+
+    // Update streak
+    try { await sb.rpc('update_streak', {p_user_id: authUser.id}); } catch(e) { console.warn('streak update failed:', e); }
+    var {data: fresh} = await sb.from('profiles').select('streak,points').eq('user_id', authUser.id).single();
+    if(fresh){ME.streak = fresh.streak; ME.points = fresh.points}
+
+    // Count matches
+    var {count: matchCount} = await sb.from('matches').select('*', {count: 'exact', head: true}).eq('from_user', authUser.id).eq('is_match', true);
+    ME._matchCount = matchCount || 0;
+
+    // Show app
+    document.getElementById('loadingScreen').classList.add('gone');
+    document.getElementById('app').style.display = 'flex';
+    buildApp();
+  } catch(e) {
+    console.error('loadUser error:', e);
     document.getElementById('loadingScreen').classList.add('gone');
     showOnboarding(authUser);
-    return;
   }
-
-  ME = profile;
-
-  // Load venues
-  var {data: venues} = await sb.from('venues').select('*').order('crowd_count', {ascending: false});
-  VENUES = venues || [];
-
-  // Load profiles for matching (exclude self, exclude already swiped)
-  var {data: swiped} = await sb.from('matches').select('to_user').eq('from_user', authUser.id);
-  var swipedIds = (swiped || []).map(function(s){return s.to_user});
-  swipedIds.push(authUser.id);
-
-  var q = sb.from('profiles').select('*').not('user_id', 'in', '('+swipedIds.join(',')+')');
-  var {data: profiles} = await q;
-  PROFILES = profiles || [];
-
-  // Update streak
-  await sb.rpc('update_streak', {p_user_id: authUser.id});
-  var {data: fresh} = await sb.from('profiles').select('streak,points').eq('user_id', authUser.id).single();
-  if(fresh){ME.streak = fresh.streak; ME.points = fresh.points}
-
-  // Count matches
-  var {count: matchCount} = await sb.from('matches').select('*', {count: 'exact', head: true}).eq('from_user', authUser.id).eq('is_match', true);
-  ME._matchCount = matchCount || 0;
-
-  // Show app
-  document.getElementById('loadingScreen').classList.add('gone');
-  document.getElementById('app').style.display = 'flex';
-  buildApp();
 }
 
 // ============================================
@@ -1472,33 +1492,39 @@ window.pickCustomClub = function(v){
 };
 
 window.finishOnboard = async function(){
-  var name = esc(document.getElementById('obName').value.trim());
-  var d=document.getElementById('obBDay').value, m=document.getElementById('obBMonth').value, y=document.getElementById('obBYear').value;
-  var birthdate = y+'-'+(m<10?'0'+m:m)+'-'+(d<10?'0'+d:d);
-  var bd=new Date(+y,+m-1,+d), today=new Date();
-  var age=today.getFullYear()-bd.getFullYear();
-  if(today.getMonth()<bd.getMonth()||(today.getMonth()===bd.getMonth()&&today.getDate()<bd.getDate()))age--;
-  var insta = esc(document.getElementById('obInsta').value.trim().replace(/^@/,''));
-  var tiktok = esc(document.getElementById('obTiktok').value.trim().replace(/^@/,''));
-  var snapchat = esc(document.getElementById('obSnap').value.trim().replace(/^@/,''));
-  var bio = esc((document.getElementById('obBio')?.value||'').trim());
+  try {
+    var name = esc(document.getElementById('obName').value.trim());
+    var d=document.getElementById('obBDay').value, m=document.getElementById('obBMonth').value, y=document.getElementById('obBYear').value;
+    var birthdate = y+'-'+(m<10?'0'+m:m)+'-'+(d<10?'0'+d:d);
+    var bd=new Date(+y,+m-1,+d), today=new Date();
+    var age=today.getFullYear()-bd.getFullYear();
+    if(today.getMonth()<bd.getMonth()||(today.getMonth()===bd.getMonth()&&today.getDate()<bd.getDate()))age--;
+    var insta = esc(document.getElementById('obInsta').value.trim().replace(/^@/,''));
+    var tiktok = esc(document.getElementById('obTiktok').value.trim().replace(/^@/,''));
+    var snapchat = esc(document.getElementById('obSnap').value.trim().replace(/^@/,''));
+    var bio = esc((document.getElementById('obBio')?.value||'').trim());
 
-  var {data:{user}} = await sb.auth.getUser();
-  if(!user){toast('Fehler — bitte neu einloggen');return}
+    var {data:{user}} = await sb.auth.getUser();
+    if(!user){toast('Fehler — bitte neu einloggen');return}
 
-  var updateObj = {
-    name: name, age: age, birthdate: birthdate, bio: bio, insta: insta, tiktok: tiktok, snapchat: snapchat,
-    gender: obData.gender, seek: obData.seek, status: obData.status, club: obData.club
-  };
-  if(obData.photo_url) updateObj.photo_url = obData.photo_url;
+    var updateObj = {
+      name: name, age: age, birthdate: birthdate, bio: bio, insta: insta, tiktok: tiktok, snapchat: snapchat,
+      gender: obData.gender, seek: obData.seek, status: obData.status, club: obData.club
+    };
+    if(obData.photo_url) updateObj.photo_url = obData.photo_url;
 
-  var {error} = await sb.from('profiles').update(updateObj).eq('user_id', user.id);
+    updateObj.user_id = user.id;
+    var {error} = await sb.from('profiles').upsert(updateObj, {onConflict: 'user_id'});
 
-  if(error){toast('Fehler: '+error.message);return}
+    if(error){toast('Fehler: '+error.message);return}
 
-  document.getElementById('onboard').classList.add('gone');
-  await loadUser(user);
-  toast('Willkommen, '+name+'! 🌴');
+    document.getElementById('onboard').classList.add('gone');
+    await loadUser(user);
+    toast('Willkommen, '+name+'! 🌴');
+  } catch(e) {
+    console.error('finishOnboard error:', e);
+    toast('Fehler beim Speichern. Bitte versuche es erneut.');
+  }
 };
 
 // ============================================
