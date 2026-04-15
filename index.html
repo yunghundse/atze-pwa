@@ -625,7 +625,7 @@ select.ri{appearance:none;-webkit-appearance:none}
     <div class="rsub">Deine Daten. Deine Kontrolle.</div>
     <div id="dsgvoList"></div>
     <div style="margin-top:12px;padding:12px;border-radius:10px;background:var(--bg3);font-size:11px;color:var(--t3);line-height:1.5">butterbread tech GmbH · butterbread-tech.com · AES-256 verschlüsselt · Server EU (Frankfurt) · DSGVO-konform</div>
-    <div style="flex-shrink:0;padding:16px 0 20px"><button class="rnext" onclick="finishOnboard()" style="margin-top:0">Los geht's!</button></div>
+    <div style="flex-shrink:0;padding:16px 0 20px"><button class="rnext" onclick="try{finishOnboard()}catch(e){alert('Fehler: '+e.message)}" style="margin-top:0">Los geht's!</button></div>
   </div>
 </div>
 
@@ -818,9 +818,27 @@ select.ri{appearance:none;-webkit-appearance:none}
 <script src="config.js"></script>
 <script>
 // ============================================
-// ATZE PWA — Supabase Edition
+// ATZE PWA — Supabase Edition v7
 // butterbread tech GmbH
 // ============================================
+
+// FORCE UPDATE: Kill old service workers and caches
+(function(){
+  var APP_VERSION = 7;
+  var lastV = parseInt(localStorage.getItem('atze_app_v') || '0');
+  if(lastV < APP_VERSION){
+    localStorage.setItem('atze_app_v', APP_VERSION);
+    if('serviceWorker' in navigator){
+      navigator.serviceWorker.getRegistrations().then(function(regs){
+        regs.forEach(function(r){r.unregister()});
+      });
+      caches.keys().then(function(keys){
+        keys.forEach(function(k){caches.delete(k)});
+      });
+    }
+    if(lastV > 0) { window.location.reload(true); return; }
+  }
+})();
 
 var sb; // Supabase client
 var ME = null; // Current user profile
@@ -1576,10 +1594,12 @@ window.pickCustomClub = function(v){
 };
 
 window.finishOnboard = async function(){
+  console.log('finishOnboard CALLED');
   toast('Profil wird gespeichert...');
   try {
     var nameEl = document.getElementById('obName');
-    var name = nameEl ? esc(nameEl.value.trim()) : '';
+    if(!nameEl) { toast('FEHLER: Name-Feld nicht gefunden!'); console.error('obName element missing'); return; }
+    var name = esc(nameEl.value.trim());
     if(!name){toast('Bitte gib deinen Namen ein!');return}
 
     var d=document.getElementById('obBDay').value, m=document.getElementById('obBMonth').value, y=document.getElementById('obBYear').value;
@@ -3208,7 +3228,7 @@ window.rateVenue=function(venueId){
 // 11. SANGRIA CURRENCY (rebrand points)
 // Already handled in I18N - just show 🍹 icon next to points
 
-if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js').catch(function(){});
+if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js?v=7').catch(function(){});
 </script>
 </body>
 </html>
