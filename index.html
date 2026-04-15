@@ -104,7 +104,7 @@ main{flex:1;overflow:hidden;position:relative}
 /* ONBOARDING (nach Auth) */
 .onboard{position:fixed;inset:0;z-index:99998;background:var(--bg);display:flex;flex-direction:column}
 .onboard.gone{display:none}
-.ob-step{position:absolute;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:all .4s var(--ease);padding:60px 28px 40px}
+.ob-step{position:absolute;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:all .4s var(--ease);padding:60px 28px 40px;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .ob-step.active{opacity:1;pointer-events:all}
 .ob-back{position:absolute;top:16px;left:16px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.06);border:none;color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .rprog{display:flex;gap:4px;margin-bottom:32px}
@@ -625,7 +625,7 @@ select.ri{appearance:none;-webkit-appearance:none}
     <div class="rsub">Deine Daten. Deine Kontrolle.</div>
     <div id="dsgvoList"></div>
     <div style="margin-top:12px;padding:12px;border-radius:10px;background:var(--bg3);font-size:11px;color:var(--t3);line-height:1.5">butterbread tech GmbH · butterbread-tech.com · AES-256 verschlüsselt · Server EU (Frankfurt) · DSGVO-konform</div>
-    <button class="rnext" onclick="finishOnboard()">Los geht's!</button>
+    <div style="flex-shrink:0;padding:16px 0 20px"><button class="rnext" onclick="finishOnboard()" style="margin-top:0">Los geht's!</button></div>
   </div>
 </div>
 
@@ -1576,38 +1576,59 @@ window.pickCustomClub = function(v){
 };
 
 window.finishOnboard = async function(){
+  toast('Profil wird gespeichert...');
   try {
-    var name = esc(document.getElementById('obName').value.trim());
+    var nameEl = document.getElementById('obName');
+    var name = nameEl ? esc(nameEl.value.trim()) : '';
+    if(!name){toast('Bitte gib deinen Namen ein!');return}
+
     var d=document.getElementById('obBDay').value, m=document.getElementById('obBMonth').value, y=document.getElementById('obBYear').value;
+    if(!d||!m||!y){toast('Bitte Geburtsdatum ausfüllen!');return}
     var birthdate = y+'-'+(m<10?'0'+m:m)+'-'+(d<10?'0'+d:d);
     var bd=new Date(+y,+m-1,+d), today=new Date();
     var age=today.getFullYear()-bd.getFullYear();
     if(today.getMonth()<bd.getMonth()||(today.getMonth()===bd.getMonth()&&today.getDate()<bd.getDate()))age--;
-    var insta = esc(document.getElementById('obInsta').value.trim().replace(/^@/,''));
-    var tiktok = esc(document.getElementById('obTiktok').value.trim().replace(/^@/,''));
-    var snapchat = esc(document.getElementById('obSnap').value.trim().replace(/^@/,''));
-    var bio = esc((document.getElementById('obBio')?.value||'').trim());
+
+    var instaEl=document.getElementById('obInsta'), tiktokEl=document.getElementById('obTiktok'), snapEl=document.getElementById('obSnap'), bioEl=document.getElementById('obBio');
+    var insta = instaEl ? esc(instaEl.value.trim().replace(/^@/,'')) : '';
+    var tiktok = tiktokEl ? esc(tiktokEl.value.trim().replace(/^@/,'')) : '';
+    var snapchat = snapEl ? esc(snapEl.value.trim().replace(/^@/,'')) : '';
+    var bio = bioEl ? esc(bioEl.value.trim()) : '';
 
     var {data:{user}} = await sb.auth.getUser();
     if(!user){toast('Fehler — bitte neu einloggen');return}
 
     var updateObj = {
+      user_id: user.id,
       name: name, age: age, birthdate: birthdate, bio: bio, insta: insta, tiktok: tiktok, snapchat: snapchat,
-      gender: obData.gender, seek: obData.seek, status: obData.status, club: obData.club
+      gender: obData.gender||'', seek: obData.seek||'', status: obData.status||'', club: obData.club||''
     };
     if(obData.photo_url) updateObj.photo_url = obData.photo_url;
 
-    updateObj.user_id = user.id;
-    var {error} = await sb.from('profiles').upsert(updateObj, {onConflict: 'user_id'});
+    // Try upsert first, fall back to insert if needed
+    var {data, error} = await sb.from('profiles').upsert(updateObj, {onConflict: 'user_id'});
 
-    if(error){toast('Fehler: '+error.message);return}
+    if(error){
+      console.error('Upsert error:', error);
+      // Fallback: try insert
+      var {error: insertErr} = await sb.from('profiles').insert(updateObj);
+      if(insertErr){
+        console.error('Insert error:', insertErr);
+        // Fallback: try update
+        var {error: updateErr} = await sb.from('profiles').update(updateObj).eq('user_id', user.id);
+        if(updateErr){
+          toast('Fehler: '+updateErr.message);
+          return;
+        }
+      }
+    }
 
     document.getElementById('onboard').classList.add('gone');
     await loadUser(user);
     toast('Willkommen, '+name+'! 🌴');
   } catch(e) {
     console.error('finishOnboard error:', e);
-    toast('Fehler beim Speichern. Bitte versuche es erneut.');
+    toast('Fehler: ' + (e.message||'Unbekannter Fehler'));
   }
 };
 
