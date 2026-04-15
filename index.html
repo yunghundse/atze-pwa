@@ -485,6 +485,10 @@ select.ri{appearance:none;-webkit-appearance:none}
 .anim{animation:su .4s var(--bounce) both}
 @keyframes su{from{transform:translateY(12px);opacity:0}to{transform:none;opacity:1}}
 .d1{animation-delay:.05s}.d2{animation-delay:.1s}
+
+/* WEATHER CARD */
+.weather-card{position:relative;overflow:hidden}
+.weather-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,214,10,.08),rgba(10,132,255,.06));border-radius:var(--r);pointer-events:none}
 </style>
 </head>
 <body>
@@ -710,6 +714,17 @@ select.ri{appearance:none;-webkit-appearance:none}
       <div class="stories" id="storiesBar"></div>
       <div class="radar-content">
         <div class="mood-bar glass anim"><div class="mb-label">Vibe</div><div class="mood-emojis" id="moodBar"></div></div>
+        <div class="weather-card glass anim" id="weatherCard" style="margin:0 14px 10px;padding:14px 16px;display:flex;align-items:center;gap:14px;cursor:pointer" onclick="refreshWeather()">
+          <div id="weatherIcon" style="font-size:36px">☀️</div>
+          <div style="flex:1">
+            <div style="font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px">Mallorca jetzt</div>
+            <div style="display:flex;align-items:baseline;gap:6px"><span id="weatherTemp" style="font-size:24px;font-weight:900">--°</span><span id="weatherDesc" style="font-size:12px;color:var(--t2)">Lädt...</span></div>
+          </div>
+          <div style="text-align:right">
+            <div id="weatherWind" style="font-size:11px;color:var(--t3)">💨 --</div>
+            <div id="weatherHumid" style="font-size:11px;color:var(--t3);margin-top:2px">💧 --</div>
+          </div>
+        </div>
         <div class="tonight glass anim">
           <div class="tc-row"><div class="tc-live"></div><div class="tc-label">Heute Abend</div></div>
           <h3 id="tonightTitle">Lädt...</h3>
@@ -765,6 +780,11 @@ var PROFILES = []; // For matching
 var rMap, cMap;
 var MOODS = ['🥳','🔥','💃','🍻','🌴','🍹','😎','🤪','💤','🌅'];
 var CLUBS = {'Bundesliga':['Bayern München','Borussia Dortmund','Bayer Leverkusen','RB Leipzig','VfB Stuttgart','Eintracht Frankfurt','Wolfsburg','SC Freiburg','Union Berlin','Gladbach','Hoffenheim','Werder Bremen','Mainz 05','Augsburg','Bochum','Heidenheim','1. FC Köln','Schalke 04','HSV','Hertha BSC','St. Pauli','Kaiserslautern','Düsseldorf'],'Premier League':['Arsenal','Chelsea','Liverpool','Man City','Man United','Newcastle','Tottenham','West Ham','Aston Villa','Brighton','Everton'],'La Liga':['Real Madrid','FC Barcelona','Atlético Madrid','Real Sociedad','Athletic Bilbao','Betis','Villarreal','Sevilla','Mallorca'],'Serie A':['AC Milan','Inter','Juventus','Neapel','AS Rom','Lazio','Atalanta','Fiorentina'],'Ligue 1':['PSG','Marseille','Monaco','Lille','Lyon','Lens'],'Andere':['Ajax','PSV','Feyenoord','Benfica','Porto','Galatasaray','Fenerbahçe','RB Salzburg','Rapid Wien','Basel','Young Boys']};
+var MALLE_BOUNDS = {latMin:39.2,latMax:39.97,lngMin:2.3,lngMax:3.5};
+function isOnMallorca(){
+  if(!ME || !ME.lat || !ME.lng) return false;
+  return ME.lat >= MALLE_BOUNDS.latMin && ME.lat <= MALLE_BOUNDS.latMax && ME.lng >= MALLE_BOUNDS.lngMin && ME.lng <= MALLE_BOUNDS.lngMax;
+}
 var GAMES = [
   {name:'Wer bin ich?',icon:'🤔',desc:'Rate die Person auf deiner Stirn',players:'2-10',cards:['Ich bin ein deutscher Schlagerstar','Ich bin der DJ im Megapark','Ich bin ein Sangria-Eimer','Ich bin Jürgen Drews','Ich bin die Sonne auf Mallorca','Ich bin ein Taxi um 5 Uhr morgens','Ich bin ein verlorenes Handy','Ich bin die Pommesbude am Strand','Ich bin der Türsteher im Bierkönig','Ich bin ein Sonnenbrand']},
   {name:'Wahrheit oder Pflicht',icon:'🎯',desc:'Das Partyspiel für Mutige',players:'3-8',cards:['Was ist das Peinlichste auf Malle?','Ruf die letzte Person an','Mach 10 Liegestütze','Zeig dein letztes Selfie','Bestell auf Spanisch','Imitiere jemanden aus der Gruppe','Was war dein schlimmster Kater?','Tausche ein Kleidungsstück','Singe den Refrain von Layla','Erzähl deine beste Malle-Story']},
@@ -1569,6 +1589,9 @@ function buildApp(){
   // Initial nearby build
   buildNearby();
 
+  // Fetch weather for Mallorca
+  fetchWeather();
+
   // Request push notifications
   requestPushPermission();
 }
@@ -1789,6 +1812,13 @@ window.applyFilters=function(){
 };
 function buildCards(){
   var s=document.getElementById('matchStack');if(!s)return;
+
+  // Geo-check: Only on Mallorca
+  if(!isOnMallorca()){
+    s.innerHTML='<div class="no-profiles"><div style="font-size:64px;margin-bottom:16px">🏝️</div><div style="font-size:18px;font-weight:800;color:var(--t);margin-bottom:8px">Nur auf Mallorca!</div><div style="font-size:13px;color:var(--t2);line-height:1.6;max-width:260px;margin:0 auto">Matchmaking ist nur auf Mallorca verfügbar.<br>Flieg hin und finde deine Atzen! ✈️🌴</div><div style="margin-top:20px;font-size:11px;color:var(--t3)">📍 Standort: '+(ME&&ME.lat?'Nicht auf Mallorca':'Kein Standort')+'</div></div>';
+    return;
+  }
+
   s.innerHTML='';cIdx=0;
   var blocked=JSON.parse(localStorage.getItem('atze_blocked')||'[]');
   var list=(FILTERED_PROFILES.length>0?FILTERED_PROFILES:PROFILES).filter(function(p){return blocked.indexOf(p.user_id)===-1});
@@ -2166,6 +2196,45 @@ window.deleteAccount = async function(){
 window.closeBS=function(){document.getElementById('bsheet').classList.remove('show')};
 function shareText(text){if(navigator.share)navigator.share({title:'atze',text:text}).catch(function(){});else{navigator.clipboard.writeText(text).catch(function(){});toast('Kopiert!')}}
 window.toast=function(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2200)};
+
+async function fetchWeather(){
+  try {
+    var resp = await fetch('https://api.open-meteo.com/v1/forecast?latitude=39.5696&longitude=2.6502&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&timezone=Europe/Madrid');
+    var data = await resp.json();
+    if(!data.current) return;
+
+    var temp = Math.round(data.current.temperature_2m);
+    var humidity = data.current.relative_humidity_2m;
+    var wind = Math.round(data.current.wind_speed_10m);
+    var code = data.current.weather_code;
+
+    // WMO Weather codes to emoji + description
+    var weatherMap = {
+      0:{icon:'☀️',de:'Sonnig'},1:{icon:'🌤️',de:'Überwiegend klar'},2:{icon:'⛅',de:'Teilweise bewölkt'},3:{icon:'☁️',de:'Bewölkt'},
+      45:{icon:'🌫️',de:'Nebel'},48:{icon:'🌫️',de:'Reifnebel'},
+      51:{icon:'🌦️',de:'Leichter Nieselregen'},53:{icon:'🌦️',de:'Nieselregen'},55:{icon:'🌧️',de:'Starker Nieselregen'},
+      61:{icon:'🌧️',de:'Leichter Regen'},63:{icon:'🌧️',de:'Regen'},65:{icon:'🌧️',de:'Starkregen'},
+      71:{icon:'🌨️',de:'Leichter Schnee'},73:{icon:'🌨️',de:'Schnee'},75:{icon:'❄️',de:'Starker Schnee'},
+      80:{icon:'🌦️',de:'Regenschauer'},81:{icon:'🌧️',de:'Starke Schauer'},82:{icon:'⛈️',de:'Gewitter-Schauer'},
+      95:{icon:'⛈️',de:'Gewitter'},96:{icon:'⛈️',de:'Gewitter mit Hagel'},99:{icon:'⛈️',de:'Schweres Gewitter'}
+    };
+
+    var w = weatherMap[code] || {icon:'🌡️',de:'Wetter'};
+
+    document.getElementById('weatherIcon').textContent = w.icon;
+    document.getElementById('weatherTemp').textContent = temp + '°';
+    document.getElementById('weatherDesc').textContent = w.de;
+    document.getElementById('weatherWind').textContent = '💨 ' + wind + ' km/h';
+    document.getElementById('weatherHumid').textContent = '💧 ' + humidity + '%';
+  } catch(e) {
+    console.warn('Weather fetch failed:', e);
+  }
+}
+
+window.refreshWeather = function(){
+  toast('Wetter wird aktualisiert...');
+  fetchWeather();
+};
 
 // ============================================
 // PHOTO UPLOAD
