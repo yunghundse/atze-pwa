@@ -266,6 +266,18 @@ select.ri{appearance:none;-webkit-appearance:none}
 .prof-badges-row{display:flex;justify-content:center;gap:5px;margin-top:8px;flex-wrap:wrap}
 .pbadge{display:flex;align-items:center;gap:3px;padding:3px 10px;border-radius:16px;font-size:10px;font-weight:700}
 .pbadge.ok{background:rgba(52,199,89,.08);color:var(--green)}.pbadge.fire{background:rgba(255,109,46,.08);color:var(--o)}
+.prof-vibe{display:flex;align-items:center;justify-content:center;gap:6px;margin:10px 0 4px;font-size:13px;color:var(--t2)}.prof-vibe .pv-emoji{font-size:28px;animation:vb 2s ease infinite}.prof-vibe .pv-label{font-weight:600}
+@keyframes vb{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+.prof-socials{display:flex;justify-content:center;gap:10px;margin:10px 0 6px}
+.prof-social-btn{padding:6px 14px;border-radius:20px;background:var(--bg3);border:1px solid var(--brd);font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px;color:var(--t2);text-decoration:none;transition:all .15s}
+.prof-social-btn:active{transform:scale(.95)}
+.prof-social-btn.ig{border-color:rgba(225,48,108,.25);color:#E1306C}.prof-social-btn.tt{border-color:rgba(255,0,80,.25);color:#FF0050}.prof-social-btn.sc{border-color:rgba(255,252,0,.25);color:#FFFC00}
+.community-soon{margin:0 14px 10px;padding:16px;border-radius:var(--r);background:var(--bg3);border:1px dashed var(--brd);text-align:center}
+.community-soon h4{font-size:14px;font-weight:800;margin-bottom:4px}.community-soon p{font-size:12px;color:var(--t3)}
+.crew-limit{font-size:11px;color:var(--t3);text-align:center;margin:4px 0 8px}
+.match-filter-bar{display:flex;gap:6px;padding:8px 14px;overflow-x:auto;scrollbar-width:none;flex-wrap:nowrap}.match-filter-bar::-webkit-scrollbar{display:none}
+.mf-select{padding:7px 10px;border-radius:20px;background:var(--bg3);border:1px solid var(--brd);font-size:11px;font-weight:600;color:var(--t2);cursor:pointer;appearance:none;-webkit-appearance:none;font-family:inherit;outline:none;transition:all .15s}
+.mf-select:focus{border-color:var(--o);color:var(--o)}
 .prof-stats{display:flex;margin:16px 14px;border-radius:var(--r);overflow:hidden}
 .pstat{flex:1;padding:14px 0;text-align:center;border-right:1px solid var(--brd)}.pstat:last-child{border-right:none}
 .pstat .pn{font-size:18px;font-weight:900}.pstat .pl{font-size:9px;color:var(--t3);font-weight:600;text-transform:uppercase;margin-top:2px}
@@ -405,8 +417,10 @@ select.ri{appearance:none;-webkit-appearance:none}
       <select class="ri" id="obBMonth" onchange="chkOb()"><option value="">Monat</option></select>
       <select class="ri" id="obBYear" onchange="chkOb()"><option value="">Jahr</option></select>
     </div>
-    <input class="ri" id="obInsta" type="text" placeholder="@instagram (optional)">
-    <input class="ri" id="obTiktok" type="text" placeholder="@tiktok (optional)">
+    <div class="pe-section">Social Media</div>
+    <input class="ri" id="obInsta" type="text" placeholder="📸 Instagram Username (optional)">
+    <input class="ri" id="obTiktok" type="text" placeholder="🎵 TikTok Username (optional)">
+    <input class="ri" id="obSnap" type="text" placeholder="👻 Snapchat Username (optional)">
     <button class="rnext" id="obNext1" disabled onclick="obStep(2)">Weiter</button>
   </div>
   <div class="ob-step" id="ob2">
@@ -484,8 +498,8 @@ select.ri{appearance:none;-webkit-appearance:none}
         <div class="hscroll anim d1" id="venueScroll"></div>
       </div>
     </div>
-    <div class="scr" id="screen-match"><div class="match-area"><div class="match-filters"><div class="mf-chip active" onclick="toast('Filter kommt bald!')">⚙ Filter</div><div class="mf-chip" id="mfAge">18-35</div><div class="mf-chip" id="mfSeek">Alle</div></div><div class="match-stack" id="matchStack"></div><div class="mactions"><button class="ma sm" onclick="rewind()">↩</button><button class="ma nope" onclick="doSwipe('left')">✕</button><button class="ma super" onclick="superLike()">⭐</button><button class="ma like" onclick="doSwipe('right')">🔥</button><button class="ma sm" onclick="toast('Chat kommt bald!')">💬</button></div></div></div>
-    <div class="scr" id="screen-crew"><div class="crew-map-full"><div id="crewMap"></div></div><div class="crew-content"><div class="crew-invite glass" onclick="inviteCrew()"><div class="ci-icon">📲</div><div><h4>Crew einladen</h4><p>Teile deinen Invite-Link!</p></div></div><div class="sec-label">Deine Crew</div><div id="crewList"><p style="padding:14px;color:var(--t3);font-size:13px">Noch keine Crew-Mitglieder. Lade Freunde ein!</p></div><div class="sec-label">Party-Spiele</div><div id="gameList"></div></div></div>
+    <div class="scr" id="screen-match"><div class="match-area"><div class="match-filter-bar"><select class="mf-select" id="mfGender" onchange="applyFilters()"><option value="">Alle</option><option value="Mann">Mann</option><option value="Frau">Frau</option><option value="Divers">Divers</option></select><select class="mf-select" id="mfAge" onchange="applyFilters()"><option value="">Alter</option><option value="18-21">18-21</option><option value="22-25">22-25</option><option value="26-30">26-30</option><option value="31-40">31-40</option><option value="40+">40+</option></select><select class="mf-select" id="mfCity" onchange="applyFilters()"><option value="">Wohnort</option></select><select class="mf-select" id="mfClub" onchange="applyFilters()"><option value="">Verein</option></select></div><div class="match-stack" id="matchStack"></div><div class="mactions"><button class="ma sm" onclick="rewind()">↩</button><button class="ma nope" onclick="doSwipe('left')">✕</button><button class="ma super" onclick="superLike()">⭐</button><button class="ma like" onclick="doSwipe('right')">🔥</button><button class="ma sm" onclick="toast('Chat kommt bald!')">💬</button></div></div></div>
+    <div class="scr" id="screen-crew"><div class="crew-map-full"><div id="crewMap"></div></div><div class="crew-content"><div class="crew-invite glass" onclick="inviteCrew()"><div class="ci-icon">📲</div><div><h4>Crew einladen</h4><p>Teile deinen Invite-Link!</p></div></div><div class="crew-limit" id="crewCount">0/8 Crew-Mitglieder</div><div class="sec-label">Deine Crew</div><div id="crewList"><p style="padding:14px;color:var(--t3);font-size:13px">Noch keine Crew-Mitglieder. Lade Freunde ein!</p></div><div class="sec-label">Deine Matches</div><div id="matchFriendList"><p style="padding:14px;color:var(--t3);font-size:13px">Matche mit Leuten um sie hier zu sehen!</p></div><div class="community-soon"><h4>🌍 Community</h4><p>Triff tausende Atzen in der Community — kommt bald!</p></div><div class="sec-label">Party-Spiele</div><div id="gameList"></div></div></div>
     <div class="scr" id="screen-deals"><div class="deals-wrap">
       <div class="deals-tabs" id="dealsTabs">
         <div class="dtab active" onclick="showDeals('all',this)">Alle Deals</div>
@@ -496,7 +510,7 @@ select.ri{appearance:none;-webkit-appearance:none}
       <div id="dealsContent"></div>
       <div class="deal-disclosure">⚠️ Affiliate-Hinweis: Einige Links sind Partnerlinks. Bei einer Buchung/Kauf erhalten wir eine kleine Provision — für dich ändert sich der Preis nicht. butterbread tech GmbH · DSGVO-konform · Server EU</div>
     </div></div>
-    <div class="scr" id="screen-profile"><div class="prof-hero"><div class="prof-ava-wrap"><div class="prof-ava"><img id="profAvaImg" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80"></div><div class="prof-ava-edit" onclick="toast('Profil bearbeiten kommt bald!')">✏</div></div><h2><span id="profName">Laden...</span></h2><div class="handle" id="profHandle"></div><div class="prof-badges-row" id="profBadges"></div></div><div class="prof-stats glass"><div class="pstat"><div class="pn" id="stM">0</div><div class="pl">Matches</div></div><div class="pstat"><div class="pn" id="stCrew">0</div><div class="pl">Crew</div></div><div class="pstat"><div class="pn" id="stPts">0</div><div class="pl">Punkte</div></div></div><div class="premium-cta" id="premCta" onclick="toast('Premium kommt bald!')"><h3>✨ atze Premium</h3><div class="pc-sub">Keine Werbung · Unlimited Swipes · VIP</div><div class="pc-btn">Ab 2,99€</div></div><div class="pmenu"><div class="pmi" onclick="openLegal('dsgvo')"><div class="pmi-icon b">🛡</div><span class="pmi-label">Datenschutz</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openLegal('impressum')"><div class="pmi-icon gr">📄</div><span class="pmi-label">Impressum</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openLegal('agb')"><div class="pmi-icon gr">📝</div><span class="pmi-label">AGB</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openLegal('affiliate')"><div class="pmi-icon o">🤝</div><span class="pmi-label">Affiliate-Hinweis</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="logOut()"><div class="pmi-icon gr">🚪</div><span class="pmi-label" style="color:var(--fire)">Ausloggen</span></div></div></div>
+    <div class="scr" id="screen-profile"><div class="prof-hero"><div class="prof-ava-wrap"><div class="prof-ava"><img id="profAvaImg" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80"></div><div class="prof-ava-edit" onclick="toast('Profil bearbeiten kommt bald!')">✏</div></div><h2><span id="profName">Laden...</span></h2><div class="handle" id="profHandle"></div><div class="prof-badges-row" id="profBadges"></div></div><div class="prof-vibe" id="profVibe"></div><div class="prof-socials" id="profSocials"></div><div class="prof-stats glass"><div class="pstat"><div class="pn" id="stM">0</div><div class="pl">Matches</div></div><div class="pstat"><div class="pn" id="stCrew">0</div><div class="pl">Crew</div></div><div class="pstat"><div class="pn" id="stPts">0</div><div class="pl">Punkte</div></div></div><div class="premium-cta" id="premCta" onclick="toast('Premium kommt bald!')"><h3>✨ atze Premium</h3><div class="pc-sub">Keine Werbung · Unlimited Swipes · VIP</div><div class="pc-btn">Ab 2,99€</div></div><div class="pmenu"><div class="pmi" onclick="openLegal('dsgvo')"><div class="pmi-icon b">🛡</div><span class="pmi-label">Datenschutz</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openLegal('impressum')"><div class="pmi-icon gr">📄</div><span class="pmi-label">Impressum</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openLegal('agb')"><div class="pmi-icon gr">📝</div><span class="pmi-label">AGB</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="editSocials()"><div class="pmi-icon o">📱</div><span class="pmi-label">Social Media verknüpfen</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openLegal('affiliate')"><div class="pmi-icon o">🤝</div><span class="pmi-label">Affiliate-Hinweis</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="logOut()"><div class="pmi-icon gr">🚪</div><span class="pmi-label" style="color:var(--fire)">Ausloggen</span></div></div></div>
   </main>
   <nav id="navBar">
     <button class="active" onclick="go('radar',this)"><span class="ni">📍</span>Radar</button>
@@ -760,15 +774,16 @@ window.finishOnboard = async function(){
   var bd=new Date(+y,+m-1,+d), today=new Date();
   var age=today.getFullYear()-bd.getFullYear();
   if(today.getMonth()<bd.getMonth()||(today.getMonth()===bd.getMonth()&&today.getDate()<bd.getDate()))age--;
-  var insta = esc(document.getElementById('obInsta').value.trim());
-  var tiktok = esc(document.getElementById('obTiktok').value.trim());
+  var insta = esc(document.getElementById('obInsta').value.trim().replace(/^@/,''));
+  var tiktok = esc(document.getElementById('obTiktok').value.trim().replace(/^@/,''));
+  var snapchat = esc(document.getElementById('obSnap').value.trim().replace(/^@/,''));
   var bio = esc((document.getElementById('obBio')?.value||'').trim());
 
   var {data:{user}} = await sb.auth.getUser();
   if(!user){toast('Fehler — bitte neu einloggen');return}
 
   var {error} = await sb.from('profiles').update({
-    name: name, age: age, birthdate: birthdate, bio: bio, insta: insta, tiktok: tiktok,
+    name: name, age: age, birthdate: birthdate, bio: bio, insta: insta, tiktok: tiktok, snapchat: snapchat,
     gender: obData.gender, seek: obData.seek, status: obData.status, club: obData.club
   }).eq('user_id', user.id);
 
@@ -786,6 +801,7 @@ function buildApp(){
   buildMoodBar();
   buildVenues();
   buildStories();
+  populateFilterOptions();
   buildCards();
   buildGames();
   buildDeals('all');
@@ -941,19 +957,47 @@ window.checkinVenue = async function(venueId, name){
 // ============================================
 // MATCHING
 // ============================================
+var FILTERED_PROFILES = [];
+function populateFilterOptions(){
+  var cities={},clubs={};
+  PROFILES.forEach(function(p){
+    if(p.city)cities[p.city]=1;
+    if(p.club)clubs[p.club]=1;
+  });
+  var cs=document.getElementById('mfCity');
+  if(cs){Object.keys(cities).sort().forEach(function(c){var o=document.createElement('option');o.value=c;o.textContent=c;cs.appendChild(o)})}
+  var cl=document.getElementById('mfClub');
+  if(cl){Object.keys(clubs).sort().forEach(function(c){var o=document.createElement('option');o.value=c;o.textContent=c;cl.appendChild(o)})}
+}
+window.applyFilters=function(){
+  var g=document.getElementById('mfGender').value;
+  var a=document.getElementById('mfAge').value;
+  var c=document.getElementById('mfCity').value;
+  var cl=document.getElementById('mfClub').value;
+  FILTERED_PROFILES=PROFILES.filter(function(p){
+    if(g&&p.gender!==g)return false;
+    if(a){var parts=a.split('-');if(a==='40+'){if(p.age<40)return false}else{if(p.age<+parts[0]||p.age>+parts[1])return false}}
+    if(c&&p.city!==c)return false;
+    if(cl&&p.club!==cl)return false;
+    return true;
+  });
+  buildCards();
+};
 function buildCards(){
   var s=document.getElementById('matchStack');if(!s)return;
   s.innerHTML='';cIdx=0;
-  if(PROFILES.length===0){
-    s.innerHTML='<div class="no-profiles"><div style="font-size:48px;margin-bottom:12px">🔍</div><div style="font-size:16px;font-weight:700;color:var(--t)">Keine neuen Leute</div><div style="font-size:13px;margin-top:4px">Schau später nochmal vorbei!</div></div>';
+  var list=FILTERED_PROFILES.length>0?FILTERED_PROFILES:PROFILES;
+  if(list.length===0){
+    s.innerHTML='<div class="no-profiles"><div style="font-size:48px;margin-bottom:12px">🔍</div><div style="font-size:16px;font-weight:700;color:var(--t)">Keine neuen Leute</div><div style="font-size:13px;margin-top:4px">Ändere deine Filter oder schau später nochmal vorbei!</div></div>';
     return;
   }
-  for(var i=Math.min(2,PROFILES.length-1);i>=0;i--)s.appendChild(mkCard(PROFILES[i],i));
+  for(var i=Math.min(2,list.length-1);i>=0;i--)s.appendChild(mkCard(list[i],i));
 }
 
 function mkCard(p,idx){
   var c=document.createElement('div');c.className='scard'+(idx===1?' behind':idx>=2?' far':'');c.dataset.i=idx;
-  c.innerHTML='<div class="stamp like">ATZE!</div><div class="stamp nope">NOPE</div><div class="sc-photo" style="background-image:url(\''+(p.photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80')+'\')"></div><div class="sc-grad"></div><div class="sc-content"><div class="sc-name">'+esc(p.name)+', <span class="sc-age">'+p.age+'</span></div><div class="sc-loc">📍 '+(p.gender||'')+' · '+(p.status||'')+'</div>'+(p.verified?'<span class="sc-badge">✓ Verifiziert</span>':'')+(p.club?'<span class="sc-badge">⚽ '+esc(p.club)+'</span>':'')+'<div class="sc-bio">'+esc(p.bio||'')+'</div></div>';
+var socials='';if(p.insta)socials+='<a class="sc-social" onclick="event.stopPropagation();window.open(\'https://instagram.com/'+esc(p.insta)+'\',\'_blank\')" style="color:#E1306C">📸</a>';if(p.tiktok)socials+='<a class="sc-social" onclick="event.stopPropagation();window.open(\'https://tiktok.com/@'+esc(p.tiktok)+'\',\'_blank\')" style="color:#FF0050">🎵</a>';if(p.snapchat)socials+='<a class="sc-social" onclick="event.stopPropagation();window.open(\'https://snapchat.com/add/'+esc(p.snapchat)+'\',\'_blank\')" style="color:#FFFC00">👻</a>';
+  c.innerHTML='<div class="stamp like">ATZE!</div><div class="stamp nope">NOPE</div><div class="sc-photo" style="background-image:url(\''+(p.photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80')+'\')"></div><div class="sc-grad"></div><div class="sc-content"><div class="sc-name">'+esc(p.name)+', <span class="sc-age">'+p.age+'</span>'+(p.mood?' <span style="font-size:22px;margin-left:4px">'+p.mood+'</span>':'')+'</div><div class="sc-loc">📍 '+(p.gender||'')+' · '+(p.status||'')+'</div>'+(p.verified?'<span class="sc-badge">✓ Verifiziert</span>':'')+(p.club?'<span class="sc-badge">⚽ '+esc(p.club)+'</span>':'')+(socials?'<div style="display:flex;gap:8px;margin-top:6px">'+socials+'</div>':'')+'<div class="sc-bio">'+esc(p.bio||'')+'</div></div>';
   var sx=0,dx=0,dr=0;
   function ms(x){sx=x;dr=1}
   function mm(x){if(!dr)return;dx=x-sx;c.style.transform='translateX('+dx+'px) rotate('+dx*.05+'deg)';c.style.transition='none';c.querySelector('.like').classList.toggle('vis',dx>60);c.querySelector('.nope').classList.toggle('vis',dx<-60)}
@@ -1027,10 +1071,23 @@ window.setMood = async function(el,m){
 // ============================================
 function updateProfile(){
   var n=document.getElementById('profName');if(n)n.textContent=ME.name+', '+ME.age;
-  var h=document.getElementById('profHandle');if(h)h.textContent=ME.insta||'@'+ME.name.toLowerCase();
+  var h=document.getElementById('profHandle');if(h)h.textContent=ME.insta?'@'+ME.insta:'@'+ME.name.toLowerCase();
   if(ME.photo_url){var img=document.getElementById('profAvaImg');if(img)img.src=ME.photo_url}
   var pb=document.getElementById('profBadges');
   if(pb)pb.innerHTML=(ME.verified?'<span class="pbadge ok">✓ Verifiziert</span>':'')+(ME.club?'<span class="pbadge fire">⚽ '+esc(ME.club)+'</span>':'')+(ME.gender?'<span class="pbadge fire">'+esc(ME.gender)+'</span>':'');
+  // Vibe
+  var pv=document.getElementById('profVibe');
+  if(pv)pv.innerHTML=ME.mood?'<span class="pv-emoji">'+ME.mood+'</span><span class="pv-label">Aktueller Vibe</span>':'<span style="color:var(--t3);font-size:12px">Wähl deinen Vibe auf dem Radar!</span>';
+  // Socials
+  var ps=document.getElementById('profSocials');
+  if(ps){
+    var sh='';
+    if(ME.insta)sh+='<a class="prof-social-btn ig" href="https://instagram.com/'+esc(ME.insta)+'" target="_blank" rel="noopener">📸 '+esc(ME.insta)+'</a>';
+    if(ME.tiktok)sh+='<a class="prof-social-btn tt" href="https://tiktok.com/@'+esc(ME.tiktok)+'" target="_blank" rel="noopener">🎵 '+esc(ME.tiktok)+'</a>';
+    if(ME.snapchat)sh+='<a class="prof-social-btn sc" href="https://snapchat.com/add/'+esc(ME.snapchat)+'" target="_blank" rel="noopener">👻 '+esc(ME.snapchat)+'</a>';
+    if(!sh)sh='<span style="font-size:11px;color:var(--t3)">Verlinke deine Socials im Profil!</span>';
+    ps.innerHTML=sh;
+  }
   var sm=document.getElementById('stM');if(sm)sm.textContent=ME._matchCount||0;
   var sp=document.getElementById('stPts');if(sp)sp.textContent=(ME.points||0).toLocaleString('de-DE');
   var sn=document.getElementById('sNum');if(sn)sn.textContent=ME.streak||0;
@@ -1039,8 +1096,27 @@ function updateProfile(){
 // ============================================
 // CREW
 // ============================================
-window.inviteCrew=function(){shareText('Komm in meine Crew auf atze! 🌴🔥 https://atze-app.com/invite')};
+var CREW_MAX=8;
+window.inviteCrew=function(){
+  var cc=document.getElementById('crewCount');
+  var current=parseInt((cc?cc.textContent:'0'));
+  if(current>=CREW_MAX){toast('Max. '+CREW_MAX+' Crew-Mitglieder erreicht!');return}
+  shareText('Komm in meine Crew auf atze! 🌴🔥 https://atze-app.com/invite');
+};
 window.joinTonight=function(){toast('Du bist dabei! 🎉')};
+window.editSocials=async function(){
+  var insta=prompt('Instagram Username:',ME.insta||'');
+  if(insta===null)return;
+  var tiktok=prompt('TikTok Username:',ME.tiktok||'');
+  if(tiktok===null)return;
+  var snap=prompt('Snapchat Username:',ME.snapchat||'');
+  if(snap===null)return;
+  insta=insta.replace(/^@/,'').trim();tiktok=tiktok.replace(/^@/,'').trim();snap=snap.replace(/^@/,'').trim();
+  await sb.from('profiles').update({insta:insta,tiktok:tiktok,snapchat:snap}).eq('user_id',ME.user_id);
+  ME.insta=insta;ME.tiktok=tiktok;ME.snapchat=snap;
+  updateProfile();
+  toast('Socials aktualisiert! ✅');
+};
 
 // ============================================
 // GAMES
