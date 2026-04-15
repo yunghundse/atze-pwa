@@ -388,6 +388,11 @@ select.ri{appearance:none;-webkit-appearance:none}
 @keyframes pf{0%{transform:translateY(0);opacity:1}100%{transform:translateY(100vh);opacity:0}}
 .ax{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.12);border:none;color:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 
+/* REPORT REASONS */
+.report-reason{padding:14px;border-radius:12px;background:var(--bg3);border:1.5px solid transparent;cursor:pointer;transition:all .15s;color:var(--t2);font-size:13px;font-weight:600}
+.report-reason:active{transform:scale(.97)}
+.report-reason.sel{border-color:var(--o);background:rgba(255,109,46,.08);color:var(--o)}
+
 /* TOAST */
 .toast{position:fixed;bottom:88px;left:50%;transform:translateX(-50%) translateY(16px);padding:12px 20px;border-radius:14px;font-size:13px;font-weight:600;opacity:0;transition:all .3s var(--bounce);z-index:20002;white-space:nowrap;max-width:90%;background:rgba(26,26,28,.9);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.06)}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -442,7 +447,7 @@ select.ri{appearance:none;-webkit-appearance:none}
 <!-- ONBOARDING (nach Auth, wenn Profil noch leer) -->
 <div class="onboard gone" id="onboard">
   <div class="ob-step active" id="ob1">
-    <div class="rprog"><div class="rp done"></div><div class="rp"></div><div class="rp"></div><div class="rp"></div></div>
+    <div class="rprog"><div class="rp done"></div><div class="rp"></div><div class="rp"></div><div class="rp"></div><div class="rp"></div></div>
     <h2>Über dich</h2>
     <div class="rsub">Name und Geburtsdatum für dein Profil.</div>
     <input class="ri" id="obName" type="text" placeholder="Vorname" maxlength="20" oninput="chkOb()">
@@ -460,7 +465,7 @@ select.ri{appearance:none;-webkit-appearance:none}
   </div>
   <div class="ob-step" id="ob2">
     <button class="ob-back" onclick="obStep(1)">←</button>
-    <div class="rprog"><div class="rp done"></div><div class="rp done"></div><div class="rp"></div><div class="rp"></div></div>
+    <div class="rprog"><div class="rp done"></div><div class="rp done"></div><div class="rp"></div><div class="rp"></div><div class="rp"></div></div>
     <h2>Wer bist du?</h2>
     <div class="rsub">Erzähl den anderen etwas über dich.</div>
     <div class="pe-section">Ich bin</div>
@@ -475,7 +480,7 @@ select.ri{appearance:none;-webkit-appearance:none}
   </div>
   <div class="ob-step" id="ob3">
     <button class="ob-back" onclick="obStep(2)">←</button>
-    <div class="rprog"><div class="rp done"></div><div class="rp done"></div><div class="rp done"></div><div class="rp"></div></div>
+    <div class="rprog"><div class="rp done"></div><div class="rp done"></div><div class="rp done"></div><div class="rp"></div><div class="rp"></div></div>
     <h2>Dein Verein</h2>
     <div class="rsub">Zeig deine Farben auf deinem Profil.</div>
     <div style="margin-bottom:12px">
@@ -488,7 +493,23 @@ select.ri{appearance:none;-webkit-appearance:none}
   </div>
   <div class="ob-step" id="ob4">
     <button class="ob-back" onclick="obStep(3)">←</button>
-    <div class="rprog"><div class="rp done"></div><div class="rp done"></div><div class="rp done"></div><div class="rp done"></div></div>
+    <div class="rprog"><div class="rp done"></div><div class="rp done"></div><div class="rp done"></div><div class="rp done"></div><div class="rp"></div></div>
+    <h2>Dein Profilbild</h2>
+    <div class="rsub">Lade ein angemessenes Foto für dein Profil hoch.</div>
+    <div style="margin:20px 0;padding:20px;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid var(--brd);font-size:13px;color:var(--t2);line-height:1.5">📸 Bitte nur angemessene Fotos hochladen. Verstöße gegen Nutzungsrichtlinien führen zur Sperrung.</div>
+    <input type="file" id="obPhotoFile" accept="image/*" style="display:none" onchange="previewObPhoto(this)">
+    <div class="pu-preview" id="obPhotoPreview" style="background:var(--bg3);display:none"><img id="obPhotoImg" src=""></div>
+    <div style="margin-bottom:12px">
+      <button class="rnext" style="background:var(--bg3);color:var(--t2);margin-bottom:10px" onclick="document.getElementById('obPhotoFile').click()">📷 Foto wählen</button>
+      <div style="display:flex;gap:8px">
+        <button class="rnext" style="flex:1;background:var(--bg3);color:var(--t2);opacity:1" onclick="obStep(5)">Später</button>
+        <button class="rnext" id="obPhotoSave" style="flex:1;opacity:.25;cursor:default" disabled onclick="saveObPhoto()">Speichern</button>
+      </div>
+    </div>
+  </div>
+  <div class="ob-step" id="ob5">
+    <button class="ob-back" onclick="obStep(4)">←</button>
+    <div class="rprog"><div class="rp done"></div><div class="rp done"></div><div class="rp done"></div><div class="rp done"></div><div class="rp done"></div></div>
     <h2>Datenschutz</h2>
     <div class="rsub">Deine Daten. Deine Kontrolle.</div>
     <div id="dsgvoList"></div>
@@ -508,6 +529,8 @@ select.ri{appearance:none;-webkit-appearance:none}
 <!-- COLOR PICKER --><div class="color-picker-ov" id="colorPickerOv"><div class="cp-title">🎨 Profilfarbe</div><div class="cp-sub">Ab 6 eingeladenen Freunden freigeschaltet!</div><div class="cp-grid" id="cpGrid"></div><div class="pu-actions"><button class="pu-btn cancel" onclick="closeColorPicker()">Abbrechen</button><button class="pu-btn save" onclick="saveColor()">Speichern</button></div></div>
 
 <!-- BSHEET --><div class="bsheet" id="bsheet"><div class="bsheet-backdrop" onclick="closeBS()"></div><div class="bsheet-body"><div class="bsheet-handle"></div><div class="bsheet-hero"><img id="bsImg" src=""><div class="bs-grad"></div><button class="bs-close" onclick="closeBS()">✕</button></div><div class="bs-content" id="bsContent"></div></div></div>
+
+<!-- REPORT OVERLAY --><div class="bsheet" id="reportSheet"><div class="bsheet-backdrop" onclick="closeReport()"></div><div class="bsheet-body"><div class="bsheet-handle"></div><div style="padding:20px"><h2 style="font-size:20px;font-weight:900;margin-bottom:12px">Nutzer melden</h2><div style="font-size:13px;color:var(--t2);margin-bottom:20px">Warum möchtest du diesen Nutzer melden?</div><div id="reportReasons" style="display:flex;flex-direction:column;gap:8px"></div><button class="rnext" style="margin-top:16px;opacity:.25;cursor:default" id="reportSubmit" disabled onclick="submitReport()">Melden</button><button class="rnext" style="background:var(--bg3);color:var(--t2);margin-top:8px;opacity:1" onclick="closeReport()">Abbrechen</button></div></div></div>
 
 <div class="toast" id="toast"></div>
 
@@ -554,7 +577,7 @@ select.ri{appearance:none;-webkit-appearance:none}
       <div id="dealsContent"></div>
       <div class="deal-disclosure">⚠️ Affiliate-Hinweis: Einige Links sind Partnerlinks. Bei einer Buchung/Kauf erhalten wir eine kleine Provision — für dich ändert sich der Preis nicht. butterbread tech GmbH · DSGVO-konform · Server EU</div>
     </div></div>
-    <div class="scr" id="screen-profile"><div class="prof-hero"><div class="prof-ava-wrap"><div class="prof-ava"><img id="profAvaImg" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80"></div><div class="prof-ava-edit" onclick="openPhotoUpload()">📷</div></div><h2><span id="profName">Laden...</span></h2><div class="handle" id="profHandle"></div><div class="prof-badges-row" id="profBadges"></div></div><div class="prof-vibe" id="profVibe"></div><div class="prof-socials" id="profSocials"></div><div class="prof-stats glass"><div class="pstat"><div class="pn" id="stM">0</div><div class="pl">Matches</div></div><div class="pstat"><div class="pn" id="stCrew">0</div><div class="pl">Crew</div></div><div class="pstat"><div class="pn" id="stPts">0</div><div class="pl">Punkte</div></div></div><div class="premium-cta" id="premCta" onclick="toast('Premium kommt bald!')"><h3>✨ atze Premium</h3><div class="pc-sub">Keine Werbung · Unlimited Swipes · VIP</div><div class="pc-btn">Ab 2,99€</div></div><div class="pmenu"><div class="pmi" onclick="openLegal('dsgvo')"><div class="pmi-icon b">🛡</div><span class="pmi-label">Datenschutz</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openLegal('impressum')"><div class="pmi-icon gr">📄</div><span class="pmi-label">Impressum</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openLegal('agb')"><div class="pmi-icon gr">📝</div><span class="pmi-label">AGB</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="editSocials()"><div class="pmi-icon o">📱</div><span class="pmi-label">Social Media verknüpfen</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openColorPicker()"><div class="pmi-icon o">🎨</div><span class="pmi-label">Profilfarbe ändern</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="showBlockedUsers()"><div class="pmi-icon gr">🚫</div><span class="pmi-label">Blockierte Nutzer</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openLegal('affiliate')"><div class="pmi-icon o">🤝</div><span class="pmi-label">Affiliate-Hinweis</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="logOut()"><div class="pmi-icon gr">🚪</div><span class="pmi-label" style="color:var(--fire)">Ausloggen</span></div></div></div>
+    <div class="scr" id="screen-profile"><div class="prof-hero"><div class="prof-ava-wrap"><div class="prof-ava"><img id="profAvaImg" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80"></div><div class="prof-ava-edit" onclick="openPhotoUpload()">📷</div></div><h2><span id="profName">Laden...</span></h2><div class="handle" id="profHandle"></div><div class="prof-badges-row" id="profBadges"></div></div><div class="prof-vibe" id="profVibe"></div><div class="prof-socials" id="profSocials"></div><div class="prof-stats glass"><div class="pstat"><div class="pn" id="stM">0</div><div class="pl">Matches</div></div><div class="pstat"><div class="pn" id="stCrew">0</div><div class="pl">Crew</div></div><div class="pstat"><div class="pn" id="stPts">0</div><div class="pl">Punkte</div></div></div><div class="premium-cta" id="premCta" onclick="toast('Premium kommt bald!')"><h3>✨ atze Premium</h3><div class="pc-sub">Keine Werbung · Unlimited Swipes · VIP</div><div class="pc-btn">Ab 2,99€</div></div><div class="pmenu"><div class="pmi" onclick="openLegal('dsgvo')"><div class="pmi-icon b">🛡</div><span class="pmi-label">Datenschutz</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openLegal('impressum')"><div class="pmi-icon gr">📄</div><span class="pmi-label">Impressum</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openLegal('agb')"><div class="pmi-icon gr">📝</div><span class="pmi-label">AGB</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="editSocials()"><div class="pmi-icon o">📱</div><span class="pmi-label">Social Media verknüpfen</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openColorPicker()"><div class="pmi-icon o">🎨</div><span class="pmi-label">Profilfarbe ändern</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="requestVerification()"><div class="pmi-icon b">✓</div><span class="pmi-label">Verifizierung <span style="font-size:11px;font-weight:600;color:var(--t3)" id="verStatus"></span></span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="showBlockedUsers()"><div class="pmi-icon gr">🚫</div><span class="pmi-label">Blockierte Nutzer</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openLegal('affiliate')"><div class="pmi-icon o">🤝</div><span class="pmi-label">Affiliate-Hinweis</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="logOut()"><div class="pmi-icon gr">🚪</div><span class="pmi-label" style="color:var(--fire)">Ausloggen</span></div></div></div>
   </main>
   <nav id="navBar">
     <button class="active" onclick="go('radar',this)"><span class="ni">📍</span>Radar</button>
@@ -789,6 +812,48 @@ window.obStep = function(n){
   document.getElementById('ob'+n).classList.add('active');
   if(n===3) buildClubPicker();
 };
+window.previewObPhoto = function(input){
+  if(!input.files||!input.files[0])return;
+  var file=input.files[0];
+  if(file.size>5*1024*1024){toast('Max 5MB!');return}
+  var reader=new FileReader();
+  reader.onload=function(e){
+    var img=new Image();
+    img.onload=function(){
+      var canvas=document.createElement('canvas');
+      var max=600;var w=img.width,h=img.height;
+      if(w>h){h=h*(max/w);w=max}else{w=w*(max/h);h=max}
+      canvas.width=w;canvas.height=h;
+      canvas.getContext('2d').drawImage(img,0,0,w,h);
+      canvas.toBlob(function(blob){
+        window.obPhotoBlob=blob;
+        var preview=document.getElementById('obPhotoPreview');
+        preview.style.display='flex';
+        document.getElementById('obPhotoImg').src=URL.createObjectURL(blob);
+        document.getElementById('obPhotoSave').disabled=false;
+        document.getElementById('obPhotoSave').style.opacity='1';
+        document.getElementById('obPhotoSave').style.cursor='pointer';
+        toast('Foto geladen!');
+      },'image/jpeg',0.85);
+    };
+    img.src=e.target.result;
+  };
+  reader.readAsDataURL(file);
+};
+window.saveObPhoto = async function(){
+  if(!window.obPhotoBlob){toast('Wähle zuerst ein Foto!');return}
+  toast('Wird hochgeladen...');
+  var {data:{user}} = await sb.auth.getUser();
+  if(!user){toast('Fehler');return}
+  var ext='jpg';var path=user.id+'/avatar.'+ext;
+  var {error:upErr}=await sb.storage.from('avatars').upload(path,window.obPhotoBlob,{upsert:true,contentType:'image/jpeg'});
+  if(upErr){toast('Upload-Fehler: '+upErr.message);return}
+  var {data:urlData}=sb.storage.from('avatars').getPublicUrl(path);
+  obData.photo_url=urlData.publicUrl+'?t='+Date.now();
+  window.obPhotoBlob=null;
+  toast('Foto gespeichert!');
+  obStep(5);
+};
 window.chkOb = function(){
   var n=document.getElementById('obName').value.trim();
   var d=document.getElementById('obBDay').value;
@@ -826,10 +891,13 @@ window.finishOnboard = async function(){
   var {data:{user}} = await sb.auth.getUser();
   if(!user){toast('Fehler — bitte neu einloggen');return}
 
-  var {error} = await sb.from('profiles').update({
+  var updateObj = {
     name: name, age: age, birthdate: birthdate, bio: bio, insta: insta, tiktok: tiktok, snapchat: snapchat,
     gender: obData.gender, seek: obData.seek, status: obData.status, club: obData.club
-  }).eq('user_id', user.id);
+  };
+  if(obData.photo_url) updateObj.photo_url = obData.photo_url;
+
+  var {error} = await sb.from('profiles').update(updateObj).eq('user_id', user.id);
 
   if(error){toast('Fehler: '+error.message);return}
 
@@ -864,6 +932,9 @@ function buildApp(){
   document.getElementById('sNum').textContent = ME.streak || 0;
   // Initial nearby build
   buildNearby();
+
+  // Request push notifications
+  requestPushPermission();
 }
 
 // ============================================
@@ -943,6 +1014,7 @@ window.pokeUser=async function(uid,name){
   poked[uid]=Date.now();
   localStorage.setItem('atze_poked',JSON.stringify(poked));
   toast(name+' wurde angestupst! 👋');
+  sendLocalNotification('👋 '+name+' wurde angestupst!',{body:'Du hast '+name+' angestupst.'});
   if(navigator.vibrate)navigator.vibrate([30,20,30]);
   buildNearby();
 };
@@ -1142,6 +1214,7 @@ function showCele(p){
   document.getElementById('celeAva2').src=p.photo_url||'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=200&q=80';
   document.getElementById('celeName').textContent='Du & '+p.name;
   spawnP();document.getElementById('cele').classList.add('show');
+  sendLocalNotification('🔥 It\'s a Match!',{body:'Du und '+p.name+' matchen sich!'});
   if(navigator.vibrate)navigator.vibrate([50,30,50,30,100]);
   sb.rpc('add_points',{p_user_id:ME.user_id,p_points:50});ME.points+=50;updateProfile();
 }
@@ -1192,6 +1265,16 @@ function updateProfile(){
     document.documentElement.style.setProperty('--o',ME.profile_color);
     var pa=document.querySelector('.prof-ava');if(pa)pa.style.borderColor=ME.profile_color;
   }
+  // Update verification status in menu
+  sb.from('verification_requests').select('status').eq('user_id',ME.user_id).single().then(function(res){
+    var vs=document.getElementById('verStatus');
+    if(!vs)return;
+    if(res.data){
+      if(res.data.status==='verified')vs.textContent='✓';
+      else if(res.data.status==='pending')vs.textContent='⏳';
+      else vs.textContent='';
+    }
+  });
 }
 
 // ============================================
@@ -1430,7 +1513,7 @@ window.openUserProfile=function(uid){
     if(p.tiktok)soc+='<a class="ups-social" href="https://tiktok.com/@'+esc(p.tiktok)+'" target="_blank" rel="noopener" style="border-color:rgba(255,0,80,.25);color:#FF0050">🎵 '+esc(p.tiktok)+'</a>';
     if(p.snapchat)soc+='<a class="ups-social" href="https://snapchat.com/add/'+esc(p.snapchat)+'" target="_blank" rel="noopener" style="border-color:rgba(255,252,0,.25);color:#FFFC00">👻 '+esc(p.snapchat)+'</a>';
     document.getElementById('bsImg').src=p.photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80';
-    document.getElementById('bsContent').innerHTML='<div style="text-align:center"><div class="ups-ava"><img src="'+(p.photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80')+'"></div><h2>'+esc(p.name)+', '+p.age+(p.mood?' '+p.mood:'')+'</h2><div class="bs-meta">'+(p.gender||'')+' · '+(p.status||'')+(p.club?' · ⚽ '+esc(p.club):'')+'</div></div>'+(p.bio?'<div class="bs-desc">'+esc(p.bio)+'</div>':'')+(soc?'<div class="ups-socials">'+soc+'</div>':'')+'<div class="bs-actions"><button class="bs-btn '+(isBlocked?'orange':'dark')+'" onclick="toggleBlock(\''+uid+'\')">🚫 '+(isBlocked?'Entblocken':'Blockieren')+'</button><button class="bs-btn dark" onclick="closeBS()">Schließen</button></div>';
+    document.getElementById('bsContent').innerHTML='<div style="text-align:center"><div class="ups-ava"><img src="'+(p.photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80')+'"></div><h2>'+esc(p.name)+', '+p.age+(p.mood?' '+p.mood:'')+'</h2><div class="bs-meta">'+(p.gender||'')+' · '+(p.status||'')+(p.club?' · ⚽ '+esc(p.club):'')+'</div></div>'+(p.bio?'<div class="bs-desc">'+esc(p.bio)+'</div>':'')+(soc?'<div class="ups-socials">'+soc+'</div>':'')+'<div class="bs-actions"><button class="bs-btn '+(isBlocked?'orange':'dark')+'" onclick="toggleBlock(\''+uid+'\')">🚫 '+(isBlocked?'Entblocken':'Blockieren')+'</button><button class="bs-btn dark" onclick="openReportForm(\''+uid+'\',\''+esc(p.name)+'\')">🚨 Melden</button><button class="bs-btn dark" onclick="closeBS()">Schließen</button></div>';
     document.getElementById('bsheet').classList.add('show');
   });
 };
@@ -1503,6 +1586,130 @@ window.saveColor=async function(){
   document.querySelector('.prof-ava').style.borderColor=c;
   closeColorPicker();
   toast('Profilfarbe gespeichert! 🎨');
+};
+
+// ============================================
+// REPORTING
+// ============================================
+var reportedUserId=null,reportReason=null;
+window.openReportForm=function(uid,name){
+  reportedUserId=uid;reportReason=null;
+  var reasons=['Fake-Profil','Belästigung','Spam','Unangemessene Inhalte','Sonstiges'];
+  var html=reasons.map(function(r){return '<div class="report-reason" onclick="selectReason(this,\''+r+'\')">'+r+'</div>'}).join('');
+  document.getElementById('reportReasons').innerHTML=html;
+  document.getElementById('reportSubmit').disabled=true;
+  document.getElementById('reportSubmit').style.opacity='.25';
+  closeBS();
+  document.getElementById('reportSheet').classList.add('show');
+};
+window.selectReason=function(el,reason){
+  document.querySelectorAll('.report-reason').forEach(function(e){e.classList.remove('sel')});
+  el.classList.add('sel');
+  reportReason=reason;
+  document.getElementById('reportSubmit').disabled=false;
+  document.getElementById('reportSubmit').style.opacity='1';
+};
+window.closeReport=function(){document.getElementById('reportSheet').classList.remove('show')};
+window.submitReport=async function(){
+  if(!reportedUserId||!reportReason){toast('Wähle einen Grund aus');return}
+  var {data:{user}} = await sb.auth.getUser();
+  if(!user){toast('Fehler');return}
+  var {error}=await sb.from('reports').insert({from_user:user.id,to_user:reportedUserId,reason:reportReason,status:'pending'});
+  if(error){toast('Fehler: '+error.message);return}
+  closeReport();
+  toast('Nutzer gemeldet. Danke! 🙏');
+};
+
+// ============================================
+// EMAIL VERIFICATION (Feature 4)
+// ============================================
+window.requestVerification = async function(){
+  var {data:{user}} = await sb.auth.getUser();
+  if(!user){toast('Fehler');return}
+  // Check if already verified
+  if(user.email_confirmed_at){
+    toast('Deine E-Mail ist bereits verifiziert! ✓');
+    return;
+  }
+  // Resend verification email
+  var {error} = await sb.auth.resend({type:'signup',email:user.email});
+  if(error){
+    toast('Fehler: '+error.message);
+    return;
+  }
+  toast('Bestätigungs-E-Mail erneut gesendet! 📧');
+};
+
+// ============================================
+// SELFIE VERIFICATION (Feature 5)
+// ============================================
+window.requestVerification_old = window.requestVerification;
+window.requestVerification = async function(){
+  var {data:{user}} = await sb.auth.getUser();
+  if(!user){toast('Fehler');return}
+
+  // Check verification status
+  var {data:verReq} = await sb.from('verification_requests').select('status').eq('user_id',user.id).single();
+  var status=verReq?verReq.status:'none';
+
+  if(status==='verified'){
+    toast('Du bist bereits verifiziert! ✓');
+    return;
+  }
+  if(status==='pending'){
+    toast('Verifizierung läuft... Bitte warten.');
+    return;
+  }
+
+  // Open camera to capture selfie
+  var input=document.createElement('input');
+  input.type='file';input.accept='image/*';input.capture='user';
+  input.onchange=function(){
+    if(!input.files||!input.files[0])return;
+    var file=input.files[0];
+    if(file.size>5*1024*1024){toast('Max 5MB!');return}
+    var reader=new FileReader();
+    reader.onload=function(e){
+      var img=new Image();
+      img.onload=function(){
+        var canvas=document.createElement('canvas');
+        var max=400;var w=img.width,h=img.height;
+        if(w>h){h=h*(max/w);w=max}else{w=w*(max/h);h=max}
+        canvas.width=w;canvas.height=h;
+        canvas.getContext('2d').drawImage(img,0,0,w,h);
+        canvas.toBlob(async function(blob){
+          toast('Wird hochgeladen...');
+          var path=user.id+'/selfie_verify.jpg';
+          var {error:upErr}=await sb.storage.from('verifications').upload(path,blob,{upsert:true,contentType:'image/jpeg'});
+          if(upErr){toast('Upload-Fehler: '+upErr.message);return}
+          var {data:urlData}=sb.storage.from('verifications').getPublicUrl(path);
+          var {error:insErr}=await sb.from('verification_requests').upsert({user_id:user.id,selfie_url:urlData.publicUrl,status:'pending'});
+          if(insErr){toast('Fehler: '+insErr.message);return}
+          toast('Verifizierung beantragt! 🎉');
+          updateProfile();
+        },'image/jpeg',0.85);
+      };
+      img.src=e.target.result;
+    };
+    reader.readAsDataURL(file);
+  };
+  input.click();
+};
+
+// ============================================
+// PUSH NOTIFICATIONS (Feature 6)
+// ============================================
+window.requestPushPermission = async function(){
+  if(!('Notification'in navigator))return;
+  if(Notification.permission==='granted')return;
+  if(Notification.permission!=='denied'){
+    Notification.requestPermission();
+  }
+};
+window.sendLocalNotification = function(title,opts){
+  if('Notification'in navigator&&Notification.permission==='granted'){
+    new Notification(title,opts||{});
+  }
 };
 
 if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js').catch(function(){});
