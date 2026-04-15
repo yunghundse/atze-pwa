@@ -11,7 +11,7 @@
 <meta http-equiv="X-Frame-Options" content="DENY">
 <meta http-equiv="Permissions-Policy" content="camera=(self), geolocation=(self), microphone=()">
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<title>atze</title>
+<title>crew.</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="img/icon-192.png">
 <link rel="apple-touch-icon" href="img/icon-192.png">
@@ -490,7 +490,7 @@ select.ri{appearance:none;-webkit-appearance:none}
 .weather-card{position:relative;overflow:hidden}
 .weather-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,214,10,.08),rgba(10,132,255,.06));border-radius:var(--r);pointer-events:none}
 
-/* ATZE SHOT */
+/* CREW SHOT */
 #atzeShotOv .drink-display{padding-top:60px}
 #shotFeed::-webkit-scrollbar{display:none}
 @keyframes activePulse{0%,100%{box-shadow:0 0 0 0 rgba(52,199,89,.4)}50%{box-shadow:0 0 0 6px rgba(52,199,89,0)}}
@@ -504,21 +504,11 @@ select.ri{appearance:none;-webkit-appearance:none}
   <p>Laden...</p>
 </div>
 
-<!-- LANGUAGE PICKER -->
-<div class="agegate" id="langPicker" style="display:none">
-  <div class="ag-logo">atze<span>.</span></div>
-  <p class="ag-sub" id="langPickerTitle">Sprache wählen</p>
-  <div style="width:100%;max-width:340px;display:flex;flex-direction:column;gap:10px;margin-top:20px">
-    <button class="abtn primary" style="display:flex;align-items:center;justify-content:center;gap:10px" onclick="pickLang('de')">🇩🇪 Deutsch</button>
-    <button class="abtn primary" style="background:var(--bg3);color:#fff;display:flex;align-items:center;justify-content:center;gap:10px" onclick="pickLang('en')">🇬🇧 English</button>
-    <button class="abtn primary" style="background:var(--bg3);color:#fff;display:flex;align-items:center;justify-content:center;gap:10px" onclick="pickLang('es')">🇪🇸 Español</button>
-  </div>
-  <div class="ag-legal">butterbread tech GmbH · butterbread-tech.com</div>
-</div>
+<!-- LANGUAGE PICKER removed — German only -->
 
 <!-- AGE GATE -->
 <div class="agegate gone" id="agegate">
-  <div class="ag-logo">atze<span>.</span></div>
+  <div class="ag-logo">crew<span>.</span></div>
   <p class="ag-sub">Die Party-App für die Playa de Palma.</p>
   <div class="age-warning">Diese App ist nur für Personen ab 18 Jahren.</div>
   <div class="age-dob">
@@ -535,7 +525,7 @@ select.ri{appearance:none;-webkit-appearance:none}
 <div class="auth-screen gone" id="authScreen">
   <div class="auth-bg"><img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=900&q=80"><div class="auth-ov"></div></div>
   <div class="auth-content">
-    <div class="auth-brand">atze<span>.</span></div>
+    <div class="auth-brand">crew<span>.</span></div>
     <div class="auth-tag">Finde die besten Parties.<br>Verlier nie wieder deine Crew. 🌴</div>
     <div class="auth-form show" id="emailForm">
       <input class="ri" id="authEmail" type="email" placeholder="E-Mail-Adresse" autocomplete="email">
@@ -700,9 +690,9 @@ select.ri{appearance:none;-webkit-appearance:none}
   </div>
 </div>
 
-<!-- ATZE SHOT -->
-<div class="drink-counter" id="atzeShotOv" style="z-index:10006" onclick="if(event.target===this)closeAtzeShot()">
-  <button class="drink-close" onclick="closeAtzeShot()">✕</button>
+<!-- CREW SHOT -->
+<div class="drink-counter" id="atzeShotOv" style="z-index:10006" onclick="if(event.target===this)closeCrewShot()">
+  <button class="drink-close" onclick="closeCrewShot()">✕</button>
   <div class="drink-display" style="gap:16px">
     <div style="font-size:48px" id="shotChallengeEmoji">📸</div>
     <div style="font-size:18px;font-weight:800;text-align:center;max-width:280px" id="shotChallengeText">Lade Challenge...</div>
@@ -710,7 +700,7 @@ select.ri{appearance:none;-webkit-appearance:none}
     <input type="file" id="shotPhotoFile" accept="image/*" capture="environment" style="display:none" onchange="previewShotPhoto(this)">
     <div id="shotPreview" style="display:none;width:200px;height:200px;border-radius:16px;overflow:hidden;border:3px solid var(--o);margin-bottom:12px"><img id="shotPreviewImg" style="width:100%;height:100%;object-fit:cover"></div>
     <button class="abtn primary" style="max-width:280px" onclick="document.getElementById('shotPhotoFile').click()">📷 Foto aufnehmen</button>
-    <button class="abtn primary" id="shotUploadBtn" style="max-width:280px;display:none;background:var(--green)" onclick="uploadAtzeShot()">✅ AtzeShot posten!</button>
+    <button class="abtn primary" id="shotUploadBtn" style="max-width:280px;display:none;background:var(--green)" onclick="uploadCrewShot()">✅ CrewShot posten!</button>
     <div style="margin-top:16px">
       <div class="sec-label" style="padding:0;margin-bottom:12px;color:var(--t2)">📸 Letzte Shots</div>
       <div id="shotFeed" style="display:flex;gap:10px;overflow-x:auto;max-width:320px;padding-bottom:8px;scrollbar-width:none"></div>
@@ -723,7 +713,7 @@ select.ri{appearance:none;-webkit-appearance:none}
 <!-- APP -->
 <div id="app" style="display:none">
   <div class="app-header">
-    <div class="logo">atze<span>.</span></div>
+    <div class="logo">crew<span>.</span></div>
     <div class="hdr-actions">
       <div class="streak-badge" id="sBadge">🔥 <span id="sNum">0</span></div>
       <button class="hdr-btn" onclick="openAlcoholTracker()">🍺</button>
@@ -738,7 +728,7 @@ select.ri{appearance:none;-webkit-appearance:none}
       <div class="radar-content">
         <div class="active-counter anim" id="activeCounter" style="margin:0 14px 8px;display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;background:rgba(52,199,89,.06);border:1px solid rgba(52,199,89,.12)">
           <div class="active-dot" style="width:8px;height:8px;border-radius:50%;background:var(--green);animation:activePulse 2s ease infinite"></div>
-          <span style="font-size:13px;font-weight:700"><span id="activeCount">0</span> Atzen online</span>
+          <span style="font-size:13px;font-weight:700"><span id="activeCount">0</span> Leute online</span>
           <span style="font-size:11px;color:var(--t3);margin-left:auto">auf Mallorca</span>
         </div>
         <div class="quick-stats anim" id="quickStats" style="margin:0 14px 8px;display:flex;gap:8px">
@@ -774,11 +764,11 @@ select.ri{appearance:none;-webkit-appearance:none}
         </div>
         <div class="sec-label anim">🔥 Live auf der Insel</div>
         <div class="hscroll anim" id="venueScroll"></div>
-        <div class="tonight glass anim" onclick="openAtzeShot()" style="cursor:pointer">
-          <div class="tc-row"><div class="tc-live"></div><div class="tc-label">AtzeShot</div></div>
+        <div class="tonight glass anim" onclick="openCrewShot()" style="cursor:pointer">
+          <div class="tc-row"><div class="tc-live"></div><div class="tc-label">CrewShot</div></div>
           <h3 id="shotDailyTitle">📸 Tägliche Challenge</h3>
           <div class="tc-sub" id="shotDailySub">Lade...</div>
-          <button class="tc-btn primary" onclick="event.stopPropagation();openAtzeShot()">📸 Jetzt knipsen!</button>
+          <button class="tc-btn primary" onclick="event.stopPropagation();openCrewShot()">📸 Jetzt knipsen!</button>
         </div>
         <div class="sec-label anim d1">👥 Crew in der Nähe</div>
         <div id="nearbyCrewList" class="anim d1" style="padding:0 14px 14px"><p style="color:var(--t3);font-size:13px">Standort wird geladen...</p></div>
@@ -786,10 +776,10 @@ select.ri{appearance:none;-webkit-appearance:none}
       </div>
     </div>
     <div class="scr" id="screen-match"><div class="match-area"><div class="match-filter-bar"><select class="mf-select" id="mfGender" onchange="applyFilters()"><option value="">Alle</option><option value="Mann">Mann</option><option value="Frau">Frau</option><option value="Divers">Divers</option></select><select class="mf-select" id="mfAge" onchange="applyFilters()"><option value="">Alter</option><option value="18-21">18-21</option><option value="22-25">22-25</option><option value="26-30">26-30</option><option value="31-40">31-40</option><option value="40+">40+</option></select><select class="mf-select" id="mfCity" onchange="applyFilters()"><option value="">Wohnort</option></select><select class="mf-select" id="mfClub" onchange="applyFilters()"><option value="">Verein</option></select></div><div class="match-stack" id="matchStack"></div><div class="mactions"><button class="ma sm" onclick="rewind()">↩</button><button class="ma nope" onclick="doSwipe('left')">✕</button><button class="ma super" onclick="superLike()">⭐</button><button class="ma like" onclick="doSwipe('right')">🔥</button><button class="ma sm" onclick="toast('Chat kommt bald!')">💬</button></div></div></div>
-    <div class="scr" id="screen-crew"><div class="crew-map-full"><div id="crewMap"></div></div><div class="crew-content"><div class="crew-invite glass" onclick="inviteCrew()"><div class="ci-icon">📲</div><div><h4>Crew einladen</h4><p>Teile deinen Invite-Link!</p></div></div><div class="crew-limit" id="crewCount">0/8 Crew-Mitglieder</div><div class="sec-label">Deine Crew</div><div id="crewList"><p style="padding:14px;color:var(--t3);font-size:13px">Noch keine Crew-Mitglieder. Lade Freunde ein!</p></div><div class="sec-label">Deine Matches</div><div id="matchFriendList"><p style="padding:14px;color:var(--t3);font-size:13px">Matche mit Leuten um sie hier zu sehen!</p></div><div class="sec-label">🏆 Crew-Leaderboard</div><div id="leaderboardList" style="padding:0 14px 14px"><p style="color:var(--t3);font-size:13px">Wird geladen...</p></div><div class="sec-label">🗓️ Heute Abend</div><div id="tonightPlanner" style="padding:0 14px 14px"><p style="color:var(--t3);font-size:13px">Wird geladen...</p></div><div class="sec-label">🍻 Tagesvollster</div><div id="drunkList" style="padding:10px 14px 14px;display:flex;flex-wrap:wrap;gap:10px;justify-content:center"><p style="color:var(--t3);font-size:13px;width:100%">Wird geladen...</p></div><div class="sec-label">🎯 Crew-Challenges</div><div id="challengeList" style="padding:0 14px 14px"><p style="color:var(--t3);font-size:13px">Wird geladen...</p></div><div class="sec-label">🚕 Taxi-Splitter</div><div class="game-card" onclick="openTaxiSplitter()"><div class="game-icon">🚕</div><div><h4>Taxi-Rechner</h4><p>Teile Fahrtkosten fair auf</p></div></div><div class="community-soon"><h4>🌍 Community</h4><p>Triff tausende Atzen in der Community — kommt bald!</p></div><div class="sec-label">Party-Spiele</div><div id="gameList"></div></div></div>
+    <div class="scr" id="screen-crew"><div class="crew-map-full"><div id="crewMap"></div></div><div class="crew-content"><div class="crew-invite glass" onclick="inviteCrew()"><div class="ci-icon">📲</div><div><h4>Crew einladen</h4><p>Teile deinen Invite-Link!</p></div></div><div class="crew-limit" id="crewCount">0/8 Crew-Mitglieder</div><div class="sec-label">Deine Crew</div><div id="crewList"><p style="padding:14px;color:var(--t3);font-size:13px">Noch keine Crew-Mitglieder. Lade Freunde ein!</p></div><div class="sec-label">Deine Matches</div><div id="matchFriendList"><p style="padding:14px;color:var(--t3);font-size:13px">Matche mit Leuten um sie hier zu sehen!</p></div><div class="sec-label">🏆 Crew-Leaderboard</div><div id="leaderboardList" style="padding:0 14px 14px"><p style="color:var(--t3);font-size:13px">Wird geladen...</p></div><div class="sec-label">🗓️ Heute Abend</div><div id="tonightPlanner" style="padding:0 14px 14px"><p style="color:var(--t3);font-size:13px">Wird geladen...</p></div><div class="sec-label">🍻 Tagesvollster</div><div id="drunkList" style="padding:10px 14px 14px;display:flex;flex-wrap:wrap;gap:10px;justify-content:center"><p style="color:var(--t3);font-size:13px;width:100%">Wird geladen...</p></div><div class="sec-label">🎯 Crew-Challenges</div><div id="challengeList" style="padding:0 14px 14px"><p style="color:var(--t3);font-size:13px">Wird geladen...</p></div><div class="sec-label">🚕 Taxi-Splitter</div><div class="game-card" onclick="openTaxiSplitter()"><div class="game-icon">🚕</div><div><h4>Taxi-Rechner</h4><p>Teile Fahrtkosten fair auf</p></div></div><div class="community-soon"><h4>🌍 Community</h4><p>Triff tausende Leute in der Community — kommt bald!</p></div><div class="sec-label">Party-Spiele</div><div id="gameList"></div></div></div>
     <div class="scr" id="screen-deals"><div class="deals-wrap">
       <div class="deals-hero" style="padding:68px 16px 12px;text-align:center">
-        <div style="font-size:11px;font-weight:700;color:var(--o);text-transform:uppercase;letter-spacing:2px;margin-bottom:4px">Exklusiv für Atzen</div>
+        <div style="font-size:11px;font-weight:700;color:var(--o);text-transform:uppercase;letter-spacing:2px;margin-bottom:4px">Exklusiv für dich</div>
         <h2 style="font-size:22px;font-weight:900;letter-spacing:-.5px">Deals & Rabatte</h2>
         <p style="font-size:12px;color:var(--t3);margin-top:4px">Handverlesene Angebote für deine Malle-Reise</p>
       </div>
@@ -802,7 +792,7 @@ select.ri{appearance:none;-webkit-appearance:none}
       <div id="dealsContent"></div>
       <div class="deal-disclosure">⚠️ Affiliate-Hinweis: Einige Links sind Partnerlinks. Bei einer Buchung/Kauf erhalten wir eine kleine Provision — für dich ändert sich der Preis nicht. butterbread tech GmbH · DSGVO-konform · Server EU</div>
     </div></div>
-    <div class="scr" id="screen-profile"><div class="prof-hero"><div class="prof-ava-wrap"><div class="prof-ava"><img id="profAvaImg" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80"></div><div class="prof-ava-edit" onclick="openPhotoUpload()">📷</div></div><h2><span id="profName">Laden...</span></h2><div class="handle" id="profHandle"></div><div class="prof-badges-row" id="profBadges"></div></div><div class="prof-vibe" id="profVibe"></div><div class="prof-socials" id="profSocials"></div><div class="prof-stats glass"><div class="pstat"><div class="pn" id="stM">0</div><div class="pl">Matches</div></div><div class="pstat"><div class="pn" id="stCrew">0</div><div class="pl">Crew</div></div><div class="pstat"><div class="pn" id="stPts">0</div><div class="pl">🍹 Sangrias</div></div></div><div class="premium-cta" id="premCta" onclick="openPremium()"><h3>✨ atze Premium</h3><div class="pc-sub">Keine Werbung · Unlimited Swipes · VIP</div><div class="pc-btn">Ab 2,99€</div></div><div class="pmenu"><div class="pmi" onclick="openLegal('dsgvo')"><div class="pmi-icon b">🛡</div><span class="pmi-label">Datenschutz</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openLegal('impressum')"><div class="pmi-icon gr">📄</div><span class="pmi-label">Impressum</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openLegal('agb')"><div class="pmi-icon gr">📝</div><span class="pmi-label">AGB</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="editProfile()"><div class="pmi-icon o">✏️</div><span class="pmi-label">Profil bearbeiten</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="editSocials()"><div class="pmi-icon o">📱</div><span class="pmi-label">Social Media verknüpfen</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openColorPicker()"><div class="pmi-icon o">🎨</div><span class="pmi-label">Profilfarbe ändern</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="requestVerification()"><div class="pmi-icon b">✓</div><span class="pmi-label">Verifizierung <span style="font-size:11px;font-weight:600;color:var(--t3)" id="verStatus"></span></span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="showBlockedUsers()"><div class="pmi-icon gr">🚫</div><span class="pmi-label">Blockierte Nutzer</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openLegal('moderation')"><div class="pmi-icon b">⚖</div><span class="pmi-label">Moderations-Transparenz</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openLegal('affiliate')"><div class="pmi-icon o">🤝</div><span class="pmi-label">Affiliate-Hinweis</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="exportData()"><div class="pmi-icon b">📦</div><span class="pmi-label">Meine Daten exportieren</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="deleteAccount()"><div class="pmi-icon gr" style="background:rgba(255,59,48,.08)">🗑</div><span class="pmi-label" style="color:var(--fire)">Account löschen</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openLanguagePicker()"><div class="pmi-icon gr">🌐</div><span class="pmi-label">Sprache</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="toggleTheme()"><div class="pmi-icon o">🌙</div><span class="pmi-label">Dark/Light Mode</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="logOut()"><div class="pmi-icon gr">🚪</div><span class="pmi-label" style="color:var(--fire)">Ausloggen</span></div></div></div>
+    <div class="scr" id="screen-profile"><div class="prof-hero"><div class="prof-ava-wrap"><div class="prof-ava"><img id="profAvaImg" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80"></div><div class="prof-ava-edit" onclick="openPhotoUpload()">📷</div></div><h2><span id="profName">Laden...</span></h2><div class="handle" id="profHandle"></div><div class="prof-badges-row" id="profBadges"></div></div><div class="prof-vibe" id="profVibe"></div><div class="prof-socials" id="profSocials"></div><div class="prof-stats glass"><div class="pstat"><div class="pn" id="stM">0</div><div class="pl">Matches</div></div><div class="pstat"><div class="pn" id="stCrew">0</div><div class="pl">Crew</div></div><div class="pstat"><div class="pn" id="stPts">0</div><div class="pl">🍹 Sangrias</div></div></div><div class="premium-cta" id="premCta" onclick="openPremium()"><h3>✨ crew Premium</h3><div class="pc-sub">Keine Werbung · Unlimited Swipes · VIP</div><div class="pc-btn">Ab 2,99€</div></div><div class="pmenu"><div class="pmi" onclick="openLegal('dsgvo')"><div class="pmi-icon b">🛡</div><span class="pmi-label">Datenschutz</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openLegal('impressum')"><div class="pmi-icon gr">📄</div><span class="pmi-label">Impressum</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openLegal('agb')"><div class="pmi-icon gr">📝</div><span class="pmi-label">AGB</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="editProfile()"><div class="pmi-icon o">✏️</div><span class="pmi-label">Profil bearbeiten</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="editSocials()"><div class="pmi-icon o">📱</div><span class="pmi-label">Social Media verknüpfen</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openColorPicker()"><div class="pmi-icon o">🎨</div><span class="pmi-label">Profilfarbe ändern</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="requestVerification()"><div class="pmi-icon b">✓</div><span class="pmi-label">Verifizierung <span style="font-size:11px;font-weight:600;color:var(--t3)" id="verStatus"></span></span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="showBlockedUsers()"><div class="pmi-icon gr">🚫</div><span class="pmi-label">Blockierte Nutzer</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openLegal('moderation')"><div class="pmi-icon b">⚖</div><span class="pmi-label">Moderations-Transparenz</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openLegal('affiliate')"><div class="pmi-icon o">🤝</div><span class="pmi-label">Affiliate-Hinweis</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="exportData()"><div class="pmi-icon b">📦</div><span class="pmi-label">Meine Daten exportieren</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="deleteAccount()"><div class="pmi-icon gr" style="background:rgba(255,59,48,.08)">🗑</div><span class="pmi-label" style="color:var(--fire)">Account löschen</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="toggleTheme()"><div class="pmi-icon o">🌙</div><span class="pmi-label">Dark/Light Mode</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="logOut()"><div class="pmi-icon gr">🚪</div><span class="pmi-label" style="color:var(--fire)">Ausloggen</span></div></div></div>
   </main>
   <nav id="navBar">
     <button class="active" onclick="go('radar',this)"><span class="ni">📍</span><span>Radar</span></button>
@@ -818,16 +808,16 @@ select.ri{appearance:none;-webkit-appearance:none}
 <script src="config.js"></script>
 <script>
 // ============================================
-// ATZE PWA — Supabase Edition v7
+// CREW PWA — Supabase Edition v7
 // butterbread tech GmbH
 // ============================================
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 8;
-  var lastV = parseInt(localStorage.getItem('atze_app_v') || '0');
+  var APP_VERSION = 9;
+  var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
-    localStorage.setItem('atze_app_v', APP_VERSION);
+    localStorage.setItem('crew_app_v', APP_VERSION);
     if('serviceWorker' in navigator){
       navigator.serviceWorker.getRegistrations().then(function(regs){
         regs.forEach(function(r){r.unregister()});
@@ -869,7 +859,7 @@ var CHALLENGES = [
   {title:'Spanisch bestellen',icon:'🇪🇸',desc:'Bestelle komplett auf Spanisch',pts:40}
 ];
 
-var ATZE_CHALLENGES = [
+var CREW_CHALLENGES = [
   {id:'sangria',text:'📸 Zeig deinen Sangria-Eimer!',emoji:'🍹'},
   {id:'stranger',text:'📸 Selfie mit einem Fremden!',emoji:'🤳'},
   {id:'sunset',text:'📸 Bester Sonnenuntergang-Shot!',emoji:'🌅'},
@@ -884,21 +874,21 @@ var ATZE_CHALLENGES = [
   {id:'taxi',text:'📸 Im Taxi nach...?',emoji:'🚕'}
 ];
 var AFFILIATES = [
-  {phase:'pre',icon:'✈️',partner:'Check24 Flüge',net:'Belboon',com:'~2%',desc:'Günstige Flüge nach Mallorca finden und direkt buchen.',cta:'Flug schnappen',url:'https://www.check24.de/flug/?pid=ATZE_{subid}',tags:['Flüge','Ø 350€']},
-  {phase:'pre',icon:'🛡',partner:'HanseMerkur Reiseversicherung',net:'Awin',com:'15-22%',desc:'Reiserücktritt, Krankenversicherung & mehr. Sorglos auf Malle.',cta:'Abgesichert reisen',url:'https://www.hansemerkur.de/reiseversicherung?awc=ATZE_{subid}',tags:['Versicherung','Ø 45€']},
-  {phase:'pre',icon:'🅿️',partner:'Holidayparking',net:'Awin',com:'6-8%',desc:'Parkplatz am Flughafen vorab sichern. Günstiger als vor Ort.',cta:'Parkplatz sichern',url:'https://www.holidayparking.de/?awc=ATZE_{subid}',tags:['Parken','Ø 55€']},
-  {phase:'pre',icon:'🚗',partner:'Sunny Cars Mietwagen',net:'Awin',com:'5%',desc:'Alles-inklusive Mietwagen auf Mallorca. Ohne versteckte Kosten.',cta:'Auto auf Malle',url:'https://www.sunnycars.de/?awc=ATZE_{subid}&destination=PMI',tags:['Mietwagen','Ø 280€']},
-  {phase:'pre',icon:'🏨',partner:'Booking.com Hotels',net:'Booking Affiliate',com:'25-40%',desc:'Hotels, Apartments & Fincas an der Playa. Bestpreisgarantie.',cta:'Bude sichern',url:'https://www.booking.com/searchresults.de.html?dest_id=PMI&aid=ATZE_{subid}',tags:['Hotels','Ø 600€']},
-  {phase:'on',icon:'🎉',partner:'GetYourGuide',net:'Awin',com:'8%',desc:'Bootspartys, Katamaran-Touren, Club-Crawls auf Mallorca.',cta:'Erlebnis buchen',url:'https://www.getyourguide.de/palma-de-mallorca-l189/?partner_id=ATZE_{subid}',tags:['Erlebnisse','Ø 60€/Pers.']},
-  {phase:'on',icon:'🎵',partner:'Megapark / Bierkönig',net:'Direkt-API',com:'10-15%',desc:'Tickets für die legendären Clubs an der Playa. Skip the line.',cta:'Ticket sichern',url:'https://www.megapark.de/tickets/?ref=atze&subid={subid}',tags:['Club-Tickets','Live']},
-  {phase:'on',icon:'🚐',partner:'Welcome Pickups',net:'Direkt',com:'10%',desc:'Privater Flughafen-Transfer nach Palma. Fahrer wartet auf euch.',cta:'Transfer bestellen',url:'https://www.welcomepickups.com/transfer/palma-airport/?ref=atze_{subid}',tags:['Transfer','Ø 35€']},
-  {phase:'on',icon:'🎟',partner:'Tiqets',net:'Awin',com:'6%',desc:'Wasserparks, Jeep-Safaris, Höhlen-Touren — für den Tag.',cta:'Tagestour buchen',url:'https://www.tiqets.com/de/mallorca-c66550/?partner=atze&subid={subid}',tags:['Tagesausflüge','Ø 50€']},
-  {phase:'on',icon:'🍽',partner:'TheFork',net:'Awin',com:'3-5€ fix',desc:'Restaurants auf Mallorca mit Rabatt. Für die ganze Crew reservieren.',cta:'Tisch reservieren',url:'https://www.thefork.de/restaurant/palma-de-mallorca?awc=ATZE_{subid}',tags:['Restaurant','Gruppe']},
-  {phase:'gear',icon:'🎒',partner:'Amazon Party-Gear',net:'Amazon PartnerNet',com:'1-10%',desc:'Bucket Hats, Trinkflaschen, wasserdichte Hüllen — die Atze-Packliste.',cta:'Packliste checken',url:'https://www.amazon.de/s?k=mallorca+party+set&tag=atze-app-21&subid={subid}',tags:['Party-Gear','Packliste']},
-  {phase:'gear',icon:'📹',partner:'GoPro',net:'Awin',com:'5-8%',desc:'Die besten Momente auf Malle in 4K festhalten. Waterproof.',cta:'Momente filmen',url:'https://gopro.com/de/d/hero-cameras?awc=ATZE_{subid}',tags:['Kamera','Ø 350€']},
-  {phase:'gear',icon:'☀️',partner:'Douglas',net:'Awin',com:'5-8%',desc:'Sonnenschutz, After-Sun & Pflege für die Malle-Woche.',cta:'Sonnenschutz holen',url:'https://www.douglas.de/de/c/sonnenschutz?awc=ATZE_{subid}',tags:['Sonnenschutz','Pflege']},
-  {phase:'gear',icon:'💆',partner:'Flaconi',net:'Awin',com:'8-12%',desc:'Parfum, Skincare & Bestseller für die Reise. Schnelle Lieferung.',cta:'Pflege einpacken',url:'https://www.flaconi.de/pflege/?awc=ATZE_{subid}',tags:['Beauty','Ø 45€']},
-  {phase:'gear',icon:'🚁',partner:'DJI Drohnen',net:'Awin',com:'3-5%',desc:'Epische Drohnen-Shots über der Playa. Content Creator auf Malle.',cta:'Drohne mitnehmen',url:'https://store.dji.com/de/?awc=ATZE_{subid}',tags:['Drohne','Content']}
+  {phase:'pre',icon:'✈️',partner:'Check24 Flüge',net:'Belboon',com:'~2%',desc:'Günstige Flüge nach Mallorca finden und direkt buchen.',cta:'Flug schnappen',url:'https://www.check24.de/flug/?pid=CREW_{subid}',tags:['Flüge','Ø 350€']},
+  {phase:'pre',icon:'🛡',partner:'HanseMerkur Reiseversicherung',net:'Awin',com:'15-22%',desc:'Reiserücktritt, Krankenversicherung & mehr. Sorglos auf Malle.',cta:'Abgesichert reisen',url:'https://www.hansemerkur.de/reiseversicherung?awc=CREW_{subid}',tags:['Versicherung','Ø 45€']},
+  {phase:'pre',icon:'🅿️',partner:'Holidayparking',net:'Awin',com:'6-8%',desc:'Parkplatz am Flughafen vorab sichern. Günstiger als vor Ort.',cta:'Parkplatz sichern',url:'https://www.holidayparking.de/?awc=CREW_{subid}',tags:['Parken','Ø 55€']},
+  {phase:'pre',icon:'🚗',partner:'Sunny Cars Mietwagen',net:'Awin',com:'5%',desc:'Alles-inklusive Mietwagen auf Mallorca. Ohne versteckte Kosten.',cta:'Auto auf Malle',url:'https://www.sunnycars.de/?awc=CREW_{subid}&destination=PMI',tags:['Mietwagen','Ø 280€']},
+  {phase:'pre',icon:'🏨',partner:'Booking.com Hotels',net:'Booking Affiliate',com:'25-40%',desc:'Hotels, Apartments & Fincas an der Playa. Bestpreisgarantie.',cta:'Bude sichern',url:'https://www.booking.com/searchresults.de.html?dest_id=PMI&aid=CREW_{subid}',tags:['Hotels','Ø 600€']},
+  {phase:'on',icon:'🎉',partner:'GetYourGuide',net:'Awin',com:'8%',desc:'Bootspartys, Katamaran-Touren, Club-Crawls auf Mallorca.',cta:'Erlebnis buchen',url:'https://www.getyourguide.de/palma-de-mallorca-l189/?partner_id=CREW_{subid}',tags:['Erlebnisse','Ø 60€/Pers.']},
+  {phase:'on',icon:'🎵',partner:'Megapark / Bierkönig',net:'Direkt-API',com:'10-15%',desc:'Tickets für die legendären Clubs an der Playa. Skip the line.',cta:'Ticket sichern',url:'https://www.megapark.de/tickets/?ref=crew&subid={subid}',tags:['Club-Tickets','Live']},
+  {phase:'on',icon:'🚐',partner:'Welcome Pickups',net:'Direkt',com:'10%',desc:'Privater Flughafen-Transfer nach Palma. Fahrer wartet auf euch.',cta:'Transfer bestellen',url:'https://www.welcomepickups.com/transfer/palma-airport/?ref=crew_{subid}',tags:['Transfer','Ø 35€']},
+  {phase:'on',icon:'🎟',partner:'Tiqets',net:'Awin',com:'6%',desc:'Wasserparks, Jeep-Safaris, Höhlen-Touren — für den Tag.',cta:'Tagestour buchen',url:'https://www.tiqets.com/de/mallorca-c66550/?partner=crew&subid={subid}',tags:['Tagesausflüge','Ø 50€']},
+  {phase:'on',icon:'🍽',partner:'TheFork',net:'Awin',com:'3-5€ fix',desc:'Restaurants auf Mallorca mit Rabatt. Für die ganze Crew reservieren.',cta:'Tisch reservieren',url:'https://www.thefork.de/restaurant/palma-de-mallorca?awc=CREW_{subid}',tags:['Restaurant','Gruppe']},
+  {phase:'gear',icon:'🎒',partner:'Amazon Party-Gear',net:'Amazon PartnerNet',com:'1-10%',desc:'Bucket Hats, Trinkflaschen, wasserdichte Hüllen — die Crew-Packliste.',cta:'Packliste checken',url:'https://www.amazon.de/s?k=mallorca+party+set&tag=crew-app-21&subid={subid}',tags:['Party-Gear','Packliste']},
+  {phase:'gear',icon:'📹',partner:'GoPro',net:'Awin',com:'5-8%',desc:'Die besten Momente auf Malle in 4K festhalten. Waterproof.',cta:'Momente filmen',url:'https://gopro.com/de/d/hero-cameras?awc=CREW_{subid}',tags:['Kamera','Ø 350€']},
+  {phase:'gear',icon:'☀️',partner:'Douglas',net:'Awin',com:'5-8%',desc:'Sonnenschutz, After-Sun & Pflege für die Malle-Woche.',cta:'Sonnenschutz holen',url:'https://www.douglas.de/de/c/sonnenschutz?awc=CREW_{subid}',tags:['Sonnenschutz','Pflege']},
+  {phase:'gear',icon:'💆',partner:'Flaconi',net:'Awin',com:'8-12%',desc:'Parfum, Skincare & Bestseller für die Reise. Schnelle Lieferung.',cta:'Pflege einpacken',url:'https://www.flaconi.de/pflege/?awc=CREW_{subid}',tags:['Beauty','Ø 45€']},
+  {phase:'gear',icon:'🚁',partner:'DJI Drohnen',net:'Awin',com:'3-5%',desc:'Epische Drohnen-Shots über der Playa. Content Creator auf Malle.',cta:'Drohne mitnehmen',url:'https://store.dji.com/de/?awc=CREW_{subid}',tags:['Drohne','Content']}
 ];
 
 var obData = {gender:'',seek:'',status:'',club:'',bio:'',birthdate:''};
@@ -910,8 +900,7 @@ function esc(s){var d=document.createElement('div');d.textContent=s;return d.inn
 // ============================================
 // i18n - LANGUAGE SYSTEM
 // ============================================
-var LANG_KEY = 'atze_lang';
-var curLang = localStorage.getItem(LANG_KEY) || 'de';
+var curLang = 'de';
 
 var I18N = {
   de: {
@@ -952,8 +941,8 @@ var I18N = {
     ob_go: "Los geht's!",
     // DSGVO items
     dsgvo_location: 'Standort', dsgvo_location_desc: 'Venues und Crew in deiner Nähe. Du kannst die App auch ohne Standort nutzen.',
-    dsgvo_push: 'Push-Benachrichtigungen', dsgvo_push_desc: 'AtzeShot, Matches, Deals.',
-    dsgvo_camera: 'Kamera', dsgvo_camera_desc: 'AtzeShot & Profilfotos.',
+    dsgvo_push: 'Push-Benachrichtigungen', dsgvo_push_desc: 'CrewShot, Matches, Deals.',
+    dsgvo_camera: 'Kamera', dsgvo_camera_desc: 'CrewShot & Profilfotos.',
     dsgvo_analytics: 'Anonyme Nutzungsanalyse', dsgvo_analytics_desc: 'Hilft uns die App zu verbessern.',
     dsgvo_required: '(erforderlich)', dsgvo_footer: 'butterbread tech GmbH · butterbread-tech.com · AES-256 verschlüsselt · Server EU (Frankfurt) · DSGVO-konform',
     // Nav
@@ -971,17 +960,17 @@ var I18N = {
     crew_members: 'Crew-Mitglieder', your_crew: 'Deine Crew',
     no_crew: 'Noch keine Crew-Mitglieder. Lade Freunde ein!',
     your_matches: 'Deine Matches', no_matches: 'Matche mit Leuten um sie hier zu sehen!',
-    community_title: '🌍 Community', community_sub: 'Triff tausende Atzen in der Community — kommt bald!',
+    community_title: '🌍 Community', community_sub: 'Triff tausende Leute in der Community — kommt bald!',
     party_games: 'Party-Spiele', players: 'Spieler',
     // Deals
-    deals_exclusive: 'Exklusiv für Atzen', deals_title: 'Deals & Rabatte',
+    deals_exclusive: 'Exklusiv für dich', deals_title: 'Deals & Rabatte',
     deals_sub: 'Handverlesene Angebote für deine Malle-Reise',
     deals_all: '🔥 Alle Deals', deals_pre: '✈️ Vor dem Abflug',
     deals_on: '🌴 Auf der Insel', deals_gear: '🎒 Must-Haves',
     deals_disclosure: '⚠️ Affiliate-Hinweis: Einige Links sind Partnerlinks. Bei einer Buchung/Kauf erhalten wir eine kleine Provision — für dich ändert sich der Preis nicht. butterbread tech GmbH · DSGVO-konform · Server EU',
     // Profile
     matches_label: 'Matches', crew_label: 'Crew', points_label: 'Punkte',
-    premium_title: '✨ atze Premium', premium_sub: 'Keine Werbung · Unlimited Swipes · VIP', premium_price: 'Ab 2,99€',
+    premium_title: '✨ crew Premium', premium_sub: 'Keine Werbung · Unlimited Swipes · VIP', premium_price: 'Ab 2,99€',
     premium_soon: 'Premium kommt bald!',
     menu_privacy: 'Datenschutz', menu_imprint: 'Impressum', menu_terms: 'AGB',
     menu_socials: 'Social Media verknüpfen', menu_color: 'Profilfarbe ändern',
@@ -1056,250 +1045,16 @@ var I18N = {
     malle_countdown: 'Malle-Countdown',
     dark_mode: 'Dark/Light Mode',
     points_label: 'Sangrias'
-  },
-  en: {
-    ag_title: 'The party app for Playa de Palma.',
-    ag_warning: 'This app is for users aged 18 and above only.',
-    ag_day: 'Day', ag_month: 'Month', ag_year: 'Year',
-    ag_confirm: 'Confirm age',
-    ag_under18: "I'm under 18",
-    auth_tag: 'Find the best parties.<br>Never lose your crew again.',
-    auth_apple: ' Apple', auth_google: 'G Google',
-    auth_or: 'or',
-    auth_email_btn: 'Sign up with email',
-    auth_email_ph: 'Email address',
-    auth_pass_ph: 'Password (min. 6 characters)',
-    auth_signup: 'Sign up', auth_login: 'Log in',
-    auth_has_account: 'Already have an account?', auth_no_account: "Don't have an account?",
-    auth_terms: 'By signing up you accept the <a href="#" onclick="event.preventDefault();openLegal(\'agb\')">Terms</a> and <a href="#" onclick="event.preventDefault();openLegal(\'dsgvo\')">Privacy Policy</a> of butterbread tech GmbH.',
-    ob1_title: 'About you', ob1_sub: 'Your name and birthday for your profile.',
-    ob_firstname: 'First name', ob_birthday: 'Birthday',
-    ob_social: 'Social Media',
-    ob_insta_ph: '📸 Instagram username (optional)',
-    ob_tiktok_ph: '🎵 TikTok username (optional)',
-    ob_snap_ph: '👻 Snapchat username (optional)',
-    ob_next: 'Next',
-    ob2_title: 'Who are you?', ob2_sub: 'Tell others about yourself.',
-    ob_iam: 'I am', ob_status: 'Relationship status',
-    ob_seek: 'What brings you here?', ob_about: 'About me',
-    ob_bio_ph: 'Party animal, sangria lover, always good vibes...',
-    ob3_title: 'Your club', ob3_sub: 'Show your colors on your profile.',
-    ob_custom_club: '✏️ Enter your club...', ob_or_select: 'Or choose',
-    ob4_title: 'Your profile photo', ob4_sub: 'Upload an appropriate photo for your profile.',
-    ob_photo_warning: '📸 Please only upload appropriate photos. Violations will lead to a ban.',
-    ob_choose_photo: '📷 Choose photo', ob_later: 'Later', ob_save: 'Save',
-    ob5_title: 'Privacy', ob5_sub: 'Your data. Your control.',
-    ob_go: "Let's go!",
-    dsgvo_location: 'Location', dsgvo_location_desc: 'Venues and crew nearby. You can use the app without location.',
-    dsgvo_push: 'Push notifications', dsgvo_push_desc: 'AtzeShot, matches, deals.',
-    dsgvo_camera: 'Camera', dsgvo_camera_desc: 'AtzeShot & profile photos.',
-    dsgvo_analytics: 'Anonymous analytics', dsgvo_analytics_desc: 'Helps us improve the app.',
-    dsgvo_required: '(required)', dsgvo_footer: 'butterbread tech GmbH · butterbread-tech.com · AES-256 encrypted · Server EU (Frankfurt) · GDPR compliant',
-    nav_radar: 'Radar', nav_deals: 'Deals', nav_crew: 'Crew', nav_match: 'Match', nav_profil: 'Profile',
-    vibe: 'Vibe', tonight: 'Tonight', loading: 'Loading...',
-    join_tonight: "I'm in!", crew_nearby: '👥 Crew nearby',
-    location_loading: 'Loading location...',
-    all: 'All', age: 'Age', city: 'City', club: 'Club',
-    no_profiles: 'No new people', no_profiles_sub: 'Change your filters or check back later!',
-    chat_soon: 'Chat coming soon!',
-    invite_crew: 'Invite crew', invite_sub: 'Share your invite link!',
-    crew_members: 'Crew members', your_crew: 'Your Crew',
-    no_crew: 'No crew members yet. Invite friends!',
-    your_matches: 'Your Matches', no_matches: 'Match with people to see them here!',
-    community_title: '🌍 Community', community_sub: 'Meet thousands in the community — coming soon!',
-    party_games: 'Party Games', players: 'Players',
-    deals_exclusive: 'Exclusive for Atzen', deals_title: 'Deals & Discounts',
-    deals_sub: 'Handpicked offers for your Malle trip',
-    deals_all: '🔥 All Deals', deals_pre: '✈️ Before takeoff',
-    deals_on: '🌴 On the island', deals_gear: '🎒 Must-haves',
-    deals_disclosure: '⚠️ Affiliate notice: Some links are partner links. We receive a small commission on bookings/purchases — the price stays the same for you. butterbread tech GmbH · GDPR compliant · Server EU',
-    matches_label: 'Matches', crew_label: 'Crew', points_label: 'Points',
-    premium_title: '✨ atze Premium', premium_sub: 'No ads · Unlimited swipes · VIP', premium_price: 'From €2.99',
-    premium_soon: 'Premium coming soon!',
-    menu_privacy: 'Privacy', menu_imprint: 'Imprint', menu_terms: 'Terms',
-    menu_socials: 'Link social media', menu_color: 'Change profile color',
-    menu_verify: 'Verification', menu_blocked: 'Blocked users',
-    menu_affiliate: 'Affiliate info', menu_export: 'Export my data',
-    menu_delete: 'Delete account', menu_logout: 'Log out',
-    menu_edit_profile: 'Edit profile', menu_language: 'Language',
-    sos_title: '🚨 SOS EMERGENCY', sos_sub: 'Your crew will be notified with your location immediately.',
-    sos_112: '🚨 Emergency 112', sos_crew: '📢 SOS to crew',
-    sos_hospital: '🏥 Hospital Son Llàtzer', sos_taxi: '🚕 Taxi Palma',
-    sos_embassy: '🇩🇪 German Embassy', sos_cancel: 'Cancel',
-    toast_blocked: 'User blocked 🚫', toast_unblocked: 'User unblocked ✅',
-    toast_photo_saved: 'Profile photo saved! 📸', toast_photo_deleted: 'Profile photo deleted',
-    toast_color_saved: 'Profile color saved! 🎨',
-    toast_socials_saved: 'Socials updated! ✅',
-    toast_reported: 'User reported. Thank you! 🙏',
-    toast_export: 'Data exported! 📦',
-    toast_poked: 'was poked! 👋',
-    toast_poke_wait: 'Already poked! Wait an hour.',
-    report_title: 'Report user', report_why: 'Why do you want to report this user?',
-    report_submit: 'Report',
-    gender_man: 'Male', gender_woman: 'Female', gender_diverse: 'Diverse', gender_nb: 'Non-Binary',
-    seek_crew: 'Find party crew', seek_meet: 'Meet people', seek_party: 'Party & Fun', seek_dating: 'Dating', seek_all: 'Everything',
-    status_single: 'Single', status_taken: 'Taken', status_complicated: 'Complicated', status_open: 'Open',
-    close: 'Close', block: 'Block', unblock: 'Unblock', report: 'Report',
-    no_blocked: 'No blocked users.',
-    blocked_users: 'Blocked Users',
-    its_a_match: "It's a Match!",
-    match_sub: 'You both want to party together',
-    keep_swiping: 'Keep swiping',
-    checkin: '📍 Check in (+50)', route: '🗺 Route', share: '📤 Share',
-    delete_confirm1: 'Really delete your account? All data will be permanently deleted.',
-    delete_confirm2: '⚠️ WARNING: This cannot be undone. Really delete account?',
-    nearby_activate: 'Enable location to see crew nearby.',
-    nearby_match_first: 'Match with people to see them here!',
-    nearby_no_location: 'No crew members with location nearby.',
-    nearby_nobody: 'No crew nearby right now.',
-    poke: 'Poke 👋', poked: 'Poked ✓',
-    away: 'away',
-    color_title: '🎨 Profile Color', color_sub: 'Unlocked after inviting 6 friends!',
-    invite_unlock: 'Invite 6 friends to unlock colors!',
-    colors_unlocked: '🎨 Profile colors unlocked!',
-    crew_max: 'Max 8 crew members reached!',
-    notif_title: 'Notifications', notif_empty: 'No notifications yet.',
-    game_title: 'Game', game_next: 'Next card', game_tap: 'Tap for the next card',
-    edit_name: 'Name', edit_bio: 'Bio', edit_gender: 'Gender', edit_status: 'Status',
-    edit_seek: 'Looking for', edit_club: 'Club', edit_save: 'Save',
-    edit_title: 'Edit Profile',
-    profile_saved: 'Profile saved! ✅',
-    mod_transparency: 'Moderation Transparency',
-    mod_72h: 'We process all reports within 72 hours.',
-    mod_appeal: 'File appeal',
-    mod_appeal_sent: 'Appeal submitted. We will contact you via email.',
-    lang_title: 'Choose language',
-    lang_changed: 'Language changed!'
-  },
-  es: {
-    ag_title: 'La app de fiestas para Playa de Palma.',
-    ag_warning: 'Esta aplicación es solo para mayores de 18 años.',
-    ag_day: 'Día', ag_month: 'Mes', ag_year: 'Año',
-    ag_confirm: 'Confirmar edad',
-    ag_under18: 'Soy menor de 18',
-    auth_tag: 'Encuentra las mejores fiestas.<br>No pierdas nunca a tu crew.',
-    auth_apple: ' Apple', auth_google: 'G Google',
-    auth_or: 'o',
-    auth_email_btn: 'Registrarse con email',
-    auth_email_ph: 'Correo electrónico',
-    auth_pass_ph: 'Contraseña (mín. 6 caracteres)',
-    auth_signup: 'Registrarse', auth_login: 'Iniciar sesión',
-    auth_has_account: '¿Ya tienes cuenta?', auth_no_account: '¿No tienes cuenta?',
-    auth_terms: 'Al registrarte aceptas los <a href="#" onclick="event.preventDefault();openLegal(\'agb\')">Términos</a> y la <a href="#" onclick="event.preventDefault();openLegal(\'dsgvo\')">Política de Privacidad</a> de butterbread tech GmbH.',
-    ob1_title: 'Sobre ti', ob1_sub: 'Tu nombre y fecha de nacimiento para tu perfil.',
-    ob_firstname: 'Nombre', ob_birthday: 'Fecha de nacimiento',
-    ob_social: 'Redes sociales',
-    ob_insta_ph: '📸 Usuario de Instagram (opcional)',
-    ob_tiktok_ph: '🎵 Usuario de TikTok (opcional)',
-    ob_snap_ph: '👻 Usuario de Snapchat (opcional)',
-    ob_next: 'Siguiente',
-    ob2_title: '¿Quién eres?', ob2_sub: 'Cuéntale a los demás sobre ti.',
-    ob_iam: 'Soy', ob_status: 'Estado sentimental',
-    ob_seek: '¿Qué te trae aquí?', ob_about: 'Sobre mí',
-    ob_bio_ph: 'Fiestero, amante de la sangría, siempre de buen rollo...',
-    ob3_title: 'Tu equipo', ob3_sub: 'Muestra tus colores en tu perfil.',
-    ob_custom_club: '✏️ Escribe tu equipo...', ob_or_select: 'O elige',
-    ob4_title: 'Tu foto de perfil', ob4_sub: 'Sube una foto apropiada para tu perfil.',
-    ob_photo_warning: '📸 Solo fotos apropiadas. Las infracciones llevarán al bloqueo.',
-    ob_choose_photo: '📷 Elegir foto', ob_later: 'Más tarde', ob_save: 'Guardar',
-    ob5_title: 'Privacidad', ob5_sub: 'Tus datos. Tu control.',
-    ob_go: '¡Vamos!',
-    dsgvo_location: 'Ubicación', dsgvo_location_desc: 'Locales y crew cerca de ti. Puedes usar la app sin ubicación.',
-    dsgvo_push: 'Notificaciones push', dsgvo_push_desc: 'AtzeShot, matches, ofertas.',
-    dsgvo_camera: 'Cámara', dsgvo_camera_desc: 'AtzeShot y fotos de perfil.',
-    dsgvo_analytics: 'Análisis anónimo', dsgvo_analytics_desc: 'Nos ayuda a mejorar la app.',
-    dsgvo_required: '(obligatorio)', dsgvo_footer: 'butterbread tech GmbH · butterbread-tech.com · Cifrado AES-256 · Servidor UE (Frankfurt) · Conforme al RGPD',
-    nav_radar: 'Radar', nav_deals: 'Ofertas', nav_crew: 'Crew', nav_match: 'Match', nav_profil: 'Perfil',
-    vibe: 'Vibe', tonight: 'Esta noche', loading: 'Cargando...',
-    join_tonight: '¡Me apunto!', crew_nearby: '👥 Crew cercana',
-    location_loading: 'Cargando ubicación...',
-    all: 'Todos', age: 'Edad', city: 'Ciudad', club: 'Club',
-    no_profiles: 'Nadie nuevo', no_profiles_sub: '¡Cambia tus filtros o vuelve más tarde!',
-    chat_soon: '¡Chat próximamente!',
-    invite_crew: 'Invitar crew', invite_sub: '¡Comparte tu enlace de invitación!',
-    crew_members: 'Miembros del crew', your_crew: 'Tu Crew',
-    no_crew: 'Sin miembros aún. ¡Invita amigos!',
-    your_matches: 'Tus Matches', no_matches: '¡Haz match para verlos aquí!',
-    community_title: '🌍 Comunidad', community_sub: 'Conoce a miles en la comunidad — ¡próximamente!',
-    party_games: 'Juegos de fiesta', players: 'Jugadores',
-    deals_exclusive: 'Exclusivo para Atzen', deals_title: 'Ofertas y descuentos',
-    deals_sub: 'Ofertas seleccionadas para tu viaje a Malle',
-    deals_all: '🔥 Todas', deals_pre: '✈️ Antes del vuelo',
-    deals_on: '🌴 En la isla', deals_gear: '🎒 Imprescindibles',
-    deals_disclosure: '⚠️ Aviso de afiliados: Algunos enlaces son de socios. Recibimos una pequeña comisión — el precio no cambia para ti. butterbread tech GmbH · Conforme al RGPD · Servidor UE',
-    matches_label: 'Matches', crew_label: 'Crew', points_label: 'Puntos',
-    premium_title: '✨ atze Premium', premium_sub: 'Sin anuncios · Swipes ilimitados · VIP', premium_price: 'Desde 2,99€',
-    premium_soon: '¡Premium próximamente!',
-    menu_privacy: 'Privacidad', menu_imprint: 'Aviso legal', menu_terms: 'Términos',
-    menu_socials: 'Vincular redes', menu_color: 'Cambiar color de perfil',
-    menu_verify: 'Verificación', menu_blocked: 'Usuarios bloqueados',
-    menu_affiliate: 'Info de afiliados', menu_export: 'Exportar mis datos',
-    menu_delete: 'Eliminar cuenta', menu_logout: 'Cerrar sesión',
-    menu_edit_profile: 'Editar perfil', menu_language: 'Idioma',
-    sos_title: '🚨 SOS EMERGENCIA', sos_sub: 'Tu crew será notificada con tu ubicación inmediatamente.',
-    sos_112: '🚨 Emergencia 112', sos_crew: '📢 SOS al crew',
-    sos_hospital: '🏥 Hospital Son Llàtzer', sos_taxi: '🚕 Taxi Palma',
-    sos_embassy: '🇩🇪 Embajada alemana', sos_cancel: 'Cancelar',
-    toast_blocked: 'Usuario bloqueado 🚫', toast_unblocked: 'Usuario desbloqueado ✅',
-    toast_photo_saved: '¡Foto guardada! 📸', toast_photo_deleted: 'Foto eliminada',
-    toast_color_saved: '¡Color guardado! 🎨',
-    toast_socials_saved: '¡Redes actualizadas! ✅',
-    toast_reported: '¡Usuario reportado. Gracias! 🙏',
-    toast_export: '¡Datos exportados! 📦',
-    toast_poked: '¡fue tocado! 👋',
-    toast_poke_wait: '¡Ya tocado! Espera una hora.',
-    report_title: 'Reportar usuario', report_why: '¿Por qué quieres reportar a este usuario?',
-    report_submit: 'Reportar',
-    gender_man: 'Hombre', gender_woman: 'Mujer', gender_diverse: 'Diverso', gender_nb: 'No binario',
-    seek_crew: 'Encontrar crew', seek_meet: 'Conocer gente', seek_party: 'Fiesta y diversión', seek_dating: 'Citas', seek_all: 'De todo',
-    status_single: 'Soltero/a', status_taken: 'En pareja', status_complicated: 'Complicado', status_open: 'Abierto/a',
-    close: 'Cerrar', block: 'Bloquear', unblock: 'Desbloquear', report: 'Reportar',
-    no_blocked: 'Sin usuarios bloqueados.',
-    blocked_users: 'Usuarios Bloqueados',
-    its_a_match: '¡Es un Match!',
-    match_sub: 'Ambos queréis salir de fiesta juntos',
-    keep_swiping: 'Seguir deslizando',
-    checkin: '📍 Check in (+50)', route: '🗺 Ruta', share: '📤 Compartir',
-    delete_confirm1: '¿Eliminar cuenta? Todos los datos serán eliminados permanentemente.',
-    delete_confirm2: '⚠️ ADVERTENCIA: Esto no se puede deshacer. ¿Eliminar cuenta?',
-    nearby_activate: 'Activa tu ubicación para ver crew cercana.',
-    nearby_match_first: '¡Haz match para verlos aquí!',
-    nearby_no_location: 'Sin crew con ubicación cercana.',
-    nearby_nobody: 'Sin crew cerca ahora.',
-    poke: 'Tocar 👋', poked: 'Tocado ✓',
-    away: 'de distancia',
-    color_title: '🎨 Color de perfil', color_sub: '¡Desbloqueado tras invitar a 6 amigos!',
-    invite_unlock: '¡Invita a 6 amigos para desbloquear colores!',
-    colors_unlocked: '🎨 ¡Colores desbloqueados!',
-    crew_max: '¡Máximo 8 miembros alcanzado!',
-    notif_title: 'Notificaciones', notif_empty: 'Sin notificaciones.',
-    game_title: 'Juego', game_next: 'Siguiente carta', game_tap: 'Toca para la siguiente carta',
-    edit_name: 'Nombre', edit_bio: 'Bio', edit_gender: 'Género', edit_status: 'Estado',
-    edit_seek: 'Busco', edit_club: 'Club', edit_save: 'Guardar',
-    edit_title: 'Editar Perfil',
-    profile_saved: '¡Perfil guardado! ✅',
-    mod_transparency: 'Transparencia de moderación',
-    mod_72h: 'Procesamos todas las denuncias en 72 horas.',
-    mod_appeal: 'Presentar recurso',
-    mod_appeal_sent: 'Recurso enviado. Te contactaremos por email.',
-    lang_title: 'Elegir idioma',
-    lang_changed: '¡Idioma cambiado!'
   }
 };
 
-function t(key){ return (I18N[curLang] && I18N[curLang][key]) || (I18N['de'] && I18N['de'][key]) || key; }
-
-function setLang(lang){
-  curLang = lang;
-  localStorage.setItem(LANG_KEY, lang);
-  document.documentElement.lang = lang;
-}
+function t(key){ return (I18N['de'] && I18N['de'][key]) || key; }
 
 // ============================================
 // INIT
 // ============================================
 document.addEventListener('DOMContentLoaded', async function(){
-  console.log('[ATZE] Init starting...');
+  console.log('[CREW] Init starting...');
 
   // Check config
   if(!SUPABASE_URL || SUPABASE_URL === 'DEINE_SUPABASE_URL_HIER'){
@@ -1310,9 +1065,9 @@ document.addEventListener('DOMContentLoaded', async function(){
   // Init Supabase
   try {
     sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    console.log('[ATZE] Supabase client created');
+    console.log('[CREW] Supabase client created');
   } catch(e) {
-    console.error('[ATZE] Supabase init failed:', e);
+    console.error('[CREW] Supabase init failed:', e);
     document.getElementById('loadingScreen').innerHTML = '<div style="padding:40px;text-align:center;color:#fff"><p>App konnte nicht geladen werden. Bitte Seite neu laden.</p></div>';
     return;
   }
@@ -1320,20 +1075,20 @@ document.addEventListener('DOMContentLoaded', async function(){
   // Check session
   try {
     var {data:{session}} = await sb.auth.getSession();
-    console.log('[ATZE] Session check:', session ? 'found' : 'none');
+    console.log('[CREW] Session check:', session ? 'found' : 'none');
     if(session && session.user){
       await loadUser(session.user);
     } else {
       showAgeGate();
     }
   } catch(e) {
-    console.error('[ATZE] Session check failed:', e);
+    console.error('[CREW] Session check failed:', e);
     showAgeGate();
   }
 
   // Auth state listener
   sb.auth.onAuthStateChange(async function(event, session){
-    console.log('[ATZE] Auth event:', event);
+    console.log('[CREW] Auth event:', event);
     if(event === 'SIGNED_IN' && session && session.user){
       await loadUser(session.user);
     } else if(event === 'SIGNED_OUT'){
@@ -1351,26 +1106,15 @@ function showAgeGate(){
   document.getElementById('loadingScreen').classList.add('gone');
   document.getElementById('authScreen').classList.add('gone');
   document.getElementById('onboard').classList.add('gone');
-  if(!localStorage.getItem(LANG_KEY)){
-    document.getElementById('langPicker').style.display='flex';
-    return;
-  }
   if(localStorage.aok === '1'){
     showAuth();
   } else {
     document.getElementById('agegate').classList.remove('gone');
     fillAgeSelects();
-    applyLang();
   }
 }
 
-window.pickLang = function(lang){
-  setLang(lang);
-  document.getElementById('langPicker').style.display='none';
-  document.getElementById('agegate').classList.remove('gone');
-  fillAgeSelects();
-  applyLang();
-};
+// pickLang removed — German only
 
 function applyLang(){
   document.documentElement.lang = curLang;
@@ -1393,11 +1137,7 @@ function applyLang(){
 function fillAgeSelects(){
   var ds=document.getElementById('agDay'),ms=document.getElementById('agMonth'),ys=document.getElementById('agYear');
   for(var i=1;i<=31;i++)ds.innerHTML+='<option value="'+i+'">'+i+'</option>';
-  // Use translated month names
-  var months = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
-  if(curLang === 'en') months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  if(curLang === 'es') months = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
-  months.forEach(function(m,i){ms.innerHTML+='<option value="'+(i+1)+'">'+m+'</option>'});
+  ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'].forEach(function(m,i){ms.innerHTML+='<option value="'+(i+1)+'">'+m+'</option>'});
   var cy=new Date().getFullYear();for(var y=cy-16;y>=cy-80;y--)ys.innerHTML+='<option value="'+y+'">'+y+'</option>';
 }
 
@@ -1437,9 +1177,9 @@ window.authEmail = async function(){
 
   try {
     if(authMode === 'signup'){
-      console.log('[ATZE] Signing up:', email);
+      console.log('[CREW] Signing up:', email);
       var res = await sb.auth.signUp({email: email, password: pass});
-      console.log('[ATZE] SignUp result:', JSON.stringify(res));
+      console.log('[CREW] SignUp result:', JSON.stringify(res));
       if(res.error){
         toast('Fehler: ' + res.error.message);
         btn.disabled=false; btn.textContent='Registrieren';
@@ -1460,9 +1200,9 @@ window.authEmail = async function(){
         return;
       }
     } else {
-      console.log('[ATZE] Logging in:', email);
+      console.log('[CREW] Logging in:', email);
       var res = await sb.auth.signInWithPassword({email: email, password: pass});
-      console.log('[ATZE] Login result:', res.error ? res.error.message : 'success');
+      console.log('[CREW] Login result:', res.error ? res.error.message : 'success');
       if(res.error){
         toast('Fehler: ' + res.error.message);
         btn.disabled=false; btn.textContent='Einloggen';
@@ -1472,7 +1212,7 @@ window.authEmail = async function(){
       toast('Eingeloggt! 🌴');
     }
   } catch(e) {
-    console.error('[ATZE] authEmail error:', e);
+    console.error('[CREW] authEmail error:', e);
     toast('Fehler: ' + (e.message || 'Unbekannt'));
     btn.disabled=false;
     btn.textContent = authMode === 'signup' ? 'Registrieren' : 'Einloggen';
@@ -1491,7 +1231,7 @@ window.openLegalAuth=function(type){
 // LOAD USER
 // ============================================
 async function loadUser(authUser){
-  console.log('[ATZE] loadUser called, uid:', authUser.id);
+  console.log('[CREW] loadUser called, uid:', authUser.id);
   document.getElementById('loadingScreen').classList.remove('gone');
   document.getElementById('authScreen').classList.add('gone');
   document.getElementById('agegate').classList.add('gone');
@@ -1500,24 +1240,24 @@ async function loadUser(authUser){
     // Check if profile exists and is complete
     var profileRes = await sb.from('profiles').select('*').eq('user_id', authUser.id).maybeSingle();
     var profile = profileRes.data;
-    console.log('[ATZE] Profile check:', profile ? profile.name : 'no profile');
+    console.log('[CREW] Profile check:', profile ? profile.name : 'no profile');
 
     // If no profile or profile is just the auto-created placeholder → show onboarding
-    if(!profile || !profile.name || profile.name === 'Neuer Atze'){
-      console.log('[ATZE] → Show onboarding');
+    if(!profile || !profile.name || profile.name === 'Neuer User'){
+      console.log('[CREW] → Show onboarding');
       document.getElementById('loadingScreen').classList.add('gone');
       showOnboarding(authUser);
       return;
     }
 
     ME = profile;
-    console.log('[ATZE] Profile loaded:', ME.name);
+    console.log('[CREW] Profile loaded:', ME.name);
 
     // Load venues (non-blocking errors are fine)
     try {
       var {data: venues} = await sb.from('venues').select('*').order('crowd_count', {ascending: false});
       VENUES = venues || [];
-    } catch(e) { console.warn('[ATZE] venues load failed:', e); VENUES = []; }
+    } catch(e) { console.warn('[CREW] venues load failed:', e); VENUES = []; }
 
     // Load profiles for matching
     try {
@@ -1526,7 +1266,7 @@ async function loadUser(authUser){
       swipedIds.push(authUser.id);
       var {data: profiles} = await sb.from('profiles').select('*').not('user_id', 'in', '('+swipedIds.join(',')+')');
       PROFILES = profiles || [];
-    } catch(e) { console.warn('[ATZE] profiles load failed:', e); PROFILES = []; }
+    } catch(e) { console.warn('[CREW] profiles load failed:', e); PROFILES = []; }
 
     // Update streak (non-critical)
     try { await sb.rpc('update_streak', {p_user_id: authUser.id}); } catch(e) {}
@@ -1542,13 +1282,13 @@ async function loadUser(authUser){
     } catch(e) { ME._matchCount = 0; }
 
     // Show app
-    console.log('[ATZE] → Show app');
+    console.log('[CREW] → Show app');
     document.getElementById('loadingScreen').classList.add('gone');
     document.getElementById('onboard').classList.add('gone');
     document.getElementById('app').style.display = 'flex';
     buildApp();
   } catch(e) {
-    console.error('[ATZE] loadUser error:', e);
+    console.error('[CREW] loadUser error:', e);
     document.getElementById('loadingScreen').classList.add('gone');
     showOnboarding(authUser);
   }
@@ -1560,7 +1300,7 @@ async function loadUser(authUser){
 var _onboardAuthUser = null; // Store auth user for finishOnboard
 
 function showOnboarding(authUser){
-  console.log('[ATZE] showOnboarding called');
+  console.log('[CREW] showOnboarding called');
   _onboardAuthUser = authUser;
   document.getElementById('onboard').classList.remove('gone');
 
@@ -1581,8 +1321,8 @@ function showOnboarding(authUser){
   var dl=document.getElementById('dsgvoList');
   if(dl)dl.innerHTML=[
     {l:'Standort',d:'Venues und Crew in deiner Nähe.',on:1},
-    {l:'Push',d:'AtzeShot, Matches, Deals.',on:1},
-    {l:'Kamera',d:'AtzeShot & Profilfotos.',on:1},
+    {l:'Push',d:'CrewShot, Matches, Deals.',on:1},
+    {l:'Kamera',d:'CrewShot & Profilfotos.',on:1},
     {l:'Analyse',d:'Anonyme Nutzungsanalyse.',on:0}
   ].map(function(i){return '<div class="dsgvo-item"><div class="dtxt"><h4>'+i.l+'</h4><p style="font-size:12px;color:var(--t3)">'+i.d+'</p></div><button class="dtog'+(i.on?' on':'')+'" onclick="this.classList.toggle(\'on\')"></button></div>'}).join('');
 }
@@ -1657,7 +1397,7 @@ window.pickCustomClub = function(v){
 };
 
 window.finishOnboard = async function(){
-  console.log('[ATZE] finishOnboard CALLED');
+  console.log('[CREW] finishOnboard CALLED');
 
   // Disable button to prevent double-tap
   var losBtn = document.querySelector('#ob5 .rnext');
@@ -1675,7 +1415,7 @@ window.finishOnboard = async function(){
       if(losBtn){ losBtn.disabled = false; losBtn.textContent = "Los geht's!"; }
       return;
     }
-    console.log('[ATZE] User ID:', user.id);
+    console.log('[CREW] User ID:', user.id);
 
     // 2. Collect form data
     var nameVal = (document.getElementById('obName').value || '').trim();
@@ -1712,40 +1452,40 @@ window.finishOnboard = async function(){
     if(birthdate) profileData.birthdate = birthdate;
     if(obData.photo_url) profileData.photo_url = obData.photo_url;
 
-    console.log('[ATZE] Profile data:', JSON.stringify(profileData));
+    console.log('[CREW] Profile data:', JSON.stringify(profileData));
 
     // 3. Save: Try UPDATE first (profile might already exist from trigger)
     var saved = false;
 
     // Approach A: UPDATE existing row
-    console.log('[ATZE] Trying UPDATE...');
+    console.log('[CREW] Trying UPDATE...');
     var upRes = await sb.from('profiles').update(profileData).eq('user_id', user.id).select();
-    console.log('[ATZE] UPDATE result:', JSON.stringify({data: upRes.data, error: upRes.error}));
+    console.log('[CREW] UPDATE result:', JSON.stringify({data: upRes.data, error: upRes.error}));
     if(!upRes.error && upRes.data && upRes.data.length > 0){
       saved = true;
-      console.log('[ATZE] UPDATE succeeded');
+      console.log('[CREW] UPDATE succeeded');
     }
 
     // Approach B: If UPDATE didn't match any row, try INSERT
     if(!saved){
-      console.log('[ATZE] Trying INSERT...');
+      console.log('[CREW] Trying INSERT...');
       profileData.user_id = user.id;
       var insRes = await sb.from('profiles').insert(profileData).select();
-      console.log('[ATZE] INSERT result:', JSON.stringify({data: insRes.data, error: insRes.error}));
+      console.log('[CREW] INSERT result:', JSON.stringify({data: insRes.data, error: insRes.error}));
       if(!insRes.error && insRes.data && insRes.data.length > 0){
         saved = true;
-        console.log('[ATZE] INSERT succeeded');
+        console.log('[CREW] INSERT succeeded');
       }
 
       // Approach C: If INSERT also failed (conflict), try UPSERT
       if(!saved){
-        console.log('[ATZE] Trying UPSERT...');
+        console.log('[CREW] Trying UPSERT...');
         profileData.user_id = user.id;
         var upsRes = await sb.from('profiles').upsert(profileData, {onConflict: 'user_id'}).select();
-        console.log('[ATZE] UPSERT result:', JSON.stringify({data: upsRes.data, error: upsRes.error}));
+        console.log('[CREW] UPSERT result:', JSON.stringify({data: upsRes.data, error: upsRes.error}));
         if(!upsRes.error){
           saved = true;
-          console.log('[ATZE] UPSERT succeeded');
+          console.log('[CREW] UPSERT succeeded');
         } else {
           toast('Speicherfehler: ' + upsRes.error.message);
           if(losBtn){ losBtn.disabled = false; losBtn.textContent = "Los geht's!"; }
@@ -1755,13 +1495,13 @@ window.finishOnboard = async function(){
     }
 
     // 4. Success! Hide onboarding and load app
-    console.log('[ATZE] Profile saved! Loading app...');
+    console.log('[CREW] Profile saved! Loading app...');
     document.getElementById('onboard').classList.add('gone');
     _onboardAuthUser = null;
     await loadUser(user);
 
   } catch(e) {
-    console.error('[ATZE] finishOnboard EXCEPTION:', e);
+    console.error('[CREW] finishOnboard EXCEPTION:', e);
     toast('Fehler: ' + (e.message || String(e)));
     if(losBtn){ losBtn.disabled = false; losBtn.textContent = "Los geht's!"; }
   }
@@ -1772,7 +1512,7 @@ window.finishOnboard = async function(){
 // ============================================
 function buildApp(){
   // Apply theme
-  if(localStorage.getItem('atze_theme')==='light'){
+  if(localStorage.getItem('crew_theme')==='light'){
     document.documentElement.classList.add('light-mode');
   }
   applyLang();
@@ -1809,7 +1549,7 @@ function buildApp(){
   try{buildChallenges()}catch(e){console.error('buildChallenges failed:',e)}
   try{buildCountdownCard()}catch(e){console.error('buildCountdownCard failed:',e)}
 
-  // AtzeShot daily challenge card
+  // CrewShot daily challenge card
   try {
     var dailyChallenge = getTodaysChallenge();
     if(dailyChallenge){
@@ -1901,7 +1641,7 @@ async function buildNearby(){
     p._dist=haversine(userLat,userLng,p.lat,p.lng);return p;
   }).filter(function(p){return p._dist<=10}).sort(function(a,b){return a._dist-b._dist});
   if(nearby.length===0){el.innerHTML='<p style="color:var(--t3);font-size:13px">Gerade keine Crew in der Nähe.</p>';return}
-  var poked=JSON.parse(localStorage.getItem('atze_poked')||'{}');
+  var poked=JSON.parse(localStorage.getItem('crew_poked')||'{}');
   el.innerHTML=nearby.map(function(p){
     var distTxt=p._dist<1?(Math.round(p._dist*1000)+'m'):(p._dist.toFixed(1)+'km');
     var canPoke=p._dist<=2;
@@ -1910,10 +1650,10 @@ async function buildNearby(){
   }).join('');
 }
 window.pokeUser=async function(uid,name){
-  var poked=JSON.parse(localStorage.getItem('atze_poked')||'{}');
+  var poked=JSON.parse(localStorage.getItem('crew_poked')||'{}');
   if(poked[uid]&&(Date.now()-poked[uid]<3600000)){toast('Schon angestupst! Warte eine Stunde.');return}
   poked[uid]=Date.now();
-  localStorage.setItem('atze_poked',JSON.stringify(poked));
+  localStorage.setItem('crew_poked',JSON.stringify(poked));
   toast(name+' wurde angestupst! 👋');
   sendLocalNotification('👋 '+name+' wurde angestupst!',{body:'Du hast '+name+' angestupst.'});
   if(navigator.vibrate)navigator.vibrate([30,20,30]);
@@ -1956,8 +1696,8 @@ var VENUE_STORIES = [
 function buildStories(){
   var b = document.getElementById('storiesBar');
   if(!b) return;
-  // 1. AtzeShot camera button
-  var html = '<div class="add-story" onclick="openAtzeShot()"><div style="font-size:22px">📸</div></div>';
+  // 1. CrewShot camera button
+  var html = '<div class="add-story" onclick="openCrewShot()"><div style="font-size:22px">📸</div></div>';
 
   // 2. Real Instagram venue stories
   VENUE_STORIES.forEach(function(v){
@@ -1965,7 +1705,7 @@ function buildStories(){
   });
   b.innerHTML = html;
 
-  // 3. Load real AtzeShots from last 24h
+  // 3. Load real CrewShots from last 24h
   var since = new Date(Date.now() - 24*60*60*1000).toISOString();
   sb.from('atze_shots').select('id, photo_url, challenge, caption, likes, created_at, profiles!atze_shots_user_id_fkey(name, photo_url)')
     .gte('created_at', since)
@@ -1973,12 +1713,12 @@ function buildStories(){
     .limit(20)
     .then(function(res){
       if(!res.data || res.data.length === 0){
-        b.innerHTML += '<div class="sty" onclick="openAtzeShot()" style="opacity:.5"><div class="sty-ring" style="background:var(--bg4);padding:2.5px"><div style="width:100%;height:100%;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:20px">?</div></div><div class="sty-name">Erster Shot?</div></div>';
+        b.innerHTML += '<div class="sty" onclick="openCrewShot()" style="opacity:.5"><div class="sty-ring" style="background:var(--bg4);padding:2.5px"><div style="width:100%;height:100%;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:20px">?</div></div><div class="sty-name">Erster Shot?</div></div>';
         return;
       }
       var html = '';
       res.data.forEach(function(s){
-        var name = s.profiles ? esc(s.profiles.name) : 'Atze';
+        var name = s.profiles ? esc(s.profiles.name) : 'User';
         var ava = s.photo_url;
         html += '<div class="sty" onclick="viewShot(\''+s.id+'\',\''+esc(s.photo_url)+'\',\''+name+'\',\''+esc(s.caption||'')+'\','+s.likes+')"><div class="sty-ring"><img src="'+ava+'" alt="'+name+'"></div><div class="sty-name">'+name+'</div></div>';
       });
@@ -2049,7 +1789,7 @@ window.openVenue = function(id){
 
 window.checkinVenue = async function(venueId, name){
   // Prevent double check-in (within 1 hour)
-  var lastCheckin = localStorage.getItem('atze_checkin_'+venueId);
+  var lastCheckin = localStorage.getItem('crew_checkin_'+venueId);
   if(lastCheckin && Date.now() - parseInt(lastCheckin) < 3600000){
     toast('Du bist schon eingecheckt bei '+name+'! 🎉');
     return;
@@ -2058,7 +1798,7 @@ window.checkinVenue = async function(venueId, name){
   await sb.from('checkins').insert({user_id: ME.user_id, venue_id: venueId});
   await sb.rpc('add_points', {p_user_id: ME.user_id, p_points: 50});
   ME.points += 50;
-  localStorage.setItem('atze_checkin_'+venueId, Date.now().toString());
+  localStorage.setItem('crew_checkin_'+venueId, Date.now().toString());
   updateProfile();
 
   // Refresh live counts
@@ -2079,17 +1819,17 @@ window.checkinVenue = async function(venueId, name){
 };
 
 // ============================================
-// ATZE SHOT (24h Photo Challenges)
+// CREW SHOT (24h Photo Challenges)
 // ============================================
 var currentShotChallenge = null;
 var shotPhotoBlob = null;
 
 function getTodaysChallenge(){
   var dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(),0,0)) / 86400000);
-  return ATZE_CHALLENGES[dayOfYear % ATZE_CHALLENGES.length];
+  return CREW_CHALLENGES[dayOfYear % CREW_CHALLENGES.length];
 }
 
-window.openAtzeShot = function(){
+window.openCrewShot = function(){
   currentShotChallenge = getTodaysChallenge();
   document.getElementById('shotChallengeEmoji').textContent = currentShotChallenge.emoji;
   document.getElementById('shotChallengeText').textContent = currentShotChallenge.text;
@@ -2100,7 +1840,7 @@ window.openAtzeShot = function(){
   loadShotFeed();
 };
 
-window.closeAtzeShot = function(){
+window.closeCrewShot = function(){
   document.getElementById('atzeShotOv').classList.remove('show');
 };
 
@@ -2129,7 +1869,7 @@ window.previewShotPhoto = function(input){
   reader.readAsDataURL(file);
 };
 
-window.uploadAtzeShot = async function(){
+window.uploadCrewShot = async function(){
   if(!shotPhotoBlob || !currentShotChallenge){toast('Bitte erst ein Foto aufnehmen!');return}
   if(!ME || !ME.user_id){toast('Bitte einloggen');return}
 
@@ -2140,7 +1880,7 @@ window.uploadAtzeShot = async function(){
   try {
     var path = ME.user_id + '/shot_' + Date.now() + '.jpg';
     var upErr = await sb.storage.from('shots').upload(path, shotPhotoBlob, {contentType:'image/jpeg'});
-    if(upErr.error){toast('Upload-Fehler: '+upErr.error.message);btn.disabled=false;btn.textContent='✅ AtzeShot posten!';return}
+    if(upErr.error){toast('Upload-Fehler: '+upErr.error.message);btn.disabled=false;btn.textContent='✅ CrewShot posten!';return}
 
     var urlData = sb.storage.from('shots').getPublicUrl(path);
     var photoUrl = urlData.data.publicUrl;
@@ -2152,20 +1892,20 @@ window.uploadAtzeShot = async function(){
       caption: currentShotChallenge.text
     });
 
-    if(dbErr.error){toast('Fehler: '+dbErr.error.message);btn.disabled=false;btn.textContent='✅ AtzeShot posten!';return}
+    if(dbErr.error){toast('Fehler: '+dbErr.error.message);btn.disabled=false;btn.textContent='✅ CrewShot posten!';return}
 
     // Add points
     await sb.rpc('add_points',{p_user_id: ME.user_id, p_points: 30});
     ME.points += 30;
     updateProfile();
 
-    toast('📸 AtzeShot gepostet! +30 🍹');
-    sendLocalNotification('📸 AtzeShot!', {body: currentShotChallenge.text + ' — gepostet!'});
+    toast('📸 CrewShot gepostet! +30 🍹');
+    sendLocalNotification('📸 CrewShot!', {body: currentShotChallenge.text + ' — gepostet!'});
     shotPhotoBlob = null;
     document.getElementById('shotPreview').style.display = 'none';
     btn.style.display = 'none';
     btn.disabled = false;
-    btn.textContent = '✅ AtzeShot posten!';
+    btn.textContent = '✅ CrewShot posten!';
 
     loadShotFeed();
     buildStories(); // Refresh stories bar
@@ -2173,7 +1913,7 @@ window.uploadAtzeShot = async function(){
     console.error('Upload error:', e);
     toast('Fehler beim Upload');
     btn.disabled = false;
-    btn.textContent = '✅ AtzeShot posten!';
+    btn.textContent = '✅ CrewShot posten!';
   }
 };
 
@@ -2259,7 +1999,7 @@ function buildCards(){
   }
 
   s.innerHTML='';cIdx=0;
-  var blocked=JSON.parse(localStorage.getItem('atze_blocked')||'[]');
+  var blocked=JSON.parse(localStorage.getItem('crew_blocked')||'[]');
   var list=(FILTERED_PROFILES.length>0?FILTERED_PROFILES:PROFILES).filter(function(p){return blocked.indexOf(p.user_id)===-1});
   if(list.length===0){
     s.innerHTML='<div class="no-profiles"><div style="font-size:48px;margin-bottom:12px">🔍</div><div style="font-size:16px;font-weight:700;color:var(--t)">Keine neuen Leute</div><div style="font-size:13px;margin-top:4px">Ändere deine Filter oder schau später nochmal vorbei!</div></div>';
@@ -2391,9 +2131,9 @@ window.inviteCrew=function(){
   var cc=document.getElementById('crewCount');
   var current=parseInt((cc?cc.textContent:'0'));
   if(current>=CREW_MAX){toast('Max. '+CREW_MAX+' Crew-Mitglieder erreicht!');return}
-  shareText('Komm in meine Crew auf atze! 🌴🔥 https://atze-app.com/invite');
-  var inv=parseInt(localStorage.getItem('atze_invites')||'0')+1;
-  localStorage.setItem('atze_invites',String(inv));
+  shareText('Komm in meine Crew! 🌴🔥 https://crew-app.com/invite');
+  var inv=parseInt(localStorage.getItem('crew_invites')||'0')+1;
+  localStorage.setItem('crew_invites',String(inv));
   if(inv===6)toast('🎨 Profilfarben freigeschaltet!');
 };
 window.editSocials=async function(){
@@ -2480,7 +2220,7 @@ function buildClubPicker(){
 window.openLegal=function(type){
   document.getElementById('bsImg').src='https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=60';
   var c='';
-  if(type==='dsgvo')c='<h2>Datenschutzerklärung</h2><div class="bs-desc" style="font-size:12px;line-height:1.7"><strong>Verantwortlicher gem. Art. 4 Abs. 7 DSGVO</strong><br>butterbread tech GmbH<br>Geschäftsführer: Jan<br>Web: butterbread-tech.com<br>E-Mail: datenschutz@butterbread-tech.com<br><br><strong>1. Datenkategorien & Rechtsgrundlagen</strong><br><strong>Profildaten</strong> (Name, Geburtsdatum, Geschlecht, Bio, Fotos): Rechtsgrundlage Art. 6 Abs. 1 b DSGVO (Erfüllung Nutzungsvertrag). Speicherdauer: Bis zur Accountlöschung.<br><strong>Standortdaten:</strong> Rechtsgrundlage Art. 6 Abs. 1 a DSGVO (Einwilligung). Speicherdauer: Nur aktuelle Position, nicht archiviert. Du kannst Standort jederzeit deaktivieren.<br><strong>Kameradaten:</strong> Nur bei AtzeShot-Feature. Rechtsgrundlage Art. 6 Abs. 1 a DSGVO (Einwilligung). Speicherdauer: Nur während aktiven Uploads.<br><strong>Nutzungsdaten:</strong> Anonymisiert, keine IP-Tracking. Rechtsgrundlage Art. 6 Abs. 1 a DSGVO.<br><br><strong>2. Drittanbieter</strong><br>Supabase (Auth, Database, Storage) - Server in der EU (Frankfurt). Alle Daten AES-256 verschlüsselt.<br><br><strong>3. Speicherdauer</strong><br>Profildaten: Bis zur Accountlöschung.<br>Standortdaten: Nur letzte bekannte Position (keine Historie).<br>Nach Accountlöschung: Vollständig und irreversibel gelöscht.<br><br><strong>4. Betroffenenrechte (Art. 15-22 DSGVO)</strong><br>• Auskunft (Art. 15): Export deiner Daten möglich<br>• Berichtigung (Art. 16): Profilbearbeitung<br>• Löschung (Art. 17): Accountlöschung<br>• Einschränkung (Art. 18): Nicht automatisch implementiert<br>• Datenportabilität (Art. 20): Über Export-Funktion<br>• Widerspruch (Art. 21): datenschutz@butterbread-tech.com<br><br><strong>5. Aufsichtsbehörde</strong><br>Landesbeauftragte für Datenschutz und Informationsfreiheit Baden-Württemberg (falls zuständig) oder deine lokale Behörde.<br><br><strong>6. Keine Cookies, Keine Tracker</strong><br>Wir verwenden keine Tracking-Cookies oder Drittanbieter-Analytics.<br><br><strong>Kontakt: datenschutz@butterbread-tech.com</strong><br>Stand: April 2026</div><div class="bs-actions"><button class="bs-btn orange" onclick="closeBS()">Schließen</button></div>';
+  if(type==='dsgvo')c='<h2>Datenschutzerklärung</h2><div class="bs-desc" style="font-size:12px;line-height:1.7"><strong>Verantwortlicher gem. Art. 4 Abs. 7 DSGVO</strong><br>butterbread tech GmbH<br>Geschäftsführer: Jan<br>Web: butterbread-tech.com<br>E-Mail: datenschutz@butterbread-tech.com<br><br><strong>1. Datenkategorien & Rechtsgrundlagen</strong><br><strong>Profildaten</strong> (Name, Geburtsdatum, Geschlecht, Bio, Fotos): Rechtsgrundlage Art. 6 Abs. 1 b DSGVO (Erfüllung Nutzungsvertrag). Speicherdauer: Bis zur Accountlöschung.<br><strong>Standortdaten:</strong> Rechtsgrundlage Art. 6 Abs. 1 a DSGVO (Einwilligung). Speicherdauer: Nur aktuelle Position, nicht archiviert. Du kannst Standort jederzeit deaktivieren.<br><strong>Kameradaten:</strong> Nur bei CrewShot-Feature. Rechtsgrundlage Art. 6 Abs. 1 a DSGVO (Einwilligung). Speicherdauer: Nur während aktiven Uploads.<br><strong>Nutzungsdaten:</strong> Anonymisiert, keine IP-Tracking. Rechtsgrundlage Art. 6 Abs. 1 a DSGVO.<br><br><strong>2. Drittanbieter</strong><br>Supabase (Auth, Database, Storage) - Server in der EU (Frankfurt). Alle Daten AES-256 verschlüsselt.<br><br><strong>3. Speicherdauer</strong><br>Profildaten: Bis zur Accountlöschung.<br>Standortdaten: Nur letzte bekannte Position (keine Historie).<br>Nach Accountlöschung: Vollständig und irreversibel gelöscht.<br><br><strong>4. Betroffenenrechte (Art. 15-22 DSGVO)</strong><br>• Auskunft (Art. 15): Export deiner Daten möglich<br>• Berichtigung (Art. 16): Profilbearbeitung<br>• Löschung (Art. 17): Accountlöschung<br>• Einschränkung (Art. 18): Nicht automatisch implementiert<br>• Datenportabilität (Art. 20): Über Export-Funktion<br>• Widerspruch (Art. 21): datenschutz@butterbread-tech.com<br><br><strong>5. Aufsichtsbehörde</strong><br>Landesbeauftragte für Datenschutz und Informationsfreiheit Baden-Württemberg (falls zuständig) oder deine lokale Behörde.<br><br><strong>6. Keine Cookies, Keine Tracker</strong><br>Wir verwenden keine Tracking-Cookies oder Drittanbieter-Analytics.<br><br><strong>Kontakt: datenschutz@butterbread-tech.com</strong><br>Stand: April 2026</div><div class="bs-actions"><button class="bs-btn orange" onclick="closeBS()">Schließen</button></div>';
   else if(type==='impressum')c='<h2>Impressum</h2><div class="bs-desc" style="font-size:12px;line-height:1.7"><strong>Angaben gemäß §5 TMG</strong><br><br>butterbread tech GmbH<br>Geschäftsführer: Jan<br>Web: butterbread-tech.com<br>E-Mail: hello@butterbread-tech.com<br><br><strong>Registergericht:</strong> [wird nach Eintragung ergänzt]<br><strong>HRB:</strong> [wird nach Eintragung ergänzt]<br><br>Stand: April 2026</div><div class="bs-actions"><button class="bs-btn orange" onclick="closeBS()">Schließen</button></div>';
   else if(type==='agb')c='<h2>AGB</h2><div class="bs-desc" style="font-size:12px;line-height:1.7"><strong>§1 Geltungsbereich</strong><br>Diese AGB gelten für die atze-App der butterbread tech GmbH.<br><br><strong>§2 Registrierung</strong><br>Mindestalter 18 Jahre. Wahrheitsgemäße Angaben. Ein Konto pro Person.<br><br><strong>§3 Premium</strong><br>1 Woche 2,99€, 1 Monat 4,99€/Monat, Saison 9,99€. Kündigung jederzeit. 14-Tage-Widerrufsrecht.<br><br><strong>§4 Verhaltensregeln</strong><br>Kein Mobbing, Belästigung, Diskriminierung. Verstoß = Sperrung.<br><br><strong>§5 Datenschutz</strong><br>Siehe Datenschutzerklärung. DSGVO-konform.<br><br>Stand: April 2026</div><div class="bs-actions"><button class="bs-btn orange" onclick="closeBS()">Schließen</button></div>';
   else if(type==='affiliate')c='<h2>Affiliate-Hinweis</h2><div class="bs-desc" style="font-size:12px;line-height:1.7"><strong>Transparenzhinweis gemäß TMG & UWG</strong><br><br>Die atze-App enthält Affiliate-/Partnerlinks. Wenn du über diese Links Produkte oder Dienstleistungen buchst oder kaufst, erhält die butterbread tech GmbH eine Provision vom jeweiligen Anbieter.<br><br><strong>Für dich ändert sich der Preis nicht.</strong><br><br><strong>Unsere Partner (Auszug):</strong><br>Check24, HanseMerkur, Booking.com, GetYourGuide, Megapark, Amazon, GoPro, Douglas, Sunny Cars, TheFork, Tiqets, Welcome Pickups, Holidayparking, Flaconi, DJI<br><br><strong>Netzwerke:</strong><br>Awin, Belboon, Amazon PartnerNet, Booking Affiliate Partner, Direkt-Partnerschaften<br><br><strong>Tracking:</strong><br>Wir verwenden anonymisierte Sub-IDs zur Zuordnung. Es werden keine personenbezogenen Daten an Partner übermittelt. DSGVO-konform.<br><br><strong>Qualitätsstandards:</strong><br>• Keine Dropshipping/Fake-Shops<br>• Kein Gambling/Sportwetten<br>• Nur etablierte DE/EU-Brands<br>• App-Store-Policy-konform<br><br>Stand: April 2026<br>butterbread tech GmbH · butterbread-tech.com</div><div class="bs-actions"><button class="bs-btn orange" onclick="closeBS()">Schließen</button></div>';
@@ -2587,7 +2327,7 @@ window.exportData = async function(){
   var url = URL.createObjectURL(dataBlob);
   var a = document.createElement('a');
   a.href = url;
-  a.download = 'atze-daten-export.json';
+  a.download = 'crew-daten-export.json';
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
@@ -2632,7 +2372,7 @@ window.deleteAccount = async function(){
 // UTILS
 // ============================================
 window.closeBS=function(){document.getElementById('bsheet').classList.remove('show')};
-function shareText(text){if(navigator.share)navigator.share({title:'atze',text:text}).catch(function(){});else{navigator.clipboard.writeText(text).catch(function(){});toast('Kopiert!')}}
+function shareText(text){if(navigator.share)navigator.share({title:'crew.',text:text}).catch(function(){});else{navigator.clipboard.writeText(text).catch(function(){});toast('Kopiert!')}}
 window.toast=function(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2200)};
 
 async function fetchWeather(){
@@ -2715,7 +2455,7 @@ function updateIslandMood(){
     var moodLabels = {'🥳':'Party-Modus','🔥':'On Fire','💃':'Tanz-Laune','🍻':'Bier-Zeit','🌴':'Chill-Vibes','🍹':'Cocktail-Hour','😎':'Cool & Relaxed','🤪':'Crazy Night','💤':'Ausschlafen','🌅':'Sunset-Mood'};
     var label = moodLabels[topMood.mood] || 'Gut drauf';
 
-    document.getElementById('islandMoodContent').innerHTML = topMood.mood + ' ' + label + ' — <span style="color:var(--o)">' + pct + '%</span> der Atzen';
+    document.getElementById('islandMoodContent').innerHTML = topMood.mood + ' ' + label + ' — <span style="color:var(--o)">' + pct + '%</span> der Leute';
 
     // Build mood bar
     var barHtml = '';
@@ -2816,7 +2556,7 @@ async function buildMatchList(){
   var {data:profiles}=await sb.from('profiles').select('*').in('user_id',ids);
   if(!profiles||profiles.length===0){ml.innerHTML='<p style="padding:14px;color:var(--t3);font-size:13px">Noch keine Matches.</p>';return}
   // Filter blocked
-  var blocked=JSON.parse(localStorage.getItem('atze_blocked')||'[]');
+  var blocked=JSON.parse(localStorage.getItem('crew_blocked')||'[]');
   profiles=profiles.filter(function(p){return blocked.indexOf(p.user_id)===-1});
   ml.innerHTML=profiles.map(function(p){
     var soc='';
@@ -2836,7 +2576,7 @@ window.openUserProfile=function(uid){
   var {data}=sb.from('profiles').select('*').eq('user_id',uid).single().then(function(res){
     if(!res.data)return;
     p=res.data;
-    var blocked=JSON.parse(localStorage.getItem('atze_blocked')||'[]');
+    var blocked=JSON.parse(localStorage.getItem('crew_blocked')||'[]');
     var isBlocked=blocked.indexOf(uid)!==-1;
     var soc='';
     if(p.insta)soc+='<a class="ups-social" href="https://instagram.com/'+esc(p.insta)+'" target="_blank" rel="noopener" style="border-color:rgba(225,48,108,.25);color:#E1306C">📸 '+esc(p.insta)+'</a>';
@@ -2852,17 +2592,17 @@ window.openUserProfile=function(uid){
 // BLOCK USERS
 // ============================================
 window.toggleBlock=function(uid){
-  var blocked=JSON.parse(localStorage.getItem('atze_blocked')||'[]');
+  var blocked=JSON.parse(localStorage.getItem('crew_blocked')||'[]');
   var idx=blocked.indexOf(uid);
   if(idx===-1){blocked.push(uid);toast('Nutzer blockiert 🚫')}
   else{blocked.splice(idx,1);toast('Nutzer entblockt ✅')}
-  localStorage.setItem('atze_blocked',JSON.stringify(blocked));
+  localStorage.setItem('crew_blocked',JSON.stringify(blocked));
   closeBS();
   buildMatchList();
   buildCards();
 };
 window.showBlockedUsers=function(){
-  var blocked=JSON.parse(localStorage.getItem('atze_blocked')||'[]');
+  var blocked=JSON.parse(localStorage.getItem('crew_blocked')||'[]');
   if(blocked.length===0){
     document.getElementById('bsImg').src='https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=800&q=60';
     document.getElementById('bsContent').innerHTML='<h2>Blockierte Nutzer</h2><div style="padding:40px 0;text-align:center;color:var(--t3)"><div style="font-size:32px;margin-bottom:8px">✅</div><p style="font-size:13px">Keine blockierten Nutzer.</p></div><div class="bs-actions"><button class="bs-btn orange" onclick="closeBS()">Schließen</button></div>';
@@ -2891,7 +2631,7 @@ var PROFILE_COLORS=[
   '#FF4500','#1DB954','#8B5CF6','#EC4899','#F97316','#06B6D4','#84CC16','#E879F9','#FB7185','#FBBF24'
 ];
 window.openColorPicker=function(){
-  var invites=parseInt(localStorage.getItem('atze_invites')||'0');
+  var invites=parseInt(localStorage.getItem('crew_invites')||'0');
   if(invites<6){toast('Lade 6 Freunde ein um Farben freizuschalten! ('+invites+'/6)');return}
   var cur=ME.profile_color||'#FF6D2E';
   var grid=document.getElementById('cpGrid');
@@ -3071,7 +2811,7 @@ async function buildLeaderboard(){
 async function buildTonightPlanner(){
   var el=document.getElementById('tonightPlanner');if(!el)return;
   var today=new Date().toISOString().split('T')[0];
-  var votes=JSON.parse(localStorage.getItem('atze_tonight_vote_'+today)||'{}');
+  var votes=JSON.parse(localStorage.getItem('crew_tonight_vote_'+today)||'{}');
   var voteCount={};
   Object.values(votes).forEach(function(v){voteCount[v]=(voteCount[v]||0)+1});
   var html='';
@@ -3086,10 +2826,10 @@ async function buildTonightPlanner(){
 }
 window.voteTonightVenue=function(venueId){
   var today=new Date().toISOString().split('T')[0];
-  var votes=JSON.parse(localStorage.getItem('atze_tonight_vote_'+today)||'{}');
+  var votes=JSON.parse(localStorage.getItem('crew_tonight_vote_'+today)||'{}');
   var userKey=ME.user_id;
   if(votes[userKey]===venueId){delete votes[userKey]}else{votes[userKey]=venueId}
-  localStorage.setItem('atze_tonight_vote_'+today,JSON.stringify(votes));
+  localStorage.setItem('crew_tonight_vote_'+today,JSON.stringify(votes));
   buildTonightPlanner();
   toast('Vote gespeichert! 🗳️');
 }
@@ -3100,8 +2840,8 @@ function buildChallenges(){
   var doy=Math.floor((new Date()-new Date(new Date().getFullYear(),0,0))/86400000);
   var challenge=CHALLENGES[doy%CHALLENGES.length];
   if(!challenge){el.innerHTML='<p style="color:var(--t3);font-size:13px">Keine Challenge heute.</p>';return}
-  var accepted=JSON.parse(localStorage.getItem('atze_challenges_accepted')||'{}');
-  var completed=JSON.parse(localStorage.getItem('atze_challenges_completed')||'{}');
+  var accepted=JSON.parse(localStorage.getItem('crew_challenges_accepted')||'{}');
+  var completed=JSON.parse(localStorage.getItem('crew_challenges_completed')||'{}');
   var today=new Date().toISOString().split('T')[0];
   var isAccepted=accepted[today]===challenge.title;
   var isCompleted=completed[today]===challenge.title;
@@ -3114,17 +2854,17 @@ function buildChallenges(){
 }
 window.acceptChallenge=function(title){
   var today=new Date().toISOString().split('T')[0];
-  var accepted=JSON.parse(localStorage.getItem('atze_challenges_accepted')||'{}');
+  var accepted=JSON.parse(localStorage.getItem('crew_challenges_accepted')||'{}');
   accepted[today]=title;
-  localStorage.setItem('atze_challenges_accepted',JSON.stringify(accepted));
+  localStorage.setItem('crew_challenges_accepted',JSON.stringify(accepted));
   buildChallenges();
   toast('Challenge angenommen! 💪');
 }
 window.completeChallengeNow=async function(title,pts){
   var today=new Date().toISOString().split('T')[0];
-  var completed=JSON.parse(localStorage.getItem('atze_challenges_completed')||'{}');
+  var completed=JSON.parse(localStorage.getItem('crew_challenges_completed')||'{}');
   completed[today]=title;
-  localStorage.setItem('atze_challenges_completed',JSON.stringify(completed));
+  localStorage.setItem('crew_challenges_completed',JSON.stringify(completed));
   await sb.rpc('add_points',{p_user_id:ME.user_id,p_points:pts});
   ME.points+=pts;updateProfile();
   buildChallenges();
@@ -3141,7 +2881,7 @@ async function buildDrunkList(){
     var {data:profiles}=await sb.from('profiles').select('*').in('user_id',ids);
     if(!profiles||profiles.length===0){el.innerHTML='<p style="color:var(--t3);font-size:13px;width:100%">Keine Crew.</p>';return}
     var today=new Date().toISOString().split('T')[0];
-    var votes=JSON.parse(localStorage.getItem('atze_drunk_vote_'+today)||'{}');
+    var votes=JSON.parse(localStorage.getItem('crew_drunk_vote_'+today)||'{}');
     var voteCount={};
     Object.values(votes).forEach(function(v){voteCount[v]=(voteCount[v]||0)+1});
     var userVote=votes[ME.user_id];
@@ -3157,9 +2897,9 @@ async function buildDrunkList(){
 window.voteDrunk=function(uid,name){
   var today=new Date().toISOString().split('T')[0];
   if(uid===ME.user_id){toast('Du kannst nicht für dich selbst abstimmen! 😄');return}
-  var votes=JSON.parse(localStorage.getItem('atze_drunk_vote_'+today)||'{}');
+  var votes=JSON.parse(localStorage.getItem('crew_drunk_vote_'+today)||'{}');
   if(votes[ME.user_id]===uid){delete votes[ME.user_id]}else{votes[ME.user_id]=uid}
-  localStorage.setItem('atze_drunk_vote_'+today,JSON.stringify(votes));
+  localStorage.setItem('crew_drunk_vote_'+today,JSON.stringify(votes));
   buildDrunkList();
   if(votes[ME.user_id]===uid){toast('Vote für '+name+' abgegeben! 🍻')}
 }
@@ -3174,23 +2914,23 @@ window.closeAlcoholTracker=function(){
 }
 window.addDrink=function(type){
   var today=new Date().toISOString().split('T')[0];
-  var data=JSON.parse(localStorage.getItem('atze_drinks_'+today)||'{"beer":0,"wine":0,"cocktail":0,"shot":0,"sparkling":0,"firstTime":null}');
+  var data=JSON.parse(localStorage.getItem('crew_drinks_'+today)||'{"beer":0,"wine":0,"cocktail":0,"shot":0,"sparkling":0,"firstTime":null}');
   if(!data.firstTime)data.firstTime=Date.now();
   data[type]=(data[type]||0)+1;
-  localStorage.setItem('atze_drinks_'+today,JSON.stringify(data));
+  localStorage.setItem('crew_drinks_'+today,JSON.stringify(data));
   updateDrinkDisplay();
   toast('🍺 +1 '+(type==='beer'?'Bier':type==='wine'?'Wein':type==='cocktail'?'Cocktail':type==='shot'?'Shot':'Sekt'));
 }
 window.resetDrinks=function(){
   if(!confirm('Alle Drinks zurücksetzen?'))return;
   var today=new Date().toISOString().split('T')[0];
-  localStorage.removeItem('atze_drinks_'+today);
+  localStorage.removeItem('crew_drinks_'+today);
   updateDrinkDisplay();
   toast('Zurückgesetzt!');
 }
 function updateDrinkDisplay(){
   var today=new Date().toISOString().split('T')[0];
-  var data=JSON.parse(localStorage.getItem('atze_drinks_'+today)||'{"beer":0,"wine":0,"cocktail":0,"shot":0,"sparkling":0,"firstTime":null}');
+  var data=JSON.parse(localStorage.getItem('crew_drinks_'+today)||'{"beer":0,"wine":0,"cocktail":0,"shot":0,"sparkling":0,"firstTime":null}');
   var total=(data.beer||0)+(data.wine||0)+(data.cocktail||0)+(data.shot||0)+(data.sparkling||0);
 
   // Grams of pure alcohol per standard drink
@@ -3245,7 +2985,7 @@ function updateDrinkDisplay(){
 function buildCountdownCard(){
   var el=document.getElementById('countdownCard');
   if(!el)return;
-  var tripDate=localStorage.getItem('atze_trip_date');
+  var tripDate=localStorage.getItem('crew_trip_date');
   if(!tripDate){
     el.innerHTML='<h3>✈️ Malle-Countdown</h3><p>Tippe um dein Abreisedatum zu setzen</p>';
     return;
@@ -3262,22 +3002,22 @@ function buildCountdownCard(){
 window.setTripDate=function(){
   var date=prompt('Abreisedatum (YYYY-MM-DD):',new Date().toISOString().split('T')[0]);
   if(date===null)return;
-  localStorage.setItem('atze_trip_date',date);
+  localStorage.setItem('crew_trip_date',date);
   buildCountdownCard();
   toast('Abreisedatum gespeichert! ✈️');
 }
 
 // 7. DARK/LIGHT MODE
 window.toggleTheme=function(){
-  var isDark=localStorage.getItem('atze_theme')==='light'?false:true;
-  localStorage.setItem('atze_theme',isDark?'light':'dark');
+  var isDark=localStorage.getItem('crew_theme')==='light'?false:true;
+  localStorage.setItem('crew_theme',isDark?'light':'dark');
   document.documentElement.classList.toggle('light-mode',isDark);
   toast(isDark?'Light Mode 🌙':'Dark Mode ⚫');
 }
 
 // 8. PREMIUM UPSELL
 window.openPremium=function(){
-  var html='<h2>✨ atze Premium</h2><div class="bs-desc"><div style="font-size:12px;margin-bottom:16px;line-height:1.6"><strong>Features vergleichen:</strong></div>';
+  var html='<h2>✨ crew Premium</h2><div class="bs-desc"><div style="font-size:12px;margin-bottom:16px;line-height:1.6"><strong>Features vergleichen:</strong></div>';
   var features=[
     {name:'Unlimited Swipes',free:'20/Tag',pro:'∞'},
     {name:'Keine Werbung',free:'✕',pro:'✓'},
@@ -3336,14 +3076,14 @@ window.rateVenue=function(venueId){
   var rating=prompt('Bewertung 1-5:','5');
   if(rating===null)return;
   rating=Math.max(1,Math.min(5,parseInt(rating)));
-  localStorage.setItem('atze_venue_rating_'+venueId,rating);
+  localStorage.setItem('crew_venue_rating_'+venueId,rating);
   toast('Bewertet: '+rating+'★');
 }
 
 // 11. SANGRIA CURRENCY (rebrand points)
 // Already handled in I18N - just show 🍹 icon next to points
 
-if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js?v=8').catch(function(){});
+if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js?v=9').catch(function(){});
 </script>
 </body>
 </html>

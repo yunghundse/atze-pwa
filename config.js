@@ -1,5 +1,5 @@
 // ============================================
-// ATZE CONFIG — Supabase Credentials
+// CREW CONFIG — Supabase Credentials
 // ============================================
 // Ersetze diese Werte mit deinen echten Supabase-Daten:
 // 1. Geh auf https://supabase.com → Neues Projekt
