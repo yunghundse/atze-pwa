@@ -489,6 +489,10 @@ select.ri{appearance:none;-webkit-appearance:none}
 /* WEATHER CARD */
 .weather-card{position:relative;overflow:hidden}
 .weather-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,214,10,.08),rgba(10,132,255,.06));border-radius:var(--r);pointer-events:none}
+
+/* ATZE SHOT */
+#atzeShotOv .drink-display{padding-top:60px}
+#shotFeed::-webkit-scrollbar{display:none}
 </style>
 </head>
 <body>
@@ -695,6 +699,24 @@ select.ri{appearance:none;-webkit-appearance:none}
   </div>
 </div>
 
+<!-- ATZE SHOT -->
+<div class="drink-counter" id="atzeShotOv" style="z-index:10006" onclick="if(event.target===this)closeAtzeShot()">
+  <button class="drink-close" onclick="closeAtzeShot()">✕</button>
+  <div class="drink-display" style="gap:16px">
+    <div style="font-size:48px" id="shotChallengeEmoji">📸</div>
+    <div style="font-size:18px;font-weight:800;text-align:center;max-width:280px" id="shotChallengeText">Lade Challenge...</div>
+    <div style="font-size:12px;color:var(--t3);margin-bottom:8px">Verschwindet nach 24h</div>
+    <input type="file" id="shotPhotoFile" accept="image/*" capture="environment" style="display:none" onchange="previewShotPhoto(this)">
+    <div id="shotPreview" style="display:none;width:200px;height:200px;border-radius:16px;overflow:hidden;border:3px solid var(--o);margin-bottom:12px"><img id="shotPreviewImg" style="width:100%;height:100%;object-fit:cover"></div>
+    <button class="abtn primary" style="max-width:280px" onclick="document.getElementById('shotPhotoFile').click()">📷 Foto aufnehmen</button>
+    <button class="abtn primary" id="shotUploadBtn" style="max-width:280px;display:none;background:var(--green)" onclick="uploadAtzeShot()">✅ AtzeShot posten!</button>
+    <div style="margin-top:16px">
+      <div class="sec-label" style="padding:0;margin-bottom:12px;color:var(--t2)">📸 Letzte Shots</div>
+      <div id="shotFeed" style="display:flex;gap:10px;overflow-x:auto;max-width:320px;padding-bottom:8px;scrollbar-width:none"></div>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <!-- APP -->
@@ -725,6 +747,8 @@ select.ri{appearance:none;-webkit-appearance:none}
             <div id="weatherHumid" style="font-size:11px;color:var(--t3);margin-top:2px">💧 --</div>
           </div>
         </div>
+        <div class="sec-label anim">🔥 Live auf der Insel</div>
+        <div class="hscroll anim" id="venueScroll"></div>
         <div class="tonight glass anim">
           <div class="tc-row"><div class="tc-live"></div><div class="tc-label">Heute Abend</div></div>
           <h3 id="tonightTitle">Lädt...</h3>
@@ -800,6 +824,21 @@ var CHALLENGES = [
   {title:'Strand um 6',icon:'🌅',desc:'Sei um 6 Uhr morgens am Strand',pts:120},
   {title:'10 Neue Leute',icon:'👥',desc:'Lerne 10 neue Leute kennen',pts:80},
   {title:'Spanisch bestellen',icon:'🇪🇸',desc:'Bestelle komplett auf Spanisch',pts:40}
+];
+
+var ATZE_CHALLENGES = [
+  {id:'sangria',text:'📸 Zeig deinen Sangria-Eimer!',emoji:'🍹'},
+  {id:'stranger',text:'📸 Selfie mit einem Fremden!',emoji:'🤳'},
+  {id:'sunset',text:'📸 Bester Sonnenuntergang-Shot!',emoji:'🌅'},
+  {id:'crew',text:'📸 Crew-Foto am Strand!',emoji:'👥'},
+  {id:'food',text:'📸 Bestes Malle-Essen!',emoji:'🍕'},
+  {id:'dance',text:'📸 Caught dancing!',emoji:'💃'},
+  {id:'pool',text:'📸 Pool-Moment!',emoji:'🏊'},
+  {id:'balkon',text:'📸 Balkonien-View!',emoji:'🏨'},
+  {id:'drinks',text:'📸 Cheers mit der Crew!',emoji:'🥂'},
+  {id:'beach',text:'📸 Strand-Vibes!',emoji:'🏖️'},
+  {id:'night',text:'📸 Nachtleben-Snapshot!',emoji:'🌙'},
+  {id:'taxi',text:'📸 Im Taxi nach...?',emoji:'🚕'}
 ];
 var AFFILIATES = [
   {phase:'pre',icon:'✈️',partner:'Check24 Flüge',net:'Belboon',com:'~2%',desc:'Günstige Flüge nach Mallorca finden und direkt buchen.',cta:'Flug schnappen',url:'https://www.check24.de/flug/?pid=ATZE_{subid}',tags:['Flüge','Ø 350€']},
@@ -1559,6 +1598,17 @@ function buildApp(){
   buildMoodBar();
   buildVenues();
   buildStories();
+
+  // Fetch live venue counts
+  sb.rpc('get_venue_live_counts').then(function(res){
+    if(res.data){
+      res.data.forEach(function(lc){
+        var v = VENUES.find(function(x){return x.id===lc.venue_id});
+        if(v) v.live_count = lc.live_count;
+      });
+      buildVenues();
+    }
+  }).catch(function(e){console.warn('Live counts failed:', e)});
   populateFilterOptions();
   buildCards();
   buildMatchList();
@@ -1688,7 +1738,15 @@ function buildVenues(){
   var s = document.getElementById('venueScroll');
   if(!s) return;
   s.innerHTML = VENUES.map(function(v){
-    return '<div class="vcard" onclick="openVenue(\''+v.id+'\')"><div class="vc-img"><img src="'+v.image_url+'" loading="lazy"><div class="vc-grad"></div>'+(v.is_live?'<div class="vc-live">LIVE</div>':'')+'<div class="vc-crowd">'+v.crowd_count+'</div></div><div class="vc-info"><h3>'+esc(v.name)+'</h3><div class="vc-meta">★'+v.rating+' · '+esc(v.description)+'</div></div></div>';
+    var liveCount = v.live_count || v.crowd_count || 0;
+    var heat = liveCount > 200 ? 'fire' : liveCount > 100 ? 'hot' : liveCount > 30 ? 'warm' : 'chill';
+    var heatColors = {fire:'#FF3B30',hot:'#FF6D2E',warm:'#FFD60A',chill:'#34C759'};
+    return '<div class="vcard" onclick="openVenue(\''+v.id+'\')">' +
+      '<div class="vc-img"><img src="'+v.image_url+'" loading="lazy"><div class="vc-grad"></div>' +
+      (v.is_live?'<div class="vc-live">LIVE</div>':'') +
+      '<div class="vc-crowd" style="background:'+heatColors[heat]+'">🔥 '+liveCount+'</div>' +
+      '</div><div class="vc-info"><h3>'+esc(v.name)+'</h3>' +
+      '<div class="vc-meta">★'+v.rating+' · '+esc(v.description)+'</div></div></div>';
   }).join('');
 }
 
@@ -1703,15 +1761,27 @@ var INSTA_VENUES = [
 function buildStories(){
   var b = document.getElementById('storiesBar');
   if(!b) return;
-  var html = '<div class="add-story" onclick="toast(\'AtzeShot kommt bald!\')">+</div>';
-  INSTA_VENUES.forEach(function(iv){
-    html += '<div class="sty" onclick="window.open(\'https://instagram.com/'+iv.handle+'\',\'_blank\')"><div class="sty-ring" style="background:'+iv.color+'"><div style="width:100%;height:100%;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:24px;border:2px solid var(--bg)">'+iv.emoji+'</div></div><span class="sty-name">'+iv.name+'</span></div>';
-  });
-  // Add venue stories from DB
-  VENUES.slice(0,4).forEach(function(v){
-    html += '<div class="sty" onclick="openVenue(\''+v.id+'\')"><div class="sty-ring"><img src="'+v.image_url.replace('w=600','w=150')+'" loading="lazy"></div><span class="sty-name">'+esc(v.name)+'</span></div>';
+  var html = '<div class="add-story" onclick="openAtzeShot()">📸</div>';
+
+  // Add venue stories
+  INSTA_VENUES.forEach(function(v){
+    html += '<div class="sty" onclick="openAtzeShot()"><div class="sty-ring"><img src="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=100&q=60" alt="'+esc(v.name)+'"></div><div class="sty-name">'+v.emoji+' '+v.name+'</div></div>';
   });
   b.innerHTML = html;
+
+  // Load recent shots into stories
+  var since = new Date(Date.now() - 24*60*60*1000).toISOString();
+  sb.from('atze_shots').select('*, profiles!atze_shots_user_id_fkey(name, photo_url)').gte('created_at', since).order('created_at', {ascending: false}).limit(10).then(function(res){
+    if(!res.data || res.data.length === 0) return;
+    var shotStories = res.data.map(function(s){
+      var name = s.profiles ? s.profiles.name : 'Atze';
+      var ava = s.profiles && s.profiles.photo_url ? s.profiles.photo_url : 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=60';
+      return '<div class="sty" onclick="viewShot(\''+s.id+'\',\''+esc(s.photo_url)+'\',\''+esc(name)+'\',\''+esc(s.caption)+'\','+s.likes+')"><div class="sty-ring"><img src="'+ava+'" alt="'+esc(name)+'"></div><div class="sty-name">'+esc(name)+'</div></div>';
+    }).join('');
+    // Insert after the add-story button
+    var addBtn = b.querySelector('.add-story');
+    if(addBtn) addBtn.insertAdjacentHTML('afterend', shotStories);
+  }).catch(function(e){console.warn('Shot stories failed:', e)});
 }
 
 var userMarker = null, userAccCircle = null, userLat = 0, userLng = 0;
@@ -1767,18 +1837,183 @@ function initCMap(){
 window.openVenue = function(id){
   var v = VENUES.find(function(x){return x.id===id});
   if(!v) return;
+  var liveCount = v.live_count || v.crowd_count || 0;
   document.getElementById('bsImg').src = v.image_url;
-  document.getElementById('bsContent').innerHTML = '<h2>'+esc(v.name)+'</h2><div class="bs-meta"><span style="color:var(--o);font-weight:700">★ '+v.rating+'</span> · '+v.crowd_count+' hier'+(v.website?' · <a href="https://'+v.website+'" target="_blank" rel="noopener" style="color:var(--o)">'+v.website+'</a>':'')+'</div><div class="bs-desc">📍 '+esc(v.address)+'<br>🕐 '+esc(v.hours)+(v.is_live?'<br>🔴 <strong>Jetzt Live!</strong>':'')+'</div><div class="bs-tags">'+(v.tags||[]).map(function(t){return '<span class="t">'+t+'</span>'}).join('')+'</div><div class="bs-actions"><button class="bs-btn orange" onclick="checkinVenue(\''+v.id+'\',\''+esc(v.name)+'\')">📍 Einchecken (+50)</button><button class="bs-btn dark" onclick="window.open(\'https://www.google.com/maps/dir/?api=1&destination='+v.lat+','+v.lng+'&travelmode=walking\',\'_blank\')">🗺 Route</button><button class="bs-btn dark" onclick="shareText(\''+esc(v.name)+' – '+v.crowd_count+' Leute da!\')">📤 Teilen</button></div>';
+  document.getElementById('bsContent').innerHTML = '<h2>'+esc(v.name)+'</h2><div class="bs-meta"><span style="color:var(--o);font-weight:700">★ '+v.rating+'</span> · '+liveCount+' Atzen hier 🔥'+(v.website?' · <a href="https://'+v.website+'" target="_blank" rel="noopener" style="color:var(--o)">'+v.website+'</a>':'')+'</div><div class="bs-desc">📍 '+esc(v.address)+'<br>🕐 '+esc(v.hours)+(v.is_live?'<br>🔴 <strong>Jetzt Live!</strong>':'')+'</div><div class="bs-tags">'+(v.tags||[]).map(function(t){return '<span class="t">'+t+'</span>'}).join('')+'</div><div class="bs-actions"><button class="bs-btn orange" onclick="checkinVenue(\''+v.id+'\',\''+esc(v.name)+'\')">📍 Einchecken (+50)</button><button class="bs-btn dark" onclick="window.open(\'https://www.google.com/maps/dir/?api=1&destination='+v.lat+','+v.lng+'&travelmode=walking\',\'_blank\')">🗺 Route</button><button class="bs-btn dark" onclick="shareText(\''+esc(v.name)+' – '+liveCount+' Leute da!\')">📤 Teilen</button></div>';
   document.getElementById('bsheet').classList.add('show');
 };
 
 window.checkinVenue = async function(venueId, name){
+  // Prevent double check-in (within 1 hour)
+  var lastCheckin = localStorage.getItem('atze_checkin_'+venueId);
+  if(lastCheckin && Date.now() - parseInt(lastCheckin) < 3600000){
+    toast('Du bist schon eingecheckt bei '+name+'! 🎉');
+    return;
+  }
+
   await sb.from('checkins').insert({user_id: ME.user_id, venue_id: venueId});
   await sb.rpc('add_points', {p_user_id: ME.user_id, p_points: 50});
   ME.points += 50;
+  localStorage.setItem('atze_checkin_'+venueId, Date.now().toString());
   updateProfile();
-  toast('Eingecheckt bei '+name+'! +50');
+
+  // Refresh live counts
+  try {
+    var res = await sb.rpc('get_venue_live_counts');
+    if(res.data){
+      res.data.forEach(function(lc){
+        var v = VENUES.find(function(x){return x.id===lc.venue_id});
+        if(v) v.live_count = lc.live_count;
+      });
+      buildVenues();
+    }
+  } catch(e){ console.warn('Live count refresh failed:', e); }
+
+  toast('📍 Eingecheckt bei '+name+'! +50 🍹');
+  sendLocalNotification('📍 Check-In!', {body: 'Du bist jetzt bei '+name+'!'});
   closeBS();
+};
+
+// ============================================
+// ATZE SHOT (24h Photo Challenges)
+// ============================================
+var currentShotChallenge = null;
+var shotPhotoBlob = null;
+
+function getTodaysChallenge(){
+  var dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(),0,0)) / 86400000);
+  return ATZE_CHALLENGES[dayOfYear % ATZE_CHALLENGES.length];
+}
+
+window.openAtzeShot = function(){
+  currentShotChallenge = getTodaysChallenge();
+  document.getElementById('shotChallengeEmoji').textContent = currentShotChallenge.emoji;
+  document.getElementById('shotChallengeText').textContent = currentShotChallenge.text;
+  document.getElementById('shotPreview').style.display = 'none';
+  document.getElementById('shotUploadBtn').style.display = 'none';
+  shotPhotoBlob = null;
+  document.getElementById('atzeShotOv').classList.add('show');
+  loadShotFeed();
+};
+
+window.closeAtzeShot = function(){
+  document.getElementById('atzeShotOv').classList.remove('show');
+};
+
+window.previewShotPhoto = function(input){
+  if(!input.files || !input.files[0]) return;
+  var file = input.files[0];
+  if(file.size > 5*1024*1024){toast('Max 5MB!');return}
+  var reader = new FileReader();
+  reader.onload = function(e){
+    var img = new Image();
+    img.onload = function(){
+      var canvas = document.createElement('canvas');
+      var max = 800; var w = img.width, h = img.height;
+      if(w > h){h = h*(max/w); w = max} else {w = w*(max/h); h = max}
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img,0,0,w,h);
+      canvas.toBlob(function(blob){
+        shotPhotoBlob = blob;
+        document.getElementById('shotPreviewImg').src = URL.createObjectURL(blob);
+        document.getElementById('shotPreview').style.display = 'block';
+        document.getElementById('shotUploadBtn').style.display = 'block';
+      },'image/jpeg',0.8);
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+};
+
+window.uploadAtzeShot = async function(){
+  if(!shotPhotoBlob || !currentShotChallenge){toast('Bitte erst ein Foto aufnehmen!');return}
+  if(!ME || !ME.user_id){toast('Bitte einloggen');return}
+
+  var btn = document.getElementById('shotUploadBtn');
+  btn.disabled = true;
+  btn.textContent = 'Wird hochgeladen...';
+
+  try {
+    var path = ME.user_id + '/shot_' + Date.now() + '.jpg';
+    var upErr = await sb.storage.from('shots').upload(path, shotPhotoBlob, {contentType:'image/jpeg'});
+    if(upErr.error){toast('Upload-Fehler: '+upErr.error.message);btn.disabled=false;btn.textContent='✅ AtzeShot posten!';return}
+
+    var urlData = sb.storage.from('shots').getPublicUrl(path);
+    var photoUrl = urlData.data.publicUrl;
+
+    var dbErr = await sb.from('atze_shots').insert({
+      user_id: ME.user_id,
+      photo_url: photoUrl,
+      challenge: currentShotChallenge.id,
+      caption: currentShotChallenge.text
+    });
+
+    if(dbErr.error){toast('Fehler: '+dbErr.error.message);btn.disabled=false;btn.textContent='✅ AtzeShot posten!';return}
+
+    // Add points
+    await sb.rpc('add_points',{p_user_id: ME.user_id, p_points: 30});
+    ME.points += 30;
+    updateProfile();
+
+    toast('📸 AtzeShot gepostet! +30 🍹');
+    sendLocalNotification('📸 AtzeShot!', {body: currentShotChallenge.text + ' — gepostet!'});
+    shotPhotoBlob = null;
+    document.getElementById('shotPreview').style.display = 'none';
+    btn.style.display = 'none';
+    btn.disabled = false;
+    btn.textContent = '✅ AtzeShot posten!';
+
+    loadShotFeed();
+    buildStories(); // Refresh stories bar
+  } catch(e){
+    console.error('Upload error:', e);
+    toast('Fehler beim Upload');
+    btn.disabled = false;
+    btn.textContent = '✅ AtzeShot posten!';
+  }
+};
+
+async function loadShotFeed(){
+  var feed = document.getElementById('shotFeed');
+  if(!feed) return;
+  try {
+    // Only shots from last 24 hours
+    var since = new Date(Date.now() - 24*60*60*1000).toISOString();
+    var res = await sb.from('atze_shots').select('*, profiles!atze_shots_user_id_fkey(name, photo_url)').gte('created_at', since).order('created_at', {ascending: false}).limit(20);
+    var shots = res.data;
+
+    if(!shots || shots.length === 0){
+      feed.innerHTML = '<p style="color:var(--t3);font-size:12px;white-space:nowrap">Noch keine Shots heute. Sei der Erste! 📸</p>';
+      return;
+    }
+
+    feed.innerHTML = shots.map(function(s){
+      var name = s.profiles ? s.profiles.name : 'Atze';
+      var timeAgo = Math.round((Date.now() - new Date(s.created_at).getTime()) / 3600000);
+      return '<div style="flex-shrink:0;width:120px;cursor:pointer" onclick="viewShot(\''+s.id+'\',\''+esc(s.photo_url)+'\',\''+esc(name)+'\',\''+esc(s.caption)+'\','+s.likes+')">' +
+        '<div style="width:120px;height:160px;border-radius:12px;overflow:hidden;border:2px solid var(--glass-border)"><img src="'+s.photo_url+'" style="width:100%;height:100%;object-fit:cover" loading="lazy"></div>' +
+        '<div style="font-size:10px;font-weight:700;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(name)+'</div>' +
+        '<div style="font-size:9px;color:var(--t3)">vor '+timeAgo+'h · ❤️ '+s.likes+'</div></div>';
+    }).join('');
+  } catch(e){
+    console.warn('Shot feed load failed:', e);
+    feed.innerHTML = '<p style="color:var(--t3);font-size:12px">Feed lädt nicht</p>';
+  }
+}
+
+window.viewShot = function(id, url, name, caption, likes){
+  document.getElementById('bsImg').src = url;
+  document.getElementById('bsContent').innerHTML = '<h2>📸 '+esc(name)+'</h2><div class="bs-meta">'+esc(caption)+'</div><div style="display:flex;gap:12px;margin-top:16px"><button class="bs-btn orange" style="flex:1" onclick="likeShot(\''+id+'\')">❤️ Like ('+likes+')</button><button class="bs-btn dark" style="flex:1" onclick="closeBS()">Schließen</button></div>';
+  document.getElementById('bsheet').classList.add('show');
+};
+
+window.likeShot = async function(id){
+  try {
+    await sb.rpc('like_shot', {shot_id: id});
+    toast('❤️ Geliked!');
+    closeBS();
+    loadShotFeed();
+  } catch(e){ toast('Fehler'); }
 };
 
 // ============================================
