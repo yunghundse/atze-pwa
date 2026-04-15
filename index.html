@@ -749,11 +749,11 @@ select.ri{appearance:none;-webkit-appearance:none}
         </div>
         <div class="sec-label anim">🔥 Live auf der Insel</div>
         <div class="hscroll anim" id="venueScroll"></div>
-        <div class="tonight glass anim">
-          <div class="tc-row"><div class="tc-live"></div><div class="tc-label">Heute Abend</div></div>
-          <h3 id="tonightTitle">Lädt...</h3>
-          <div class="tc-sub" id="tonightSub"></div>
-          <button class="tc-btn primary" id="tonightBtn" onclick="joinTonight()">Ich bin dabei</button>
+        <div class="tonight glass anim" onclick="openAtzeShot()" style="cursor:pointer">
+          <div class="tc-row"><div class="tc-live"></div><div class="tc-label">AtzeShot</div></div>
+          <h3 id="shotDailyTitle">📸 Tägliche Challenge</h3>
+          <div class="tc-sub" id="shotDailySub">Lade...</div>
+          <button class="tc-btn primary" onclick="event.stopPropagation();openAtzeShot()">📸 Jetzt knipsen!</button>
         </div>
         <div class="sec-label anim d1">👥 Crew in der Nähe</div>
         <div id="nearbyCrewList" class="anim d1" style="padding:0 14px 14px"><p style="color:var(--t3);font-size:13px">Standort wird geladen...</p></div>
@@ -1628,22 +1628,14 @@ function buildApp(){
   try{buildChallenges()}catch(e){console.error('buildChallenges failed:',e)}
   try{buildCountdownCard()}catch(e){console.error('buildCountdownCard failed:',e)}
 
-  // Tonight - show live venue or placeholder
-  var tonightEl = document.getElementById('tonightTitle');
-  var tonightSub = document.getElementById('tonightSub');
-  if(VENUES.length > 0){
-    var hot = VENUES.find(function(v){return v.is_live});
-    if(hot){
-      tonightEl.textContent = hot.name + ' Live-Night 🔥';
-      tonightSub.textContent = (hot.description||'Party') + (hot.hours ? ' · ' + hot.hours : '');
-    } else {
-      tonightEl.textContent = 'Heute Abend auf Malle 🌴';
-      tonightSub.textContent = VENUES.length + ' Venues warten auf dich!';
+  // AtzeShot daily challenge card
+  try {
+    var dailyChallenge = getTodaysChallenge();
+    if(dailyChallenge){
+      document.getElementById('shotDailyTitle').textContent = dailyChallenge.emoji + ' ' + dailyChallenge.text.replace('📸 ','');
+      document.getElementById('shotDailySub').textContent = 'Poste ein Foto und verdiene 30 🍹 Sangrias!';
     }
-  } else {
-    tonightEl.textContent = 'Heute Abend auf Malle 🌴';
-    tonightSub.textContent = 'Venues werden bald hinzugefügt!';
-  }
+  } catch(e){ console.warn('Daily challenge display failed:', e); }
 
   document.getElementById('sNum').textContent = ME.streak || 0;
   // Initial nearby build
@@ -1764,12 +1756,27 @@ function buildVenues(){
   }).join('');
 }
 
+var VENUE_STORIES = [
+  {name:'Bierkönig',ig:'bierkoenigmallorca',emoji:'🍺',img:'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=100&q=60'},
+  {name:'Megapark',ig:'megapark.tv',emoji:'🎵',img:'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=100&q=60'},
+  {name:'Oberbayern',ig:'oberbayern_mallorca',emoji:'🎉',img:'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=100&q=60'},
+  {name:'Purobeach',ig:'purobeachpalma',emoji:'🏖️',img:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=100&q=60'},
+  {name:'Ballermann',ig:'ballermann6.official',emoji:'☀️',img:'https://images.unsplash.com/photo-1504196606672-aef5c9cefc92?w=100&q=60'}
+];
+
 function buildStories(){
   var b = document.getElementById('storiesBar');
   if(!b) return;
-  b.innerHTML = '<div class="add-story" onclick="openAtzeShot()"><div style="font-size:22px">📸</div></div>';
+  // 1. AtzeShot camera button
+  var html = '<div class="add-story" onclick="openAtzeShot()"><div style="font-size:22px">📸</div></div>';
 
-  // Load real AtzeShots from last 24h
+  // 2. Real Instagram venue stories
+  VENUE_STORIES.forEach(function(v){
+    html += '<div class="sty" onclick="window.open(\'https://instagram.com/'+v.ig+'\',\'_blank\')"><div class="sty-ring"><img src="'+v.img+'" alt="'+esc(v.name)+'"></div><div class="sty-name">'+v.emoji+' '+v.name+'</div></div>';
+  });
+  b.innerHTML = html;
+
+  // 3. Load real AtzeShots from last 24h
   var since = new Date(Date.now() - 24*60*60*1000).toISOString();
   sb.from('atze_shots').select('id, photo_url, challenge, caption, likes, created_at, profiles!atze_shots_user_id_fkey(name, photo_url)')
     .gte('created_at', since)
@@ -2200,7 +2207,6 @@ window.inviteCrew=function(){
   localStorage.setItem('atze_invites',String(inv));
   if(inv===6)toast('🎨 Profilfarben freigeschaltet!');
 };
-window.joinTonight=function(){toast('Du bist dabei! 🎉')};
 window.editSocials=async function(){
   var insta=prompt('Instagram Username:',ME.insta||'');
   if(insta===null)return;
