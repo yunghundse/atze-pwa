@@ -824,7 +824,7 @@ select.ri{appearance:none;-webkit-appearance:none}
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 7;
+  var APP_VERSION = 8;
   var lastV = parseInt(localStorage.getItem('atze_app_v') || '0');
   if(lastV < APP_VERSION){
     localStorage.setItem('atze_app_v', APP_VERSION);
@@ -1299,26 +1299,42 @@ function setLang(lang){
 // INIT
 // ============================================
 document.addEventListener('DOMContentLoaded', async function(){
+  console.log('[ATZE] Init starting...');
+
   // Check config
   if(!SUPABASE_URL || SUPABASE_URL === 'DEINE_SUPABASE_URL_HIER'){
-    document.getElementById('loadingScreen').innerHTML = '<div style="padding:40px;text-align:center"><div style="font-size:48px;margin-bottom:16px">⚠️</div><h2 style="font-size:20px;font-weight:900;margin-bottom:8px">Supabase nicht konfiguriert</h2><p style="color:var(--t2);font-size:14px;line-height:1.6">Öffne <code style="background:var(--bg3);padding:2px 8px;border-radius:6px">config.js</code> und trage deine Supabase URL und deinen Anon Key ein.</p></div>';
+    document.getElementById('loadingScreen').innerHTML = '<div style="padding:40px;text-align:center"><div style="font-size:48px;margin-bottom:16px">⚠️</div><h2>Supabase nicht konfiguriert</h2></div>';
     return;
   }
 
   // Init Supabase
-  sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  try {
+    sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    console.log('[ATZE] Supabase client created');
+  } catch(e) {
+    console.error('[ATZE] Supabase init failed:', e);
+    document.getElementById('loadingScreen').innerHTML = '<div style="padding:40px;text-align:center;color:#fff"><p>App konnte nicht geladen werden. Bitte Seite neu laden.</p></div>';
+    return;
+  }
 
   // Check session
-  var {data:{session}} = await sb.auth.getSession();
-  if(session){
-    await loadUser(session.user);
-  } else {
+  try {
+    var {data:{session}} = await sb.auth.getSession();
+    console.log('[ATZE] Session check:', session ? 'found' : 'none');
+    if(session && session.user){
+      await loadUser(session.user);
+    } else {
+      showAgeGate();
+    }
+  } catch(e) {
+    console.error('[ATZE] Session check failed:', e);
     showAgeGate();
   }
 
   // Auth state listener
   sb.auth.onAuthStateChange(async function(event, session){
-    if(event === 'SIGNED_IN' && session){
+    console.log('[ATZE] Auth event:', event);
+    if(event === 'SIGNED_IN' && session && session.user){
       await loadUser(session.user);
     } else if(event === 'SIGNED_OUT'){
       ME = null;
@@ -1333,6 +1349,8 @@ document.addEventListener('DOMContentLoaded', async function(){
 // ============================================
 function showAgeGate(){
   document.getElementById('loadingScreen').classList.add('gone');
+  document.getElementById('authScreen').classList.add('gone');
+  document.getElementById('onboard').classList.add('gone');
   if(!localStorage.getItem(LANG_KEY)){
     document.getElementById('langPicker').style.display='flex';
     return;
@@ -1356,17 +1374,14 @@ window.pickLang = function(lang){
 
 function applyLang(){
   document.documentElement.lang = curLang;
-  // Age gate
   var agSub = document.querySelector('.agegate .ag-sub');
   if(agSub && agSub.id !== 'langPickerTitle') agSub.textContent = t('ag_title');
   var agWarn = document.querySelector('.age-warning');
   if(agWarn) agWarn.textContent = t('ag_warning');
-  // Age gate button
   var agBtn = document.querySelector('.agegate .abtn.primary');
   if(agBtn && agBtn.textContent.includes('Alter')) agBtn.textContent = t('ag_confirm');
   var agUn18 = document.querySelector('.agegate .abtn.ghost');
   if(agUn18) agUn18.textContent = t('ag_under18');
-  // Nav buttons
   var navBtns = document.querySelectorAll('#navBar button');
   var navLabels = ['nav_radar','nav_deals','nav_crew','nav_match','nav_profil'];
   navBtns.forEach(function(btn,i){
@@ -1414,7 +1429,7 @@ window.authEmail = async function(){
   var email = document.getElementById('authEmail').value.trim();
   var pass = document.getElementById('authPass').value;
   if(!email){toast('Bitte E-Mail eingeben');return}
-  if(!pass || pass.length < 6){toast('Passwort muss mindestens 6 Zeichen haben');return}
+  if(!pass || pass.length < 6){toast('Passwort mind. 6 Zeichen');return}
 
   var btn = document.getElementById('authSubmit');
   btn.disabled = true;
@@ -1422,24 +1437,43 @@ window.authEmail = async function(){
 
   try {
     if(authMode === 'signup'){
-      var {data: signUpData, error} = await sb.auth.signUp({email: email, password: pass});
-      if(error){toast('Fehler: ' + error.message);btn.disabled=false;btn.textContent='Registrieren';return}
-      if(signUpData.session){
+      console.log('[ATZE] Signing up:', email);
+      var res = await sb.auth.signUp({email: email, password: pass});
+      console.log('[ATZE] SignUp result:', JSON.stringify(res));
+      if(res.error){
+        toast('Fehler: ' + res.error.message);
+        btn.disabled=false; btn.textContent='Registrieren';
+        return;
+      }
+      if(res.data && res.data.session){
+        // Auto-confirmed, session exists → loadUser will be called by onAuthStateChange
         toast('Willkommen! 🌴');
         return;
       }
-      if(signUpData.user && !signUpData.session){
-        toast('Bestätigungs-E-Mail gesendet! Prüfe dein Postfach.');
-        btn.disabled=false;btn.textContent='Registrieren';
+      if(res.data && res.data.user && !res.data.session){
+        toast('Bestätigungs-E-Mail gesendet! Prüfe dein Postfach. Dann logge dich ein.');
+        btn.disabled=false; btn.textContent='Registrieren';
+        // Switch to login mode
+        authMode = 'login';
+        document.getElementById('authSubmit').textContent = 'Einloggen';
+        document.getElementById('authSwitch').innerHTML = 'Noch kein Konto? <span>Registrieren</span>';
         return;
       }
     } else {
-      var {data, error} = await sb.auth.signInWithPassword({email: email, password: pass});
-      if(error){toast('Fehler: ' + error.message);btn.disabled=false;btn.textContent='Einloggen';return}
+      console.log('[ATZE] Logging in:', email);
+      var res = await sb.auth.signInWithPassword({email: email, password: pass});
+      console.log('[ATZE] Login result:', res.error ? res.error.message : 'success');
+      if(res.error){
+        toast('Fehler: ' + res.error.message);
+        btn.disabled=false; btn.textContent='Einloggen';
+        return;
+      }
+      // onAuthStateChange will handle the rest
+      toast('Eingeloggt! 🌴');
     }
   } catch(e) {
-    console.error('authEmail error:', e);
-    toast('Ein Fehler ist aufgetreten. Bitte versuche es erneut.');
+    console.error('[ATZE] authEmail error:', e);
+    toast('Fehler: ' + (e.message || 'Unbekannt'));
     btn.disabled=false;
     btn.textContent = authMode === 'signup' ? 'Registrieren' : 'Einloggen';
   }
@@ -1457,49 +1491,64 @@ window.openLegalAuth=function(type){
 // LOAD USER
 // ============================================
 async function loadUser(authUser){
+  console.log('[ATZE] loadUser called, uid:', authUser.id);
   document.getElementById('loadingScreen').classList.remove('gone');
   document.getElementById('authScreen').classList.add('gone');
   document.getElementById('agegate').classList.add('gone');
 
   try {
-    var {data: profile, error: profileError} = await sb.from('profiles').select('*').eq('user_id', authUser.id).single();
+    // Check if profile exists and is complete
+    var profileRes = await sb.from('profiles').select('*').eq('user_id', authUser.id).maybeSingle();
+    var profile = profileRes.data;
+    console.log('[ATZE] Profile check:', profile ? profile.name : 'no profile');
 
-    if(profileError || !profile || !profile.name || profile.name === 'Neuer Atze'){
+    // If no profile or profile is just the auto-created placeholder → show onboarding
+    if(!profile || !profile.name || profile.name === 'Neuer Atze'){
+      console.log('[ATZE] → Show onboarding');
       document.getElementById('loadingScreen').classList.add('gone');
       showOnboarding(authUser);
       return;
     }
 
     ME = profile;
+    console.log('[ATZE] Profile loaded:', ME.name);
 
-    // Load venues
-    var {data: venues} = await sb.from('venues').select('*').order('crowd_count', {ascending: false});
-    VENUES = venues || [];
+    // Load venues (non-blocking errors are fine)
+    try {
+      var {data: venues} = await sb.from('venues').select('*').order('crowd_count', {ascending: false});
+      VENUES = venues || [];
+    } catch(e) { console.warn('[ATZE] venues load failed:', e); VENUES = []; }
 
-    // Load profiles for matching (exclude self, exclude already swiped)
-    var {data: swiped} = await sb.from('matches').select('to_user').eq('from_user', authUser.id);
-    var swipedIds = (swiped || []).map(function(s){return s.to_user});
-    swipedIds.push(authUser.id);
+    // Load profiles for matching
+    try {
+      var {data: swiped} = await sb.from('matches').select('to_user').eq('from_user', authUser.id);
+      var swipedIds = (swiped || []).map(function(s){return s.to_user});
+      swipedIds.push(authUser.id);
+      var {data: profiles} = await sb.from('profiles').select('*').not('user_id', 'in', '('+swipedIds.join(',')+')');
+      PROFILES = profiles || [];
+    } catch(e) { console.warn('[ATZE] profiles load failed:', e); PROFILES = []; }
 
-    var q = sb.from('profiles').select('*').not('user_id', 'in', '('+swipedIds.join(',')+')');
-    var {data: profiles} = await q;
-    PROFILES = profiles || [];
-
-    // Update streak
-    try { await sb.rpc('update_streak', {p_user_id: authUser.id}); } catch(e) { console.warn('streak update failed:', e); }
-    var {data: fresh} = await sb.from('profiles').select('streak,points').eq('user_id', authUser.id).single();
-    if(fresh){ME.streak = fresh.streak; ME.points = fresh.points}
+    // Update streak (non-critical)
+    try { await sb.rpc('update_streak', {p_user_id: authUser.id}); } catch(e) {}
+    try {
+      var {data: fresh} = await sb.from('profiles').select('streak,points').eq('user_id', authUser.id).single();
+      if(fresh){ME.streak = fresh.streak; ME.points = fresh.points}
+    } catch(e) {}
 
     // Count matches
-    var {count: matchCount} = await sb.from('matches').select('*', {count: 'exact', head: true}).eq('from_user', authUser.id).eq('is_match', true);
-    ME._matchCount = matchCount || 0;
+    try {
+      var {count: matchCount} = await sb.from('matches').select('*', {count: 'exact', head: true}).eq('from_user', authUser.id).eq('is_match', true);
+      ME._matchCount = matchCount || 0;
+    } catch(e) { ME._matchCount = 0; }
 
     // Show app
+    console.log('[ATZE] → Show app');
     document.getElementById('loadingScreen').classList.add('gone');
+    document.getElementById('onboard').classList.add('gone');
     document.getElementById('app').style.display = 'flex';
     buildApp();
   } catch(e) {
-    console.error('loadUser error:', e);
+    console.error('[ATZE] loadUser error:', e);
     document.getElementById('loadingScreen').classList.add('gone');
     showOnboarding(authUser);
   }
@@ -1508,11 +1557,20 @@ async function loadUser(authUser){
 // ============================================
 // ONBOARDING
 // ============================================
+var _onboardAuthUser = null; // Store auth user for finishOnboard
+
 function showOnboarding(authUser){
+  console.log('[ATZE] showOnboarding called');
+  _onboardAuthUser = authUser;
   document.getElementById('onboard').classList.remove('gone');
-  // Build birthdate selects
+
+  // Reset to step 1
+  document.querySelectorAll('.ob-step').forEach(function(e){e.classList.remove('active')});
+  document.getElementById('ob1').classList.add('active');
+
+  // Build birthdate selects (only once)
   var bd=document.getElementById('obBDay'),bm=document.getElementById('obBMonth'),by=document.getElementById('obBYear');
-  if(bd&&bd.children.length<=1){
+  if(bd && bd.children.length<=1){
     for(var i=1;i<=31;i++)bd.innerHTML+='<option value="'+i+'">'+i+'</option>';
     ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'].forEach(function(m,i){bm.innerHTML+='<option value="'+(i+1)+'">'+m+'</option>'});
     var cy=new Date().getFullYear();for(var y=cy-18;y>=cy-80;y--)by.innerHTML+='<option value="'+y+'">'+y+'</option>';
@@ -1521,7 +1579,12 @@ function showOnboarding(authUser){
   buildChips('obSeek',['Party-Crew finden','Leute kennenlernen','Feiern & Spaß','Dating','Alles mitnehmen'],'',function(v){obData.seek=v});
   buildChips('obStatus',['Single','Vergeben','Kompliziert','Offen'],'',function(v){obData.status=v});
   var dl=document.getElementById('dsgvoList');
-  if(dl)dl.innerHTML=[{l:'Standort',d:'Venues und Crew in deiner Nähe. Du kannst die App auch ohne Standort nutzen.',r:0,on:1},{l:'Push-Benachrichtigungen',d:'AtzeShot, Matches, Deals.',r:0,on:1},{l:'Kamera',d:'AtzeShot & Profilfotos.',r:0,on:1},{l:'Anonyme Nutzungsanalyse',d:'Hilft uns die App zu verbessern.',r:0,on:0}].map(function(i){return '<div class="dsgvo-item"><div class="dtxt"><h4>'+i.l+(i.r?' (erforderlich)':'')+'</h4><p>'+i.d+'</p></div><button class="dtog'+(i.on?' on':'')+'" onclick="this.classList.toggle(\'on\')"></button></div>'}).join('');
+  if(dl)dl.innerHTML=[
+    {l:'Standort',d:'Venues und Crew in deiner Nähe.',on:1},
+    {l:'Push',d:'AtzeShot, Matches, Deals.',on:1},
+    {l:'Kamera',d:'AtzeShot & Profilfotos.',on:1},
+    {l:'Analyse',d:'Anonyme Nutzungsanalyse.',on:0}
+  ].map(function(i){return '<div class="dsgvo-item"><div class="dtxt"><h4>'+i.l+'</h4><p style="font-size:12px;color:var(--t3)">'+i.d+'</p></div><button class="dtog'+(i.on?' on':'')+'" onclick="this.classList.toggle(\'on\')"></button></div>'}).join('');
 }
 
 window.obStep = function(n){
@@ -1594,61 +1657,113 @@ window.pickCustomClub = function(v){
 };
 
 window.finishOnboard = async function(){
-  console.log('finishOnboard CALLED');
-  toast('Profil wird gespeichert...');
+  console.log('[ATZE] finishOnboard CALLED');
+
+  // Disable button to prevent double-tap
+  var losBtn = document.querySelector('#ob5 .rnext');
+  if(losBtn){ losBtn.disabled = true; losBtn.textContent = 'Wird gespeichert...'; }
+
   try {
-    var nameEl = document.getElementById('obName');
-    if(!nameEl) { toast('FEHLER: Name-Feld nicht gefunden!'); console.error('obName element missing'); return; }
-    var name = esc(nameEl.value.trim());
-    if(!name){toast('Bitte gib deinen Namen ein!');return}
+    // 1. Get user
+    var user = _onboardAuthUser;
+    if(!user || !user.id){
+      var res = await sb.auth.getUser();
+      user = res.data ? res.data.user : null;
+    }
+    if(!user || !user.id){
+      toast('Fehler — bitte neu einloggen');
+      if(losBtn){ losBtn.disabled = false; losBtn.textContent = "Los geht's!"; }
+      return;
+    }
+    console.log('[ATZE] User ID:', user.id);
 
-    var d=document.getElementById('obBDay').value, m=document.getElementById('obBMonth').value, y=document.getElementById('obBYear').value;
-    if(!d||!m||!y){toast('Bitte Geburtsdatum ausfüllen!');return}
-    var birthdate = y+'-'+(m<10?'0'+m:m)+'-'+(d<10?'0'+d:d);
-    var bd=new Date(+y,+m-1,+d), today=new Date();
-    var age=today.getFullYear()-bd.getFullYear();
-    if(today.getMonth()<bd.getMonth()||(today.getMonth()===bd.getMonth()&&today.getDate()<bd.getDate()))age--;
+    // 2. Collect form data
+    var nameVal = (document.getElementById('obName').value || '').trim();
+    if(!nameVal || nameVal.length < 1){
+      toast('Bitte gib deinen Namen ein!');
+      if(losBtn){ losBtn.disabled = false; losBtn.textContent = "Los geht's!"; }
+      return;
+    }
+    var name = esc(nameVal);
 
-    var instaEl=document.getElementById('obInsta'), tiktokEl=document.getElementById('obTiktok'), snapEl=document.getElementById('obSnap'), bioEl=document.getElementById('obBio');
-    var insta = instaEl ? esc(instaEl.value.trim().replace(/^@/,'')) : '';
-    var tiktok = tiktokEl ? esc(tiktokEl.value.trim().replace(/^@/,'')) : '';
-    var snapchat = snapEl ? esc(snapEl.value.trim().replace(/^@/,'')) : '';
-    var bio = bioEl ? esc(bioEl.value.trim()) : '';
+    var d = document.getElementById('obBDay').value;
+    var m = document.getElementById('obBMonth').value;
+    var y = document.getElementById('obBYear').value;
+    var age = 18;
+    var birthdate = null;
+    if(d && m && y){
+      birthdate = y+'-'+(m<10?'0'+m:m)+'-'+(d<10?'0'+d:d);
+      var bd=new Date(+y,+m-1,+d), today=new Date();
+      age=today.getFullYear()-bd.getFullYear();
+      if(today.getMonth()<bd.getMonth()||(today.getMonth()===bd.getMonth()&&today.getDate()<bd.getDate()))age--;
+    }
 
-    var {data:{user}} = await sb.auth.getUser();
-    if(!user){toast('Fehler — bitte neu einloggen');return}
+    var insta = esc((document.getElementById('obInsta').value||'').trim().replace(/^@/,''));
+    var tiktok = esc((document.getElementById('obTiktok').value||'').trim().replace(/^@/,''));
+    var snapchat = esc((document.getElementById('obSnap').value||'').trim().replace(/^@/,''));
+    var bio = esc((document.getElementById('obBio').value||'').trim());
 
-    var updateObj = {
-      user_id: user.id,
-      name: name, age: age, birthdate: birthdate, bio: bio, insta: insta, tiktok: tiktok, snapchat: snapchat,
-      gender: obData.gender||'', seek: obData.seek||'', status: obData.status||'', club: obData.club||''
+    var profileData = {
+      name: name, age: age, bio: bio,
+      insta: insta, tiktok: tiktok, snapchat: snapchat,
+      gender: obData.gender||'', seek: obData.seek||'',
+      status: obData.status||'', club: obData.club||''
     };
-    if(obData.photo_url) updateObj.photo_url = obData.photo_url;
+    if(birthdate) profileData.birthdate = birthdate;
+    if(obData.photo_url) profileData.photo_url = obData.photo_url;
 
-    // Try upsert first, fall back to insert if needed
-    var {data, error} = await sb.from('profiles').upsert(updateObj, {onConflict: 'user_id'});
+    console.log('[ATZE] Profile data:', JSON.stringify(profileData));
 
-    if(error){
-      console.error('Upsert error:', error);
-      // Fallback: try insert
-      var {error: insertErr} = await sb.from('profiles').insert(updateObj);
-      if(insertErr){
-        console.error('Insert error:', insertErr);
-        // Fallback: try update
-        var {error: updateErr} = await sb.from('profiles').update(updateObj).eq('user_id', user.id);
-        if(updateErr){
-          toast('Fehler: '+updateErr.message);
+    // 3. Save: Try UPDATE first (profile might already exist from trigger)
+    var saved = false;
+
+    // Approach A: UPDATE existing row
+    console.log('[ATZE] Trying UPDATE...');
+    var upRes = await sb.from('profiles').update(profileData).eq('user_id', user.id).select();
+    console.log('[ATZE] UPDATE result:', JSON.stringify({data: upRes.data, error: upRes.error}));
+    if(!upRes.error && upRes.data && upRes.data.length > 0){
+      saved = true;
+      console.log('[ATZE] UPDATE succeeded');
+    }
+
+    // Approach B: If UPDATE didn't match any row, try INSERT
+    if(!saved){
+      console.log('[ATZE] Trying INSERT...');
+      profileData.user_id = user.id;
+      var insRes = await sb.from('profiles').insert(profileData).select();
+      console.log('[ATZE] INSERT result:', JSON.stringify({data: insRes.data, error: insRes.error}));
+      if(!insRes.error && insRes.data && insRes.data.length > 0){
+        saved = true;
+        console.log('[ATZE] INSERT succeeded');
+      }
+
+      // Approach C: If INSERT also failed (conflict), try UPSERT
+      if(!saved){
+        console.log('[ATZE] Trying UPSERT...');
+        profileData.user_id = user.id;
+        var upsRes = await sb.from('profiles').upsert(profileData, {onConflict: 'user_id'}).select();
+        console.log('[ATZE] UPSERT result:', JSON.stringify({data: upsRes.data, error: upsRes.error}));
+        if(!upsRes.error){
+          saved = true;
+          console.log('[ATZE] UPSERT succeeded');
+        } else {
+          toast('Speicherfehler: ' + upsRes.error.message);
+          if(losBtn){ losBtn.disabled = false; losBtn.textContent = "Los geht's!"; }
           return;
         }
       }
     }
 
+    // 4. Success! Hide onboarding and load app
+    console.log('[ATZE] Profile saved! Loading app...');
     document.getElementById('onboard').classList.add('gone');
+    _onboardAuthUser = null;
     await loadUser(user);
-    toast('Willkommen, '+name+'! 🌴');
+
   } catch(e) {
-    console.error('finishOnboard error:', e);
-    toast('Fehler: ' + (e.message||'Unbekannter Fehler'));
+    console.error('[ATZE] finishOnboard EXCEPTION:', e);
+    toast('Fehler: ' + (e.message || String(e)));
+    if(losBtn){ losBtn.disabled = false; losBtn.textContent = "Los geht's!"; }
   }
 };
 
@@ -3228,7 +3343,7 @@ window.rateVenue=function(venueId){
 // 11. SANGRIA CURRENCY (rebrand points)
 // Already handled in I18N - just show 🍹 icon next to points
 
-if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js?v=7').catch(function(){});
+if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js?v=8').catch(function(){});
 </script>
 </body>
 </html>
