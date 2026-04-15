@@ -813,7 +813,7 @@ select.ri{appearance:none;-webkit-appearance:none}
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 10;
+  var APP_VERSION = 11;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     localStorage.setItem('crew_app_v', APP_VERSION);
@@ -1400,117 +1400,59 @@ window.pickCustomClub = function(v){
 };
 
 window.finishOnboard = async function(){
-  console.log('[CREW] finishOnboard CALLED');
-
-  // Disable button to prevent double-tap
+  // Disable button
   var losBtn = document.querySelector('#ob5 .rnext');
-  if(losBtn){ losBtn.disabled = true; losBtn.textContent = 'Wird gespeichert...'; }
+  if(losBtn){ losBtn.disabled = true; losBtn.textContent = 'Speichern...'; }
 
   try {
-    // 1. Get user
-    var user = _onboardAuthUser;
-    if(!user || !user.id){
-      var res = await sb.auth.getUser();
-      user = res.data ? res.data.user : null;
-    }
-    if(!user || !user.id){
-      toast('Fehler — bitte neu einloggen');
-      if(losBtn){ losBtn.disabled = false; losBtn.textContent = "Los geht's!"; }
-      return;
-    }
-    console.log('[CREW] User ID:', user.id);
+    // Get user
+    var userRes = await sb.auth.getUser();
+    var user = userRes.data ? userRes.data.user : (_onboardAuthUser || null);
+    if(!user){ alert('Kein User — bitte neu einloggen'); location.reload(); return; }
 
-    // 2. Collect form data
+    // Collect data
     var nameVal = (document.getElementById('obName').value || '').trim();
-    if(!nameVal || nameVal.length < 1){
-      toast('Bitte gib deinen Namen ein!');
-      if(losBtn){ losBtn.disabled = false; losBtn.textContent = "Los geht's!"; }
-      return;
-    }
-    var name = esc(nameVal);
+    if(!nameVal){ toast('Bitte Namen eingeben!'); losBtn.disabled=false; losBtn.textContent="Los geht's!"; return; }
 
-    var d = document.getElementById('obBDay').value;
-    var m = document.getElementById('obBMonth').value;
-    var y = document.getElementById('obBYear').value;
-    var age = 18;
-    var birthdate = null;
-    if(d && m && y){
-      birthdate = y+'-'+(m<10?'0'+m:m)+'-'+(d<10?'0'+d:d);
-      var bd=new Date(+y,+m-1,+d), today=new Date();
-      age=today.getFullYear()-bd.getFullYear();
-      if(today.getMonth()<bd.getMonth()||(today.getMonth()===bd.getMonth()&&today.getDate()<bd.getDate()))age--;
+    var d=document.getElementById('obBDay').value, m=document.getElementById('obBMonth').value, y=document.getElementById('obBYear').value;
+    var age=18, birthdate=null;
+    if(d&&m&&y){
+      birthdate=y+'-'+(+m<10?'0'+m:m)+'-'+(+d<10?'0'+d:d);
+      var bd=new Date(+y,+m-1,+d),now=new Date();
+      age=now.getFullYear()-bd.getFullYear();
+      if(now.getMonth()<bd.getMonth()||(now.getMonth()===bd.getMonth()&&now.getDate()<bd.getDate()))age--;
     }
 
-    var insta = esc((document.getElementById('obInsta').value||'').trim().replace(/^@/,''));
-    var tiktok = esc((document.getElementById('obTiktok').value||'').trim().replace(/^@/,''));
-    var bio = esc((document.getElementById('obBio').value||'').trim());
-
-    // seek muss leer sein wenn nichts gewählt (DB-Constraint: Männer/Frauen/Alle oder NULL)
-    var seekVal = obData.seek || null;
-
-    var profileData = {
-      name: name, age: age, bio: bio,
-      insta: insta, tiktok: tiktok,
-      gender: obData.gender||null, seek: seekVal,
+    var obj = {
+      name: esc(nameVal), age: age,
+      bio: esc((document.getElementById('obBio').value||'').trim()),
+      insta: esc((document.getElementById('obInsta').value||'').trim().replace(/^@/,'')),
+      tiktok: esc((document.getElementById('obTiktok').value||'').trim().replace(/^@/,'')),
+      gender: obData.gender||null, seek: obData.seek||null,
       status: obData.status||null, club: obData.club||''
     };
-    if(birthdate) profileData.birthdate = birthdate;
-    if(obData.photo_url) profileData.photo_url = obData.photo_url;
+    if(birthdate) obj.birthdate = birthdate;
+    if(obData.photo_url) obj.photo_url = obData.photo_url;
 
-    console.log('[CREW] Profile data:', JSON.stringify(profileData));
-
-    // 3. Save: Try UPDATE first (profile might already exist from trigger)
-    var saved = false;
-
-    // Approach A: UPDATE existing row
-    console.log('[CREW] Trying UPDATE...');
-    var upRes = await sb.from('profiles').update(profileData).eq('user_id', user.id).select();
-    console.log('[CREW] UPDATE result:', JSON.stringify({data: upRes.data, error: upRes.error}));
-    if(!upRes.error && upRes.data && upRes.data.length > 0){
-      saved = true;
-      console.log('[CREW] UPDATE succeeded');
+    // Save — single upsert call
+    obj.user_id = user.id;
+    var res = await sb.from('profiles').upsert(obj, {onConflict:'user_id'});
+    if(res.error){
+      // Fallback: simple update
+      delete obj.user_id;
+      var res2 = await sb.from('profiles').update(obj).eq('user_id', user.id);
+      if(res2.error){ alert('Speicherfehler: '+res2.error.message); losBtn.disabled=false; losBtn.textContent="Los geht's!"; return; }
     }
 
-    // Approach B: If UPDATE didn't match any row, try INSERT
-    if(!saved){
-      console.log('[CREW] Trying INSERT...');
-      profileData.user_id = user.id;
-      var insRes = await sb.from('profiles').insert(profileData).select();
-      console.log('[CREW] INSERT result:', JSON.stringify({data: insRes.data, error: insRes.error}));
-      if(!insRes.error && insRes.data && insRes.data.length > 0){
-        saved = true;
-        console.log('[CREW] INSERT succeeded');
-      }
-
-      // Approach C: If INSERT also failed (conflict), try UPSERT
-      if(!saved){
-        console.log('[CREW] Trying UPSERT...');
-        profileData.user_id = user.id;
-        var upsRes = await sb.from('profiles').upsert(profileData, {onConflict: 'user_id'}).select();
-        console.log('[CREW] UPSERT result:', JSON.stringify({data: upsRes.data, error: upsRes.error}));
-        if(!upsRes.error){
-          saved = true;
-          console.log('[CREW] UPSERT succeeded');
-        } else {
-          toast('Speicherfehler: ' + upsRes.error.message);
-          if(losBtn){ losBtn.disabled = false; losBtn.textContent = "Los geht's!"; }
-          return;
-        }
-      }
-    }
-
-    // 4. Success! Hide onboarding and load app
-    console.log('[CREW] Profile saved! Loading app...');
+    // Done — go to app
     document.getElementById('onboard').classList.add('gone');
     document.getElementById('authScreen').classList.add('gone');
     document.getElementById('agegate').classList.add('gone');
     _onboardAuthUser = null;
     await loadUser(user);
-
   } catch(e) {
-    console.error('[CREW] finishOnboard EXCEPTION:', e);
-    toast('Fehler: ' + (e.message || String(e)));
-    if(losBtn){ losBtn.disabled = false; losBtn.textContent = "Los geht's!"; }
+    alert('Fehler: '+e.message);
+    if(losBtn){ losBtn.disabled=false; losBtn.textContent="Los geht's!"; }
   }
 };
 
@@ -3090,7 +3032,7 @@ window.rateVenue=function(venueId){
 // 11. SANGRIA CURRENCY (rebrand points)
 // Already handled in I18N - just show 🍹 icon next to points
 
-if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js?v=10').catch(function(){});
+if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js?v=11').catch(function(){});
 </script>
 </body>
 </html>
