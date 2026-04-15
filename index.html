@@ -561,7 +561,6 @@ select.ri{appearance:none;-webkit-appearance:none}
     <div class="pe-section">Social Media</div>
     <input class="ri" id="obInsta" type="text" placeholder="📸 Instagram Username (optional)">
     <input class="ri" id="obTiktok" type="text" placeholder="🎵 TikTok Username (optional)">
-    <input class="ri" id="obSnap" type="text" placeholder="👻 Snapchat Username (optional)">
     <button class="rnext" id="obNext1" disabled onclick="obStep(2)">Weiter</button>
   </div>
   <div class="ob-step" id="ob2">
@@ -814,7 +813,7 @@ select.ri{appearance:none;-webkit-appearance:none}
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 9;
+  var APP_VERSION = 10;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     localStorage.setItem('crew_app_v', APP_VERSION);
@@ -1191,12 +1190,13 @@ window.authEmail = async function(){
         return;
       }
       if(res.data && res.data.user && !res.data.session){
-        toast('Bestätigungs-E-Mail gesendet! Prüfe dein Postfach. Dann logge dich ein.');
-        btn.disabled=false; btn.textContent='Registrieren';
-        // Switch to login mode
+        // E-Mail-Bestätigung erforderlich— automatisch zu Login wechseln
         authMode = 'login';
         document.getElementById('authSubmit').textContent = 'Einloggen';
         document.getElementById('authSwitch').innerHTML = 'Noch kein Konto? <span>Registrieren</span>';
+        btn.disabled = false;
+        btn.textContent = 'Einloggen';
+        toast('✉️ Bestätigungs-E-Mail gesendet! Postfach prüfen, dann hier einloggen.');
         return;
       }
     } else {
@@ -1243,7 +1243,8 @@ async function loadUser(authUser){
     console.log('[CREW] Profile check:', profile ? profile.name : 'no profile');
 
     // If no profile or profile is just the auto-created placeholder → show onboarding
-    if(!profile || !profile.name || profile.name === 'Neuer User'){
+    // Trigger schreibt 'Neuer Atze' als Platzhalter-Name
+    if(!profile || !profile.name || profile.name === 'Neuer User' || profile.name === 'Neuer Atze'){
       console.log('[CREW] → Show onboarding');
       document.getElementById('loadingScreen').classList.add('gone');
       showOnboarding(authUser);
@@ -1285,6 +1286,8 @@ async function loadUser(authUser){
     console.log('[CREW] → Show app');
     document.getElementById('loadingScreen').classList.add('gone');
     document.getElementById('onboard').classList.add('gone');
+    document.getElementById('authScreen').classList.add('gone');
+    document.getElementById('agegate').classList.add('gone');
     document.getElementById('app').style.display = 'flex';
     buildApp();
   } catch(e) {
@@ -1440,14 +1443,16 @@ window.finishOnboard = async function(){
 
     var insta = esc((document.getElementById('obInsta').value||'').trim().replace(/^@/,''));
     var tiktok = esc((document.getElementById('obTiktok').value||'').trim().replace(/^@/,''));
-    var snapchat = esc((document.getElementById('obSnap').value||'').trim().replace(/^@/,''));
     var bio = esc((document.getElementById('obBio').value||'').trim());
+
+    // seek muss leer sein wenn nichts gewählt (DB-Constraint: Männer/Frauen/Alle oder NULL)
+    var seekVal = obData.seek || null;
 
     var profileData = {
       name: name, age: age, bio: bio,
-      insta: insta, tiktok: tiktok, snapchat: snapchat,
-      gender: obData.gender||'', seek: obData.seek||'',
-      status: obData.status||'', club: obData.club||''
+      insta: insta, tiktok: tiktok,
+      gender: obData.gender||null, seek: seekVal,
+      status: obData.status||null, club: obData.club||''
     };
     if(birthdate) profileData.birthdate = birthdate;
     if(obData.photo_url) profileData.photo_url = obData.photo_url;
@@ -1497,6 +1502,8 @@ window.finishOnboard = async function(){
     // 4. Success! Hide onboarding and load app
     console.log('[CREW] Profile saved! Loading app...');
     document.getElementById('onboard').classList.add('gone');
+    document.getElementById('authScreen').classList.add('gone');
+    document.getElementById('agegate').classList.add('gone');
     _onboardAuthUser = null;
     await loadUser(user);
 
@@ -3083,7 +3090,7 @@ window.rateVenue=function(venueId){
 // 11. SANGRIA CURRENCY (rebrand points)
 // Already handled in I18N - just show 🍹 icon next to points
 
-if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js?v=9').catch(function(){});
+if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js?v=10').catch(function(){});
 </script>
 </body>
 </html>
