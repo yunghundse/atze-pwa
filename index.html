@@ -19,7 +19,7 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>
 :root{
-  --o:#FF6D2E;--o2:#FF9A5C;--fire:#FF3B30;--green:#34C759;--blue:#0A84FF;--purple:#BF5AF2;--yellow:#FFD60A;
+  --o:#FF6D2E;--o2:#FF9A5C;--fire:#FF3B30;--green:#34C759;--mint:#34C759;--blue:#0A84FF;--purple:#BF5AF2;--yellow:#FFD60A;
   --gold:linear-gradient(135deg,#FF6D2E,#FFD60A);
   --bg:#0A0A0A;--bg2:#111;--bg3:#1A1A1C;--bg4:#2C2C2E;
   --glass:rgba(26,26,28,.55);--glass-light:rgba(255,255,255,.04);--glass-border:rgba(255,255,255,.08);--glass2:rgba(255,255,255,.06);
@@ -555,8 +555,13 @@ select.ri{appearance:none;-webkit-appearance:none}
   <div class="ob-step active" id="ob1">
     <div class="rprog"><div class="rp done"></div><div class="rp"></div><div class="rp"></div><div class="rp"></div><div class="rp"></div></div>
     <h2>Über dich</h2>
-    <div class="rsub">Name und Geburtsdatum für dein Profil.</div>
+    <div class="rsub">Name, Username und Geburtsdatum für dein Profil.</div>
     <input class="ri" id="obName" type="text" placeholder="Vorname" maxlength="20" oninput="chkOb()">
+    <div style="position:relative">
+      <input class="ri" id="obUsername" type="text" placeholder="@username (eindeutig)" maxlength="20" oninput="chkOb()" autocapitalize="none" autocorrect="off" style="padding-left:28px">
+      <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--t3);font-weight:700;font-size:15px">@</span>
+    </div>
+    <div id="obUsernameStatus" style="font-size:11px;margin:-6px 0 4px 4px;min-height:16px"></div>
     <div class="pe-section">Geburtsdatum</div>
     <div style="display:flex;gap:8px">
       <select class="ri" id="obBDay" onchange="chkOb()"><option value="">Tag</option></select>
@@ -636,6 +641,17 @@ select.ri{appearance:none;-webkit-appearance:none}
 <!-- BSHEET --><div class="bsheet" id="bsheet"><div class="bsheet-backdrop" onclick="closeBS()"></div><div class="bsheet-body"><div class="bsheet-handle"></div><div class="bsheet-hero"><img id="bsImg" src=""><div class="bs-grad"></div><button class="bs-close" onclick="closeBS()">✕</button></div><div class="bs-content" id="bsContent"></div></div></div>
 
 <!-- REPORT OVERLAY --><div class="bsheet" id="reportSheet"><div class="bsheet-backdrop" onclick="closeReport()"></div><div class="bsheet-body"><div class="bsheet-handle"></div><div style="padding:20px"><h2 style="font-size:20px;font-weight:900;margin-bottom:12px">Nutzer melden</h2><div style="font-size:13px;color:var(--t2);margin-bottom:20px">Warum möchtest du diesen Nutzer melden?</div><div id="reportReasons" style="display:flex;flex-direction:column;gap:8px"></div><button class="rnext" style="margin-top:16px;opacity:.25;cursor:default" id="reportSubmit" disabled onclick="submitReport()">Melden</button><button class="rnext" style="background:var(--bg3);color:var(--t2);margin-top:8px;opacity:1" onclick="closeReport()">Abbrechen</button></div></div></div>
+
+<!-- ADMIN PANEL OVERLAY -->
+<div id="adminPanel" style="position:fixed;inset:0;z-index:999999;background:var(--bg);display:none;flex-direction:column;overflow-y:auto">
+  <div style="position:sticky;top:0;z-index:2;background:var(--bg);padding:16px 20px 12px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--glass-border)">
+    <button onclick="closeAdmin()" style="background:none;border:none;color:var(--t);font-size:22px;cursor:pointer;padding:4px">←</button>
+    <h2 style="font-size:20px;font-weight:900;flex:1">👑 Admin Dashboard</h2>
+  </div>
+  <div id="adminContent" style="padding:16px 20px 40px">
+    <div style="text-align:center;padding:40px;color:var(--t3)">Lädt...</div>
+  </div>
+</div>
 
 <!-- ALCOHOL TRACKER OVERLAY -->
 <div class="drink-counter" id="drinkCounter" onclick="if(event.target===this)closeAlcoholTracker()">
@@ -773,7 +789,7 @@ select.ri{appearance:none;-webkit-appearance:none}
       <div id="dealsContent"></div>
       <div class="deal-disclosure">⚠️ Affiliate-Hinweis: Einige Links sind Partnerlinks. Bei einer Buchung/Kauf erhalten wir eine kleine Provision — für dich ändert sich der Preis nicht. butterbread tech GmbH · DSGVO-konform · Server EU</div>
     </div></div>
-    <div class="scr" id="screen-profile"><div class="prof-hero"><div class="prof-ava-wrap"><div class="prof-ava"><img id="profAvaImg" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80"></div><div class="prof-ava-edit" onclick="openPhotoUpload()">📷</div></div><h2><span id="profName">Laden...</span></h2><div class="handle" id="profHandle"></div><div class="prof-badges-row" id="profBadges"></div></div><div class="prof-vibe" id="profVibe"></div><div class="prof-socials" id="profSocials"></div><div class="prof-stats glass"><div class="pstat"><div class="pn" id="stM">0</div><div class="pl">Matches</div></div><div class="pstat"><div class="pn" id="stCrew">0</div><div class="pl">Crew</div></div><div class="pstat"><div class="pn" id="stPts">0</div><div class="pl">🍹 Sangrias</div></div></div><div class="premium-cta" id="premCta" onclick="openPremium()"><h3>✨ crew Premium</h3><div class="pc-sub">Keine Werbung · Unlimited Swipes · VIP</div><div class="pc-btn">Ab 2,99€</div></div><div class="pmenu"><div class="pmi" onclick="openLegal('dsgvo')"><div class="pmi-icon b">🛡</div><span class="pmi-label">Datenschutz</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openLegal('impressum')"><div class="pmi-icon gr">📄</div><span class="pmi-label">Impressum</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openLegal('agb')"><div class="pmi-icon gr">📝</div><span class="pmi-label">AGB</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="editProfile()"><div class="pmi-icon o">✏️</div><span class="pmi-label">Profil bearbeiten</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="editSocials()"><div class="pmi-icon o">📱</div><span class="pmi-label">Social Media verknüpfen</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openColorPicker()"><div class="pmi-icon o">🎨</div><span class="pmi-label">Profilfarbe ändern</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="requestVerification()"><div class="pmi-icon b">✓</div><span class="pmi-label">Verifizierung <span style="font-size:11px;font-weight:600;color:var(--t3)" id="verStatus"></span></span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="showBlockedUsers()"><div class="pmi-icon gr">🚫</div><span class="pmi-label">Blockierte Nutzer</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openLegal('moderation')"><div class="pmi-icon b">⚖</div><span class="pmi-label">Moderations-Transparenz</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openLegal('affiliate')"><div class="pmi-icon o">🤝</div><span class="pmi-label">Affiliate-Hinweis</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="exportData()"><div class="pmi-icon b">📦</div><span class="pmi-label">Meine Daten exportieren</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="deleteAccount()"><div class="pmi-icon gr" style="background:rgba(255,59,48,.08)">🗑</div><span class="pmi-label" style="color:var(--fire)">Account löschen</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="toggleTheme()"><div class="pmi-icon o">🌙</div><span class="pmi-label">Dark/Light Mode</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="logOut()"><div class="pmi-icon gr">🚪</div><span class="pmi-label" style="color:var(--fire)">Ausloggen</span></div></div></div>
+    <div class="scr" id="screen-profile"><div class="prof-hero"><div class="prof-ava-wrap"><div class="prof-ava"><img id="profAvaImg" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80"></div><div class="prof-ava-edit" onclick="openPhotoUpload()">📷</div></div><h2><span id="profName">Laden...</span></h2><div class="handle" id="profHandle"></div><div class="prof-badges-row" id="profBadges"></div></div><div class="prof-vibe" id="profVibe"></div><div class="prof-socials" id="profSocials"></div><div class="prof-stats glass"><div class="pstat"><div class="pn" id="stM">0</div><div class="pl">Matches</div></div><div class="pstat"><div class="pn" id="stCrew">0</div><div class="pl">Crew</div></div><div class="pstat"><div class="pn" id="stPts">0</div><div class="pl">🍹 Sangrias</div></div></div><div class="premium-cta" id="premCta" onclick="openPremium()"><h3>✨ crew Premium</h3><div class="pc-sub">Keine Werbung · Unlimited Swipes · VIP</div><div class="pc-btn">Ab 2,99€</div></div><div class="pmenu"><div class="pmi" id="adminMenuItem" style="display:none;background:linear-gradient(135deg,rgba(255,109,46,.08),rgba(255,109,46,.02));border:1px solid rgba(255,109,46,.2)" onclick="openAdminPanel()"><div class="pmi-icon o">👑</div><span class="pmi-label" style="color:var(--o);font-weight:700">Admin Dashboard</span><span class="pmi-arrow" style="color:var(--o)">›</span></div><div class="pmi" onclick="openLegal('dsgvo')"><div class="pmi-icon b">🛡</div><span class="pmi-label">Datenschutz</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openLegal('impressum')"><div class="pmi-icon gr">📄</div><span class="pmi-label">Impressum</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openLegal('agb')"><div class="pmi-icon gr">📝</div><span class="pmi-label">AGB</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="editProfile()"><div class="pmi-icon o">✏️</div><span class="pmi-label">Profil bearbeiten</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="editSocials()"><div class="pmi-icon o">📱</div><span class="pmi-label">Social Media verknüpfen</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openColorPicker()"><div class="pmi-icon o">🎨</div><span class="pmi-label">Profilfarbe ändern</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="requestVerification()"><div class="pmi-icon b">✓</div><span class="pmi-label">Verifizierung <span style="font-size:11px;font-weight:600;color:var(--t3)" id="verStatus"></span></span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="showBlockedUsers()"><div class="pmi-icon gr">🚫</div><span class="pmi-label">Blockierte Nutzer</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openLegal('moderation')"><div class="pmi-icon b">⚖</div><span class="pmi-label">Moderations-Transparenz</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openLegal('affiliate')"><div class="pmi-icon o">🤝</div><span class="pmi-label">Affiliate-Hinweis</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="exportData()"><div class="pmi-icon b">📦</div><span class="pmi-label">Meine Daten exportieren</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="deleteAccount()"><div class="pmi-icon gr" style="background:rgba(255,59,48,.08)">🗑</div><span class="pmi-label" style="color:var(--fire)">Account löschen</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="toggleTheme()"><div class="pmi-icon o">🌙</div><span class="pmi-label">Dark/Light Mode</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="logOut()"><div class="pmi-icon gr">🚪</div><span class="pmi-label" style="color:var(--fire)">Ausloggen</span></div></div></div>
   </main>
   <nav id="navBar">
     <button class="active" onclick="go('radar',this)"><span class="ni">📍</span><span>Radar</span></button>
@@ -795,7 +811,7 @@ select.ri{appearance:none;-webkit-appearance:none}
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 14;
+  var APP_VERSION = 15;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     localStorage.setItem('crew_app_v', APP_VERSION);
@@ -1360,12 +1376,16 @@ window.saveObPhoto = async function(){
   toast('Foto gespeichert!');
   obStep(5);
 };
+var _usernameCheckTimer = null;
+var _usernameAvailable = false;
 window.chkOb = function(){
   var n=document.getElementById('obName').value.trim();
+  var u=document.getElementById('obUsername').value.trim().toLowerCase().replace(/[^a-z0-9_.]/g,'');
+  document.getElementById('obUsername').value=u;
   var d=document.getElementById('obBDay').value;
   var m=document.getElementById('obBMonth').value;
   var y=document.getElementById('obBYear').value;
-  var valid = n.length>=2 && d && m && y;
+  var valid = n.length>=2 && u.length>=3 && d && m && y;
   if(valid){
     var bd=new Date(+y,+m-1,+d);
     var today=new Date();
@@ -1373,7 +1393,33 @@ window.chkOb = function(){
     if(today.getMonth()<bd.getMonth()||(today.getMonth()===bd.getMonth()&&today.getDate()<bd.getDate()))age--;
     valid = age >= 18;
   }
-  document.getElementById('obNext1').disabled=!valid;
+  // Username availability check (debounced)
+  var st=document.getElementById('obUsernameStatus');
+  if(u.length>=3){
+    st.innerHTML='<span style="color:var(--t3)">Prüfe...</span>';
+    _usernameAvailable=false;
+    clearTimeout(_usernameCheckTimer);
+    _usernameCheckTimer=setTimeout(async function(){
+      var {data}=await sb.from('profiles').select('user_id').eq('username',u).maybeSingle();
+      if(data){
+        st.innerHTML='<span style="color:var(--fire)">@'+u+' ist schon vergeben</span>';
+        _usernameAvailable=false;
+        document.getElementById('obNext1').disabled=true;
+      } else {
+        st.innerHTML='<span style="color:var(--mint)">@'+u+' ist verfügbar ✓</span>';
+        _usernameAvailable=true;
+        // Re-check overall validity
+        chkOb();
+      }
+    },500);
+  } else if(u.length>0){
+    st.innerHTML='<span style="color:var(--t3)">Mindestens 3 Zeichen</span>';
+    _usernameAvailable=false;
+  } else {
+    st.innerHTML='';
+    _usernameAvailable=false;
+  }
+  document.getElementById('obNext1').disabled=!(valid && _usernameAvailable);
 };
 window.pickCustomClub = function(v){
   if(v.trim().length>0){
@@ -1406,8 +1452,11 @@ window.finishOnboard = async function(){
       if(now.getMonth()<bd.getMonth()||(now.getMonth()===bd.getMonth()&&now.getDate()<bd.getDate()))age--;
     }
 
+    var usernameVal = (document.getElementById('obUsername').value||'').trim().toLowerCase().replace(/[^a-z0-9_.]/g,'');
+    if(!usernameVal || usernameVal.length<3){ toast('Bitte Username eingeben (min. 3 Zeichen)!'); losBtn.disabled=false; losBtn.textContent="Los geht's!"; return; }
+
     var obj = {
-      name: esc(nameVal), age: age,
+      name: esc(nameVal), username: usernameVal, age: age,
       bio: esc((document.getElementById('obBio').value||'').trim()),
       insta: esc((document.getElementById('obInsta').value||'').trim().replace(/^@/,'')),
       tiktok: esc((document.getElementById('obTiktok').value||'').trim().replace(/^@/,'')),
@@ -1772,7 +1821,7 @@ function buildCards(){
 function mkCard(p,idx){
   var c=document.createElement('div');c.className='scard'+(idx===1?' behind':idx>=2?' far':'');c.dataset.i=idx;
   var socials='';if(p.insta)socials+='<a class="sc-social" onclick="event.stopPropagation();window.open(\'https://instagram.com/'+esc(p.insta)+'\',\'_blank\')" style="color:#E1306C">📸</a>';if(p.tiktok)socials+='<a class="sc-social" onclick="event.stopPropagation();window.open(\'https://tiktok.com/@'+esc(p.tiktok)+'\',\'_blank\')" style="color:#FF0050">🎵</a>';if(p.snapchat)socials+='<a class="sc-social" onclick="event.stopPropagation();window.open(\'https://snapchat.com/add/'+esc(p.snapchat)+'\',\'_blank\')" style="color:#FFFC00">👻</a>';
-  c.innerHTML='<div class="stamp like">ATZE!</div><div class="stamp nope">NOPE</div><div class="sc-photo-dots"><div class="scd-dot active"></div><div class="scd-dot"></div><div class="scd-dot"></div></div><div class="sc-photo" style="background-image:url(\''+(p.photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80')+'\')"></div><div class="sc-grad"></div><div class="sc-content"><div class="sc-name">'+esc(p.name)+'<span class="sc-age">'+p.age+'</span>'+(p.mood?' <span style="font-size:22px;margin-left:4px">'+p.mood+'</span>':'')+'</div><div class="sc-loc">'+(p.gender||'')+(p.status?' · '+p.status:'')+'</div>'+(p.verified?'<span class="sc-badge">✓ Verifiziert</span>':'')+(p.club?'<span class="sc-badge">⚽ '+esc(p.club)+'</span>':'')+(socials?'<div style="display:flex;gap:8px;margin-top:8px">'+socials+'</div>':'')+'<div class="sc-bio">'+esc(p.bio||'')+'</div></div>';
+  c.innerHTML='<div class="stamp like">ATZE!</div><div class="stamp nope">NOPE</div><div class="sc-photo-dots"><div class="scd-dot active"></div><div class="scd-dot"></div><div class="scd-dot"></div></div><div class="sc-photo" style="background-image:url(\''+(p.photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80')+'\')"></div><div class="sc-grad"></div><div class="sc-content"><div class="sc-name">'+esc(p.name)+'<span class="sc-age">'+p.age+'</span>'+(p.mood?' <span style="font-size:22px;margin-left:4px">'+p.mood+'</span>':'')+'</div>'+(p.username?'<div style="font-size:13px;color:var(--o);font-weight:600;margin-top:2px">@'+esc(p.username)+'</div>':'')+'<div class="sc-loc">'+(p.gender||'')+(p.status?' · '+p.status:'')+'</div>'+(p.verified?'<span class="sc-badge">✓ Verifiziert</span>':'')+(p.club?'<span class="sc-badge">⚽ '+esc(p.club)+'</span>':'')+(socials?'<div style="display:flex;gap:8px;margin-top:8px">'+socials+'</div>':'')+'<div class="sc-bio">'+esc(p.bio||'')+'</div></div>';
   var sx=0,dx=0,dr=0;
   function ms(x){sx=x;dr=1}
   function mm(x){if(!dr)return;dx=x-sx;c.style.transform='translateX('+dx+'px) rotate('+dx*.05+'deg)';c.style.transition='none';c.querySelector('.like').classList.toggle('vis',dx>80);c.querySelector('.nope').classList.toggle('vis',dx<-80)}
@@ -1848,10 +1897,13 @@ window.setMood = async function(el,m){
 // ============================================
 function updateProfile(){
   var n=document.getElementById('profName');if(n)n.textContent=ME.name+', '+ME.age;
-  var h=document.getElementById('profHandle');if(h)h.textContent=ME.insta?'@'+ME.insta:'@'+ME.name.toLowerCase();
+  var h=document.getElementById('profHandle');if(h)h.textContent=ME.username?'@'+ME.username:(ME.insta?'@'+ME.insta:'@'+ME.name.toLowerCase());
   if(ME.photo_url){var img=document.getElementById('profAvaImg');if(img)img.src=ME.photo_url}
   var pb=document.getElementById('profBadges');
-  if(pb)pb.innerHTML=(ME.verified?'<span class="pbadge ok">✓ Verifiziert</span>':'')+(ME.club?'<span class="pbadge fire">⚽ '+esc(ME.club)+'</span>':'')+(ME.gender?'<span class="pbadge fire">'+esc(ME.gender)+'</span>':'');
+  if(pb)pb.innerHTML=(ME.is_admin?'<span class="pbadge" style="background:rgba(255,109,46,.15);color:var(--o)">👑 Admin</span>':'')+(ME.verified?'<span class="pbadge ok">✓ Verifiziert</span>':'')+(ME.club?'<span class="pbadge fire">⚽ '+esc(ME.club)+'</span>':'')+(ME.gender?'<span class="pbadge fire">'+esc(ME.gender)+'</span>':'');
+  // Show admin menu item
+  var adminItem=document.getElementById('adminMenuItem');
+  if(adminItem)adminItem.style.display=ME.is_admin?'flex':'none';
   // Vibe
   var pv=document.getElementById('profVibe');
   if(pv)pv.innerHTML=ME.mood?'<span class="pv-emoji">'+ME.mood+'</span><span class="pv-label">Aktueller Vibe</span>':'<span style="color:var(--t3);font-size:12px">Wähl deinen Vibe auf dem Radar!</span>';
@@ -2010,6 +2062,128 @@ window.logOut = async function(){
 };
 
 // ============================================
+// ADMIN PANEL
+// ============================================
+window.openAdminPanel = async function(){
+  if(!ME || !ME.is_admin) return;
+  document.getElementById('adminPanel').style.display='flex';
+  var c=document.getElementById('adminContent');
+  c.innerHTML='<div style="text-align:center;padding:40px;color:var(--t3)">Lädt Dashboard...</div>';
+
+  try {
+    // Fetch all stats in parallel
+    var [usersRes, checkinsRes, matchesRes, reportsRes, sosRes, venuesRes] = await Promise.all([
+      sb.from('profiles').select('user_id,name,username,email,photo_url,age,gender,status,seek,created_at,lat,lng,points,streak,is_admin,verified', {count:'exact'}),
+      sb.from('checkins').select('*', {count:'exact', head:true}),
+      sb.from('matches').select('*', {count:'exact', head:true}).eq('is_match', true),
+      sb.from('reports').select('*', {count:'exact'}),
+      sb.from('sos_alerts').select('*', {count:'exact', head:true}),
+      sb.from('venues').select('*')
+    ]);
+
+    var users = usersRes.data || [];
+    var totalUsers = users.length;
+    var totalCheckins = checkinsRes.count || 0;
+    var totalMatches = matchesRes.count || 0;
+    var reports = reportsRes.data || [];
+    var pendingReports = reports.filter(function(r){return r.status==='pending'}).length;
+    var totalSOS = sosRes.count || 0;
+    var venues = venuesRes.data || [];
+
+    // Calc stats
+    var today = new Date().toISOString().split('T')[0];
+    var newToday = users.filter(function(u){return u.created_at && u.created_at.startsWith(today)}).length;
+    var withLocation = users.filter(function(u){return u.lat && u.lng}).length;
+    var verified = users.filter(function(u){return u.verified}).length;
+    var genderStats = {};
+    users.forEach(function(u){var g=u.gender||'Unbekannt';genderStats[g]=(genderStats[g]||0)+1});
+    var topPoints = users.sort(function(a,b){return (b.points||0)-(a.points||0)}).slice(0,10);
+
+    var html = '';
+
+    // KPI Cards
+    html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px">';
+    html += adminKPI('👥','User gesamt',totalUsers);
+    html += adminKPI('🆕','Heute neu',newToday);
+    html += adminKPI('📍','Mit Standort',withLocation);
+    html += adminKPI('✓','Verifiziert',verified);
+    html += adminKPI('📍','Check-Ins',totalCheckins);
+    html += adminKPI('🔥','Matches',totalMatches);
+    html += adminKPI('🚨','SOS Alerts',totalSOS);
+    html += adminKPI('⚠️','Offene Reports',pendingReports,'color:'+(pendingReports>0?'var(--fire)':'var(--mint)'));
+    html += '</div>';
+
+    // Gender breakdown
+    html += '<div style="background:var(--glass);border:1px solid var(--glass-border);border-radius:16px;padding:16px;margin-bottom:16px">';
+    html += '<div style="font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">Gender-Verteilung</div>';
+    Object.keys(genderStats).forEach(function(g){
+      var pct = Math.round(genderStats[g]/totalUsers*100);
+      html += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span style="font-size:13px;font-weight:600;width:90px">'+esc(g)+'</span><div style="flex:1;height:8px;background:var(--bg3);border-radius:4px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:var(--o);border-radius:4px"></div></div><span style="font-size:12px;font-weight:700;color:var(--t2);width:50px;text-align:right">'+genderStats[g]+' ('+pct+'%)</span></div>';
+    });
+    html += '</div>';
+
+    // Venues
+    html += '<div style="background:var(--glass);border:1px solid var(--glass-border);border-radius:16px;padding:16px;margin-bottom:16px">';
+    html += '<div style="font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">🏝️ Venues ('+venues.length+')</div>';
+    if(venues.length===0) html += '<div style="color:var(--t3);font-size:13px">Noch keine Venues angelegt.</div>';
+    venues.forEach(function(v){
+      html += '<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--glass-border)"><div style="font-size:13px;font-weight:700;flex:1">'+esc(v.name)+'</div><div style="font-size:12px;color:var(--t3)">🔥 '+(v.crowd_count||0)+'</div></div>';
+    });
+    html += '</div>';
+
+    // Top Sangria earners
+    html += '<div style="background:var(--glass);border:1px solid var(--glass-border);border-radius:16px;padding:16px;margin-bottom:16px">';
+    html += '<div style="font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">🍹 Top 10 Sangria-Sammler</div>';
+    topPoints.forEach(function(u,i){
+      html += '<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--glass-border)"><span style="font-size:14px;font-weight:900;color:var(--o);width:24px">#'+(i+1)+'</span><img src="'+(u.photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&q=60')+'" style="width:32px;height:32px;border-radius:50%;object-fit:cover"><div style="flex:1"><div style="font-size:13px;font-weight:700">'+esc(u.name)+(u.username?' <span style="color:var(--t3);font-weight:400">@'+esc(u.username)+'</span>':'')+'</div></div><div style="font-size:13px;font-weight:800;color:var(--o)">'+(u.points||0)+' 🍹</div></div>';
+    });
+    html += '</div>';
+
+    // Reports section
+    if(reports.length > 0){
+      html += '<div style="background:var(--glass);border:1px solid var(--glass-border);border-radius:16px;padding:16px;margin-bottom:16px">';
+      html += '<div style="font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">⚠️ Reports ('+reports.length+')</div>';
+      reports.slice(0,20).forEach(function(r){
+        var statusColor = r.status==='pending'?'var(--fire)':r.status==='resolved'?'var(--mint)':'var(--t3)';
+        html += '<div style="padding:10px 0;border-bottom:1px solid var(--glass-border)"><div style="display:flex;justify-content:space-between;align-items:center"><div style="font-size:13px;font-weight:600">'+esc(r.reason||'Kein Grund')+'</div><span style="font-size:11px;font-weight:700;color:'+statusColor+'">'+esc(r.status||'pending')+'</span></div><div style="font-size:11px;color:var(--t3);margin-top:4px">Gemeldet: '+new Date(r.created_at).toLocaleDateString('de-DE')+'</div>'+(r.status==='pending'?'<div style="display:flex;gap:8px;margin-top:8px"><button style="flex:1;padding:6px;border:none;border-radius:8px;background:var(--mint);color:#fff;font-size:11px;font-weight:700;cursor:pointer" onclick="resolveReport(\''+r.id+'\',\'resolved\')">✓ Erledigt</button><button style="flex:1;padding:6px;border:none;border-radius:8px;background:var(--fire);color:#fff;font-size:11px;font-weight:700;cursor:pointer" onclick="resolveReport(\''+r.id+'\',\'dismissed\')">✕ Abweisen</button></div>':'')+'</div>';
+      });
+      html += '</div>';
+    }
+
+    // User list
+    html += '<div style="background:var(--glass);border:1px solid var(--glass-border);border-radius:16px;padding:16px;margin-bottom:16px">';
+    html += '<div style="font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">👥 Alle User ('+totalUsers+')</div>';
+    users.sort(function(a,b){return (b.created_at||'')>(a.created_at||'')?1:-1}).forEach(function(u){
+      html += '<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--glass-border)">';
+      html += '<img src="'+(u.photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&q=60')+'" style="width:36px;height:36px;border-radius:50%;object-fit:cover">';
+      html += '<div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(u.name)+(u.is_admin?' 👑':'')+'</div><div style="font-size:11px;color:var(--t3)">@'+(u.username||'---')+' · '+(u.gender||'?')+' · '+(u.age||'?')+' · '+(u.points||0)+' 🍹</div></div>';
+      html += '<div style="text-align:right;font-size:10px;color:var(--t3)">'+((u.lat&&u.lng)?'📍':'⚫')+'</div>';
+      html += '</div>';
+    });
+    html += '</div>';
+
+    c.innerHTML = html;
+  } catch(e){
+    c.innerHTML='<div style="padding:40px;text-align:center;color:var(--fire)">Fehler: '+e.message+'</div>';
+  }
+};
+
+function adminKPI(emoji,label,value,extra){
+  return '<div style="background:var(--glass);border:1px solid var(--glass-border);border-radius:16px;padding:14px;text-align:center"><div style="font-size:24px;font-weight:900;'+(extra||'')+'">'+(emoji?emoji+' ':'')+value+'</div><div style="font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-top:4px">'+label+'</div></div>';
+}
+
+window.resolveReport = async function(reportId, newStatus){
+  if(!ME || !ME.is_admin) return;
+  await sb.from('reports').update({status:newStatus}).eq('id',reportId);
+  toast('Report '+newStatus);
+  openAdminPanel(); // Refresh
+};
+
+window.closeAdmin = function(){
+  document.getElementById('adminPanel').style.display='none';
+};
+
+// ============================================
 // PROFILE EDIT
 // ============================================
 window.editProfile = async function(){
@@ -2017,6 +2191,7 @@ window.editProfile = async function(){
   var {data:{user}} = await sb.auth.getUser();
   var c = '<h2>'+t('edit_title')+'</h2><div class="bs-desc"><div style="display:flex;flex-direction:column;gap:12px">';
   c += '<div><label style="font-size:12px;font-weight:600">'+t('edit_name')+'</label><input class="ri" id="epName" type="text" placeholder="'+t('edit_name')+'" value="'+esc(ME.name)+'"></div>';
+  c += '<div><label style="font-size:12px;font-weight:600">@username</label><input class="ri" id="epUsername" type="text" placeholder="@username" value="'+esc(ME.username||'')+'" maxlength="20" autocapitalize="none" style="text-transform:lowercase"><div id="epUsernameStatus" style="font-size:11px;margin-top:4px;min-height:16px"></div></div>';
   c += '<div><label style="font-size:12px;font-weight:600">'+t('edit_bio')+'</label><textarea class="ri" id="epBio" style="min-height:80px;resize:none" placeholder="'+t('ob_bio_ph')+'">'+esc(ME.bio||'')+'</textarea></div>';
   c += '<div><label style="font-size:12px;font-weight:600">'+t('edit_gender')+'</label><select class="ri" id="epGender"><option value="">-</option><option value="Mann">'+t('gender_man')+'</option><option value="Frau">'+t('gender_woman')+'</option><option value="Divers">'+t('gender_diverse')+'</option><option value="Non-Binary">'+t('gender_nb')+'</option></select></div>';
   c += '<div><label style="font-size:12px;font-weight:600">'+t('edit_status')+'</label><select class="ri" id="epStatus"><option value="">-</option><option value="Single">'+t('status_single')+'</option><option value="Vergeben">'+t('status_taken')+'</option><option value="Kompliziert">'+t('status_complicated')+'</option><option value="Offen">'+t('status_open')+'</option></select></div>';
@@ -2036,8 +2211,16 @@ window.saveEditProfile = async function(){
   if(!user) return;
   var name = document.getElementById('epName').value.trim();
   if(!name){toast(t('edit_name'));return}
+  var newUsername = (document.getElementById('epUsername').value||'').trim().toLowerCase().replace(/[^a-z0-9_.]/g,'');
+  if(newUsername.length<3){toast('Username: mindestens 3 Zeichen');return}
+  // Check if username changed and if new one is available
+  if(newUsername !== ME.username){
+    var {data:existing} = await sb.from('profiles').select('user_id').eq('username',newUsername).maybeSingle();
+    if(existing && existing.user_id !== user.id){toast('@'+newUsername+' ist schon vergeben');return}
+  }
   var updates = {
     name: name,
+    username: newUsername,
     bio: document.getElementById('epBio').value.trim(),
     gender: document.getElementById('epGender').value,
     status: document.getElementById('epStatus').value,
