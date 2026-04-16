@@ -19,55 +19,56 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>
 :root{
-  --o:#FF6D2E;--o2:#FF9A5C;--fire:#FF3B30;--green:#34C759;--mint:#34C759;--blue:#0A84FF;--purple:#BF5AF2;--yellow:#FFD60A;
+  --o:#FF6D2E;--o2:#FF9A5C;--fire:#FF3B30;--green:#34C759;--mint:#30D158;--blue:#0A84FF;--purple:#BF5AF2;--yellow:#FFD60A;
+  --coral:#FF6B6B;--turquoise:#00C7BE;--sunset:linear-gradient(135deg,#FF6D2E 0%,#FF3B82 50%,#BF5AF2 100%);
   --gold:linear-gradient(135deg,#FF6D2E,#FFD60A);
-  --bg:#0A0A0A;--bg2:#111;--bg3:#1A1A1C;--bg4:#2C2C2E;
-  --glass:rgba(26,26,28,.55);--glass-light:rgba(255,255,255,.04);--glass-border:rgba(255,255,255,.08);--glass2:rgba(255,255,255,.06);
-  --glow:0 0 20px rgba(255,109,46,.15);--shadow:0 8px 32px rgba(0,0,0,.3);
-  --t:#FAFAFA;--t2:rgba(255,255,255,.65);--t3:rgba(255,255,255,.35);
-  --brd:rgba(255,255,255,.07);--r:16px;--r2:24px;
-  --ease:cubic-bezier(.32,.72,.32,1);--bounce:cubic-bezier(.34,1.56,.64,1);
+  --tropical:linear-gradient(135deg,#FF6D2E 0%,#FF9A5C 30%,#FFD60A 60%,#34C759 100%);
+  --ocean:linear-gradient(135deg,#0A84FF,#00C7BE,#30D158);
+  --magic:linear-gradient(135deg,#BF5AF2 0%,#FF6D2E 50%,#FFD60A 100%);
+  --bg:#050507;--bg2:#0C0C0E;--bg3:#161618;--bg4:#28282A;
+  --glass:rgba(22,22,24,.65);--glass-light:rgba(255,255,255,.035);--glass-border:rgba(255,255,255,.07);--glass2:rgba(255,255,255,.05);
+  --glow:0 0 24px rgba(255,109,46,.12);--shadow:0 12px 40px rgba(0,0,0,.4);
+  --t:#F5F5F7;--t2:rgba(255,255,255,.6);--t3:rgba(255,255,255,.3);
+  --brd:rgba(255,255,255,.06);--r:18px;--r2:26px;
+  --ease:cubic-bezier(.22,.68,.36,1);--bounce:cubic-bezier(.34,1.56,.64,1);--spring:cubic-bezier(.175,.885,.32,1.275);
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden;background:#000}
-body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;color:var(--t);-webkit-font-smoothing:antialiased}
-#app{max-width:430px;margin:0 auto;height:100dvh;background:var(--bg);background-image:radial-gradient(circle at 20% 50%, rgba(255,109,46,.04) 0%, transparent 50%),radial-gradient(circle at 80% 80%, rgba(191,90,242,.03) 0%, transparent 50%);position:relative;overflow:hidden;display:flex;flex-direction:column}
-@media(min-width:431px){#app{border-radius:44px;margin-top:10px;height:calc(100dvh - 20px);box-shadow:0 0 0 1px rgba(255,255,255,.04),0 40px 120px rgba(0,0,0,.8)}}
-.glass{background:var(--glass);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);border:1px solid var(--glass-border);border-radius:var(--r);box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
-.app-header{position:absolute;top:env(safe-area-inset-top,0);left:0;right:0;z-index:150;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:rgba(10,10,10,.50);backdrop-filter:blur(50px);border-bottom:1px solid rgba(255,255,255,.06);box-shadow:0 0 0 0.5px rgba(255,109,46,.1),inset 0 -12px 16px rgba(255,109,46,.08)}
-.logo{font-weight:900;font-size:26px;letter-spacing:-1.5px;text-shadow:0 0 30px rgba(255,109,46,.12)}.logo span{background:var(--gold);-webkit-background-clip:text;background-clip:text;color:transparent}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;color:var(--t);-webkit-font-smoothing:antialiased;letter-spacing:-.01em}
+#app{max-width:430px;margin:0 auto;height:100dvh;background:var(--bg);background-image:radial-gradient(ellipse at 15% 30%, rgba(255,109,46,.05) 0%, transparent 45%),radial-gradient(ellipse at 85% 70%, rgba(191,90,242,.04) 0%, transparent 45%),radial-gradient(ellipse at 50% 100%, rgba(0,199,190,.03) 0%, transparent 40%);position:relative;overflow:hidden;display:flex;flex-direction:column}
+@media(min-width:431px){#app{border-radius:48px;margin-top:10px;height:calc(100dvh - 20px);box-shadow:0 0 0 1px rgba(255,255,255,.03),0 50px 140px rgba(0,0,0,.85)}}
+.glass{background:var(--glass);backdrop-filter:blur(44px) saturate(190%);-webkit-backdrop-filter:blur(44px) saturate(190%);border:1px solid var(--glass-border);border-radius:var(--r);box-shadow:inset 0 .5px 0 rgba(255,255,255,.08),0 2px 8px rgba(0,0,0,.12)}
+.app-header{position:absolute;top:env(safe-area-inset-top,0);left:0;right:0;z-index:150;display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:rgba(5,5,7,.55);backdrop-filter:blur(60px) saturate(200%);-webkit-backdrop-filter:blur(60px) saturate(200%);border-bottom:.5px solid rgba(255,255,255,.06)}
+.logo{font-weight:900;font-size:28px;letter-spacing:-1.8px}.logo span{background:var(--gold);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 20px rgba(255,109,46,.3))}
 .hdr-actions{display:flex;gap:8px;align-items:center}
 .hdr-btn{width:36px;height:36px;border-radius:50%;border:none;background:rgba(255,255,255,.08);color:#fff;font-size:15px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;transition:transform .15s var(--ease)}
 .hdr-btn:active{transform:scale(.9)}
 .notif-dot{position:absolute;top:6px;right:6px;width:7px;height:7px;border-radius:50%;background:var(--fire);border:2px solid var(--bg)}
-.streak-badge{display:flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;background:rgba(255,214,10,.15);font-size:12px;font-weight:800;color:var(--yellow);box-shadow:0 0 16px rgba(255,214,10,.3);animation:streakPulse 1.5s ease-in-out infinite}
-@keyframes streakPulse{0%,100%{box-shadow:0 0 16px rgba(255,214,10,.3)}50%{box-shadow:0 0 24px rgba(255,214,10,.5)}}
+.streak-badge{display:flex;align-items:center;gap:4px;padding:5px 12px;border-radius:20px;background:rgba(255,214,10,.1);border:1px solid rgba(255,214,10,.15);font-size:12px;font-weight:800;color:var(--yellow);box-shadow:0 0 20px rgba(255,214,10,.15);animation:streakPulse 2s ease-in-out infinite}
+@keyframes streakPulse{0%,100%{box-shadow:0 0 20px rgba(255,214,10,.15)}50%{box-shadow:0 0 30px rgba(255,214,10,.3)}}
 .sos-float{position:absolute;bottom:88px;right:14px;z-index:190;width:48px;height:48px;border-radius:50%;background:var(--fire);border:2px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#fff;cursor:pointer;box-shadow:0 4px 16px rgba(255,59,48,.5);letter-spacing:.5px;animation:sosPulse 1.5s ease-in-out infinite}
 @keyframes sosPulse{0%,100%{box-shadow:0 4px 16px rgba(255,59,48,.5),0 0 0 0 rgba(255,59,48,.3)}50%{box-shadow:0 4px 16px rgba(255,59,48,.5),0 0 0 16px rgba(255,59,48,.08)}}
-nav{position:absolute;bottom:0;left:0;right:0;z-index:200;height:72px;padding-bottom:env(safe-area-inset-bottom,8px);display:flex;align-items:center;justify-content:space-around;background:rgba(14,14,14,.75);border-top:none;backdrop-filter:blur(50px);border-radius:24px 24px 0 0;box-shadow:0 -2px 20px rgba(0,0,0,.3)}
-nav button{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 10px;color:var(--t3);font-size:9px;font-weight:600;transition:color .2s;position:relative;letter-spacing:.2px}
-nav button .ni{font-size:22px;transition:transform .2s var(--bounce)}
+nav{position:absolute;bottom:0;left:0;right:0;z-index:200;height:76px;padding-bottom:env(safe-area-inset-bottom,8px);display:flex;align-items:center;justify-content:space-around;background:rgba(5,5,7,.7);border-top:none;backdrop-filter:blur(60px) saturate(200%);-webkit-backdrop-filter:blur(60px) saturate(200%);border-radius:28px 28px 0 0;box-shadow:0 -1px 0 rgba(255,255,255,.04)}
+nav button{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 10px;color:var(--t3);font-size:9px;font-weight:500;transition:all .25s var(--ease);position:relative;letter-spacing:.1px}
+nav button .ni{font-size:22px;transition:all .3s var(--spring)}
 nav button span{display:block}
 nav button.active{color:var(--o)}
-nav button.active .ni{transform:scale(1.1);text-shadow:0 0 16px rgba(255,109,46,.4)}
-nav button.active::after{content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:20px;height:3px;border-radius:2px;background:var(--o);box-shadow:0 0 8px rgba(255,109,46,.5)}
+nav button.active .ni{transform:scale(1.15);filter:drop-shadow(0 0 12px rgba(255,109,46,.5))}
+nav button.active::after{content:'';position:absolute;bottom:1px;left:50%;transform:translateX(-50%);width:5px;height:5px;border-radius:50%;background:var(--o);box-shadow:0 0 10px rgba(255,109,46,.6)}
 nav .match-dot{position:absolute;top:4px;right:8px;width:8px;height:8px;border-radius:50%;background:var(--fire);border:2px solid rgba(14,14,14,.82);box-shadow:0 0 12px rgba(255,59,48,.5)}
 nav .crew-center-btn{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:2px 10px;color:var(--t3);font-size:9px;font-weight:600;position:relative;letter-spacing:.2px;margin-top:-18px}
 nav .crew-center-btn .ni{width:46px;height:46px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;box-shadow:0 4px 16px rgba(255,109,46,.3),0 0 0 6px rgba(255,109,46,.08),0 0 24px rgba(255,109,46,.2);transition:transform .2s var(--bounce)}
 nav .crew-center-btn:active .ni{transform:scale(.9)}
 nav .crew-center-btn.active{color:var(--o)}
 main{flex:1;overflow:hidden;position:relative}
-.scr{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;opacity:0;pointer-events:none;transition:opacity .3s var(--ease),transform .3s var(--ease);transform:translateY(6px);-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.08) transparent}
+.scr{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;opacity:0;pointer-events:none;transition:opacity .35s var(--ease),transform .35s var(--ease);transform:scale(.98);-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .scr.active{opacity:1;pointer-events:all;transform:none}
-.scr::-webkit-scrollbar{width:6px}
-.scr::-webkit-scrollbar-track{background:transparent}
-.scr::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:3px}
-.scr::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,.15)}
-#screen-radar{background:linear-gradient(135deg,rgba(10,132,255,.12) 0%,rgba(191,90,242,.08) 100%)}
-#screen-match{background:linear-gradient(135deg,rgba(255,109,46,.12) 0%,rgba(255,192,61,.08) 100%)}
-#screen-crew{background:linear-gradient(135deg,rgba(52,199,89,.10) 0%,rgba(52,199,89,.05) 100%)}
-#screen-deals{background:linear-gradient(135deg,rgba(255,214,10,.12) 0%,rgba(255,152,0,.08) 100%)}
-#screen-profile{background:linear-gradient(135deg,rgba(191,90,242,.12) 0%,rgba(191,90,242,.05) 100%)}
+.scr::-webkit-scrollbar{display:none}
+#screen-radar{background:radial-gradient(ellipse at 30% 0%, rgba(10,132,255,.1) 0%, transparent 50%),radial-gradient(ellipse at 70% 80%, rgba(255,109,46,.06) 0%, transparent 40%)}
+#screen-match{background:radial-gradient(ellipse at 50% 20%, rgba(255,109,46,.12) 0%, transparent 50%),radial-gradient(ellipse at 20% 90%, rgba(255,59,48,.06) 0%, transparent 40%)}
+#screen-crew{background:radial-gradient(ellipse at 40% 10%, rgba(48,209,88,.08) 0%, transparent 50%),radial-gradient(ellipse at 80% 80%, rgba(0,199,190,.05) 0%, transparent 40%)}
+#screen-deals{background:radial-gradient(ellipse at 60% 0%, rgba(255,214,10,.1) 0%, transparent 50%),radial-gradient(ellipse at 20% 70%, rgba(255,109,46,.06) 0%, transparent 40%)}
+#screen-profile{background:radial-gradient(ellipse at 50% 0%, rgba(191,90,242,.12) 0%, transparent 50%),radial-gradient(ellipse at 30% 80%, rgba(255,109,46,.06) 0%, transparent 40%)}
 
 /* AGE GATE */
 .agegate{position:fixed;inset:0;z-index:999999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px;text-align:center}
@@ -87,12 +88,12 @@ main{flex:1;overflow:hidden;position:relative}
 /* AUTH */
 .auth-screen{position:fixed;inset:0;z-index:99999;background:#000;display:flex;flex-direction:column}
 .auth-screen.gone{display:none}
-.auth-bg{position:absolute;inset:0}.auth-bg img{width:100%;height:100%;object-fit:cover;animation:rz 25s ease infinite alternate}
-@keyframes rz{from{transform:scale(1)}to{transform:scale(1.08)}}
-.auth-ov{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.1) 0%,rgba(0,0,0,.7) 55%,#000 100%)}
+.auth-bg{position:absolute;inset:0}.auth-bg img{width:100%;height:100%;object-fit:cover;animation:rz 30s ease infinite alternate}
+@keyframes rz{from{transform:scale(1) rotate(0deg)}to{transform:scale(1.12) rotate(.5deg)}}
+.auth-ov{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 0%,rgba(0,0,0,.3) 30%,rgba(0,0,0,.75) 60%,rgba(5,5,7,.98) 100%)}
 .auth-content{position:absolute;bottom:0;left:0;right:0;padding:0 28px 48px;z-index:2}
-.auth-brand{font-size:52px;font-weight:900;letter-spacing:-3px;margin-bottom:4px}.auth-brand span{background:var(--gold);-webkit-background-clip:text;background-clip:text;color:transparent}
-.auth-tag{font-size:16px;color:var(--t2);margin-bottom:28px;line-height:1.6}
+.auth-brand{font-size:56px;font-weight:900;letter-spacing:-3.5px;margin-bottom:6px}.auth-brand span{background:var(--gold);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 30px rgba(255,109,46,.4))}
+.auth-tag{font-size:17px;color:rgba(255,255,255,.75);margin-bottom:30px;line-height:1.7;font-weight:300}
 .rbtn{width:100%;padding:15px;border:none;border-radius:14px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:8px;transition:all .15s var(--ease)}
 .rbtn:active{transform:scale(.97)}
 .auth-form{display:flex;flex-direction:column;gap:10px;margin-top:16px}
@@ -111,8 +112,8 @@ main{flex:1;overflow:hidden;position:relative}
 .rprog .rp{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.08);transition:background .3s}.rprog .rp.done{background:var(--o)}
 .ob-step h2{font-size:26px;font-weight:900;letter-spacing:-.5px;margin-bottom:6px}
 .rsub{font-size:14px;color:var(--t2);margin-bottom:24px;line-height:1.5}
-.ri{width:100%;padding:15px 16px;border-radius:12px;border:1px solid var(--glass-border);background:var(--glass);color:#fff;font-size:15px;font-family:inherit;outline:none;margin-bottom:10px;transition:border-color .2s,box-shadow .2s;box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
-.ri:focus{border-color:var(--o);box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 0 16px rgba(255,109,46,.15)}.ri::placeholder{color:var(--t3)}
+.ri{width:100%;padding:15px 16px;border-radius:14px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#fff;font-size:15px;font-family:inherit;outline:none;margin-bottom:10px;transition:all .3s var(--ease);box-shadow:inset 0 .5px 0 rgba(255,255,255,.06)}
+.ri:focus{border-color:var(--o);background:rgba(255,109,46,.04);box-shadow:0 0 0 3px rgba(255,109,46,.1),inset 0 .5px 0 rgba(255,255,255,.06)}.ri::placeholder{color:rgba(255,255,255,.25)}
 select.ri{appearance:none;-webkit-appearance:none}
 .rnext{margin-top:auto;width:100%;padding:16px;border:none;border-radius:14px;background:var(--o);color:#fff;font-size:15px;font-weight:700;cursor:pointer;transition:opacity .2s}.rnext:disabled{opacity:.25;cursor:default}
 .chip-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
@@ -130,11 +131,14 @@ select.ri{appearance:none;-webkit-appearance:none}
 .dtxt h4{font-size:12px;font-weight:700;margin-bottom:2px}.dtxt p{font-size:11px;color:var(--t3);line-height:1.4}
 
 /* LOADING */
-.loading-screen{position:fixed;inset:0;z-index:999998;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.loading-screen{position:fixed;inset:0;z-index:999998;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
+.loading-screen::before{content:'';position:absolute;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(255,109,46,.15),transparent 70%);animation:loadingGlow 2.5s ease-in-out infinite;filter:blur(60px)}
+@keyframes loadingGlow{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.3);opacity:.8}}
 .loading-screen.gone{display:none}
-.loader{width:40px;height:40px;border:3px solid var(--bg3);border-top-color:var(--o);border-radius:50%;animation:spin .8s linear infinite}
+.loader{width:44px;height:44px;border:2.5px solid rgba(255,255,255,.06);border-top-color:var(--o);border-radius:50%;animation:spin .7s linear infinite;position:relative}
+.loader::after{content:'';position:absolute;inset:-6px;border:2px solid transparent;border-top-color:rgba(191,90,242,.4);border-radius:50%;animation:spin 1.2s linear infinite reverse}
 @keyframes spin{to{transform:rotate(360deg)}}
-.loading-screen p{margin-top:16px;color:var(--t3);font-size:13px}
+.loading-screen p{margin-top:18px;color:var(--t3);font-size:12px;font-weight:500;letter-spacing:.3px}
 
 /* Alles andere bleibt gleich wie v6 — hier kommen die Screen-Styles */
 .stories{display:flex;gap:10px;padding:68px 14px 10px;overflow-x:auto;scrollbar-width:none;position:relative;z-index:10}.stories::-webkit-scrollbar{display:none}
@@ -182,7 +186,7 @@ select.ri{appearance:none;-webkit-appearance:none}
 .sec-label{font-size:11px;font-weight:800;color:var(--o);text-transform:uppercase;letter-spacing:1.5px;padding:16px 16px 10px;display:flex;align-items:center;gap:8px}
 .sec-label::before{content:'';width:4px;height:16px;border-radius:2px;background:var(--o)}
 .hscroll{display:flex;gap:10px;overflow-x:auto;padding:0 14px 14px;scroll-snap-type:x mandatory;scrollbar-width:none}.hscroll::-webkit-scrollbar{display:none}
-.vcard{min-width:220px;scroll-snap-align:start;border-radius:var(--r);overflow:hidden;cursor:pointer;flex-shrink:0;position:relative;transition:transform .15s;box-shadow:0 8px 24px rgba(255,109,46,.15)}.vcard:active{transform:scale(.97)}
+.vcard{min-width:220px;scroll-snap-align:start;border-radius:var(--r2);overflow:hidden;cursor:pointer;flex-shrink:0;position:relative;transition:all .2s var(--ease);box-shadow:0 8px 32px rgba(0,0,0,.3),0 0 0 .5px rgba(255,255,255,.06)}.vcard:active{transform:scale(.96)}
 .vcard .vc-img{height:150px;position:relative;overflow:hidden}
 .vcard .vc-img img{width:100%;height:100%;object-fit:cover}
 .vc-grad{position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(255,109,46,.2) 70%,rgba(191,90,242,.15) 100%)}
@@ -200,7 +204,7 @@ select.ri{appearance:none;-webkit-appearance:none}
 .mf-chip{padding:7px 14px;border-radius:20px;background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--glass-border);font-size:11px;font-weight:600;color:var(--t2);white-space:nowrap;cursor:pointer;flex-shrink:0;display:flex;align-items:center;gap:4px;transition:all .15s;box-shadow:inset 0 1px 0 rgba(255,255,255,.04)}
 .mf-chip.active{border-color:var(--o);color:var(--o);background:rgba(255,109,46,.12);box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 0 12px rgba(255,109,46,.15)}
 .match-stack{position:relative;flex:1;margin:0 12px;min-height:0}
-.scard{position:absolute;inset:0;border-radius:var(--r2);overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.3),0 16px 48px rgba(0,0,0,.2);transition:transform .35s var(--bounce),opacity .35s;cursor:grab;touch-action:none;will-change:transform}
+.scard{position:absolute;inset:0;border-radius:var(--r2);overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.4),0 24px 64px rgba(0,0,0,.25),0 0 0 .5px rgba(255,255,255,.08) inset;transition:transform .35s var(--bounce),opacity .35s;cursor:grab;touch-action:none;will-change:transform}
 .scard.behind{transform:scale(.95) translateY(8px);opacity:.5;pointer-events:none}
 .scard.far{transform:scale(.9) translateY(16px);opacity:.25;pointer-events:none}
 .scard.go-left{transform:translateX(-130%) rotate(-15deg);opacity:0}.scard.go-right{transform:translateX(130%) rotate(15deg);opacity:0}
@@ -282,7 +286,7 @@ select.ri{appearance:none;-webkit-appearance:none}
 /* PROFILE */
 .prof-hero{text-align:center;padding:80px 20px 16px}
 .prof-ava-wrap{position:relative;width:88px;height:88px;margin:0 auto 10px}
-.prof-ava{width:88px;height:88px;border-radius:50%;overflow:hidden;border:3px solid var(--o);box-shadow:0 6px 24px rgba(255,109,46,.15),0 0 0 8px rgba(255,109,46,.08),0 0 40px rgba(255,109,46,.2)}.prof-ava img{width:100%;height:100%;object-fit:cover}
+.prof-ava{width:88px;height:88px;border-radius:50%;overflow:hidden;border:3px solid transparent;background-image:linear-gradient(var(--bg),var(--bg)),var(--magic);background-origin:border-box;background-clip:content-box,border-box;box-shadow:0 8px 30px rgba(255,109,46,.2),0 0 0 6px rgba(255,109,46,.06),0 0 50px rgba(191,90,242,.15)}.prof-ava img{width:100%;height:100%;object-fit:cover}
 .prof-ava-edit{position:absolute;bottom:0;right:-2px;width:28px;height:28px;border-radius:50%;background:var(--o);border:2px solid var(--bg);display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer}
 .prof-hero h2{font-size:20px;font-weight:900;display:flex;align-items:center;justify-content:center;gap:6px}
 .prof-hero .handle{font-size:12px;color:var(--t3);margin-top:2px}
@@ -488,8 +492,8 @@ select.ri{appearance:none;-webkit-appearance:none}
 .report-reason.sel{border-color:var(--o);background:rgba(255,109,46,.12);color:var(--o);box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 0 12px rgba(255,109,46,.15)}
 
 /* TOAST */
-.toast{position:fixed;bottom:88px;left:50%;transform:translateX(-50%) translateY(16px);padding:12px 20px;border-radius:14px;font-size:13px;font-weight:600;opacity:0;transition:all .3s var(--bounce);z-index:20002;white-space:nowrap;max-width:90%;background:var(--glass);backdrop-filter:blur(40px);border:1px solid var(--glass-border);box-shadow:0 8px 24px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.06)}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast{position:fixed;bottom:92px;left:50%;transform:translateX(-50%) translateY(20px) scale(.95);padding:13px 22px;border-radius:50px;font-size:13px;font-weight:600;opacity:0;transition:all .35s var(--spring);z-index:20002;white-space:nowrap;max-width:88%;background:rgba(22,22,24,.82);backdrop-filter:blur(50px) saturate(200%);-webkit-backdrop-filter:blur(50px) saturate(200%);border:.5px solid rgba(255,255,255,.1);box-shadow:0 10px 40px rgba(0,0,0,.4)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}
 .anim{animation:su .4s var(--bounce) both}
 @keyframes su{from{transform:translateY(12px);opacity:0}to{transform:none;opacity:1}}
 .d1{animation-delay:.05s}.d2{animation-delay:.1s}
@@ -499,14 +503,57 @@ select.ri{appearance:none;-webkit-appearance:none}
 .weather-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,214,10,.08),rgba(10,132,255,.06));border-radius:var(--r);pointer-events:none}
 
 @keyframes activePulse{0%,100%{box-shadow:0 0 0 0 rgba(52,199,89,.4)}50%{box-shadow:0 0 0 6px rgba(52,199,89,0)}}
+
+/* TROPICAL MAGIC */
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+.shimmer{background:linear-gradient(90deg,transparent 30%,rgba(255,255,255,.04) 50%,transparent 70%);background-size:200% 100%;animation:shimmer 3s ease infinite}
+@keyframes breathe{0%,100%{opacity:.6;transform:scale(1)}50%{opacity:1;transform:scale(1.02)}}
+@keyframes tropicalGlow{0%,100%{filter:drop-shadow(0 0 15px rgba(255,109,46,.2))}50%{filter:drop-shadow(0 0 25px rgba(255,109,46,.35))}}
+@keyframes slideUp{from{transform:translateY(16px);opacity:0}to{transform:none;opacity:1}}
+
+/* Enhanced section labels */
+.sec-label{font-size:11px;font-weight:800;color:var(--o);text-transform:uppercase;letter-spacing:1.8px;padding:18px 18px 10px;display:flex;align-items:center;gap:8px}
+.sec-label::before{content:'';width:3px;height:14px;border-radius:2px;background:var(--o);box-shadow:0 0 8px rgba(255,109,46,.4)}
+
+/* Better chips */
+.chip{padding:10px 18px;border-radius:50px;background:rgba(255,255,255,.04);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.07);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s var(--ease);color:var(--t2)}
+.chip.sel{border-color:var(--o);background:rgba(255,109,46,.1);color:var(--o);box-shadow:0 0 20px rgba(255,109,46,.12)}
+.chip:active{transform:scale(.93)}
+
+/* Premium buttons */
+.abtn.primary{background:var(--o);color:#fff;border-radius:16px;box-shadow:0 6px 20px rgba(255,109,46,.25),0 0 0 1px rgba(255,109,46,.2) inset;transition:all .2s var(--ease)}
+.abtn.primary:active{transform:scale(.96);box-shadow:0 3px 10px rgba(255,109,46,.3)}
+.rnext{margin-top:auto;width:100%;padding:16px;border:none;border-radius:16px;background:var(--o);color:#fff;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s var(--ease);box-shadow:0 6px 20px rgba(255,109,46,.2)}.rnext:disabled{opacity:.2;cursor:default;box-shadow:none}
+.rnext:not(:disabled):active{transform:scale(.97)}
+
+/* Mood emojis enhanced */
+.mood-em{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;font-size:19px;cursor:pointer;flex-shrink:0;transition:all .2s var(--spring)}
+.mood-em.sel{border-color:var(--o);background:rgba(255,109,46,.1);transform:scale(1.15);box-shadow:0 0 16px rgba(255,109,46,.2)}
+
+/* Crew center button enhanced */
+nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:21px;color:#fff;box-shadow:0 6px 20px rgba(255,109,46,.35),0 0 0 4px rgba(255,109,46,.1),0 0 40px rgba(255,109,46,.15);transition:all .25s var(--spring)}
+
+/* Profile stats glass */
+.prof-stats{display:flex;margin:16px 14px;border-radius:var(--r2);overflow:hidden;background:rgba(255,255,255,.03);backdrop-filter:blur(44px);border:.5px solid rgba(255,255,255,.07)}
+
+/* Bottom sheet refined */
+.bsheet-body{position:absolute;bottom:0;left:0;right:0;max-height:90vh;background:rgba(22,22,24,.85);backdrop-filter:blur(60px) saturate(200%);-webkit-backdrop-filter:blur(60px) saturate(200%);border:.5px solid rgba(255,255,255,.08);border-radius:22px 22px 0 0;overflow-y:auto;transform:translateY(100%);transition:transform .4s var(--ease);box-shadow:0 -12px 48px rgba(0,0,0,.4)}
+
+/* Agegate refined */
+.agegate{position:fixed;inset:0;z-index:999999;background:var(--bg);background-image:radial-gradient(ellipse at 50% 30%,rgba(255,109,46,.06),transparent 60%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px;text-align:center}
+.ag-logo{font-size:68px;font-weight:900;letter-spacing:-4px;margin-bottom:6px}
+
+/* Admin menu item glow */
+#adminMenuItem{animation:breathe 3s ease-in-out infinite}
 </style>
 </head>
 <body>
 
 <!-- LOADING -->
 <div class="loading-screen" id="loadingScreen">
+  <div style="font-size:48px;font-weight:900;letter-spacing:-3px;margin-bottom:24px;opacity:.9">crew<span style="background:linear-gradient(135deg,#FF6D2E,#FFD60A);-webkit-background-clip:text;background-clip:text;color:transparent">.</span></div>
   <div class="loader"></div>
-  <p>Laden...</p>
+  <p>Dein Urlaub startet...</p>
 </div>
 
 <!-- LANGUAGE PICKER removed — German only -->
@@ -531,7 +578,7 @@ select.ri{appearance:none;-webkit-appearance:none}
   <div class="auth-bg"><img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=900&q=80"><div class="auth-ov"></div></div>
   <div class="auth-content">
     <div class="auth-brand">crew<span>.</span></div>
-    <div class="auth-tag">Finde die besten Parties.<br>Verlier nie wieder deine Crew. 🌴</div>
+    <div class="auth-tag">Finde die besten Parties.<br>Verlier nie wieder deine Crew.</div>
     <div class="auth-form show" id="emailForm">
       <input class="ri" id="authEmail" type="email" placeholder="E-Mail-Adresse" autocomplete="email">
       <input class="ri" id="authPass" type="password" placeholder="Passwort (min. 6 Zeichen)" autocomplete="current-password">
@@ -643,13 +690,14 @@ select.ri{appearance:none;-webkit-appearance:none}
 <!-- REPORT OVERLAY --><div class="bsheet" id="reportSheet"><div class="bsheet-backdrop" onclick="closeReport()"></div><div class="bsheet-body"><div class="bsheet-handle"></div><div style="padding:20px"><h2 style="font-size:20px;font-weight:900;margin-bottom:12px">Nutzer melden</h2><div style="font-size:13px;color:var(--t2);margin-bottom:20px">Warum möchtest du diesen Nutzer melden?</div><div id="reportReasons" style="display:flex;flex-direction:column;gap:8px"></div><button class="rnext" style="margin-top:16px;opacity:.25;cursor:default" id="reportSubmit" disabled onclick="submitReport()">Melden</button><button class="rnext" style="background:var(--bg3);color:var(--t2);margin-top:8px;opacity:1" onclick="closeReport()">Abbrechen</button></div></div></div>
 
 <!-- ADMIN PANEL OVERLAY -->
-<div id="adminPanel" style="position:fixed;inset:0;z-index:999999;background:var(--bg);display:none;flex-direction:column;overflow-y:auto">
-  <div style="position:sticky;top:0;z-index:2;background:var(--bg);padding:16px 20px 12px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--glass-border)">
-    <button onclick="closeAdmin()" style="background:none;border:none;color:var(--t);font-size:22px;cursor:pointer;padding:4px">←</button>
-    <h2 style="font-size:20px;font-weight:900;flex:1">👑 Admin Dashboard</h2>
+<div id="adminPanel" style="position:fixed;inset:0;z-index:999999;background:var(--bg);background-image:radial-gradient(ellipse at 50% 0%,rgba(255,109,46,.08),transparent 50%);display:none;flex-direction:column;overflow-y:auto;-webkit-overflow-scrolling:touch">
+  <div style="position:sticky;top:0;z-index:2;background:rgba(5,5,7,.8);backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);padding:16px 20px 14px;display:flex;align-items:center;gap:12px;border-bottom:.5px solid rgba(255,255,255,.06)">
+    <button onclick="closeAdmin()" style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.06);border:none;color:var(--t);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center">←</button>
+    <h2 style="font-size:20px;font-weight:900;flex:1;background:linear-gradient(135deg,#FF6D2E,#FFD60A);-webkit-background-clip:text;background-clip:text;color:transparent">Admin Dashboard</h2>
+    <span style="font-size:11px;color:var(--t3);font-weight:600">butterbread tech</span>
   </div>
   <div id="adminContent" style="padding:16px 20px 40px">
-    <div style="text-align:center;padding:40px;color:var(--t3)">Lädt...</div>
+    <div style="text-align:center;padding:40px;color:var(--t3)"><div class="loader" style="margin:0 auto 16px"></div>Dashboard wird geladen...</div>
   </div>
 </div>
 
@@ -811,7 +859,7 @@ select.ri{appearance:none;-webkit-appearance:none}
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 15;
+  var APP_VERSION = 16;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     localStorage.setItem('crew_app_v', APP_VERSION);
@@ -1210,7 +1258,7 @@ window.authEmail = async function(){
 
 window.openLegalAuth=function(type){
   var c='';
-  if(type==='agb') c='<h2 style="font-size:22px;font-weight:900;margin-bottom:16px">AGB</h2><div style="color:var(--t2)"><strong>§1 Geltungsbereich</strong><br>Diese AGB gelten für die atze-App der butterbread tech GmbH.<br><br><strong>§2 Registrierung</strong><br>Mindestalter 18 Jahre. Wahrheitsgemäße Angaben. Ein Konto pro Person.<br><br><strong>§3 Premium</strong><br>1 Woche 2,99€, 1 Monat 4,99€/Monat, Saison 9,99€. Kündigung jederzeit. 14-Tage-Widerrufsrecht.<br><br><strong>§4 Verhaltensregeln</strong><br>Kein Mobbing, Belästigung, Diskriminierung. Verstoß = Sperrung.<br><br><strong>§5 Datenschutz</strong><br>Siehe Datenschutzerklärung. DSGVO-konform.<br><br>Stand: April 2026</div>';
+  if(type==='agb') c='<h2 style="font-size:22px;font-weight:900;margin-bottom:16px">AGB</h2><div style="color:var(--t2)"><strong>§1 Geltungsbereich</strong><br>Diese AGB gelten für die crew.-App der butterbread tech GmbH.<br><br><strong>§2 Registrierung</strong><br>Mindestalter 18 Jahre. Wahrheitsgemäße Angaben. Ein Konto pro Person.<br><br><strong>§3 Premium</strong><br>1 Woche 2,99€, 1 Monat 4,99€/Monat, Saison 9,99€. Kündigung jederzeit. 14-Tage-Widerrufsrecht.<br><br><strong>§4 Verhaltensregeln</strong><br>Kein Mobbing, Belästigung, Diskriminierung. Verstoß = Sperrung.<br><br><strong>§5 Datenschutz</strong><br>Siehe Datenschutzerklärung. DSGVO-konform.<br><br>Stand: April 2026</div>';
   else if(type==='dsgvo') c='<h2 style="font-size:22px;font-weight:900;margin-bottom:16px">Datenschutzerklärung</h2><div style="color:var(--t2)"><strong>Verantwortlicher gem. Art. 4 Abs. 7 DSGVO</strong><br>butterbread tech GmbH<br>Web: butterbread-tech.com<br>E-Mail: datenschutz@butterbread-tech.com<br><br><strong>1. Datenkategorien</strong><br>Profildaten (Name, Geburtsdatum, Geschlecht, Bio, Fotos): Art. 6 Abs. 1 b DSGVO.<br>Standortdaten: Art. 6 Abs. 1 a DSGVO (Einwilligung, optional).<br>Kameradaten: Nur bei Upload, Art. 6 Abs. 1 a DSGVO.<br><br><strong>2. Drittanbieter</strong><br>Supabase (Server EU Frankfurt). AES-256 verschlüsselt.<br><br><strong>3. Betroffenenrechte (Art. 15-22)</strong><br>Auskunft, Berichtigung, Löschung, Datenportabilität.<br>Kontakt: datenschutz@butterbread-tech.com<br><br><strong>4. Keine Cookies, Keine Tracker</strong><br><br>Stand: April 2026</div>';
   document.getElementById('legalAuthContent').innerHTML=c;
   document.getElementById('legalAuthOv').style.display='flex';
@@ -1241,7 +1289,18 @@ async function loadUser(authUser){
     }
 
     ME = profile;
-    console.log('[CREW] Profile loaded:', ME.name);
+    // Admin by email — only Jan gets admin access
+    var ADMIN_EMAILS = ['yunghundse@gmail.com'];
+    if(authUser.email && ADMIN_EMAILS.indexOf(authUser.email.toLowerCase()) !== -1){
+      ME.is_admin = true;
+      // Persist to DB if not already set
+      if(!profile.is_admin){
+        sb.from('profiles').update({is_admin: true}).eq('user_id', authUser.id).then(function(){
+          console.log('[CREW] Admin flag set for', authUser.email);
+        });
+      }
+    }
+    console.log('[CREW] Profile loaded:', ME.name, ME.is_admin ? '(ADMIN)' : '');
 
     // Load venues (non-blocking errors are fine)
     try {
@@ -1734,7 +1793,7 @@ window.openVenue = function(id){
   if(!v) return;
   var liveCount = v.live_count || v.crowd_count || 0;
   document.getElementById('bsImg').src = v.image_url;
-  document.getElementById('bsContent').innerHTML = '<h2>'+esc(v.name)+'</h2><div class="bs-meta"><span style="color:var(--o);font-weight:700">★ '+v.rating+'</span> · '+liveCount+' Atzen hier 🔥'+(v.website?' · <a href="https://'+v.website+'" target="_blank" rel="noopener" style="color:var(--o)">'+v.website+'</a>':'')+'</div><div class="bs-desc">📍 '+esc(v.address)+'<br>🕐 '+esc(v.hours)+(v.is_live?'<br>🔴 <strong>Jetzt Live!</strong>':'')+'</div><div class="bs-tags">'+(v.tags||[]).map(function(t){return '<span class="t">'+t+'</span>'}).join('')+'</div><div class="bs-actions"><button class="bs-btn orange" onclick="checkinVenue(\''+v.id+'\',\''+esc(v.name)+'\')">📍 Einchecken (+50)</button><button class="bs-btn dark" onclick="window.open(\'https://www.google.com/maps/dir/?api=1&destination='+v.lat+','+v.lng+'&travelmode=walking\',\'_blank\')">🗺 Route</button><button class="bs-btn dark" onclick="shareText(\''+esc(v.name)+' – '+liveCount+' Leute da!\')">📤 Teilen</button></div>';
+  document.getElementById('bsContent').innerHTML = '<h2>'+esc(v.name)+'</h2><div class="bs-meta"><span style="color:var(--o);font-weight:700">★ '+v.rating+'</span> · '+liveCount+' Leute hier 🔥'+(v.website?' · <a href="https://'+v.website+'" target="_blank" rel="noopener" style="color:var(--o)">'+v.website+'</a>':'')+'</div><div class="bs-desc">📍 '+esc(v.address)+'<br>🕐 '+esc(v.hours)+(v.is_live?'<br>🔴 <strong>Jetzt Live!</strong>':'')+'</div><div class="bs-tags">'+(v.tags||[]).map(function(t){return '<span class="t">'+t+'</span>'}).join('')+'</div><div class="bs-actions"><button class="bs-btn orange" onclick="checkinVenue(\''+v.id+'\',\''+esc(v.name)+'\')">📍 Einchecken (+50)</button><button class="bs-btn dark" onclick="window.open(\'https://www.google.com/maps/dir/?api=1&destination='+v.lat+','+v.lng+'&travelmode=walking\',\'_blank\')">🗺 Route</button><button class="bs-btn dark" onclick="shareText(\''+esc(v.name)+' – '+liveCount+' Leute da!\')">📤 Teilen</button></div>';
   document.getElementById('bsheet').classList.add('show');
 };
 
@@ -1804,7 +1863,7 @@ function buildCards(){
 
   // Geo-check: Only on Mallorca
   if(!isOnMallorca()){
-    s.innerHTML='<div class="no-profiles"><div style="font-size:64px;margin-bottom:16px">🏝️</div><div style="font-size:18px;font-weight:800;color:var(--t);margin-bottom:8px">Nur auf Mallorca!</div><div style="font-size:13px;color:var(--t2);line-height:1.6;max-width:260px;margin:0 auto">Matchmaking ist nur auf Mallorca verfügbar.<br>Flieg hin und finde deine Atzen! ✈️🌴</div><div style="margin-top:20px;font-size:11px;color:var(--t3)">📍 Standort: '+(ME&&ME.lat?'Nicht auf Mallorca':'Kein Standort')+'</div></div>';
+    s.innerHTML='<div class="no-profiles"><div style="font-size:64px;margin-bottom:16px">🏝️</div><div style="font-size:18px;font-weight:800;color:var(--t);margin-bottom:8px">Nur auf Mallorca!</div><div style="font-size:13px;color:var(--t2);line-height:1.6;max-width:260px;margin:0 auto">Matchmaking ist nur auf Mallorca verfügbar.<br>Flieg hin und finde deine Crew! ✈️🌴</div><div style="margin-top:20px;font-size:11px;color:var(--t3)">📍 Standort: '+(ME&&ME.lat?'Nicht auf Mallorca':'Kein Standort')+'</div></div>';
     return;
   }
 
@@ -1821,7 +1880,7 @@ function buildCards(){
 function mkCard(p,idx){
   var c=document.createElement('div');c.className='scard'+(idx===1?' behind':idx>=2?' far':'');c.dataset.i=idx;
   var socials='';if(p.insta)socials+='<a class="sc-social" onclick="event.stopPropagation();window.open(\'https://instagram.com/'+esc(p.insta)+'\',\'_blank\')" style="color:#E1306C">📸</a>';if(p.tiktok)socials+='<a class="sc-social" onclick="event.stopPropagation();window.open(\'https://tiktok.com/@'+esc(p.tiktok)+'\',\'_blank\')" style="color:#FF0050">🎵</a>';if(p.snapchat)socials+='<a class="sc-social" onclick="event.stopPropagation();window.open(\'https://snapchat.com/add/'+esc(p.snapchat)+'\',\'_blank\')" style="color:#FFFC00">👻</a>';
-  c.innerHTML='<div class="stamp like">ATZE!</div><div class="stamp nope">NOPE</div><div class="sc-photo-dots"><div class="scd-dot active"></div><div class="scd-dot"></div><div class="scd-dot"></div></div><div class="sc-photo" style="background-image:url(\''+(p.photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80')+'\')"></div><div class="sc-grad"></div><div class="sc-content"><div class="sc-name">'+esc(p.name)+'<span class="sc-age">'+p.age+'</span>'+(p.mood?' <span style="font-size:22px;margin-left:4px">'+p.mood+'</span>':'')+'</div>'+(p.username?'<div style="font-size:13px;color:var(--o);font-weight:600;margin-top:2px">@'+esc(p.username)+'</div>':'')+'<div class="sc-loc">'+(p.gender||'')+(p.status?' · '+p.status:'')+'</div>'+(p.verified?'<span class="sc-badge">✓ Verifiziert</span>':'')+(p.club?'<span class="sc-badge">⚽ '+esc(p.club)+'</span>':'')+(socials?'<div style="display:flex;gap:8px;margin-top:8px">'+socials+'</div>':'')+'<div class="sc-bio">'+esc(p.bio||'')+'</div></div>';
+  c.innerHTML='<div class="stamp like">CREW!</div><div class="stamp nope">NOPE</div><div class="sc-photo-dots"><div class="scd-dot active"></div><div class="scd-dot"></div><div class="scd-dot"></div></div><div class="sc-photo" style="background-image:url(\''+(p.photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80')+'\')"></div><div class="sc-grad"></div><div class="sc-content"><div class="sc-name">'+esc(p.name)+'<span class="sc-age">'+p.age+'</span>'+(p.mood?' <span style="font-size:22px;margin-left:4px">'+p.mood+'</span>':'')+'</div>'+(p.username?'<div style="font-size:13px;color:var(--o);font-weight:600;margin-top:2px">@'+esc(p.username)+'</div>':'')+'<div class="sc-loc">'+(p.gender||'')+(p.status?' · '+p.status:'')+'</div>'+(p.verified?'<span class="sc-badge">✓ Verifiziert</span>':'')+(p.club?'<span class="sc-badge">⚽ '+esc(p.club)+'</span>':'')+(socials?'<div style="display:flex;gap:8px;margin-top:8px">'+socials+'</div>':'')+'<div class="sc-bio">'+esc(p.bio||'')+'</div></div>';
   var sx=0,dx=0,dr=0;
   function ms(x){sx=x;dr=1}
   function mm(x){if(!dr)return;dx=x-sx;c.style.transform='translateX('+dx+'px) rotate('+dx*.05+'deg)';c.style.transition='none';c.querySelector('.like').classList.toggle('vis',dx>80);c.querySelector('.nope').classList.toggle('vis',dx<-80)}
@@ -2036,8 +2095,8 @@ window.openLegal=function(type){
   var c='';
   if(type==='dsgvo')c='<h2>Datenschutzerklärung</h2><div class="bs-desc" style="font-size:12px;line-height:1.7"><strong>Verantwortlicher gem. Art. 4 Abs. 7 DSGVO</strong><br>butterbread tech GmbH<br>Geschäftsführer: Jan<br>Web: butterbread-tech.com<br>E-Mail: datenschutz@butterbread-tech.com<br><br><strong>1. Datenkategorien & Rechtsgrundlagen</strong><br><strong>Profildaten</strong> (Name, Geburtsdatum, Geschlecht, Bio, Fotos): Rechtsgrundlage Art. 6 Abs. 1 b DSGVO (Erfüllung Nutzungsvertrag). Speicherdauer: Bis zur Accountlöschung.<br><strong>Standortdaten:</strong> Rechtsgrundlage Art. 6 Abs. 1 a DSGVO (Einwilligung). Speicherdauer: Nur aktuelle Position, nicht archiviert. Du kannst Standort jederzeit deaktivieren.<br><strong>Kameradaten:</strong> Nur bei Profilbild-Upload. Rechtsgrundlage Art. 6 Abs. 1 a DSGVO (Einwilligung). Speicherdauer: Nur während aktiven Uploads.<br><strong>Nutzungsdaten:</strong> Anonymisiert, keine IP-Tracking. Rechtsgrundlage Art. 6 Abs. 1 a DSGVO.<br><br><strong>2. Drittanbieter</strong><br>Supabase (Auth, Database, Storage) - Server in der EU (Frankfurt). Alle Daten AES-256 verschlüsselt.<br><br><strong>3. Speicherdauer</strong><br>Profildaten: Bis zur Accountlöschung.<br>Standortdaten: Nur letzte bekannte Position (keine Historie).<br>Nach Accountlöschung: Vollständig und irreversibel gelöscht.<br><br><strong>4. Betroffenenrechte (Art. 15-22 DSGVO)</strong><br>• Auskunft (Art. 15): Export deiner Daten möglich<br>• Berichtigung (Art. 16): Profilbearbeitung<br>• Löschung (Art. 17): Accountlöschung<br>• Einschränkung (Art. 18): Nicht automatisch implementiert<br>• Datenportabilität (Art. 20): Über Export-Funktion<br>• Widerspruch (Art. 21): datenschutz@butterbread-tech.com<br><br><strong>5. Aufsichtsbehörde</strong><br>Landesbeauftragte für Datenschutz und Informationsfreiheit Baden-Württemberg (falls zuständig) oder deine lokale Behörde.<br><br><strong>6. Keine Cookies, Keine Tracker</strong><br>Wir verwenden keine Tracking-Cookies oder Drittanbieter-Analytics.<br><br><strong>Kontakt: datenschutz@butterbread-tech.com</strong><br>Stand: April 2026</div><div class="bs-actions"><button class="bs-btn orange" onclick="closeBS()">Schließen</button></div>';
   else if(type==='impressum')c='<h2>Impressum</h2><div class="bs-desc" style="font-size:12px;line-height:1.7"><strong>Angaben gemäß §5 TMG</strong><br><br>butterbread tech GmbH<br>Geschäftsführer: Jan<br>Web: butterbread-tech.com<br>E-Mail: hello@butterbread-tech.com<br><br><strong>Registergericht:</strong> [wird nach Eintragung ergänzt]<br><strong>HRB:</strong> [wird nach Eintragung ergänzt]<br><br>Stand: April 2026</div><div class="bs-actions"><button class="bs-btn orange" onclick="closeBS()">Schließen</button></div>';
-  else if(type==='agb')c='<h2>AGB</h2><div class="bs-desc" style="font-size:12px;line-height:1.7"><strong>§1 Geltungsbereich</strong><br>Diese AGB gelten für die atze-App der butterbread tech GmbH.<br><br><strong>§2 Registrierung</strong><br>Mindestalter 18 Jahre. Wahrheitsgemäße Angaben. Ein Konto pro Person.<br><br><strong>§3 Premium</strong><br>1 Woche 2,99€, 1 Monat 4,99€/Monat, Saison 9,99€. Kündigung jederzeit. 14-Tage-Widerrufsrecht.<br><br><strong>§4 Verhaltensregeln</strong><br>Kein Mobbing, Belästigung, Diskriminierung. Verstoß = Sperrung.<br><br><strong>§5 Datenschutz</strong><br>Siehe Datenschutzerklärung. DSGVO-konform.<br><br>Stand: April 2026</div><div class="bs-actions"><button class="bs-btn orange" onclick="closeBS()">Schließen</button></div>';
-  else if(type==='affiliate')c='<h2>Affiliate-Hinweis</h2><div class="bs-desc" style="font-size:12px;line-height:1.7"><strong>Transparenzhinweis gemäß TMG & UWG</strong><br><br>Die atze-App enthält Affiliate-/Partnerlinks. Wenn du über diese Links Produkte oder Dienstleistungen buchst oder kaufst, erhält die butterbread tech GmbH eine Provision vom jeweiligen Anbieter.<br><br><strong>Für dich ändert sich der Preis nicht.</strong><br><br><strong>Unsere Partner (Auszug):</strong><br>Check24, HanseMerkur, Booking.com, GetYourGuide, Megapark, Amazon, GoPro, Douglas, Sunny Cars, TheFork, Tiqets, Welcome Pickups, Holidayparking, Flaconi, DJI<br><br><strong>Netzwerke:</strong><br>Awin, Belboon, Amazon PartnerNet, Booking Affiliate Partner, Direkt-Partnerschaften<br><br><strong>Tracking:</strong><br>Wir verwenden anonymisierte Sub-IDs zur Zuordnung. Es werden keine personenbezogenen Daten an Partner übermittelt. DSGVO-konform.<br><br><strong>Qualitätsstandards:</strong><br>• Keine Dropshipping/Fake-Shops<br>• Kein Gambling/Sportwetten<br>• Nur etablierte DE/EU-Brands<br>• App-Store-Policy-konform<br><br>Stand: April 2026<br>butterbread tech GmbH · butterbread-tech.com</div><div class="bs-actions"><button class="bs-btn orange" onclick="closeBS()">Schließen</button></div>';
+  else if(type==='agb')c='<h2>AGB</h2><div class="bs-desc" style="font-size:12px;line-height:1.7"><strong>§1 Geltungsbereich</strong><br>Diese AGB gelten für die crew.-App der butterbread tech GmbH.<br><br><strong>§2 Registrierung</strong><br>Mindestalter 18 Jahre. Wahrheitsgemäße Angaben. Ein Konto pro Person.<br><br><strong>§3 Premium</strong><br>1 Woche 2,99€, 1 Monat 4,99€/Monat, Saison 9,99€. Kündigung jederzeit. 14-Tage-Widerrufsrecht.<br><br><strong>§4 Verhaltensregeln</strong><br>Kein Mobbing, Belästigung, Diskriminierung. Verstoß = Sperrung.<br><br><strong>§5 Datenschutz</strong><br>Siehe Datenschutzerklärung. DSGVO-konform.<br><br>Stand: April 2026</div><div class="bs-actions"><button class="bs-btn orange" onclick="closeBS()">Schließen</button></div>';
+  else if(type==='affiliate')c='<h2>Affiliate-Hinweis</h2><div class="bs-desc" style="font-size:12px;line-height:1.7"><strong>Transparenzhinweis gemäß TMG & UWG</strong><br><br>Die crew.-App enthält Affiliate-/Partnerlinks. Wenn du über diese Links Produkte oder Dienstleistungen buchst oder kaufst, erhält die butterbread tech GmbH eine Provision vom jeweiligen Anbieter.<br><br><strong>Für dich ändert sich der Preis nicht.</strong><br><br><strong>Unsere Partner (Auszug):</strong><br>Check24, HanseMerkur, Booking.com, GetYourGuide, Megapark, Amazon, GoPro, Douglas, Sunny Cars, TheFork, Tiqets, Welcome Pickups, Holidayparking, Flaconi, DJI<br><br><strong>Netzwerke:</strong><br>Awin, Belboon, Amazon PartnerNet, Booking Affiliate Partner, Direkt-Partnerschaften<br><br><strong>Tracking:</strong><br>Wir verwenden anonymisierte Sub-IDs zur Zuordnung. Es werden keine personenbezogenen Daten an Partner übermittelt. DSGVO-konform.<br><br><strong>Qualitätsstandards:</strong><br>• Keine Dropshipping/Fake-Shops<br>• Kein Gambling/Sportwetten<br>• Nur etablierte DE/EU-Brands<br>• App-Store-Policy-konform<br><br>Stand: April 2026<br>butterbread tech GmbH · butterbread-tech.com</div><div class="bs-actions"><button class="bs-btn orange" onclick="closeBS()">Schließen</button></div>';
   else if(type==='moderation')c='<h2>'+t('mod_transparency')+'</h2><div class="bs-desc" style="font-size:12px;line-height:1.7"><strong>Meldungsverfahren</strong><br>Wenn du einen Nutzer meldest, überprüft unser Moderationsteam:<br>• Verstoß gegen Nutzungsrichtlinien<br>• Unangemessene Inhalte<br>• Belästigung oder Mobbing<br><br><strong>Verarbeitungszeit: '+t('mod_72h')+'</strong><br><br><strong>Mögliche Maßnahmen</strong><br>• Warnung (für Erstverstöße)<br>• Temporäre Sperrung (7-30 Tage)<br>• Permanente Sperrung<br><br><strong>Gründe für Sperrung</strong><br>• Fake-Profile / Catfishing<br>• Sexuelle Belästigung oder unangemessene Inhalte<br>• Hate Speech oder Diskriminierung<br>• Spam oder kommerzielle Nutzung<br>• Kinderschutz-Verstöße<br><br><strong>'+t('mod_appeal')+'</strong><br>Du kannst gegen jede Moderationsentscheidung Einspruch erheben. Sende eine E-Mail an moderation@butterbread-tech.com mit:<br>• Dein Nutzername<br>• Beschreibung warum die Entscheidung falsch ist<br>• Relevante Screenshots<br><br><button class="bs-btn orange" style="width:100%;margin-top:12px;cursor:pointer" onclick="window.location.href=\'mailto:moderation@butterbread-tech.com?subject=Appeal\';toast(t(\'mod_appeal_sent\'))">'+t('mod_appeal')+'</button><br><br>Stand: April 2026</div><div class="bs-actions"><button class="bs-btn orange" onclick="closeBS()">Schließen</button></div>';
   document.getElementById('bsContent').innerHTML=c;
   document.getElementById('bsheet').classList.add('show');
