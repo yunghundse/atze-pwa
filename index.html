@@ -551,7 +551,7 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
 
 <!-- LOADING -->
 <!-- MAINTENANCE SCREEN -->
-<div id="maintenanceScreen" class="gone" style="position:fixed;inset:0;z-index:999998;background:var(--bg);background-image:radial-gradient(ellipse at 50% 30%,rgba(255,109,46,.06),transparent 60%);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px">
+<div id="maintenanceScreen" style="position:fixed;inset:0;z-index:999998;background:var(--bg);background-image:radial-gradient(ellipse at 50% 30%,rgba(255,109,46,.06),transparent 60%);display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px">
   <div style="font-size:64px;margin-bottom:20px">🔧</div>
   <div style="font-size:32px;font-weight:900;letter-spacing:-1px;margin-bottom:8px">crew<span style="background:linear-gradient(135deg,#FF6D2E,#FFD60A);-webkit-background-clip:text;background-clip:text;color:transparent">.</span></div>
   <div id="maintenanceMsg" style="font-size:15px;color:var(--t2);line-height:1.6;max-width:320px;margin-bottom:24px">Wartungsarbeiten – wir sind gleich zurück!</div>
@@ -559,7 +559,7 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
 </div>
 
 <!-- REGISTRATION CLOSED SCREEN -->
-<div id="regClosedScreen" class="gone" style="position:fixed;inset:0;z-index:999997;background:var(--bg);background-image:radial-gradient(ellipse at 50% 30%,rgba(255,109,46,.06),transparent 60%);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px">
+<div id="regClosedScreen" style="position:fixed;inset:0;z-index:999997;background:var(--bg);background-image:radial-gradient(ellipse at 50% 30%,rgba(255,109,46,.06),transparent 60%);display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px">
   <div style="font-size:64px;margin-bottom:20px">🚧</div>
   <div style="font-size:32px;font-weight:900;letter-spacing:-1px;margin-bottom:8px">crew<span style="background:linear-gradient(135deg,#FF6D2E,#FFD60A);-webkit-background-clip:text;background-clip:text;color:transparent">.</span></div>
   <div id="regClosedMsg" style="font-size:15px;color:var(--t2);line-height:1.6;max-width:320px;margin-bottom:24px">Die Registrierung ist aktuell geschlossen.</div>
@@ -875,7 +875,7 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 17;
+  var APP_VERSION = 18;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     localStorage.setItem('crew_app_v', APP_VERSION);
@@ -1147,8 +1147,7 @@ document.addEventListener('DOMContentLoaded', async function(){
 
     if(isMaintenance){
       document.getElementById('loadingScreen').classList.add('gone');
-      var mm = document.getElementById('maintenanceScreen');
-      mm.classList.remove('gone');
+      document.getElementById('maintenanceScreen').style.display = 'flex';
       document.getElementById('maintenanceMsg').textContent = APP_SETTINGS.maintenance_message || 'Wartungsarbeiten – wir sind gleich zurück!';
       console.log('[CREW] Maintenance mode active — blocking app');
       return;
@@ -1160,8 +1159,7 @@ document.addEventListener('DOMContentLoaded', async function(){
       // Check if registration is closed before showing age gate
       if(APP_SETTINGS.registration_open === 'false'){
         document.getElementById('loadingScreen').classList.add('gone');
-        var rc = document.getElementById('regClosedScreen');
-        rc.classList.remove('gone');
+        document.getElementById('regClosedScreen').style.display = 'flex';
         document.getElementById('regClosedMsg').textContent = APP_SETTINGS.registration_message || 'Die Registrierung ist aktuell geschlossen.';
         console.log('[CREW] Registration closed — blocking new users');
         return;
