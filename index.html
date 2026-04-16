@@ -875,7 +875,7 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 18;
+  var APP_VERSION = 19;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     localStorage.setItem('crew_app_v', APP_VERSION);
@@ -1156,14 +1156,6 @@ document.addEventListener('DOMContentLoaded', async function(){
     if(session && session.user){
       await loadUser(session.user);
     } else {
-      // Check if registration is closed before showing age gate
-      if(APP_SETTINGS.registration_open === 'false'){
-        document.getElementById('loadingScreen').classList.add('gone');
-        document.getElementById('regClosedScreen').style.display = 'flex';
-        document.getElementById('regClosedMsg').textContent = APP_SETTINGS.registration_message || 'Die Registrierung ist aktuell geschlossen.';
-        console.log('[CREW] Registration closed — blocking new users');
-        return;
-      }
       showAgeGate();
     }
   } catch(e) {
@@ -1245,10 +1237,22 @@ window.checkAge = function(){
 function showAuth(){
   document.getElementById('loadingScreen').classList.add('gone');
   document.getElementById('authScreen').classList.remove('gone');
+  // If registration closed, force login mode
+  if(window.APP_SETTINGS && window.APP_SETTINGS.registration_open === 'false'){
+    authMode = 'login';
+    document.getElementById('authSubmit').textContent = t('auth_login');
+    document.getElementById('authSwitch').innerHTML = t('auth_no_account') + ' <span>' + t('auth_signup') + '</span>';
+  }
 }
 
 window.toggleAuthMode = function(){
-  authMode = authMode === 'signup' ? 'login' : 'signup';
+  var wantSignup = authMode !== 'signup';
+  // Block switching to signup if registration is closed
+  if(wantSignup && window.APP_SETTINGS && window.APP_SETTINGS.registration_open === 'false'){
+    toast(window.APP_SETTINGS.registration_message || 'Die Registrierung ist aktuell geschlossen.');
+    return;
+  }
+  authMode = wantSignup ? 'signup' : 'login';
   document.getElementById('authSubmit').textContent = authMode === 'signup' ? t('auth_signup') : t('auth_login');
   document.getElementById('authSwitch').innerHTML = authMode === 'signup'
     ? t('auth_has_account') + ' <span>' + t('auth_login') + '</span>'
@@ -1267,6 +1271,12 @@ window.authEmail = async function(){
 
   try {
     if(authMode === 'signup'){
+      // Block signup if registration is closed
+      if(window.APP_SETTINGS && window.APP_SETTINGS.registration_open === 'false'){
+        toast(window.APP_SETTINGS.registration_message || 'Die Registrierung ist aktuell geschlossen.');
+        btn.disabled=false; btn.textContent='Registrieren';
+        return;
+      }
       console.log('[CREW] Signing up:', email);
       var res = await sb.auth.signUp({email: email, password: pass});
       console.log('[CREW] SignUp result:', JSON.stringify(res));
