@@ -1,6 +1,6 @@
 -- ============================================
 -- ATZE PWA — Supabase Datenbank-Schema
--- butterbread tech GmbH
+-- Butterbread Technologies
 -- ============================================
 -- Dieses SQL in Supabase → SQL Editor einfügen
 -- und auf "Run" klicken.
