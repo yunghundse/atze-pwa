@@ -498,55 +498,6 @@ select.ri{appearance:none;-webkit-appearance:none}
 .weather-card{position:relative;overflow:hidden}
 .weather-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,214,10,.08),rgba(10,132,255,.06));border-radius:var(--r);pointer-events:none}
 
-/* CREW SHOT - INSTAGRAM FEED STYLE */
-#atzeShotOv{background:var(--bg)!important;display:flex!important;flex-direction:column!important;padding:0!important}
-#atzeShotOv .drink-display{padding:0;flex:1;display:flex;flex-direction:column;gap:0}
-#atzeShotOv .drink-close{z-index:20}
-.shot-feed-container{flex:1;display:flex;flex-direction:column;overflow:hidden}
-.shot-feed-header{padding:68px 16px 12px;text-align:center;border-bottom:1px solid var(--brd);flex-shrink:0}
-.shot-feed-header h2{font-size:20px;font-weight:900;margin-bottom:4px}
-.shot-feed-header p{font-size:12px;color:var(--t3);margin:4px 0}
-.shot-daily-challenge{margin:16px 14px;padding:16px;border-radius:var(--r);background:linear-gradient(135deg,rgba(255,109,46,.12),rgba(255,214,10,.08));backdrop-filter:blur(40px);border:1px solid rgba(255,214,10,.2);cursor:pointer;flex-shrink:0}
-.shot-daily-challenge .sdc-label{font-size:10px;font-weight:700;color:var(--o);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
-.shot-daily-challenge h3{font-size:18px;font-weight:900;margin-bottom:4px}
-.shot-daily-challenge .sdc-sub{font-size:12px;color:var(--t2);margin-bottom:12px}
-.shot-feed-grid{flex:1;overflow-y:auto;padding:14px;display:grid;grid-template-columns:repeat(2,1fr);gap:12px;-webkit-overflow-scrolling:touch}
-.shot-feed-grid::-webkit-scrollbar{width:4px}
-.shot-feed-grid::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:2px}
-.shot-card{position:relative;border-radius:var(--r2);overflow:hidden;aspect-ratio:1;cursor:pointer;background:var(--bg3);transition:transform .2s var(--bounce);box-shadow:0 4px 12px rgba(0,0,0,.3)}
-.shot-card:active{transform:scale(.95)}
-.shot-card img{width:100%;height:100%;object-fit:cover}
-.shot-card-overlay{position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(0,0,0,.75) 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:12px;color:#fff;pointer-events:none}
-.sco-user{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-.sco-ava{width:32px;height:32px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,255,255,.3)}
-.sco-ava img{width:100%;height:100%;object-fit:cover}
-.sco-info{flex:1}
-.sco-name{font-size:13px;font-weight:700}
-.sco-time{font-size:10px;color:rgba(255,255,255,.7);margin-top:1px}
-.sco-likes{display:flex;align-items:center;gap:4px;font-size:12px;font-weight:600}
-.shot-empty{grid-column:1/-1;padding:40px 20px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.shot-empty-icon{font-size:48px;margin-bottom:12px}
-.shot-empty-text{font-size:14px;color:var(--t2);margin-bottom:16px}
-.shot-upload-banner{padding:14px;margin:14px;border-radius:var(--r);background:var(--glass);backdrop-filter:blur(40px);border:1px solid var(--glass-border);display:flex;align-items:center;gap:12px;flex-shrink:0;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
-.sub-icon{width:44px;height:44px;border-radius:12px;background:rgba(255,109,46,.15);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
-.sub-text h4{font-size:14px;font-weight:700;margin-bottom:2px}
-.sub-text p{font-size:11px;color:var(--t3)}
-.shot-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:10007;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;overflow-y:auto}
-.shot-modal-close{position:absolute;top:20px;right:20px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.1);border:none;color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2}
-.shot-modal-image{max-width:100%;max-height:70vh;border-radius:var(--r2);margin-bottom:20px;box-shadow:0 8px 32px rgba(0,0,0,.5)}
-.shot-modal-info{width:100%;max-width:420px;background:var(--glass);backdrop-filter:blur(40px);border:1px solid var(--glass-border);border-radius:var(--r2);padding:20px;text-align:center;box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
-.shot-modal-info h3{font-size:18px;font-weight:900;margin-bottom:8px}
-.shot-modal-info p{font-size:13px;color:var(--t2);margin-bottom:16px}
-.shot-modal-stats{display:flex;justify-content:center;gap:16px;margin:16px 0;padding:16px 0;border-top:1px solid var(--brd);border-bottom:1px solid var(--brd)}
-.shot-modal-stat{text-align:center}
-.shot-modal-stat-num{font-size:20px;font-weight:900;color:var(--o)}
-.shot-modal-stat-label{font-size:10px;color:var(--t3);text-transform:uppercase;margin-top:4px}
-.shot-modal-actions{display:flex;flex-direction:column;gap:8px;margin-top:16px}
-.shot-modal-btn{padding:14px;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;transition:transform .15s;display:flex;align-items:center;justify-content:center;gap:8px}
-.shot-modal-btn:active{transform:scale(.97)}
-.shot-modal-btn.like{background:var(--o);color:#fff;box-shadow:0 4px 12px rgba(255,109,46,.3)}
-.shot-modal-btn.close{background:var(--bg3);color:var(--t2)}
-#shotFeed::-webkit-scrollbar{display:none}
 @keyframes activePulse{0%,100%{box-shadow:0 0 0 0 rgba(52,199,89,.4)}50%{box-shadow:0 0 0 6px rgba(52,199,89,0)}}
 </style>
 </head>
@@ -743,28 +694,6 @@ select.ri{appearance:none;-webkit-appearance:none}
   </div>
 </div>
 
-<!-- CREW SHOT - INSTAGRAM FEED STYLE -->
-<div id="atzeShotOv" style="z-index:10006;display:none" onclick="if(event.target===this)closeCrewShot()">
-  <button class="drink-close" onclick="closeCrewShot()" style="background:rgba(0,0,0,.4)">✕</button>
-  <div class="shot-feed-container">
-    <div class="shot-feed-header">
-      <h2>📸 CrewShot</h2>
-      <p>Tägliche Challenge · Verschwindet nach 24h</p>
-    </div>
-    <div class="shot-daily-challenge" onclick="document.getElementById('shotPhotoFile').click();event.stopPropagation()">
-      <div class="sdc-label">Heute</div>
-      <h3 id="shotChallengeText">Lade Challenge...</h3>
-      <div class="sdc-sub" id="shotChallengeEmoji">📸</div>
-    </div>
-    <div id="shotPreview" style="display:none;margin:14px;width:150px;height:150px;border-radius:var(--r2);overflow:hidden;border:3px solid var(--o);align-self:center"><img id="shotPreviewImg" style="width:100%;height:100%;object-fit:cover"></div>
-    <div style="display:flex;gap:8px;padding:0 14px;flex-shrink:0" id="shotUploadControls" style="display:none">
-      <button class="rnext" style="flex:1;background:var(--bg3);color:var(--t2)" onclick="document.getElementById('shotPreview').style.display='none';shotPhotoBlob=null;document.getElementById('shotUploadControls').style.display='none'">Abbrechen</button>
-      <button class="rnext" id="shotUploadBtn" style="flex:1;background:var(--green)" onclick="uploadCrewShot()">✅ Posten</button>
-    </div>
-    <input type="file" id="shotPhotoFile" accept="image/*" capture="environment" style="display:none" onchange="previewShotPhoto(this)">
-    <div class="shot-feed-grid" id="shotFeedGrid"></div>
-  </div>
-</div>
 
 <div class="toast" id="toast"></div>
 
@@ -822,12 +751,6 @@ select.ri{appearance:none;-webkit-appearance:none}
         </div>
         <div class="sec-label anim">🔥 Live auf der Insel</div>
         <div class="hscroll anim" id="venueScroll"></div>
-        <div class="tonight glass anim" onclick="openCrewShot()" style="cursor:pointer">
-          <div class="tc-row"><div class="tc-live"></div><div class="tc-label">CrewShot</div></div>
-          <h3 id="shotDailyTitle">📸 Tägliche Challenge</h3>
-          <div class="tc-sub" id="shotDailySub">Lade...</div>
-          <button class="tc-btn primary" onclick="event.stopPropagation();openCrewShot()">📸 Jetzt knipsen!</button>
-        </div>
         <div class="sec-label anim d1">👥 Crew in der Nähe</div>
         <div id="nearbyCrewList" class="anim d1" style="padding:0 14px 14px"><p style="color:var(--t3);font-size:13px">Standort wird geladen...</p></div>
         <div class="countdown-card anim d1" onclick="setTripDate()" id="countdownCard" style="margin:10px 14px"><h3>✈️ Malle-Countdown</h3><p>Tippe um dein Abreisedatum zu setzen</p></div>
@@ -872,7 +795,7 @@ select.ri{appearance:none;-webkit-appearance:none}
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 13;
+  var APP_VERSION = 14;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     localStorage.setItem('crew_app_v', APP_VERSION);
@@ -917,20 +840,6 @@ var CHALLENGES = [
   {title:'Spanisch bestellen',icon:'🇪🇸',desc:'Bestelle komplett auf Spanisch',pts:40}
 ];
 
-var CREW_CHALLENGES = [
-  {id:'sangria',text:'📸 Zeig deinen Sangria-Eimer!',emoji:'🍹'},
-  {id:'stranger',text:'📸 Selfie mit einem Fremden!',emoji:'🤳'},
-  {id:'sunset',text:'📸 Bester Sonnenuntergang-Shot!',emoji:'🌅'},
-  {id:'crew',text:'📸 Crew-Foto am Strand!',emoji:'👥'},
-  {id:'food',text:'📸 Bestes Malle-Essen!',emoji:'🍕'},
-  {id:'dance',text:'📸 Caught dancing!',emoji:'💃'},
-  {id:'pool',text:'📸 Pool-Moment!',emoji:'🏊'},
-  {id:'balkon',text:'📸 Balkonien-View!',emoji:'🏨'},
-  {id:'drinks',text:'📸 Cheers mit der Crew!',emoji:'🥂'},
-  {id:'beach',text:'📸 Strand-Vibes!',emoji:'🏖️'},
-  {id:'night',text:'📸 Nachtleben-Snapshot!',emoji:'🌙'},
-  {id:'taxi',text:'📸 Im Taxi nach...?',emoji:'🚕'}
-];
 var AFFILIATES = [
   {phase:'pre',icon:'✈️',partner:'Check24 Flüge',net:'Belboon',com:'~2%',desc:'Günstige Flüge nach Mallorca finden und direkt buchen.',cta:'Flug schnappen',url:'https://www.check24.de/flug/?pid=CREW_{subid}',tags:['Flüge','Ø 350€']},
   {phase:'pre',icon:'🛡',partner:'HanseMerkur Reiseversicherung',net:'Awin',com:'15-22%',desc:'Reiserücktritt, Krankenversicherung & mehr. Sorglos auf Malle.',cta:'Abgesichert reisen',url:'https://www.hansemerkur.de/reiseversicherung?awc=CREW_{subid}',tags:['Versicherung','Ø 45€']},
@@ -999,8 +908,8 @@ var I18N = {
     ob_go: "Los geht's!",
     // DSGVO items
     dsgvo_location: 'Standort', dsgvo_location_desc: 'Venues und Crew in deiner Nähe. Du kannst die App auch ohne Standort nutzen.',
-    dsgvo_push: 'Push-Benachrichtigungen', dsgvo_push_desc: 'CrewShot, Matches, Deals.',
-    dsgvo_camera: 'Kamera', dsgvo_camera_desc: 'CrewShot & Profilfotos.',
+    dsgvo_push: 'Push-Benachrichtigungen', dsgvo_push_desc: 'Matches, Deals & Updates.',
+    dsgvo_camera: 'Kamera', dsgvo_camera_desc: 'Profilfotos.',
     dsgvo_analytics: 'Anonyme Nutzungsanalyse', dsgvo_analytics_desc: 'Hilft uns die App zu verbessern.',
     dsgvo_required: '(erforderlich)', dsgvo_footer: 'butterbread tech GmbH · butterbread-tech.com · AES-256 verschlüsselt · Server EU (Frankfurt) · DSGVO-konform',
     // Nav
@@ -1398,8 +1307,8 @@ function showOnboarding(authUser){
   var dl=document.getElementById('dsgvoList');
   if(dl)dl.innerHTML=[
     {l:'Standort',d:'Venues und Crew in deiner Nähe.',on:1},
-    {l:'Push',d:'CrewShot, Matches, Deals.',on:1},
-    {l:'Kamera',d:'CrewShot & Profilfotos.',on:1},
+    {l:'Push',d:'Matches, Deals & Updates.',on:1},
+    {l:'Kamera',d:'Profilfotos.',on:1},
     {l:'Analyse',d:'Anonyme Nutzungsanalyse.',on:0}
   ].map(function(i){return '<div class="dsgvo-item"><div class="dtxt"><h4>'+i.l+'</h4><p style="font-size:12px;color:var(--t3)">'+i.d+'</p></div><button class="dtog'+(i.on?' on':'')+'" onclick="this.classList.toggle(\'on\')"></button></div>'}).join('');
 }
@@ -1572,15 +1481,6 @@ function buildApp(){
   try{buildChallenges()}catch(e){console.error('buildChallenges failed:',e)}
   try{buildCountdownCard()}catch(e){console.error('buildCountdownCard failed:',e)}
 
-  // CrewShot daily challenge card
-  try {
-    var dailyChallenge = getTodaysChallenge();
-    if(dailyChallenge){
-      document.getElementById('shotDailyTitle').textContent = dailyChallenge.emoji + ' ' + dailyChallenge.text.replace('📸 ','');
-      document.getElementById('shotDailySub').textContent = 'Poste ein Foto und verdiene 30 🍹 Sangrias!';
-    }
-  } catch(e){ console.warn('Daily challenge display failed:', e); }
-
   document.getElementById('sNum').textContent = ME.streak || 0;
   // Initial nearby build
   buildNearby();
@@ -1720,36 +1620,12 @@ var VENUE_STORIES = [
 function buildStories(){
   var b = document.getElementById('storiesBar');
   if(!b) return;
-  // 1. CrewShot camera button
-  var html = '<div class="add-story" onclick="openCrewShot()"><div style="font-size:22px">📸</div></div>';
-
-  // 2. Real Instagram venue stories
+  var html = '';
+  // Venue stories (Instagram links)
   VENUE_STORIES.forEach(function(v){
     html += '<div class="sty" onclick="window.open(\'https://instagram.com/'+v.ig+'\',\'_blank\')"><div class="sty-ring"><img src="'+v.img+'" alt="'+esc(v.name)+'"></div><div class="sty-name">'+v.emoji+' '+v.name+'</div></div>';
   });
   b.innerHTML = html;
-
-  // 3. Load real CrewShots from last 24h
-  var since = new Date(Date.now() - 24*60*60*1000).toISOString();
-  sb.from('atze_shots').select('id, photo_url, challenge, caption, likes, created_at, profiles!atze_shots_user_id_fkey(name, photo_url)')
-    .gte('created_at', since)
-    .order('created_at', {ascending: false})
-    .limit(20)
-    .then(function(res){
-      if(!res.data || res.data.length === 0){
-        b.innerHTML += '<div class="sty" onclick="openCrewShot()" style="opacity:.5"><div class="sty-ring" style="background:var(--bg4);padding:2.5px"><div style="width:100%;height:100%;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:20px">?</div></div><div class="sty-name">Erster Shot?</div></div>';
-        return;
-      }
-      var html = '';
-      res.data.forEach(function(s){
-        var name = s.profiles ? esc(s.profiles.name) : 'User';
-        var ava = s.photo_url;
-        html += '<div class="sty" onclick="viewShot(\''+s.id+'\',\''+esc(s.photo_url)+'\',\''+name+'\',\''+esc(s.caption||'')+'\','+s.likes+')"><div class="sty-ring"><img src="'+ava+'" alt="'+name+'"></div><div class="sty-name">'+name+'</div></div>';
-      });
-      b.innerHTML += html;
-    }).catch(function(e){
-      console.warn('Stories load failed:', e);
-    });
 }
 
 var userMarker = null, userAccCircle = null, userLat = 0, userLng = 0;
@@ -1844,175 +1720,6 @@ window.checkinVenue = async function(venueId, name){
   closeBS();
 };
 
-// ============================================
-// CREW SHOT (24h Photo Challenges)
-// ============================================
-var currentShotChallenge = null;
-var shotPhotoBlob = null;
-
-function getTodaysChallenge(){
-  var dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(),0,0)) / 86400000);
-  return CREW_CHALLENGES[dayOfYear % CREW_CHALLENGES.length];
-}
-
-window.openCrewShot = function(){
-  currentShotChallenge = getTodaysChallenge();
-  document.getElementById('shotChallengeEmoji').textContent = currentShotChallenge.emoji;
-  document.getElementById('shotChallengeText').textContent = currentShotChallenge.text;
-  document.getElementById('shotPreview').style.display = 'none';
-  document.getElementById('shotUploadBtn').style.display = 'none';
-  shotPhotoBlob = null;
-  document.getElementById('atzeShotOv').classList.add('show');
-  loadShotFeed();
-};
-
-window.closeCrewShot = function(){
-  document.getElementById('atzeShotOv').classList.remove('show');
-};
-
-window.previewShotPhoto = function(input){
-  if(!input.files || !input.files[0]) return;
-  var file = input.files[0];
-  if(file.size > 5*1024*1024){toast('Max 5MB!');return}
-  var reader = new FileReader();
-  reader.onload = function(e){
-    var img = new Image();
-    img.onload = function(){
-      var canvas = document.createElement('canvas');
-      var max = 800; var w = img.width, h = img.height;
-      if(w > h){h = h*(max/w); w = max} else {w = w*(max/h); h = max}
-      canvas.width = w; canvas.height = h;
-      canvas.getContext('2d').drawImage(img,0,0,w,h);
-      canvas.toBlob(function(blob){
-        shotPhotoBlob = blob;
-        document.getElementById('shotPreviewImg').src = URL.createObjectURL(blob);
-        document.getElementById('shotPreview').style.display = 'block';
-        document.getElementById('shotUploadControls').style.display = 'flex';
-      },'image/jpeg',0.8);
-    };
-    img.src = e.target.result;
-  };
-  reader.readAsDataURL(file);
-};
-
-window.uploadCrewShot = async function(){
-  if(!shotPhotoBlob || !currentShotChallenge){toast('Bitte erst ein Foto aufnehmen!');return}
-  if(!ME || !ME.user_id){toast('Bitte einloggen');return}
-
-  var btn = document.getElementById('shotUploadBtn');
-  btn.disabled = true;
-  btn.textContent = 'Wird hochgeladen...';
-
-  try {
-    var path = ME.user_id + '/shot_' + Date.now() + '.jpg';
-    var upErr = await sb.storage.from('shots').upload(path, shotPhotoBlob, {contentType:'image/jpeg'});
-    if(upErr.error){toast('Upload-Fehler: '+upErr.error.message);btn.disabled=false;btn.textContent='✅ CrewShot posten!';return}
-
-    var urlData = sb.storage.from('shots').getPublicUrl(path);
-    var photoUrl = urlData.data.publicUrl;
-
-    var dbErr = await sb.from('atze_shots').insert({
-      user_id: ME.user_id,
-      photo_url: photoUrl,
-      challenge: currentShotChallenge.id,
-      caption: currentShotChallenge.text
-    });
-
-    if(dbErr.error){toast('Fehler: '+dbErr.error.message);btn.disabled=false;btn.textContent='✅ CrewShot posten!';return}
-
-    // Add points
-    await sb.rpc('add_points',{p_user_id: ME.user_id, p_points: 30});
-    ME.points += 30;
-    updateProfile();
-
-    toast('📸 CrewShot gepostet! +30 🍹');
-    sendLocalNotification('📸 CrewShot!', {body: currentShotChallenge.text + ' — gepostet!'});
-    shotPhotoBlob = null;
-    document.getElementById('shotPreview').style.display = 'none';
-    document.getElementById('shotUploadControls').style.display = 'none';
-    btn.disabled = false;
-    btn.textContent = '✅ Posten';
-
-    loadShotFeed();
-    buildStories();
-  } catch(e){
-    console.error('Upload error:', e);
-    toast('Fehler beim Upload');
-    btn.disabled = false;
-    btn.textContent = '✅ CrewShot posten!';
-  }
-};
-
-async function loadShotFeed(){
-  var grid = document.getElementById('shotFeedGrid');
-  if(!grid) return;
-  try {
-    var since = new Date(Date.now() - 24*60*60*1000).toISOString();
-    var res = await sb.from('atze_shots').select('*, profiles!atze_shots_user_id_fkey(name, photo_url)').gte('created_at', since).order('created_at', {ascending: false}).limit(50);
-    var shots = res.data;
-
-    if(!shots || shots.length === 0){
-      grid.innerHTML = '<div class="shot-empty"><div class="shot-empty-icon">📸</div><div class="shot-empty-text">Noch keine Shots heute</div><p style="font-size:12px;color:var(--t2)">Sei der erste und teile dein CrewShot!</p></div>';
-      return;
-    }
-
-    grid.innerHTML = shots.map(function(s){
-      var name = s.profiles ? s.profiles.name : 'Atze';
-      var ava = s.profiles && s.profiles.photo_url ? s.profiles.photo_url : 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=60';
-      var timeAgo = Math.round((Date.now() - new Date(s.created_at).getTime()) / 3600000);
-      var hours = timeAgo === 0 ? 'gerade eben' : (timeAgo === 1 ? 'vor 1h' : 'vor '+timeAgo+'h');
-      return '<div class="shot-card" onclick="viewShotModal(\''+s.id+'\',\''+esc(s.photo_url)+'\',\''+esc(name)+'\',\''+esc(s.caption)+'\','+s.likes+')">' +
-        '<img src="'+s.photo_url+'" alt="'+esc(name)+'" loading="lazy">' +
-        '<div class="shot-card-overlay">' +
-          '<div class="sco-user">' +
-            '<div class="sco-ava"><img src="'+ava+'" alt="'+esc(name)+'"></div>' +
-            '<div class="sco-info">' +
-              '<div class="sco-name">'+esc(name)+'</div>' +
-              '<div class="sco-time">'+hours+'</div>' +
-            '</div>' +
-          '</div>' +
-          '<div class="sco-likes">❤️ '+s.likes+'</div>' +
-        '</div>' +
-      '</div>';
-    }).join('');
-  } catch(e){
-    console.warn('Shot feed load failed:', e);
-    grid.innerHTML = '<div class="shot-empty"><div class="shot-empty-icon">⚠️</div><div class="shot-empty-text">Feed lädt nicht</div></div>';
-  }
-}
-
-window.viewShot = function(id, url, name, caption, likes){
-  document.getElementById('bsImg').src = url;
-  document.getElementById('bsContent').innerHTML = '<h2>📸 '+esc(name)+'</h2><div class="bs-meta">'+esc(caption)+'</div><div style="display:flex;gap:12px;margin-top:16px"><button class="bs-btn orange" style="flex:1" onclick="likeShot(\''+id+'\')">❤️ Like ('+likes+')</button><button class="bs-btn dark" style="flex:1" onclick="closeBS()">Schließen</button></div>';
-  document.getElementById('bsheet').classList.add('show');
-};
-
-window.viewShotModal = function(id, url, name, caption, likes){
-  var modal = document.createElement('div');
-  modal.className = 'shot-modal-overlay';
-  modal.innerHTML = '<button class="shot-modal-close" onclick="this.parentElement.remove()">✕</button>' +
-    '<img src="'+url+'" class="shot-modal-image" alt="'+esc(name)+'">' +
-    '<div class="shot-modal-info">' +
-      '<h3>'+esc(name)+'</h3>' +
-      '<p style="margin-bottom:8px">'+esc(caption)+'</p>' +
-      '<div class="shot-modal-stats">' +
-        '<div class="shot-modal-stat"><div class="shot-modal-stat-num">'+likes+'</div><div class="shot-modal-stat-label">Likes</div></div>' +
-      '</div>' +
-      '<div class="shot-modal-actions">' +
-        '<button class="shot-modal-btn like" onclick="likeShot(\''+id+'\');setTimeout(function(){if(this.parentElement.parentElement)this.parentElement.parentElement.remove()},300)">❤️ Like</button>' +
-        '<button class="shot-modal-btn close" onclick="this.parentElement.parentElement.remove()">Schließen</button>' +
-      '</div>' +
-    '</div>';
-  document.body.appendChild(modal);
-};
-
-window.likeShot = async function(id){
-  try {
-    await sb.rpc('like_shot', {shot_id: id});
-    toast('❤️ Geliked!');
-    loadShotFeed();
-  } catch(e){ toast('Fehler beim Like'); }
-};
 
 // ============================================
 // MATCHING
@@ -2275,7 +1982,7 @@ function buildClubPicker(){
 window.openLegal=function(type){
   document.getElementById('bsImg').src='https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=60';
   var c='';
-  if(type==='dsgvo')c='<h2>Datenschutzerklärung</h2><div class="bs-desc" style="font-size:12px;line-height:1.7"><strong>Verantwortlicher gem. Art. 4 Abs. 7 DSGVO</strong><br>butterbread tech GmbH<br>Geschäftsführer: Jan<br>Web: butterbread-tech.com<br>E-Mail: datenschutz@butterbread-tech.com<br><br><strong>1. Datenkategorien & Rechtsgrundlagen</strong><br><strong>Profildaten</strong> (Name, Geburtsdatum, Geschlecht, Bio, Fotos): Rechtsgrundlage Art. 6 Abs. 1 b DSGVO (Erfüllung Nutzungsvertrag). Speicherdauer: Bis zur Accountlöschung.<br><strong>Standortdaten:</strong> Rechtsgrundlage Art. 6 Abs. 1 a DSGVO (Einwilligung). Speicherdauer: Nur aktuelle Position, nicht archiviert. Du kannst Standort jederzeit deaktivieren.<br><strong>Kameradaten:</strong> Nur bei CrewShot-Feature. Rechtsgrundlage Art. 6 Abs. 1 a DSGVO (Einwilligung). Speicherdauer: Nur während aktiven Uploads.<br><strong>Nutzungsdaten:</strong> Anonymisiert, keine IP-Tracking. Rechtsgrundlage Art. 6 Abs. 1 a DSGVO.<br><br><strong>2. Drittanbieter</strong><br>Supabase (Auth, Database, Storage) - Server in der EU (Frankfurt). Alle Daten AES-256 verschlüsselt.<br><br><strong>3. Speicherdauer</strong><br>Profildaten: Bis zur Accountlöschung.<br>Standortdaten: Nur letzte bekannte Position (keine Historie).<br>Nach Accountlöschung: Vollständig und irreversibel gelöscht.<br><br><strong>4. Betroffenenrechte (Art. 15-22 DSGVO)</strong><br>• Auskunft (Art. 15): Export deiner Daten möglich<br>• Berichtigung (Art. 16): Profilbearbeitung<br>• Löschung (Art. 17): Accountlöschung<br>• Einschränkung (Art. 18): Nicht automatisch implementiert<br>• Datenportabilität (Art. 20): Über Export-Funktion<br>• Widerspruch (Art. 21): datenschutz@butterbread-tech.com<br><br><strong>5. Aufsichtsbehörde</strong><br>Landesbeauftragte für Datenschutz und Informationsfreiheit Baden-Württemberg (falls zuständig) oder deine lokale Behörde.<br><br><strong>6. Keine Cookies, Keine Tracker</strong><br>Wir verwenden keine Tracking-Cookies oder Drittanbieter-Analytics.<br><br><strong>Kontakt: datenschutz@butterbread-tech.com</strong><br>Stand: April 2026</div><div class="bs-actions"><button class="bs-btn orange" onclick="closeBS()">Schließen</button></div>';
+  if(type==='dsgvo')c='<h2>Datenschutzerklärung</h2><div class="bs-desc" style="font-size:12px;line-height:1.7"><strong>Verantwortlicher gem. Art. 4 Abs. 7 DSGVO</strong><br>butterbread tech GmbH<br>Geschäftsführer: Jan<br>Web: butterbread-tech.com<br>E-Mail: datenschutz@butterbread-tech.com<br><br><strong>1. Datenkategorien & Rechtsgrundlagen</strong><br><strong>Profildaten</strong> (Name, Geburtsdatum, Geschlecht, Bio, Fotos): Rechtsgrundlage Art. 6 Abs. 1 b DSGVO (Erfüllung Nutzungsvertrag). Speicherdauer: Bis zur Accountlöschung.<br><strong>Standortdaten:</strong> Rechtsgrundlage Art. 6 Abs. 1 a DSGVO (Einwilligung). Speicherdauer: Nur aktuelle Position, nicht archiviert. Du kannst Standort jederzeit deaktivieren.<br><strong>Kameradaten:</strong> Nur bei Profilbild-Upload. Rechtsgrundlage Art. 6 Abs. 1 a DSGVO (Einwilligung). Speicherdauer: Nur während aktiven Uploads.<br><strong>Nutzungsdaten:</strong> Anonymisiert, keine IP-Tracking. Rechtsgrundlage Art. 6 Abs. 1 a DSGVO.<br><br><strong>2. Drittanbieter</strong><br>Supabase (Auth, Database, Storage) - Server in der EU (Frankfurt). Alle Daten AES-256 verschlüsselt.<br><br><strong>3. Speicherdauer</strong><br>Profildaten: Bis zur Accountlöschung.<br>Standortdaten: Nur letzte bekannte Position (keine Historie).<br>Nach Accountlöschung: Vollständig und irreversibel gelöscht.<br><br><strong>4. Betroffenenrechte (Art. 15-22 DSGVO)</strong><br>• Auskunft (Art. 15): Export deiner Daten möglich<br>• Berichtigung (Art. 16): Profilbearbeitung<br>• Löschung (Art. 17): Accountlöschung<br>• Einschränkung (Art. 18): Nicht automatisch implementiert<br>• Datenportabilität (Art. 20): Über Export-Funktion<br>• Widerspruch (Art. 21): datenschutz@butterbread-tech.com<br><br><strong>5. Aufsichtsbehörde</strong><br>Landesbeauftragte für Datenschutz und Informationsfreiheit Baden-Württemberg (falls zuständig) oder deine lokale Behörde.<br><br><strong>6. Keine Cookies, Keine Tracker</strong><br>Wir verwenden keine Tracking-Cookies oder Drittanbieter-Analytics.<br><br><strong>Kontakt: datenschutz@butterbread-tech.com</strong><br>Stand: April 2026</div><div class="bs-actions"><button class="bs-btn orange" onclick="closeBS()">Schließen</button></div>';
   else if(type==='impressum')c='<h2>Impressum</h2><div class="bs-desc" style="font-size:12px;line-height:1.7"><strong>Angaben gemäß §5 TMG</strong><br><br>butterbread tech GmbH<br>Geschäftsführer: Jan<br>Web: butterbread-tech.com<br>E-Mail: hello@butterbread-tech.com<br><br><strong>Registergericht:</strong> [wird nach Eintragung ergänzt]<br><strong>HRB:</strong> [wird nach Eintragung ergänzt]<br><br>Stand: April 2026</div><div class="bs-actions"><button class="bs-btn orange" onclick="closeBS()">Schließen</button></div>';
   else if(type==='agb')c='<h2>AGB</h2><div class="bs-desc" style="font-size:12px;line-height:1.7"><strong>§1 Geltungsbereich</strong><br>Diese AGB gelten für die atze-App der butterbread tech GmbH.<br><br><strong>§2 Registrierung</strong><br>Mindestalter 18 Jahre. Wahrheitsgemäße Angaben. Ein Konto pro Person.<br><br><strong>§3 Premium</strong><br>1 Woche 2,99€, 1 Monat 4,99€/Monat, Saison 9,99€. Kündigung jederzeit. 14-Tage-Widerrufsrecht.<br><br><strong>§4 Verhaltensregeln</strong><br>Kein Mobbing, Belästigung, Diskriminierung. Verstoß = Sperrung.<br><br><strong>§5 Datenschutz</strong><br>Siehe Datenschutzerklärung. DSGVO-konform.<br><br>Stand: April 2026</div><div class="bs-actions"><button class="bs-btn orange" onclick="closeBS()">Schließen</button></div>';
   else if(type==='affiliate')c='<h2>Affiliate-Hinweis</h2><div class="bs-desc" style="font-size:12px;line-height:1.7"><strong>Transparenzhinweis gemäß TMG & UWG</strong><br><br>Die atze-App enthält Affiliate-/Partnerlinks. Wenn du über diese Links Produkte oder Dienstleistungen buchst oder kaufst, erhält die butterbread tech GmbH eine Provision vom jeweiligen Anbieter.<br><br><strong>Für dich ändert sich der Preis nicht.</strong><br><br><strong>Unsere Partner (Auszug):</strong><br>Check24, HanseMerkur, Booking.com, GetYourGuide, Megapark, Amazon, GoPro, Douglas, Sunny Cars, TheFork, Tiqets, Welcome Pickups, Holidayparking, Flaconi, DJI<br><br><strong>Netzwerke:</strong><br>Awin, Belboon, Amazon PartnerNet, Booking Affiliate Partner, Direkt-Partnerschaften<br><br><strong>Tracking:</strong><br>Wir verwenden anonymisierte Sub-IDs zur Zuordnung. Es werden keine personenbezogenen Daten an Partner übermittelt. DSGVO-konform.<br><br><strong>Qualitätsstandards:</strong><br>• Keine Dropshipping/Fake-Shops<br>• Kein Gambling/Sportwetten<br>• Nur etablierte DE/EU-Brands<br>• App-Store-Policy-konform<br><br>Stand: April 2026<br>butterbread tech GmbH · butterbread-tech.com</div><div class="bs-actions"><button class="bs-btn orange" onclick="closeBS()">Schließen</button></div>';
