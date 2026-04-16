@@ -550,6 +550,22 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
 <body>
 
 <!-- LOADING -->
+<!-- MAINTENANCE SCREEN -->
+<div id="maintenanceScreen" class="gone" style="position:fixed;inset:0;z-index:999998;background:var(--bg);background-image:radial-gradient(ellipse at 50% 30%,rgba(255,109,46,.06),transparent 60%);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px">
+  <div style="font-size:64px;margin-bottom:20px">🔧</div>
+  <div style="font-size:32px;font-weight:900;letter-spacing:-1px;margin-bottom:8px">crew<span style="background:linear-gradient(135deg,#FF6D2E,#FFD60A);-webkit-background-clip:text;background-clip:text;color:transparent">.</span></div>
+  <div id="maintenanceMsg" style="font-size:15px;color:var(--t2);line-height:1.6;max-width:320px;margin-bottom:24px">Wartungsarbeiten – wir sind gleich zurück!</div>
+  <div style="font-size:12px;color:var(--t3)">butterbread tech GmbH</div>
+</div>
+
+<!-- REGISTRATION CLOSED SCREEN -->
+<div id="regClosedScreen" class="gone" style="position:fixed;inset:0;z-index:999997;background:var(--bg);background-image:radial-gradient(ellipse at 50% 30%,rgba(255,109,46,.06),transparent 60%);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px">
+  <div style="font-size:64px;margin-bottom:20px">🚧</div>
+  <div style="font-size:32px;font-weight:900;letter-spacing:-1px;margin-bottom:8px">crew<span style="background:linear-gradient(135deg,#FF6D2E,#FFD60A);-webkit-background-clip:text;background-clip:text;color:transparent">.</span></div>
+  <div id="regClosedMsg" style="font-size:15px;color:var(--t2);line-height:1.6;max-width:320px;margin-bottom:24px">Die Registrierung ist aktuell geschlossen.</div>
+  <div style="font-size:12px;color:var(--t3)">butterbread tech GmbH</div>
+</div>
+
 <div class="loading-screen" id="loadingScreen">
   <div style="font-size:48px;font-weight:900;letter-spacing:-3px;margin-bottom:24px;opacity:.9">crew<span style="background:linear-gradient(135deg,#FF6D2E,#FFD60A);-webkit-background-clip:text;background-clip:text;color:transparent">.</span></div>
   <div class="loader"></div>
@@ -859,7 +875,7 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 16;
+  var APP_VERSION = 17;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     localStorage.setItem('crew_app_v', APP_VERSION);
@@ -1103,13 +1119,53 @@ document.addEventListener('DOMContentLoaded', async function(){
     return;
   }
 
+  // Fetch app settings (maintenance mode, registration)
+  var APP_SETTINGS = {};
+  try {
+    var {data:settingsData} = await sb.from('app_settings').select('key,value');
+    if(settingsData) settingsData.forEach(function(s){ APP_SETTINGS[s.key] = s.value; });
+    console.log('[CREW] App settings loaded:', APP_SETTINGS);
+  } catch(e){ console.warn('[CREW] Could not load app_settings:', e); }
+  window.APP_SETTINGS = APP_SETTINGS;
+
+  // Check maintenance mode — admins can bypass
+  var isMaintenance = APP_SETTINGS.maintenance_mode === 'true';
+
   // Check session
   try {
     var {data:{session}} = await sb.auth.getSession();
     console.log('[CREW] Session check:', session ? 'found' : 'none');
+
+    // If maintenance, check if user is admin before blocking
+    if(isMaintenance && session && session.user){
+      var {data:adminCheck} = await sb.from('profiles').select('is_admin').eq('user_id', session.user.id).single();
+      if(adminCheck && adminCheck.is_admin){
+        console.log('[CREW] Maintenance mode active but admin user — bypassing');
+        isMaintenance = false;
+      }
+    }
+
+    if(isMaintenance){
+      document.getElementById('loadingScreen').classList.add('gone');
+      var mm = document.getElementById('maintenanceScreen');
+      mm.classList.remove('gone');
+      document.getElementById('maintenanceMsg').textContent = APP_SETTINGS.maintenance_message || 'Wartungsarbeiten – wir sind gleich zurück!';
+      console.log('[CREW] Maintenance mode active — blocking app');
+      return;
+    }
+
     if(session && session.user){
       await loadUser(session.user);
     } else {
+      // Check if registration is closed before showing age gate
+      if(APP_SETTINGS.registration_open === 'false'){
+        document.getElementById('loadingScreen').classList.add('gone');
+        var rc = document.getElementById('regClosedScreen');
+        rc.classList.remove('gone');
+        document.getElementById('regClosedMsg').textContent = APP_SETTINGS.registration_message || 'Die Registrierung ist aktuell geschlossen.';
+        console.log('[CREW] Registration closed — blocking new users');
+        return;
+      }
       showAgeGate();
     }
   } catch(e) {
@@ -2158,7 +2214,40 @@ window.openAdminPanel = async function(){
     users.forEach(function(u){var g=u.gender||'Unbekannt';genderStats[g]=(genderStats[g]||0)+1});
     var topPoints = users.sort(function(a,b){return (b.points||0)-(a.points||0)}).slice(0,10);
 
+    // Fetch current app settings
+    var {data:curSettings} = await sb.from('app_settings').select('key,value');
+    var settings = {};
+    if(curSettings) curSettings.forEach(function(s){ settings[s.key] = s.value; });
+    var maintenanceOn = settings.maintenance_mode === 'true';
+    var registrationOpen = settings.registration_open !== 'false';
+
     var html = '';
+
+    // === ADMIN CONTROLS ===
+    html += '<div style="background:linear-gradient(135deg,rgba(255,109,46,.08),rgba(255,214,10,.04));border:1px solid rgba(255,109,46,.2);border-radius:16px;padding:16px;margin-bottom:20px">';
+    html += '<div style="font-size:11px;font-weight:700;color:var(--o);text-transform:uppercase;letter-spacing:1px;margin-bottom:14px">App-Steuerung</div>';
+
+    // Maintenance toggle
+    html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.04)">';
+    html += '<div><div style="font-size:14px;font-weight:700">🔧 Wartungsmodus</div><div style="font-size:11px;color:var(--t3);margin-top:2px">App für alle Nutzer sperren</div></div>';
+    html += '<label style="position:relative;display:inline-block;width:51px;height:31px;cursor:pointer"><input type="checkbox" id="adminToggleMaintenance" onchange="toggleAppSetting(this,\'maintenance_mode\')" '+(maintenanceOn?'checked':'')+' style="opacity:0;width:0;height:0"><span style="position:absolute;inset:0;background:'+(maintenanceOn?'var(--fire)':'rgba(255,255,255,.1)')+';border-radius:31px;transition:.3s"></span><span style="position:absolute;top:2px;left:'+(maintenanceOn?'22px':'2px')+';width:27px;height:27px;background:#fff;border-radius:50%;transition:.3s;box-shadow:0 2px 4px rgba(0,0,0,.3)"></span></label>';
+    html += '</div>';
+
+    // Registration toggle
+    html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.04)">';
+    html += '<div><div style="font-size:14px;font-weight:700">📝 Registrierung</div><div style="font-size:11px;color:var(--t3);margin-top:2px">Neue Anmeldungen erlauben</div></div>';
+    html += '<label style="position:relative;display:inline-block;width:51px;height:31px;cursor:pointer"><input type="checkbox" id="adminToggleRegistration" onchange="toggleAppSetting(this,\'registration_open\')" '+(registrationOpen?'checked':'')+' style="opacity:0;width:0;height:0"><span style="position:absolute;inset:0;background:'+(registrationOpen?'var(--mint)':'rgba(255,255,255,.1)')+';border-radius:31px;transition:.3s"></span><span style="position:absolute;top:2px;left:'+(registrationOpen?'22px':'2px')+';width:27px;height:27px;background:#fff;border-radius:50%;transition:.3s;box-shadow:0 2px 4px rgba(0,0,0,.3)"></span></label>';
+    html += '</div>';
+
+    // Maintenance message edit
+    html += '<div style="padding:12px 0">';
+    html += '<div style="font-size:12px;font-weight:600;color:var(--t2);margin-bottom:6px">Wartungs-Nachricht:</div>';
+    html += '<input type="text" id="adminMaintenanceMsg" class="ri" value="'+esc(settings.maintenance_message || 'crew. wird gerade aktualisiert')+'" style="font-size:13px;margin-bottom:8px">';
+    html += '<div style="font-size:12px;font-weight:600;color:var(--t2);margin-bottom:6px">Registrierung-geschlossen-Nachricht:</div>';
+    html += '<input type="text" id="adminRegMsg" class="ri" value="'+esc(settings.registration_message || 'Die Registrierung ist aktuell geschlossen.')+'" style="font-size:13px;margin-bottom:10px">';
+    html += '<button onclick="saveAdminMessages()" style="width:100%;padding:10px;border:none;border-radius:12px;background:var(--o);color:#fff;font-size:13px;font-weight:700;cursor:pointer">Nachrichten speichern</button>';
+    html += '</div>';
+    html += '</div>';
 
     // KPI Cards
     html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px">';
@@ -2240,6 +2329,37 @@ window.resolveReport = async function(reportId, newStatus){
 
 window.closeAdmin = function(){
   document.getElementById('adminPanel').style.display='none';
+};
+
+window.toggleAppSetting = async function(checkbox, key){
+  if(!ME || !ME.is_admin) return;
+  var newVal = checkbox.checked ? 'true' : 'false';
+  // For registration_open: checked = true (open), unchecked = false (closed)
+  // For maintenance_mode: checked = true (on), unchecked = false (off)
+  var {error} = await sb.from('app_settings').update({value: newVal, updated_at: new Date().toISOString()}).eq('key', key);
+  if(error){
+    toast('Fehler: ' + error.message);
+    checkbox.checked = !checkbox.checked;
+  } else {
+    window.APP_SETTINGS[key] = newVal;
+    var label = key === 'maintenance_mode' ? 'Wartungsmodus' : 'Registrierung';
+    var state = key === 'maintenance_mode' ? (newVal==='true'?'AN':'AUS') : (newVal==='true'?'OFFEN':'GESCHLOSSEN');
+    toast(label + ': ' + state);
+    // Refresh the panel to update toggle styles
+    openAdminPanel();
+  }
+};
+
+window.saveAdminMessages = async function(){
+  if(!ME || !ME.is_admin) return;
+  var mMsg = document.getElementById('adminMaintenanceMsg').value.trim();
+  var rMsg = document.getElementById('adminRegMsg').value.trim();
+  var now = new Date().toISOString();
+  await Promise.all([
+    sb.from('app_settings').update({value: mMsg, updated_at: now}).eq('key', 'maintenance_message'),
+    sb.from('app_settings').update({value: rMsg, updated_at: now}).eq('key', 'registration_message')
+  ]);
+  toast('Nachrichten gespeichert! ✅');
 };
 
 // ============================================
