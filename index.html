@@ -43,16 +43,22 @@ a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer;border:0
 @keyframes fade{to{opacity:1}}
 .hero-sub{margin-top:20px;font-size:clamp(13px,1.3vw,16px);color:#999;line-height:1.7;opacity:0;animation:fade .8s ease .9s forwards;max-width:440px;margin-left:auto;margin-right:auto}
 
-/* WAITLIST — inline in hero */
-.wl-form{display:flex;gap:10px;max-width:440px;margin:28px auto 0;flex-wrap:wrap;opacity:0;animation:fade .8s ease 1.2s forwards}
-.wl-form input{flex:1;min-width:200px;background:rgba(255,255,255,.06);color:#fff;border:1px solid rgba(255,255,255,.1);padding:16px 20px;border-radius:999px;font:inherit;font-size:15px;outline:none;transition:border-color .2s}
-.wl-form input:focus{border-color:var(--o)}
-.wl-form input::placeholder{color:#555}
-.wl-form button{background:var(--gold);color:#000;padding:16px 28px;border-radius:999px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;white-space:nowrap;transition:transform .2s,box-shadow .2s;box-shadow:0 8px 24px rgba(255,109,46,.15)}
-.wl-form button:hover{transform:translateY(-1px);box-shadow:0 12px 30px rgba(255,109,46,.25)}
-.wl-note{margin-top:12px;font-size:11px;color:#444;opacity:0;animation:fade .8s ease 1.4s forwards}
-.wl-success{margin-top:16px;padding:14px 18px;background:rgba(52,199,89,.08);border:1px solid rgba(52,199,89,.15);border-radius:14px;display:none;font-size:14px;color:#34C759;font-weight:600}
-.wl-count{margin-top:14px;font-size:13px;color:var(--muted);opacity:0;animation:fade .8s ease 1.5s forwards}.wl-count strong{color:var(--o);font-weight:800}
+/* WAITLIST — card in hero */
+.wl-card{max-width:440px;margin:28px auto 0;padding:28px 24px;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:var(--r);opacity:0;animation:fade .8s ease 1.2s forwards}
+.wl-card h2{font-size:16px;font-weight:800;text-align:center;margin-bottom:18px}
+.wl-field{margin-bottom:12px}
+.wl-field label{display:block;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.wl-field input,.wl-field select{width:100%;background:rgba(255,255,255,.06);color:#fff;border:1px solid rgba(255,255,255,.1);padding:14px 16px;border-radius:14px;font:inherit;font-size:15px;outline:none;transition:border-color .2s;-webkit-appearance:none;appearance:none}
+.wl-field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;padding-right:40px}
+.wl-field select option{background:#1a1a1a;color:#fff}
+.wl-field input:focus,.wl-field select:focus{border-color:var(--o)}
+.wl-field input::placeholder{color:#555}
+.wl-row{display:flex;gap:12px}.wl-row .wl-field{flex:1}
+.wl-btn{width:100%;background:var(--gold);color:#000;padding:16px 28px;border-radius:999px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;transition:transform .2s,box-shadow .2s;box-shadow:0 8px 24px rgba(255,109,46,.15);margin-top:4px;border:0;cursor:pointer}
+.wl-btn:hover{transform:translateY(-1px);box-shadow:0 12px 30px rgba(255,109,46,.25)}
+.wl-note{margin-top:12px;font-size:11px;color:#444;text-align:center}
+.wl-success{margin-top:16px;padding:14px 18px;background:rgba(52,199,89,.08);border:1px solid rgba(52,199,89,.15);border-radius:14px;display:none;font-size:14px;color:#34C759;font-weight:600;text-align:center}
+.wl-count{margin-top:14px;font-size:13px;color:var(--muted);text-align:center;opacity:0;animation:fade .8s ease 1.5s forwards}.wl-count strong{color:var(--o);font-weight:800}
 
 /* FEATURES — small strip */
 .features-strip{border-top:1px solid var(--line);padding:48px 24px;text-align:center}
@@ -125,11 +131,46 @@ footer{padding:32px 24px;border-top:1px solid var(--line);text-align:center}
       <span class="word brand">crew<span class="dot">.</span></span>
     </div>
     <p class="hero-sub">Die erste App für Mallorca-Urlauber. Crew-Tracker, Matching, Party-Spiele und mehr — alles kostenlos.</p>
-    <form class="wl-form" id="wlForm" novalidate>
-      <input type="email" id="wlEmail" placeholder="deine@email.com" required>
-      <button type="submit">Ich bin dabei &rarr;</button>
+    <form class="wl-card" id="wlForm" novalidate>
+      <h2>Trag dich in die Warteliste ein</h2>
+      <div class="wl-field">
+        <label>Name</label>
+        <input type="text" id="wlName" placeholder="Dein Vorname" required>
+      </div>
+      <div class="wl-field">
+        <label>E-Mail</label>
+        <input type="email" id="wlEmail" placeholder="deine@email.com" required>
+      </div>
+      <div class="wl-field">
+        <label>Wohnort</label>
+        <input type="text" id="wlCity" placeholder="z.B. Stuttgart" required>
+      </div>
+      <div class="wl-row">
+        <div class="wl-field">
+          <label>Alter</label>
+          <select id="wlAge" required>
+            <option value="" disabled selected>Wählen</option>
+            <option value="16-17">16–17</option>
+            <option value="18-21">18–21</option>
+            <option value="22-25">22–25</option>
+            <option value="26-30">26–30</option>
+            <option value="31-40">31–40</option>
+            <option value="40+">40+</option>
+          </select>
+        </div>
+        <div class="wl-field">
+          <label>Geschlecht</label>
+          <select id="wlGender" required>
+            <option value="" disabled selected>Wählen</option>
+            <option value="männlich">Männlich</option>
+            <option value="weiblich">Weiblich</option>
+            <option value="divers">Divers</option>
+          </select>
+        </div>
+      </div>
+      <button type="submit" class="wl-btn">Ich bin dabei &rarr;</button>
+      <p class="wl-note" id="wl">Kein Spam. Nur eine Mail wenn es losgeht.</p>
     </form>
-    <p class="wl-note" id="wl">Kein Spam. Nur eine Mail wenn es losgeht.</p>
     <div class="wl-success" id="wlSuccess">Du bist auf der Liste! Wir melden uns wenn es losgeht.</div>
     <div class="wl-count" id="wlCount"></div>
   </div>
@@ -156,7 +197,7 @@ footer{padding:32px 24px;border-top:1px solid var(--line);text-align:center}
     <a href="mailto:info@butterbread-tech.com">Datenschutz</a>
     <a href="mailto:info@butterbread-tech.com">Impressum</a>
   </div>
-  <div class="foot-copy">&copy; 2026 crew. — Butterbread Technologies, Winterlingen</div>
+  <div class="foot-copy">&copy; 2026 crew. — Butterbread Technologies</div>
 </footer>
 
 <!-- ADMIN -->
@@ -177,13 +218,22 @@ try { sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY); } catch(e){}
 // Waitlist
 document.getElementById('wlForm').addEventListener('submit', async function(e){
   e.preventDefault();
+  var name = document.getElementById('wlName').value.trim();
   var email = document.getElementById('wlEmail').value.trim();
+  var city = document.getElementById('wlCity').value.trim();
+  var age = document.getElementById('wlAge').value;
+  var gender = document.getElementById('wlGender').value;
+  if(!name){alert('Bitte gib deinen Namen ein.');return}
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){alert('Bitte eine gültige E-Mail eingeben.');return}
+  if(!city){alert('Bitte gib deinen Wohnort ein.');return}
+  if(!age){alert('Bitte wähle deine Altersgruppe.');return}
+  if(!gender){alert('Bitte wähle dein Geschlecht.');return}
   var btn = this.querySelector('button');
   btn.textContent = 'Laden...';btn.disabled = true;
   try {
-    var {error} = await sb.from('waitlist').insert({email: email});
+    var {error} = await sb.from('waitlist').insert({email:email, name:name, city:city, age_range:age, gender:gender});
     if(error && error.code === '23505') document.getElementById('wlSuccess').textContent = 'Du stehst schon auf der Liste!';
+    else if(error) throw error;
     document.getElementById('wlForm').style.display = 'none';
     document.getElementById('wlSuccess').style.display = 'block';
     loadWaitlistCount();
