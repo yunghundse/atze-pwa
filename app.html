@@ -1605,17 +1605,7 @@ async function loadUser(authUser){
     }
 
     ME = profile;
-    // Admin by email — only Jan gets admin access
-    var ADMIN_EMAILS = ['yunghundse@gmail.com'];
-    if(authUser.email && ADMIN_EMAILS.indexOf(authUser.email.toLowerCase()) !== -1){
-      ME.is_admin = true;
-      // Persist to DB if not already set
-      if(!profile.is_admin){
-        sb.from('profiles').update({is_admin: true}).eq('user_id', authUser.id).then(function(){
-          console.log('[CREW] Admin flag set for', authUser.email);
-        });
-      }
-    }
+    // Admin status comes from DB only — no client-side detection
     console.log('[CREW] Profile loaded:', ME.name, ME.is_admin ? '(ADMIN)' : '');
 
     // Load venues (non-blocking errors are fine)
