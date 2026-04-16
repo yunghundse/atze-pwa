@@ -36,9 +36,9 @@ a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer;border:0
 .hero-inner{position:relative;z-index:2;max-width:620px;width:100%}
 .hero-eyebrow{font-size:12px;letter-spacing:.35em;text-transform:uppercase;color:var(--o);font-weight:700;margin-bottom:20px;opacity:0;animation:fade .8s ease .3s forwards}
 .hook{display:flex;flex-wrap:wrap;justify-content:center;align-items:baseline;gap:.12em;font-weight:900;line-height:.88;letter-spacing:-2px}
-.word{display:inline-block;font-size:clamp(44px,11vw,120px);opacity:0;transform:translateY(30px);animation:rise .7s cubic-bezier(.2,.8,.2,1) forwards}
-.word:nth-child(1){animation-delay:.1s}.word:nth-child(2){animation-delay:.2s}.word:nth-child(3){animation-delay:.3s}.word:nth-child(4){animation-delay:.4s}
-.word.brand{font-size:clamp(72px,18vw,180px);background:var(--gold);-webkit-background-clip:text;background-clip:text;color:transparent;animation:rise .7s cubic-bezier(.2,.8,.2,1) .55s forwards;filter:drop-shadow(0 0 50px rgba(255,109,46,.25))}
+.word{display:inline-block;font-size:clamp(28px,6.5vw,72px);opacity:0;transform:translateY(30px);animation:rise .7s cubic-bezier(.2,.8,.2,1) forwards}
+.word:nth-child(1){animation-delay:.1s}.word:nth-child(2){animation-delay:.16s}.word:nth-child(3){animation-delay:.22s}.word:nth-child(4){animation-delay:.28s}.word:nth-child(5){animation-delay:.34s}.word:nth-child(6){animation-delay:.4s}.word:nth-child(7){animation-delay:.46s}.word:nth-child(8){animation-delay:.52s}
+.word.brand{font-size:clamp(72px,18vw,180px);background:var(--gold);-webkit-background-clip:text;background-clip:text;color:transparent;animation:rise .7s cubic-bezier(.2,.8,.2,1) .7s forwards;filter:drop-shadow(0 0 50px rgba(255,109,46,.25))}
 @keyframes rise{0%{opacity:0;transform:translateY(40px) scale(.96)}100%{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes fade{to{opacity:1}}
 .hero-sub{margin-top:20px;font-size:clamp(13px,1.3vw,16px);color:#999;line-height:1.7;opacity:0;animation:fade .8s ease .9s forwards;max-width:440px;margin-left:auto;margin-right:auto}
@@ -122,15 +122,19 @@ footer{padding:32px 24px;border-top:1px solid var(--line);text-align:center}
   <div class="hero-inner">
     <div class="hero-eyebrow">Die Party-App für Mallorca · Saison 2026</div>
     <div class="hook">
-      <span class="word">Mallorca</span>
-      <span class="word">allein</span>
-      <span class="word">war</span>
-      <span class="word">gestern.</span>
+      <span class="word">Dein</span>
+      <span class="word">Urlaub</span>
+      <span class="word">ist</span>
+      <span class="word">nur</span>
+      <span class="word">so</span>
+      <span class="word">gut</span>
+      <span class="word">wie</span>
+      <span class="word">deine</span>
     </div>
     <div class="hook" style="margin-top:.05em">
       <span class="word brand">crew<span class="dot">.</span></span>
     </div>
-    <p class="hero-sub">Finde deine Leute, bevor du landest. Die App für alle, die Mallorca nicht alleine erleben wollen.</p>
+    <p class="hero-sub">Finde deine Leute, bevor du landest. Crew-Tracker, Matching & Party-Spiele — kostenlos auf Mallorca.</p>
     <form class="wl-card" id="wlForm" novalidate>
       <h2>Trag dich in die Warteliste ein</h2>
       <div class="wl-field">
