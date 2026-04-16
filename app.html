@@ -2888,10 +2888,9 @@ window.deleteAccount = async function(){
         await sb.storage.from('avatars').remove([photoPath]);
       } catch(e){}
     }
-    var {error:delError} = await sb.from('profiles').delete().eq('user_id',user.id);
-    if(delError) throw delError;
-    var {error:authError} = await sb.auth.admin.deleteUser(user.id);
-    if(authError) throw authError;
+    // Use server-side RPC to delete profile + auth user securely
+    var {error:rpcError} = await sb.rpc('delete_own_account');
+    if(rpcError) throw rpcError;
     toast('Account gelöscht');
     setTimeout(function(){
       localStorage.removeItem('aok');
