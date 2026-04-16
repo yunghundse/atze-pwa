@@ -2,7 +2,7 @@
   "name": "crew. — Feiern, nur besser.",
   "short_name": "crew.",
   "description": "Die Party-App für die Playa de Palma. Finde Parties, verpass nie deine Crew.",
-  "start_url": "/",
+  "start_url": "./app.html",
   "display": "standalone",
   "background_color": "#0A0A0A",
   "theme_color": "#0A0A0A",
