@@ -813,7 +813,7 @@ select.ri{appearance:none;-webkit-appearance:none}
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 11;
+  var APP_VERSION = 12;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     localStorage.setItem('crew_app_v', APP_VERSION);
@@ -1085,10 +1085,15 @@ document.addEventListener('DOMContentLoaded', async function(){
     showAgeGate();
   }
 
-  // Auth state listener
+  // Auth state listener — guard against re-triggering when app is already loaded
   sb.auth.onAuthStateChange(async function(event, session){
-    console.log('[CREW] Auth event:', event);
+    console.log('[CREW] Auth event:', event, 'ME:', ME ? ME.name : 'null');
     if(event === 'SIGNED_IN' && session && session.user){
+      // If app is already loaded with a valid profile, skip re-loading
+      if(ME && ME.user_id && document.getElementById('app').style.display === 'flex'){
+        console.log('[CREW] App already loaded, skipping loadUser on SIGNED_IN');
+        return;
+      }
       await loadUser(session.user);
     } else if(event === 'SIGNED_OUT'){
       ME = null;
@@ -1293,7 +1298,17 @@ async function loadUser(authUser){
   } catch(e) {
     console.error('[CREW] loadUser error:', e);
     document.getElementById('loadingScreen').classList.add('gone');
-    showOnboarding(authUser);
+    // Only show onboarding if we don't already have a valid profile loaded
+    if(ME && ME.user_id && ME.name && ME.name !== 'Neuer User' && ME.name !== 'Neuer Atze'){
+      console.log('[CREW] Error after profile loaded, showing app anyway');
+      document.getElementById('onboard').classList.add('gone');
+      document.getElementById('authScreen').classList.add('gone');
+      document.getElementById('agegate').classList.add('gone');
+      document.getElementById('app').style.display = 'flex';
+      try { buildApp(); } catch(e2) { console.error('[CREW] buildApp fallback error:', e2); }
+    } else {
+      showOnboarding(authUser);
+    }
   }
 }
 
@@ -1578,6 +1593,7 @@ function haversine(lat1,lng1,lat2,lng2){
 }
 async function buildNearby(){
   var el=document.getElementById('nearbyCrewList');if(!el)return;
+  if(!ME||!ME.user_id){return}
   if(!userLat||!userLng){el.innerHTML='<p style="color:var(--t3);font-size:13px">Aktiviere deinen Standort um Crew in der Nähe zu sehen.</p>';return}
   // Get matches
   var {data:matches}=await sb.from('matches').select('to_user').eq('from_user',ME.user_id).eq('is_match',true);
@@ -1692,20 +1708,22 @@ function initMap(){
   userMarker = L.marker(PC,{icon:L.divIcon({html:u.outerHTML,className:'',iconSize:[16,16],iconAnchor:[8,8]})}).addTo(rMap);
   if(navigator.geolocation){
     navigator.geolocation.watchPosition(function(pos){
-      var ll=[pos.coords.latitude,pos.coords.longitude];
-      userLat=ll[0];userLng=ll[1];
-      userMarker.setLatLng(ll);
-      // Accuracy circle
-      var acc=pos.coords.accuracy;
-      if(userAccCircle)rMap.removeLayer(userAccCircle);
-      userAccCircle=L.circle(ll,{radius:acc,color:'#0A84FF',fillColor:'#0A84FF',fillOpacity:0.08,weight:1,opacity:0.3}).addTo(rMap);
-      if(!window._mapCentered){rMap.setView(ll,17);window._mapCentered=true}
-      if(cMap&&window._crewUserMarker){window._crewUserMarker.setLatLng(ll)}
-      // Update nearby crew
-      buildNearby();
-      // Save location to DB
-      if(ME&&ME.user_id)sb.from('profiles').update({lat:ll[0],lng:ll[1]}).eq('user_id',ME.user_id);
-    },function(){},
+      try {
+        var ll=[pos.coords.latitude,pos.coords.longitude];
+        userLat=ll[0];userLng=ll[1];
+        if(userMarker)userMarker.setLatLng(ll);
+        // Accuracy circle
+        var acc=pos.coords.accuracy;
+        if(userAccCircle&&rMap)rMap.removeLayer(userAccCircle);
+        if(rMap)userAccCircle=L.circle(ll,{radius:acc,color:'#0A84FF',fillColor:'#0A84FF',fillOpacity:0.08,weight:1,opacity:0.3}).addTo(rMap);
+        if(!window._mapCentered&&rMap){rMap.setView(ll,17);window._mapCentered=true}
+        if(cMap&&window._crewUserMarker){window._crewUserMarker.setLatLng(ll)}
+        // Update nearby crew (only if app is loaded)
+        if(ME&&ME.user_id)buildNearby().catch(function(e){console.warn('[CREW] buildNearby error:',e)});
+        // Save location to DB
+        if(ME&&ME.user_id)sb.from('profiles').update({lat:ll[0],lng:ll[1]}).eq('user_id',ME.user_id);
+      } catch(e){ console.warn('[CREW] watchPosition callback error:', e); }
+    },function(err){console.warn('[CREW] Geolocation error:',err.message)},
     {enableHighAccuracy:true,maximumAge:5000,timeout:10000});
   }
   setTimeout(function(){rMap.invalidateSize()},200);
