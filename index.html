@@ -15,106 +15,215 @@
 html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
 body{background:#050507;color:#FAFAFA;font-family:'Inter',system-ui,sans-serif;font-weight:400;line-height:1.55;overflow-x:hidden}
 img{max-width:100%;display:block}a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
-:root{--bg:#050507;--fg:#FAFAFA;--muted:#888;--o:#FF6D2E;--gold:linear-gradient(135deg,#FF6D2E,#FFD60A);--line:rgba(255,255,255,.06);--r:18px;--max:1100px}
+:root{--bg:#050507;--fg:#FAFAFA;--muted:#888;--o:#FF6D2E;--gold:linear-gradient(135deg,#FF6D2E,#FFD60A);--line:rgba(255,255,255,.06);--r:18px;--max:1200px}
 
-/* NAV */
-.nav{position:fixed;top:0;left:0;right:0;z-index:50;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);background:rgba(5,5,7,.6);border-bottom:1px solid var(--line)}
+/* ========== NAV ========== */
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);background:rgba(5,5,7,.65);border-bottom:1px solid var(--line)}
 .logo{font-size:28px;font-weight:900;letter-spacing:-1px}.logo .dot{background:var(--gold);-webkit-background-clip:text;background-clip:text;color:transparent}
-.nav-pill{display:flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;border:1px solid rgba(255,109,46,.3);padding:8px 14px;border-radius:999px;color:var(--o)}
+.nav-links{display:none;gap:32px;list-style:none;font-size:13px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--muted)}
+.nav-links a{transition:color .2s}.nav-links a:hover{color:var(--o)}
+.nav-pill{display:flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;border:1px solid rgba(255,109,46,.3);padding:8px 16px;border-radius:999px;color:var(--o);transition:all .2s}
+.nav-pill:hover{background:rgba(255,109,46,.08);border-color:rgba(255,109,46,.5)}
 .pulse-dot{width:7px;height:7px;background:var(--o);border-radius:999px;animation:pulse 1.6s infinite}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,109,46,.5)}70%{box-shadow:0 0 0 12px rgba(255,109,46,0)}100%{box-shadow:0 0 0 0 rgba(255,109,46,0)}}
 
-/* HERO */
-.hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:120px 24px 80px;overflow:hidden}
-.hero-bg{position:absolute;inset:0;z-index:0;background-image:url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=1920&q=80');background-size:cover;background-position:center;filter:grayscale(30%) contrast(1.1) brightness(.25);transform:scale(1.05)}
-.hero::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 0%,rgba(5,5,7,.7) 55%,#050507 100%);z-index:1}
-.hero-inner{position:relative;z-index:2;max-width:900px;width:100%}
-.hero-eyebrow{font-size:12px;letter-spacing:.35em;text-transform:uppercase;color:var(--o);font-weight:700;margin-bottom:24px;opacity:0;animation:fade .8s ease .3s forwards}
-.hook{display:flex;flex-wrap:wrap;justify-content:center;align-items:baseline;gap:.15em;font-weight:900;line-height:.9;letter-spacing:-3px}
-.word{display:inline-block;font-size:clamp(56px,14vw,160px);opacity:0;transform:translateY(30px);animation:rise .7s cubic-bezier(.2,.8,.2,1) forwards}
-.word:nth-child(1){animation-delay:.1s}.word:nth-child(2){animation-delay:.25s}.word:nth-child(3){animation-delay:.4s}
-.word.brand{font-size:clamp(80px,20vw,240px);background:var(--gold);-webkit-background-clip:text;background-clip:text;color:transparent;animation:rise .7s cubic-bezier(.2,.8,.2,1) .6s forwards;filter:drop-shadow(0 0 40px rgba(255,109,46,.3))}
-.word.brand .dot{color:#FFD60A}
+/* ========== HERO ========== */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:100px 24px 80px;overflow:hidden}
+.hero-bg{position:absolute;inset:0;z-index:0;background-image:url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=1920&q=80');background-size:cover;background-position:center;filter:grayscale(30%) contrast(1.1) brightness(.22);transform:scale(1.05)}
+.hero::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 0%,rgba(5,5,7,.65) 50%,#050507 100%);z-index:1}
+.hero-inner{position:relative;z-index:2;max-width:960px;width:100%}
+.hero-eyebrow{font-size:12px;letter-spacing:.35em;text-transform:uppercase;color:var(--o);font-weight:700;margin-bottom:20px;opacity:0;animation:fade .8s ease .3s forwards}
+.hook{display:flex;flex-wrap:wrap;justify-content:center;align-items:baseline;gap:.12em;font-weight:900;line-height:.88;letter-spacing:-2px}
+.word{display:inline-block;font-size:clamp(44px,11vw,140px);opacity:0;transform:translateY(30px);animation:rise .7s cubic-bezier(.2,.8,.2,1) forwards}
+.word:nth-child(1){animation-delay:.1s}.word:nth-child(2){animation-delay:.2s}.word:nth-child(3){animation-delay:.3s}.word:nth-child(4){animation-delay:.4s}
+.word.brand{font-size:clamp(72px,18vw,220px);background:var(--gold);-webkit-background-clip:text;background-clip:text;color:transparent;animation:rise .7s cubic-bezier(.2,.8,.2,1) .55s forwards;filter:drop-shadow(0 0 50px rgba(255,109,46,.25))}
 @keyframes rise{0%{opacity:0;transform:translateY(40px) scale(.96)}100%{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes fade{to{opacity:1}}
-.hero-sub{margin-top:28px;font-size:clamp(14px,1.3vw,18px);letter-spacing:.2em;text-transform:uppercase;font-weight:500;color:#ccc;opacity:0;animation:fade .8s ease 1.2s forwards}
+.hero-sub{margin-top:24px;font-size:clamp(12px,1.2vw,16px);letter-spacing:.25em;text-transform:uppercase;font-weight:500;color:#aaa;opacity:0;animation:fade .8s ease 1s forwards}
 .hero-sub .y{color:var(--o)}
-.hero-cta{margin-top:40px;display:inline-flex;align-items:center;gap:10px;background:var(--gold);color:#000;padding:18px 36px;font-size:14px;letter-spacing:.15em;text-transform:uppercase;font-weight:800;border-radius:999px;transition:transform .2s,box-shadow .2s;opacity:0;animation:fade .8s ease 1.5s forwards;box-shadow:0 14px 40px rgba(255,109,46,.2)}
-.hero-cta:hover{transform:translateY(-2px);box-shadow:0 18px 50px rgba(255,109,46,.35)}
-.scroll-hint{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);z-index:2;font-size:10px;letter-spacing:.35em;text-transform:uppercase;color:var(--muted);animation:bob 2s ease-in-out infinite}
+.hero-ctas{margin-top:36px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;opacity:0;animation:fade .8s ease 1.3s forwards}
+.hero-cta{display:inline-flex;align-items:center;gap:8px;padding:16px 32px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;border-radius:999px;transition:transform .2s,box-shadow .2s}
+.hero-cta.primary{background:var(--gold);color:#000;box-shadow:0 14px 40px rgba(255,109,46,.2)}
+.hero-cta.primary:hover{transform:translateY(-2px);box-shadow:0 18px 50px rgba(255,109,46,.35)}
+.hero-cta.ghost{border:1px solid rgba(255,255,255,.15);color:#fff;backdrop-filter:blur(10px);background:rgba(255,255,255,.04)}
+.hero-cta.ghost:hover{border-color:rgba(255,109,46,.4);color:var(--o)}
+.scroll-hint{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);z-index:2;font-size:10px;letter-spacing:.35em;text-transform:uppercase;color:#555;animation:bob 2s ease-in-out infinite}
 @keyframes bob{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,8px)}}
 
-/* MARQUEE */
-.marquee{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:18px 0;overflow:hidden;white-space:nowrap;background:rgba(255,255,255,.01)}
-.marquee-track{display:inline-block;animation:scroll 30s linear infinite;font-size:32px;font-weight:900;letter-spacing:-1px}
-.marquee-track span{margin:0 24px;color:#FAFAFA}.marquee-track .dot{color:var(--o)}
+/* ========== MARQUEE ========== */
+.marquee{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:16px 0;overflow:hidden;white-space:nowrap;background:rgba(255,255,255,.01)}
+.marquee-track{display:inline-block;animation:scroll 35s linear infinite;font-size:28px;font-weight:900;letter-spacing:-1px}
+.marquee-track span{margin:0 20px;color:rgba(255,255,255,.5)}.marquee-track .dot{color:var(--o)}
 @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-/* SECTIONS */
-section{padding:100px 24px;position:relative}
+/* ========== SECTIONS ========== */
+section{padding:80px 24px;position:relative}
 .wrap{max-width:var(--max);margin:0 auto}
-.section-eyebrow{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--o);font-weight:700;margin-bottom:16px}
-.section-title{font-size:clamp(32px,5vw,56px);font-weight:900;letter-spacing:-1.5px;line-height:1;margin-bottom:24px}
+.section-eyebrow{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--o);font-weight:700;margin-bottom:14px}
+.section-title{font-size:clamp(28px,4.5vw,52px);font-weight:900;letter-spacing:-1.5px;line-height:1.05;margin-bottom:20px}
 .section-title .gradient{background:var(--gold);-webkit-background-clip:text;background-clip:text;color:transparent}
+.section-desc{color:var(--muted);font-size:15px;line-height:1.7;max-width:520px}
 
-/* FEATURES */
-.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:48px}
-.feat{padding:28px 24px;border-radius:var(--r);background:rgba(255,255,255,.03);border:1px solid var(--line);transition:all .2s}
-.feat:hover{border-color:rgba(255,109,46,.2);background:rgba(255,109,46,.03)}
-.feat-icon{font-size:32px;margin-bottom:14px}
-.feat h3{font-size:16px;font-weight:800;margin-bottom:6px;letter-spacing:-.3px}
-.feat p{font-size:13px;color:var(--muted);line-height:1.6}
+/* ========== FEATURES ========== */
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:40px}
+.feat{padding:28px 24px;border-radius:var(--r);background:rgba(255,255,255,.025);border:1px solid var(--line);transition:all .25s;position:relative;overflow:hidden}
+.feat::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 30%,rgba(255,109,46,.06),transparent 60%);opacity:0;transition:opacity .3s}
+.feat:hover{border-color:rgba(255,109,46,.2);transform:translateY(-2px)}.feat:hover::before{opacity:1}
+.feat-icon{font-size:28px;margin-bottom:12px;position:relative}
+.feat h3{font-size:15px;font-weight:800;margin-bottom:5px;letter-spacing:-.2px;position:relative}
+.feat p{font-size:12.5px;color:var(--muted);line-height:1.6;position:relative}
 
-/* PHONE MOCKUP */
-.mockup-section{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
-@media(max-width:768px){.mockup-section{grid-template-columns:1fr;text-align:center}}
-.phone-frame{width:280px;height:560px;border-radius:40px;border:3px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);margin:0 auto;overflow:hidden;position:relative;box-shadow:0 30px 80px rgba(0,0,0,.5),0 0 40px rgba(255,109,46,.1)}
-.phone-screen{width:100%;height:100%;background:#0A0A0C;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;text-align:center}
-.phone-logo{font-size:36px;font-weight:900;letter-spacing:-2px;margin-bottom:12px}
+/* ========== SHOWCASE (Phone + Text) ========== */
+.showcase{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.phone-frame{width:260px;height:520px;border-radius:36px;border:2.5px solid rgba(255,255,255,.08);background:rgba(255,255,255,.02);margin:0 auto;overflow:hidden;position:relative;box-shadow:0 40px 100px rgba(0,0,0,.6),0 0 60px rgba(255,109,46,.08)}
+.phone-screen{width:100%;height:100%;background:#0A0A0C;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:36px 18px;text-align:center}
+.phone-logo{font-size:32px;font-weight:900;letter-spacing:-2px;margin-bottom:10px}
 .phone-logo .dot{background:var(--gold);-webkit-background-clip:text;background-clip:text;color:transparent}
-.phone-features{display:flex;flex-direction:column;gap:12px;width:100%}
-.pf-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);font-size:12px;font-weight:600;text-align:left}
-.pf-icon{font-size:18px;flex-shrink:0}
+.phone-features{display:flex;flex-direction:column;gap:10px;width:100%}
+.pf-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:12px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.05);font-size:11.5px;font-weight:600;text-align:left;transition:all .15s}
+.pf-icon{font-size:16px;flex-shrink:0}
 
-/* WAITLIST */
-#waitlist{background:rgba(255,109,46,.04);border-top:1px solid rgba(255,109,46,.1);border-bottom:1px solid rgba(255,109,46,.1)}
-.wl-form{display:flex;gap:10px;max-width:480px;flex-wrap:wrap;margin-top:24px}
-.wl-form input{flex:1;min-width:220px;background:rgba(255,255,255,.06);color:#fff;border:1px solid rgba(255,255,255,.1);padding:16px 20px;border-radius:999px;font:inherit;font-size:15px;outline:none;transition:border-color .2s}
+/* ========== USP SECTION ========== */
+.usp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:48px}
+.usp{text-align:center;padding:32px 20px;border-radius:var(--r);background:rgba(255,255,255,.02);border:1px solid var(--line);transition:all .2s}
+.usp:hover{border-color:rgba(255,109,46,.15)}
+.usp-emoji{font-size:36px;margin-bottom:12px}
+.usp h4{font-size:14px;font-weight:800;margin-bottom:6px}
+.usp p{font-size:12px;color:var(--muted);line-height:1.5}
+
+/* ========== STATS ========== */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:40px}
+.stat{text-align:center;padding:28px 16px;border-radius:var(--r);background:rgba(255,255,255,.02);border:1px solid var(--line)}
+.stat-num{font-size:clamp(26px,3.5vw,40px);font-weight:900;letter-spacing:-1px;background:var(--gold);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat-label{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:6px;font-weight:600}
+
+/* ========== WAITLIST ========== */
+#waitlist{background:rgba(255,109,46,.03);border-top:1px solid rgba(255,109,46,.08);border-bottom:1px solid rgba(255,109,46,.08)}
+.wl-form{display:flex;gap:10px;max-width:480px;flex-wrap:wrap;margin-top:20px}
+.wl-form input{flex:1;min-width:200px;background:rgba(255,255,255,.06);color:#fff;border:1px solid rgba(255,255,255,.1);padding:16px 20px;border-radius:999px;font:inherit;font-size:15px;outline:none;transition:border-color .2s}
 .wl-form input:focus{border-color:var(--o)}
-.wl-form input::placeholder{color:#666}
-.wl-form button{background:var(--gold);color:#000;padding:16px 28px;border-radius:999px;font-size:13px;letter-spacing:.15em;text-transform:uppercase;font-weight:800;white-space:nowrap;transition:transform .2s}
-.wl-form button:hover{transform:translateY(-1px)}
-.wl-note{margin-top:14px;font-size:12px;color:#555}
-.wl-success{margin-top:20px;padding:14px 18px;background:rgba(52,199,89,.1);border:1px solid rgba(52,199,89,.2);border-radius:14px;display:none;font-size:14px;color:#34C759;font-weight:600}
-.wl-count{margin-top:20px;font-size:13px;color:var(--muted)}
-.wl-count strong{color:var(--o);font-weight:800}
+.wl-form input::placeholder{color:#555}
+.wl-form button{background:var(--gold);color:#000;padding:16px 28px;border-radius:999px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;white-space:nowrap;transition:transform .2s,box-shadow .2s;box-shadow:0 8px 24px rgba(255,109,46,.15)}
+.wl-form button:hover{transform:translateY(-1px);box-shadow:0 12px 30px rgba(255,109,46,.25)}
+.wl-note{margin-top:12px;font-size:12px;color:#444}
+.wl-success{margin-top:16px;padding:14px 18px;background:rgba(52,199,89,.08);border:1px solid rgba(52,199,89,.15);border-radius:14px;display:none;font-size:14px;color:#34C759;font-weight:600}
+.wl-count{margin-top:16px;font-size:13px;color:var(--muted)}.wl-count strong{color:var(--o);font-weight:800}
 
-/* STATS */
-.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:48px}
-@media(max-width:600px){.stats-row{grid-template-columns:repeat(2,1fr)}}
-.stat{text-align:center;padding:24px 16px;border-radius:var(--r);background:rgba(255,255,255,.02);border:1px solid var(--line)}
-.stat-num{font-size:clamp(28px,4vw,42px);font-weight:900;letter-spacing:-1px;background:var(--gold);-webkit-background-clip:text;background-clip:text;color:transparent}
-.stat-label{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:6px;font-weight:600}
-
-/* FOOTER */
+/* ========== FOOTER ========== */
 footer{background:#000;padding:60px 24px 30px;border-top:1px solid var(--line)}
-.foot-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:40px;flex-wrap:wrap;gap:20px}
-.foot-logo{font-size:36px;font-weight:900;letter-spacing:-1px}.foot-logo .dot{background:var(--gold);-webkit-background-clip:text;background-clip:text;color:transparent}
-.foot-links{display:flex;gap:24px;font-size:13px;color:var(--muted)}
-.foot-links a:hover{color:var(--o)}
-.foot-bottom{padding-top:20px;border-top:1px solid var(--line);display:flex;justify-content:space-between;font-size:11px;color:#444;flex-wrap:wrap;gap:12px}
+.foot-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:40px;margin-bottom:48px}
+.foot-brand{font-size:32px;font-weight:900;letter-spacing:-1px;margin-bottom:10px}
+.foot-brand .dot{background:var(--gold);-webkit-background-clip:text;background-clip:text;color:transparent}
+.foot-desc{font-size:13px;color:#555;max-width:300px;line-height:1.6}
+.foot-col h5{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;font-weight:700}
+.foot-col ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+.foot-col a{font-size:13px;color:#666;transition:color .2s}.foot-col a:hover{color:var(--o)}
+.foot-bottom{padding-top:20px;border-top:1px solid var(--line);display:flex;justify-content:space-between;font-size:11px;color:#333;flex-wrap:wrap;gap:12px}
 
-/* ADMIN LOGIN */
-.admin-section{padding:40px 24px;text-align:center}
-.admin-toggle{font-size:11px;color:#333;cursor:pointer;letter-spacing:.1em;transition:color .2s}
+/* ========== ADMIN ========== */
+.admin-section{padding:30px 24px;text-align:center}
+.admin-toggle{font-size:10px;color:#222;cursor:pointer;letter-spacing:.1em;transition:color .2s;user-select:none}
 .admin-toggle:hover{color:var(--muted)}
-.admin-form{display:none;max-width:340px;margin:16px auto 0;padding:24px;border-radius:var(--r);background:rgba(255,255,255,.02);border:1px solid var(--line)}
+.admin-form{display:none;max-width:320px;margin:14px auto 0;padding:20px;border-radius:16px;background:rgba(255,255,255,.02);border:1px solid var(--line)}
 .admin-form.show{display:block}
-.admin-form input{width:100%;padding:14px 16px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);color:#fff;font:inherit;font-size:14px;margin-bottom:10px;outline:none}
+.admin-form input{width:100%;padding:13px 16px;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);color:#fff;font:inherit;font-size:14px;margin-bottom:8px;outline:none}
 .admin-form input:focus{border-color:var(--o)}
-.admin-form button{width:100%;padding:14px;border-radius:12px;background:var(--o);color:#fff;font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;transition:transform .2s}
+.admin-form button{width:100%;padding:13px;border-radius:12px;background:var(--o);color:#fff;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;transition:transform .2s}
 .admin-form button:hover{transform:translateY(-1px)}
-.admin-msg{margin-top:10px;font-size:12px;min-height:20px}
+.admin-msg{margin-top:8px;font-size:12px;min-height:18px}
+
+/* ==========================================================
+   DESKTOP (min-width: 900px) — wider, more spacious, multi-col
+   ========================================================== */
+@media(min-width:900px){
+  .nav{padding:16px 40px}
+  .nav-links{display:flex}
+  section{padding:120px 40px}
+  .hero{padding:140px 40px 100px}
+  .hero-eyebrow{font-size:13px;letter-spacing:.4em;margin-bottom:28px}
+  .hero-sub{font-size:16px;margin-top:32px}
+  .hero-ctas{margin-top:44px;gap:16px}
+  .hero-cta{padding:18px 36px;font-size:14px}
+  .marquee-track{font-size:36px}
+  .features{grid-template-columns:repeat(3,1fr);gap:18px;margin-top:56px}
+  .feat{padding:36px 28px}
+  .feat-icon{font-size:32px;margin-bottom:16px}
+  .feat h3{font-size:16px;margin-bottom:8px}
+  .feat p{font-size:13px}
+  .showcase{gap:100px}
+  .phone-frame{width:300px;height:600px;border-radius:42px}
+  .phone-screen{padding:44px 22px}
+  .phone-logo{font-size:38px}
+  .pf-item{padding:11px 14px;font-size:12.5px;border-radius:14px}
+  .usp-grid{gap:24px}
+  .usp{padding:40px 24px}
+  .usp-emoji{font-size:40px}
+  .usp h4{font-size:16px}
+  .usp p{font-size:13px}
+  .stats-row{gap:20px}
+  .stat{padding:36px 20px}
+  .foot-grid{grid-template-columns:2fr 1fr 1fr;gap:60px}
+  .scroll-hint{display:block}
+}
+
+/* ==========================================================
+   MOBILE (max-width: 899px) — compact, touch-friendly
+   ========================================================== */
+@media(max-width:899px){
+  .nav{padding:12px 16px}
+  .nav-links{display:none!important}
+  .nav-pill{font-size:10px;padding:7px 12px}
+  section{padding:60px 16px}
+  .hero{padding:90px 16px 60px;min-height:100svh}
+  .hook{letter-spacing:-1px;gap:.08em}
+  .hero-ctas{flex-direction:column;align-items:center}
+  .hero-cta{width:100%;max-width:320px;justify-content:center;padding:16px 24px}
+  .hero-cta.ghost{display:none}
+  .marquee-track{font-size:22px}
+  .marquee-track span{margin:0 14px}
+  .features{grid-template-columns:1fr 1fr;gap:10px}
+  .feat{padding:18px 16px}
+  .feat-icon{font-size:24px;margin-bottom:8px}
+  .feat h3{font-size:13px;margin-bottom:3px}
+  .feat p{font-size:11px}
+  .showcase{grid-template-columns:1fr;gap:40px;text-align:center}
+  .showcase .section-desc{margin:12px auto 0}
+  .phone-frame{width:220px;height:440px;border-radius:30px;border-width:2px}
+  .phone-screen{padding:28px 14px}
+  .phone-logo{font-size:26px;margin-bottom:8px}
+  .pf-item{padding:7px 10px;font-size:10.5px;border-radius:10px;gap:8px}
+  .pf-icon{font-size:14px}
+  .usp-grid{grid-template-columns:1fr;gap:10px}
+  .usp{padding:20px 16px;text-align:left;display:flex;gap:14px;align-items:center}
+  .usp-emoji{font-size:28px;margin-bottom:0;flex-shrink:0}
+  .usp-text{flex:1}
+  .usp h4{font-size:13px;margin-bottom:2px}
+  .usp p{font-size:11px}
+  .stats-row{grid-template-columns:repeat(2,1fr);gap:10px}
+  .stat{padding:20px 12px}
+  .stat-num{font-size:24px}
+  .stat-label{font-size:9px}
+  .wl-form{flex-direction:column}
+  .wl-form input{min-width:0}
+  .wl-form button{width:100%}
+  .foot-grid{grid-template-columns:1fr;gap:24px}
+  .foot-col:last-child{display:none}
+  .scroll-hint{display:none}
+  .section-title{font-size:clamp(26px,7vw,36px)}
+  .section-desc{font-size:14px}
+}
+
+/* ==========================================================
+   LARGE DESKTOP (min-width: 1200px) — extra breathing room
+   ========================================================== */
+@media(min-width:1200px){
+  .nav{padding:18px 60px}
+  section{padding:140px 60px}
+  .features{grid-template-columns:repeat(3,1fr);gap:20px}
+  .feat{padding:40px 32px}
+  .showcase{gap:120px}
+  .usp-grid{grid-template-columns:repeat(3,1fr);gap:28px}
+}
 </style>
 </head>
 <body>
@@ -122,6 +231,12 @@ footer{background:#000;padding:60px 24px 30px;border-top:1px solid var(--line)}
 <!-- NAV -->
 <header class="nav">
   <a href="#top" class="logo">crew<span class="dot">.</span></a>
+  <nav class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#showcase">App</a>
+    <a href="#why">Warum crew.?</a>
+    <a href="#waitlist">Warteliste</a>
+  </nav>
   <a href="#waitlist" class="nav-pill"><span class="pulse-dot"></span>Warteliste offen</a>
 </header>
 
@@ -129,29 +244,34 @@ footer{background:#000;padding:60px 24px 30px;border-top:1px solid var(--line)}
 <section class="hero" id="top">
   <div class="hero-bg"></div>
   <div class="hero-inner">
-    <div class="hero-eyebrow">Die Party-App für Mallorca</div>
+    <div class="hero-eyebrow">Die Party-App für Mallorca · Saison 2026</div>
     <div class="hook">
       <span class="word">Verlier</span>
       <span class="word">nie</span>
       <span class="word">wieder</span>
       <span class="word">deine</span>
+    </div>
+    <div class="hook" style="margin-top:.05em">
       <span class="word brand">crew<span class="dot">.</span></span>
     </div>
-    <p class="hero-sub">Mallorca <span class="y">&middot;</span> Saison 26 <span class="y">&middot;</span> Launch bald</p>
-    <a href="#waitlist" class="hero-cta">Auf die Warteliste &rarr;</a>
+    <p class="hero-sub">Mallorca <span class="y">&middot;</span> Playa de Palma <span class="y">&middot;</span> Launch bald</p>
+    <div class="hero-ctas">
+      <a href="#waitlist" class="hero-cta primary">Auf die Warteliste &rarr;</a>
+      <a href="#features" class="hero-cta ghost">Features ansehen</a>
+    </div>
   </div>
-  <div class="scroll-hint">Scroll</div>
+  <div class="scroll-hint">Scroll ↓</div>
 </section>
 
 <!-- MARQUEE -->
 <div class="marquee" aria-hidden="true">
   <div class="marquee-track">
     <span>CREW<span class="dot">.</span></span><span>MALLORCA<span class="dot">.</span></span>
-    <span>PARTY<span class="dot">.</span></span><span>TRACKER<span class="dot">.</span></span>
-    <span>VERLIER NIE WIEDER DEINE CREW<span class="dot">.</span></span>
+    <span>TRACKER<span class="dot">.</span></span><span>MATCHING<span class="dot">.</span></span>
+    <span>PARTY<span class="dot">.</span></span><span>VERLIER NIE WIEDER DEINE CREW<span class="dot">.</span></span>
     <span>CREW<span class="dot">.</span></span><span>MALLORCA<span class="dot">.</span></span>
-    <span>PARTY<span class="dot">.</span></span><span>TRACKER<span class="dot">.</span></span>
-    <span>VERLIER NIE WIEDER DEINE CREW<span class="dot">.</span></span>
+    <span>TRACKER<span class="dot">.</span></span><span>MATCHING<span class="dot">.</span></span>
+    <span>PARTY<span class="dot">.</span></span><span>VERLIER NIE WIEDER DEINE CREW<span class="dot">.</span></span>
   </div>
 </div>
 
@@ -159,42 +279,42 @@ footer{background:#000;padding:60px 24px 30px;border-top:1px solid var(--line)}
 <section id="features">
   <div class="wrap">
     <div class="section-eyebrow">Was kann crew.?</div>
-    <div class="section-title">Dein Urlaub.<br>Aber <span class="gradient">smarter.</span></div>
+    <div class="section-title">Alles was dein Malle-Trip <span class="gradient">braucht.</span></div>
+    <p class="section-desc">Eine App. Alle Funktionen. Von Crew-Tracking bis Party-Spiele.</p>
     <div class="features">
-      <div class="feat"><div class="feat-icon">📍</div><h3>Crew-Tracker</h3><p>Sieh in Echtzeit wo deine Crew gerade ist. Nie wieder am Ballermann verloren gehen.</p></div>
-      <div class="feat"><div class="feat-icon">🔥</div><h3>Live-Matching</h3><p>Finde Leute in deiner Nähe die den gleichen Vibe haben. Swipe, matche, feiert zusammen.</p></div>
-      <div class="feat"><div class="feat-icon">🏝️</div><h3>Insel-Radar</h3><p>Live-Map mit Hotspots, Venues und Stimmungs-Tracking. Wo geht gerade die Party ab?</p></div>
-      <div class="feat"><div class="feat-icon">🎯</div><h3>Crew-Challenges</h3><p>Tägliche Challenges und Votings. Wer war Tagesvollster? Wer hat die besten Moves?</p></div>
-      <div class="feat"><div class="feat-icon">🚨</div><h3>SOS-System</h3><p>Notfall-Button teilt deinen Standort sofort mit deiner Crew. Sicherheit geht vor.</p></div>
-      <div class="feat"><div class="feat-icon">🤝</div><h3>Exklusive Deals</h3><p>Rabatte auf Clubs, Hotels, Transfers und mehr. Nur für crew.-Nutzer.</p></div>
+      <div class="feat"><div class="feat-icon">📍</div><h3>Live Crew-Tracker</h3><p>Sieh in Echtzeit wo deine Crew ist. Entfernung, Route, Online-Status. Nie wieder verloren.</p></div>
+      <div class="feat"><div class="feat-icon">🔥</div><h3>Smart Matching</h3><p>Finde Leute in deiner Nähe. Gleicher Vibe, gleiche Location. Swipe und feiert zusammen.</p></div>
+      <div class="feat"><div class="feat-icon">🏝️</div><h3>Insel-Radar</h3><p>Live-Map mit Hotspots und Stimmungs-Tracking. Wo geht gerade die beste Party?</p></div>
+      <div class="feat"><div class="feat-icon">🗳️</div><h3>Tägliche Votings</h3><p>Wer war Tagesvollster? Wer hat die besten Moves? Jeden Tag neue Fragen.</p></div>
+      <div class="feat"><div class="feat-icon">🎲</div><h3>Party-Spiele</h3><p>6 Spiele mit 150+ Karten. Wahrheit oder Pflicht, Trink-Roulette, Malle-Quiz und mehr.</p></div>
+      <div class="feat"><div class="feat-icon">🚨</div><h3>SOS-System</h3><p>Notfall? Ein Tap teilt deinen Standort mit der Crew. Notruf, Taxi, Botschaft — alles drin.</p></div>
     </div>
   </div>
 </section>
 
-<!-- PHONE + TEXT -->
-<section>
+<!-- SHOWCASE (Phone + Text) -->
+<section id="showcase" style="background:rgba(255,255,255,.01)">
   <div class="wrap">
-    <div class="mockup-section">
+    <div class="showcase">
       <div>
-        <div class="section-eyebrow">Alles in einer App</div>
+        <div class="section-eyebrow">Die App</div>
         <div class="section-title">Gebaut für den <span class="gradient">Ballermann.</span></div>
-        <p style="color:var(--muted);font-size:15px;line-height:1.7;margin-top:16px;max-width:440px">
-          crew. ist die erste App die speziell für Mallorca-Urlauber gebaut wurde. Crew-Tracking, Matching, Party-Spiele, Taxi-Splitter, Drink-Counter und ein Live-Radar — alles was du für den perfekten Malle-Trip brauchst.
+        <p class="section-desc">
+          crew. ist die erste App speziell für Mallorca-Urlauber. Crew-Tracking, Matching, Challenges, Taxi-Splitter, Drink-Counter und ein Live-Radar — alles in einer App.
         </p>
-        <p style="color:var(--muted);font-size:15px;line-height:1.7;margin-top:12px;max-width:440px">
-          Kostenlos. Keine Werbung. Made in Germany.
-        </p>
+        <p class="section-desc" style="margin-top:12px">Kostenlos. Keine Werbung. Made in Germany.</p>
+        <a href="#waitlist" class="hero-cta primary" style="margin-top:28px;opacity:1;animation:none;font-size:12px;padding:14px 28px">Early Access sichern &rarr;</a>
       </div>
       <div>
         <div class="phone-frame">
           <div class="phone-screen">
             <div class="phone-logo">crew<span class="dot">.</span></div>
-            <p style="font-size:11px;color:var(--muted);margin-bottom:20px">Die Malle-App</p>
+            <p style="font-size:10px;color:var(--muted);margin-bottom:16px;letter-spacing:.15em;text-transform:uppercase">Die Malle-App</p>
             <div class="phone-features">
               <div class="pf-item"><span class="pf-icon">📍</span>Echtzeit Crew-Tracker</div>
               <div class="pf-item"><span class="pf-icon">🔥</span>Smart Matching</div>
               <div class="pf-item"><span class="pf-icon">🗳️</span>Tages-Votings</div>
-              <div class="pf-item"><span class="pf-icon">🎲</span>Party-Spiele</div>
+              <div class="pf-item"><span class="pf-icon">🎲</span>6 Party-Spiele</div>
               <div class="pf-item"><span class="pf-icon">🍺</span>Drink-Counter + BAC</div>
               <div class="pf-item"><span class="pf-icon">🚕</span>Taxi-Splitter</div>
               <div class="pf-item"><span class="pf-icon">🚨</span>SOS Notfall-System</div>
@@ -206,15 +326,37 @@ footer{background:#000;padding:60px 24px 30px;border-top:1px solid var(--line)}
   </div>
 </section>
 
+<!-- WHY crew.? -->
+<section id="why">
+  <div class="wrap" style="text-align:center">
+    <div class="section-eyebrow">Warum crew.?</div>
+    <div class="section-title">Weil kein Urlaub wie der <span class="gradient">andere</span> ist.</div>
+    <div class="usp-grid">
+      <div class="usp">
+        <div class="usp-emoji">🔒</div>
+        <div class="usp-text"><h4>DSGVO-konform</h4><p>Server in der EU. AES-256 verschlüsselt. Keine Tracker. Keine Cookies.</p></div>
+      </div>
+      <div class="usp">
+        <div class="usp-emoji">💸</div>
+        <div class="usp-text"><h4>Komplett kostenlos</h4><p>Keine versteckten Kosten. Kein Abo nötig. Premium optional ab 2,99€.</p></div>
+      </div>
+      <div class="usp">
+        <div class="usp-emoji">🇩🇪</div>
+        <div class="usp-text"><h4>Made in Germany</h4><p>butterbread tech GmbH. Deutsche Qualität, deutsches Datenschutzrecht.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- STATS -->
 <section style="background:rgba(255,255,255,.01)">
   <div class="wrap" style="text-align:center">
-    <div class="section-eyebrow">Zahlen</div>
+    <div class="section-eyebrow">In Zahlen</div>
     <div class="section-title">Gebaut für <span class="gradient">Millionen.</span></div>
     <div class="stats-row">
       <div class="stat"><div class="stat-num">0€</div><div class="stat-label">Kosten</div></div>
-      <div class="stat"><div class="stat-num" id="wlCountStat">---</div><div class="stat-label">Auf der Warteliste</div></div>
-      <div class="stat"><div class="stat-num">5+</div><div class="stat-label">Party-Spiele</div></div>
+      <div class="stat"><div class="stat-num" id="wlCountStat">—</div><div class="stat-label">Warteliste</div></div>
+      <div class="stat"><div class="stat-num">6</div><div class="stat-label">Party-Spiele</div></div>
       <div class="stat"><div class="stat-num">24/7</div><div class="stat-label">Live-Tracking</div></div>
     </div>
   </div>
@@ -222,12 +364,10 @@ footer{background:#000;padding:60px 24px 30px;border-top:1px solid var(--line)}
 
 <!-- WAITLIST -->
 <section id="waitlist">
-  <div class="wrap" style="max-width:680px">
+  <div class="wrap" style="max-width:640px">
     <div class="section-eyebrow">Warteliste</div>
     <div class="section-title">Sei dabei wenn es <span class="gradient">losgeht.</span></div>
-    <p style="color:var(--muted);font-size:15px;max-width:520px;line-height:1.6">
-      crew. startet bald auf Mallorca. Trag dich jetzt ein und gehör zu den Ersten die es testen.
-    </p>
+    <p class="section-desc">crew. startet bald auf Mallorca. Trag dich ein und gehör zu den Ersten.</p>
     <form class="wl-form" id="wlForm" novalidate>
       <input type="email" id="wlEmail" placeholder="deine@email.com" required>
       <button type="submit">Ich bin dabei &rarr;</button>
@@ -241,22 +381,36 @@ footer{background:#000;padding:60px 24px 30px;border-top:1px solid var(--line)}
 <!-- FOOTER -->
 <footer>
   <div class="wrap">
-    <div class="foot-top">
-      <div class="foot-logo">crew<span class="dot">.</span></div>
-      <div class="foot-links">
-        <a href="#features">Features</a>
-        <a href="#waitlist">Warteliste</a>
-        <a href="mailto:info@butterbread-tech.com">Kontakt</a>
+    <div class="foot-grid">
+      <div>
+        <div class="foot-brand">crew<span class="dot">.</span></div>
+        <p class="foot-desc">Die Party-App für die Playa de Palma. Verlier nie wieder deine Crew.</p>
+      </div>
+      <div class="foot-col">
+        <h5>App</h5>
+        <ul>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#showcase">Die App</a></li>
+          <li><a href="#waitlist">Warteliste</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h5>Legal</h5>
+        <ul>
+          <li><a href="mailto:info@butterbread-tech.com">Kontakt</a></li>
+          <li><a href="mailto:datenschutz@butterbread-tech.com">Datenschutz</a></li>
+          <li><a href="mailto:info@butterbread-tech.com">Impressum</a></li>
+        </ul>
       </div>
     </div>
     <div class="foot-bottom">
-      <span>&copy; 2026 crew<span style="color:var(--o)">.</span> &mdash; butterbread tech GmbH</span>
+      <span>&copy; 2026 crew<span style="color:var(--o)">.</span> — butterbread tech GmbH</span>
       <span>Mallorca &middot; DE &middot; AT &middot; CH</span>
     </div>
   </div>
 </footer>
 
-<!-- ADMIN LOGIN (hidden) -->
+<!-- ADMIN LOGIN -->
 <div class="admin-section">
   <div class="admin-toggle" id="adminToggle">Admin</div>
   <div class="admin-form" id="adminForm">
@@ -271,38 +425,43 @@ footer{background:#000;padding:60px 24px 30px;border-top:1px solid var(--line)}
 var sb;
 try { sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY); } catch(e){}
 
-// Waitlist signup
+// Intersection Observer for scroll animations
+var io = new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)';io.unobserve(e.target)}
+  });
+},{threshold:.15});
+document.querySelectorAll('.feat,.usp,.stat').forEach(function(el){
+  el.style.opacity='0';el.style.transform='translateY(24px)';el.style.transition='opacity .6s ease, transform .6s ease';
+  io.observe(el);
+});
+
+// Waitlist
 document.getElementById('wlForm').addEventListener('submit', async function(e){
   e.preventDefault();
   var email = document.getElementById('wlEmail').value.trim();
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ alert('Bitte eine gültige E-Mail eingeben.'); return; }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){alert('Bitte eine gültige E-Mail eingeben.');return}
   var btn = this.querySelector('button');
-  btn.textContent = 'Laden...';
-  btn.disabled = true;
+  btn.textContent = 'Laden...';btn.disabled = true;
   try {
     var {error} = await sb.from('waitlist').insert({email: email});
-    if(error && error.code === '23505'){
-      document.getElementById('wlSuccess').textContent = 'Du stehst schon auf der Liste!';
-    }
+    if(error && error.code === '23505') document.getElementById('wlSuccess').textContent = 'Du stehst schon auf der Liste!';
     document.getElementById('wlForm').style.display = 'none';
     document.getElementById('wlSuccess').style.display = 'block';
     loadWaitlistCount();
   } catch(err){
-    btn.textContent = 'Ich bin dabei →';
-    btn.disabled = false;
-    alert('Fehler: ' + (err.message || 'Bitte versuche es erneut.'));
+    btn.textContent = 'Ich bin dabei →';btn.disabled = false;
+    alert('Fehler: ' + (err.message || 'Versuche es erneut.'));
   }
 });
 
-// Load waitlist count
 async function loadWaitlistCount(){
   try {
     var {count} = await sb.from('waitlist').select('*', {count:'exact', head:true});
     var c = count || 0;
     if(c > 0){
       document.getElementById('wlCount').innerHTML = '<strong>' + c + '</strong> ' + (c === 1 ? 'Person' : 'Personen') + ' auf der Warteliste';
-      var stat = document.getElementById('wlCountStat');
-      if(stat) stat.textContent = c;
+      var stat = document.getElementById('wlCountStat');if(stat) stat.textContent = c;
     }
   } catch(e){}
 }
@@ -312,46 +471,31 @@ loadWaitlistCount();
 document.getElementById('adminToggle').addEventListener('click', function(){
   document.getElementById('adminForm').classList.toggle('show');
 });
-
 document.getElementById('adminLoginBtn').addEventListener('click', async function(){
   var email = document.getElementById('adminEmail').value.trim();
   var pass = document.getElementById('adminPass').value;
   var msg = document.getElementById('adminMsg');
-  if(!email || !pass){ msg.textContent = 'Bitte E-Mail und Passwort eingeben.'; msg.style.color = '#FF3B30'; return; }
-  this.textContent = 'Laden...';
-  this.disabled = true;
+  if(!email || !pass){msg.textContent='E-Mail und Passwort eingeben.';msg.style.color='#FF3B30';return}
+  this.textContent = 'Laden...';this.disabled = true;
   try {
     var res = await sb.auth.signInWithPassword({email: email, password: pass});
-    if(res.error){ msg.textContent = 'Fehler: ' + res.error.message; msg.style.color = '#FF3B30'; this.textContent = 'Einloggen'; this.disabled = false; return; }
-    // Check if admin
+    if(res.error){msg.textContent='Fehler: '+res.error.message;msg.style.color='#FF3B30';this.textContent='Einloggen';this.disabled=false;return}
     var {data:profile} = await sb.from('profiles').select('is_admin').eq('user_id', res.data.user.id).single();
     if(profile && profile.is_admin){
-      msg.textContent = 'Admin-Login erfolgreich! Weiterleitung...';
-      msg.style.color = '#34C759';
-      setTimeout(function(){ window.location.href = 'app.html'; }, 800);
+      msg.textContent = 'Admin erkannt. Weiterleitung...';msg.style.color = '#34C759';
+      setTimeout(function(){window.location.href='app.html'},600);
     } else {
-      msg.textContent = 'Kein Admin-Zugang.';
-      msg.style.color = '#FF3B30';
-      this.textContent = 'Einloggen';
-      this.disabled = false;
+      msg.textContent='Kein Admin-Zugang.';msg.style.color='#FF3B30';this.textContent='Einloggen';this.disabled=false;
       await sb.auth.signOut();
     }
-  } catch(err){
-    msg.textContent = 'Fehler: ' + (err.message || 'Unbekannt');
-    msg.style.color = '#FF3B30';
-    this.textContent = 'Einloggen';
-    this.disabled = false;
-  }
+  } catch(err){msg.textContent='Fehler: '+(err.message||'Unbekannt');msg.style.color='#FF3B30';this.textContent='Einloggen';this.disabled=false}
 });
 
-// Check if already logged in — redirect to app
+// Auto-redirect if already logged in
 (async function(){
   try {
     var {data:{session}} = await sb.auth.getSession();
-    if(session && session.user){
-      // Already logged in, go to app
-      window.location.href = 'app.html';
-    }
+    if(session && session.user) window.location.href = 'app.html';
   } catch(e){}
 })();
 </script>
