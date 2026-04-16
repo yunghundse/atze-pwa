@@ -2588,7 +2588,7 @@ window.openAdminPanel = async function(){
   try {
     // Fetch all stats in parallel
     var [usersRes, checkinsRes, matchesRes, reportsRes, sosRes, venuesRes] = await Promise.all([
-      sb.from('profiles').select('user_id,name,username,email,photo_url,age,gender,status,seek,created_at,lat,lng,points,streak,is_admin,verified', {count:'exact'}),
+      sb.from('profiles').select('user_id,name,username,photo_url,age,gender,status,seek,created_at,lat,lng,points,streak,is_admin,verified', {count:'exact'}),
       sb.from('checkins').select('*', {count:'exact', head:true}),
       sb.from('matches').select('*', {count:'exact', head:true}).eq('is_match', true),
       sb.from('reports').select('*', {count:'exact'}),

@@ -461,8 +461,8 @@ document.getElementById('wlForm').addEventListener('submit', async function(e){
 
 async function loadWaitlistCount(){
   try {
-    var {count} = await sb.from('waitlist').select('*', {count:'exact', head:true});
-    var c = count || 0;
+    var {data, error} = await sb.rpc('get_waitlist_count');
+    var c = (error || data == null) ? 0 : data;
     if(c > 0){
       document.getElementById('wlCount').innerHTML = '<strong>' + c + '</strong> ' + (c === 1 ? 'Person' : 'Personen') + ' auf der Warteliste';
       var stat = document.getElementById('wlCountStat');if(stat) stat.textContent = c;
