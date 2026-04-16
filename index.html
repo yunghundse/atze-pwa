@@ -205,24 +205,32 @@ select.ri{appearance:none;-webkit-appearance:none}
 .scard.far{transform:scale(.9) translateY(16px);opacity:.25;pointer-events:none}
 .scard.go-left{transform:translateX(-130%) rotate(-15deg);opacity:0}.scard.go-right{transform:translateX(130%) rotate(15deg);opacity:0}
 .sc-photo{position:absolute;inset:0;background-size:cover;background-position:center top}
-.sc-grad{position:absolute;inset:0;background:linear-gradient(180deg,transparent 35%,rgba(0,0,0,.85) 100%)}.sc-grad::after{content:'';position:absolute;bottom:0;left:0;right:0;height:40%;background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
-.sc-content{position:absolute;bottom:0;left:0;right:0;padding:18px}
-.sc-name{font-size:26px;font-weight:900}.sc-age{font-weight:400;opacity:.75}
-.sc-loc{font-size:12px;color:var(--t2);margin-top:3px}
-.sc-badge{display:inline-flex;align-items:center;gap:4px;margin-top:6px;margin-right:4px;padding:3px 10px;border-radius:8px;font-size:11px;font-weight:600;background:rgba(255,255,255,.1)}
-.sc-bio{font-size:13px;color:var(--t2);line-height:1.5;margin-top:8px}
-.sc-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
-.sc-tags .t{padding:4px 10px;border-radius:16px;background:rgba(255,109,46,.12);color:var(--o);font-size:11px;font-weight:600}
-.stamp{position:absolute;top:60px;font-size:32px;font-weight:900;padding:6px 16px;border-radius:10px;border:3px solid;opacity:0;letter-spacing:2px;z-index:10;pointer-events:none}
-.stamp.like{left:16px;color:var(--green);border-color:var(--green);transform:rotate(-15deg)}.stamp.nope{right:16px;color:var(--fire);border-color:var(--fire);transform:rotate(15deg)}.stamp.vis{opacity:.85}
-.mactions{display:flex;justify-content:center;align-items:center;gap:14px;padding:12px 0 16px;flex-shrink:0}
-.ma{border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .12s var(--bounce)}.ma:active{transform:scale(.84)}
-.ma.sm{width:42px;height:42px;font-size:16px;background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--glass-border);color:var(--t2);box-shadow:inset 0 1px 0 rgba(255,255,255,.04)}
-.ma.nope{width:54px;height:54px;font-size:22px;background:var(--glass);backdrop-filter:blur(20px);border:2px solid var(--fire);color:var(--fire);box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 0 20px rgba(255,59,48,.4),0 0 40px rgba(255,59,48,.2)}
-.ma.like{width:54px;height:54px;font-size:22px;background:var(--o);color:#fff;box-shadow:0 6px 20px rgba(255,109,46,.4),0 0 30px rgba(255,109,46,.3);animation:likePulse 1.5s ease-in-out infinite}
-@keyframes likePulse{0%,100%{box-shadow:0 6px 20px rgba(255,109,46,.4),0 0 30px rgba(255,109,46,.3)}50%{box-shadow:0 6px 20px rgba(255,109,46,.6),0 0 40px rgba(255,109,46,.5)}}
-.ma.super{width:42px;height:42px;font-size:16px;background:var(--glass);backdrop-filter:blur(20px);border:2px solid var(--yellow);color:var(--yellow);box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 0 20px rgba(255,214,10,.4)}
-.no-profiles{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center;padding:20px;color:var(--t3)}
+.sc-photo-dots{position:absolute;top:16px;left:16px;right:16px;display:flex;gap:4px;z-index:5}
+.scd-dot{height:3px;flex:1;border-radius:2px;background:rgba(255,255,255,.4);transition:background .2s}
+.scd-dot.active{background:#fff;box-shadow:0 0 8px rgba(255,255,255,.4)}
+.sc-grad{position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(0,0,0,.2) 50%,rgba(0,0,0,.9) 100%)}.sc-grad::after{content:'';position:absolute;bottom:0;left:0;right:0;height:50%;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.6));backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:0 0 var(--r2) var(--r2)}
+.sc-content{position:absolute;bottom:0;left:0;right:0;padding:20px 18px}
+.sc-name{font-size:32px;font-weight:900;line-height:1;margin-bottom:4px}.sc-age{font-weight:700;opacity:.85;margin-left:8px}
+.sc-loc{font-size:13px;color:rgba(255,255,255,.8);margin-top:8px;display:flex;align-items:center;gap:8px}
+.sc-badge{display:inline-block;margin-top:10px;margin-right:6px;padding:6px 12px;border-radius:20px;font-size:11px;font-weight:700;background:rgba(255,255,255,.15);color:#fff;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.2)}
+.sc-bio{font-size:13px;color:rgba(255,255,255,.85);line-height:1.5;margin-top:10px}
+.sc-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.sc-tags .t{padding:6px 14px;border-radius:20px;background:var(--o);color:#fff;font-size:11px;font-weight:700}
+.sc-social{cursor:pointer;font-size:16px;transition:transform .2s}
+.sc-social:active{transform:scale(.8)}
+.stamp{position:absolute;top:50%;left:50%;font-size:64px;font-weight:900;padding:12px 24px;border-radius:16px;border:4px solid;opacity:0;letter-spacing:3px;z-index:10;pointer-events:none;transform:translate(-50%,-50%) scale(.3) rotate(0deg);transition:transform .3s var(--bounce);will-change:transform}
+.stamp.like{color:var(--green);border-color:var(--green);text-shadow:0 0 20px rgba(52,199,89,.5)}.stamp.nope{color:var(--fire);border-color:var(--fire);text-shadow:0 0 20px rgba(255,59,48,.5)}.stamp.vis{opacity:.95;transform:translate(-50%,-50%) scale(1) rotate(-8deg)}
+.mactions{display:flex;justify-content:center;align-items:center;gap:16px;padding:14px 0 18px;flex-shrink:0}
+.ma{border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .15s var(--bounce);position:relative}.ma:active{transform:scale(.9)}
+.ma.sm{width:48px;height:48px;font-size:18px;background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--glass-border);color:var(--t2);box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 0 20px rgba(255,255,255,.05)}
+.ma.nope{width:60px;height:60px;font-size:24px;background:var(--glass);backdrop-filter:blur(20px);border:2.5px solid var(--fire);color:var(--fire);box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 0 24px rgba(255,59,48,.5),0 0 40px rgba(255,59,48,.3);transition:all .15s}
+.ma.nope:hover{box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 0 32px rgba(255,59,48,.6),0 0 50px rgba(255,59,48,.4)}
+.ma.like{width:70px;height:70px;font-size:28px;background:var(--o);color:#fff;box-shadow:0 8px 24px rgba(255,109,46,.5),0 0 40px rgba(255,109,46,.4);animation:likePulse 1.8s ease-in-out infinite;position:relative;z-index:5}
+@keyframes likePulse{0%,100%{box-shadow:0 8px 24px rgba(255,109,46,.5),0 0 40px rgba(255,109,46,.4),0 0 0 0 rgba(255,109,46,.2)}50%{box-shadow:0 8px 24px rgba(255,109,46,.6),0 0 50px rgba(255,109,46,.5),0 0 0 12px rgba(255,109,46,0)}}
+.ma.super{width:48px;height:48px;font-size:18px;background:var(--glass);backdrop-filter:blur(20px);border:2.5px solid var(--yellow);color:var(--yellow);box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 0 24px rgba(255,214,10,.5)}
+.no-profiles{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center;padding:40px 20px;color:var(--t3)}
+.no-profiles > div:first-child{font-size:72px;margin-bottom:20px;animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
 
 /* CREW */
 .crew-map-full{height:240px;margin:68px 12px 10px;border-radius:var(--r2);overflow:hidden;position:relative;z-index:1}
@@ -490,8 +498,54 @@ select.ri{appearance:none;-webkit-appearance:none}
 .weather-card{position:relative;overflow:hidden}
 .weather-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,214,10,.08),rgba(10,132,255,.06));border-radius:var(--r);pointer-events:none}
 
-/* CREW SHOT */
-#atzeShotOv .drink-display{padding-top:60px}
+/* CREW SHOT - INSTAGRAM FEED STYLE */
+#atzeShotOv{background:var(--bg)!important;display:flex!important;flex-direction:column!important;padding:0!important}
+#atzeShotOv .drink-display{padding:0;flex:1;display:flex;flex-direction:column;gap:0}
+#atzeShotOv .drink-close{z-index:20}
+.shot-feed-container{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.shot-feed-header{padding:68px 16px 12px;text-align:center;border-bottom:1px solid var(--brd);flex-shrink:0}
+.shot-feed-header h2{font-size:20px;font-weight:900;margin-bottom:4px}
+.shot-feed-header p{font-size:12px;color:var(--t3);margin:4px 0}
+.shot-daily-challenge{margin:16px 14px;padding:16px;border-radius:var(--r);background:linear-gradient(135deg,rgba(255,109,46,.12),rgba(255,214,10,.08));backdrop-filter:blur(40px);border:1px solid rgba(255,214,10,.2);cursor:pointer;flex-shrink:0}
+.shot-daily-challenge .sdc-label{font-size:10px;font-weight:700;color:var(--o);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.shot-daily-challenge h3{font-size:18px;font-weight:900;margin-bottom:4px}
+.shot-daily-challenge .sdc-sub{font-size:12px;color:var(--t2);margin-bottom:12px}
+.shot-feed-grid{flex:1;overflow-y:auto;padding:14px;display:grid;grid-template-columns:repeat(2,1fr);gap:12px;-webkit-overflow-scrolling:touch}
+.shot-feed-grid::-webkit-scrollbar{width:4px}
+.shot-feed-grid::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:2px}
+.shot-card{position:relative;border-radius:var(--r2);overflow:hidden;aspect-ratio:1;cursor:pointer;background:var(--bg3);transition:transform .2s var(--bounce);box-shadow:0 4px 12px rgba(0,0,0,.3)}
+.shot-card:active{transform:scale(.95)}
+.shot-card img{width:100%;height:100%;object-fit:cover}
+.shot-card-overlay{position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(0,0,0,.75) 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:12px;color:#fff;pointer-events:none}
+.sco-user{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.sco-ava{width:32px;height:32px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,255,255,.3)}
+.sco-ava img{width:100%;height:100%;object-fit:cover}
+.sco-info{flex:1}
+.sco-name{font-size:13px;font-weight:700}
+.sco-time{font-size:10px;color:rgba(255,255,255,.7);margin-top:1px}
+.sco-likes{display:flex;align-items:center;gap:4px;font-size:12px;font-weight:600}
+.shot-empty{grid-column:1/-1;padding:40px 20px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.shot-empty-icon{font-size:48px;margin-bottom:12px}
+.shot-empty-text{font-size:14px;color:var(--t2);margin-bottom:16px}
+.shot-upload-banner{padding:14px;margin:14px;border-radius:var(--r);background:var(--glass);backdrop-filter:blur(40px);border:1px solid var(--glass-border);display:flex;align-items:center;gap:12px;flex-shrink:0;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
+.sub-icon{width:44px;height:44px;border-radius:12px;background:rgba(255,109,46,.15);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.sub-text h4{font-size:14px;font-weight:700;margin-bottom:2px}
+.sub-text p{font-size:11px;color:var(--t3)}
+.shot-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:10007;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;overflow-y:auto}
+.shot-modal-close{position:absolute;top:20px;right:20px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.1);border:none;color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2}
+.shot-modal-image{max-width:100%;max-height:70vh;border-radius:var(--r2);margin-bottom:20px;box-shadow:0 8px 32px rgba(0,0,0,.5)}
+.shot-modal-info{width:100%;max-width:420px;background:var(--glass);backdrop-filter:blur(40px);border:1px solid var(--glass-border);border-radius:var(--r2);padding:20px;text-align:center;box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
+.shot-modal-info h3{font-size:18px;font-weight:900;margin-bottom:8px}
+.shot-modal-info p{font-size:13px;color:var(--t2);margin-bottom:16px}
+.shot-modal-stats{display:flex;justify-content:center;gap:16px;margin:16px 0;padding:16px 0;border-top:1px solid var(--brd);border-bottom:1px solid var(--brd)}
+.shot-modal-stat{text-align:center}
+.shot-modal-stat-num{font-size:20px;font-weight:900;color:var(--o)}
+.shot-modal-stat-label{font-size:10px;color:var(--t3);text-transform:uppercase;margin-top:4px}
+.shot-modal-actions{display:flex;flex-direction:column;gap:8px;margin-top:16px}
+.shot-modal-btn{padding:14px;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;transition:transform .15s;display:flex;align-items:center;justify-content:center;gap:8px}
+.shot-modal-btn:active{transform:scale(.97)}
+.shot-modal-btn.like{background:var(--o);color:#fff;box-shadow:0 4px 12px rgba(255,109,46,.3)}
+.shot-modal-btn.close{background:var(--bg3);color:var(--t2)}
 #shotFeed::-webkit-scrollbar{display:none}
 @keyframes activePulse{0%,100%{box-shadow:0 0 0 0 rgba(52,199,89,.4)}50%{box-shadow:0 0 0 6px rgba(52,199,89,0)}}
 </style>
@@ -689,21 +743,26 @@ select.ri{appearance:none;-webkit-appearance:none}
   </div>
 </div>
 
-<!-- CREW SHOT -->
-<div class="drink-counter" id="atzeShotOv" style="z-index:10006" onclick="if(event.target===this)closeCrewShot()">
-  <button class="drink-close" onclick="closeCrewShot()">✕</button>
-  <div class="drink-display" style="gap:16px">
-    <div style="font-size:48px" id="shotChallengeEmoji">📸</div>
-    <div style="font-size:18px;font-weight:800;text-align:center;max-width:280px" id="shotChallengeText">Lade Challenge...</div>
-    <div style="font-size:12px;color:var(--t3);margin-bottom:8px">Verschwindet nach 24h</div>
-    <input type="file" id="shotPhotoFile" accept="image/*" capture="environment" style="display:none" onchange="previewShotPhoto(this)">
-    <div id="shotPreview" style="display:none;width:200px;height:200px;border-radius:16px;overflow:hidden;border:3px solid var(--o);margin-bottom:12px"><img id="shotPreviewImg" style="width:100%;height:100%;object-fit:cover"></div>
-    <button class="abtn primary" style="max-width:280px" onclick="document.getElementById('shotPhotoFile').click()">📷 Foto aufnehmen</button>
-    <button class="abtn primary" id="shotUploadBtn" style="max-width:280px;display:none;background:var(--green)" onclick="uploadCrewShot()">✅ CrewShot posten!</button>
-    <div style="margin-top:16px">
-      <div class="sec-label" style="padding:0;margin-bottom:12px;color:var(--t2)">📸 Letzte Shots</div>
-      <div id="shotFeed" style="display:flex;gap:10px;overflow-x:auto;max-width:320px;padding-bottom:8px;scrollbar-width:none"></div>
+<!-- CREW SHOT - INSTAGRAM FEED STYLE -->
+<div id="atzeShotOv" style="z-index:10006;display:none" onclick="if(event.target===this)closeCrewShot()">
+  <button class="drink-close" onclick="closeCrewShot()" style="background:rgba(0,0,0,.4)">✕</button>
+  <div class="shot-feed-container">
+    <div class="shot-feed-header">
+      <h2>📸 CrewShot</h2>
+      <p>Tägliche Challenge · Verschwindet nach 24h</p>
     </div>
+    <div class="shot-daily-challenge" onclick="document.getElementById('shotPhotoFile').click();event.stopPropagation()">
+      <div class="sdc-label">Heute</div>
+      <h3 id="shotChallengeText">Lade Challenge...</h3>
+      <div class="sdc-sub" id="shotChallengeEmoji">📸</div>
+    </div>
+    <div id="shotPreview" style="display:none;margin:14px;width:150px;height:150px;border-radius:var(--r2);overflow:hidden;border:3px solid var(--o);align-self:center"><img id="shotPreviewImg" style="width:100%;height:100%;object-fit:cover"></div>
+    <div style="display:flex;gap:8px;padding:0 14px;flex-shrink:0" id="shotUploadControls" style="display:none">
+      <button class="rnext" style="flex:1;background:var(--bg3);color:var(--t2)" onclick="document.getElementById('shotPreview').style.display='none';shotPhotoBlob=null;document.getElementById('shotUploadControls').style.display='none'">Abbrechen</button>
+      <button class="rnext" id="shotUploadBtn" style="flex:1;background:var(--green)" onclick="uploadCrewShot()">✅ Posten</button>
+    </div>
+    <input type="file" id="shotPhotoFile" accept="image/*" capture="environment" style="display:none" onchange="previewShotPhoto(this)">
+    <div class="shot-feed-grid" id="shotFeedGrid"></div>
   </div>
 </div>
 
@@ -813,7 +872,7 @@ select.ri{appearance:none;-webkit-appearance:none}
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 12;
+  var APP_VERSION = 13;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     localStorage.setItem('crew_app_v', APP_VERSION);
@@ -1828,7 +1887,7 @@ window.previewShotPhoto = function(input){
         shotPhotoBlob = blob;
         document.getElementById('shotPreviewImg').src = URL.createObjectURL(blob);
         document.getElementById('shotPreview').style.display = 'block';
-        document.getElementById('shotUploadBtn').style.display = 'block';
+        document.getElementById('shotUploadControls').style.display = 'flex';
       },'image/jpeg',0.8);
     };
     img.src = e.target.result;
@@ -1870,12 +1929,12 @@ window.uploadCrewShot = async function(){
     sendLocalNotification('📸 CrewShot!', {body: currentShotChallenge.text + ' — gepostet!'});
     shotPhotoBlob = null;
     document.getElementById('shotPreview').style.display = 'none';
-    btn.style.display = 'none';
+    document.getElementById('shotUploadControls').style.display = 'none';
     btn.disabled = false;
-    btn.textContent = '✅ CrewShot posten!';
+    btn.textContent = '✅ Posten';
 
     loadShotFeed();
-    buildStories(); // Refresh stories bar
+    buildStories();
   } catch(e){
     console.error('Upload error:', e);
     toast('Fehler beim Upload');
@@ -1885,30 +1944,40 @@ window.uploadCrewShot = async function(){
 };
 
 async function loadShotFeed(){
-  var feed = document.getElementById('shotFeed');
-  if(!feed) return;
+  var grid = document.getElementById('shotFeedGrid');
+  if(!grid) return;
   try {
-    // Only shots from last 24 hours
     var since = new Date(Date.now() - 24*60*60*1000).toISOString();
-    var res = await sb.from('atze_shots').select('*, profiles!atze_shots_user_id_fkey(name, photo_url)').gte('created_at', since).order('created_at', {ascending: false}).limit(20);
+    var res = await sb.from('atze_shots').select('*, profiles!atze_shots_user_id_fkey(name, photo_url)').gte('created_at', since).order('created_at', {ascending: false}).limit(50);
     var shots = res.data;
 
     if(!shots || shots.length === 0){
-      feed.innerHTML = '<p style="color:var(--t3);font-size:12px;white-space:nowrap">Noch keine Shots heute. Sei der Erste! 📸</p>';
+      grid.innerHTML = '<div class="shot-empty"><div class="shot-empty-icon">📸</div><div class="shot-empty-text">Noch keine Shots heute</div><p style="font-size:12px;color:var(--t2)">Sei der erste und teile dein CrewShot!</p></div>';
       return;
     }
 
-    feed.innerHTML = shots.map(function(s){
+    grid.innerHTML = shots.map(function(s){
       var name = s.profiles ? s.profiles.name : 'Atze';
+      var ava = s.profiles && s.profiles.photo_url ? s.profiles.photo_url : 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=60';
       var timeAgo = Math.round((Date.now() - new Date(s.created_at).getTime()) / 3600000);
-      return '<div style="flex-shrink:0;width:120px;cursor:pointer" onclick="viewShot(\''+s.id+'\',\''+esc(s.photo_url)+'\',\''+esc(name)+'\',\''+esc(s.caption)+'\','+s.likes+')">' +
-        '<div style="width:120px;height:160px;border-radius:12px;overflow:hidden;border:2px solid var(--glass-border)"><img src="'+s.photo_url+'" style="width:100%;height:100%;object-fit:cover" loading="lazy"></div>' +
-        '<div style="font-size:10px;font-weight:700;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(name)+'</div>' +
-        '<div style="font-size:9px;color:var(--t3)">vor '+timeAgo+'h · ❤️ '+s.likes+'</div></div>';
+      var hours = timeAgo === 0 ? 'gerade eben' : (timeAgo === 1 ? 'vor 1h' : 'vor '+timeAgo+'h');
+      return '<div class="shot-card" onclick="viewShotModal(\''+s.id+'\',\''+esc(s.photo_url)+'\',\''+esc(name)+'\',\''+esc(s.caption)+'\','+s.likes+')">' +
+        '<img src="'+s.photo_url+'" alt="'+esc(name)+'" loading="lazy">' +
+        '<div class="shot-card-overlay">' +
+          '<div class="sco-user">' +
+            '<div class="sco-ava"><img src="'+ava+'" alt="'+esc(name)+'"></div>' +
+            '<div class="sco-info">' +
+              '<div class="sco-name">'+esc(name)+'</div>' +
+              '<div class="sco-time">'+hours+'</div>' +
+            '</div>' +
+          '</div>' +
+          '<div class="sco-likes">❤️ '+s.likes+'</div>' +
+        '</div>' +
+      '</div>';
     }).join('');
   } catch(e){
     console.warn('Shot feed load failed:', e);
-    feed.innerHTML = '<p style="color:var(--t3);font-size:12px">Feed lädt nicht</p>';
+    grid.innerHTML = '<div class="shot-empty"><div class="shot-empty-icon">⚠️</div><div class="shot-empty-text">Feed lädt nicht</div></div>';
   }
 }
 
@@ -1918,13 +1987,31 @@ window.viewShot = function(id, url, name, caption, likes){
   document.getElementById('bsheet').classList.add('show');
 };
 
+window.viewShotModal = function(id, url, name, caption, likes){
+  var modal = document.createElement('div');
+  modal.className = 'shot-modal-overlay';
+  modal.innerHTML = '<button class="shot-modal-close" onclick="this.parentElement.remove()">✕</button>' +
+    '<img src="'+url+'" class="shot-modal-image" alt="'+esc(name)+'">' +
+    '<div class="shot-modal-info">' +
+      '<h3>'+esc(name)+'</h3>' +
+      '<p style="margin-bottom:8px">'+esc(caption)+'</p>' +
+      '<div class="shot-modal-stats">' +
+        '<div class="shot-modal-stat"><div class="shot-modal-stat-num">'+likes+'</div><div class="shot-modal-stat-label">Likes</div></div>' +
+      '</div>' +
+      '<div class="shot-modal-actions">' +
+        '<button class="shot-modal-btn like" onclick="likeShot(\''+id+'\');setTimeout(function(){if(this.parentElement.parentElement)this.parentElement.parentElement.remove()},300)">❤️ Like</button>' +
+        '<button class="shot-modal-btn close" onclick="this.parentElement.parentElement.remove()">Schließen</button>' +
+      '</div>' +
+    '</div>';
+  document.body.appendChild(modal);
+};
+
 window.likeShot = async function(id){
   try {
     await sb.rpc('like_shot', {shot_id: id});
     toast('❤️ Geliked!');
-    closeBS();
     loadShotFeed();
-  } catch(e){ toast('Fehler'); }
+  } catch(e){ toast('Fehler beim Like'); }
 };
 
 // ============================================
@@ -1977,18 +2064,19 @@ function buildCards(){
 
 function mkCard(p,idx){
   var c=document.createElement('div');c.className='scard'+(idx===1?' behind':idx>=2?' far':'');c.dataset.i=idx;
-var socials='';if(p.insta)socials+='<a class="sc-social" onclick="event.stopPropagation();window.open(\'https://instagram.com/'+esc(p.insta)+'\',\'_blank\')" style="color:#E1306C">📸</a>';if(p.tiktok)socials+='<a class="sc-social" onclick="event.stopPropagation();window.open(\'https://tiktok.com/@'+esc(p.tiktok)+'\',\'_blank\')" style="color:#FF0050">🎵</a>';if(p.snapchat)socials+='<a class="sc-social" onclick="event.stopPropagation();window.open(\'https://snapchat.com/add/'+esc(p.snapchat)+'\',\'_blank\')" style="color:#FFFC00">👻</a>';
-  c.innerHTML='<div class="stamp like">ATZE!</div><div class="stamp nope">NOPE</div><div class="sc-photo" style="background-image:url(\''+(p.photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80')+'\')"></div><div class="sc-grad"></div><div class="sc-content"><div class="sc-name">'+esc(p.name)+', <span class="sc-age">'+p.age+'</span>'+(p.mood?' <span style="font-size:22px;margin-left:4px">'+p.mood+'</span>':'')+'</div><div class="sc-loc">📍 '+(p.gender||'')+' · '+(p.status||'')+'</div>'+(p.verified?'<span class="sc-badge">✓ Verifiziert</span>':'')+(p.club?'<span class="sc-badge">⚽ '+esc(p.club)+'</span>':'')+(socials?'<div style="display:flex;gap:8px;margin-top:6px">'+socials+'</div>':'')+'<div class="sc-bio">'+esc(p.bio||'')+'</div></div>';
+  var socials='';if(p.insta)socials+='<a class="sc-social" onclick="event.stopPropagation();window.open(\'https://instagram.com/'+esc(p.insta)+'\',\'_blank\')" style="color:#E1306C">📸</a>';if(p.tiktok)socials+='<a class="sc-social" onclick="event.stopPropagation();window.open(\'https://tiktok.com/@'+esc(p.tiktok)+'\',\'_blank\')" style="color:#FF0050">🎵</a>';if(p.snapchat)socials+='<a class="sc-social" onclick="event.stopPropagation();window.open(\'https://snapchat.com/add/'+esc(p.snapchat)+'\',\'_blank\')" style="color:#FFFC00">👻</a>';
+  c.innerHTML='<div class="stamp like">ATZE!</div><div class="stamp nope">NOPE</div><div class="sc-photo-dots"><div class="scd-dot active"></div><div class="scd-dot"></div><div class="scd-dot"></div></div><div class="sc-photo" style="background-image:url(\''+(p.photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80')+'\')"></div><div class="sc-grad"></div><div class="sc-content"><div class="sc-name">'+esc(p.name)+'<span class="sc-age">'+p.age+'</span>'+(p.mood?' <span style="font-size:22px;margin-left:4px">'+p.mood+'</span>':'')+'</div><div class="sc-loc">'+(p.gender||'')+(p.status?' · '+p.status:'')+'</div>'+(p.verified?'<span class="sc-badge">✓ Verifiziert</span>':'')+(p.club?'<span class="sc-badge">⚽ '+esc(p.club)+'</span>':'')+(socials?'<div style="display:flex;gap:8px;margin-top:8px">'+socials+'</div>':'')+'<div class="sc-bio">'+esc(p.bio||'')+'</div></div>';
   var sx=0,dx=0,dr=0;
   function ms(x){sx=x;dr=1}
-  function mm(x){if(!dr)return;dx=x-sx;c.style.transform='translateX('+dx+'px) rotate('+dx*.05+'deg)';c.style.transition='none';c.querySelector('.like').classList.toggle('vis',dx>60);c.querySelector('.nope').classList.toggle('vis',dx<-60)}
-  function me(){if(!dr)return;dr=0;c.style.transition='';if(Math.abs(dx)>100)doSwipe(dx>0?'right':'left');else{c.style.transform='';c.querySelector('.like').classList.remove('vis');c.querySelector('.nope').classList.remove('vis')}dx=0}
+  function mm(x){if(!dr)return;dx=x-sx;c.style.transform='translateX('+dx+'px) rotate('+dx*.05+'deg)';c.style.transition='none';c.querySelector('.like').classList.toggle('vis',dx>80);c.querySelector('.nope').classList.toggle('vis',dx<-80)}
+  function me(){if(!dr)return;dr=0;c.style.transition='';if(Math.abs(dx)>120)doSwipe(dx>0?'right':'left');else{c.style.transform='';c.querySelector('.like').classList.remove('vis');c.querySelector('.nope').classList.remove('vis')}dx=0}
   c.addEventListener('touchstart',function(e){ms(e.touches[0].clientX)},{passive:true});
   c.addEventListener('touchmove',function(e){e.preventDefault();mm(e.touches[0].clientX)},{passive:false});
   c.addEventListener('touchend',me);
   c.addEventListener('mousedown',function(e){ms(e.clientX)});
   c.addEventListener('mousemove',function(e){mm(e.clientX)});
   c.addEventListener('mouseup',me);c.addEventListener('mouseleave',me);
+  if(navigator.vibrate)c.addEventListener('touchend',function(){navigator.vibrate(10)});
   return c;
 }
 
