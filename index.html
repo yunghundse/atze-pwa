@@ -328,7 +328,14 @@ footer{padding:32px 24px;border-top:1px solid var(--line);text-align:center}
     <div class="feat-item"><span>🚨</span>SOS-System</div>
     <div class="feat-item"><span>🗳️</span>Tages-Votings</div>
     <div class="feat-item"><span>🍺</span>Drink-Counter</div>
+    <div class="feat-item"><span>💬</span>Crew-Chat</div>
+    <div class="feat-item"><span>🗺️</span>Live-Map</div>
+    <div class="feat-item"><span>📸</span>Foto-Battles</div>
+    <div class="feat-item"><span>🏆</span>Challenges</div>
+    <div class="feat-item"><span>🎵</span>Playlist-Voting</div>
+    <div class="feat-item"><span>🤝</span>Crew-Finder</div>
   </div>
+  <p style="margin-top:18px;font-size:12px;color:#555;max-width:500px;margin-left:auto;margin-right:auto">Und das ist erst der Anfang — ab 250 Mitgliedern entscheidet ihr, welche Features als Nächstes kommen.</p>
 </div>
 
 <!-- MANIFESTO — Wofür wir stehen -->
@@ -354,41 +361,41 @@ footer{padding:32px 24px;border-top:1px solid var(--line);text-align:center}
       <div class="roadmap-progress-label" id="rmProgressLabel">0 / 50.000</div>
     </div>
     <div class="rm-timeline">
-      <div class="rm-step" id="rmStep1" data-target="500">
-        <div class="rm-dot">✓</div>
-        <div class="rm-head"><span class="rm-members">500 Mitglieder</span></div>
-        <div class="rm-title">Community-Chat öffnet</div>
-        <div class="rm-desc">Exklusiver Zugang zur crew. WhatsApp-Gruppe. Nur für die Ersten — wer drin ist, ist drin. Hier entstehen die ersten Freundschaften, bevor die Saison startet.</div>
+      <div class="rm-step" id="rmStep1" data-target="250">
+        <div class="rm-dot">💬</div>
+        <div class="rm-head"><span class="rm-members">250 Mitglieder</span></div>
+        <div class="rm-title">Ihr entscheidet, was gebaut wird</div>
+        <div class="rm-desc">Ab hier bestimmt die Community. Schickt uns eure Ideen, sagt uns was die App braucht — wir bauen, was ihr wollt. Kein Feature ohne euer Go.</div>
       </div>
-      <div class="rm-step" id="rmStep2" data-target="2500">
-        <div class="rm-dot">✓</div>
-        <div class="rm-head"><span class="rm-members">2.500 Mitglieder</span></div>
-        <div class="rm-title">Erstes Feature-Voting</div>
-        <div class="rm-desc">Ihr bestimmt, was als Nächstes gebaut wird. Welches Feature kommt zuerst? Crew-Tracker, Matching oder Party-Games? Eure Stimme zählt.</div>
+      <div class="rm-step" id="rmStep2" data-target="1000">
+        <div class="rm-dot">🔓</div>
+        <div class="rm-head"><span class="rm-members">1.000 Mitglieder</span></div>
+        <div class="rm-title">Exklusiver Community-Chat</div>
+        <div class="rm-desc">Die innere crew. wird freigeschaltet — direkter Draht zu uns, Sneak Peeks und die Möglichkeit, aktiv an der Entwicklung mitzuwirken.</div>
       </div>
       <div class="rm-step" id="rmStep3" data-target="5000">
         <div class="rm-dot">🚀</div>
         <div class="rm-head"><span class="rm-members">5.000 Mitglieder</span></div>
         <div class="rm-title">Closed Beta startet</div>
-        <div class="rm-desc">Die ersten 5.000 sind die Beta-Tester. Ihr bekommt die App bevor irgendwer anders sie sieht. Bugs finden, Features testen, Geschichte schreiben.</div>
+        <div class="rm-desc">Die App geht in die Hände der Community. Ihr testet, ihr gebt Feedback, ihr macht sie besser. Founding Members bekommen als Erste Zugang.</div>
       </div>
       <div class="rm-step" id="rmStep4" data-target="10000">
         <div class="rm-dot">🏝️</div>
         <div class="rm-head"><span class="rm-members">10.000 Mitglieder</span></div>
         <div class="rm-title">Erstes crew. Meetup auf Malle</div>
-        <div class="rm-desc">Vom Bildschirm an den Strand. Das erste offizielle crew. Treffen auf der Insel — organisiert von uns, gefeiert von euch. Das wird legendär.</div>
+        <div class="rm-desc">Vom Bildschirm an den Strand. Das erste offizielle crew. Treffen auf der Insel — organisiert mit der Community, gefeiert von allen.</div>
       </div>
       <div class="rm-step" id="rmStep5" data-target="25000">
         <div class="rm-dot">👑</div>
         <div class="rm-head"><span class="rm-members">25.000 Mitglieder</span></div>
         <div class="rm-title">Offizieller Launch</div>
-        <div class="rm-desc">Die App geht live — für alle. Aber die Founding Members behalten ihren Status für immer. Ihr wart die Ersten. Ihr habt das hier möglich gemacht.</div>
+        <div class="rm-desc">Die App geht live — mit den Features, die ihr gewählt habt. Founding Members behalten ihren Status für immer. Ihr habt das hier möglich gemacht.</div>
       </div>
       <div class="rm-step" id="rmStep6" data-target="50000">
         <div class="rm-dot">🌍</div>
         <div class="rm-head"><span class="rm-members">50.000 Mitglieder</span></div>
-        <div class="rm-title">Expansion — Ibiza, Kreta & mehr</div>
-        <div class="rm-desc">crew. geht über Mallorca hinaus. Ibiza, Kreta, Goldstrand — überall wo gefeiert wird, ist crew. dabei. Und die OGs von Tag 1 haben Lifetime-Status.</div>
+        <div class="rm-title">Expansion — neue Inseln, neue Crews</div>
+        <div class="rm-desc">crew. wächst über Mallorca hinaus. Wohin als Nächstes? Das entscheidet ihr. Ibiza, Kreta, Goldstrand — die Community zeigt den Weg.</div>
       </div>
     </div>
   </div>
@@ -544,7 +551,7 @@ loadWaitlistCount();
 
 // Roadmap updater
 function updateRoadmap(count){
-  var targets = [500, 2500, 5000, 10000, 25000, 50000];
+  var targets = [250, 1000, 5000, 10000, 25000, 50000];
   var maxTarget = 50000;
   // Progress bar
   var pct = Math.min((count / maxTarget) * 100, 100);
