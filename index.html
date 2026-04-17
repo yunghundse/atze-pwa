@@ -138,6 +138,59 @@ footer{padding:32px 24px;border-top:1px solid var(--line);text-align:center}
 .admin-form button:hover{transform:translateY(-1px)}
 .admin-msg{margin-top:8px;font-size:12px;min-height:18px}
 
+/* MANIFESTO */
+.manifesto{padding:80px 24px;text-align:center;border-top:1px solid var(--line);position:relative;overflow:hidden}
+.manifesto::before{content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);width:300px;height:300px;background:radial-gradient(circle,rgba(255,109,46,.06),transparent 70%);pointer-events:none}
+.manifesto-inner{max-width:600px;margin:0 auto;position:relative}
+.manifesto .section-tag{font-size:11px;letter-spacing:.35em;text-transform:uppercase;color:var(--o);font-weight:700;margin-bottom:20px}
+.manifesto h2{font-size:clamp(22px,4vw,36px);font-weight:900;line-height:1.15;letter-spacing:-1px;margin-bottom:20px}
+.manifesto h2 .hl{background:var(--gold);-webkit-background-clip:text;background-clip:text;color:transparent}
+.manifesto p{font-size:clamp(13px,1.2vw,15px);color:#999;line-height:1.8;margin-bottom:14px}
+.manifesto .sig{margin-top:24px;font-size:13px;font-weight:700;color:#ccc;letter-spacing:.02em}
+.manifesto .sig span{color:var(--o)}
+
+/* ROADMAP */
+.roadmap{padding:80px 24px;border-top:1px solid var(--line);position:relative}
+.roadmap-inner{max-width:560px;margin:0 auto}
+.roadmap .section-tag{font-size:11px;letter-spacing:.35em;text-transform:uppercase;color:var(--o);font-weight:700;margin-bottom:8px;text-align:center}
+.roadmap h2{font-size:clamp(20px,3.5vw,32px);font-weight:900;letter-spacing:-1px;text-align:center;margin-bottom:8px}
+.roadmap .roadmap-sub{font-size:13px;color:#666;text-align:center;margin-bottom:36px;line-height:1.6}
+.roadmap-progress{display:flex;align-items:center;gap:0;margin-bottom:32px;padding:0 8px}
+.roadmap-progress-bar{flex:1;height:6px;background:rgba(255,255,255,.06);border-radius:99px;overflow:hidden;position:relative}
+.roadmap-progress-fill{height:100%;background:var(--gold);border-radius:99px;transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
+.roadmap-progress-label{font-size:12px;font-weight:700;color:var(--o);white-space:nowrap;margin-left:12px}
+.rm-timeline{position:relative;padding-left:28px}
+.rm-timeline::before{content:"";position:absolute;left:9px;top:8px;bottom:8px;width:2px;background:rgba(255,255,255,.06)}
+.rm-step{position:relative;margin-bottom:28px}
+.rm-step:last-child{margin-bottom:0}
+.rm-dot{position:absolute;left:-28px;top:2px;width:20px;height:20px;border-radius:50%;border:2px solid rgba(255,255,255,.1);background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:10px;transition:all .3s;z-index:1}
+.rm-step.done .rm-dot{border-color:rgba(52,199,89,.4);background:rgba(52,199,89,.12);color:#34C759}
+.rm-step.active .rm-dot{border-color:rgba(255,109,46,.5);background:rgba(255,109,46,.12);box-shadow:0 0 12px rgba(255,109,46,.2);animation:pulse 1.6s infinite}
+.rm-step.locked .rm-dot{border-color:rgba(255,255,255,.06);color:#333}
+.rm-head{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.rm-members{font-size:11px;font-weight:800;color:var(--o);background:rgba(255,109,46,.08);padding:3px 10px;border-radius:99px;letter-spacing:.04em}
+.rm-step.done .rm-members{color:#34C759;background:rgba(52,199,89,.08)}
+.rm-step.locked .rm-members{color:#444;background:rgba(255,255,255,.03)}
+.rm-title{font-size:15px;font-weight:800;color:#fff}
+.rm-step.locked .rm-title{color:#555}
+.rm-desc{font-size:12px;color:#777;line-height:1.6;margin-top:2px}
+.rm-step.locked .rm-desc{color:#444}
+.rm-badge{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:99px;margin-top:8px}
+.rm-step.done .rm-badge{background:rgba(52,199,89,.1);color:#34C759;border:1px solid rgba(52,199,89,.2)}
+.rm-step.active .rm-badge{background:rgba(255,109,46,.1);color:var(--o);border:1px solid rgba(255,109,46,.2)}
+
+/* COMMUNITY CTA */
+.community-cta{padding:60px 24px;border-top:1px solid var(--line);text-align:center}
+.community-cta-inner{max-width:500px;margin:0 auto}
+.community-cta h3{font-size:18px;font-weight:900;margin-bottom:8px}
+.community-cta p{font-size:13px;color:#888;margin-bottom:20px;line-height:1.6}
+.community-socials{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.csocial{display:flex;align-items:center;gap:8px;padding:12px 20px;border-radius:14px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);font-size:12px;font-weight:700;color:#ccc;transition:all .25s;text-decoration:none}
+.csocial:hover{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.15);transform:translateY(-2px)}
+.csocial svg{width:18px;height:18px;flex-shrink:0}
+.csocial.wa{border-color:rgba(37,211,102,.15);color:#25D366}.csocial.wa:hover{background:rgba(37,211,102,.08);border-color:rgba(37,211,102,.3)}
+.csocial.ig{border-color:rgba(225,48,108,.15);color:#E1306C}.csocial.ig:hover{background:rgba(225,48,108,.08);border-color:rgba(225,48,108,.3)}
+
 /* MOBILE */
 @media(max-width:599px){
   .nav{padding:12px 16px}
@@ -278,6 +331,87 @@ footer{padding:32px 24px;border-top:1px solid var(--line);text-align:center}
   </div>
 </div>
 
+<!-- MANIFESTO — Wofür wir stehen -->
+<section class="manifesto">
+  <div class="manifesto-inner">
+    <div class="section-tag">Wofür wir stehen</div>
+    <h2>Kein Startup-Gelaber.<br>Nur zwei Jungs mit <span class="hl">einer Mission.</span></h2>
+    <p>Wir sind Yannick und Jan — und wir haben crew. nicht gegründet, um reich zu werden. Wir haben es gegründet, weil wir selbst wissen, wie es sich anfühlt, auf Malle zu landen und nicht die richtige Crew zu haben.</p>
+    <p>crew. ist kein Produkt. Es ist eine Bewegung. Wir glauben daran, dass der beste Urlaub nicht vom Hotel abhängt, sondern von den Menschen um dich rum. Und genau dafür bauen wir das hier — mit euch, für euch, von Anfang an.</p>
+    <p>Jede Idee, jedes Feature, jede Entscheidung — ihr seid dabei. Weil crew. euch gehört, nicht uns.</p>
+    <div class="sig">Yannick & Jan — <span>Team Filmriss</span> 🎬</div>
+  </div>
+</section>
+
+<!-- ROADMAP — Community-Meilensteine -->
+<section class="roadmap" id="roadmap">
+  <div class="roadmap-inner">
+    <div class="section-tag">Unsere Roadmap</div>
+    <h2>Gemeinsam bauen. Gemeinsam feiern.</h2>
+    <p class="roadmap-sub">Jeder einzelne von euch bringt uns näher ans Ziel. Das sind keine leeren Versprechen — das ist der Plan. Und ihr entscheidet, wie schnell wir da hinkommen.</p>
+    <div class="roadmap-progress">
+      <div class="roadmap-progress-bar"><div class="roadmap-progress-fill" id="rmProgressFill" style="width:0%"></div></div>
+      <div class="roadmap-progress-label" id="rmProgressLabel">0 / 10.000</div>
+    </div>
+    <div class="rm-timeline">
+      <div class="rm-step" id="rmStep1" data-target="100">
+        <div class="rm-dot">✓</div>
+        <div class="rm-head"><span class="rm-members">100 Mitglieder</span></div>
+        <div class="rm-title">Community-Chat öffnet</div>
+        <div class="rm-desc">Exklusiver Zugang zur crew. WhatsApp-Gruppe. Nur für die Ersten — wer drin ist, ist drin. Hier entstehen die ersten Freundschaften, bevor die Saison startet.</div>
+      </div>
+      <div class="rm-step" id="rmStep2" data-target="500">
+        <div class="rm-dot">✓</div>
+        <div class="rm-head"><span class="rm-members">500 Mitglieder</span></div>
+        <div class="rm-title">Erstes Feature-Voting</div>
+        <div class="rm-desc">Ihr bestimmt, was als Nächstes gebaut wird. Welches Feature kommt zuerst? Crew-Tracker, Matching oder Party-Games? Eure Stimme zählt.</div>
+      </div>
+      <div class="rm-step" id="rmStep3" data-target="1000">
+        <div class="rm-dot">🚀</div>
+        <div class="rm-head"><span class="rm-members">1.000 Mitglieder</span></div>
+        <div class="rm-title">Closed Beta startet</div>
+        <div class="rm-desc">Die ersten 1.000 sind die Beta-Tester. Ihr bekommt die App bevor irgendwer anders sie sieht. Bugs finden, Features testen, Geschichte schreiben.</div>
+      </div>
+      <div class="rm-step" id="rmStep4" data-target="2500">
+        <div class="rm-dot">🏝️</div>
+        <div class="rm-head"><span class="rm-members">2.500 Mitglieder</span></div>
+        <div class="rm-title">Erstes crew. Meetup auf Malle</div>
+        <div class="rm-desc">Vom Bildschirm an den Strand. Das erste offizielle crew. Treffen auf der Insel — organisiert von uns, gefeiert von euch. Das wird legendär.</div>
+      </div>
+      <div class="rm-step" id="rmStep5" data-target="5000">
+        <div class="rm-dot">👑</div>
+        <div class="rm-head"><span class="rm-members">5.000 Mitglieder</span></div>
+        <div class="rm-title">Offizieller Launch</div>
+        <div class="rm-desc">Die App geht live — für alle. Aber die Founding Members behalten ihren Status für immer. Ihr wart die Ersten. Ihr habt das hier möglich gemacht.</div>
+      </div>
+      <div class="rm-step" id="rmStep6" data-target="10000">
+        <div class="rm-dot">🌍</div>
+        <div class="rm-head"><span class="rm-members">10.000 Mitglieder</span></div>
+        <div class="rm-title">Expansion — Ibiza, Kreta & mehr</div>
+        <div class="rm-desc">crew. geht über Mallorca hinaus. Ibiza, Kreta, Goldstrand — überall wo gefeiert wird, ist crew. dabei. Und die OGs von Tag 1 haben Lifetime-Status.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMMUNITY CTA -->
+<section class="community-cta">
+  <div class="community-cta-inner">
+    <h3>Sei Teil der Crew. Von Tag 1.</h3>
+    <p>Folg uns, bleib dran und bring deine Leute mit. Je größer die Crew, desto geiler wird der Sommer.</p>
+    <div class="community-socials">
+      <a href="https://whatsapp.com/channel/0029VbD10Vg3GJOtfhXJDG2e" target="_blank" rel="noopener" class="csocial wa">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" fill="currentColor"/><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.832-1.438A9.955 9.955 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a7.96 7.96 0 01-4.107-1.138l-.293-.176-2.862.852.852-2.862-.176-.293A7.96 7.96 0 014 12c0-4.411 3.589-8 8-8s8 3.589 8 8-3.589 8-8 8z" fill="currentColor"/></svg>
+        WhatsApp-Kanal
+      </a>
+      <a href="https://www.instagram.com/playa.crew" target="_blank" rel="noopener" class="csocial ig">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.17.054 1.97.24 2.43.403a4.088 4.088 0 011.523.99 4.088 4.088 0 01.99 1.524c.163.46.349 1.26.403 2.43.058 1.265.07 1.645.07 4.849s-.012 3.584-.07 4.85c-.054 1.17-.24 1.97-.403 2.43a4.088 4.088 0 01-.99 1.523 4.088 4.088 0 01-1.524.99c-.46.163-1.26.349-2.43.403-1.265.058-1.645.07-4.849.07s-3.584-.012-4.85-.07c-1.17-.054-1.97-.24-2.43-.403a4.088 4.088 0 01-1.523-.99 4.088 4.088 0 01-.99-1.524c-.163-.46-.349-1.26-.403-2.43C2.175 15.584 2.163 15.204 2.163 12s.012-3.584.07-4.85c.054-1.17.24-1.97.403-2.43a4.088 4.088 0 01.99-1.523A4.088 4.088 0 015.15 2.207c.46-.163 1.26-.349 2.43-.403C8.845 1.746 9.225 1.734 12 1.734" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="3.5" stroke="currentColor" stroke-width="1.5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+        Instagram
+      </a>
+    </div>
+  </div>
+</section>
+
 <!-- FOOTER -->
 <footer>
   <div class="foot-brand">crew<span class="dot">.</span></div>
@@ -403,9 +537,46 @@ async function loadWaitlistCount(){
     if(c > 0){
       document.getElementById('wlCount').innerHTML = '<strong>' + c + '</strong> ' + (c === 1 ? 'Person' : 'Personen') + ' auf der Warteliste';
     }
+    updateRoadmap(c);
   } catch(e){}
 }
 loadWaitlistCount();
+
+// Roadmap updater
+function updateRoadmap(count){
+  var targets = [100, 500, 1000, 2500, 5000, 10000];
+  var maxTarget = 10000;
+  // Progress bar
+  var pct = Math.min((count / maxTarget) * 100, 100);
+  document.getElementById('rmProgressFill').style.width = pct + '%';
+  document.getElementById('rmProgressLabel').textContent = count.toLocaleString('de-DE') + ' / ' + maxTarget.toLocaleString('de-DE');
+  // Steps
+  for(var i = 0; i < targets.length; i++){
+    var step = document.getElementById('rmStep' + (i + 1));
+    if(!step) continue;
+    var target = targets[i];
+    if(count >= target){
+      step.className = 'rm-step done';
+      var badge = step.querySelector('.rm-badge');
+      if(!badge){ badge = document.createElement('div'); badge.className = 'rm-badge'; step.appendChild(badge); }
+      badge.textContent = 'Erreicht ✓';
+    } else {
+      // Find which step is currently active (first not-done)
+      var isActive = true;
+      for(var j = 0; j < i; j++){
+        if(count < targets[j]){ isActive = false; break; }
+      }
+      if(isActive && (i === 0 || count >= targets[i-1])){
+        step.className = 'rm-step active';
+        var badge = step.querySelector('.rm-badge');
+        if(!badge){ badge = document.createElement('div'); badge.className = 'rm-badge'; step.appendChild(badge); }
+        badge.textContent = 'Noch ' + (target - count).toLocaleString('de-DE') + ' bis hierhin';
+      } else {
+        step.className = 'rm-step locked';
+      }
+    }
+  }
+}
 
 // Legal pages
 function openLegalPage(type){
