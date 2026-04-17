@@ -336,14 +336,12 @@ document.getElementById('wlForm').addEventListener('submit', async function(e){
   try {
     var insertData = {email:email, name:name, city:city, age_range:age, gender:gender};
     if(referredBy) insertData.referred_by = referredBy;
-    var {data:insertResult, error} = await sb.from('waitlist').insert(insertData).select('referral_code').single();
-    var myRefCode = insertResult ? insertResult.referral_code : null;
+    var {error} = await sb.from('waitlist').insert(insertData);
     if(error && error.code === '23505'){
       document.getElementById('wlSuccess').textContent = 'Du stehst schon auf der Liste!';
-      // Fetch existing referral code
-      var {data:codeData} = await sb.rpc('get_my_referral_code', {user_email: email});
-      myRefCode = codeData;
     } else if(error) throw error;
+    // Fetch referral code via RPC (no SELECT policy needed)
+    var {data:myRefCode} = await sb.rpc('get_my_referral_code', {user_email: email});
     document.getElementById('wlForm').style.display = 'none';
     document.getElementById('wlSuccess').style.display = 'block';
     if(myRefCode) showReferralCard(myRefCode);
