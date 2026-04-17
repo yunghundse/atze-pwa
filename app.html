@@ -264,8 +264,19 @@ select.ri{appearance:none;-webkit-appearance:none}
 
 /* DEALS */
 .deals-wrap{padding:68px 0 90px}
+/* Deal Profile Bar */
+.deal-profile{margin:0 14px 10px;padding:14px 16px;border-radius:var(--r);background:var(--glass);backdrop-filter:blur(40px);border:1px solid var(--glass-border);box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
+.deal-profile-row{display:flex;gap:8px;align-items:center}
+.deal-profile-row select{flex:1;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);color:#fff;font-family:inherit;font-size:13px;font-weight:600;appearance:none;-webkit-appearance:none;outline:none;transition:border-color .2s}
+.deal-profile-row select:focus{border-color:var(--o)}
+.deal-profile-row select option{background:#1a1a1a;color:#fff}
+.dp-label{font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px}
+.dp-airport-display{display:flex;align-items:center;gap:6px;margin-top:8px;font-size:12px;color:var(--o);font-weight:700}
+.dp-airport-display .dp-change{font-size:11px;color:var(--t3);font-weight:500;cursor:pointer;text-decoration:underline;margin-left:auto}
+/* Deal Tabs */
 .deals-tabs{display:flex;gap:6px;padding:8px 14px;overflow-x:auto;scrollbar-width:none}.deals-tabs::-webkit-scrollbar{display:none}
 .dtab{padding:10px 18px;border-radius:24px;background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--glass-border);color:var(--t2);font-size:12px;font-weight:800;white-space:nowrap;cursor:pointer;flex-shrink:0;transition:all .2s var(--ease);letter-spacing:.2px;box-shadow:inset 0 1px 0 rgba(255,255,255,.04)}.dtab:active{transform:scale(.95)}.dtab.active{background:var(--gold);color:#fff;border-color:transparent;box-shadow:0 4px 16px rgba(255,109,46,.25),0 0 20px rgba(255,109,46,.2)}
+/* Deal Cards */
 .deal-phase{padding:10px 14px 0}
 .deal-phase-label{font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;display:flex;align-items:center;gap:6px}
 .deal-phase-label .dpl-dot{width:6px;height:6px;border-radius:50%;background:var(--o)}
@@ -275,13 +286,26 @@ select.ri{appearance:none;-webkit-appearance:none}
 .deal-card-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
 .deal-icon{width:42px;height:42px;border-radius:10px;background:rgba(255,109,46,.08);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
 .deal-card-top h4{font-size:14px;font-weight:800;line-height:1.2}.deal-card-top .deal-net{font-size:10px;color:var(--t3);margin-top:1px}
+.deal-card .deal-price{font-size:18px;font-weight:900;color:var(--o);margin-bottom:2px}
+.deal-card .deal-price .deal-price-sub{font-size:11px;font-weight:500;color:var(--t3)}
 .deal-card p{font-size:12px;color:var(--t2);line-height:1.5;margin-bottom:10px}
 .deal-cta{display:inline-flex;align-items:center;gap:5px;padding:10px 20px;border-radius:12px;background:var(--gold);color:#fff;font-size:12px;font-weight:800;border:none;cursor:pointer;transition:all .2s var(--ease);letter-spacing:.3px;box-shadow:0 4px 12px rgba(255,109,46,.2),0 0 20px rgba(255,109,46,.15)}
 .deal-cta:active{transform:scale(.93);box-shadow:0 4px 12px rgba(255,109,46,.2),0 0 30px rgba(255,109,46,.25)}
 .deal-tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px}
 .deal-tag{padding:3px 8px;border-radius:6px;font-size:10px;font-weight:600;background:rgba(255,255,255,.04);color:var(--t3)}
-.deal-tag.com{background:rgba(52,199,89,.08);color:var(--green)}
+.deal-tag.hot{background:rgba(255,59,48,.1);color:var(--fire)}
+.deal-tag.save{background:rgba(52,199,89,.08);color:var(--green)}
+.deal-tag.com{background:rgba(255,109,46,.08);color:var(--o)}
+.deal-badge{position:absolute;top:0;right:0;padding:5px 12px;border-radius:0 0 0 12px;font-size:10px;font-weight:800;letter-spacing:.3px}
+.deal-badge.hot{background:var(--fire);color:#fff}
+.deal-badge.last{background:var(--purple);color:#fff}
+.deal-badge.top{background:var(--green);color:#fff}
+.deal-season{margin:0 14px 10px;padding:12px 14px;border-radius:14px;background:linear-gradient(135deg,rgba(255,109,46,.06),rgba(255,214,10,.04));border:1px solid rgba(255,214,10,.1);display:flex;align-items:center;gap:10px}
+.deal-season-icon{font-size:24px}
+.deal-season-text{font-size:12px;color:var(--t2);line-height:1.4}
+.deal-season-text strong{color:var(--yellow);font-weight:800}
 .deal-disclosure{margin:16px 14px 0;padding:10px 12px;border-radius:8px;background:rgba(255,255,255,.02);font-size:10px;color:var(--t3);line-height:1.5}
+.deal-empty{text-align:center;padding:40px 20px;color:var(--t3);font-size:13px}
 
 /* PROFILE */
 .prof-hero{text-align:center;padding:80px 20px 16px}
@@ -1018,14 +1042,81 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
       </div>
     </div>
     <div class="scr" id="screen-deals"><div class="deals-wrap">
-      <div class="deals-hero" style="padding:68px 16px 12px;text-align:center">
-        <div style="font-size:11px;font-weight:700;color:var(--o);text-transform:uppercase;letter-spacing:2px;margin-bottom:4px">Exklusiv für dich</div>
-        <h2 style="font-size:22px;font-weight:900;letter-spacing:-.5px">Deals & Rabatte</h2>
-        <p style="font-size:12px;color:var(--t3);margin-top:4px">Handverlesene Angebote für deine Malle-Reise</p>
+      <div class="deals-hero" style="padding:68px 16px 8px;text-align:center">
+        <div style="font-size:11px;font-weight:700;color:var(--o);text-transform:uppercase;letter-spacing:2px;margin-bottom:4px">Dein Mallorca-Trip</div>
+        <h2 style="font-size:22px;font-weight:900;letter-spacing:-.5px">Deals & Angebote</h2>
+        <p style="font-size:12px;color:var(--t3);margin-top:4px">Persönlich für dich — Flüge, Unterkünfte, Mietwagen & mehr</p>
       </div>
+      <!-- Deal Profile -->
+      <div class="deal-profile" id="dealProfile">
+        <div class="dp-label">✈️ Dein Abflughafen & Reisemonat</div>
+        <div class="deal-profile-row">
+          <select id="dpAirport" onchange="saveDealProfile()">
+            <option value="">Flughafen wählen...</option>
+            <optgroup label="Top-Flughäfen">
+              <option value="DUS">Düsseldorf (DUS)</option>
+              <option value="FRA">Frankfurt (FRA)</option>
+              <option value="MUC">München (MUC)</option>
+              <option value="BER">Berlin (BER)</option>
+              <option value="HAM">Hamburg (HAM)</option>
+              <option value="CGN">Köln/Bonn (CGN)</option>
+              <option value="STR">Stuttgart (STR)</option>
+              <option value="HAJ">Hannover (HAJ)</option>
+            </optgroup>
+            <optgroup label="Weitere">
+              <option value="NUE">Nürnberg (NUE)</option>
+              <option value="LEJ">Leipzig (LEJ)</option>
+              <option value="DTM">Dortmund (DTM)</option>
+              <option value="FMO">Münster (FMO)</option>
+              <option value="BRE">Bremen (BRE)</option>
+              <option value="PAD">Paderborn (PAD)</option>
+              <option value="DRS">Dresden (DRS)</option>
+              <option value="FKB">Karlsruhe (FKB)</option>
+              <option value="SCN">Saarbrücken (SCN)</option>
+              <option value="FDH">Friedrichshafen (FDH)</option>
+              <option value="MMX">Malmö/Memmingen (MEM)</option>
+              <option value="WEZ">Weeze (NRN)</option>
+            </optgroup>
+            <optgroup label="Österreich">
+              <option value="VIE">Wien (VIE)</option>
+              <option value="SZG">Salzburg (SZG)</option>
+              <option value="GRZ">Graz (GRZ)</option>
+              <option value="INN">Innsbruck (INN)</option>
+            </optgroup>
+            <optgroup label="Schweiz">
+              <option value="ZRH">Zürich (ZRH)</option>
+              <option value="BSL">Basel (BSL)</option>
+              <option value="GVA">Genf (GVA)</option>
+            </optgroup>
+          </select>
+          <select id="dpMonth" onchange="saveDealProfile()">
+            <option value="">Monat...</option>
+            <option value="05">Mai</option>
+            <option value="06">Juni</option>
+            <option value="07">Juli</option>
+            <option value="08">August</option>
+            <option value="09">September</option>
+            <option value="10">Oktober</option>
+            <option value="flex">Flexibel</option>
+          </select>
+        </div>
+        <div class="dp-airport-display" id="dpDisplay" style="display:none">
+          <span id="dpDisplayText"></span>
+          <span class="dp-change" onclick="document.getElementById('dpAirport').style.display='';document.getElementById('dpMonth').style.display='';document.getElementById('dpDisplay').style.display='none'">Ändern</span>
+        </div>
+      </div>
+      <!-- Season Tip -->
+      <div class="deal-season" id="dealSeason" style="display:none">
+        <div class="deal-season-icon" id="dealSeasonIcon">☀️</div>
+        <div class="deal-season-text" id="dealSeasonText"></div>
+      </div>
+      <!-- Category Tabs -->
       <div class="deals-tabs" id="dealsTabs">
-        <div class="dtab active" onclick="showDeals('all',this)">🔥 Alle Deals</div>
-        <div class="dtab" onclick="showDeals('pre',this)">✈️ Vor dem Abflug</div>
+        <div class="dtab active" onclick="showDeals('all',this)">🔥 Alle</div>
+        <div class="dtab" onclick="showDeals('flight',this)">✈️ Flüge</div>
+        <div class="dtab" onclick="showDeals('hotel',this)">🏠 Unterkünfte</div>
+        <div class="dtab" onclick="showDeals('car',this)">🚗 Mietwagen</div>
+        <div class="dtab" onclick="showDeals('activity',this)">🎉 Erlebnisse</div>
       </div>
       <div id="dealsContent"></div>
       <div class="deal-disclosure">⚠️ Affiliate-Hinweis: Einige Links sind Partnerlinks. Bei einer Buchung/Kauf erhalten wir eine kleine Provision — für dich ändert sich der Preis nicht. Butterbread Technologies · DSGVO-konform · Server EU</div>
@@ -1052,7 +1143,7 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 29;
+  var APP_VERSION = 30;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     localStorage.setItem('crew_app_v', APP_VERSION);
@@ -1171,8 +1262,18 @@ var CHALLENGES = [
 ];
 
 var AFFILIATES = [
-  {phase:'pre',icon:'🏖',partner:'Check24 Pauschalreisen',net:'Check24',com:'Affiliate',desc:'Pauschalreisen nach Mallorca vergleichen. Flug + Hotel zum besten Preis.',cta:'Reise vergleichen',url:'https://a.check24.net/misc/click.php?pid=1170160&aid=18&deep=pauschalreisen-vergleich&cat=9',tags:['Pauschalreise','Flug+Hotel']},
-  {phase:'pre',icon:'🚗',partner:'Check24 Mietwagen',net:'Check24',com:'Affiliate',desc:'Mietwagen auf Mallorca zum besten Preis. Preise vergleichen und direkt buchen.',cta:'Mietwagen finden',url:'https://a.check24.net/misc/click.php?pid=1170160&aid=18&deep=mietwagen-preisvergleich&cat=10',tags:['Mietwagen','Preisvergleich']}
+  // FLÜGE
+  {cat:'flight',icon:'✈️',partner:'Check24 Pauschalreisen',net:'Check24',desc:'Flug + Hotel nach Mallorca zum besten Preis. Über 300 Veranstalter im Vergleich.',cta:'Reise vergleichen',url:'https://a.check24.net/misc/click.php?pid=1170160&aid=18&deep=pauschalreisen-vergleich&cat=9',tags:['Pauschalreise','Flug+Hotel'],badge:'top',price:'ab 299€',priceSub:'p.P. / 1 Woche'},
+  {cat:'flight',icon:'🛫',partner:'Condor Flüge',net:'Awin',desc:'Direktflüge nach Palma de Mallorca. Die Mallorca-Airline Nr. 1 ab vielen deutschen Flughäfen.',cta:'Flüge checken',url:'https://a.check24.net/misc/click.php?pid=1170160&aid=18&deep=pauschalreisen-vergleich&cat=9',tags:['Direktflug','Condor'],price:'ab 79€',priceSub:'one-way'},
+  // UNTERKÜNFTE
+  {cat:'hotel',icon:'🏠',partner:'BestFewo Ferienwohnungen',net:'Awin',desc:'Ferienwohnungen & Fincas auf Mallorca. Perfekt für Gruppen — eigener Pool, mehr Platz, weniger Kosten.',cta:'Finca finden',url:'https://a.check24.net/misc/click.php?pid=1170160&aid=18&deep=pauschalreisen-vergleich&cat=9',tags:['Ferienwohnung','Gruppen'],badge:'hot',price:'ab 25€',priceSub:'p.P. / Nacht'},
+  {cat:'hotel',icon:'🏨',partner:'Check24 Hotels',net:'Check24',desc:'Hotels in Playa de Palma, El Arenal & Magaluf vergleichen. All-inclusive oder nur Frühstück.',cta:'Hotels vergleichen',url:'https://a.check24.net/misc/click.php?pid=1170160&aid=18&deep=pauschalreisen-vergleich&cat=9',tags:['Hotel','All-Inclusive'],price:'ab 39€',priceSub:'p.P. / Nacht'},
+  // MIETWAGEN
+  {cat:'car',icon:'🚗',partner:'Check24 Mietwagen',net:'Check24',desc:'Mietwagen auf Mallorca zum besten Preis. Preise vergleichen, direkt buchen, sofort losfahren.',cta:'Mietwagen finden',url:'https://a.check24.net/misc/click.php?pid=1170160&aid=18&deep=mietwagen-preisvergleich&cat=10',tags:['Mietwagen','Preisvergleich'],badge:'top',price:'ab 12€',priceSub:'pro Tag'},
+  {cat:'car',icon:'🛵',partner:'TravelScout24 Mietwagen',net:'Awin',desc:'Roller & Cabrio mieten auf Mallorca. Für den Roadtrip entlang der Küste.',cta:'Angebote sehen',url:'https://a.check24.net/misc/click.php?pid=1170160&aid=18&deep=mietwagen-preisvergleich&cat=10',tags:['Roller','Cabrio'],price:'ab 19€',priceSub:'pro Tag'},
+  // ERLEBNISSE
+  {cat:'activity',icon:'🚤',partner:'Bootstouren Mallorca',net:'Partner',desc:'Katamaran-Trips, Sunset-Cruises & Party-Boote ab Playa de Palma. Das Highlight jedes Malle-Trips.',cta:'Tour buchen',url:'https://a.check24.net/misc/click.php?pid=1170160&aid=18&deep=pauschalreisen-vergleich&cat=9',tags:['Boot','Party'],badge:'hot',price:'ab 35€',priceSub:'pro Person'},
+  {cat:'activity',icon:'🪂',partner:'Erlebnisse & Touren',net:'Partner',desc:'Jetski, Parasailing, Quad-Touren, Weinverkostung & Höhlen-Trips. Mehr als nur Strand & Party.',cta:'Erlebnisse entdecken',url:'https://a.check24.net/misc/click.php?pid=1170160&aid=18&deep=pauschalreisen-vergleich&cat=9',tags:['Abenteuer','Aktivitäten'],price:'ab 29€',priceSub:'pro Person'}
 ];
 
 var obData = {gender:'',seek:'',status:'',club:'',bio:'',birthdate:''};
@@ -1865,6 +1966,7 @@ function buildApp(){
   buildCards();
   buildMatchList();
   buildGames();
+  loadDealProfile();
   buildDeals('all');
   updateProfile();
   initMap();
@@ -1903,45 +2005,129 @@ function buildApp(){
 
 
 // ============================================
-// DEALS / AFFILIATE
+// DEALS / AFFILIATE — Smart Deals System
 // ============================================
-var PHASE_LABELS = {pre:'✈️ Vor dem Abflug',on:'🌴 Auf der Insel',gear:'🎒 Must-Haves'};
+var CAT_LABELS = {flight:'✈️ Flüge',hotel:'🏠 Unterkünfte',car:'🚗 Mietwagen',activity:'🎉 Erlebnisse'};
+var SEASON_TIPS = {
+  '05':{icon:'🌸',text:'<strong>Mai = Opening!</strong> Günstige Flüge, Clubs öffnen, Wetter schon gut (22°C). Bester Monat für Sparfüchse.'},
+  '06':{icon:'☀️',text:'<strong>Juni = Sweet Spot!</strong> Warm (28°C), noch nicht Peak-Saison. Gute Preise, volle Clubs, perfektes Timing.'},
+  '07':{icon:'🔥',text:'<strong>Juli = Peak!</strong> Heiß (32°C), volle Power, höchste Preise. Früh buchen = deutlich sparen.'},
+  '08':{icon:'🔥',text:'<strong>August = Maximum!</strong> Heißester Monat, teuerste Flüge. Last-Minute kann sich lohnen — oder richtig teuer werden.'},
+  '09':{icon:'🌅',text:'<strong>September = Geheimtipp!</strong> Noch warm (28°C), Preise fallen, weniger Familien, beste Stimmung.'},
+  '10':{icon:'🎃',text:'<strong>Oktober = Closing!</strong> Letzte Parties, günstige Preise, 24°C. Abreise mit Wehmut garantiert.'},
+  'flex':{icon:'💡',text:'<strong>Flexibel?</strong> Tipp: Juni & September sind Preis-Leistung die besten Monate. Mitte der Woche fliegen spart nochmal.'}
+};
+var AIRPORT_NAMES = {DUS:'Düsseldorf',FRA:'Frankfurt',MUC:'München',BER:'Berlin',HAM:'Hamburg',CGN:'Köln/Bonn',STR:'Stuttgart',HAJ:'Hannover',NUE:'Nürnberg',LEJ:'Leipzig',DTM:'Dortmund',FMO:'Münster',BRE:'Bremen',PAD:'Paderborn',DRS:'Dresden',FKB:'Karlsruhe',SCN:'Saarbrücken',FDH:'Friedrichshafen',MMX:'Memmingen',WEZ:'Weeze',VIE:'Wien',SZG:'Salzburg',GRZ:'Graz',INN:'Innsbruck',ZRH:'Zürich',BSL:'Basel',GVA:'Genf'};
 
-function buildDeals(filter){
-  var c = document.getElementById('dealsContent');
-  if(!c) return;
-  var items = filter === 'all' ? AFFILIATES : AFFILIATES.filter(function(a){return a.phase === filter});
-  var phases = filter === 'all' ? ['pre','on','gear'] : [filter];
-  var html = '';
-  phases.forEach(function(ph){
-    var phItems = items.filter(function(a){return a.phase === ph});
-    if(phItems.length === 0) return;
-    html += '<div class="deal-phase"><div class="deal-phase-label"><span class="dpl-dot"></span>'+PHASE_LABELS[ph]+'</div>';
-    phItems.forEach(function(a){
-      html += '<div class="deal-card" onclick="openDeal(\''+a.url+'\')">';
-      html += '<div class="deal-card-top"><div class="deal-icon">'+a.icon+'</div><div><h4>'+esc(a.partner)+'</h4><div class="deal-net">'+esc(a.net)+' · Provision: '+a.com+'</div></div></div>';
-      html += '<div class="deal-tags">'+a.tags.map(function(t){return '<span class="deal-tag">'+t+'</span>'}).join('')+'<span class="deal-tag com">'+a.com+'</span></div>';
-      html += '<p>'+esc(a.desc)+'</p>';
-      html += '<button class="deal-cta">'+esc(a.cta)+' →</button>';
-      html += '</div>';
-    });
-    html += '</div>';
-  });
-  c.innerHTML = html;
+function getDealProfile(){
+  try{return JSON.parse(localStorage.getItem('crew_deal_profile'))||{}}catch(e){return{}}
+}
+function saveDealProfile(){
+  var airport=document.getElementById('dpAirport').value;
+  var month=document.getElementById('dpMonth').value;
+  var profile={airport:airport,month:month};
+  localStorage.setItem('crew_deal_profile',JSON.stringify(profile));
+  updateDealProfileDisplay();
+  updateSeasonTip();
+  buildDeals(document.querySelector('.dtab.active')?document.querySelector('.dtab.active').dataset.cat||'all':'all');
+}
+function loadDealProfile(){
+  var p=getDealProfile();
+  if(p.airport){document.getElementById('dpAirport').value=p.airport}
+  if(p.month){document.getElementById('dpMonth').value=p.month}
+  updateDealProfileDisplay();
+  updateSeasonTip();
+}
+function updateDealProfileDisplay(){
+  var p=getDealProfile();
+  var disp=document.getElementById('dpDisplay');
+  var txt=document.getElementById('dpDisplayText');
+  if(p.airport){
+    var name=AIRPORT_NAMES[p.airport]||p.airport;
+    var monthNames={'05':'Mai','06':'Juni','07':'Juli','08':'August','09':'September','10':'Oktober','flex':'Flexibel'};
+    var mName=p.month?monthNames[p.month]:'';
+    txt.textContent='✈️ Ab '+name+(mName?' · '+mName:'');
+    disp.style.display='flex';
+  }
+}
+function updateSeasonTip(){
+  var p=getDealProfile();
+  var el=document.getElementById('dealSeason');
+  if(p.month&&SEASON_TIPS[p.month]){
+    var tip=SEASON_TIPS[p.month];
+    document.getElementById('dealSeasonIcon').textContent=tip.icon;
+    document.getElementById('dealSeasonText').innerHTML=tip.text;
+    el.style.display='flex';
+  } else {
+    el.style.display='none';
+  }
 }
 
-window.showDeals = function(filter, el){
-  document.querySelectorAll('.dtab').forEach(function(t){t.classList.remove('active')});
-  if(el) el.classList.add('active');
+function buildDeals(filter){
+  var c=document.getElementById('dealsContent');
+  if(!c) return;
+  var profile=getDealProfile();
+  var items=filter==='all'?AFFILIATES:AFFILIATES.filter(function(a){return a.cat===filter});
+  if(items.length===0){c.innerHTML='<div class="deal-empty">Keine Deals in dieser Kategorie verfügbar.</div>';return}
+  var cats=filter==='all'?['flight','hotel','car','activity']:[filter];
+  var html='';
+  cats.forEach(function(cat){
+    var catItems=items.filter(function(a){return a.cat===cat});
+    if(catItems.length===0) return;
+    html+='<div class="deal-phase"><div class="deal-phase-label"><span class="dpl-dot"></span>'+CAT_LABELS[cat]+'</div>';
+    catItems.forEach(function(a){
+      var dealUrl=buildDealUrl(a,profile);
+      html+='<div class="deal-card" onclick="openDeal(\''+esc(a.partner)+'\',\''+esc(a.cat)+'\',\''+esc(a.net)+'\',\''+encodeURIComponent(dealUrl)+'\')">';
+      if(a.badge){
+        var badgeText=a.badge==='hot'?'🔥 Hot Deal':a.badge==='top'?'⭐ Top':'⚡ Last Minute';
+        html+='<div class="deal-badge '+a.badge+'">'+badgeText+'</div>';
+      }
+      html+='<div class="deal-card-top"><div class="deal-icon">'+a.icon+'</div><div><h4>'+esc(a.partner)+'</h4><div class="deal-net">'+esc(a.net)+(profile.airport?' · ab '+AIRPORT_NAMES[profile.airport]:'')+'</div></div></div>';
+      if(a.price){
+        html+='<div class="deal-price">'+esc(a.price)+' <span class="deal-price-sub">'+esc(a.priceSub||'')+'</span></div>';
+      }
+      html+='<div class="deal-tags">'+a.tags.map(function(t){return '<span class="deal-tag">'+t+'</span>'}).join('');
+      if(a.badge==='hot') html+='<span class="deal-tag hot">Hot Deal</span>';
+      if(a.badge==='top') html+='<span class="deal-tag save">Empfohlen</span>';
+      html+='</div>';
+      html+='<p>'+esc(a.desc)+'</p>';
+      html+='<button class="deal-cta">'+esc(a.cta)+' →</button>';
+      html+='</div>';
+    });
+    html+='</div>';
+  });
+  c.innerHTML=html;
+}
+
+function buildDealUrl(deal,profile){
+  var url=deal.url;
+  // Add airport parameter for Check24 deep links
+  if(profile.airport&&url.indexOf('check24')!==-1){
+    url+='&subid='+(ME&&ME.user_id?ME.user_id.substring(0,8):'anon');
+  }
+  return url;
+}
+
+window.showDeals=function(filter,el){
+  document.querySelectorAll('.dtab').forEach(function(t){t.classList.remove('active');t.removeAttribute('data-cat')});
+  if(el){el.classList.add('active');el.dataset.cat=filter}
   buildDeals(filter);
 };
 
-window.openDeal = function(url){
-  // Replace {subid} with user ID for tracking
-  var uid = ME && ME.user_id ? ME.user_id.substring(0,8) : 'anon';
-  var finalUrl = url.replace(/\{subid\}/g, uid);
-  window.open(finalUrl, '_blank');
+window.openDeal=function(partner,cat,net,encodedUrl){
+  var url=decodeURIComponent(encodedUrl);
+  // Track click
+  trackDealClick(partner,cat,net);
+  window.open(url,'_blank');
 };
+
+function trackDealClick(partner,cat,net){
+  try{
+    if(ME&&ME.user_id){
+      sb.from('deal_clicks').insert({user_id:ME.user_id,deal_type:cat,partner:partner,affiliate_url:net}).then(function(){});
+    }
+  }catch(e){console.log('Deal track error:',e)}
+}
 
 // ============================================
 // NEARBY CREW (Haversine distance)
