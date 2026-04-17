@@ -4,10 +4,10 @@
 <meta http-equiv="X-Frame-Options" content="DENY">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<title>crew. — Verlier nie wieder deine Crew auf Mallorca</title>
+<title>crew. — Dein Urlaub ist nur so gut wie deine Crew</title>
 <meta name="description" content="crew. — Die Party-App für Mallorca. Finde deine Crew, tracke deine Freunde, erlebe den besten Urlaub.">
 <meta name="theme-color" content="#050507">
-<meta property="og:title" content="crew. — Verlier nie wieder deine Crew">
+<meta property="og:title" content="crew. — Dein Urlaub ist nur so gut wie deine Crew">
 <meta property="og:description" content="Die Party-App für die Playa de Palma. Crew-Tracker, Matches & mehr.">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -54,6 +54,10 @@ a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer;border:0
 .wl-field input:focus,.wl-field select:focus{border-color:var(--o)}
 .wl-field input::placeholder{color:#555}
 .wl-row{display:flex;gap:12px}.wl-row .wl-field{flex:1}
+.wl-consent{display:flex;align-items:start;gap:10px;margin:14px 0 4px;text-align:left}
+.wl-consent input[type=checkbox]{width:18px;height:18px;margin-top:1px;accent-color:var(--o);flex-shrink:0;cursor:pointer}
+.wl-consent label{font-size:11px;color:var(--muted);line-height:1.5;cursor:pointer}
+.wl-consent label a{color:var(--o);text-decoration:underline}
 .wl-btn{width:100%;background:var(--gold);color:#000;padding:16px 28px;border-radius:999px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;transition:transform .2s,box-shadow .2s;box-shadow:0 8px 24px rgba(255,109,46,.15);margin-top:4px;border:0;cursor:pointer}
 .wl-btn:hover{transform:translateY(-1px);box-shadow:0 12px 30px rgba(255,109,46,.25)}
 .wl-note{margin-top:12px;font-size:11px;color:#444;text-align:center}
@@ -79,8 +83,19 @@ footer{padding:32px 24px;border-top:1px solid var(--line);text-align:center}
 .foot-brand{font-size:24px;font-weight:900;letter-spacing:-1px;margin-bottom:8px}
 .foot-brand .dot{background:var(--gold);-webkit-background-clip:text;background-clip:text;color:transparent}
 .foot-links{display:flex;justify-content:center;gap:20px;font-size:12px;color:#444;margin-bottom:12px;flex-wrap:wrap}
-.foot-links a{transition:color .2s}.foot-links a:hover{color:var(--o)}
+.foot-links a{transition:color .2s;cursor:pointer}.foot-links a:hover{color:var(--o)}
 .foot-copy{font-size:11px;color:#333}
+
+/* LEGAL MODAL */
+.legal-overlay{display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);overflow-y:auto;padding:60px 16px}
+.legal-overlay.show{display:block}
+.legal-box{max-width:640px;margin:0 auto;background:#111;border:1px solid var(--line);border-radius:20px;padding:32px 28px;position:relative}
+.legal-close{position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;transition:background .2s;border:none;color:#fff}
+.legal-close:hover{background:rgba(255,255,255,.12)}
+.legal-box h2{font-size:20px;font-weight:800;margin-bottom:20px;padding-right:40px}
+.legal-box p,.legal-box li{font-size:12px;line-height:1.7;color:#bbb;margin-bottom:10px}
+.legal-box strong{color:#fff;font-weight:700}
+.legal-box h3{font-size:14px;font-weight:700;color:#fff;margin:20px 0 8px}
 
 /* ADMIN */
 .admin-section{padding:24px;text-align:center}
@@ -100,11 +115,11 @@ footer{padding:32px 24px;border-top:1px solid var(--line);text-align:center}
   .nav-pill{font-size:10px;padding:7px 12px}
   .hero{padding:90px 16px 50px;min-height:100svh}
   .hook{letter-spacing:-1px;gap:.08em}
-  .wl-form{flex-direction:column}
-  .wl-form input{min-width:0}
-  .wl-form button{width:100%}
   .feat-row{gap:16px 24px}
   .feat-item{font-size:12px}
+  .social-bar{flex-direction:column;gap:10px}
+  .legal-overlay{padding:40px 12px}
+  .legal-box{padding:24px 18px}
 }
 /* DESKTOP */
 @media(min-width:900px){
@@ -161,7 +176,6 @@ footer{padding:32px 24px;border-top:1px solid var(--line);text-align:center}
           <label>Alter</label>
           <select id="wlAge" required>
             <option value="" disabled selected>Wählen</option>
-            <option value="16-17">16–17</option>
             <option value="18-21">18–21</option>
             <option value="22-25">22–25</option>
             <option value="26-30">26–30</option>
@@ -179,8 +193,12 @@ footer{padding:32px 24px;border-top:1px solid var(--line);text-align:center}
           </select>
         </div>
       </div>
+      <div class="wl-consent">
+        <input type="checkbox" id="wlConsent">
+        <label for="wlConsent">Ich habe die <a href="#" onclick="openLegalPage('datenschutz');return false">Datenschutzerklärung</a> gelesen und stimme der Verarbeitung meiner Daten zum Zweck der Warteliste zu.</label>
+      </div>
       <button type="submit" class="wl-btn">Ich bin dabei &rarr;</button>
-      <p class="wl-note" id="wl">Kein Spam. Nur eine Mail wenn es losgeht.</p>
+      <p class="wl-note" id="wl">Kein Spam. Nur eine Mail wenn es losgeht. Daten jederzeit löschbar per E-Mail.</p>
     </form>
     <div class="wl-success" id="wlSuccess">Du bist auf der Liste! Wir melden uns wenn es losgeht.</div>
     <div class="wl-count" id="wlCount"></div>
@@ -215,8 +233,8 @@ footer{padding:32px 24px;border-top:1px solid var(--line);text-align:center}
   <div class="foot-brand">crew<span class="dot">.</span></div>
   <div class="foot-links">
     <a href="mailto:info@butterbread-tech.com">Kontakt</a>
-    <a href="mailto:info@butterbread-tech.com">Datenschutz</a>
-    <a href="mailto:info@butterbread-tech.com">Impressum</a>
+    <a onclick="openLegalPage('datenschutz')">Datenschutz</a>
+    <a onclick="openLegalPage('impressum')">Impressum</a>
   </div>
   <div class="foot-copy">&copy; 2026 crew. — Butterbread Technologies</div>
 </footer>
@@ -232,6 +250,14 @@ footer{padding:32px 24px;border-top:1px solid var(--line);text-align:center}
   </div>
 </div>
 
+<!-- LEGAL MODALS -->
+<div class="legal-overlay" id="legalOverlay">
+  <div class="legal-box">
+    <button class="legal-close" onclick="closeLegalPage()">&times;</button>
+    <div id="legalContent"></div>
+  </div>
+</div>
+
 <script>
 var sb;
 try { sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY); } catch(e){}
@@ -244,11 +270,13 @@ document.getElementById('wlForm').addEventListener('submit', async function(e){
   var city = document.getElementById('wlCity').value.trim();
   var age = document.getElementById('wlAge').value;
   var gender = document.getElementById('wlGender').value;
+  var consent = document.getElementById('wlConsent').checked;
   if(!name){alert('Bitte gib deinen Namen ein.');return}
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){alert('Bitte eine gültige E-Mail eingeben.');return}
   if(!city){alert('Bitte gib deinen Wohnort ein.');return}
   if(!age){alert('Bitte wähle deine Altersgruppe.');return}
   if(!gender){alert('Bitte wähle dein Geschlecht.');return}
+  if(!consent){alert('Bitte stimme der Datenschutzerklärung zu.');return}
   var btn = this.querySelector('button');
   btn.textContent = 'Laden...';btn.disabled = true;
   try {
@@ -274,6 +302,73 @@ async function loadWaitlistCount(){
   } catch(e){}
 }
 loadWaitlistCount();
+
+// Legal pages
+function openLegalPage(type){
+  var c = document.getElementById('legalContent');
+  if(type==='impressum'){
+    c.innerHTML = '<h2>Impressum</h2>'
+    +'<h3>Angaben gemäß § 5 TMG</h3>'
+    +'<p>Butterbread Technologies<br>Jan Hundsdorff<br>Sudetenstraße 27<br>72474 Winterlingen<br>Deutschland</p>'
+    +'<h3>Kontakt</h3>'
+    +'<p>Telefon: +49 176 63447217<br>E-Mail: info@butterbread-tech.com</p>'
+    +'<h3>Umsatzsteuer-ID</h3>'
+    +'<p>Umsatzsteuer-Identifikationsnummer gemäß § 27a UStG: Wird bei Bedarf beantragt.</p>'
+    +'<h3>Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</h3>'
+    +'<p>Jan Hundsdorff<br>Sudetenstraße 27<br>72474 Winterlingen</p>'
+    +'<h3>Haftung für Inhalte</h3>'
+    +'<p>Die Inhalte unserer Seiten wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte können wir jedoch keine Gewähr übernehmen. Als Diensteanbieter sind wir gemäß § 7 Abs. 1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen.</p>'
+    +'<h3>Haftung für Links</h3>'
+    +'<p>Unser Angebot enthält Links zu externen Webseiten Dritter, auf deren Inhalte wir keinen Einfluss haben. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter verantwortlich.</p>'
+    +'<h3>Urheberrecht</h3>'
+    +'<p>Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers.</p>'
+    +'<p><strong>Stand: April 2026</strong></p>';
+  } else if(type==='datenschutz'){
+    c.innerHTML = '<h2>Datenschutzerklärung</h2>'
+    +'<h3>1. Datenschutz auf einen Blick</h3>'
+    +'<p>Die folgenden Hinweise geben einen Überblick darüber, was mit deinen personenbezogenen Daten passiert, wenn du diese Website bzw. die crew.-App nutzt.</p>'
+    +'<h3>2. Verantwortliche Stelle</h3>'
+    +'<p>Butterbread Technologies<br>Jan Hundsdorff<br>Sudetenstraße 27, 72474 Winterlingen<br>E-Mail: info@butterbread-tech.com</p>'
+    +'<h3>3. Hosting & Datenverarbeitung</h3>'
+    +'<p>Diese Website wird über GitHub Pages (GitHub Inc., USA) gehostet. Die App-Daten werden über Supabase (Supabase Inc.) verarbeitet. Server-Standort: EU (Frankfurt). Alle Daten sind AES-256 verschlüsselt. Supabase verarbeitet Daten gemäß der EU-DSGVO und hat Standard-Vertragsklauseln (SCCs) implementiert.</p>'
+    +'<h3>4. Externe Dienste</h3>'
+    +'<p><strong>Google Fonts:</strong> Diese Seite nutzt Google Fonts zur einheitlichen Darstellung von Schriftarten. Beim Aufruf wird eine Verbindung zu Servern von Google (Google LLC, USA) hergestellt, wobei deine IP-Adresse an Google übertragen wird. Rechtsgrundlage: Art. 6 Abs. 1 f DSGVO (berechtigtes Interesse an einheitlicher Darstellung). Google Datenschutzerklärung: https://policies.google.com/privacy</p>'
+    +'<p><strong>Unsplash:</strong> Für Hintergrundbilder werden Bilder von Unsplash Inc. geladen. Dabei wird deine IP-Adresse an Unsplash-Server übertragen.</p>'
+    +'<p><strong>jsDelivr CDN:</strong> Für technische Bibliotheken wird das jsDelivr Content Delivery Network genutzt. Dabei wird deine IP-Adresse an jsDelivr-Server übertragen.</p>'
+    +'<h3>5. Warteliste — Datenerfassung</h3>'
+    +'<p>Wenn du dich für die Warteliste einträgst, erfassen wir folgende Daten:</p>'
+    +'<p><strong>Pflichtangaben:</strong> Name, E-Mail-Adresse, Wohnort, Altersgruppe, Geschlecht</p>'
+    +'<p><strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 a DSGVO (deine ausdrückliche Einwilligung per Checkbox)</p>'
+    +'<p><strong>Zweck:</strong> Dich über den Start der crew.-App zu informieren und die Zielgruppe besser zu verstehen.</p>'
+    +'<p><strong>Speicherdauer:</strong> Bis du deine Einwilligung widerrufst oder die Warteliste aufgelöst wird, spätestens jedoch 12 Monate nach Eintragung.</p>'
+    +'<p><strong>Weitergabe:</strong> Keine Weitergabe an Dritte. Daten werden ausschließlich in der Supabase-Datenbank (EU-Server) gespeichert.</p>'
+    +'<h3>6. Cookies & Tracking</h3>'
+    +'<p>Diese Website verwendet keine Tracking-Cookies, keine Werbe-Cookies und keine Drittanbieter-Analytics. Es werden lediglich technisch notwendige Session-Tokens für die Admin-Authentifizierung im lokalen Speicher (localStorage) abgelegt.</p>'
+    +'<h3>7. Deine Rechte (Art. 15–22 DSGVO)</h3>'
+    +'<p>Du hast jederzeit das Recht auf:</p>'
+    +'<p>• <strong>Auskunft</strong> (Art. 15) — welche Daten wir über dich speichern<br>'
+    +'• <strong>Berichtigung</strong> (Art. 16) — fehlerhafte Daten korrigieren lassen<br>'
+    +'• <strong>Löschung</strong> (Art. 17) — deine Daten löschen lassen<br>'
+    +'• <strong>Einschränkung</strong> (Art. 18) — Verarbeitung einschränken<br>'
+    +'• <strong>Datenübertragbarkeit</strong> (Art. 20) — Daten in maschinenlesbarem Format erhalten<br>'
+    +'• <strong>Widerspruch</strong> (Art. 21) — der Verarbeitung widersprechen<br>'
+    +'• <strong>Widerruf der Einwilligung</strong> — jederzeit per E-Mail an info@butterbread-tech.com</p>'
+    +'<h3>8. Beschwerderecht</h3>'
+    +'<p>Dir steht ein Beschwerderecht bei der zuständigen Aufsichtsbehörde zu:<br><br>Landesbeauftragter für den Datenschutz und die Informationsfreiheit Baden-Württemberg (LfDI BaWü)<br>Lautenschlagerstraße 20, 70173 Stuttgart<br>https://www.baden-wuerttemberg.datenschutz.de</p>'
+    +'<h3>9. Mindestalter</h3>'
+    +'<p>Die Nutzung der Warteliste und der crew.-App ist erst ab 18 Jahren gestattet. Wir erheben wissentlich keine Daten von Minderjährigen.</p>'
+    +'<p><strong>Stand: April 2026</strong></p>';
+  }
+  document.getElementById('legalOverlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closeLegalPage(){
+  document.getElementById('legalOverlay').classList.remove('show');
+  document.body.style.overflow = '';
+}
+document.getElementById('legalOverlay').addEventListener('click', function(e){
+  if(e.target === this) closeLegalPage();
+});
 
 // Admin login
 document.getElementById('adminToggle').addEventListener('click', function(){
