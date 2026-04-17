@@ -38,9 +38,7 @@ a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer;border:0
 .hook{display:flex;flex-wrap:wrap;justify-content:center;align-items:baseline;gap:.12em;font-weight:900;line-height:.88;letter-spacing:-2px}
 .word{display:inline-block;font-size:clamp(32px,7.5vw,78px);opacity:0;transform:translateY(30px);animation:rise .7s cubic-bezier(.2,.8,.2,1) forwards}
 .word:nth-child(1){animation-delay:.1s}.word:nth-child(2){animation-delay:.2s}
-.word.brand{font-size:clamp(72px,18vw,180px);background:var(--gold);-webkit-background-clip:text;background-clip:text;color:transparent;animation:rise .7s cubic-bezier(.2,.8,.2,1) .55s forwards;filter:drop-shadow(0 0 50px rgba(255,109,46,.25));position:relative}
-.word.brand::after{content:"";position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);animation:shimmer 3s ease-in-out 1.8s infinite;pointer-events:none}
-@keyframes shimmer{0%{left:-100%}40%{left:150%}100%{left:150%}}
+.word.brand{font-size:clamp(72px,18vw,180px);background:var(--gold);-webkit-background-clip:text;background-clip:text;color:transparent;animation:rise .7s cubic-bezier(.2,.8,.2,1) .55s forwards;filter:drop-shadow(0 0 50px rgba(255,109,46,.25))}
 @keyframes rise{0%{opacity:0;transform:translateY(40px) scale(.96)}100%{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes fade{to{opacity:1}}
 .hero-sub{margin-top:20px;font-size:clamp(13px,1.3vw,16px);color:#999;line-height:1.7;opacity:0;animation:fade .8s ease .9s forwards;max-width:440px;margin-left:auto;margin-right:auto}
@@ -264,6 +262,8 @@ footer{padding:32px 24px;border-top:1px solid var(--line);text-align:center}
     </div>
     <div class="hook" style="margin-top:.05em">
       <span class="word">Zusammen</span>
+    </div>
+    <div class="hook" style="margin-top:.05em">
       <span class="word">feiern.</span>
     </div>
     <div class="hook" style="margin-top:.05em">
