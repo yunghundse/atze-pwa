@@ -138,6 +138,37 @@ footer{padding:32px 24px;border-top:1px solid var(--line);text-align:center}
 .admin-form button:hover{transform:translateY(-1px)}
 .admin-msg{margin-top:8px;font-size:12px;min-height:18px}
 
+/* FEATURE SHOWCASE */
+.feat-showcase{padding:80px 24px;border-top:1px solid var(--line)}
+.feat-showcase-inner{max-width:640px;margin:0 auto}
+.feat-showcase .section-tag{font-size:11px;letter-spacing:.35em;text-transform:uppercase;color:var(--o);font-weight:700;margin-bottom:20px;text-align:center}
+.feat-showcase h2{font-size:clamp(20px,3.5vw,32px);font-weight:900;letter-spacing:-1px;text-align:center;margin-bottom:36px}
+.feat-card{padding:28px 24px;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:var(--r);margin-bottom:16px;transition:border-color .3s}
+.feat-card:hover{border-color:rgba(255,109,46,.15)}
+.feat-card-head{display:flex;align-items:center;gap:14px;margin-bottom:10px}
+.feat-card-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.feat-card-icon.orange{background:rgba(255,109,46,.1);border:1px solid rgba(255,109,46,.15)}
+.feat-card-icon.blue{background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.15)}
+.feat-card-icon.green{background:rgba(52,199,89,.1);border:1px solid rgba(52,199,89,.15)}
+.feat-card h3{font-size:17px;font-weight:800;color:#fff}
+.feat-card p{font-size:13px;color:#999;line-height:1.7}
+.feat-card .feat-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.feat-card .feat-tag{font-size:10px;font-weight:700;letter-spacing:.06em;padding:4px 10px;border-radius:99px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);color:#777}
+.feat-more{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:24px;padding-top:24px;border-top:1px solid var(--line)}
+.feat-more-item{font-size:12px;font-weight:600;color:#555;display:flex;align-items:center;gap:5px}
+.feat-more-item span{font-size:15px}
+
+/* SOCIAL FOLLOW CTA */
+.social-follow{padding:48px 24px;text-align:center;background:rgba(255,109,46,.02);border-top:1px solid rgba(255,109,46,.06);border-bottom:1px solid rgba(255,109,46,.06)}
+.social-follow-inner{max-width:500px;margin:0 auto}
+.social-follow h3{font-size:16px;font-weight:800;margin-bottom:6px}
+.social-follow p{font-size:13px;color:#888;line-height:1.6;margin-bottom:18px}
+.social-follow-btns{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.sf-btn{display:flex;align-items:center;gap:8px;padding:14px 24px;border-radius:14px;font-size:13px;font-weight:700;transition:all .25s;text-decoration:none}
+.sf-btn.wa{background:rgba(37,211,102,.1);color:#25D366;border:1px solid rgba(37,211,102,.2)}.sf-btn.wa:hover{background:rgba(37,211,102,.18);transform:translateY(-2px)}
+.sf-btn.ig{background:rgba(225,48,108,.1);color:#E1306C;border:1px solid rgba(225,48,108,.2)}.sf-btn.ig:hover{background:rgba(225,48,108,.18);transform:translateY(-2px)}
+.sf-btn svg{width:20px;height:20px}
+
 /* MANIFESTO */
 .manifesto{padding:80px 24px;text-align:center;border-top:1px solid var(--line);position:relative;overflow:hidden}
 .manifesto::before{content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);width:300px;height:300px;background:radial-gradient(circle,rgba(255,109,46,.06),transparent 70%);pointer-events:none}
@@ -318,25 +349,67 @@ footer{padding:32px 24px;border-top:1px solid var(--line);text-align:center}
   </div>
 </section>
 
-<!-- FEATURES STRIP -->
-<div class="features-strip">
-  <h3>Was drin steckt</h3>
-  <div class="feat-row">
-    <div class="feat-item"><span>📍</span>Crew-Tracker</div>
-    <div class="feat-item"><span>🔥</span>Matching</div>
-    <div class="feat-item"><span>🎲</span>Party-Spiele</div>
-    <div class="feat-item"><span>🚨</span>SOS-System</div>
-    <div class="feat-item"><span>🗳️</span>Tages-Votings</div>
-    <div class="feat-item"><span>🍺</span>Drink-Counter</div>
-    <div class="feat-item"><span>💬</span>Crew-Chat</div>
-    <div class="feat-item"><span>🗺️</span>Live-Map</div>
-    <div class="feat-item"><span>📸</span>Foto-Battles</div>
-    <div class="feat-item"><span>🏆</span>Challenges</div>
-    <div class="feat-item"><span>🎵</span>Playlist-Voting</div>
-    <div class="feat-item"><span>🤝</span>Crew-Finder</div>
+<!-- FEATURE SHOWCASE -->
+<section class="feat-showcase">
+  <div class="feat-showcase-inner">
+    <div class="section-tag">Was crew. kann</div>
+    <h2>Drei Gründe warum du das brauchst</h2>
+
+    <div class="feat-card">
+      <div class="feat-card-head">
+        <div class="feat-card-icon orange">🤝</div>
+        <h3>Crew-Finder</h3>
+      </div>
+      <p>Du fliegst allein oder zu zweit? Egal. crew. matched dich mit Leuten die genauso drauf sind wie du — gleiche Vibes, gleiches Alter, gleiche Tage auf der Insel. Kein Zufall, kein Glück. Du landest und deine Crew wartet schon.</p>
+      <div class="feat-tags"><span class="feat-tag">Smart Matching</span><span class="feat-tag">Filter nach Alter & Vibe</span><span class="feat-tag">Crew-Gruppen</span></div>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-card-head">
+        <div class="feat-card-icon blue">📍</div>
+        <h3>Live-Tracker</h3>
+      </div>
+      <p>3 Uhr nachts, Bierkönig war geil, aber wo ist der Rest? Der Live-Tracker zeigt dir in Echtzeit wo deine Crew gerade ist. Nie wieder Leute verlieren. Nie wieder 47 Sprachnachrichten schicken um rauszufinden in welcher Bar alle sind.</p>
+      <div class="feat-tags"><span class="feat-tag">Echtzeit-Standort</span><span class="feat-tag">Nur für deine Crew</span><span class="feat-tag">SOS-Button</span></div>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-card-head">
+        <div class="feat-card-icon green">🎲</div>
+        <h3>Party-Challenges</h3>
+      </div>
+      <p>Trinkspiele, Foto-Battles, Tages-Challenges gegen andere Crews. Punkte sammeln, Ranglisten erklimmen und am Ende der Woche sehen, wer die härteste Crew auf der ganzen Insel war. Das wird euer Urlaub auf einem anderen Level.</p>
+      <div class="feat-tags"><span class="feat-tag">Crew vs. Crew</span><span class="feat-tag">Tages-Challenges</span><span class="feat-tag">Leaderboard</span></div>
+    </div>
+
+    <div class="feat-more">
+      <div class="feat-more-item"><span>🍺</span>Drink-Counter</div>
+      <div class="feat-more-item"><span>💬</span>Crew-Chat</div>
+      <div class="feat-more-item"><span>🗳️</span>Votings</div>
+      <div class="feat-more-item"><span>🎵</span>Playlist-Voting</div>
+      <div class="feat-more-item"><span>📸</span>Foto-Battles</div>
+      <div class="feat-more-item"><span>🚨</span>SOS-System</div>
+    </div>
   </div>
-  <p style="margin-top:18px;font-size:12px;color:#555;max-width:500px;margin-left:auto;margin-right:auto">Und das ist erst der Anfang — ab 250 Mitgliedern entscheidet ihr, welche Features als Nächstes kommen.</p>
-</div>
+</section>
+
+<!-- SOCIAL FOLLOW CTA -->
+<section class="social-follow">
+  <div class="social-follow-inner">
+    <h3>Folgt dem Prozess — live.</h3>
+    <p>Auf WhatsApp und Instagram zeigen wir euch jeden Schritt: neue Features, Behind the Scenes, Community-Entscheidungen. Alles passiert dort — seid dabei.</p>
+    <div class="social-follow-btns">
+      <a href="https://whatsapp.com/channel/0029VbD10Vg3GJOtfhXJDG2e" target="_blank" rel="noopener" class="sf-btn wa">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" fill="currentColor"/><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.832-1.438A9.955 9.955 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a7.96 7.96 0 01-4.107-1.138l-.293-.176-2.862.852.852-2.862-.176-.293A7.96 7.96 0 014 12c0-4.411 3.589-8 8-8s8 3.589 8 8-3.589 8-8 8z" fill="currentColor"/></svg>
+        WhatsApp-Kanal folgen
+      </a>
+      <a href="https://www.instagram.com/playa.crew" target="_blank" rel="noopener" class="sf-btn ig">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.17.054 1.97.24 2.43.403a4.088 4.088 0 011.523.99 4.088 4.088 0 01.99 1.524c.163.46.349 1.26.403 2.43.058 1.265.07 1.645.07 4.849s-.012 3.584-.07 4.85c-.054 1.17-.24 1.97-.403 2.43a4.088 4.088 0 01-.99 1.523 4.088 4.088 0 01-1.524.99c-.46.163-1.26.349-2.43.403-1.265.058-1.645.07-4.849.07s-3.584-.012-4.85-.07c-1.17-.054-1.97-.24-2.43-.403a4.088 4.088 0 01-1.523-.99 4.088 4.088 0 01-.99-1.524c-.163-.46-.349-1.26-.403-2.43C2.175 15.584 2.163 15.204 2.163 12s.012-3.584.07-4.85c.054-1.17.24-1.97.403-2.43a4.088 4.088 0 01.99-1.523A4.088 4.088 0 015.15 2.207c.46-.163 1.26-.349 2.43-.403C8.845 1.746 9.225 1.734 12 1.734" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="3.5" stroke="currentColor" stroke-width="1.5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+        Instagram folgen
+      </a>
+    </div>
+  </div>
+</section>
 
 <!-- MANIFESTO — Wofür wir stehen -->
 <section class="manifesto">
@@ -365,7 +438,7 @@ footer{padding:32px 24px;border-top:1px solid var(--line);text-align:center}
         <div class="rm-dot">💬</div>
         <div class="rm-head"><span class="rm-members">250 Mitglieder</span></div>
         <div class="rm-title">Ihr entscheidet, was gebaut wird</div>
-        <div class="rm-desc">Ab hier bestimmt die Community. Schickt uns eure Ideen, sagt uns was die App braucht — wir bauen, was ihr wollt. Kein Feature ohne euer Go.</div>
+        <div class="rm-desc">Ab hier bestimmt die Community. Schickt uns eure Ideen über WhatsApp und Instagram — wir posten Updates, ihr stimmt ab. Kein Feature ohne euer Go.</div>
       </div>
       <div class="rm-step" id="rmStep2" data-target="1000">
         <div class="rm-dot">🔓</div>
