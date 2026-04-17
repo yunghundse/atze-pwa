@@ -1143,7 +1143,7 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 30;
+  var APP_VERSION = 31;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     localStorage.setItem('crew_app_v', APP_VERSION);
@@ -1262,18 +1262,25 @@ var CHALLENGES = [
 ];
 
 var AFFILIATES = [
-  // FLÜGE
-  {cat:'flight',icon:'✈️',partner:'Check24 Pauschalreisen',net:'Check24',desc:'Flug + Hotel nach Mallorca zum besten Preis. Über 300 Veranstalter im Vergleich.',cta:'Reise vergleichen',url:'https://a.check24.net/misc/click.php?pid=1170160&aid=18&deep=pauschalreisen-vergleich&cat=9',tags:['Pauschalreise','Flug+Hotel'],badge:'top',price:'ab 299€',priceSub:'p.P. / 1 Woche'},
-  {cat:'flight',icon:'🛫',partner:'Condor Flüge',net:'Awin',desc:'Direktflüge nach Palma de Mallorca. Die Mallorca-Airline Nr. 1 ab vielen deutschen Flughäfen.',cta:'Flüge checken',url:'https://a.check24.net/misc/click.php?pid=1170160&aid=18&deep=pauschalreisen-vergleich&cat=9',tags:['Direktflug','Condor'],price:'ab 79€',priceSub:'one-way'},
+  // ====== NUR ECHTE AFFILIATE-LINKS ======
+  // Check24 Pauschalreisen (pid=1170160, cat=9)
+  // Check24 Mietwagen (pid=1170160, cat=10)
+
+  // FLÜGE & PAUSCHALREISEN
+  {cat:'flight',icon:'✈️',partner:'Check24 Pauschalreisen',net:'Check24',desc:'Flug + Hotel nach Mallorca zum besten Preis. Über 300 Veranstalter im Vergleich — Condor, TUI, FTI & mehr.',cta:'Reisen vergleichen',url:'https://a.check24.net/misc/click.php?pid=1170160&aid=18&deep=pauschalreisen-vergleich&cat=9',tags:['Pauschalreise','Flug+Hotel'],badge:'top',price:'ab 299€',priceSub:'p.P. / 1 Woche'},
+  {cat:'flight',icon:'🛫',partner:'Check24 Nur-Flug',net:'Check24',desc:'Nur Flug nach Palma de Mallorca gesucht? Alle Airlines vergleichen — Condor, Eurowings, Ryanair & Co.',cta:'Flüge vergleichen',url:'https://a.check24.net/misc/click.php?pid=1170160&aid=18&deep=pauschalreisen-vergleich&cat=9',tags:['Nur Flug','Alle Airlines'],price:'ab 79€',priceSub:'one-way'},
+  {cat:'flight',icon:'👥',partner:'Check24 Gruppen-Pauschalreise',net:'Check24',desc:'Mit der Crew nach Malle! Gruppenreisen vergleichen — geteilte Apartments, Party-Hotels, All-Inclusive.',cta:'Gruppen-Deal finden',url:'https://a.check24.net/misc/click.php?pid=1170160&aid=18&deep=pauschalreisen-vergleich&cat=9',tags:['Gruppen','Crew-Trip'],badge:'hot',price:'ab 249€',priceSub:'p.P. / 1 Woche'},
+
   // UNTERKÜNFTE
-  {cat:'hotel',icon:'🏠',partner:'BestFewo Ferienwohnungen',net:'Awin',desc:'Ferienwohnungen & Fincas auf Mallorca. Perfekt für Gruppen — eigener Pool, mehr Platz, weniger Kosten.',cta:'Finca finden',url:'https://a.check24.net/misc/click.php?pid=1170160&aid=18&deep=pauschalreisen-vergleich&cat=9',tags:['Ferienwohnung','Gruppen'],badge:'hot',price:'ab 25€',priceSub:'p.P. / Nacht'},
-  {cat:'hotel',icon:'🏨',partner:'Check24 Hotels',net:'Check24',desc:'Hotels in Playa de Palma, El Arenal & Magaluf vergleichen. All-inclusive oder nur Frühstück.',cta:'Hotels vergleichen',url:'https://a.check24.net/misc/click.php?pid=1170160&aid=18&deep=pauschalreisen-vergleich&cat=9',tags:['Hotel','All-Inclusive'],price:'ab 39€',priceSub:'p.P. / Nacht'},
+  {cat:'hotel',icon:'🏨',partner:'Check24 Hotels Mallorca',net:'Check24',desc:'Hotels in Playa de Palma, El Arenal & Magaluf vergleichen. All-Inclusive, Halbpension oder nur Frühstück.',cta:'Hotels vergleichen',url:'https://a.check24.net/misc/click.php?pid=1170160&aid=18&deep=pauschalreisen-vergleich&cat=9',tags:['Hotel','All-Inclusive'],badge:'top',price:'ab 39€',priceSub:'p.P. / Nacht'},
+  {cat:'hotel',icon:'🎉',partner:'Check24 Party-Hotels',net:'Check24',desc:'Die besten Party-Hotels direkt am Ballermann. Kurze Wege zu Bierkönig, Megapark & Co.',cta:'Party-Hotels finden',url:'https://a.check24.net/misc/click.php?pid=1170160&aid=18&deep=pauschalreisen-vergleich&cat=9',tags:['Party-Hotel','Ballermann'],badge:'hot',price:'ab 49€',priceSub:'p.P. / Nacht'},
+
   // MIETWAGEN
-  {cat:'car',icon:'🚗',partner:'Check24 Mietwagen',net:'Check24',desc:'Mietwagen auf Mallorca zum besten Preis. Preise vergleichen, direkt buchen, sofort losfahren.',cta:'Mietwagen finden',url:'https://a.check24.net/misc/click.php?pid=1170160&aid=18&deep=mietwagen-preisvergleich&cat=10',tags:['Mietwagen','Preisvergleich'],badge:'top',price:'ab 12€',priceSub:'pro Tag'},
-  {cat:'car',icon:'🛵',partner:'TravelScout24 Mietwagen',net:'Awin',desc:'Roller & Cabrio mieten auf Mallorca. Für den Roadtrip entlang der Küste.',cta:'Angebote sehen',url:'https://a.check24.net/misc/click.php?pid=1170160&aid=18&deep=mietwagen-preisvergleich&cat=10',tags:['Roller','Cabrio'],price:'ab 19€',priceSub:'pro Tag'},
-  // ERLEBNISSE
-  {cat:'activity',icon:'🚤',partner:'Bootstouren Mallorca',net:'Partner',desc:'Katamaran-Trips, Sunset-Cruises & Party-Boote ab Playa de Palma. Das Highlight jedes Malle-Trips.',cta:'Tour buchen',url:'https://a.check24.net/misc/click.php?pid=1170160&aid=18&deep=pauschalreisen-vergleich&cat=9',tags:['Boot','Party'],badge:'hot',price:'ab 35€',priceSub:'pro Person'},
-  {cat:'activity',icon:'🪂',partner:'Erlebnisse & Touren',net:'Partner',desc:'Jetski, Parasailing, Quad-Touren, Weinverkostung & Höhlen-Trips. Mehr als nur Strand & Party.',cta:'Erlebnisse entdecken',url:'https://a.check24.net/misc/click.php?pid=1170160&aid=18&deep=pauschalreisen-vergleich&cat=9',tags:['Abenteuer','Aktivitäten'],price:'ab 29€',priceSub:'pro Person'}
+  {cat:'car',icon:'🚗',partner:'Check24 Mietwagen',net:'Check24',desc:'Mietwagen auf Mallorca zum besten Preis. Alle Anbieter vergleichen — Sixt, Europcar, Hertz & lokale.',cta:'Mietwagen finden',url:'https://a.check24.net/misc/click.php?pid=1170160&aid=18&deep=mietwagen-preisvergleich&cat=10',tags:['Mietwagen','Preisvergleich'],badge:'top',price:'ab 12€',priceSub:'pro Tag'},
+  {cat:'car',icon:'🏖️',partner:'Check24 Cabrio & SUV',net:'Check24',desc:'Cabrio oder SUV für den Malle-Roadtrip? Küstenstraße, Serra de Tramuntana, versteckte Buchten.',cta:'Cabrio vergleichen',url:'https://a.check24.net/misc/click.php?pid=1170160&aid=18&deep=mietwagen-preisvergleich&cat=10',tags:['Cabrio','Roadtrip'],price:'ab 29€',priceSub:'pro Tag'},
+
+  // ERLEBNISSE — Coming Soon (keine echten Affiliate-Links verfügbar)
+  {cat:'activity',icon:'🚀',partner:'Mehr Deals kommen bald!',net:'crew.',desc:'Wir arbeiten an Erlebnis-Deals: Bootstouren, Jetski, Quad-Touren & mehr. Bald verfügbar!',cta:'Pauschalreise mit Extras',url:'https://a.check24.net/misc/click.php?pid=1170160&aid=18&deep=pauschalreisen-vergleich&cat=9',tags:['Coming Soon','Erlebnisse'],price:'Stay tuned',priceSub:''}
 ];
 
 var obData = {gender:'',seek:'',status:'',club:'',bio:'',birthdate:''};
