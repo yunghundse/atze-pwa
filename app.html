@@ -1026,8 +1026,6 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
       <div class="deals-tabs" id="dealsTabs">
         <div class="dtab active" onclick="showDeals('all',this)">🔥 Alle Deals</div>
         <div class="dtab" onclick="showDeals('pre',this)">✈️ Vor dem Abflug</div>
-        <div class="dtab" onclick="showDeals('on',this)">🌴 Auf der Insel</div>
-        <div class="dtab" onclick="showDeals('gear',this)">🎒 Must-Haves</div>
       </div>
       <div id="dealsContent"></div>
       <div class="deal-disclosure">⚠️ Affiliate-Hinweis: Einige Links sind Partnerlinks. Bei einer Buchung/Kauf erhalten wir eine kleine Provision — für dich ändert sich der Preis nicht. Butterbread Technologies · DSGVO-konform · Server EU</div>
@@ -1054,7 +1052,7 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 28;
+  var APP_VERSION = 29;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     localStorage.setItem('crew_app_v', APP_VERSION);
@@ -1173,21 +1171,8 @@ var CHALLENGES = [
 ];
 
 var AFFILIATES = [
-  {phase:'pre',icon:'✈️',partner:'Check24 Flüge',net:'Belboon',com:'~2%',desc:'Günstige Flüge nach Mallorca finden und direkt buchen.',cta:'Flug schnappen',url:'https://www.check24.de/flug/?pid=CREW_{subid}',tags:['Flüge','Ø 350€']},
-  {phase:'pre',icon:'🛡',partner:'HanseMerkur Reiseversicherung',net:'Awin',com:'15-22%',desc:'Reiserücktritt, Krankenversicherung & mehr. Sorglos auf Malle.',cta:'Abgesichert reisen',url:'https://www.hansemerkur.de/reiseversicherung?awc=CREW_{subid}',tags:['Versicherung','Ø 45€']},
-  {phase:'pre',icon:'🅿️',partner:'Holidayparking',net:'Awin',com:'6-8%',desc:'Parkplatz am Flughafen vorab sichern. Günstiger als vor Ort.',cta:'Parkplatz sichern',url:'https://www.holidayparking.de/?awc=CREW_{subid}',tags:['Parken','Ø 55€']},
-  {phase:'pre',icon:'🚗',partner:'Sunny Cars Mietwagen',net:'Awin',com:'5%',desc:'Alles-inklusive Mietwagen auf Mallorca. Ohne versteckte Kosten.',cta:'Auto auf Malle',url:'https://www.sunnycars.de/?awc=CREW_{subid}&destination=PMI',tags:['Mietwagen','Ø 280€']},
-  {phase:'pre',icon:'🏨',partner:'Booking.com Hotels',net:'Booking Affiliate',com:'25-40%',desc:'Hotels, Apartments & Fincas an der Playa. Bestpreisgarantie.',cta:'Bude sichern',url:'https://www.booking.com/searchresults.de.html?dest_id=PMI&aid=CREW_{subid}',tags:['Hotels','Ø 600€']},
-  {phase:'on',icon:'🎉',partner:'GetYourGuide',net:'Awin',com:'8%',desc:'Bootspartys, Katamaran-Touren, Club-Crawls auf Mallorca.',cta:'Erlebnis buchen',url:'https://www.getyourguide.de/palma-de-mallorca-l189/?partner_id=CREW_{subid}',tags:['Erlebnisse','Ø 60€/Pers.']},
-  {phase:'on',icon:'🎵',partner:'Megapark / Bierkönig',net:'Direkt-API',com:'10-15%',desc:'Tickets für die legendären Clubs an der Playa. Skip the line.',cta:'Ticket sichern',url:'https://www.megapark.de/tickets/?ref=crew&subid={subid}',tags:['Club-Tickets','Live']},
-  {phase:'on',icon:'🚐',partner:'Welcome Pickups',net:'Direkt',com:'10%',desc:'Privater Flughafen-Transfer nach Palma. Fahrer wartet auf euch.',cta:'Transfer bestellen',url:'https://www.welcomepickups.com/transfer/palma-airport/?ref=crew_{subid}',tags:['Transfer','Ø 35€']},
-  {phase:'on',icon:'🎟',partner:'Tiqets',net:'Awin',com:'6%',desc:'Wasserparks, Jeep-Safaris, Höhlen-Touren — für den Tag.',cta:'Tagestour buchen',url:'https://www.tiqets.com/de/mallorca-c66550/?partner=crew&subid={subid}',tags:['Tagesausflüge','Ø 50€']},
-  {phase:'on',icon:'🍽',partner:'TheFork',net:'Awin',com:'3-5€ fix',desc:'Restaurants auf Mallorca mit Rabatt. Für die ganze Crew reservieren.',cta:'Tisch reservieren',url:'https://www.thefork.de/restaurant/palma-de-mallorca?awc=CREW_{subid}',tags:['Restaurant','Gruppe']},
-  {phase:'gear',icon:'🎒',partner:'Amazon Party-Gear',net:'Amazon PartnerNet',com:'1-10%',desc:'Bucket Hats, Trinkflaschen, wasserdichte Hüllen — die Crew-Packliste.',cta:'Packliste checken',url:'https://www.amazon.de/s?k=mallorca+party+set&tag=crew-app-21&subid={subid}',tags:['Party-Gear','Packliste']},
-  {phase:'gear',icon:'📹',partner:'GoPro',net:'Awin',com:'5-8%',desc:'Die besten Momente auf Malle in 4K festhalten. Waterproof.',cta:'Momente filmen',url:'https://gopro.com/de/d/hero-cameras?awc=CREW_{subid}',tags:['Kamera','Ø 350€']},
-  {phase:'gear',icon:'☀️',partner:'Douglas',net:'Awin',com:'5-8%',desc:'Sonnenschutz, After-Sun & Pflege für die Malle-Woche.',cta:'Sonnenschutz holen',url:'https://www.douglas.de/de/c/sonnenschutz?awc=CREW_{subid}',tags:['Sonnenschutz','Pflege']},
-  {phase:'gear',icon:'💆',partner:'Flaconi',net:'Awin',com:'8-12%',desc:'Parfum, Skincare & Bestseller für die Reise. Schnelle Lieferung.',cta:'Pflege einpacken',url:'https://www.flaconi.de/pflege/?awc=CREW_{subid}',tags:['Beauty','Ø 45€']},
-  {phase:'gear',icon:'🚁',partner:'DJI Drohnen',net:'Awin',com:'3-5%',desc:'Epische Drohnen-Shots über der Playa. Content Creator auf Malle.',cta:'Drohne mitnehmen',url:'https://store.dji.com/de/?awc=CREW_{subid}',tags:['Drohne','Content']}
+  {phase:'pre',icon:'🏖',partner:'Check24 Pauschalreisen',net:'Check24',com:'Affiliate',desc:'Pauschalreisen nach Mallorca vergleichen. Flug + Hotel zum besten Preis.',cta:'Reise vergleichen',url:'https://a.check24.net/misc/click.php?pid=1170160&aid=18&deep=pauschalreisen-vergleich&cat=9',tags:['Pauschalreise','Flug+Hotel']},
+  {phase:'pre',icon:'🚗',partner:'Check24 Mietwagen',net:'Check24',com:'Affiliate',desc:'Mietwagen auf Mallorca zum besten Preis. Preise vergleichen und direkt buchen.',cta:'Mietwagen finden',url:'https://a.check24.net/misc/click.php?pid=1170160&aid=18&deep=mietwagen-preisvergleich&cat=10',tags:['Mietwagen','Preisvergleich']}
 ];
 
 var obData = {gender:'',seek:'',status:'',club:'',bio:'',birthdate:''};
