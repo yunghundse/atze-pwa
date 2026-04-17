@@ -174,6 +174,24 @@ footer{padding:32px 24px;border-top:1px solid var(--line);text-align:center}
 .sf-btn.ig{background:rgba(225,48,108,.1);color:#E1306C;border:1px solid rgba(225,48,108,.2)}.sf-btn.ig:hover{background:rgba(225,48,108,.18);transform:translateY(-2px)}
 .sf-btn svg{width:20px;height:20px}
 
+/* FEEDBACK */
+.feedback-section{padding:48px 24px;text-align:center;border-top:1px solid var(--line)}
+.feedback-inner{max-width:500px;margin:0 auto}
+.feedback-section h3{font-size:16px;font-weight:800;margin-bottom:6px}
+.feedback-section .fb-sub{font-size:13px;color:#888;line-height:1.6;margin-bottom:18px}
+.fb-form{display:flex;flex-direction:column;gap:12px}
+.fb-form textarea{width:100%;min-height:100px;background:rgba(255,255,255,.06);color:#fff;border:1px solid rgba(255,255,255,.1);padding:14px 16px;border-radius:14px;font:inherit;font-size:14px;outline:none;transition:border-color .2s;resize:vertical}
+.fb-form textarea:focus{border-color:var(--o)}
+.fb-form textarea::placeholder{color:#555}
+.fb-row{display:flex;gap:10px}
+.fb-row input{flex:1;background:rgba(255,255,255,.06);color:#fff;border:1px solid rgba(255,255,255,.1);padding:12px 14px;border-radius:14px;font:inherit;font-size:13px;outline:none;transition:border-color .2s}
+.fb-row input:focus{border-color:var(--o)}
+.fb-row input::placeholder{color:#555}
+.fb-btn{width:100%;background:var(--gold);color:#000;padding:14px 24px;border-radius:999px;font-size:13px;letter-spacing:.1em;text-transform:uppercase;font-weight:800;transition:transform .2s,box-shadow .2s;box-shadow:0 6px 20px rgba(255,109,46,.12);border:0;cursor:pointer}
+.fb-btn:hover{transform:translateY(-1px);box-shadow:0 10px 28px rgba(255,109,46,.2)}
+.fb-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.fb-success{margin-top:12px;padding:14px;background:rgba(52,199,89,.08);border:1px solid rgba(52,199,89,.15);border-radius:14px;display:none;font-size:14px;color:#34C759;font-weight:600}
+
 /* MANIFESTO */
 .manifesto{padding:80px 24px;text-align:center;border-top:1px solid var(--line);position:relative;overflow:hidden}
 .manifesto::before{content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);width:300px;height:300px;background:radial-gradient(circle,rgba(255,109,46,.06),transparent 70%);pointer-events:none}
@@ -419,6 +437,23 @@ footer{padding:32px 24px;border-top:1px solid var(--line);text-align:center}
   </div>
 </section>
 
+<!-- FEEDBACK — Was braucht eure App? -->
+<section class="feedback-section" id="feedback">
+  <div class="feedback-inner">
+    <h3>Was muss crew. können? 💬</h3>
+    <p class="fb-sub">Ihr baut diese App mit. Sagt uns, welches Feature euch fehlt, was ihr euch wünscht oder was euch nervt. Jede Nachricht kommt direkt bei uns an.</p>
+    <form class="fb-form" id="fbForm" onsubmit="return false">
+      <textarea id="fbMessage" placeholder="Eure Idee, euer Wunsch, euer Feedback..." required></textarea>
+      <div class="fb-row">
+        <input type="text" id="fbName" placeholder="Name (optional)">
+        <input type="email" id="fbEmail" placeholder="E-Mail (optional)">
+      </div>
+      <button type="submit" class="fb-btn" id="fbBtn">Feedback senden &rarr;</button>
+    </form>
+    <div class="fb-success" id="fbSuccess">Danke! Euer Feedback ist angekommen. Wir lesen alles. 🙌</div>
+  </div>
+</section>
+
 <!-- MANIFESTO — Wofür wir stehen -->
 <section class="manifesto">
   <div class="manifesto-inner">
@@ -445,8 +480,8 @@ footer{padding:32px 24px;border-top:1px solid var(--line);text-align:center}
       <div class="rm-step" id="rmStep1" data-target="250">
         <div class="rm-dot">💬</div>
         <div class="rm-head"><span class="rm-members">250 Mitglieder</span></div>
-        <div class="rm-title">Ihr entscheidet, was gebaut wird</div>
-        <div class="rm-desc">Ab hier bestimmt die Community. Schickt uns eure Ideen über WhatsApp und Instagram — wir posten Updates, ihr stimmt ab. Kein Feature ohne euer Go.</div>
+        <div class="rm-title">Sagt uns, was eure App können muss</div>
+        <div class="rm-desc">Ab 250 Mitgliedern entscheidet ihr selbst, was wir als Nächstes bauen. Schickt uns euer Feedback direkt hier auf der Seite oder über WhatsApp und Instagram — wir setzen es um.</div>
       </div>
       <div class="rm-step" id="rmStep2" data-target="1000">
         <div class="rm-dot">🔓</div>
@@ -610,7 +645,7 @@ function updateRefProgress(count){
 
 function updateMilestoneTrigger(count){
   var milestones = [
-    {target:250, label:'Ihr entscheidet, was gebaut wird', emoji:'💬'},
+    {target:250, label:'Sagt uns, was eure App können muss', emoji:'💬'},
     {target:1000, label:'Exklusiver Community-Chat', emoji:'🔓'},
     {target:5000, label:'Closed Beta startet', emoji:'🚀'},
     {target:10000, label:'Erstes Meetup auf Malle', emoji:'🏝️'},
@@ -638,6 +673,29 @@ function copyRefLink(){
     setTimeout(function(){ btn.textContent = 'Kopieren'; }, 2000);
   });
 }
+
+// Feedback form
+document.getElementById('fbForm').addEventListener('submit', async function(e){
+  e.preventDefault();
+  var message = document.getElementById('fbMessage').value.trim();
+  var name = document.getElementById('fbName').value.trim();
+  var email = document.getElementById('fbEmail').value.trim();
+  if(!message){alert('Bitte schreib uns was du dir wünschst.');return}
+  var btn = document.getElementById('fbBtn');
+  btn.textContent = 'Senden...';btn.disabled = true;
+  try {
+    var insertData = {message: message};
+    if(name) insertData.name = name;
+    if(email) insertData.email = email;
+    var {error} = await sb.from('feedback').insert(insertData);
+    if(error) throw error;
+    document.getElementById('fbForm').style.display = 'none';
+    document.getElementById('fbSuccess').style.display = 'block';
+  } catch(err){
+    btn.textContent = 'Feedback senden →';btn.disabled = false;
+    alert('Fehler: ' + (err.message || 'Versuche es erneut.'));
+  }
+});
 
 async function loadWaitlistCount(){
   try {
