@@ -1162,7 +1162,7 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 33;
+  var APP_VERSION = 34;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     localStorage.setItem('crew_app_v', APP_VERSION);
@@ -2987,6 +2987,29 @@ window.openAdminPanel = async function(){
         html += '</div>';
       }
     } catch(e){ console.log('Invite stats error:', e); }
+
+    // === WAITLIST REFERRAL STATS ===
+    try {
+      var {data:wlStats} = await sb.rpc('get_waitlist_referral_stats');
+      if(wlStats && wlStats.length > 0){
+        html += '<div style="background:var(--glass);border:1px solid var(--glass-border);border-radius:16px;padding:16px;margin-bottom:16px">';
+        html += '<div style="font-size:11px;font-weight:700;color:var(--yellow);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">📋 Warteliste — Referral-Codes</div>';
+        var wlTotalReferred = wlStats.reduce(function(s,x){return s+(x.referral_count||0)},0);
+        html += '<div style="display:flex;gap:10px;margin-bottom:14px">';
+        html += '<div style="flex:1;text-align:center;padding:10px;border-radius:12px;background:rgba(255,214,10,.06);border:1px solid rgba(255,214,10,.1)"><div style="font-size:22px;font-weight:900;color:var(--yellow)">'+wlStats.length+'</div><div style="font-size:10px;color:var(--t3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-top:2px">Codes vergeben</div></div>';
+        html += '<div style="flex:1;text-align:center;padding:10px;border-radius:12px;background:rgba(48,209,88,.06);border:1px solid rgba(48,209,88,.1)"><div style="font-size:22px;font-weight:900;color:var(--mint)">'+wlTotalReferred+'</div><div style="font-size:10px;color:var(--t3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-top:2px">Geworben</div></div>';
+        html += '</div>';
+        wlStats.forEach(function(s){
+          html += '<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--glass-border)">';
+          html += '<div style="width:32px;height:32px;border-radius:50%;background:rgba(255,214,10,.08);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:var(--yellow)">'+(s.referral_count||0)+'</div>';
+          html += '<div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(s.name||'Unbekannt')+'</div>';
+          html += '<div style="font-size:11px;color:var(--t3)">'+esc(s.email)+' · Code: <span style="color:var(--yellow);font-weight:600">'+esc(s.referral_code||'—')+'</span></div></div>';
+          html += '<div style="font-size:12px;font-weight:800;color:'+(s.referral_count>0?'var(--mint)':'var(--t3)')+'">'+(s.referral_count||0)+' 👥</div>';
+          html += '</div>';
+        });
+        html += '</div>';
+      }
+    } catch(e){ console.log('WL referral stats error:', e); }
 
     // === PARTNER APPLICATIONS ===
     try {
