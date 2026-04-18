@@ -1143,7 +1143,7 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 31;
+  var APP_VERSION = 32;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     localStorage.setItem('crew_app_v', APP_VERSION);
@@ -1858,17 +1858,29 @@ window.chkOb = function(){
     _usernameAvailable=false;
     clearTimeout(_usernameCheckTimer);
     _usernameCheckTimer=setTimeout(async function(){
-      var {data}=await sb.from('profiles').select('user_id').eq('username',u).maybeSingle();
-      if(data){
-        st.innerHTML='<span style="color:var(--fire)">@'+u+' ist schon vergeben</span>';
-        _usernameAvailable=false;
-        document.getElementById('obNext1').disabled=true;
-      } else {
+      try{
+        var {data,error}=await sb.from('profiles').select('user_id').eq('username',u).maybeSingle();
+        if(error) throw error;
+        if(data){
+          st.innerHTML='<span style="color:var(--fire)">@'+u+' ist schon vergeben</span>';
+          _usernameAvailable=false;
+        } else {
+          st.innerHTML='<span style="color:var(--mint)">@'+u+' ist verfügbar ✓</span>';
+          _usernameAvailable=true;
+        }
+      }catch(e){
+        console.warn('[CREW] Username check error:',e);
         st.innerHTML='<span style="color:var(--mint)">@'+u+' ist verfügbar ✓</span>';
         _usernameAvailable=true;
-        // Re-check overall validity
-        chkOb();
       }
+      // Update button state without recursive call
+      var n2=document.getElementById('obName').value.trim();
+      var d2=document.getElementById('obBDay').value;
+      var m2=document.getElementById('obBMonth').value;
+      var y2=document.getElementById('obBYear').value;
+      var v2=n2.length>=2&&u.length>=3&&d2&&m2&&y2&&_usernameAvailable;
+      if(v2){var bd2=new Date(+y2,+m2-1,+d2);var now2=new Date();var age2=now2.getFullYear()-bd2.getFullYear();if(now2.getMonth()<bd2.getMonth()||(now2.getMonth()===bd2.getMonth()&&now2.getDate()<bd2.getDate()))age2--;v2=age2>=18;}
+      document.getElementById('obNext1').disabled=!v2;
     },500);
   } else if(u.length>0){
     st.innerHTML='<span style="color:var(--t3)">Mindestens 3 Zeichen</span>';
