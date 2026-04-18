@@ -26,8 +26,8 @@
   --ocean:linear-gradient(135deg,#0A84FF,#00C7BE,#30D158);
   --magic:linear-gradient(135deg,#BF5AF2 0%,#FF6D2E 50%,#FFD60A 100%);
   --bg:#050507;--bg2:#0C0C0E;--bg3:#161618;--bg4:#28282A;
-  --glass:rgba(22,22,24,.65);--glass-light:rgba(255,255,255,.035);--glass-border:rgba(255,255,255,.07);--glass2:rgba(255,255,255,.05);
-  --glow:0 0 24px rgba(255,109,46,.12);--shadow:0 12px 40px rgba(0,0,0,.4);
+  --glass:rgba(22,22,24,.65);--glass-light:rgba(255,255,255,.045);--glass-border:rgba(255,255,255,.09);--glass2:rgba(255,255,255,.06);
+  --glow:0 0 30px rgba(255,109,46,.15),0 0 60px rgba(255,109,46,.05);--shadow:0 12px 40px rgba(0,0,0,.4),0 2px 8px rgba(0,0,0,.2);
   --t:#F5F5F7;--t2:rgba(255,255,255,.6);--t3:rgba(255,255,255,.3);
   --brd:rgba(255,255,255,.06);--r:18px;--r2:26px;
   --ease:cubic-bezier(.22,.68,.36,1);--bounce:cubic-bezier(.34,1.56,.64,1);--spring:cubic-bezier(.175,.885,.32,1.275);
@@ -37,18 +37,18 @@ html,body{height:100%;overflow:hidden;background:#000}
 body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;color:var(--t);-webkit-font-smoothing:antialiased;letter-spacing:-.01em}
 #app{max-width:430px;margin:0 auto;height:100dvh;background:var(--bg);background-image:radial-gradient(ellipse at 15% 30%, rgba(255,109,46,.05) 0%, transparent 45%),radial-gradient(ellipse at 85% 70%, rgba(191,90,242,.04) 0%, transparent 45%),radial-gradient(ellipse at 50% 100%, rgba(0,199,190,.03) 0%, transparent 40%);position:relative;overflow:hidden;display:flex;flex-direction:column}
 @media(min-width:431px){#app{border-radius:48px;margin-top:10px;height:calc(100dvh - 20px);box-shadow:0 0 0 1px rgba(255,255,255,.03),0 50px 140px rgba(0,0,0,.85)}}
-.glass{background:var(--glass);backdrop-filter:blur(44px) saturate(190%);-webkit-backdrop-filter:blur(44px) saturate(190%);border:1px solid var(--glass-border);border-radius:var(--r);box-shadow:inset 0 .5px 0 rgba(255,255,255,.08),0 2px 8px rgba(0,0,0,.12)}
-.app-header{position:absolute;top:env(safe-area-inset-top,0);left:0;right:0;z-index:150;display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:rgba(5,5,7,.55);backdrop-filter:blur(60px) saturate(200%);-webkit-backdrop-filter:blur(60px) saturate(200%);border-bottom:.5px solid rgba(255,255,255,.06)}
+.glass{background:linear-gradient(135deg,rgba(22,22,24,.72),rgba(28,28,32,.55));backdrop-filter:blur(60px) saturate(200%);-webkit-backdrop-filter:blur(60px) saturate(200%);border:1px solid rgba(255,255,255,.1);border-radius:var(--r);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),inset 0 -1px 0 rgba(0,0,0,.1),0 4px 24px rgba(0,0,0,.2),0 0 0 .5px rgba(255,255,255,.04)}
+.app-header{position:absolute;top:env(safe-area-inset-top,0);left:0;right:0;z-index:150;display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:linear-gradient(180deg,rgba(5,5,7,.7),rgba(5,5,7,.55));backdrop-filter:blur(80px) saturate(220%);-webkit-backdrop-filter:blur(80px) saturate(220%);border-bottom:.5px solid rgba(255,255,255,.08);box-shadow:0 1px 0 rgba(255,255,255,.03),0 4px 20px rgba(0,0,0,.15)}
 .logo{font-weight:900;font-size:28px;letter-spacing:-1.8px}.logo span{background:var(--gold);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 20px rgba(255,109,46,.3))}
 .hdr-actions{display:flex;gap:8px;align-items:center}
-.hdr-btn{width:36px;height:36px;border-radius:50%;border:none;background:rgba(255,255,255,.08);color:#fff;font-size:15px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;transition:transform .15s var(--ease)}
+.hdr-btn{width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.06);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);color:#fff;font-size:15px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;transition:transform .15s var(--ease),background .2s;box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 2px 8px rgba(0,0,0,.15)}
 .hdr-btn:active{transform:scale(.9)}
 .notif-dot{position:absolute;top:6px;right:6px;width:7px;height:7px;border-radius:50%;background:var(--fire);border:2px solid var(--bg)}
 .streak-badge{display:flex;align-items:center;gap:4px;padding:5px 12px;border-radius:20px;background:rgba(255,214,10,.1);border:1px solid rgba(255,214,10,.15);font-size:12px;font-weight:800;color:var(--yellow);box-shadow:0 0 20px rgba(255,214,10,.15);animation:streakPulse 2s ease-in-out infinite}
 @keyframes streakPulse{0%,100%{box-shadow:0 0 20px rgba(255,214,10,.15)}50%{box-shadow:0 0 30px rgba(255,214,10,.3)}}
 .sos-float{position:absolute;bottom:88px;right:14px;z-index:190;width:48px;height:48px;border-radius:50%;background:var(--fire);border:2px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#fff;cursor:pointer;box-shadow:0 4px 16px rgba(255,59,48,.5);letter-spacing:.5px;animation:sosPulse 1.5s ease-in-out infinite}
 @keyframes sosPulse{0%,100%{box-shadow:0 4px 16px rgba(255,59,48,.5),0 0 0 0 rgba(255,59,48,.3)}50%{box-shadow:0 4px 16px rgba(255,59,48,.5),0 0 0 16px rgba(255,59,48,.08)}}
-nav{position:absolute;bottom:0;left:0;right:0;z-index:200;height:76px;padding-bottom:env(safe-area-inset-bottom,8px);display:flex;align-items:center;justify-content:space-around;background:rgba(5,5,7,.7);border-top:none;backdrop-filter:blur(60px) saturate(200%);-webkit-backdrop-filter:blur(60px) saturate(200%);border-radius:28px 28px 0 0;box-shadow:0 -1px 0 rgba(255,255,255,.04)}
+nav{position:absolute;bottom:0;left:0;right:0;z-index:200;height:76px;padding-bottom:env(safe-area-inset-bottom,8px);display:flex;align-items:center;justify-content:space-around;background:linear-gradient(0deg,rgba(5,5,7,.8),rgba(5,5,7,.6));border-top:none;backdrop-filter:blur(80px) saturate(220%);-webkit-backdrop-filter:blur(80px) saturate(220%);border-radius:28px 28px 0 0;box-shadow:0 -1px 0 rgba(255,255,255,.06),inset 0 1px 0 rgba(255,255,255,.04),0 -8px 30px rgba(0,0,0,.2)}
 nav button{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 10px;color:var(--t3);font-size:9px;font-weight:500;transition:all .25s var(--ease);position:relative;letter-spacing:.1px}
 nav button .ni{font-size:22px;transition:all .3s var(--spring)}
 nav button span{display:block}
@@ -112,12 +112,12 @@ main{flex:1;overflow:hidden;position:relative}
 .rprog .rp{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.08);transition:background .3s}.rprog .rp.done{background:var(--o)}
 .ob-step h2{font-size:26px;font-weight:900;letter-spacing:-.5px;margin-bottom:6px}
 .rsub{font-size:14px;color:var(--t2);margin-bottom:24px;line-height:1.5}
-.ri{width:100%;padding:15px 16px;border-radius:14px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#fff;font-size:15px;font-family:inherit;outline:none;margin-bottom:10px;transition:all .3s var(--ease);box-shadow:inset 0 .5px 0 rgba(255,255,255,.06)}
+.ri{width:100%;padding:15px 16px;border-radius:14px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:#fff;font-size:15px;font-family:inherit;outline:none;margin-bottom:10px;transition:all .3s var(--ease);box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 2px 6px rgba(0,0,0,.08)}
 .ri:focus{border-color:var(--o);background:rgba(255,109,46,.04);box-shadow:0 0 0 3px rgba(255,109,46,.1),inset 0 .5px 0 rgba(255,255,255,.06)}.ri::placeholder{color:rgba(255,255,255,.25)}
 select.ri{appearance:none;-webkit-appearance:none}
 .rnext{margin-top:auto;width:100%;padding:16px;border:none;border-radius:14px;background:var(--o);color:#fff;font-size:15px;font-weight:700;cursor:pointer;transition:opacity .2s}.rnext:disabled{opacity:.25;cursor:default}
 .chip-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
-.chip{padding:10px 18px;border-radius:20px;background:var(--glass);backdrop-filter:blur(20px);border:1.5px solid var(--glass-border);font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;color:var(--t2);box-shadow:inset 0 1px 0 rgba(255,255,255,.04)}
+.chip{padding:10px 18px;border-radius:20px;background:linear-gradient(135deg,rgba(22,22,24,.6),rgba(28,28,32,.45));backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1.5px solid rgba(255,255,255,.1);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s var(--ease);color:var(--t2);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 2px 8px rgba(0,0,0,.12)}
 .chip.sel{border-color:var(--o);background:rgba(255,109,46,.12);color:var(--o);box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 0 16px rgba(255,109,46,.15)}
 .chip:active{transform:scale(.95)}
 .league-tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:12px;scrollbar-width:none}.league-tabs::-webkit-scrollbar{display:none}
@@ -1121,7 +1121,26 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
       <div id="dealsContent"></div>
       <div class="deal-disclosure">⚠️ Affiliate-Hinweis: Einige Links sind Partnerlinks. Bei einer Buchung/Kauf erhalten wir eine kleine Provision — für dich ändert sich der Preis nicht. Butterbread Technologies · DSGVO-konform · Server EU</div>
     </div></div>
-    <div class="scr" id="screen-profile"><div class="prof-hero"><div class="prof-ava-wrap"><div class="prof-ava"><img id="profAvaImg" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80"></div><div class="prof-ava-edit" onclick="openPhotoUpload()">📷</div></div><h2><span id="profName">Laden...</span></h2><div class="handle" id="profHandle"></div><div class="prof-badges-row" id="profBadges"></div></div><div class="prof-vibe" id="profVibe"></div><div class="prof-socials" id="profSocials"></div><div class="prof-stats glass"><div class="pstat"><div class="pn" id="stM">0</div><div class="pl">Matches</div></div><div class="pstat"><div class="pn" id="stCrew">0</div><div class="pl">Crew</div></div><div class="pstat"><div class="pn" id="stPts">0</div><div class="pl">🍹 Sangrias</div></div></div><div class="premium-cta" id="premCta" onclick="openPremium()"><h3>✨ crew Premium</h3><div class="pc-sub">Keine Werbung · Unlimited Swipes · VIP</div><div class="pc-btn">Ab 2,99€</div></div><div class="pmenu"><div class="pmi" id="adminMenuItem" style="display:none;background:linear-gradient(135deg,rgba(255,109,46,.08),rgba(255,109,46,.02));border:1px solid rgba(255,109,46,.2)" onclick="openAdminPanel()"><div class="pmi-icon o">👑</div><span class="pmi-label" style="color:var(--o);font-weight:700">Admin Dashboard</span><span class="pmi-arrow" style="color:var(--o)">›</span></div><div class="pmi" onclick="openLegal('dsgvo')"><div class="pmi-icon b">🛡</div><span class="pmi-label">Datenschutz</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openLegal('impressum')"><div class="pmi-icon gr">📄</div><span class="pmi-label">Impressum</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openLegal('agb')"><div class="pmi-icon gr">📝</div><span class="pmi-label">AGB</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="editProfile()"><div class="pmi-icon o">✏️</div><span class="pmi-label">Profil bearbeiten</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="editSocials()"><div class="pmi-icon o">📱</div><span class="pmi-label">Social Media verknüpfen</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openColorPicker()"><div class="pmi-icon o">🎨</div><span class="pmi-label">Profilfarbe ändern</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="requestVerification()"><div class="pmi-icon b">✓</div><span class="pmi-label">Verifizierung <span style="font-size:11px;font-weight:600;color:var(--t3)" id="verStatus"></span></span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="showBlockedUsers()"><div class="pmi-icon gr">🚫</div><span class="pmi-label">Blockierte Nutzer</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openLegal('moderation')"><div class="pmi-icon b">⚖</div><span class="pmi-label">Moderations-Transparenz</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="openLegal('affiliate')"><div class="pmi-icon o">🤝</div><span class="pmi-label">Affiliate-Hinweis</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="exportData()"><div class="pmi-icon b">📦</div><span class="pmi-label">Meine Daten exportieren</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="deleteAccount()"><div class="pmi-icon gr" style="background:rgba(255,59,48,.08)">🗑</div><span class="pmi-label" style="color:var(--fire)">Account löschen</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="toggleTheme()"><div class="pmi-icon o">🌙</div><span class="pmi-label">Dark/Light Mode</span><span class="pmi-arrow">›</span></div><div class="pmi" onclick="logOut()"><div class="pmi-icon gr">🚪</div><span class="pmi-label" style="color:var(--fire)">Ausloggen</span></div></div></div>
+    <div class="scr" id="screen-profile"><div class="prof-hero"><div class="prof-ava-wrap"><div class="prof-ava"><img id="profAvaImg" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80"></div><div class="prof-ava-edit" onclick="openPhotoUpload()">📷</div></div><h2><span id="profName">Laden...</span></h2><div class="handle" id="profHandle"></div><div class="prof-badges-row" id="profBadges"></div></div><div class="prof-vibe" id="profVibe"></div><div class="prof-socials" id="profSocials"></div><div class="prof-stats glass"><div class="pstat"><div class="pn" id="stM">0</div><div class="pl">Matches</div></div><div class="pstat"><div class="pn" id="stCrew">0</div><div class="pl">Crew</div></div><div class="pstat"><div class="pn" id="stPts">0</div><div class="pl">🍹 Sangrias</div></div></div><div class="premium-cta" id="premCta" onclick="openPremium()"><h3>✨ crew Premium</h3><div class="pc-sub">Keine Werbung · Unlimited Swipes · VIP</div><div class="pc-btn">Ab 2,99€</div></div><div class="pmenu">
+<div class="pmi" id="adminMenuItem" style="display:none;background:linear-gradient(135deg,rgba(255,109,46,.08),rgba(255,109,46,.02));border:1px solid rgba(255,109,46,.2)" onclick="openAdminPanel()"><div class="pmi-icon o">👑</div><span class="pmi-label" style="color:var(--o);font-weight:700">Admin Dashboard</span><span class="pmi-arrow" style="color:var(--o)">›</span></div>
+<div class="pe-section">Profil & Einstellungen</div>
+<div class="pmi" onclick="editProfile()"><div class="pmi-icon o">✏️</div><span class="pmi-label">Profil bearbeiten</span><span class="pmi-arrow">›</span></div>
+<div class="pmi" onclick="editSocials()"><div class="pmi-icon o">📱</div><span class="pmi-label">Social Media verknüpfen</span><span class="pmi-arrow">›</span></div>
+<div class="pmi" onclick="openColorPicker()"><div class="pmi-icon o">🎨</div><span class="pmi-label">Profilfarbe ändern</span><span class="pmi-arrow">›</span></div>
+<div class="pmi" onclick="requestVerification()"><div class="pmi-icon b">✓</div><span class="pmi-label">Verifizierung <span style="font-size:11px;font-weight:600;color:var(--t3)" id="verStatus"></span></span><span class="pmi-arrow">›</span></div>
+<div class="pmi" onclick="toggleTheme()"><div class="pmi-icon o">🌙</div><span class="pmi-label">Dark/Light Mode</span><span class="pmi-arrow">›</span></div>
+<div class="pe-section">Rechtliches & Transparenz</div>
+<div class="pmi" onclick="openLegal('dsgvo')"><div class="pmi-icon b">🛡</div><span class="pmi-label">Datenschutz</span><span class="pmi-arrow">›</span></div>
+<div class="pmi" onclick="openLegal('impressum')"><div class="pmi-icon gr">📄</div><span class="pmi-label">Impressum</span><span class="pmi-arrow">›</span></div>
+<div class="pmi" onclick="openLegal('agb')"><div class="pmi-icon gr">📝</div><span class="pmi-label">AGB</span><span class="pmi-arrow">›</span></div>
+<div class="pmi" onclick="openLegal('moderation')"><div class="pmi-icon b">⚖</div><span class="pmi-label">Moderations-Transparenz</span><span class="pmi-arrow">›</span></div>
+<div class="pmi" onclick="openLegal('affiliate')"><div class="pmi-icon o">🤝</div><span class="pmi-label">Affiliate-Hinweis</span><span class="pmi-arrow">›</span></div>
+<div class="pe-section">Konto</div>
+<div class="pmi" onclick="showBlockedUsers()"><div class="pmi-icon gr">🚫</div><span class="pmi-label">Blockierte Nutzer</span><span class="pmi-arrow">›</span></div>
+<div class="pmi" onclick="exportData()"><div class="pmi-icon b">📦</div><span class="pmi-label">Meine Daten exportieren</span><span class="pmi-arrow">›</span></div>
+<div class="pmi" onclick="deleteAccount()"><div class="pmi-icon gr" style="background:rgba(255,59,48,.08)">🗑</div><span class="pmi-label" style="color:var(--fire)">Account löschen</span><span class="pmi-arrow">›</span></div>
+<div class="pmi" onclick="logOut()"><div class="pmi-icon gr">🚪</div><span class="pmi-label" style="color:var(--fire)">Ausloggen</span></div>
+</div></div>
   </main>
   <nav id="navBar">
     <button class="active" onclick="go('radar',this)"><span class="ni">📍</span><span>Radar</span></button>
@@ -1143,7 +1162,7 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 32;
+  var APP_VERSION = 33;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     localStorage.setItem('crew_app_v', APP_VERSION);
@@ -1288,6 +1307,7 @@ var authMode = 'signup'; // or 'login'
 var curGame = null, gameIdx = 0, cIdx = 0;
 
 function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
+function safeJSON(key,fallback){try{return JSON.parse(localStorage.getItem(key)||JSON.stringify(fallback))}catch(e){return fallback}}
 
 // ============================================
 // i18n - LANGUAGE SYSTEM
@@ -1498,9 +1518,18 @@ document.addEventListener('DOMContentLoaded', async function(){
       return;
     }
 
+    // Handle invite links — redirect non-logged-in users to landing page
+    var inviteParam = new URLSearchParams(window.location.search).get('invite');
+    if(inviteParam) localStorage.setItem('crew_invited_by', inviteParam);
+
     if(session && session.user){
       await loadUser(session.user);
     } else {
+      // If came via invite link, redirect to landing page
+      if(inviteParam){
+        window.location.href = 'https://partycrew.app/?ref=' + encodeURIComponent(inviteParam);
+        return;
+      }
       showAgeGate();
     }
   } catch(e) {
@@ -1935,6 +1964,9 @@ window.finishOnboard = async function(){
     };
     if(birthdate) obj.birthdate = birthdate;
     if(obData.photo_url) obj.photo_url = obData.photo_url;
+    // Track invite referral
+    var invRef = localStorage.getItem('crew_invited_by');
+    if(invRef) { obj.invited_by = invRef; localStorage.removeItem('crew_invited_by'); }
 
     // Save — single upsert call
     obj.user_id = user.id;
@@ -2502,7 +2534,9 @@ window.inviteCrew=function(){
   var cc=document.getElementById('crewCount');
   var current=parseInt((cc?cc.textContent:'0'));
   if(current>=CREW_MAX){toast('Max. '+CREW_MAX+' Crew-Mitglieder erreicht!');return}
-  shareText('Komm in meine Crew! 🌴🔥 https://crew-app.com/invite');
+  var code=ME.invite_code||ME.username||'crew';
+  var link='https://partycrew.app/app.html?invite='+encodeURIComponent(code);
+  shareText('Komm in meine Crew! 🌴🔥 '+link);
   var inv=parseInt(localStorage.getItem('crew_invites')||'0')+1;
   localStorage.setItem('crew_invites',String(inv));
   if(inv===6)toast('🎨 Profilfarben freigeschaltet!');
@@ -2930,6 +2964,51 @@ window.openAdminPanel = async function(){
       });
       html += '</div>';
     }
+
+    // === INVITE STATS ===
+    try {
+      var {data:inviteStats} = await sb.rpc('get_invite_stats');
+      if(inviteStats && inviteStats.length > 0){
+        html += '<div style="background:var(--glass);border:1px solid var(--glass-border);border-radius:16px;padding:16px;margin-bottom:16px">';
+        html += '<div style="font-size:11px;font-weight:700;color:var(--o);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">🔗 Einladungscodes & Rekrutierungen</div>';
+        var totalRecruited = inviteStats.reduce(function(s,x){return s+(x.invite_count||0)},0);
+        html += '<div style="display:flex;gap:10px;margin-bottom:14px">';
+        html += '<div style="flex:1;text-align:center;padding:10px;border-radius:12px;background:rgba(255,109,46,.06);border:1px solid rgba(255,109,46,.1)"><div style="font-size:22px;font-weight:900;color:var(--o)">'+inviteStats.length+'</div><div style="font-size:10px;color:var(--t3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-top:2px">Codes aktiv</div></div>';
+        html += '<div style="flex:1;text-align:center;padding:10px;border-radius:12px;background:rgba(48,209,88,.06);border:1px solid rgba(48,209,88,.1)"><div style="font-size:22px;font-weight:900;color:var(--mint)">'+totalRecruited+'</div><div style="font-size:10px;color:var(--t3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-top:2px">Geworben</div></div>';
+        html += '</div>';
+        inviteStats.forEach(function(s){
+          html += '<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--glass-border)">';
+          html += '<div style="width:32px;height:32px;border-radius:50%;background:var(--glass);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:var(--o)">'+(s.invite_count||0)+'</div>';
+          html += '<div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(s.name||'Unbekannt')+'</div>';
+          html += '<div style="font-size:11px;color:var(--t3)">@'+esc(s.username||'---')+' · Code: <span style="color:var(--o);font-weight:600">'+esc(s.invite_code||'—')+'</span></div></div>';
+          html += '<div style="font-size:12px;font-weight:800;color:'+(s.invite_count>0?'var(--mint)':'var(--t3)')+'">'+(s.invite_count||0)+' 👥</div>';
+          html += '</div>';
+        });
+        html += '</div>';
+      }
+    } catch(e){ console.log('Invite stats error:', e); }
+
+    // === PARTNER APPLICATIONS ===
+    try {
+      var {data:partnerApps} = await sb.rpc('get_partner_applications');
+      if(partnerApps && partnerApps.length > 0){
+        html += '<div style="background:var(--glass);border:1px solid var(--glass-border);border-radius:16px;padding:16px;margin-bottom:16px">';
+        html += '<div style="font-size:11px;font-weight:700;color:var(--o);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">🤝 Partner-Bewerbungen ('+partnerApps.length+')</div>';
+        partnerApps.forEach(function(p){
+          var sc = p.status==='pending'?'var(--fire)':p.status==='approved'?'var(--mint)':'var(--t3)';
+          html += '<div style="padding:10px 0;border-bottom:1px solid var(--glass-border)">';
+          html += '<div style="display:flex;justify-content:space-between;align-items:start">';
+          html += '<div><div style="font-size:14px;font-weight:700">'+esc(p.business_name)+'</div>';
+          html += '<div style="font-size:11px;color:var(--t2);margin-top:2px">'+esc(p.business_type)+' · '+esc(p.contact_name)+'</div>';
+          html += '<div style="font-size:11px;color:var(--t3);margin-top:2px">'+esc(p.email)+(p.location?' · 📍 '+esc(p.location):'')+'</div>';
+          if(p.description) html += '<div style="font-size:11px;color:var(--t3);margin-top:4px;font-style:italic">"'+esc(p.description.substring(0,100))+(p.description.length>100?'…':'')+'"</div>';
+          html += '</div>';
+          html += '<span style="font-size:10px;font-weight:700;color:'+sc+';white-space:nowrap;padding:3px 8px;border-radius:8px;background:rgba(255,255,255,.04)">'+esc(p.status||'pending')+'</span>';
+          html += '</div></div>';
+        });
+        html += '</div>';
+      }
+    } catch(e){ console.log('Partner apps error:', e); }
 
     // User list
     html += '<div style="background:var(--glass);border:1px solid var(--glass-border);border-radius:16px;padding:16px;margin-bottom:16px">';
