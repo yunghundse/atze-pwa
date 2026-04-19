@@ -1520,6 +1520,22 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
           <div id="tonightPlanner" style="padding:0 14px 14px"><p class="crew-empty">Wird geladen...</p></div>
         </div>
 
+        <!-- CREW LOCATIONS — Who's where -->
+        <div class="crew-section">
+          <div class="crew-section-header">
+            <div class="csh-left"><span class="csh-emoji">📍</span><span class="csh-title">Crew-Standorte</span></div>
+          </div>
+          <div id="crewLocationList" style="padding:0 14px 14px"></div>
+        </div>
+
+        <!-- DRUNK LIST — Tagesvollster -->
+        <div class="crew-section">
+          <div class="crew-section-header">
+            <div class="csh-left"><span class="csh-emoji">🍻</span><span class="csh-title">Tagesvollster</span></div>
+          </div>
+          <div id="drunkList" style="padding:0 14px 14px;display:flex;gap:10px;overflow-x:auto"></div>
+        </div>
+
         <!-- CREW SUGGESTIONS — Time-based activity tips -->
         <div class="crew-section">
           <div class="crew-section-header">
@@ -2865,7 +2881,7 @@ window.openDeal=function(partner,cat,net,encodedUrl){
 function trackDealClick(partner,cat,net){
   try{
     if(ME&&ME.user_id){
-      sb.from('deal_clicks').insert({user_id:ME.user_id,deal_type:cat,partner:partner,affiliate_url:net}).then(function(){});
+      sb.from('deal_clicks').insert({user_id:ME.user_id,deal_type:cat,partner:partner,affiliate_url:net}).catch(function(e){console.log('Deal click track error:',e)});
     }
   }catch(e){console.log('Deal track error:',e)}
 }
@@ -4274,10 +4290,10 @@ window.openMyCrewProfile=function(){
   html+='</div></div>';
   html+='</div>';
 
-  // Delete crew — admin or app-admin
-  var isCrewAdmin=localStorage.getItem('crew_is_admin')==='true';
+  // Delete crew — crew owner or app-admin
+  var isCrewOwner=s&&s.created_by===ME.user_id;
   var isAppAdmin=ME&&ME.is_admin;
-  if(isCrewAdmin||isAppAdmin){
+  if(isCrewOwner||isAppAdmin){
     html+='<div class="cp-section"><div class="cp-section-title" style="color:#FF3B30">⚠️ Gefahrenzone</div>';
     if(isAppAdmin){
       html+='<div style="padding:14px;border-radius:var(--r);background:rgba(255,59,48,.06);border:1px solid rgba(255,59,48,.12);cursor:pointer;margin-bottom:8px" onclick="adminDeleteOwnCrew()">';
@@ -4398,7 +4414,7 @@ function renderMalleStats(uid,name,photo){
   var isMe=uid===ME.user_id;
   var rank=MALLE_RANKS[0];
   var pts=0;
-  if(isMe){pts=parseInt(localStorage.getItem('crew_user_points')||'0')}
+  if(isMe){pts=ME.score||ME.points||0}
   else if(_crewProfiles){var p=_crewProfiles.find(function(x){return x.user_id===uid});if(p)pts=p.points||0}
   for(var i=MALLE_RANKS.length-1;i>=0;i--){if(pts>=MALLE_RANKS[i].min){rank=MALLE_RANKS[i];break}}
 
