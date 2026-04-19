@@ -436,6 +436,80 @@ select.ri{appearance:none;-webkit-appearance:none}
 .crew-limit-badge{padding:3px 10px;border-radius:10px;font-size:10px;font-weight:800;background:rgba(255,109,46,.12);color:var(--o);border:1px solid rgba(255,109,46,.2)}
 .crew-empty{padding:14px;color:var(--t3);font-size:13px}
 .highlight-section{margin:0 10px 10px;border-radius:var(--r2);background:linear-gradient(135deg,rgba(255,109,46,.06),rgba(191,90,242,.04));backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);border:1px solid rgba(255,109,46,.12);overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 6px 24px rgba(0,0,0,.3),0 0 40px rgba(255,109,46,.04)}
+/* AURA CHECK — Crew Voting */
+.aura-check-badge{background:rgba(191,90,242,.12);color:#BF5AF2;border:1px solid rgba(191,90,242,.2)}
+.aura-cat-grid{display:flex;gap:8px;padding:0 14px 14px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.aura-cat-grid::-webkit-scrollbar{display:none}
+.aura-cat{padding:8px 14px;border-radius:14px;background:linear-gradient(135deg,rgba(22,22,24,.7),rgba(28,28,32,.5));backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);border:1px solid rgba(255,255,255,.08);cursor:pointer;transition:all .2s var(--ease);white-space:nowrap;text-align:center}
+.aura-cat:active{transform:scale(.95)}
+.aura-cat.sel{border-color:rgba(191,90,242,.4);background:linear-gradient(135deg,rgba(191,90,242,.15),rgba(191,90,242,.05));box-shadow:0 0 16px rgba(191,90,242,.1)}
+.aura-cat-emoji{font-size:22px;display:block;margin-bottom:2px}
+.aura-cat-label{font-size:10px;font-weight:700;color:var(--t2)}
+.aura-vote-area{padding:0 14px 14px}
+.aura-vote-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--r);background:linear-gradient(135deg,rgba(22,22,24,.6),rgba(28,28,32,.4));border:1px solid rgba(255,255,255,.06);margin-bottom:6px;cursor:pointer;transition:all .2s var(--ease)}
+.aura-vote-row:active{transform:scale(.98)}
+.aura-vote-row.voted{border-color:rgba(191,90,242,.3);background:linear-gradient(135deg,rgba(191,90,242,.12),rgba(191,90,242,.04))}
+.avr-ava{width:36px;height:36px;border-radius:50%;overflow:hidden;flex-shrink:0}.avr-ava img{width:100%;height:100%;object-fit:cover}
+.avr-name{flex:1;font-size:13px;font-weight:700}
+.avr-count{font-size:12px;font-weight:800;color:#BF5AF2}
+.aura-result{margin:0 14px 14px;padding:12px;border-radius:var(--r);background:linear-gradient(135deg,rgba(191,90,242,.15),rgba(191,90,242,.05));border:1px solid rgba(191,90,242,.2);text-align:center}
+.aura-result-label{font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.aura-result-name{font-size:16px;font-weight:900;color:#BF5AF2}
+/* RIZZ RANKING */
+.rizz-badge{background:rgba(255,59,48,.12);color:#FF3B30;border:1px solid rgba(255,59,48,.2)}
+.rizz-podium{display:flex;gap:8px;padding:0 14px 10px;align-items:flex-end}
+.rizz-pod{flex:1;text-align:center;padding:12px 6px;border-radius:var(--r);background:linear-gradient(135deg,rgba(22,22,24,.7),rgba(28,28,32,.5));backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);border:1px solid rgba(255,255,255,.08);position:relative;overflow:hidden}
+.rizz-pod.gold{border-color:rgba(255,214,10,.3);background:linear-gradient(135deg,rgba(255,214,10,.1),rgba(255,214,10,.03))}
+.rizz-pod.gold::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,214,10,.08),transparent);pointer-events:none}
+.rizz-pod .rp-place{font-size:20px;margin-bottom:4px}
+.rizz-pod .rp-ava{width:48px;height:48px;border-radius:50%;overflow:hidden;margin:0 auto 6px;border:2px solid rgba(255,255,255,.1)}.rizz-pod.gold .rp-ava{border-color:rgba(255,214,10,.4);width:56px;height:56px}
+.rizz-pod .rp-ava img{width:100%;height:100%;object-fit:cover}
+.rizz-pod .rp-name{font-size:11px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rizz-pod .rp-score{font-size:14px;font-weight:900;color:#FF6B6B;margin-top:2px}
+.rizz-rate-area{padding:0 14px 14px}
+.rizz-rate-card{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--r);background:linear-gradient(135deg,rgba(22,22,24,.6),rgba(28,28,32,.4));border:1px solid rgba(255,255,255,.06);margin-bottom:6px}
+.rrc-ava{width:36px;height:36px;border-radius:50%;overflow:hidden;flex-shrink:0}.rrc-ava img{width:100%;height:100%;object-fit:cover}
+.rrc-name{flex:1;font-size:13px;font-weight:700}
+.rrc-hearts{display:flex;gap:3px}
+.rrc-heart{font-size:18px;cursor:pointer;transition:transform .15s;opacity:.3}
+.rrc-heart:active{transform:scale(1.3)}
+.rrc-heart.lit{opacity:1;filter:drop-shadow(0 0 4px rgba(255,59,48,.4))}
+/* CONFESSION WALL */
+.confess-badge{background:rgba(90,200,250,.12);color:#5AC8FA;border:1px solid rgba(90,200,250,.2)}
+.confess-list{padding:0 14px 8px}
+.confess-card{padding:14px;border-radius:var(--r);background:linear-gradient(135deg,rgba(22,22,24,.7),rgba(28,28,32,.5));backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);border:1px solid rgba(255,255,255,.08);margin-bottom:8px;position:relative;overflow:hidden}
+.confess-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;border-radius:2px}
+.confess-card:nth-child(odd)::before{background:linear-gradient(180deg,#BF5AF2,#5AC8FA)}
+.confess-card:nth-child(even)::before{background:linear-gradient(180deg,#FF6B6B,#FFD60A)}
+.confess-anon{font-size:10px;font-weight:700;color:var(--t3);margin-bottom:6px;display:flex;align-items:center;gap:5px}
+.confess-anon::before{content:'👻';font-size:14px}
+.confess-text{font-size:14px;font-weight:600;line-height:1.5;color:var(--t1)}
+.confess-time{font-size:10px;color:var(--t3);margin-top:8px}
+.confess-react{display:flex;gap:8px;margin-top:8px}
+.confess-react-btn{padding:4px 10px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.06);font-size:12px;cursor:pointer;transition:all .15s}
+.confess-react-btn:active{transform:scale(.9)}
+.confess-react-btn.reacted{background:rgba(255,109,46,.12);border-color:rgba(255,109,46,.2)}
+.confess-input-area{padding:0 14px 14px;display:flex;gap:8px}
+.confess-input{flex:1;padding:10px 14px;border-radius:14px;background:rgba(22,22,24,.6);border:1px solid rgba(255,255,255,.1);color:var(--t1);font-size:13px;font-family:inherit;outline:none;transition:border-color .2s}
+.confess-input:focus{border-color:rgba(90,200,250,.4)}
+.confess-input::placeholder{color:var(--t3)}
+.confess-send{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#5AC8FA,#BF5AF2);border:none;color:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .15s}
+.confess-send:active{transform:scale(.85)}
+/* STORY RECAP */
+.recap-badge{background:linear-gradient(135deg,rgba(255,109,46,.12),rgba(191,90,242,.12));color:var(--o);border:1px solid rgba(255,109,46,.2)}
+.recap-carousel{display:flex;gap:10px;padding:0 14px 14px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.recap-carousel::-webkit-scrollbar{display:none}
+.recap-card{min-width:200px;padding:16px;border-radius:var(--r2);position:relative;overflow:hidden;flex-shrink:0;cursor:pointer;transition:transform .2s var(--ease)}
+.recap-card:active{transform:scale(.96)}
+.recap-card.rc-highlights{background:linear-gradient(135deg,rgba(255,109,46,.2),rgba(191,90,242,.1));border:1px solid rgba(255,109,46,.15)}
+.recap-card.rc-stats{background:linear-gradient(135deg,rgba(90,200,250,.15),rgba(52,199,89,.08));border:1px solid rgba(90,200,250,.15)}
+.recap-card.rc-moments{background:linear-gradient(135deg,rgba(255,214,10,.15),rgba(255,107,107,.08));border:1px solid rgba(255,214,10,.15)}
+.recap-card.rc-awards{background:linear-gradient(135deg,rgba(191,90,242,.2),rgba(255,59,48,.08));border:1px solid rgba(191,90,242,.15)}
+.rc-icon{font-size:28px;margin-bottom:8px}
+.rc-title{font-size:14px;font-weight:900;margin-bottom:4px}
+.rc-desc{font-size:11px;color:var(--t2);line-height:1.4}
+.rc-stat{font-size:22px;font-weight:900;color:var(--o);margin:6px 0 2px}
+.rc-stat-label{font-size:10px;color:var(--t3);font-weight:600}
 
 /* CREW LOCATION CARDS */
 .crew-loc-card{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid rgba(255,255,255,.04);transition:all .2s var(--ease)}
@@ -805,7 +879,7 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
     <div class="pe-section">Was treibt dich hierher?</div>
     <div class="chip-row" id="obSeek"></div>
     <div class="pe-section">Über mich</div>
-    <textarea class="ri" id="obBio" placeholder="Party-Animal, Sangria-Liebhaber, immer gut drauf... Erzähl was über dich!" rows="3" style="resize:none;font-family:inherit"></textarea>
+    <textarea class="ri" id="obBio" placeholder="Party-Animal, Main Character Energy, immer gut drauf... Erzähl was über dich!" rows="3" style="resize:none;font-family:inherit"></textarea>
     <button class="rnext" onclick="obStep(3)">Weiter</button>
   </div>
   <div class="ob-step" id="ob3">
@@ -965,8 +1039,8 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
             <div style="font-size:9px;font-weight:700;color:var(--t3);text-transform:uppercase">Crew</div>
           </div>
           <div onclick="go('profile',document.querySelectorAll('#navBar button')[4])" style="flex:1;padding:10px;border-radius:12px;background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--glass-border);text-align:center;cursor:pointer">
-            <div style="font-size:18px;font-weight:900;color:var(--o)" id="qsSangrias">0</div>
-            <div style="font-size:9px;font-weight:700;color:var(--t3);text-transform:uppercase">🍹 Sangrias</div>
+            <div style="font-size:18px;font-weight:900;color:var(--o)" id="qsAura">0</div>
+            <div style="font-size:9px;font-weight:700;color:var(--t3);text-transform:uppercase">✨ Aura</div>
           </div>
         </div>
         <div class="mood-bar glass anim"><div class="mb-label">Vibe</div><div class="mood-emojis" id="moodBar"></div></div>
@@ -1013,7 +1087,7 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
           </div>
           <div class="csb-pts">
             <div class="csb-pts-num" id="csbPoints">0</div>
-            <div class="csb-pts-label">Sangrias 🍹</div>
+            <div class="csb-pts-label">Aura ✨</div>
           </div>
         </div>
 
@@ -1070,6 +1144,48 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
             <div class="csh-badge live-badge">LIVE</div>
           </div>
           <div id="crewActivityFeed"></div>
+        </div>
+
+        <!-- AURA CHECK — Who has the most aura? -->
+        <div class="crew-section highlight-section">
+          <div class="crew-section-header">
+            <div class="csh-left"><span class="csh-emoji">✨</span><span class="csh-title">Aura-Check</span></div>
+            <div class="csh-badge aura-check-badge">VOTE NOW</div>
+          </div>
+          <div id="auraCheckCategories"></div>
+          <div id="auraCheckVotes"></div>
+        </div>
+
+        <!-- RIZZ RANKING — Rate the crew -->
+        <div class="crew-section">
+          <div class="crew-section-header">
+            <div class="csh-left"><span class="csh-emoji">💘</span><span class="csh-title">Rizz-Ranking</span></div>
+            <div class="csh-badge rizz-badge">HOT OR NOT</div>
+          </div>
+          <div id="rizzPodium"></div>
+          <div id="rizzRateArea"></div>
+        </div>
+
+        <!-- CONFESSION WALL — Anonymous crew confessions -->
+        <div class="crew-section">
+          <div class="crew-section-header">
+            <div class="csh-left"><span class="csh-emoji">👻</span><span class="csh-title">Confession Wall</span></div>
+            <div class="csh-badge confess-badge">ANONYM</div>
+          </div>
+          <div id="confessionList"></div>
+          <div class="confess-input-area">
+            <input type="text" class="confess-input" id="confessInput" placeholder="Dein anonymes Geständnis..." maxlength="200">
+            <button class="confess-send" onclick="submitConfession()">➤</button>
+          </div>
+        </div>
+
+        <!-- STORY RECAP — Daily/Weekly Highlights -->
+        <div class="crew-section">
+          <div class="crew-section-header">
+            <div class="csh-left"><span class="csh-emoji">📸</span><span class="csh-title">Story Recap</span></div>
+            <div class="csh-badge recap-badge">TODAY</div>
+          </div>
+          <div id="storyRecap"></div>
         </div>
 
         <!-- DAILY QUESTION — Tagesvollster + Tagesrituale -->
@@ -1219,7 +1335,7 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
       <div id="dealsContent"></div>
       <div class="deal-disclosure">⚠️ Affiliate-Hinweis: Einige Links sind Partnerlinks. Bei einer Buchung/Kauf erhalten wir eine kleine Provision — für dich ändert sich der Preis nicht. Butterbread Technologies · DSGVO-konform · Server EU</div>
     </div></div>
-    <div class="scr" id="screen-profile"><div class="prof-hero"><div class="prof-ava-wrap"><div class="prof-ava"><img id="profAvaImg" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80"></div><div class="prof-ava-edit" onclick="openPhotoUpload()">📷</div></div><h2><span id="profName">Laden...</span></h2><div class="handle" id="profHandle"></div><div class="prof-badges-row" id="profBadges"></div></div><div class="prof-vibe" id="profVibe"></div><div class="prof-socials" id="profSocials"></div><div class="prof-stats glass"><div class="pstat"><div class="pn" id="stM">0</div><div class="pl">Matches</div></div><div class="pstat"><div class="pn" id="stCrew">0</div><div class="pl">Crew</div></div><div class="pstat"><div class="pn" id="stPts">0</div><div class="pl">🍹 Sangrias</div></div></div><div class="premium-cta" id="premCta" onclick="openPremium()"><h3>✨ crew Premium</h3><div class="pc-sub">Keine Werbung · Unlimited Swipes · VIP</div><div class="pc-btn">Ab 2,99€</div></div><div class="pmenu">
+    <div class="scr" id="screen-profile"><div class="prof-hero"><div class="prof-ava-wrap"><div class="prof-ava"><img id="profAvaImg" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80"></div><div class="prof-ava-edit" onclick="openPhotoUpload()">📷</div></div><h2><span id="profName">Laden...</span></h2><div class="handle" id="profHandle"></div><div class="prof-badges-row" id="profBadges"></div></div><div class="prof-vibe" id="profVibe"></div><div class="prof-socials" id="profSocials"></div><div class="prof-stats glass"><div class="pstat"><div class="pn" id="stM">0</div><div class="pl">Matches</div></div><div class="pstat"><div class="pn" id="stCrew">0</div><div class="pl">Crew</div></div><div class="pstat"><div class="pn" id="stPts">0</div><div class="pl">✨ Aura</div></div></div><div class="premium-cta" id="premCta" onclick="openPremium()"><h3>✨ crew Premium</h3><div class="pc-sub">Keine Werbung · Unlimited Swipes · VIP</div><div class="pc-btn">Ab 2,99€</div></div><div class="pmenu">
 <div class="pmi" id="adminMenuItem" style="display:none;background:linear-gradient(135deg,rgba(255,109,46,.08),rgba(255,109,46,.02));border:1px solid rgba(255,109,46,.2)" onclick="openAdminPanel()"><div class="pmi-icon o">👑</div><span class="pmi-label" style="color:var(--o);font-weight:700">Admin Dashboard</span><span class="pmi-arrow" style="color:var(--o)">›</span></div>
 <div class="pmi" style="background:linear-gradient(135deg,rgba(255,214,10,.08),rgba(255,214,10,.02));border:1px solid rgba(255,214,10,.15)" onclick="showMyQR()"><div class="pmi-icon o" style="background:rgba(255,214,10,.1)">📲</div><span class="pmi-label" style="font-weight:700">Mein QR-Code</span><span class="pmi-arrow" style="color:var(--yellow)">›</span></div>
 <div class="pe-section">Profil & Einstellungen</div>
@@ -1260,7 +1376,7 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 37;
+  var APP_VERSION = 38;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     localStorage.setItem('crew_app_v', APP_VERSION);
@@ -1357,7 +1473,7 @@ var GAMES = [
 var CHALLENGES = [
   {title:'Erster im Bierkönig',icon:'🏃',desc:'Wer checkt als erster ein?',pts:100},
   {title:'Sonnenbrand-Selfie',icon:'☀️',desc:'Poste ein Selfie mit deinem Sonnenbrand-Tan',pts:50},
-  {title:'Sangria-Eimer',icon:'🍹',desc:'Bestelle einen Sangria-Eimer für die Crew',pts:75},
+  {title:'Eimer-Runde',icon:'🍹',desc:'Bestelle einen Eimer für die Crew — instant Aura!',pts:75},
   {title:'Taxi-Karaoke',icon:'🎤',desc:'Singe im Taxi einen Schlager — laut!',pts:60},
   {title:'Strand um 6',icon:'🌅',desc:'Sei um 6 Uhr morgens am Strand und mach ein Foto',pts:120},
   {title:'10 Neue Leute',icon:'👥',desc:'Lerne heute 10 neue Leute kennen',pts:80},
@@ -1441,7 +1557,7 @@ var I18N = {
     ob2_title: 'Wer bist du?', ob2_sub: 'Erzähl den anderen etwas über dich.',
     ob_iam: 'Ich bin', ob_status: 'Beziehungsstatus',
     ob_seek: 'Was treibt dich hierher?', ob_about: 'Über mich',
-    ob_bio_ph: 'Party-Animal, Sangria-Liebhaber, immer gut drauf...',
+    ob_bio_ph: 'Party-Animal, Main Character Energy, immer gut drauf...',
     ob3_title: 'Dein Verein', ob3_sub: 'Zeig deine Farben auf deinem Profil.',
     ob_custom_club: '✏️ Eigenen Verein eintragen...', ob_or_select: 'Oder wähle aus',
     ob4_title: 'Dein Profilbild', ob4_sub: 'Lade ein angemessenes Foto für dein Profil hoch.',
@@ -1554,7 +1670,7 @@ var I18N = {
     taxi_splitter: 'Taxi-Splitter',
     malle_countdown: 'Malle-Countdown',
     dark_mode: 'Dark/Light Mode',
-    points_label: 'Sangrias'
+    points_label: 'Aura'
   }
 };
 
@@ -2451,7 +2567,7 @@ window.checkinVenue = async function(venueId, name){
     }
   } catch(e){ console.warn('Live count refresh failed:', e); }
 
-  toast('📍 Eingecheckt bei '+name+'! +50 🍹');
+  toast('📍 Eingecheckt bei '+name+'! +50 ✨ Aura');
   sendLocalNotification('📍 Check-In!', {body: 'Du bist jetzt bei '+name+'!'});
   closeBS();
 };
@@ -2725,7 +2841,7 @@ async function buildCrewList(){
       html+='</div>';
       // Right side — points + poke
       html+='<div class="cc-right">';
-      html+='<div class="cc-pts">'+(p.points||0)+'</div><div class="cc-pts-label">🍹 Sangrias</div>';
+      html+='<div class="cc-pts">'+(p.points||0)+'</div><div class="cc-pts-label">✨ Aura</div>';
       html+='<button class="cc-poke'+(isPoked?' poked':'')+'" onclick="event.stopPropagation();pokeCrewMember(\''+p.user_id+'\',\''+esc(p.name)+'\')">'+(isPoked?'✓ Gepingt':'👋 Ping')+'</button>';
       html+='</div></div>';
     });
@@ -2783,7 +2899,7 @@ window.openCrewProfile=function(uid){
     var progressHtml='';
     if(nextRank){
       var pct=Math.min(100,Math.round(((p.points||0)-rank.min)/(nextRank.min-rank.min)*100));
-      progressHtml='<div style="margin:12px 0"><div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:4px"><span style="color:'+rank.color+';font-weight:700">'+rank.emoji+' '+rank.title+'</span><span style="color:'+nextRank.color+';font-weight:700">'+nextRank.emoji+' '+nextRank.title+'</span></div><div style="height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:var(--gold);border-radius:3px"></div></div><div style="font-size:10px;color:var(--t3);margin-top:4px;text-align:center">Noch '+(nextRank.min-(p.points||0))+' Sangrias bis '+nextRank.emoji+'</div></div>';
+      progressHtml='<div style="margin:12px 0"><div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:4px"><span style="color:'+rank.color+';font-weight:700">'+rank.emoji+' '+rank.title+'</span><span style="color:'+nextRank.color+';font-weight:700">'+nextRank.emoji+' '+nextRank.title+'</span></div><div style="height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:var(--gold);border-radius:3px"></div></div><div style="font-size:10px;color:var(--t3);margin-top:4px;text-align:center">Noch '+(nextRank.min-(p.points||0))+' Aura bis '+nextRank.emoji+'</div></div>';
     }
     var sheetHtml='<div class="crew-profile-sheet">';
     // Header
@@ -2801,7 +2917,7 @@ window.openCrewProfile=function(uid){
     sheetHtml+='</div></div>';
     // Stats grid — psychological social proof
     sheetHtml+='<div class="cps-stats">';
-    sheetHtml+='<div class="cps-stat"><div class="cps-stat-num" style="color:var(--o)">'+(p.points||0)+'</div><div class="cps-stat-label">🍹 Sangrias</div></div>';
+    sheetHtml+='<div class="cps-stat"><div class="cps-stat-num" style="color:var(--o)">'+(p.points||0)+'</div><div class="cps-stat-label">✨ Aura</div></div>';
     sheetHtml+='<div class="cps-stat"><div class="cps-stat-num" style="color:#FFD60A">'+(p.streak||0)+'</div><div class="cps-stat-label">🔥 Streak</div></div>';
     sheetHtml+='<div class="cps-stat"><div class="cps-stat-num" style="color:var(--green)">'+(p.matches_count||'—')+'</div><div class="cps-stat-label">👥 Matches</div></div>';
     sheetHtml+='</div>';
@@ -2956,6 +3072,329 @@ window.shareCrewLocation=function(){
 };
 
 // ============================================
+// AURA CHECK — "Wer hat die meiste Aura?" Crew Voting
+// ============================================
+var AURA_CATEGORIES = [
+  {id:'mainchar',emoji:'⭐',label:'Main Character',desc:'Wer steht immer im Mittelpunkt?'},
+  {id:'npc',emoji:'🤖',label:'NPC Energy',desc:'Wer läuft nur mit?'},
+  {id:'rizz',emoji:'💘',label:'Most Rizz',desc:'Wer hat den meisten Rizz?'},
+  {id:'villain',emoji:'😈',label:'Villain Arc',desc:'Wer startet den Villain Arc?'},
+  {id:'clown',emoji:'🤡',label:'Crew Clown',desc:'Wer bringt alle zum Lachen?'},
+  {id:'drama',emoji:'🎭',label:'Drama Queen',desc:'Wer macht immer Drama?'},
+  {id:'drunk',emoji:'🍻',label:'Party Animal',desc:'Wer geht am härtesten?'},
+  {id:'wholesome',emoji:'🥰',label:'Wholesome King',desc:'Wer ist der/die Süßeste?'}
+];
+var _auraCheckCat = 'mainchar';
+
+async function buildAuraCheck(){
+  var catEl=document.getElementById('auraCheckCategories');
+  var voteEl=document.getElementById('auraCheckVotes');
+  if(!catEl||!voteEl)return;
+  // Category pills
+  var catHtml='<div class="aura-cat-grid">';
+  AURA_CATEGORIES.forEach(function(c){
+    catHtml+='<div class="aura-cat'+(c.id===_auraCheckCat?' sel':'')+'" onclick="selectAuraCat(\''+c.id+'\')">';
+    catHtml+='<span class="aura-cat-emoji">'+c.emoji+'</span>';
+    catHtml+='<span class="aura-cat-label">'+c.label+'</span>';
+    catHtml+='</div>';
+  });
+  catHtml+='</div>';
+  catEl.innerHTML=catHtml;
+
+  // Load crew
+  try{
+    var {data:matches}=await sb.from('matches').select('to_user').eq('from_user',ME.user_id).eq('is_match',true);
+    if(!matches||matches.length===0){voteEl.innerHTML='<p class="crew-empty">Matche mit Leuten um den Aura-Check zu starten!</p>';return}
+    var ids=matches.map(function(m){return m.to_user});
+    var {data:profiles}=await sb.from('profiles').select('user_id,name,photo_url').in('user_id',ids);
+    if(!profiles||profiles.length===0){voteEl.innerHTML='<p class="crew-empty">Keine Crew gefunden.</p>';return}
+    var blocked=JSON.parse(localStorage.getItem('crew_blocked')||'[]');
+    profiles=profiles.filter(function(p){return blocked.indexOf(p.user_id)===-1});
+    var cat=AURA_CATEGORIES.find(function(c){return c.id===_auraCheckCat});
+    var today=new Date().toISOString().split('T')[0];
+    var voteKey='aura_check_'+_auraCheckCat+'_'+today;
+    var votes=JSON.parse(localStorage.getItem(voteKey)||'{}');
+    var voteCount={};
+    Object.values(votes).forEach(function(v){voteCount[v]=(voteCount[v]||0)+1});
+    var userVote=votes[ME.user_id];
+    var maxVotes=0;var winnerId=null;
+    Object.keys(voteCount).forEach(function(k){if(voteCount[k]>maxVotes){maxVotes=voteCount[k];winnerId=k}});
+
+    var html='<div style="padding:0 14px 8px;font-size:13px;color:var(--t2);font-weight:600">'+cat.emoji+' '+cat.desc+'</div>';
+    html+='<div class="aura-vote-area">';
+    profiles.forEach(function(p){
+      var isVoted=userVote===p.user_id;
+      html+='<div class="aura-vote-row'+(isVoted?' voted':'')+'" onclick="voteAuraCheck(\''+voteKey+'\',\''+p.user_id+'\',\''+esc(p.name)+'\')">';
+      html+='<div class="avr-ava"><img src="'+(p.photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80')+'" loading="lazy"></div>';
+      html+='<div class="avr-name">'+esc(p.name)+'</div>';
+      html+='<div class="avr-count">'+(voteCount[p.user_id]||0)+' ✨</div>';
+      html+='</div>';
+    });
+    html+='</div>';
+    if(winnerId&&maxVotes>0){
+      var wp=profiles.find(function(p){return p.user_id===winnerId});
+      if(wp){
+        html+='<div class="aura-result"><div class="aura-result-label">'+cat.emoji+' '+cat.label+'</div>';
+        html+='<div class="aura-result-name">'+esc(wp.name)+' 👑</div></div>';
+      }
+    }
+    voteEl.innerHTML=html;
+  }catch(e){console.error('buildAuraCheck error:',e);voteEl.innerHTML='<p class="crew-empty">Aura-Check nicht verfügbar.</p>'}
+}
+
+window.selectAuraCat=function(catId){
+  _auraCheckCat=catId;
+  buildAuraCheck();
+  if(navigator.vibrate)navigator.vibrate(10);
+};
+
+window.voteAuraCheck=function(voteKey,uid,name){
+  if(uid===ME.user_id){toast('Du kannst dir nicht selbst Aura geben! 😄');return}
+  var votes=JSON.parse(localStorage.getItem(voteKey)||'{}');
+  if(votes[ME.user_id]===uid){delete votes[ME.user_id];toast('Vote zurückgenommen')}
+  else{votes[ME.user_id]=uid;toast(name+' hat die Aura! ✨');if(navigator.vibrate)navigator.vibrate(15)}
+  localStorage.setItem(voteKey,JSON.stringify(votes));
+  buildAuraCheck();
+};
+
+// ============================================
+// RIZZ RANKING — Rate your crew's rizz
+// ============================================
+async function buildRizzRanking(){
+  var podEl=document.getElementById('rizzPodium');
+  var rateEl=document.getElementById('rizzRateArea');
+  if(!podEl||!rateEl)return;
+  try{
+    var {data:matches}=await sb.from('matches').select('to_user').eq('from_user',ME.user_id).eq('is_match',true);
+    if(!matches||matches.length===0){podEl.innerHTML='<p class="crew-empty">Matche mit Leuten für das Rizz-Ranking!</p>';rateEl.innerHTML='';return}
+    var ids=matches.map(function(m){return m.to_user});
+    var {data:profiles}=await sb.from('profiles').select('user_id,name,photo_url').in('user_id',ids);
+    if(!profiles||profiles.length===0){podEl.innerHTML='<p class="crew-empty">Keine Crew gefunden.</p>';rateEl.innerHTML='';return}
+    var blocked=JSON.parse(localStorage.getItem('crew_blocked')||'[]');
+    profiles=profiles.filter(function(p){return blocked.indexOf(p.user_id)===-1});
+
+    // Load ratings from localStorage
+    var rizzKey='crew_rizz_ratings';
+    var allRatings=JSON.parse(localStorage.getItem(rizzKey)||'{}');
+    // Calculate averages
+    var scored=profiles.map(function(p){
+      var ratings=allRatings[p.user_id]||{};
+      var vals=Object.values(ratings);
+      var avg=vals.length>0?vals.reduce(function(a,b){return a+b},0)/vals.length:0;
+      return {user_id:p.user_id,name:p.name,photo_url:p.photo_url,avg:Math.round(avg*10)/10,count:vals.length};
+    });
+    scored.sort(function(a,b){return b.avg-a.avg});
+
+    // Podium (top 3)
+    var podHtml='<div class="rizz-podium">';
+    var podOrder=[1,0,2]; // silver, gold, bronze display order
+    podOrder.forEach(function(idx){
+      if(!scored[idx])return;
+      var p=scored[idx];
+      var place=idx===0?'👑':idx===1?'🥈':'🥉';
+      podHtml+='<div class="rizz-pod'+(idx===0?' gold':'')+'">';
+      podHtml+='<div class="rp-place">'+place+'</div>';
+      podHtml+='<div class="rp-ava"><img src="'+(p.photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80')+'" loading="lazy"></div>';
+      podHtml+='<div class="rp-name">'+esc(p.name)+'</div>';
+      podHtml+='<div class="rp-score">'+(p.avg>0?p.avg+' 🔥':'—')+'</div>';
+      podHtml+='</div>';
+    });
+    podHtml+='</div>';
+    podEl.innerHTML=podHtml;
+
+    // Rating cards
+    var rateHtml='<div class="rizz-rate-area">';
+    profiles.forEach(function(p){
+      if(p.user_id===ME.user_id)return;
+      var myRating=(allRatings[p.user_id]&&allRatings[p.user_id][ME.user_id])||0;
+      rateHtml+='<div class="rizz-rate-card">';
+      rateHtml+='<div class="rrc-ava"><img src="'+(p.photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80')+'" loading="lazy"></div>';
+      rateHtml+='<div class="rrc-name">'+esc(p.name)+'</div>';
+      rateHtml+='<div class="rrc-hearts">';
+      for(var i=1;i<=5;i++){
+        rateHtml+='<span class="rrc-heart'+(i<=myRating?' lit':'')+'" onclick="rateRizz(\''+p.user_id+'\','+i+')">🔥</span>';
+      }
+      rateHtml+='</div>';
+      rateHtml+='</div>';
+    });
+    rateHtml+='</div>';
+    rateEl.innerHTML=rateHtml;
+  }catch(e){console.error('buildRizzRanking error:',e);podEl.innerHTML='<p class="crew-empty">Rizz-Ranking nicht verfügbar.</p>';rateEl.innerHTML=''}
+}
+
+window.rateRizz=function(uid,score){
+  var rizzKey='crew_rizz_ratings';
+  var allRatings=JSON.parse(localStorage.getItem(rizzKey)||'{}');
+  if(!allRatings[uid])allRatings[uid]={};
+  allRatings[uid][ME.user_id]=score;
+  localStorage.setItem(rizzKey,JSON.stringify(allRatings));
+  toast(score+'/5 Rizz! 🔥');
+  if(navigator.vibrate)navigator.vibrate(15);
+  buildRizzRanking();
+};
+
+// ============================================
+// CONFESSION WALL — Anonymous crew confessions
+// ============================================
+function buildConfessionWall(){
+  var el=document.getElementById('confessionList');if(!el)return;
+  var confKey='crew_confessions';
+  var confessions=JSON.parse(localStorage.getItem(confKey)||'[]');
+  // Predefined starter confessions for new users
+  if(confessions.length===0){
+    confessions=[
+      {id:'c1',text:'Jemand aus deiner Crew stalkt heimlich deinen Insta... 👀',time:Date.now()-3600000,reactions:{'😂':3,'💀':1}},
+      {id:'c2',text:'Ich hab gestern am Ballermann einen Shot geklaut... sorry nicht sorry 🍹',time:Date.now()-7200000,reactions:{'😂':5,'🫣':2}},
+      {id:'c3',text:'Jemand findet dich lowkey attractive aber will es nicht zugeben 💘',time:Date.now()-1800000,reactions:{'👀':4,'💀':1,'❤️':3}}
+    ];
+    localStorage.setItem(confKey,JSON.stringify(confessions));
+  }
+  // Sort newest first, limit to 10
+  confessions.sort(function(a,b){return b.time-a.time});
+  confessions=confessions.slice(0,10);
+
+  var html='<div class="confess-list">';
+  confessions.forEach(function(c){
+    var ago=getTimeAgo(c.time);
+    html+='<div class="confess-card">';
+    html+='<div class="confess-anon">Anonymes Geständnis</div>';
+    html+='<div class="confess-text">'+esc(c.text)+'</div>';
+    html+='<div class="confess-time">'+ago+'</div>';
+    html+='<div class="confess-react">';
+    var reacts=['😂','💀','👀','❤️','🫣'];
+    reacts.forEach(function(r){
+      var count=(c.reactions&&c.reactions[r])||0;
+      var myReacts=JSON.parse(localStorage.getItem('confess_reacted_'+c.id)||'[]');
+      var reacted=myReacts.indexOf(r)!==-1;
+      html+='<span class="confess-react-btn'+(reacted?' reacted':'')+'" onclick="reactConfession(\''+c.id+'\',\''+r+'\')">';
+      html+=r+(count>0?' '+count:'');
+      html+='</span>';
+    });
+    html+='</div>';
+    html+='</div>';
+  });
+  html+='</div>';
+  el.innerHTML=html;
+}
+
+function getTimeAgo(ts){
+  var diff=Date.now()-ts;
+  var mins=Math.floor(diff/60000);
+  if(mins<1)return 'Gerade eben';
+  if(mins<60)return 'Vor '+mins+' Min.';
+  var hours=Math.floor(mins/60);
+  if(hours<24)return 'Vor '+hours+' Std.';
+  return 'Vor '+Math.floor(hours/24)+' Tag(en)';
+}
+
+window.submitConfession=function(){
+  var input=document.getElementById('confessInput');
+  if(!input)return;
+  var text=input.value.trim();
+  if(!text){toast('Schreib erstmal was! 👻');return}
+  if(text.length<3){toast('Zu kurz! Mindestens 3 Zeichen.');return}
+  var confKey='crew_confessions';
+  var confessions=JSON.parse(localStorage.getItem(confKey)||'[]');
+  confessions.push({
+    id:'c_'+Date.now(),
+    text:text,
+    time:Date.now(),
+    reactions:{}
+  });
+  localStorage.setItem(confKey,JSON.stringify(confessions));
+  input.value='';
+  toast('Geständnis gepostet! 👻');
+  if(navigator.vibrate)navigator.vibrate([10,50,10]);
+  buildConfessionWall();
+};
+
+window.reactConfession=function(confId,emoji){
+  var confKey='crew_confessions';
+  var confessions=JSON.parse(localStorage.getItem(confKey)||'[]');
+  var conf=confessions.find(function(c){return c.id===confId});
+  if(!conf)return;
+  if(!conf.reactions)conf.reactions={};
+  var myKey='confess_reacted_'+confId;
+  var myReacts=JSON.parse(localStorage.getItem(myKey)||'[]');
+  if(myReacts.indexOf(emoji)!==-1){
+    // Unreact
+    myReacts=myReacts.filter(function(r){return r!==emoji});
+    conf.reactions[emoji]=Math.max(0,(conf.reactions[emoji]||1)-1);
+  }else{
+    myReacts.push(emoji);
+    conf.reactions[emoji]=(conf.reactions[emoji]||0)+1;
+  }
+  localStorage.setItem(myKey,JSON.stringify(myReacts));
+  localStorage.setItem(confKey,JSON.stringify(confessions));
+  if(navigator.vibrate)navigator.vibrate(10);
+  buildConfessionWall();
+};
+
+// ============================================
+// STORY RECAP — Daily crew highlights
+// ============================================
+async function buildCrewRecap(){
+  var el=document.getElementById('storyRecap');if(!el)return;
+  try{
+    var {data:matches}=await sb.from('matches').select('to_user').eq('from_user',ME.user_id).eq('is_match',true);
+    var crewSize=(matches&&matches.length)||0;
+    // Pull some stats from cached profiles
+    var totalAura=0;var activeToday=0;var topStreak=0;
+    if(_crewProfiles&&_crewProfiles.length>0){
+      _crewProfiles.forEach(function(p){
+        totalAura+=(p.points||0);
+        if(p.last_active){
+          var diff=Date.now()-new Date(p.last_active).getTime();
+          if(diff<86400000)activeToday++;
+        }
+        if((p.streak||0)>topStreak)topStreak=p.streak||0;
+      });
+    }
+    // Build recap cards
+    var today=new Date();
+    var dayName=['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'][today.getDay()];
+    var html='<div class="recap-carousel">';
+
+    // Card 1: Today's Highlights
+    html+='<div class="recap-card rc-highlights">';
+    html+='<div class="rc-icon">🔥</div>';
+    html+='<div class="rc-title">'+dayName+' Recap</div>';
+    html+='<div class="rc-desc">'+activeToday+' Crew-Mitglieder heute aktiv. ';
+    html+=(crewSize>3?'Die Crew ist am Start!':'Lade mehr Leute ein!')+'</div>';
+    html+='</div>';
+
+    // Card 2: Crew Stats
+    html+='<div class="recap-card rc-stats">';
+    html+='<div class="rc-icon">📊</div>';
+    html+='<div class="rc-title">Crew Stats</div>';
+    html+='<div class="rc-stat">'+totalAura+'</div>';
+    html+='<div class="rc-stat-label">Aura insgesamt</div>';
+    html+='</div>';
+
+    // Card 3: Top Moments
+    var confessions=JSON.parse(localStorage.getItem('crew_confessions')||'[]');
+    var todayConf=confessions.filter(function(c){return Date.now()-c.time<86400000}).length;
+    html+='<div class="recap-card rc-moments">';
+    html+='<div class="rc-icon">💬</div>';
+    html+='<div class="rc-title">Heute passiert</div>';
+    html+='<div class="rc-stat">'+todayConf+'</div>';
+    html+='<div class="rc-stat-label">Confessions heute</div>';
+    html+='</div>';
+
+    // Card 4: Awards
+    html+='<div class="recap-card rc-awards">';
+    html+='<div class="rc-icon">🏆</div>';
+    html+='<div class="rc-title">Streak Leader</div>';
+    html+='<div class="rc-stat">'+topStreak+' 🔥</div>';
+    html+='<div class="rc-stat-label">Längste Streak in der Crew</div>';
+    html+='</div>';
+
+    html+='</div>';
+    el.innerHTML=html;
+  }catch(e){console.error('buildCrewRecap error:',e);el.innerHTML='<p class="crew-empty">Recap nicht verfügbar.</p>'}
+}
+
+// ============================================
 // DAILY VOTING SYSTEM (rotates questions daily)
 // ============================================
 var DAILY_QUESTIONS = [
@@ -3068,7 +3507,7 @@ window.go=function(n,b){
   if(b)b.classList.add('active');
   setTimeout(function(){if(n==='radar'&&rMap)rMap.invalidateSize();if(n==='crew'&&cMap)cMap.invalidateSize()},200);
   if(n==='match')buildCards();
-  if(n==='crew'){buildCrewStatus();buildCrewList().then(buildCrewActivityFeed);buildMatchList();buildCrewLocations();buildDailyVoting();buildLeaderboard();buildTonightPlanner();buildChallenges();buildCrewTips();updateChallengeTimer()}
+  if(n==='crew'){buildCrewStatus();buildCrewList().then(buildCrewActivityFeed);buildMatchList();buildCrewLocations();buildAuraCheck();buildRizzRanking();buildConfessionWall();buildCrewRecap();buildDailyVoting();buildLeaderboard();buildTonightPlanner();buildChallenges();buildCrewTips();updateChallengeTimer()}
 };
 
 // ============================================
@@ -3273,11 +3712,11 @@ window.openAdminPanel = async function(){
     });
     html += '</div>';
 
-    // Top Sangria earners
+    // Top Aura earners
     html += '<div style="background:var(--glass);border:1px solid var(--glass-border);border-radius:16px;padding:16px;margin-bottom:16px">';
-    html += '<div style="font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">🍹 Top 10 Sangria-Sammler</div>';
+    html += '<div style="font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">✨ Top 10 Aura-Leader</div>';
     topPoints.forEach(function(u,i){
-      html += '<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--glass-border)"><span style="font-size:14px;font-weight:900;color:var(--o);width:24px">#'+(i+1)+'</span><img src="'+(u.photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&q=60')+'" style="width:32px;height:32px;border-radius:50%;object-fit:cover"><div style="flex:1"><div style="font-size:13px;font-weight:700">'+esc(u.name)+(u.username?' <span style="color:var(--t3);font-weight:400">@'+esc(u.username)+'</span>':'')+'</div></div><div style="font-size:13px;font-weight:800;color:var(--o)">'+(u.points||0)+' 🍹</div></div>';
+      html += '<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--glass-border)"><span style="font-size:14px;font-weight:900;color:var(--o);width:24px">#'+(i+1)+'</span><img src="'+(u.photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&q=60')+'" style="width:32px;height:32px;border-radius:50%;object-fit:cover"><div style="flex:1"><div style="font-size:13px;font-weight:700">'+esc(u.name)+(u.username?' <span style="color:var(--t3);font-weight:400">@'+esc(u.username)+'</span>':'')+'</div></div><div style="font-size:13px;font-weight:800;color:var(--o)">'+(u.points||0)+' ✨</div></div>';
     });
     html += '</div>';
 
@@ -3395,7 +3834,7 @@ window.openAdminPanel = async function(){
     users.sort(function(a,b){return (b.created_at||'')>(a.created_at||'')?1:-1}).forEach(function(u){
       html += '<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--glass-border)">';
       html += '<img src="'+(u.photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&q=60')+'" style="width:36px;height:36px;border-radius:50%;object-fit:cover">';
-      html += '<div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(u.name)+(u.is_admin?' 👑':'')+'</div><div style="font-size:11px;color:var(--t3)">@'+(u.username||'---')+' · '+(u.gender||'?')+' · '+(u.age||'?')+' · '+(u.points||0)+' 🍹</div></div>';
+      html += '<div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(u.name)+(u.is_admin?' 👑':'')+'</div><div style="font-size:11px;color:var(--t3)">@'+(u.username||'---')+' · '+(u.gender||'?')+' · '+(u.age||'?')+' · '+(u.points||0)+' ✨</div></div>';
       html += '<div style="text-align:right;font-size:10px;color:var(--t3)">'+((u.lat&&u.lng)?'📍':'⚫')+'</div>';
       html += '</div>';
     });
@@ -3493,7 +3932,7 @@ window.showMyQR = function(){
   c += '<button class="bs-btn" style="background:rgba(255,255,255,.06);color:var(--t);border:1px solid var(--glass-border);flex:1" onclick="downloadQR()">💾 Speichern</button>';
   c += '</div>';
   c += '<div style="margin-top:16px;padding:14px;border-radius:12px;background:rgba(255,214,10,.06);border:1px solid rgba(255,214,10,.1);font-size:12px;color:var(--yellow);line-height:1.5">';
-  c += '🍹 <strong>+25 Sangria-Punkte</strong> pro Check-in<br>🎁 Exklusive Deals bei Partnern freischalten';
+  c += '✨ <strong>+25 Aura</strong> pro Check-in<br>🎁 Exklusive Deals bei Partnern freischalten';
   c += '</div>';
   c += '</div>';
   document.getElementById('bsImg').src='https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&q=60';
@@ -3504,7 +3943,7 @@ window.showMyQR = function(){
 window.shareQR = function(){
   var uid = ME.user_id;
   var link = 'https://partycrew.app/scan.html?u=' + uid;
-  shareText('Scanne meinen crew. QR-Code für Check-in! 📲🍹 '+link);
+  shareText('Scanne meinen crew. QR-Code für Check-in! 📲✨ '+link);
 };
 
 window.downloadQR = function(){
@@ -3707,9 +4146,9 @@ function updateActiveCounter(){
 function updateQuickStats(){
   var matchEl = document.getElementById('qsMatches');
   var crewEl = document.getElementById('qsCrew');
-  var sangriasEl = document.getElementById('qsSangrias');
+  var auraEl = document.getElementById('qsAura');
   if(matchEl) matchEl.textContent = ME._matchCount || 0;
-  if(sangriasEl) sangriasEl.textContent = ME.points || 0;
+  if(auraEl) auraEl.textContent = ME.points || 0;
   // Get crew count from matches where is_match=true
   sb.from('matches').select('*', {count:'exact', head:true})
     .eq('from_user', ME.user_id).eq('is_match', true)
@@ -4067,15 +4506,15 @@ window.sendLocalNotification = function(title,opts){
 // ============================================
 
 // 1. CREW LEADERBOARD
-// Malle-Rank titles based on Sangria points
+// Malle-Rank titles based on Aura points
 var MALLE_RANKS = [
-  {min:0,title:'Tourist',emoji:'🧳',color:'var(--t3)'},
-  {min:50,title:'Stammgast',emoji:'🍺',color:'#5AC8FA'},
-  {min:150,title:'Bierkönig',emoji:'👑',color:'#FFD60A'},
-  {min:300,title:'Ballermann-Legende',emoji:'🔥',color:'var(--o)'},
-  {min:500,title:'Sangria-Boss',emoji:'🍹',color:'#FF6B6B'},
-  {min:1000,title:'Playa-König/in',emoji:'🏝️',color:'#BF5AF2'},
-  {min:2000,title:'Malle-Gott',emoji:'⚡',color:'#FFD60A'}
+  {min:0,title:'NPC',emoji:'🤖',color:'var(--t3)'},
+  {min:50,title:'Side Character',emoji:'👤',color:'#5AC8FA'},
+  {min:150,title:'Ballermann Regular',emoji:'🍺',color:'#FFD60A'},
+  {min:300,title:'Main Character',emoji:'⭐',color:'var(--o)'},
+  {min:500,title:'Aura King',emoji:'✨',color:'#BF5AF2'},
+  {min:1000,title:'Playa Legend',emoji:'👑',color:'#FF6B6B'},
+  {min:2000,title:'Malle Mythic',emoji:'🔱',color:'#FFD60A'}
 ];
 function getMalleRank(pts){
   var rank=MALLE_RANKS[0];
@@ -4119,15 +4558,15 @@ async function buildLeaderboard(){
       // 2nd place (left)
       if(profiles[1]){
         var r2=getMalleRank(profiles[1].points||0);
-        html+='<div style="flex:1;text-align:center"><div style="width:52px;height:52px;border-radius:50%;overflow:hidden;border:2px solid silver;margin:0 auto 4px"><img src="'+(profiles[1].photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80')+'" style="width:100%;height:100%;object-fit:cover"></div><div style="font-size:16px">🥈</div><div style="font-size:11px;font-weight:800">'+esc(profiles[1].name)+'</div><div style="font-size:10px;color:'+r2.color+';font-weight:700">'+r2.emoji+' '+r2.title+'</div><div style="font-size:13px;font-weight:900;color:var(--o)">'+(profiles[1].points||0)+' 🍹</div></div>';
+        html+='<div style="flex:1;text-align:center"><div style="width:52px;height:52px;border-radius:50%;overflow:hidden;border:2px solid silver;margin:0 auto 4px"><img src="'+(profiles[1].photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80')+'" style="width:100%;height:100%;object-fit:cover"></div><div style="font-size:16px">🥈</div><div style="font-size:11px;font-weight:800">'+esc(profiles[1].name)+'</div><div style="font-size:10px;color:'+r2.color+';font-weight:700">'+r2.emoji+' '+r2.title+'</div><div style="font-size:13px;font-weight:900;color:var(--o)">'+(profiles[1].points||0)+' ✨</div></div>';
       } else { html+='<div style="flex:1"></div>'; }
       // 1st place (center, bigger)
       var r1=getMalleRank(profiles[0].points||0);
-      html+='<div style="flex:1;text-align:center;transform:translateY(-12px)"><div style="font-size:20px;margin-bottom:2px">👑</div><div style="width:68px;height:68px;border-radius:50%;overflow:hidden;border:3px solid #FFD60A;margin:0 auto 4px;box-shadow:0 0 20px rgba(255,214,10,.3)"><img src="'+(profiles[0].photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80')+'" style="width:100%;height:100%;object-fit:cover"></div><div style="font-size:13px;font-weight:900">'+esc(profiles[0].name)+'</div><div style="font-size:10px;color:'+r1.color+';font-weight:700">'+r1.emoji+' '+r1.title+'</div><div style="font-size:16px;font-weight:900;color:var(--o)">'+(profiles[0].points||0)+' 🍹</div></div>';
+      html+='<div style="flex:1;text-align:center;transform:translateY(-12px)"><div style="font-size:20px;margin-bottom:2px">👑</div><div style="width:68px;height:68px;border-radius:50%;overflow:hidden;border:3px solid #FFD60A;margin:0 auto 4px;box-shadow:0 0 20px rgba(255,214,10,.3)"><img src="'+(profiles[0].photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80')+'" style="width:100%;height:100%;object-fit:cover"></div><div style="font-size:13px;font-weight:900">'+esc(profiles[0].name)+'</div><div style="font-size:10px;color:'+r1.color+';font-weight:700">'+r1.emoji+' '+r1.title+'</div><div style="font-size:16px;font-weight:900;color:var(--o)">'+(profiles[0].points||0)+' ✨</div></div>';
       // 3rd place (right)
       if(profiles[2]){
         var r3=getMalleRank(profiles[2].points||0);
-        html+='<div style="flex:1;text-align:center"><div style="width:48px;height:48px;border-radius:50%;overflow:hidden;border:2px solid #CD7F32;margin:0 auto 4px"><img src="'+(profiles[2].photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80')+'" style="width:100%;height:100%;object-fit:cover"></div><div style="font-size:16px">🥉</div><div style="font-size:11px;font-weight:800">'+esc(profiles[2].name)+'</div><div style="font-size:10px;color:'+r3.color+';font-weight:700">'+r3.emoji+' '+r3.title+'</div><div style="font-size:13px;font-weight:900;color:var(--o)">'+(profiles[2].points||0)+' 🍹</div></div>';
+        html+='<div style="flex:1;text-align:center"><div style="width:48px;height:48px;border-radius:50%;overflow:hidden;border:2px solid #CD7F32;margin:0 auto 4px"><img src="'+(profiles[2].photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80')+'" style="width:100%;height:100%;object-fit:cover"></div><div style="font-size:16px">🥉</div><div style="font-size:11px;font-weight:800">'+esc(profiles[2].name)+'</div><div style="font-size:10px;color:'+r3.color+';font-weight:700">'+r3.emoji+' '+r3.title+'</div><div style="font-size:13px;font-weight:900;color:var(--o)">'+(profiles[2].points||0)+' ✨</div></div>';
       } else { html+='<div style="flex:1"></div>'; }
       html+='</div>';
     }
@@ -4139,17 +4578,17 @@ async function buildLeaderboard(){
       html+='<div class="lb-rank">'+(i+4)+'</div>';
       html+='<div class="lb-ava"><img src="'+(p.photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80')+'" loading="lazy"></div>';
       html+='<div class="lb-info"><div class="lb-name">'+esc(p.name)+(isMe?' (Du)':'')+'</div><div style="font-size:10px;color:'+rank.color+';font-weight:700;margin-top:1px">'+rank.emoji+' '+rank.title+'</div></div>';
-      html+='<div class="lb-pts">🍹 '+(p.points||0)+'</div></div>';
+      html+='<div class="lb-pts">✨ '+(p.points||0)+'</div></div>';
     });
     // Show user's rank progress
     var myRank=getMalleRank(ME.points||0);
     var nextRank=getNextRank(ME.points||0);
     html+='<div style="margin:12px 14px 0;padding:14px;border-radius:var(--r);background:linear-gradient(135deg,rgba(255,109,46,.08),rgba(191,90,242,.05));border:1px solid rgba(255,109,46,.15)">';
-    html+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><div style="font-size:12px;font-weight:800">Dein Rang: <span style="color:'+myRank.color+'">'+myRank.emoji+' '+myRank.title+'</span></div><div style="font-size:12px;font-weight:800;color:var(--o)">'+(ME.points||0)+' 🍹</div></div>';
+    html+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><div style="font-size:12px;font-weight:800">Dein Rang: <span style="color:'+myRank.color+'">'+myRank.emoji+' '+myRank.title+'</span></div><div style="font-size:12px;font-weight:800;color:var(--o)">'+(ME.points||0)+' ✨</div></div>';
     if(nextRank){
       var pct=Math.min(100,Math.round(((ME.points||0)-myRank.min)/(nextRank.min-myRank.min)*100));
       html+='<div style="height:6px;background:var(--bg3);border-radius:3px;overflow:hidden;margin-bottom:6px"><div style="height:100%;width:'+pct+'%;background:linear-gradient(90deg,var(--o),#FFD60A);border-radius:3px;transition:width .5s"></div></div>';
-      html+='<div style="font-size:10px;color:var(--t3)">Noch '+(nextRank.min-(ME.points||0))+' Sangrias bis <span style="color:'+nextRank.color+'">'+nextRank.emoji+' '+nextRank.title+'</span></div>';
+      html+='<div style="font-size:10px;color:var(--t3)">Noch '+(nextRank.min-(ME.points||0))+' Aura bis <span style="color:'+nextRank.color+'">'+nextRank.emoji+' '+nextRank.title+'</span></div>';
     } else {
       html+='<div style="font-size:10px;color:#FFD60A;font-weight:700">Du hast den höchsten Rang erreicht! ⚡</div>';
     }
@@ -4230,7 +4669,7 @@ function buildChallenges(){
     var diffClass=c===0?'border-color:rgba(255,214,10,.25);box-shadow:0 0 20px rgba(255,214,10,.06),inset 0 1px 0 rgba(255,255,255,.1)':'';
     html+='<div class="challenge-card" style="'+diffClass+'">';
     if(c===0)html+='<div style="font-size:8px;font-weight:800;color:#FFD60A;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px">⭐ Tages-Highlight</div>';
-    html+='<div class="challenge-icon">'+challenge.icon+'</div><div class="challenge-title">'+challenge.title+'</div><div class="challenge-desc">'+challenge.desc+'</div><div class="challenge-pts">+'+challenge.pts+' Sangrias 🍹</div>';
+    html+='<div class="challenge-icon">'+challenge.icon+'</div><div class="challenge-title">'+challenge.title+'</div><div class="challenge-desc">'+challenge.desc+'</div><div class="challenge-pts">+'+challenge.pts+' Aura ✨</div>';
     if(isCompleted){html+='<div style="margin-top:8px;padding:8px;border-radius:10px;background:rgba(52,199,89,.15);color:var(--green);font-size:11px;font-weight:700;text-align:center">✅ Erledigt!</div>'}
     else if(isAccepted){html+='<button class="challenge-btn" onclick="completeChallengeNow(\''+esc(challenge.title)+'\','+challenge.pts+',\''+ckey+'\')">✓ Challenge erledigt</button>'}
     else{html+='<button class="challenge-btn" onclick="acceptChallenge(\''+esc(challenge.title)+'\',\''+ckey+'\')">Challenge annehmen 💪</button>'}
@@ -4258,7 +4697,7 @@ window.completeChallengeNow=async function(title,pts,ckey){
   try{await sb.rpc('add_points',{p_user_id:ME.user_id,p_points:pts})}catch(e){console.warn('add_points failed:',e)}
   ME.points=(ME.points||0)+pts;updateProfile();buildCrewStatus();
   buildChallenges();
-  toast('+'+pts+' Sangrias! 🍹');
+  toast('+'+pts+' Aura! ✨');
   if(navigator.vibrate)navigator.vibrate([30,20,30]);
 }
 
@@ -4277,7 +4716,7 @@ function buildCrewTips(){
     tips=[
       {icon:'🏖️',title:'Beach-Session',desc:'Sonnenschutz nicht vergessen! Ab an den Strand mit der Crew.',tag:'Mittag',tagColor:'rgba(255,214,10,.12)',tagText:'#FFD60A',bg:'rgba(255,214,10,.06)'},
       {icon:'🚤',title:'Bootstour buchen',desc:'Plant eine Bootstour — beste Zeit für Insel-Erkundung!',tag:'Mittag',tagColor:'rgba(0,199,190,.12)',tagText:'#00C7BE',bg:'rgba(0,199,190,.04)'},
-      {icon:'🍹',title:'Sangria-Time',desc:'Erster Sangria-Eimer des Tages? Teilt ihn mit der Crew!',tag:'Mittag',tagColor:'rgba(255,109,46,.12)',tagText:'var(--o)',bg:'rgba(255,109,46,.04)'}
+      {icon:'✨',title:'Aura farmen',desc:'Check bei einem Partner ein und hol dir Aura Points für die Crew!',tag:'Mittag',tagColor:'rgba(255,109,46,.12)',tagText:'var(--o)',bg:'rgba(255,109,46,.04)'}
     ];
   } else if(h>=16&&h<20){
     tips=[
@@ -4499,7 +4938,7 @@ window.rateVenue=function(venueId){
 }
 
 // 11. SANGRIA CURRENCY (rebrand points)
-// Already handled in I18N - just show 🍹 icon next to points
+// Already handled in I18N - just show ✨ icon next to points
 
 if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js?v=11').catch(function(){});
 </script>
