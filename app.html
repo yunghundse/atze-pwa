@@ -2659,6 +2659,41 @@ nav{padding-bottom:max(6px,env(safe-area-inset-bottom)) !important}
 .ps-btn:hover{background:rgba(255,255,255,.09)}
 .ps-btn.danger{color:#FF6B6B;border-color:rgba(255,107,107,.2)}
 .ps-btn.danger:hover{background:rgba(255,107,107,.08)}
+
+/* ====== CONTEXT MODE SWITCHER v75 ====== */
+.ctx-switcher{
+  display:flex;gap:6px;margin:10px 14px 8px;
+  padding:4px;border-radius:16px;
+  background:linear-gradient(160deg,rgba(20,16,24,.7),rgba(14,10,18,.55));
+  border:1px solid rgba(255,255,255,.07);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 6px 20px -12px rgba(0,0,0,.6);
+}
+.ctx-chip{
+  flex:1;display:flex;align-items:center;justify-content:center;gap:6px;
+  padding:9px 10px;border-radius:12px;
+  background:transparent;border:none;
+  color:var(--t2,#b8b8c0);font-size:12.5px;font-weight:700;
+  font-family:inherit;cursor:pointer;
+  transition:background .22s var(--spring,ease),color .22s,transform .15s;
+  position:relative;
+}
+.ctx-chip .ctx-ico{font-size:15px;line-height:1}
+.ctx-chip .ctx-lbl{letter-spacing:.15px}
+.ctx-chip:hover{color:var(--t1,#fff);background:rgba(255,255,255,.03)}
+.ctx-chip:active{transform:scale(.97)}
+.ctx-chip.active{
+  color:#fff;
+  background:linear-gradient(135deg,rgba(255,109,46,.35),rgba(254,60,114,.3));
+  box-shadow:0 6px 14px -4px rgba(254,60,114,.35),inset 0 1px 0 rgba(255,255,255,.12);
+}
+.ctx-chip.active[data-ctx="zuhause"]{background:linear-gradient(135deg,rgba(10,132,255,.38),rgba(52,199,89,.28))}
+.ctx-chip.active[data-ctx="event"]{background:linear-gradient(135deg,rgba(191,90,242,.4),rgba(255,109,46,.28))}
+@media (max-width:374px){
+  .ctx-chip{padding:8px 6px;font-size:11.5px}
+  .ctx-chip .ctx-ico{font-size:14px}
+}
 </style>
 </head>
 <body>
@@ -3817,6 +3852,18 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
   <main>
     <div class="scr active" id="screen-radar">
       <div class="map-full"><div id="radarMap"></div><div class="map-fade"></div></div>
+      <!-- v75: CONTEXT MODE SWITCHER (persistent, always visible) -->
+      <div class="ctx-switcher" id="ctxSwitcher" role="tablist" aria-label="Modus wechseln">
+        <button class="ctx-chip" data-ctx="urlaub" onclick="setContextMode('urlaub')" role="tab">
+          <span class="ctx-ico">🌴</span><span class="ctx-lbl">Urlaub</span>
+        </button>
+        <button class="ctx-chip" data-ctx="zuhause" onclick="setContextMode('zuhause')" role="tab">
+          <span class="ctx-ico">🏠</span><span class="ctx-lbl">Zuhause</span>
+        </button>
+        <button class="ctx-chip" data-ctx="event" onclick="setContextMode('event')" role="tab">
+          <span class="ctx-ico">🎉</span><span class="ctx-lbl">Event</span>
+        </button>
+      </div>
       <div class="heim-topbar" id="heimTopbarRadar">
         <button class="heim-btn-big" id="heimTopbarBtn" onclick="openHomeSafe()" aria-label="Bring mich nach Hause">
           <div class="hbig-ic"><svg viewBox="0 0 24 24"><use href="#i-home-safe"/></svg></div>
@@ -4427,7 +4474,7 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 74;
+  var APP_VERSION = 75;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     // Force-clear old non-UUID crew IDs
@@ -4555,7 +4602,7 @@ async function logPrivacyConsent(mode, previousMode, state){
       deals_consent: !!(state.consent && state.consent.deals_consent),
       consent_version: 1,
       user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-      app_version: 74,
+      app_version: 75,
       // v73: tag source so we can see who was newly prompted vs. picked from settings
       source: (!previousMode && ME && ME.created_at && (Date.now()-new Date(ME.created_at).getTime())>3600000) ? 'existing_user_v72_prompt' : (!previousMode ? 'first_run' : 'settings_change')
     };
@@ -4603,7 +4650,7 @@ function clearPrivacyData(){
         deals_consent: false,
         consent_version: 1,
         user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-        app_version: 74,
+        app_version: 75,
         source: 'user_reset'
       };
       sb.from('privacy_consent_log').insert(clearRow).then(function(r){ if(r&&r.error) console.warn('[PM] clear log err', r.error.message); });
@@ -4821,6 +4868,105 @@ window.resetPrivacyData = function(){
 // Small HTML escaper for picker suggestions
 function escapeHtml(s){
   return String(s||'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});
+}
+
+// ============================================
+// CONTEXT MODE SWITCHER v75
+// Maps 3 user-facing contexts to privacy modes:
+//   urlaub   → travel  (Live-GPS, lokale Deals, Radar aktiv)
+//   zuhause  → home    (feste Stadt, Angebote in Region)
+//   event    → private (kein GPS, Party-Inspiration, keine Ortsdaten)
+// ============================================
+var CONTEXT_KEY = 'context_mode_v1';
+var CONTEXT_TO_PRIVACY = { urlaub:'travel', zuhause:'home', event:'private' };
+var PRIVACY_TO_CONTEXT = { travel:'urlaub', home:'zuhause', private:'event' };
+
+function getContextMode(){
+  try{
+    var v = localStorage.getItem(CONTEXT_KEY);
+    if(v && CONTEXT_TO_PRIVACY[v]) return v;
+  }catch(e){}
+  // Fallback: derive from privacy_mode
+  var pm = getPrivacyMode();
+  if(pm && PRIVACY_TO_CONTEXT[pm]) return PRIVACY_TO_CONTEXT[pm];
+  return null;
+}
+
+function renderContextSwitcher(){
+  var cur = getContextMode();
+  var chips = document.querySelectorAll('.ctx-chip');
+  chips.forEach(function(c){
+    if(c.getAttribute('data-ctx') === cur){ c.classList.add('active'); }
+    else { c.classList.remove('active'); }
+  });
+}
+
+window.setContextMode = function(ctx){
+  if(!CONTEXT_TO_PRIVACY[ctx]){ console.warn('[CTX] invalid ctx',ctx); return; }
+  var prev = getContextMode();
+  if(prev === ctx){ return; } // no-op
+  try{ localStorage.setItem(CONTEXT_KEY, ctx); }catch(e){}
+  if(navigator.vibrate) navigator.vibrate(10);
+
+  // For "zuhause" without saved home city → open picker first
+  if(ctx === 'zuhause'){
+    var st = getPrivacyState();
+    if(!st || !st.home_city || !st.home_city.lat){
+      try{ openHomeCityPicker(false); }catch(e){}
+      // Keep ctx stored so picker knows where to return to, render current
+      renderContextSwitcher();
+      return;
+    }
+  }
+
+  // Sync to privacy-mode backend
+  var privacy = CONTEXT_TO_PRIVACY[ctx];
+  try{ setPrivacyMode(privacy); }catch(e){ console.warn('[CTX] setPrivacyMode err',e); }
+
+  // Adapt UI
+  renderContextSwitcher();
+  adaptUIForContext(ctx);
+
+  // User feedback
+  var msg = {urlaub:'🌴 Urlaub-Modus — Live-GPS aktiv',
+             zuhause:'🏠 Zuhause-Modus — feste Stadt',
+             event:'🎉 Event-Modus — kein Tracking'}[ctx];
+  if(msg && typeof toast==='function') toast(msg);
+
+  // If we just turned on Urlaub → request GPS
+  if(ctx === 'urlaub'){
+    setTimeout(function(){ try{ checkLocationConsent(); }catch(e){} }, 180);
+  }
+};
+
+function adaptUIForContext(ctx){
+  // Hide/show pieces based on mode
+  try{
+    var heimBar = document.getElementById('heimTopbarRadar');
+    var locPill = document.getElementById('heimLocPill');
+    var gpsBanner = document.getElementById('gpsStatusBanner');
+    if(ctx === 'event'){
+      // No GPS → hide location pill and any GPS warnings
+      if(locPill) locPill.style.display = 'none';
+      if(gpsBanner) gpsBanner.style.display = 'none';
+    } else {
+      if(locPill) locPill.style.display = '';
+    }
+    // Heim-setup banner is only meaningful in urlaub mode
+    // (already handled by existing hsUpdateHeaderDot logic via privacy mode)
+    if(typeof hsUpdateHeaderDot === 'function'){ try{ hsUpdateHeaderDot(); }catch(e){} }
+  }catch(e){ console.warn('[CTX] adapt err',e); }
+}
+
+// Called from loadUser — ensures a mode is always picked, no blocking modal
+function ensureContextMode(){
+  var cur = getContextMode();
+  if(cur) return cur;
+  // Default: urlaub for first-time users (most common use case)
+  try{ localStorage.setItem(CONTEXT_KEY, 'urlaub'); }catch(e){}
+  // Set privacy to 'travel' as default (logged to server)
+  try{ setPrivacyMode('travel'); }catch(e){}
+  return 'urlaub';
 }
 
 // ============================================
@@ -5773,16 +5919,14 @@ async function loadUser(authUser){
         console.log('[PM] Hydrated localStorage from profile:', ME.privacy_mode);
       }catch(e){ console.warn('[PM] hydrate err', e); }
     }
-    if(!hasSelectedMode()){
-      // Existing user? Mark them so we can show a "welcome back" note in onboarding
-      var _isExistingUser = !!(ME && ME.created_at && ((Date.now() - new Date(ME.created_at).getTime()) > 3600000));
-      setTimeout(function(){
-        try{ openPrivacyOnboarding(_isExistingUser); }catch(e){ console.warn('[PM] onboarding err',e); }
-      }, 400);
-    } else {
-      // Check location consent after app is visible (only in travel mode)
-      checkLocationConsent();
-    }
+    // v75: No more blocking modal. Set default if none, then render persistent switcher.
+    try{
+      var _ctx = ensureContextMode();
+      renderContextSwitcher();
+      adaptUIForContext(_ctx);
+    }catch(e){ console.warn('[CTX] init err',e); }
+    // Gate GPS prompt by privacy mode (only fires in travel mode)
+    try{ checkLocationConsent(); }catch(e){}
     try{ renderPrivacyBadge(); }catch(e){}
     // Handle pending crew QR join
     handlePendingCrewJoin();
@@ -6043,6 +6187,8 @@ function buildApp(){
 
   // Home-Safe-Setup Status (Header-Badge)
   try{ hsUpdateHeaderDot(); }catch(e){}
+  // v75: Context Mode Switcher initial render
+  try{ renderContextSwitcher(); }catch(e){}
 
   // Apply nav labels (i18n)
   applyLang();
