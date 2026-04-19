@@ -1282,6 +1282,7 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
           <span style="font-size:13px;font-weight:700"><span id="activeCount">0</span> Leute online</span>
           <span style="font-size:11px;color:var(--t3);margin-left:auto">auf Mallorca</span>
         </div>
+        <div id="gpsStatusBanner" style="margin:0 14px 8px;padding:8px 14px;border-radius:12px;font-size:12px;font-weight:700;display:none;align-items:center;gap:8px"></div>
         <div class="quick-stats anim" id="quickStats" style="margin:0 14px 8px;display:flex;gap:8px">
           <div onclick="go('match',document.querySelectorAll('#navBar button')[3])" style="flex:1;padding:10px;border-radius:12px;background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--glass-border);text-align:center;cursor:pointer">
             <div style="font-size:18px;font-weight:900;color:#FF6B6B" id="qsMatches">0</div>
@@ -1659,7 +1660,7 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 46;
+  var APP_VERSION = 47;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     localStorage.setItem('crew_app_v', APP_VERSION);
@@ -1685,7 +1686,23 @@ var CLUBS = {'Bundesliga':['Bayern München','Borussia Dortmund','Bayer Leverkus
 var MALLE_BOUNDS = {latMin:39.2,latMax:39.97,lngMin:2.3,lngMax:3.5};
 function isOnMallorca(){
   if(!ME || !ME.lat || !ME.lng) return false;
+  // Only trust location if GPS is actively running and recent (last 10 min)
+  if(_gpsStatus!=='active' || (Date.now()-_gpsLastUpdate)>600000) return false;
   return ME.lat >= MALLE_BOUNDS.latMin && ME.lat <= MALLE_BOUNDS.latMax && ME.lng >= MALLE_BOUNDS.lngMin && ME.lng <= MALLE_BOUNDS.lngMax;
+}
+// Check if another user's location is stale (older than 30 min)
+function isLocationStale(locationUpdatedAt){
+  if(!locationUpdatedAt) return true;
+  var updated=new Date(locationUpdatedAt).getTime();
+  return (Date.now()-updated)>1800000; // 30 min
+}
+// Get GPS status text for UI
+function getGpsStatusText(){
+  if(_gpsStatus==='active') return _gpsAccuracy<50?'📍 GPS aktiv (genau)':_gpsAccuracy<200?'📍 GPS aktiv (ungefähr)':'📍 GPS aktiv (ungenau)';
+  if(_gpsStatus==='denied') return '🔴 Standort blockiert — bitte in Einstellungen aktivieren';
+  if(_gpsStatus==='unavailable') return '⚠️ Standort nicht verfügbar';
+  if(_gpsStatus==='timeout') return '⚠️ GPS-Signal schwach';
+  return '📍 Standort wird ermittelt...';
 }
 var GAMES = [
   {name:'Wer bin ich?',icon:'🤔',desc:'Rate die Person auf deiner Stirn',players:'2-10',cards:[
@@ -2255,6 +2272,18 @@ async function loadUser(authUser){
       if(fresh){ME.streak = fresh.streak; ME.points = fresh.points}
     } catch(e) {}
 
+    // Clear stale location from DB on load (older than 2 hours = definitely not live)
+    try{
+      if(ME.location_updated_at){
+        var locAge=Date.now()-new Date(ME.location_updated_at).getTime();
+        if(locAge>7200000){
+          console.log('[CREW] Clearing stale location ('+Math.round(locAge/60000)+' min old)');
+          await sb.from('profiles').update({lat:null,lng:null}).eq('user_id',ME.user_id);
+          ME.lat=null;ME.lng=null;
+        }
+      }
+    }catch(e){}
+
     // Count matches
     try {
       var {count: matchCount} = await sb.from('matches').select('*', {count: 'exact', head: true}).eq('from_user', authUser.id).eq('is_match', true);
@@ -2547,8 +2576,10 @@ function buildApp(){
   updateActiveCounter();
   updateQuickStats();
   updateIslandMood();
-  // Refresh active counter every 60 seconds
+  updateGpsBanner();
+  // Refresh active counter every 60 seconds, GPS banner every 15 seconds
   setInterval(function(){ touchActive(); updateActiveCounter(); }, 60000);
+  setInterval(updateGpsBanner, 15000);
 
   // Fetch weather for Mallorca
   fetchWeather();
@@ -2699,7 +2730,7 @@ async function buildNearby(){
   var {data:matches}=await sb.from('matches').select('to_user').eq('from_user',ME.user_id).eq('is_match',true);
   if(!matches||matches.length===0){el.innerHTML='<p style="color:var(--t3);font-size:13px">Matche mit Leuten um sie hier zu sehen!</p>';return}
   var ids=matches.map(function(m){return m.to_user});
-  var {data:profiles}=await sb.from('profiles').select('user_id,name,photo_url,lat,lng,mood').in('user_id',ids).not('lat','is',null);
+  var {data:profiles}=await sb.from('profiles').select('user_id,name,photo_url,lat,lng,mood,location_updated_at').in('user_id',ids).not('lat','is',null);
   if(!profiles||profiles.length===0){el.innerHTML='<p style="color:var(--t3);font-size:13px">Keine Crew-Mitglieder mit Standort in der Nähe.</p>';return}
   // Calc distances
   var nearby=profiles.map(function(p){
@@ -2770,6 +2801,9 @@ function buildStories(){
 }
 
 var userMarker = null, userAccCircle = null, userLat = 0, userLng = 0;
+var _gpsStatus = 'unknown'; // 'active','denied','unavailable','timeout','unknown'
+var _gpsLastUpdate = 0; // timestamp of last successful GPS fix
+var _gpsAccuracy = 9999; // last accuracy in meters
 function initMap(){
   var c=document.getElementById('radarMap');if(!c||rMap)return;
   rMap=L.map(c,{zoomControl:0,attributionControl:0,scrollWheelZoom:true,maxZoom:20,minZoom:12}).setView(PC,17);
@@ -2786,21 +2820,44 @@ function initMap(){
     navigator.geolocation.watchPosition(function(pos){
       try {
         var ll=[pos.coords.latitude,pos.coords.longitude];
+        var acc=pos.coords.accuracy;
+        _gpsStatus='active';
+        _gpsLastUpdate=Date.now();
+        _gpsAccuracy=acc;
         userLat=ll[0];userLng=ll[1];
+        // Sync to ME object so isOnMallorca() works correctly
+        if(ME){ME.lat=ll[0];ME.lng=ll[1]}
         if(userMarker)userMarker.setLatLng(ll);
         // Accuracy circle
-        var acc=pos.coords.accuracy;
         if(userAccCircle&&rMap)rMap.removeLayer(userAccCircle);
         if(rMap)userAccCircle=L.circle(ll,{radius:acc,color:'#0A84FF',fillColor:'#0A84FF',fillOpacity:0.08,weight:1,opacity:0.3}).addTo(rMap);
         if(!window._mapCentered&&rMap){rMap.setView(ll,17);window._mapCentered=true}
         if(cMap&&window._crewUserMarker){window._crewUserMarker.setLatLng(ll)}
         // Update nearby crew (only if app is loaded)
         if(ME&&ME.user_id)buildNearby().catch(function(e){console.warn('[CREW] buildNearby error:',e)});
-        // Save location to DB
-        if(ME&&ME.user_id)sb.from('profiles').update({lat:ll[0],lng:ll[1]}).eq('user_id',ME.user_id);
+        // Save location to DB — only if sharing is not set to 'nobody'
+        var locMode=localStorage.getItem('location_sharing_mode')||'crew';
+        if(ME&&ME.user_id&&locMode!=='nobody'){
+          sb.from('profiles').update({lat:ll[0],lng:ll[1],location_updated_at:new Date().toISOString()}).eq('user_id',ME.user_id);
+        } else if(ME&&ME.user_id&&locMode==='nobody'){
+          // Clear location from DB when sharing disabled
+          sb.from('profiles').update({lat:null,lng:null,location_updated_at:new Date().toISOString()}).eq('user_id',ME.user_id);
+        }
       } catch(e){ console.warn('[CREW] watchPosition callback error:', e); }
-    },function(err){console.warn('[CREW] Geolocation error:',err.message)},
+    },function(err){
+      console.warn('[CREW] Geolocation error:',err.message,err.code);
+      if(err.code===1)_gpsStatus='denied';
+      else if(err.code===2)_gpsStatus='unavailable';
+      else if(err.code===3)_gpsStatus='timeout';
+      // Clear stale location from ME and DB when GPS denied
+      if(err.code===1&&ME){
+        ME.lat=null;ME.lng=null;userLat=0;userLng=0;
+        if(ME.user_id)sb.from('profiles').update({lat:null,lng:null}).eq('user_id',ME.user_id);
+      }
+    },
     {enableHighAccuracy:true,maximumAge:5000,timeout:10000});
+  } else {
+    _gpsStatus='unavailable';
   }
   setTimeout(function(){rMap.invalidateSize()},200);
 }
@@ -3085,8 +3142,8 @@ async function buildCrewList(){
     var ids=matches.map(function(m){return m.to_user});
     var {data:profiles}=await sb.from('profiles').select('*').in('user_id',ids);
     if(!profiles||profiles.length===0){el.innerHTML='<div class="crew-empty-state"><div class="crew-empty-icon">🔍</div><div class="crew-empty-title">Keine Crew-Mitglieder</div><div class="crew-empty-desc">Swipe los um deine Crew aufzubauen!</div></div>';return}
-    var blocked=JSON.parse(localStorage.getItem('crew_blocked')||'[]');
-    profiles=profiles.filter(function(p){return blocked.indexOf(p.user_id)===-1});
+    // Filter blocked users (unified Supabase system)
+    profiles=profiles.filter(function(p){return !isBlocked(p.user_id)});
     _crewProfiles=profiles;
     var now=Date.now();
     var pokedToday=JSON.parse(localStorage.getItem('crew_pokes_'+new Date().toISOString().split('T')[0])||'{}');
@@ -3108,7 +3165,7 @@ async function buildCrewList(){
       var status=minsAgo<5?'online':minsAgo<30?'away':'offline';
       var statusLabel=status==='online'?'Gerade aktiv':status==='away'?'Vor '+minsAgo+' Min':'Offline';
       var rank=getMalleRank(p.points||0);
-      var hasLoc=p.lat&&p.lng;
+      var hasLoc=p.lat&&p.lng&&!isLocationStale(p.location_updated_at);
       var dist='';
       if(hasLoc&&userLat&&userLng){
         var d=getDistanceKm(userLat,userLng,p.lat,p.lng);
@@ -3127,6 +3184,7 @@ async function buildCrewList(){
       html+='<span style="font-size:10px;color:var(--t3)">'+statusLabel+'</span>';
       html+='</div>';
       if(hasLoc||p.club)html+='<div class="cc-loc-mini">'+(dist?'📍 '+dist+(p.club?' · ':''):'')+(p.club?'⚽ '+esc(p.club):'')+'</div>';
+      if(p.lat&&p.lng&&isLocationStale(p.location_updated_at))html+='<div class="cc-loc-mini" style="color:var(--yellow);font-size:10px">⚠️ Standort veraltet</div>';
       html+='</div>';
       // Right side — points + poke
       html+='<div class="cc-right">';
@@ -3176,9 +3234,8 @@ window.openCrewProfile=function(uid){
     var minsAgo=Math.round((Date.now()-lastActive)/60000);
     var status=minsAgo<5?'online':minsAgo<30?'away':'offline';
     var statusLabel=status==='online'?'🟢 Gerade aktiv':status==='away'?'🟡 Vor '+minsAgo+' Min':'⚫ Offline';
-    var blocked=JSON.parse(localStorage.getItem('crew_blocked')||'[]');
-    var isBlocked=blocked.indexOf(uid)!==-1;
-    var hasLoc=p.lat&&p.lng;
+    var _isBlocked=isBlocked(uid);
+    var hasLoc=p.lat&&p.lng&&!isLocationStale(p.location_updated_at);
     // Build socials
     var socials='';
     if(p.insta)socials+='<a class="cps-social" href="https://instagram.com/'+esc(p.insta)+'" target="_blank" rel="noopener" style="border-color:rgba(225,48,108,.2);color:#E1306C">📸 '+esc(p.insta)+'</a>';
@@ -3225,7 +3282,7 @@ window.openCrewProfile=function(uid){
     sheetHtml+='<button class="cps-btn primary" onclick="pokeCrewMember(\''+uid+'\',\''+esc(p.name)+'\');closeBS()">👋 '+esc(p.name)+' anpingen</button>';
     if(hasLoc)sheetHtml+='<button class="cps-btn ghost" onclick="navigateToCrewMember('+p.lat+','+p.lng+',\''+esc(p.name)+'\');closeBS()">🗺️ Route anzeigen</button>';
     sheetHtml+='<button class="cps-btn ghost" onclick="shareText(\'Schau dir '+esc(p.name)+' auf crew. an! 🌴🔥 https://partycrew.app\');closeBS()">📤 Profil teilen</button>';
-    sheetHtml+='<button class="cps-btn '+(isBlocked?'primary':'danger')+'" onclick="toggleBlock(\''+uid+'\');buildCrewList()">🚫 '+(isBlocked?'Entblocken':'Blockieren')+'</button>';
+    sheetHtml+='<button class="cps-btn '+(_isBlocked?'primary':'danger')+'" onclick="toggleBlock(\''+uid+'\')">🚫 '+(_isBlocked?'Entblocken':'Blockieren')+'</button>';
     sheetHtml+='<button class="cps-btn ghost" onclick="openReportForm(\''+uid+'\',\''+esc(p.name)+'\')">🚨 Melden</button>';
     sheetHtml+='</div></div>';
     // Open in bottom sheet
@@ -3307,14 +3364,14 @@ async function buildCrewLocations(){
     var {data:matches}=await sb.from('matches').select('to_user').eq('from_user',ME.user_id).eq('is_match',true);
     if(!matches||matches.length===0){el.innerHTML='<p class="crew-empty">Matche mit Leuten um ihre Standorte zu sehen!</p>';return}
     var ids=matches.map(function(m){return m.to_user});
-    var {data:profiles}=await sb.from('profiles').select('user_id,name,photo_url,lat,lng,mood,last_active').in('user_id',ids);
+    var {data:profiles}=await sb.from('profiles').select('user_id,name,photo_url,lat,lng,mood,last_active,location_updated_at').in('user_id',ids);
     if(!profiles||profiles.length===0){el.innerHTML='<p class="crew-empty">Keine Crew-Mitglieder gefunden.</p>';return}
-    var blocked=JSON.parse(localStorage.getItem('crew_blocked')||'[]');
-    profiles=profiles.filter(function(p){return blocked.indexOf(p.user_id)===-1});
+    // Filter blocked (unified Supabase system)
+    profiles=profiles.filter(function(p){return !isBlocked(p.user_id)});
     var onlineCount=0;
     var now=Date.now();
     var html=profiles.map(function(p){
-      var hasLoc=p.lat&&p.lng;
+      var hasLoc=p.lat&&p.lng&&!isLocationStale(p.location_updated_at);
       var dist='';
       if(hasLoc&&userLat&&userLng){
         var d=getDistanceKm(userLat,userLng,p.lat,p.lng);
@@ -5130,8 +5187,12 @@ window.sendSafeCheckIn=async function(){
   if(!ME)return;
   var s=getCrewSettings();
   var crewId=s?s.id:'';
-  var lat=ME.lat||null;
-  var lng=ME.lng||null;
+  // Use live GPS coordinates if available, otherwise null
+  var lat=userLat||null;
+  var lng=userLng||null;
+  if(_gpsStatus!=='active'){
+    toast('⚠️ Standort nicht verfügbar — Check-In ohne GPS gesendet.');
+  }
   try{
     await sb.from('safe_checkins').insert({user_id:ME.user_id,crew_id:crewId,status:'safe',lat:lat,lng:lng});
     toast('Safe Check-In gesendet ✓ Deine Crew weiß dass es dir gut geht!');
@@ -5143,8 +5204,9 @@ window.sendUnsafeCheckIn=async function(){
   if(!ME)return;
   var s=getCrewSettings();
   var crewId=s?s.id:'';
-  var lat=ME.lat||null;
-  var lng=ME.lng||null;
+  // Use live GPS coordinates — critical for emergency
+  var lat=userLat||null;
+  var lng=userLng||null;
   try{
     await sb.from('safe_checkins').insert({user_id:ME.user_id,crew_id:crewId,status:'help',message:'Brauche Hilfe!',lat:lat,lng:lng});
     toast('🚨 Hilferuf gesendet! Deine Crew wird benachrichtigt.');
@@ -6158,6 +6220,31 @@ window.refreshWeather = function(){
 // ============================================
 // ACTIVE COUNTER, QUICK STATS, ISLAND MOOD
 // ============================================
+function updateGpsBanner(){
+  var el=document.getElementById('gpsStatusBanner');if(!el)return;
+  var locMode=localStorage.getItem('location_sharing_mode')||'crew';
+  if(_gpsStatus==='active'&&locMode!=='nobody'){
+    el.style.display='none';return;
+  }
+  el.style.display='flex';
+  if(locMode==='nobody'){
+    el.style.background='rgba(255,214,10,.08)';el.style.border='1px solid rgba(255,214,10,.15)';el.style.color='var(--yellow)';
+    el.innerHTML='🔒 Standort-Sharing deaktiviert — <span onclick="openBlockList()" style="text-decoration:underline;cursor:pointer">ändern</span>';
+  } else if(_gpsStatus==='denied'){
+    el.style.background='rgba(255,59,48,.08)';el.style.border='1px solid rgba(255,59,48,.15)';el.style.color='var(--fire)';
+    el.innerHTML='🔴 Standort blockiert — bitte in deinen Browser-/Handy-Einstellungen die Standortfreigabe für crew. aktivieren';
+  } else if(_gpsStatus==='unavailable'){
+    el.style.background='rgba(255,214,10,.08)';el.style.border='1px solid rgba(255,214,10,.15)';el.style.color='var(--yellow)';
+    el.innerHTML='⚠️ GPS nicht verfügbar — Standort-Features eingeschränkt. VPN kann den Standort verfälschen.';
+  } else if(_gpsStatus==='timeout'){
+    el.style.background='rgba(255,214,10,.08)';el.style.border='1px solid rgba(255,214,10,.15)';el.style.color='var(--yellow)';
+    el.innerHTML='⚠️ GPS-Signal schwach — Standort wird noch ermittelt...';
+  } else {
+    el.style.background='rgba(10,132,255,.08)';el.style.border='1px solid rgba(10,132,255,.15)';el.style.color='var(--blue)';
+    el.innerHTML='📍 Standort wird ermittelt...';
+  }
+}
+
 function updateActiveCounter(){
   sb.rpc('get_active_user_count').then(function(res){
     var count = res.data || 0;
@@ -6297,9 +6384,8 @@ async function buildMatchList(){
   var ids=matches.map(function(m){return m.to_user});
   var {data:profiles}=await sb.from('profiles').select('*').in('user_id',ids);
   if(!profiles||profiles.length===0){ml.innerHTML='<p style="padding:14px;color:var(--t3);font-size:13px">Noch keine Matches.</p>';return}
-  // Filter blocked
-  var blocked=JSON.parse(localStorage.getItem('crew_blocked')||'[]');
-  profiles=profiles.filter(function(p){return blocked.indexOf(p.user_id)===-1});
+  // Filter blocked (using unified Supabase block system)
+  profiles=profiles.filter(function(p){return !isBlocked(p.user_id)});
   ml.innerHTML=profiles.map(function(p){
     var soc='';
     if(p.insta)soc+='<a onclick="event.stopPropagation();window.open(\'https://instagram.com/'+esc(p.insta)+'\',\'_blank\')" style="color:#E1306C">📸</a>';
@@ -6318,50 +6404,49 @@ window.openUserProfile=function(uid){
   var {data}=sb.from('profiles').select('*').eq('user_id',uid).single().then(function(res){
     if(!res.data)return;
     p=res.data;
-    var blocked=JSON.parse(localStorage.getItem('crew_blocked')||'[]');
-    var isBlocked=blocked.indexOf(uid)!==-1;
+    var _ub=isBlocked(uid);
     var soc='';
     if(p.insta)soc+='<a class="ups-social" href="https://instagram.com/'+esc(p.insta)+'" target="_blank" rel="noopener" style="border-color:rgba(225,48,108,.25);color:#E1306C">📸 '+esc(p.insta)+'</a>';
     if(p.tiktok)soc+='<a class="ups-social" href="https://tiktok.com/@'+esc(p.tiktok)+'" target="_blank" rel="noopener" style="border-color:rgba(255,0,80,.25);color:#FF0050">🎵 '+esc(p.tiktok)+'</a>';
     if(p.snapchat)soc+='<a class="ups-social" href="https://snapchat.com/add/'+esc(p.snapchat)+'" target="_blank" rel="noopener" style="border-color:rgba(255,252,0,.25);color:#FFFC00">👻 '+esc(p.snapchat)+'</a>';
     document.getElementById('bsImg').src=p.photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80';
-    document.getElementById('bsContent').innerHTML='<div style="text-align:center"><div class="ups-ava"><img src="'+(p.photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80')+'"></div><h2>'+esc(p.name)+', '+p.age+(p.mood?' '+p.mood:'')+'</h2><div class="bs-meta">'+(p.gender||'')+' · '+(p.status||'')+(p.club?' · ⚽ '+esc(p.club):'')+'</div></div>'+(p.bio?'<div class="bs-desc">'+esc(p.bio)+'</div>':'')+(soc?'<div class="ups-socials">'+soc+'</div>':'')+'<div class="bs-actions"><button class="bs-btn '+(isBlocked?'orange':'dark')+'" onclick="toggleBlock(\''+uid+'\')">🚫 '+(isBlocked?'Entblocken':'Blockieren')+'</button><button class="bs-btn dark" onclick="openReportForm(\''+uid+'\',\''+esc(p.name)+'\')">🚨 Melden</button><button class="bs-btn dark" onclick="closeBS()">Schließen</button></div>';
+    document.getElementById('bsContent').innerHTML='<div style="text-align:center"><div class="ups-ava"><img src="'+(p.photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80')+'"></div><h2>'+esc(p.name)+', '+p.age+(p.mood?' '+p.mood:'')+'</h2><div class="bs-meta">'+(p.gender||'')+' · '+(p.status||'')+(p.club?' · ⚽ '+esc(p.club):'')+'</div></div>'+(p.bio?'<div class="bs-desc">'+esc(p.bio)+'</div>':'')+(soc?'<div class="ups-socials">'+soc+'</div>':'')+'<div class="bs-actions"><button class="bs-btn '+(_ub?'orange':'dark')+'" onclick="toggleBlock(\''+uid+'\')">🚫 '+(_ub?'Entblocken':'Blockieren')+'</button><button class="bs-btn dark" onclick="openReportForm(\''+uid+'\',\''+esc(p.name)+'\')">🚨 Melden</button><button class="bs-btn dark" onclick="closeBS()">Schließen</button></div>';
     document.getElementById('bsheet').classList.add('show');
   });
 };
 
 // ============================================
-// BLOCK USERS
+// BLOCK USERS (unified — uses Supabase _myBlocks)
 // ============================================
-window.toggleBlock=function(uid){
-  var blocked=JSON.parse(localStorage.getItem('crew_blocked')||'[]');
-  var idx=blocked.indexOf(uid);
-  if(idx===-1){blocked.push(uid);toast('Nutzer blockiert 🚫')}
-  else{blocked.splice(idx,1);toast('Nutzer entblockt ✅')}
-  localStorage.setItem('crew_blocked',JSON.stringify(blocked));
+window.toggleBlock=async function(uid){
+  if(!ME||uid===ME.user_id)return;
+  if(isBlocked(uid)){
+    await unblockUser(uid,'diesen Nutzer');
+  } else {
+    await blockUser(uid,'diesen Nutzer');
+  }
   closeBS();
   buildMatchList();
   buildCards();
 };
-window.showBlockedUsers=function(){
-  var blocked=JSON.parse(localStorage.getItem('crew_blocked')||'[]');
-  if(blocked.length===0){
+window.showBlockedUsers=async function(){
+  await loadMyBlocks();
+  if(_myBlocks.length===0){
     document.getElementById('bsImg').src='https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=800&q=60';
     document.getElementById('bsContent').innerHTML='<h2>Blockierte Nutzer</h2><div style="padding:40px 0;text-align:center;color:var(--t3)"><div style="font-size:32px;margin-bottom:8px">✅</div><p style="font-size:13px">Keine blockierten Nutzer.</p></div><div class="bs-actions"><button class="bs-btn orange" onclick="closeBS()">Schließen</button></div>';
     document.getElementById('bsheet').classList.add('show');
     return;
   }
-  sb.from('profiles').select('user_id,name,photo_url').in('user_id',blocked).then(function(res){
-    var profiles=res.data||[];
-    var html='<h2>Blockierte Nutzer</h2><div style="margin-top:12px">';
-    profiles.forEach(function(p){
-      html+='<div class="match-item"><div class="mi-ava"><img src="'+(p.photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80')+'"></div><div class="mi-info"><div class="mi-name">'+esc(p.name)+'</div><div class="mi-sub">Blockiert</div></div><div class="mi-block" onclick="toggleBlock(\''+p.user_id+'\')">Entblocken</div></div>';
-    });
-    html+='</div><div class="bs-actions"><button class="bs-btn orange" onclick="closeBS()">Schließen</button></div>';
-    document.getElementById('bsImg').src='https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=800&q=60';
-    document.getElementById('bsContent').innerHTML=html;
-    document.getElementById('bsheet').classList.add('show');
+  var res=await sb.from('profiles').select('user_id,name,photo_url').in('user_id',_myBlocks);
+  var profiles=res.data||[];
+  var html='<h2>Blockierte Nutzer</h2><div style="margin-top:12px">';
+  profiles.forEach(function(p){
+    html+='<div class="match-item"><div class="mi-ava"><img src="'+(p.photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80')+'"></div><div class="mi-info"><div class="mi-name">'+esc(p.name)+'</div><div class="mi-sub">Blockiert</div></div><div class="mi-block" onclick="unblockUser(\''+p.user_id+'\',\''+esc(p.name)+'\');closeBS()">Entblocken</div></div>';
   });
+  html+='</div><div class="bs-actions"><button class="bs-btn orange" onclick="closeBS()">Schließen</button></div>';
+  document.getElementById('bsImg').src='https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=800&q=60';
+  document.getElementById('bsContent').innerHTML=html;
+  document.getElementById('bsheet').classList.add('show');
 };
 
 // ============================================
@@ -6424,12 +6509,12 @@ window.selectReason=function(el,reason){
 window.closeReport=function(){document.getElementById('reportSheet').classList.remove('show')};
 window.submitReport=async function(){
   if(!reportedUserId||!reportReason){toast('Wähle einen Grund aus');return}
-  var {data:{user}} = await sb.auth.getUser();
-  if(!user){toast('Fehler');return}
-  var {error}=await sb.from('reports').insert({from_user:user.id,to_user:reportedUserId,reason:reportReason,status:'pending'});
-  if(error){toast('Fehler: '+error.message);return}
-  closeReport();
-  toast('Nutzer gemeldet. Danke! 🙏');
+  if(!ME||!ME.user_id){toast('Fehler');return}
+  try{
+    await sb.from('user_reports').insert({reporter_id:ME.user_id,reported_id:reportedUserId,reported_type:'user',reason:reportReason,status:'pending'});
+    closeReport();
+    toast('Nutzer gemeldet. Danke für deinen Beitrag zur Sicherheit! 🛡️');
+  }catch(e){toast('Fehler beim Melden: '+(e.message||''));}
 };
 
 // ============================================
