@@ -962,9 +962,730 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
 
 /* Admin menu item glow */
 #adminMenuItem{animation:breathe 3s ease-in-out infinite}
+
+/* ════════════════════════════════════════════════════════════
+   DESIGN 2.0 — PREMIUM GLASS × NEON × CLAUDE CORAL
+   Tinder-inspired gradients + Claude warm palette + refined glass
+   This block overrides & enhances the base styles above.
+   ════════════════════════════════════════════════════════════ */
+
+:root{
+  /* — Core brand: Tinder-style hot gradient + Claude coral warmth — */
+  --tinder-1:#FE3C72;         /* hot pink */
+  --tinder-2:#FF5864;         /* coral red */
+  --tinder-3:#FF655B;         /* warm red */
+  --claude-1:#D97757;         /* claude coral */
+  --claude-2:#E8A87C;         /* claude warm sand */
+  --claude-cream:#F4EBD9;     /* claude cream (subtle) */
+
+  /* — Redefined brand gradient (Tinder × Claude) — */
+  --o:#FF5864;                /* primary accent (coral red) */
+  --o2:#FE3C72;               /* hot pink */
+  --o3:#D97757;               /* claude warm */
+  --flame:linear-gradient(135deg,#FE3C72 0%,#FF5864 45%,#FF7854 100%);
+  --flame-soft:linear-gradient(135deg,rgba(254,60,114,.85),rgba(255,88,100,.7));
+  --gold:linear-gradient(135deg,#FF5864 0%,#FF7854 50%,#FFB36B 100%);
+  --sunset:linear-gradient(135deg,#FE3C72 0%,#FF4E88 35%,#FF7854 70%,#FFB36B 100%);
+  --magic:linear-gradient(135deg,#BF5AF2 0%,#FE3C72 50%,#FF7854 100%);
+  --claude-grad:linear-gradient(135deg,#D97757 0%,#E8A87C 100%);
+  --aurora:linear-gradient(135deg,#FE3C72 0%,#BF5AF2 40%,#0A84FF 80%,#00C7BE 100%);
+
+  /* — Deeper warm blacks (not pure grey) — */
+  --bg:#07060A;
+  --bg2:#0E0C12;
+  --bg3:#17141C;
+  --bg4:#22202A;
+  --bg-warm:#120D0F;          /* warm-toned surface */
+
+  /* — Refined glass (more saturated, layered) — */
+  --glass:rgba(24,20,28,.55);
+  --glass-strong:rgba(28,22,32,.78);
+  --glass-light:rgba(255,255,255,.035);
+  --glass-border:rgba(255,255,255,.08);
+  --glass2:rgba(255,255,255,.05);
+  --glass-highlight:rgba(255,255,255,.14);
+
+  /* — Typography tokens — */
+  --t:#F8F6F3;                /* slightly warm white */
+  --t2:rgba(248,246,243,.62);
+  --t3:rgba(248,246,243,.34);
+  --t-dim:rgba(248,246,243,.18);
+
+  /* — Shadows & glows — */
+  --glow:0 0 32px rgba(254,60,114,.22),0 0 64px rgba(255,88,100,.08);
+  --glow-warm:0 0 28px rgba(217,119,87,.22),0 0 56px rgba(217,119,87,.08);
+  --shadow-sm:0 2px 8px rgba(0,0,0,.28);
+  --shadow:0 14px 48px rgba(0,0,0,.5),0 2px 6px rgba(0,0,0,.2);
+  --shadow-lg:0 28px 80px rgba(0,0,0,.6),0 4px 12px rgba(0,0,0,.35);
+  --shadow-card:0 10px 30px rgba(0,0,0,.45),0 1px 2px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.06);
+
+  /* — Radii — */
+  --r:20px; --r2:28px; --r-sm:12px; --r-lg:32px;
+
+  /* — Motion — */
+  --ease:cubic-bezier(.22,.68,.36,1);
+  --ease-out:cubic-bezier(.16,1,.3,1);
+  --bounce:cubic-bezier(.34,1.56,.64,1);
+  --spring:cubic-bezier(.175,.885,.32,1.275);
+}
+
+body{
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif;
+  font-feature-settings:'ss01','cv01','cv11';
+  letter-spacing:-.012em;
+}
+
+/* — Body canvas: richer ambient gradient — */
+#app{
+  background:var(--bg);
+  background-image:
+    radial-gradient(ellipse 80% 60% at 20% 0%, rgba(254,60,114,.09) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 50% at 85% 20%, rgba(217,119,87,.07) 0%, transparent 55%),
+    radial-gradient(ellipse 90% 70% at 50% 100%, rgba(191,90,242,.06) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 40% at 100% 85%, rgba(0,199,190,.04) 0%, transparent 50%);
+}
+@media(min-width:431px){
+  #app{
+    border-radius:52px;
+    margin-top:12px;
+    height:calc(100dvh - 24px);
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,.05),
+      0 0 0 12px rgba(255,255,255,.02),
+      0 80px 180px rgba(0,0,0,.9),
+      0 20px 60px rgba(254,60,114,.08);
+  }
+}
+
+/* — Premium glass (much more depth) — */
+.glass{
+  background:linear-gradient(135deg,rgba(24,20,28,.72) 0%,rgba(32,26,36,.5) 100%);
+  backdrop-filter:blur(80px) saturate(240%);
+  -webkit-backdrop-filter:blur(80px) saturate(240%);
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:var(--r);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.14),
+    inset 0 -1px 0 rgba(0,0,0,.18),
+    0 8px 32px rgba(0,0,0,.3),
+    0 0 0 .5px rgba(255,255,255,.04);
+  position:relative;
+}
+.glass::before{
+  content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(135deg,rgba(255,255,255,.05) 0%,transparent 40%);
+}
+
+/* — Header (refined Tinder-glass) — */
+.app-header{
+  padding:16px 20px 14px;
+  background:linear-gradient(180deg,rgba(7,6,10,.78) 0%,rgba(7,6,10,.45) 85%,transparent 100%);
+  backdrop-filter:blur(100px) saturate(240%);
+  -webkit-backdrop-filter:blur(100px) saturate(240%);
+  border-bottom:.5px solid rgba(255,255,255,.06);
+  box-shadow:0 1px 0 rgba(255,255,255,.04),0 8px 28px rgba(0,0,0,.25);
+}
+.logo{
+  font-weight:900;font-size:29px;letter-spacing:-2px;
+}
+.logo span{
+  background:var(--flame);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 0 24px rgba(254,60,114,.45));
+}
+.hdr-btn{
+  width:38px;height:38px;border-radius:50%;
+  border:1px solid rgba(255,255,255,.09);
+  background:linear-gradient(135deg,rgba(255,255,255,.07),rgba(255,255,255,.03));
+  backdrop-filter:blur(24px) saturate(200%);
+  -webkit-backdrop-filter:blur(24px) saturate(200%);
+  color:#fff;font-size:16px;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.14),
+    inset 0 -1px 0 rgba(0,0,0,.15),
+    0 2px 10px rgba(0,0,0,.2);
+  transition:transform .18s var(--spring),background .25s,box-shadow .25s;
+}
+.hdr-btn:active{transform:scale(.88)}
+.hdr-btn:hover{background:linear-gradient(135deg,rgba(255,255,255,.1),rgba(255,255,255,.05))}
+.notif-dot{
+  top:5px;right:5px;width:8px;height:8px;
+  background:linear-gradient(135deg,#FE3C72,#FF5864);
+  border:2px solid rgba(7,6,10,.9);
+  box-shadow:0 0 10px rgba(254,60,114,.7);
+}
+.streak-badge{
+  padding:6px 13px;border-radius:22px;
+  background:linear-gradient(135deg,rgba(255,214,10,.14),rgba(255,88,100,.08));
+  border:1px solid rgba(255,214,10,.22);
+  font-size:12px;font-weight:800;color:#FFD60A;
+  box-shadow:0 0 24px rgba(255,214,10,.18),inset 0 1px 0 rgba(255,255,255,.1);
+}
+
+/* — SOS float (more premium, less screaming) — */
+.sos-float{
+  bottom:94px;right:16px;width:52px;height:52px;
+  background:linear-gradient(135deg,#FE3C72 0%,#FF3B30 100%);
+  border:2px solid rgba(255,255,255,.18);
+  font-size:12px;font-weight:900;letter-spacing:.8px;
+  box-shadow:
+    0 8px 26px rgba(254,60,114,.55),
+    0 0 0 0 rgba(255,59,48,.35),
+    inset 0 1px 0 rgba(255,255,255,.25);
+}
+@keyframes sosPulse{
+  0%,100%{box-shadow:0 8px 26px rgba(254,60,114,.55),0 0 0 0 rgba(255,59,48,.35),inset 0 1px 0 rgba(255,255,255,.25)}
+  50%{box-shadow:0 8px 26px rgba(254,60,114,.55),0 0 0 18px rgba(255,59,48,.05),inset 0 1px 0 rgba(255,255,255,.25)}
+}
+
+/* — Nav bar (elevated premium) — */
+nav{
+  height:82px;
+  background:linear-gradient(0deg,rgba(7,6,10,.9) 0%,rgba(7,6,10,.6) 70%,rgba(7,6,10,.3) 100%);
+  backdrop-filter:blur(100px) saturate(240%);
+  -webkit-backdrop-filter:blur(100px) saturate(240%);
+  border-radius:32px 32px 0 0;
+  border-top:.5px solid rgba(255,255,255,.08);
+  box-shadow:
+    0 -1px 0 rgba(255,255,255,.06),
+    inset 0 1px 0 rgba(255,255,255,.05),
+    0 -12px 40px rgba(0,0,0,.3);
+}
+nav button{
+  padding:8px 12px;gap:4px;font-size:9.5px;letter-spacing:.2px;
+  color:var(--t3);font-weight:600;
+}
+nav button .ni{font-size:22px}
+nav button.active{color:#FF5864}
+nav button.active .ni{
+  filter:drop-shadow(0 0 14px rgba(254,60,114,.6));
+  transform:scale(1.18);
+}
+nav button.active::after{
+  content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%);
+  width:20px;height:3px;border-radius:2px;
+  background:var(--flame);
+  box-shadow:0 0 12px rgba(254,60,114,.7);
+}
+nav .match-dot{
+  top:4px;right:8px;width:9px;height:9px;
+  background:linear-gradient(135deg,#FE3C72,#FF5864);
+  border:2px solid rgba(7,6,10,.9);
+  box-shadow:0 0 14px rgba(254,60,114,.6);
+}
+nav .crew-center-btn{margin-top:-20px}
+nav .crew-center-btn .ni{
+  width:52px;height:52px;
+  background:var(--flame);
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;color:#fff;
+  box-shadow:
+    0 10px 28px rgba(254,60,114,.5),
+    0 0 0 8px rgba(254,60,114,.08),
+    0 0 36px rgba(254,60,114,.3),
+    inset 0 1px 0 rgba(255,255,255,.3),
+    inset 0 -1px 0 rgba(0,0,0,.1);
+  transition:transform .22s var(--bounce),box-shadow .3s;
+}
+nav .crew-center-btn:active .ni{transform:scale(.88)}
+nav .crew-center-btn:hover .ni{
+  box-shadow:
+    0 14px 36px rgba(254,60,114,.6),
+    0 0 0 10px rgba(254,60,114,.1),
+    0 0 48px rgba(254,60,114,.4),
+    inset 0 1px 0 rgba(255,255,255,.3);
+}
+
+/* — Match / Discover actions (Tinder-style large round buttons) — */
+.mactions{
+  display:flex;justify-content:center;align-items:center;gap:14px;
+  padding:14px 20px 20px;
+}
+.ma{
+  border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:transform .18s var(--bounce),box-shadow .28s var(--ease);
+  position:relative;
+}
+.ma:active{transform:scale(.88)}
+.ma.sm{
+  width:46px;height:46px;border-radius:50%;
+  background:linear-gradient(135deg,rgba(24,20,28,.8),rgba(32,26,36,.6));
+  border:1.5px solid rgba(255,255,255,.1);
+  backdrop-filter:blur(30px) saturate(200%);
+  -webkit-backdrop-filter:blur(30px) saturate(200%);
+  font-size:18px;color:#FFD60A;
+  box-shadow:0 6px 18px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.1);
+}
+.ma.nope{
+  width:58px;height:58px;border-radius:50%;
+  background:linear-gradient(135deg,rgba(24,20,28,.9),rgba(32,26,36,.7));
+  border:2px solid rgba(255,88,100,.4);
+  color:#FF5864;font-size:22px;font-weight:900;
+  box-shadow:
+    0 10px 26px rgba(0,0,0,.45),
+    0 0 0 0 rgba(255,88,100,.3),
+    inset 0 1px 0 rgba(255,255,255,.08);
+}
+.ma.nope:hover{box-shadow:0 10px 26px rgba(0,0,0,.45),0 0 0 8px rgba(255,88,100,.08),inset 0 1px 0 rgba(255,255,255,.08)}
+.ma.super{
+  width:50px;height:50px;border-radius:50%;
+  background:linear-gradient(135deg,#0A84FF 0%,#5AC8FA 100%);
+  color:#fff;font-size:20px;
+  box-shadow:
+    0 10px 28px rgba(10,132,255,.5),
+    0 0 0 0 rgba(10,132,255,.35),
+    inset 0 1px 0 rgba(255,255,255,.3);
+}
+.ma.super:hover{box-shadow:0 12px 32px rgba(10,132,255,.6),0 0 0 8px rgba(10,132,255,.1),inset 0 1px 0 rgba(255,255,255,.3)}
+.ma.like{
+  width:68px;height:68px;border-radius:50%;
+  background:var(--flame);
+  color:#fff;font-size:28px;font-weight:900;
+  box-shadow:
+    0 14px 36px rgba(254,60,114,.55),
+    0 0 0 0 rgba(254,60,114,.35),
+    0 0 40px rgba(254,60,114,.25),
+    inset 0 2px 0 rgba(255,255,255,.3),
+    inset 0 -2px 0 rgba(0,0,0,.15);
+}
+.ma.like:hover{
+  box-shadow:
+    0 18px 44px rgba(254,60,114,.65),
+    0 0 0 12px rgba(254,60,114,.1),
+    0 0 56px rgba(254,60,114,.35),
+    inset 0 2px 0 rgba(255,255,255,.3);
+}
+
+/* — Section labels — refined — */
+.sec-label{
+  padding:18px 18px 10px;
+  font-size:12px;font-weight:800;letter-spacing:.5px;
+  color:var(--t);
+  text-transform:none;
+  display:flex;align-items:center;gap:8px;
+}
+.sec-label::after{
+  content:'';flex:1;height:1px;margin-left:4px;
+  background:linear-gradient(90deg,rgba(255,255,255,.08),transparent);
+}
+
+/* — Quick stat cards — refined — */
+.quick-stats > div{
+  border-radius:16px !important;
+  background:linear-gradient(135deg,rgba(24,20,28,.65),rgba(32,26,36,.35)) !important;
+  backdrop-filter:blur(30px) saturate(220%);
+  -webkit-backdrop-filter:blur(30px) saturate(220%);
+  border:1px solid rgba(255,255,255,.07) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 4px 14px rgba(0,0,0,.25);
+  transition:transform .18s var(--spring),box-shadow .25s;
+}
+.quick-stats > div:active{transform:scale(.96)}
+.quick-stats > div:hover{
+  background:linear-gradient(135deg,rgba(32,26,36,.75),rgba(40,32,44,.45)) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 8px 22px rgba(0,0,0,.3),0 0 24px rgba(254,60,114,.08);
+}
+
+/* — Premium CTA — elevated — */
+.premium-cta{
+  position:relative;overflow:hidden;
+  background:linear-gradient(135deg,#FE3C72 0%,#FF5864 45%,#FF7854 100%) !important;
+  border:1px solid rgba(255,255,255,.22) !important;
+  box-shadow:
+    0 16px 44px rgba(254,60,114,.45),
+    0 0 60px rgba(255,88,100,.2),
+    inset 0 1px 0 rgba(255,255,255,.35),
+    inset 0 -2px 0 rgba(0,0,0,.15) !important;
+}
+.premium-cta::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 30% 20%,rgba(255,255,255,.25),transparent 55%);
+  pointer-events:none;
+}
+.premium-cta::after{
+  content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;
+  background:linear-gradient(115deg,transparent 40%,rgba(255,255,255,.16) 50%,transparent 60%);
+  animation:shine 4.5s ease-in-out infinite;pointer-events:none;
+}
+@keyframes shine{0%,100%{transform:translateX(-40%)}50%{transform:translateX(40%)}}
+.premium-cta h3{font-size:18px;font-weight:900;letter-spacing:-.3px;color:#fff;margin-bottom:4px}
+.premium-cta .pc-sub{color:rgba(255,255,255,.88);font-size:12.5px}
+.premium-cta .pc-btn{
+  background:rgba(255,255,255,.22) !important;color:#fff !important;
+  border:1px solid rgba(255,255,255,.3);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.3);
+}
+
+/* — Profile ava refined — */
+.prof-ava{
+  border:3px solid transparent !important;
+  background:var(--flame) padding-box,var(--flame) border-box !important;
+  box-shadow:
+    0 0 0 4px rgba(7,6,10,.8),
+    0 0 0 6px rgba(254,60,114,.25),
+    0 18px 48px rgba(254,60,114,.35),
+    0 0 40px rgba(254,60,114,.2) !important;
+}
+.prof-ava-edit{
+  background:var(--flame) !important;
+  box-shadow:0 6px 18px rgba(254,60,114,.5),inset 0 1px 0 rgba(255,255,255,.3) !important;
+  border:2px solid rgba(7,6,10,.9) !important;
+}
+
+/* — Prof stats (glass row) — */
+.prof-stats{
+  background:linear-gradient(135deg,rgba(24,20,28,.72),rgba(32,26,36,.5)) !important;
+  backdrop-filter:blur(40px) saturate(220%);
+  -webkit-backdrop-filter:blur(40px) saturate(220%);
+  border:1px solid rgba(255,255,255,.08) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 8px 28px rgba(0,0,0,.3) !important;
+}
+.pstat .pn{
+  background:var(--flame);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 0 14px rgba(254,60,114,.3));
+}
+
+/* — Profile menu items — */
+.pmi{
+  transition:transform .18s var(--spring),background .25s;
+  border-radius:14px;
+}
+.pmi:active{transform:scale(.97)}
+.pmi:hover{background:rgba(255,255,255,.04)}
+.pmi-icon.o{
+  background:linear-gradient(135deg,rgba(254,60,114,.15),rgba(255,88,100,.08)) !important;
+  color:#FF5864 !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.1);
+}
+
+/* — Crew action buttons — */
+.crew-action-btn{
+  transition:transform .2s var(--bounce);
+}
+.crew-action-btn:active{transform:scale(.92)}
+.cab-icon{
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 6px 18px rgba(0,0,0,.3);
+  transition:transform .2s var(--spring),box-shadow .3s;
+}
+.crew-action-btn:hover .cab-icon{transform:translateY(-2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 10px 22px rgba(0,0,0,.35)}
+
+/* — Buttons / generic gold — */
+.cb-cc-btn.primary{
+  background:var(--flame) !important;
+  color:#fff !important;
+  box-shadow:0 10px 28px rgba(254,60,114,.4),inset 0 1px 0 rgba(255,255,255,.25) !important;
+}
+.cb-cc-btn.secondary{
+  background:linear-gradient(135deg,rgba(24,20,28,.8),rgba(32,26,36,.55)) !important;
+  border:1px solid rgba(255,255,255,.08) !important;
+  backdrop-filter:blur(30px) saturate(220%);
+  -webkit-backdrop-filter:blur(30px) saturate(220%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 4px 14px rgba(0,0,0,.3) !important;
+}
+
+/* — Deals tabs — */
+.dtab{
+  transition:transform .2s var(--bounce),background .25s,border-color .25s;
+  border-radius:22px;
+}
+.dtab:active{transform:scale(.94)}
+.dtab.active{
+  background:var(--flame) !important;
+  border-color:transparent !important;
+  color:#fff !important;
+  box-shadow:0 8px 22px rgba(254,60,114,.4),inset 0 1px 0 rgba(255,255,255,.2);
+}
+
+/* — Match stack cards: premium depth — */
+.match-stack .mc, .mc-card, [class*="match-card"]{
+  border-radius:26px !important;
+  box-shadow:
+    0 28px 70px rgba(0,0,0,.55),
+    0 10px 24px rgba(0,0,0,.35),
+    0 0 0 1px rgba(255,255,255,.04),
+    inset 0 1px 0 rgba(255,255,255,.05) !important;
+  overflow:hidden;
+}
+
+/* — Filter selects — */
+.mf-select{
+  background:linear-gradient(135deg,rgba(24,20,28,.7),rgba(32,26,36,.5)) !important;
+  border:1px solid rgba(255,255,255,.08) !important;
+  backdrop-filter:blur(24px) saturate(200%);
+  -webkit-backdrop-filter:blur(24px) saturate(200%);
+  color:var(--t) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08);
+}
+
+/* — Floating mini buttons (chat/location) — */
+.cfb-chat{
+  background:linear-gradient(135deg,#BF5AF2 0%,#FE3C72 100%) !important;
+  border:2px solid rgba(255,255,255,.22) !important;
+  box-shadow:0 10px 30px rgba(191,90,242,.5),inset 0 1px 0 rgba(255,255,255,.3) !important;
+}
+.cfb-loc{
+  background:linear-gradient(135deg,#30D158 0%,#00C7BE 100%) !important;
+  border:2px solid rgba(255,255,255,.22) !important;
+  box-shadow:0 10px 30px rgba(48,209,88,.45),inset 0 1px 0 rgba(255,255,255,.3) !important;
+}
+
+/* — Active counter (live dot) — */
+.active-counter{
+  background:linear-gradient(135deg,rgba(48,209,88,.1),rgba(0,199,190,.05)) !important;
+  border:1px solid rgba(48,209,88,.2) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 0 24px rgba(48,209,88,.1);
+}
+
+/* — Countdown card upgraded — */
+.countdown-card{
+  background:linear-gradient(135deg,rgba(10,132,255,.14),rgba(191,90,242,.1),rgba(254,60,114,.1)) !important;
+  border:1px solid rgba(255,255,255,.1) !important;
+  backdrop-filter:blur(40px) saturate(220%);
+  -webkit-backdrop-filter:blur(40px) saturate(220%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 12px 32px rgba(0,0,0,.3) !important;
+}
+
+/* — Weather card upgraded — */
+.weather-card{
+  background:linear-gradient(135deg,rgba(24,20,28,.7),rgba(32,26,36,.45)) !important;
+  border:1px solid rgba(255,255,255,.08) !important;
+  backdrop-filter:blur(40px) saturate(220%);
+  -webkit-backdrop-filter:blur(40px) saturate(220%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 8px 24px rgba(0,0,0,.3) !important;
+}
+
+/* — Crew status bar (gamified) — */
+.crew-status-bar{
+  background:linear-gradient(135deg,rgba(254,60,114,.1),rgba(255,88,100,.05),rgba(24,20,28,.7)) !important;
+  border:1px solid rgba(255,88,100,.18) !important;
+  backdrop-filter:blur(40px) saturate(220%);
+  -webkit-backdrop-filter:blur(40px) saturate(220%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 12px 28px rgba(0,0,0,.3),0 0 36px rgba(254,60,114,.08);
+}
+.csb-progress-fill{
+  background:var(--flame) !important;
+  box-shadow:0 0 12px rgba(254,60,114,.5);
+}
+.csb-pts-num{
+  background:var(--flame) !important;
+  -webkit-background-clip:text;background-clip:text;color:transparent !important;
+  filter:drop-shadow(0 0 10px rgba(254,60,114,.3));
+}
+
+/* — Crew SOS bar — */
+.crew-sos-bar{
+  background:linear-gradient(135deg,rgba(255,59,48,.12),rgba(254,60,114,.08)) !important;
+  border:1px solid rgba(255,59,48,.22) !important;
+  backdrop-filter:blur(30px) saturate(220%);
+  -webkit-backdrop-filter:blur(30px) saturate(220%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 8px 22px rgba(0,0,0,.3),0 0 30px rgba(255,59,48,.1) !important;
+}
+
+/* — Mini-chat message refined — */
+.mini-chat-name{color:#FF5864 !important}
+.mini-chat-more{color:#FF5864 !important}
+
+/* — Toast (if exists) — */
+.toast,[class*="toast"]{
+  background:linear-gradient(135deg,rgba(24,20,28,.9),rgba(32,26,36,.75)) !important;
+  backdrop-filter:blur(40px) saturate(220%);
+  -webkit-backdrop-filter:blur(40px) saturate(220%);
+  border:1px solid rgba(255,255,255,.1) !important;
+  box-shadow:0 16px 40px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.1) !important;
+}
+
+/* — Scrollbar invisible everywhere — */
+*::-webkit-scrollbar{display:none}
+*{scrollbar-width:none}
+
+/* — Agegate upgraded — */
+.agegate{
+  background:var(--bg);
+  background-image:
+    radial-gradient(ellipse 80% 60% at 50% 20%,rgba(254,60,114,.1),transparent 60%),
+    radial-gradient(ellipse 60% 50% at 50% 90%,rgba(217,119,87,.06),transparent 60%) !important;
+}
+.ag-logo span{
+  background:var(--flame);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 0 30px rgba(254,60,114,.5));
+}
+.abtn.primary{
+  background:var(--flame) !important;
+  box-shadow:0 12px 32px rgba(254,60,114,.45),inset 0 1px 0 rgba(255,255,255,.25);
+}
+
+/* — Entry fade + slide (for newly rendered lists) — */
+.anim{animation:fadeSlideUp .6s var(--ease-out) both}
+.anim.d1{animation-delay:.08s}
+.anim.d2{animation-delay:.16s}
+.anim.d3{animation-delay:.24s}
+@keyframes fadeSlideUp{
+  from{opacity:0;transform:translateY(14px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* — Mood bar + other glass upgrades — */
+.mood-bar{
+  background:linear-gradient(135deg,rgba(24,20,28,.7),rgba(32,26,36,.45)) !important;
+  border:1px solid rgba(255,255,255,.08) !important;
+  backdrop-filter:blur(40px) saturate(220%);
+  -webkit-backdrop-filter:blur(40px) saturate(220%);
+}
+
+/* — Island mood refined — */
+.island-mood{
+  background:linear-gradient(135deg,rgba(24,20,28,.7),rgba(32,26,36,.45)) !important;
+  border:1px solid rgba(255,255,255,.08) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 6px 18px rgba(0,0,0,.25);
+}
+
+/* — Highlight section (for Crew Votes) — */
+.highlight-section{
+  position:relative;
+}
+.highlight-section::before{
+  content:'';position:absolute;top:0;left:14px;right:14px;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(254,60,114,.3) 50%,transparent);
+  opacity:.5;
+}
+
+/* — Badges polish — */
+.csh-badge{
+  font-size:9.5px;font-weight:900;letter-spacing:.6px;
+  padding:4px 10px;border-radius:10px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.1);
+}
+.live-badge{
+  background:linear-gradient(135deg,rgba(255,59,48,.2),rgba(254,60,114,.1)) !important;
+  color:#FF5864 !important;
+  border:1px solid rgba(255,88,100,.3) !important;
+}
+.vote-badge{
+  background:linear-gradient(135deg,rgba(191,90,242,.2),rgba(254,60,114,.1)) !important;
+  color:#BF5AF2 !important;
+  border:1px solid rgba(191,90,242,.3) !important;
+}
+.challenge-time-badge{
+  background:linear-gradient(135deg,rgba(255,214,10,.2),rgba(255,149,0,.1)) !important;
+  color:#FFD60A !important;
+  border:1px solid rgba(255,214,10,.3) !important;
+}
+
+/* — Reduce motion if user prefers — */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
+}
+
+/* — Focus states (accessibility + premium feel) — */
+button:focus-visible,select:focus-visible,input:focus-visible{
+  outline:2px solid rgba(254,60,114,.6);
+  outline-offset:2px;
+  box-shadow:0 0 0 4px rgba(254,60,114,.15);
+}
+
+/* — Subtle grain overlay for texture — */
+#app::after{
+  content:'';position:absolute;inset:0;pointer-events:none;z-index:1;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .04 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  opacity:.6;mix-blend-mode:overlay;
+}
+
+/* — NEW: premium-pill for chips/tags — */
+.premium-pill{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:5px 12px;border-radius:20px;
+  background:linear-gradient(135deg,rgba(254,60,114,.14),rgba(255,88,100,.06));
+  border:1px solid rgba(254,60,114,.22);
+  font-size:11px;font-weight:800;letter-spacing:.3px;color:#FF5864;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08);
+}
+
+/* — Gradient text helper — */
+.grad-text{
+  background:var(--flame);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 0 18px rgba(254,60,114,.3));
+}
+
+/* — END DESIGN 2.0 — */
 </style>
 </head>
 <body>
+
+<!-- ════════════════════════════════════════════
+     SVG ICON SPRITE — Premium line icons
+     (Phosphor / SF-Symbols inspired, Tinder vibe)
+     ════════════════════════════════════════════ -->
+<svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true">
+  <defs>
+    <linearGradient id="icon-flame" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FE3C72"/>
+      <stop offset="50%" stop-color="#FF5864"/>
+      <stop offset="100%" stop-color="#FF7854"/>
+    </linearGradient>
+  </defs>
+  <symbol id="i-radar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 21s-7-6.3-7-12a7 7 0 1 1 14 0c0 5.7-7 12-7 12Z"/>
+    <circle cx="12" cy="9" r="2.5"/>
+  </symbol>
+  <symbol id="i-deals" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20.6 11.6 12.4 3.4a2 2 0 0 0-1.4-.6H4a1 1 0 0 0-1 1v7a2 2 0 0 0 .6 1.4l8.2 8.2a2 2 0 0 0 2.8 0l6-6a2 2 0 0 0 0-2.8Z"/>
+    <circle cx="7.5" cy="7.5" r="1.3" fill="currentColor"/>
+  </symbol>
+  <symbol id="i-crew" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="9" cy="8" r="3.2"/>
+    <circle cx="17" cy="9" r="2.4"/>
+    <path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/>
+    <path d="M15 20c0-2.3 1.7-4.2 4-4.6"/>
+  </symbol>
+  <symbol id="i-flame" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 2s4 4 4 8a4 4 0 0 1-8 0c0-1 .5-1.8.5-1.8S6 10 6 13a6 6 0 0 0 12 0c0-5-6-11-6-11Z"/>
+  </symbol>
+  <symbol id="i-profile" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="8" r="4"/>
+    <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
+  </symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9Z"/>
+    <path d="M10 21a2 2 0 0 0 4 0"/>
+  </symbol>
+  <symbol id="i-beer" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M7 8h8v11a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V8Z"/>
+    <path d="M15 11h2a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-2"/>
+    <path d="M9 8V6a2 2 0 1 1 4 0v2"/>
+    <path d="M11 12v5M9 12v5M13 12v5"/>
+  </symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+    <path d="M12 21s-7.5-4.6-9.5-9.6C1 6.5 5 3 8.5 3c1.9 0 3.2 1 3.5 1.7.3-.7 1.6-1.7 3.5-1.7C19 3 23 6.5 21.5 11.4 19.5 16.4 12 21 12 21Z"/>
+  </symbol>
+  <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+    <path d="M6 6 18 18M18 6 6 18"/>
+  </symbol>
+  <symbol id="i-star" viewBox="0 0 24 24" fill="currentColor">
+    <path d="m12 3 2.6 5.6 6 .6-4.5 4 1.3 6L12 16l-5.4 3.2 1.3-6-4.5-4 6-.6L12 3Z"/>
+  </symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5Z"/>
+  </symbol>
+  <symbol id="i-rewind" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 7v6h6"/>
+    <path d="M3 13a9 9 0 1 0 3-6.7L3 9"/>
+  </symbol>
+  <symbol id="i-sos" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10"/>
+    <path d="M12 7v5l3 2"/>
+  </symbol>
+</svg>
+
+<style>
+/* SVG icon utility */
+.icn{width:1em;height:1em;display:inline-block;vertical-align:-.14em;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.icn-fill{fill:currentColor;stroke:none}
+nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
+</style>
 
 <!-- LOADING -->
 <!-- MAINTENANCE SCREEN -->
@@ -1340,9 +2061,9 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
   <div class="app-header">
     <div class="logo">crew<span>.</span></div>
     <div class="hdr-actions">
-      <div class="streak-badge" id="sBadge">🔥 <span id="sNum">0</span></div>
-      <button class="hdr-btn" onclick="openAlcoholTracker()">🍺</button>
-      <button class="hdr-btn" onclick="openNoti()">🔔<span class="notif-dot"></span></button>
+      <div class="streak-badge" id="sBadge"><svg class="icn icn-fill" style="color:#FFD60A;width:11px;height:11px" viewBox="0 0 24 24"><use href="#i-flame"/></svg> <span id="sNum">0</span></div>
+      <button class="hdr-btn" onclick="openAlcoholTracker()" aria-label="Drinks"><svg class="icn" style="width:18px;height:18px" viewBox="0 0 24 24"><use href="#i-beer"/></svg></button>
+      <button class="hdr-btn" onclick="openNoti()" aria-label="Benachrichtigungen"><svg class="icn" style="width:17px;height:17px" viewBox="0 0 24 24"><use href="#i-bell"/></svg><span class="notif-dot"></span></button>
     </div>
   </div>
   <div class="sos-float" onclick="openSOS()">SOS</div>
@@ -1395,7 +2116,7 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
         <div class="countdown-card anim d1" onclick="setTripDate()" id="countdownCard" style="margin:10px 14px"><h3>✈️ Malle-Countdown</h3><p>Tippe um dein Abreisedatum zu setzen</p></div>
       </div>
     </div>
-    <div class="scr" id="screen-match"><div class="match-area"><div class="match-filter-bar"><select class="mf-select" id="mfGender" onchange="applyFilters()"><option value="">Alle</option><option value="Mann">Mann</option><option value="Frau">Frau</option><option value="Divers">Divers</option></select><select class="mf-select" id="mfAge" onchange="applyFilters()"><option value="">Alter</option><option value="18-21">18-21</option><option value="22-25">22-25</option><option value="26-30">26-30</option><option value="31-40">31-40</option><option value="40+">40+</option></select><select class="mf-select" id="mfCity" onchange="applyFilters()"><option value="">Wohnort</option></select><select class="mf-select" id="mfClub" onchange="applyFilters()"><option value="">Verein</option></select></div><div class="match-stack" id="matchStack"></div><div class="mactions"><button class="ma sm" onclick="rewind()">↩</button><button class="ma nope" onclick="doSwipe('left')">✕</button><button class="ma super" onclick="superLike()">⭐</button><button class="ma like" onclick="doSwipe('right')">🔥</button><button class="ma sm" onclick="toast('Matche & connecte auf Social! 📸')">💬</button></div></div></div>
+    <div class="scr" id="screen-match"><div class="match-area"><div class="match-filter-bar"><select class="mf-select" id="mfGender" onchange="applyFilters()"><option value="">Alle</option><option value="Mann">Mann</option><option value="Frau">Frau</option><option value="Divers">Divers</option></select><select class="mf-select" id="mfAge" onchange="applyFilters()"><option value="">Alter</option><option value="18-21">18-21</option><option value="22-25">22-25</option><option value="26-30">26-30</option><option value="31-40">31-40</option><option value="40+">40+</option></select><select class="mf-select" id="mfCity" onchange="applyFilters()"><option value="">Wohnort</option></select><select class="mf-select" id="mfClub" onchange="applyFilters()"><option value="">Verein</option></select></div><div class="match-stack" id="matchStack"></div><div class="mactions"><button class="ma sm" onclick="rewind()" aria-label="Zurück"><svg class="icn" style="width:20px;height:20px" viewBox="0 0 24 24"><use href="#i-rewind"/></svg></button><button class="ma nope" onclick="doSwipe('left')" aria-label="Nope"><svg class="icn" style="width:28px;height:28px" viewBox="0 0 24 24"><use href="#i-x"/></svg></button><button class="ma super" onclick="superLike()" aria-label="Superlike"><svg class="icn icn-fill" style="width:24px;height:24px;color:#fff" viewBox="0 0 24 24"><use href="#i-star"/></svg></button><button class="ma like" onclick="doSwipe('right')" aria-label="Like"><svg class="icn icn-fill" style="width:32px;height:32px;color:#fff" viewBox="0 0 24 24"><use href="#i-heart"/></svg></button><button class="ma sm" onclick="toast('Matche & connecte auf Social!')" aria-label="Chat"><svg class="icn" style="width:20px;height:20px" viewBox="0 0 24 24"><use href="#i-chat"/></svg></button></div></div></div>
     <div class="scr" id="screen-crew">
       <!-- CREW MAP — Where is everyone? -->
       <div class="crew-map-full"><div id="crewMap"></div>
@@ -1713,11 +2434,11 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
 </div></div>
   </main>
   <nav id="navBar">
-    <button class="active" onclick="go('radar',this)"><span class="ni">📍</span><span>Radar</span></button>
-    <button onclick="go('deals',this)"><span class="ni">🤝</span><span>Deals</span></button>
-    <button class="crew-center-btn" onclick="go('crew',this)"><span class="ni">👯</span><span>Crew</span></button>
-    <button onclick="go('match',this)"><span class="ni">🔥</span><span>Entdecken</span><span class="match-dot" id="matchDot" style="display:none"></span></button>
-    <button onclick="go('profile',this)"><span class="ni">👤</span><span>Profil</span></button>
+    <button class="active" onclick="go('radar',this)"><span class="ni"><svg viewBox="0 0 24 24"><use href="#i-radar"/></svg></span><span>Radar</span></button>
+    <button onclick="go('deals',this)"><span class="ni"><svg viewBox="0 0 24 24"><use href="#i-deals"/></svg></span><span>Deals</span></button>
+    <button class="crew-center-btn" onclick="go('crew',this)"><span class="ni"><svg viewBox="0 0 24 24" style="width:26px;height:26px"><use href="#i-crew"/></svg></span><span>Crew</span></button>
+    <button onclick="go('match',this)"><span class="ni"><svg viewBox="0 0 24 24"><use href="#i-flame"/></svg></span><span>Entdecken</span><span class="match-dot" id="matchDot" style="display:none"></span></button>
+    <button onclick="go('profile',this)"><span class="ni"><svg viewBox="0 0 24 24"><use href="#i-profile"/></svg></span><span>Profil</span></button>
   </nav>
 </div>
 
