@@ -1711,7 +1711,7 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 57;
+  var APP_VERSION = 58;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     // Force-clear old non-UUID crew IDs
@@ -5842,17 +5842,24 @@ async function buildDailyVoting(){
 
     // Load ALL votes for today from Supabase
     var allVotes={};
+    var _useLocalVotes=false;
     try{
-      var {data:vdata}=await sb.from('crew_votes').select('category,voter_id,voted_for').eq('crew_id',crewId).eq('date',today);
-      if(vdata)vdata.forEach(function(v){
-        if(!allVotes[v.category])allVotes[v.category]={};
-        allVotes[v.category][v.voter_id]=v.voted_for;
-      });
+      var {data:vdata,error:verr}=await sb.from('crew_votes').select('category,voter_id,voted_for').eq('crew_id',crewId).eq('date',today);
+      if(verr||!vdata){
+        _useLocalVotes=true;
+      } else {
+        vdata.forEach(function(v){
+          if(!allVotes[v.category])allVotes[v.category]={};
+          allVotes[v.category][v.voter_id]=v.voted_for;
+        });
+      }
     }catch(e){
-      // Fallback to localStorage
+      _useLocalVotes=true;
+    }
+    if(_useLocalVotes){
       todaySet.forEach(function(q){
         var lk='crew_vote_'+crewId+'_'+q.id+'_'+today;
-        allVotes[q.id]=JSON.parse(localStorage.getItem(lk)||'{}');
+        try{allVotes[q.id]=JSON.parse(localStorage.getItem(lk)||'{}');}catch(x){allVotes[q.id]={}}
       });
     }
 
@@ -5917,35 +5924,40 @@ window.voteCrewCategory=async function(category,uid,name){
   if(uid===ME.user_id){toast('Du kannst nicht für dich selbst voten! 😄');return}
   var crewId=getActiveCrewId();if(!crewId)return;
   var today=new Date().toISOString().split('T')[0];
+  var supaOk=false;
 
   try{
     // Check existing vote
-    var {data:existing}=await sb.from('crew_votes').select('id,voted_for').eq('crew_id',crewId).eq('voter_id',ME.user_id).eq('category',category).eq('date',today).limit(1);
+    var {data:existing,error:exErr}=await sb.from('crew_votes').select('id,voted_for').eq('crew_id',crewId).eq('voter_id',ME.user_id).eq('category',category).eq('date',today).limit(1);
+    if(exErr) throw exErr;
     if(existing&&existing.length>0){
       if(existing[0].voted_for===uid){
-        // Unvote
-        await sb.from('crew_votes').delete().eq('id',existing[0].id);
+        var {error:delErr}=await sb.from('crew_votes').delete().eq('id',existing[0].id);
+        if(delErr) throw delErr;
         toast('Vote zurückgenommen');
       } else {
-        // Change vote
-        await sb.from('crew_votes').update({voted_for:uid}).eq('id',existing[0].id);
+        var {error:updErr}=await sb.from('crew_votes').update({voted_for:uid}).eq('id',existing[0].id);
+        if(updErr) throw updErr;
         toast('Vote für '+name+'! ');
       }
     } else {
-      // New vote
-      await sb.from('crew_votes').insert({crew_id:crewId,voter_id:ME.user_id,voted_for:uid,category:category,date:today});
+      var {error:insErr}=await sb.from('crew_votes').insert({crew_id:crewId,voter_id:ME.user_id,voted_for:uid,category:category,date:today});
+      if(insErr) throw insErr;
       toast('Vote für '+name+'! 🗳️');
     }
+    supaOk=true;
   }catch(e){
+    console.warn('Vote Supabase error, using localStorage:',e);
     // Fallback localStorage
     var lk='crew_vote_'+crewId+'_'+category+'_'+today;
-    var votes=JSON.parse(localStorage.getItem(lk)||'{}');
+    var votes={};
+    try{votes=JSON.parse(localStorage.getItem(lk)||'{}');}catch(x){}
     if(votes[ME.user_id]===uid){delete votes[ME.user_id];toast('Vote zurückgenommen')}
     else{votes[ME.user_id]=uid;toast('Vote für '+name+'! 🗳️')}
     localStorage.setItem(lk,JSON.stringify(votes));
   }
   if(navigator.vibrate)navigator.vibrate(15);
-  buildDailyVoting();
+  try{await buildDailyVoting();}catch(e){console.error('Rebuild voting error:',e)}
 };
 
 // Challenge timer
