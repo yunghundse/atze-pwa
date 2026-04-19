@@ -175,6 +175,34 @@ select.ri{appearance:none;-webkit-appearance:none}
 .pin-user{width:18px;height:18px;border-radius:50%;background:var(--blue);border:3px solid #fff;box-shadow:0 0 0 5px rgba(10,132,255,.25);animation:userPulse 3s ease infinite}
 @keyframes userPulse{0%,100%{box-shadow:0 0 0 5px rgba(10,132,255,.25)}50%{box-shadow:0 0 0 12px rgba(10,132,255,.08)}}
 .pin-crew{width:36px;height:36px;border-radius:50%;border:2px solid var(--o);overflow:hidden}.pin-crew img{width:100%;height:100%;object-fit:cover}
+/* Community-Live-Pins (wie Travel-Tracker-Stil) */
+.cm-pin{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(255,109,46,.95),rgba(254,60,114,.85));color:#fff;font-size:11px;font-weight:900;border:2.5px solid #07060A;box-shadow:0 4px 14px rgba(255,109,46,.55),0 0 0 2px rgba(255,109,46,.2);overflow:hidden;cursor:pointer;transition:transform .2s var(--spring)}
+.cm-pin img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.cm-pin .cm-initials{display:block;line-height:1}
+.cm-pin.cm-live::after{content:'';position:absolute;top:-2px;right:-2px;width:10px;height:10px;border-radius:50%;background:var(--green);border:2px solid #07060A;box-shadow:0 0 0 2px rgba(48,209,88,.35);animation:cmLiveDot 2s ease infinite}
+.cm-pin.cm-crew{border-color:var(--o);box-shadow:0 4px 14px rgba(255,109,46,.55),0 0 0 3px rgba(255,109,46,.3)}
+.cm-pin.cm-buddy{border-color:#7FE3A0;box-shadow:0 4px 14px rgba(48,209,88,.55),0 0 0 3px rgba(48,209,88,.3);animation:cmBuddyPulse 2.4s ease infinite}
+@keyframes cmLiveDot{0%,100%{box-shadow:0 0 0 2px rgba(48,209,88,.35)}50%{box-shadow:0 0 0 5px rgba(48,209,88,.1)}}
+@keyframes cmBuddyPulse{0%,100%{box-shadow:0 4px 14px rgba(48,209,88,.55),0 0 0 3px rgba(48,209,88,.3)}50%{box-shadow:0 4px 20px rgba(48,209,88,.75),0 0 0 6px rgba(48,209,88,.12)}}
+/* Map-Marker-Popup */
+.cm-popup{min-width:170px;font-family:Inter,sans-serif}
+.cm-popup .cmp-name{font-weight:800;font-size:14px;color:#FE3C72}
+.cm-popup .cmp-sub{font-size:11px;color:#888;margin-top:3px}
+.cm-popup .cmp-mood{display:inline-block;font-size:11px;padding:3px 8px;border-radius:10px;background:rgba(255,109,46,.12);color:#FF6D2E;margin-top:5px;font-weight:700}
+.cm-popup .cmp-btn{display:block;width:100%;margin-top:8px;padding:7px;border:none;border-radius:8px;background:linear-gradient(135deg,#FF6D2E,#FE3C72);color:#fff;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit}
+/* Leaflet-Popup-Stil einheitlich dunkel */
+.leaflet-popup-content-wrapper{background:rgba(20,16,24,.95) !important;color:#fff !important;border-radius:14px !important;border:1px solid rgba(255,255,255,.1) !important;box-shadow:0 14px 36px rgba(0,0,0,.55) !important;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.leaflet-popup-tip{background:rgba(20,16,24,.95) !important;border:1px solid rgba(255,255,255,.1) !important}
+.leaflet-popup-content{margin:10px 12px !important;color:#fff !important;font-size:13px !important}
+.leaflet-popup-close-button{color:rgba(255,255,255,.6) !important;font-size:18px !important;padding:4px 8px !important}
+.leaflet-container{background:#0C0A10 !important}
+/* Custom Controls — Map-Recenter */
+.map-recenter{position:absolute;z-index:410;width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,rgba(22,22,28,.85),rgba(12,10,14,.75));backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);border:1px solid rgba(255,255,255,.1);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.4);transition:all .2s var(--spring)}
+.map-recenter:hover{background:linear-gradient(135deg,rgba(32,32,38,.9),rgba(18,14,22,.8));transform:translateY(-1px)}
+.map-recenter:active{transform:scale(.94)}
+.map-recenter svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+#screen-radar .map-recenter{bottom:14px;right:14px}
+.crew-map-full .map-recenter{bottom:12px;right:12px}
 .mood-bar{margin:0 14px 10px;padding:12px 14px;display:flex;align-items:center;gap:10px;position:relative;overflow:hidden;background:var(--glass);backdrop-filter:blur(40px);border:1px solid var(--glass-border);border-radius:var(--r);box-shadow:inset 0 1px 0 rgba(255,255,255,.06);border-bottom:2px solid transparent;background-image:linear-gradient(rgba(26,26,28,.55),rgba(26,26,28,.55)),linear-gradient(90deg,rgba(255,109,46,.4),rgba(52,199,89,.4),rgba(10,132,255,.4));background-clip:padding-box,border-box;background-origin:padding-box,border-box}
 .mood-bar::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(191,90,242,.06),rgba(255,109,46,.06));border-radius:var(--r);pointer-events:none}
 .mood-bar>*{position:relative}
@@ -2039,20 +2067,64 @@ nav{padding-bottom:max(6px,env(safe-area-inset-bottom)) !important}
    Header-Button + Sicherheits-Check-Modal
    ═══════════════════════════════════════════════════════════════ */
 
+/* Home-Button: prominenter Pill-Button (größer als normale hdr-btns, besser tappable) */
 .hdr-btn.hdr-home{
-  background:linear-gradient(135deg,rgba(48,209,88,.22),rgba(10,132,255,.14));
-  border:1px solid rgba(48,209,88,.32);
-  color:#7FE3A0;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 2px 10px rgba(48,209,88,.25);
-  position:relative;
+  width:auto;min-height:42px;padding:0 14px 0 12px;
+  border-radius:22px;gap:7px;
+  background:linear-gradient(135deg,rgba(48,209,88,.28),rgba(10,132,255,.18));
+  border:1px solid rgba(48,209,88,.38);
+  color:#B6F3C9;font-size:13px;font-weight:800;letter-spacing:-.1px;white-space:nowrap;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.16),
+    inset 0 -1px 0 rgba(0,0,0,.15),
+    0 3px 14px rgba(48,209,88,.28),
+    0 0 0 .5px rgba(48,209,88,.2);
+  position:relative;overflow:hidden;
+  animation:hdrHomeGlow 4s ease-in-out infinite;
+}
+.hdr-btn.hdr-home svg{width:18px !important;height:18px !important;flex-shrink:0}
+.hdr-btn.hdr-home .hhl{display:inline-block;line-height:1}
+.hdr-btn.hdr-home::before{
+  content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(135deg,rgba(255,255,255,.14),transparent 55%);
 }
 .hdr-btn.hdr-home::after{
-  content:'';position:absolute;inset:-2px;border-radius:50%;
-  background:radial-gradient(circle,rgba(48,209,88,.3),transparent 70%);
+  content:'';position:absolute;inset:-3px;border-radius:22px;
+  background:radial-gradient(ellipse at center,rgba(48,209,88,.35),transparent 70%);
   opacity:0;transition:opacity .25s;pointer-events:none;
 }
-.hdr-btn.hdr-home:hover::after{opacity:.8}
-.hdr-btn.hdr-home:hover{transform:translateY(-1px);box-shadow:inset 0 1px 0 rgba(255,255,255,.15),0 6px 18px rgba(48,209,88,.35)}
+.hdr-btn.hdr-home:hover::after{opacity:.75}
+.hdr-btn.hdr-home:hover{transform:translateY(-1px);box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 6px 18px rgba(48,209,88,.4)}
+.hdr-btn.hdr-home:active{transform:scale(.96)}
+@keyframes hdrHomeGlow{
+  0%,100%{box-shadow:inset 0 1px 0 rgba(255,255,255,.16),inset 0 -1px 0 rgba(0,0,0,.15),0 3px 14px rgba(48,209,88,.28),0 0 0 .5px rgba(48,209,88,.2)}
+  50%{box-shadow:inset 0 1px 0 rgba(255,255,255,.2),inset 0 -1px 0 rgba(0,0,0,.15),0 4px 22px rgba(48,209,88,.45),0 0 0 .5px rgba(48,209,88,.35)}
+}
+@media (prefers-reduced-motion:reduce){.hdr-btn.hdr-home{animation:none}}
+
+/* Setup-Badge am Home-Button */
+.hdr-home-dot{
+  position:absolute;top:-2px;right:-2px;width:11px;height:11px;border-radius:50%;
+  background:linear-gradient(135deg,#FF9500,#FF3B30);
+  border:2px solid rgba(5,5,7,.9);box-shadow:0 0 8px rgba(255,149,0,.6);
+  display:none;
+}
+.hdr-home-dot.show{display:block}
+
+/* Responsive: label weg auf super-kleinen Screens */
+@media (max-width:370px){
+  .hdr-btn.hdr-home{padding:0;width:42px;min-height:42px;border-radius:50%;gap:0}
+  .hdr-btn.hdr-home .hhl{display:none}
+  .hdr-btn.hdr-home svg{width:20px !important;height:20px !important}
+}
+/* Streak-Badge braucht auf schmalen Screens weniger Platz */
+@media (max-width:390px){
+  .streak-badge{padding:5px 9px !important;font-size:11px !important}
+  .hdr-actions{gap:6px !important}
+}
+@media (max-width:340px){
+  .streak-badge{display:none !important}
+}
 
 /* Crew-SOS-Bar: ab jetzt Home-Safe-Styling */
 .crew-sos-bar.home-safe-bar{
@@ -2213,6 +2285,135 @@ nav{padding-bottom:max(6px,env(safe-area-inset-bottom)) !important}
   .hs-header-ico{width:42px;height:42px}
   .hs-status-opt .hs-so-emoji{font-size:18px}
   .hs-act{padding:12px}
+}
+
+/* ─── Home-Safe Setup (Pre-Trip Personalisierung) ─── */
+.hs-setup-banner{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 12px;margin:10px 0 14px;border-radius:14px;
+  background:linear-gradient(135deg,rgba(255,149,0,.14),rgba(255,59,48,.06));
+  border:1px solid rgba(255,149,0,.28);cursor:pointer;
+  transition:all .2s var(--spring);
+}
+.hs-setup-banner:hover{transform:translateY(-1px);border-color:rgba(255,149,0,.4)}
+.hs-setup-banner.ready{background:linear-gradient(135deg,rgba(48,209,88,.14),rgba(10,132,255,.06));border-color:rgba(48,209,88,.28)}
+.hs-setup-banner .hsb-ico{width:32px;height:32px;border-radius:10px;background:rgba(255,149,0,.22);color:#FFB347;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.hs-setup-banner.ready .hsb-ico{background:rgba(48,209,88,.22);color:#7FE3A0}
+.hs-setup-banner .hsb-ico svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.hs-setup-banner .hsb-body{flex:1;min-width:0}
+.hs-setup-banner .hsb-title{font-size:13px;font-weight:800;color:var(--t);line-height:1.2}
+.hs-setup-banner .hsb-sub{font-size:11px;color:var(--t3);margin-top:2px;line-height:1.3}
+.hs-setup-banner .hsb-arrow{color:var(--t3);font-size:18px;flex-shrink:0}
+
+/* Setup-Modal (eigenes Popup) */
+.hss-ov{
+  position:fixed;inset:0;z-index:10008;display:none;
+  background:rgba(5,5,7,.85);
+  -webkit-backdrop-filter:blur(20px) saturate(170%);backdrop-filter:blur(20px) saturate(170%);
+  padding:max(16px,env(safe-area-inset-top)) 0 max(16px,env(safe-area-inset-bottom));
+  overflow-y:auto;-webkit-overflow-scrolling:touch;
+}
+.hss-ov.show{display:flex;flex-direction:column;align-items:center}
+.hss-card{
+  width:100%;max-width:480px;margin:auto;padding:22px 18px 18px;
+  background:linear-gradient(160deg,rgba(28,22,32,.97),rgba(18,14,22,.92));
+  border:1px solid rgba(255,255,255,.10);border-radius:28px;
+  box-shadow:0 32px 80px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.08);
+  position:relative;
+}
+.hss-close{
+  position:absolute;top:14px;right:14px;width:34px;height:34px;border-radius:50%;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);color:var(--t2);
+  font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+}
+.hss-header{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+.hss-ico{
+  width:44px;height:44px;border-radius:14px;flex-shrink:0;
+  background:linear-gradient(135deg,#FF9500,#FE3C72);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 8px 22px -6px rgba(255,149,0,.5);
+}
+.hss-ico svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.hss-title{font-size:19px;font-weight:900;letter-spacing:-.3px;color:var(--t);line-height:1.15}
+.hss-sub{font-size:12px;color:var(--t3);margin-top:2px;line-height:1.4}
+
+.hss-section{margin-top:18px}
+.hss-section-title{
+  display:flex;align-items:center;gap:8px;
+  font-size:12px;font-weight:800;color:var(--t2);
+  text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px;
+}
+.hss-section-title svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.hss-field{margin-bottom:10px}
+.hss-field label{display:block;font-size:11px;font-weight:700;color:var(--t3);margin-bottom:5px}
+.hss-input,.hss-textarea{
+  width:100%;padding:11px 13px;border-radius:12px;
+  background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.08);
+  color:var(--t);font-size:14px;font-family:inherit;
+  transition:border .2s;outline:none;
+}
+.hss-input:focus,.hss-textarea:focus{border-color:rgba(48,209,88,.4);background:rgba(0,0,0,.4)}
+.hss-textarea{resize:vertical;min-height:70px;font-size:13px;line-height:1.4}
+.hss-field-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+
+/* Buddy-Picker */
+.hss-buddy-list{display:flex;flex-direction:column;gap:6px;max-height:210px;overflow-y:auto;padding:2px}
+.hss-buddy{
+  display:flex;align-items:center;gap:10px;
+  padding:8px 10px;border-radius:12px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);
+  cursor:pointer;transition:all .2s var(--spring);
+}
+.hss-buddy:hover{background:rgba(255,255,255,.07)}
+.hss-buddy.sel{background:rgba(48,209,88,.12);border-color:rgba(48,209,88,.35)}
+.hss-buddy .bu-ava{width:34px;height:34px;border-radius:50%;overflow:hidden;flex-shrink:0;background:rgba(255,255,255,.06)}
+.hss-buddy .bu-ava img{width:100%;height:100%;object-fit:cover}
+.hss-buddy .bu-body{flex:1;min-width:0}
+.hss-buddy .bu-name{font-size:13px;font-weight:700;color:var(--t);line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hss-buddy .bu-sub{font-size:10.5px;color:var(--t3);margin-top:1px}
+.hss-buddy .bu-check{
+  width:22px;height:22px;border-radius:50%;flex-shrink:0;
+  background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.12);
+  display:flex;align-items:center;justify-content:center;color:transparent;
+  transition:all .2s var(--spring);
+}
+.hss-buddy.sel .bu-check{background:linear-gradient(135deg,#30D158,#0A84FF);border-color:transparent;color:#fff}
+.hss-buddy.sel .bu-check svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.hss-buddy-empty{text-align:center;padding:18px;font-size:12px;color:var(--t3);border-radius:12px;background:rgba(255,255,255,.03);border:1px dashed rgba(255,255,255,.08)}
+
+/* Trip-Meta */
+.hss-trip-box{
+  padding:12px;border-radius:14px;
+  background:linear-gradient(135deg,rgba(10,132,255,.10),rgba(48,209,88,.06));
+  border:1px solid rgba(10,132,255,.22);
+}
+.hss-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.hss-chip{
+  padding:6px 11px;border-radius:14px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);
+  font-size:11.5px;font-weight:700;color:var(--t2);cursor:pointer;
+  transition:all .18s var(--spring);
+}
+.hss-chip.sel{background:linear-gradient(135deg,rgba(48,209,88,.22),rgba(10,132,255,.16));border-color:rgba(48,209,88,.38);color:#B6F3C9}
+
+.hss-save-row{display:flex;gap:8px;margin-top:18px}
+.hss-save-row button{flex:1;padding:13px;border-radius:14px;font-size:13.5px;font-weight:800;cursor:pointer;transition:all .2s var(--spring);border:1px solid rgba(255,255,255,.08)}
+.hss-save-row .cancel{background:rgba(255,255,255,.05);color:var(--t)}
+.hss-save-row .prim{background:linear-gradient(135deg,#30D158,#0A84FF);border-color:transparent;color:#fff;box-shadow:0 10px 24px -8px rgba(48,209,88,.5)}
+
+/* Ready-Summary (oben im Home-Safe popup wenn setup vorhanden) */
+.hs-ready-summary{
+  padding:10px 12px;margin-bottom:10px;border-radius:12px;
+  background:rgba(48,209,88,.07);border:1px solid rgba(48,209,88,.18);
+  display:flex;align-items:center;gap:10px;
+}
+.hs-ready-summary .hrs-chips{display:flex;flex-wrap:wrap;gap:4px;flex:1;min-width:0}
+.hs-ready-summary .hrs-chip{font-size:10.5px;padding:3px 8px;border-radius:10px;background:rgba(48,209,88,.12);color:#7FE3A0;font-weight:700}
+
+@media (max-width:374px){
+  .hss-card{padding:18px 14px 14px}
+  .hss-title{font-size:17px}
+  .hss-field-row{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -2641,6 +2842,23 @@ nav{padding-bottom:max(6px,env(safe-area-inset-bottom)) !important}
     <rect x="3" y="3" width="18" height="18" rx="4"/>
     <polyline points="8 12 11 15 16 9"/>
   </symbol>
+  <symbol id="i-heart-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" fill="currentColor" fill-opacity=".08"/>
+    <polyline points="3.5 12 7 12 9 9 12 15 14 12 20.5 12"/>
+  </symbol>
+  <symbol id="i-edit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+  </symbol>
+  <symbol id="i-shield-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 2l8 4v6c0 5-3.5 9-8 10-4.5-1-8-5-8-10V6l8-4z" fill="currentColor" fill-opacity=".12"/>
+    <polyline points="9 12 11 14 15 10"/>
+  </symbol>
+  <symbol id="i-warning" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+    <line x1="12" y1="9" x2="12" y2="13"/>
+    <line x1="12" y1="17" x2="12.01" y2="17"/>
+  </symbol>
 </svg>
 
 <style>
@@ -2964,6 +3182,9 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
         <div class="hs-sub" id="hsSub">Kurzer Sicherheits-Check — dann geht's los</div>
       </div>
     </div>
+    <!-- Setup-Status Banner (dynamisch) -->
+    <div id="hsSetupBanner"></div>
+
     <div class="hs-progress" id="hsProgress">
       <span class="active"></span><span></span><span></span>
     </div>
@@ -3055,6 +3276,99 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
         <button class="hs-foot-btn" onclick="hsGoto(2)">Zurück</button>
         <button class="hs-foot-btn ghost" onclick="closeHomeSafe()">Fertig</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- HOME-SAFE SETUP — Vor-Trip-Personalisierung -->
+<div class="hss-ov" id="hsSetupOv">
+  <div class="hss-card">
+    <button class="hss-close" onclick="closeHsSetup()" aria-label="Schließen">✕</button>
+    <div class="hss-header">
+      <div class="hss-ico"><svg viewBox="0 0 24 24"><use href="#i-home-safe"/></svg></div>
+      <div>
+        <div class="hss-title">Sicher-Heim Einrichtung</div>
+        <div class="hss-sub">Einmal eingerichtet — im Notfall ist alles da.</div>
+      </div>
+    </div>
+
+    <div class="hss-section">
+      <div class="hss-section-title"><svg viewBox="0 0 24 24"><use href="#i-hotel"/></svg>Unterkunft</div>
+      <div class="hss-field">
+        <label>Hotel / Unterkunft</label>
+        <input type="text" class="hss-input" id="hss_hotel_name" placeholder="z.B. Hotel Playa de Palma"/>
+      </div>
+      <div class="hss-field">
+        <label>Adresse (für Taxi &amp; Routing)</label>
+        <input type="text" class="hss-input" id="hss_hotel_addr" placeholder="Straße, PLZ Ort"/>
+      </div>
+      <div class="hss-field">
+        <label>Zimmer / Stockwerk (optional)</label>
+        <input type="text" class="hss-input" id="hss_hotel_room" placeholder="z.B. Zimmer 412"/>
+      </div>
+    </div>
+
+    <div class="hss-section">
+      <div class="hss-section-title"><svg viewBox="0 0 24 24"><use href="#i-users"/></svg>Notfallkontakt</div>
+      <div class="hss-field">
+        <label>Name (wer wird im Notfall informiert)</label>
+        <input type="text" class="hss-input" id="hss_ec_name" placeholder="z.B. Mama, Sarah, …"/>
+      </div>
+      <div class="hss-field">
+        <label>Telefonnummer</label>
+        <input type="tel" class="hss-input" id="hss_ec_phone" placeholder="+49 …"/>
+      </div>
+    </div>
+
+    <div class="hss-section" id="hssBuddySection">
+      <div class="hss-section-title"><svg viewBox="0 0 24 24"><use href="#i-crew"/></svg>Crew-Buddy <span style="font-weight:500;text-transform:none;letter-spacing:0;font-size:10.5px;color:var(--t3);margin-left:auto">Wird zuerst benachrichtigt</span></div>
+      <div class="hss-buddy-list" id="hssBuddyList">
+        <div class="hss-buddy-empty">Lade Crew-Mitglieder…</div>
+      </div>
+    </div>
+
+    <div class="hss-section">
+      <div class="hss-section-title"><svg viewBox="0 0 24 24"><use href="#i-heart-pulse"/></svg>Medizinisch <span style="font-weight:500;text-transform:none;letter-spacing:0;font-size:10.5px;color:var(--t3);margin-left:auto">Optional</span></div>
+      <div class="hss-field-row">
+        <div class="hss-field">
+          <label>Blutgruppe</label>
+          <input type="text" class="hss-input" id="hss_blood" placeholder="z.B. A+"/>
+        </div>
+        <div class="hss-field">
+          <label>Krankenversicherung</label>
+          <input type="text" class="hss-input" id="hss_insurance" placeholder="z.B. AOK"/>
+        </div>
+      </div>
+      <div class="hss-field">
+        <label>Allergien / Medikamente / wichtige Hinweise</label>
+        <textarea class="hss-textarea" id="hss_medical" placeholder="z.B. Penicillin-Allergie, Asthma-Spray dabei, …"></textarea>
+      </div>
+    </div>
+
+    <div class="hss-section">
+      <div class="hss-section-title"><svg viewBox="0 0 24 24"><use href="#i-plane"/></svg>Trip-Info</div>
+      <div class="hss-trip-box">
+        <div class="hss-field" style="margin-bottom:6px">
+          <label>Reiseziel</label>
+          <input type="text" class="hss-input" id="hss_trip_dest" placeholder="z.B. Mallorca, Playa de Palma"/>
+        </div>
+        <div class="hss-field-row" style="margin-top:6px">
+          <div class="hss-field" style="margin-bottom:0">
+            <label>Anreise</label>
+            <input type="date" class="hss-input" id="hss_trip_from"/>
+          </div>
+          <div class="hss-field" style="margin-bottom:0">
+            <label>Abreise</label>
+            <input type="date" class="hss-input" id="hss_trip_to"/>
+          </div>
+        </div>
+        <div style="font-size:11px;color:var(--t3);margin-top:6px">Aktiviert Home-Safe automatisch während deines Trips.</div>
+      </div>
+    </div>
+
+    <div class="hss-save-row">
+      <button class="cancel" onclick="closeHsSetup()">Später</button>
+      <button class="prim" onclick="hsSaveSetup()">Speichern &amp; Einsatzbereit</button>
     </div>
   </div>
 </div>
@@ -3153,7 +3467,7 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
     <div class="logo">crew<span>.</span></div>
     <div class="hdr-actions">
       <div class="streak-badge" id="sBadge"><svg class="icn icn-fill" style="color:#FFD60A;width:11px;height:11px" viewBox="0 0 24 24"><use href="#i-flame"/></svg> <span id="sNum">0</span></div>
-      <button class="hdr-btn hdr-home" onclick="openHomeSafe()" aria-label="Bring mich nach Hause"><svg class="icn" style="width:18px;height:18px" viewBox="0 0 24 24"><use href="#i-home-safe"/></svg></button>
+      <button class="hdr-btn hdr-home" onclick="openHomeSafe()" aria-label="Bring mich nach Hause"><svg class="icn" viewBox="0 0 24 24"><use href="#i-home-safe"/></svg><span class="hhl">Heim</span><span class="hdr-home-dot" id="hdrHomeDot"></span></button>
       <button class="hdr-btn" onclick="openAlcoholTracker()" aria-label="Drinks"><svg class="icn" style="width:18px;height:18px" viewBox="0 0 24 24"><use href="#i-beer"/></svg></button>
       <button class="hdr-btn" onclick="openNoti()" aria-label="Benachrichtigungen"><svg class="icn" style="width:17px;height:17px" viewBox="0 0 24 24"><use href="#i-bell"/></svg><span class="notif-dot"></span></button>
     </div>
@@ -3736,7 +4050,7 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 67;
+  var APP_VERSION = 68;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     // Force-clear old non-UUID crew IDs
@@ -4959,6 +5273,9 @@ function buildApp(){
   initMap();
   initCMap();
 
+  // Home-Safe-Setup Status (Header-Badge)
+  try{ hsUpdateHeaderDot(); }catch(e){}
+
   // Apply nav labels (i18n)
   applyLang();
 
@@ -5211,37 +5528,234 @@ var userMarker = null, userAccCircle = null, userLat = 0, userLng = 0;
 var _gpsStatus = 'unknown'; // 'active','denied','unavailable','timeout','unknown'
 var _gpsLastUpdate = 0; // timestamp of last successful GPS fix
 var _gpsAccuracy = 9999; // last accuracy in meters
+// ============================================
+// UNIFIED MAP SYSTEM v2 — Radar + Crew + Community-Live-Pins
+// Basierend auf Travel-Tracker-Style (CartoDB dark_all)
+// ============================================
+var MAP_TILE_URL = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
+var MAP_RETINA_URL = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
+var _radarCommunityLayer = null, _crewCommunityLayer = null;
+var _communityPinsCache = []; // cached community user list
+var _communityLastFetch = 0;
+var COMMUNITY_TTL_MS = 45000; // 45s cache
+var COMMUNITY_STALE_MS = 30*60*1000; // letzte 30min = online
+
+function _baseTileLayer(){
+  return L.tileLayer(MAP_TILE_URL,{maxZoom:20,minZoom:2,attribution:'',subdomains:'abcd',detectRetina:true});
+}
+
+function _mapOpts(overrides){
+  var base = {zoomControl:false,attributionControl:false,scrollWheelZoom:true,tap:true,touchZoom:true,maxZoom:20,minZoom:3,preferCanvas:false,worldCopyJump:true};
+  if(overrides) for(var k in overrides) base[k]=overrides[k];
+  return base;
+}
+
+function _makeUserPinIcon(){
+  return L.divIcon({
+    html:'<div class="pin-user"></div>',
+    className:'cm-user-wrap',
+    iconSize:[22,22],iconAnchor:[11,11]
+  });
+}
+
+function _makeVenuePinIcon(v){
+  var d='<div class="pin pin-'+v.type+'">'+(v.emoji||'📍')+'</div>';
+  return L.divIcon({html:d,className:'',iconSize:[44,44],iconAnchor:[22,22]});
+}
+
+function _makeCommunityPinIcon(user){
+  var extra = user.isBuddy?' cm-buddy':user.isCrew?' cm-crew':'';
+  var live = user.isLive?' cm-live':'';
+  var inner;
+  if(user.photo_url){
+    inner = '<img src="'+esc(user.photo_url)+'" alt=""/>';
+  } else {
+    var init = (user.name||user.username||'?').charAt(0).toUpperCase();
+    inner = '<span class="cm-initials">'+init+'</span>';
+  }
+  return L.divIcon({
+    html:'<div class="cm-pin'+extra+live+'" style="position:relative">'+inner+'</div>',
+    className:'',
+    iconSize:[38,38],iconAnchor:[19,19],popupAnchor:[0,-18]
+  });
+}
+
+function _makeCommunityPopup(user){
+  var moodHtml = user.mood ? '<div class="cmp-mood">'+esc(user.mood)+' online</div>' : '';
+  var dist = '';
+  if(user.dist!=null){
+    dist = user.dist<1 ? Math.round(user.dist*1000)+'m' : user.dist.toFixed(1)+'km';
+    dist = ' · '+dist+' entfernt';
+  }
+  var tag = user.isBuddy?'👥 Buddy':user.isCrew?'🏴‍☠️ Crew':'🌴 Community';
+  return '<div class="cm-popup">'+
+    '<div class="cmp-name">'+esc(user.name||user.username||'crew-Mitglied')+'</div>'+
+    '<div class="cmp-sub">'+tag+dist+'</div>'+
+    moodHtml+
+    '<button class="cmp-btn" onclick="openUserFromMap(\''+esc(user.user_id)+'\')">Profil ansehen</button>'+
+  '</div>';
+}
+
+window.openUserFromMap = function(uid){
+  if(typeof openCrewProfile==='function'){ try{ openCrewProfile(uid); return; }catch(e){} }
+  if(typeof showProfileById==='function'){ try{ showProfileById(uid); return; }catch(e){} }
+  // Fallback: einfach zur Match-Seite
+  try{ go('match'); }catch(e){}
+};
+
+async function _loadCommunityUsers(){
+  var now = Date.now();
+  if(_communityPinsCache.length && (now - _communityLastFetch) < COMMUNITY_TTL_MS){
+    return _communityPinsCache;
+  }
+  if(!sb){ return []; }
+  try{
+    var cutoff = new Date(now - COMMUNITY_STALE_MS).toISOString();
+    var resp = await sb.from('profiles')
+      .select('user_id,name,username,photo_url,mood,lat,lng,last_active,location_updated_at')
+      .not('lat','is',null).not('lng','is',null)
+      .gte('location_updated_at', cutoff)
+      .limit(120);
+    var rows = (resp && resp.data) || [];
+    // filter blocked + self
+    rows = rows.filter(function(p){
+      if(ME && p.user_id===ME.user_id) return false;
+      if(typeof isBlocked==='function' && isBlocked(p.user_id)) return false;
+      return !!(p.lat && p.lng);
+    });
+    // Meta annotation
+    var setup = (typeof hsGetSetup==='function') ? hsGetSetup() : null;
+    var buddyId = setup && setup.buddy_id || null;
+    var crewIds = [];
+    try{
+      if(typeof getActiveCrewMemberIds==='function'){
+        crewIds = await getActiveCrewMemberIds();
+      }
+    }catch(e){}
+    rows.forEach(function(u){
+      var la = u.location_updated_at ? new Date(u.location_updated_at).getTime() : 0;
+      u.isLive = (now - la) < (10*60*1000); // letzte 10 min = live
+      u.isBuddy = buddyId && u.user_id===buddyId;
+      u.isCrew = crewIds.indexOf(u.user_id) >= 0;
+      if(userLat && userLng){
+        u.dist = getDistanceKm(userLat, userLng, u.lat, u.lng);
+      }
+    });
+    _communityPinsCache = rows;
+    _communityLastFetch = now;
+    return rows;
+  }catch(e){ console.warn('[MAP] community load failed:', e && e.message); return []; }
+}
+
+async function _renderCommunityLayer(map, storeKey){
+  if(!map) return;
+  var users = await _loadCommunityUsers();
+  var layer = L.layerGroup();
+  users.forEach(function(u){
+    try{
+      var m = L.marker([u.lat, u.lng], {icon: _makeCommunityPinIcon(u), riseOnHover:true});
+      m.bindPopup(_makeCommunityPopup(u));
+      m.addTo(layer);
+    }catch(e){}
+  });
+  // Swap out old layer
+  if(storeKey==='radar'){
+    if(_radarCommunityLayer) map.removeLayer(_radarCommunityLayer);
+    _radarCommunityLayer = layer;
+  } else {
+    if(_crewCommunityLayer) map.removeLayer(_crewCommunityLayer);
+    _crewCommunityLayer = layer;
+  }
+  layer.addTo(map);
+  return users.length;
+}
+
+function _addRecenterControl(map, container){
+  try{
+    var el = document.createElement('div');
+    el.className = 'map-recenter';
+    el.setAttribute('role','button');
+    el.setAttribute('aria-label','Auf meinen Standort zentrieren');
+    el.innerHTML = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>';
+    el.onclick = function(ev){
+      ev.stopPropagation();
+      if(userLat && userLng){
+        map.flyTo([userLat, userLng], Math.max(map.getZoom(), 16), {duration:0.6});
+      } else if(navigator.geolocation){
+        navigator.geolocation.getCurrentPosition(function(pos){
+          userLat = pos.coords.latitude; userLng = pos.coords.longitude;
+          map.flyTo([userLat,userLng], 16, {duration:0.6});
+        },function(){},{enableHighAccuracy:true,timeout:8000,maximumAge:30000});
+      }
+    };
+    container.appendChild(el);
+  }catch(e){}
+}
+
 function initMap(){
   var c=document.getElementById('radarMap');if(!c||rMap)return;
-  rMap=L.map(c,{zoomControl:0,attributionControl:0,scrollWheelZoom:true,maxZoom:20,minZoom:12}).setView(PC,17);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{maxZoom:20,attribution:''}).addTo(rMap);
+  var hasUser = !!(userLat && userLng);
+  var startLat = hasUser ? userLat : (PC[0]||39.5696);
+  var startLng = hasUser ? userLng : (PC[1]||2.6502);
+  var startZoom = hasUser ? 16 : 12;
+  if(hasUser) window._mapCentered = true;
+  rMap = L.map(c, _mapOpts({minZoom:4})).setView([startLat,startLng], startZoom);
+  _baseTileLayer().addTo(rMap);
+  // Venue pins
   VENUES.forEach(function(v){
-    var d=document.createElement('div');d.className='pin pin-'+v.type;d.textContent=v.emoji;
-    L.marker([v.lat,v.lng],{icon:L.divIcon({html:d.outerHTML,className:'',iconSize:[44,44],iconAnchor:[22,22]})}).addTo(rMap)
-      .bindPopup('<div style="min-width:140px"><h3 style="font-size:13px;font-weight:800;margin-bottom:3px">'+esc(v.name)+'</h3><p style="font-size:11px;color:#888;margin-bottom:6px">'+esc(v.description)+'</p><button style="display:block;width:100%;padding:7px;border:none;border-radius:8px;background:#FF6D2E;color:#fff;font-size:11px;font-weight:700;cursor:pointer" onclick="openVenue(\''+v.id+'\')">Details</button></div>');
+    L.marker([v.lat,v.lng],{icon:_makeVenuePinIcon(v),riseOnHover:true}).addTo(rMap)
+      .bindPopup('<div style="min-width:160px"><h3 style="font-size:13px;font-weight:800;margin-bottom:3px;color:#FF6D2E">'+esc(v.name)+'</h3><p style="font-size:11px;color:#aaa;margin-bottom:8px;line-height:1.4">'+esc(v.description||'')+'</p><button style="display:block;width:100%;padding:8px;border:none;border-radius:8px;background:linear-gradient(135deg,#FF6D2E,#FE3C72);color:#fff;font-size:11px;font-weight:700;cursor:pointer" onclick="openVenue(\''+v.id+'\')">Details</button></div>');
   });
-  // User location marker (GPS tracking is started via checkLocationConsent)
-  var u=document.createElement('div');u.className='pin-user';
-  userMarker = L.marker(PC,{icon:L.divIcon({html:u.outerHTML,className:'',iconSize:[16,16],iconAnchor:[8,8]})}).addTo(rMap);
-  // GPS tracking is now consent-gated — started in checkLocationConsent()
-  setTimeout(function(){rMap.invalidateSize()},200);
+  // User marker
+  userMarker = L.marker([startLat,startLng],{icon:_makeUserPinIcon(),zIndexOffset:1000}).addTo(rMap);
+  // Recenter control
+  if(c.parentElement){ _addRecenterControl(rMap, c.parentElement); }
+  // Community-Pins laden (async)
+  _renderCommunityLayer(rMap, 'radar');
+  // Periodic refresh
+  if(!window._radarRefreshInt){
+    window._radarRefreshInt = setInterval(function(){
+      if(rMap && document.getElementById('screen-radar').classList.contains('active')){
+        _renderCommunityLayer(rMap, 'radar');
+      }
+    }, 60000);
+  }
+  setTimeout(function(){ try{ rMap.invalidateSize(); }catch(e){} }, 250);
 }
+
 function initCMap(){
   var c=document.getElementById('crewMap');if(!c||cMap)return;
-  cMap=L.map(c,{zoomControl:0,attributionControl:0,scrollWheelZoom:true,maxZoom:20}).setView(PC,17);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{maxZoom:20,attribution:''}).addTo(cMap);
-  var u=document.createElement('div');u.className='pin-user';
-  window._crewUserMarker = L.marker(PC,{icon:L.divIcon({html:u.outerHTML,className:'',iconSize:[16,16],iconAnchor:[8,8]})}).addTo(cMap);
-  // Center on user if available (only if consent given)
-  var cConsent=getLocationConsent();
-  if(navigator.geolocation&&(cConsent==='permanent'||cConsent==='session')){
+  var hasUser = !!(userLat && userLng);
+  var startLat = hasUser ? userLat : (PC[0]||39.5696);
+  var startLng = hasUser ? userLng : (PC[1]||2.6502);
+  var startZoom = hasUser ? 15 : 12;
+  if(hasUser) window._cmapCentered = true;
+  cMap = L.map(c, _mapOpts()).setView([startLat,startLng], startZoom);
+  _baseTileLayer().addTo(cMap);
+  window._crewUserMarker = L.marker([startLat,startLng],{icon:_makeUserPinIcon(),zIndexOffset:1000}).addTo(cMap);
+  if(c.parentElement){ _addRecenterControl(cMap, c.parentElement); }
+  // Bei Consent aktuelle Position holen
+  var cConsent=(typeof getLocationConsent==='function')?getLocationConsent():'permanent';
+  if(navigator.geolocation && (cConsent==='permanent' || cConsent==='session' || cConsent==='unknown')){
     navigator.geolocation.getCurrentPosition(function(pos){
       var ll=[pos.coords.latitude,pos.coords.longitude];
-      cMap.setView(ll,17);
+      userLat = pos.coords.latitude; userLng = pos.coords.longitude;
+      try{ cMap.setView(ll, 16); }catch(e){}
       window._crewUserMarker.setLatLng(ll);
-    },function(e){console.warn('[CREW] crewMap getCurrentPosition:',e&&e.message)},{enableHighAccuracy:false,maximumAge:60000,timeout:30000});
+      // Nach initialer Position neu laden (damit distances stimmen)
+      _renderCommunityLayer(cMap, 'crew');
+    },function(e){ console.warn('[CREW] crewMap getCurrentPosition:',e&&e.message); }, {enableHighAccuracy:true,maximumAge:30000,timeout:10000});
   }
-  setTimeout(function(){cMap.invalidateSize()},200);
+  // Community-Pins direkt mit dem was wir haben
+  _renderCommunityLayer(cMap, 'crew');
+  if(!window._crewRefreshInt){
+    window._crewRefreshInt = setInterval(function(){
+      if(cMap && document.getElementById('screen-crew').classList.contains('active')){
+        _renderCommunityLayer(cMap, 'crew');
+      }
+    }, 60000);
+  }
+  setTimeout(function(){ try{ cMap.invalidateSize(); }catch(e){} }, 250);
 }
 
 window.openVenue = function(id){
@@ -8253,6 +8767,222 @@ function updateChallengeTimer(){
 }
 
 // ============================================
+// HOME-SAFE SETUP — Pre-Trip Personalisierung
+// localStorage-primär, best-effort Sync in profiles
+// ============================================
+var HS_SETUP_KEY = 'home_safe_setup_v1';
+function hsGetSetup(){
+  try{ var raw=localStorage.getItem(HS_SETUP_KEY); return raw?JSON.parse(raw):null; }catch(e){ return null; }
+}
+function hsSaveSetupObj(obj){
+  try{ localStorage.setItem(HS_SETUP_KEY, JSON.stringify(obj)); }catch(e){}
+  // Auch Hotel-Adresse kompatibel halten (wird vom Haupt-Flow gelesen)
+  if(obj && (obj.hotel_name||obj.hotel_addr)){
+    try{
+      localStorage.setItem('hotel_address', JSON.stringify({
+        name:obj.hotel_name||obj.hotel_addr,
+        address:obj.hotel_addr||obj.hotel_name,
+        room:obj.hotel_room||'',
+        saved_at:new Date().toISOString()
+      }));
+    }catch(e){}
+  }
+  // Best-effort sync
+  if(sb && ME && ME.user_id){
+    var payload = {};
+    if(obj.hotel_name||obj.hotel_addr) payload.hotel_address = JSON.stringify({name:obj.hotel_name,address:obj.hotel_addr,room:obj.hotel_room});
+    if(obj.ec_name || obj.ec_phone) payload.emergency_contact = [obj.ec_name,obj.ec_phone].filter(Boolean).join(' · ');
+    if(Object.keys(payload).length){
+      sb.from('profiles').update(payload).eq('user_id',ME.user_id).then(function(){}).catch(function(){});
+    }
+  }
+}
+function hsSetupIsReady(s){
+  if(!s) return false;
+  var filled = 0;
+  if(s.hotel_name || s.hotel_addr) filled++;
+  if(s.ec_name && s.ec_phone) filled++;
+  if(s.buddy_id) filled++;
+  if(s.trip_dest) filled++;
+  return filled >= 2; // mindestens 2 kritische Felder
+}
+function hsSetupCompleteness(s){
+  if(!s) return {count:0,total:5,ready:false};
+  var c=0;
+  if(s.hotel_name || s.hotel_addr) c++;
+  if(s.ec_name && s.ec_phone) c++;
+  if(s.buddy_id) c++;
+  if(s.blood || s.medical || s.insurance) c++;
+  if(s.trip_dest) c++;
+  return {count:c,total:5,ready:c>=2};
+}
+
+window.openHsSetup = function(){
+  var ov = document.getElementById('hsSetupOv');
+  if(!ov) return;
+  var s = hsGetSetup() || {};
+  // Felder prefüllen
+  (document.getElementById('hss_hotel_name')||{}).value = s.hotel_name || '';
+  (document.getElementById('hss_hotel_addr')||{}).value = s.hotel_addr || '';
+  (document.getElementById('hss_hotel_room')||{}).value = s.hotel_room || '';
+  (document.getElementById('hss_ec_name')||{}).value   = s.ec_name || (ME&&ME.emergency_contact?String(ME.emergency_contact).split(' · ')[0]||'':'');
+  (document.getElementById('hss_ec_phone')||{}).value  = s.ec_phone || (ME&&ME.emergency_contact?String(ME.emergency_contact).split(' · ')[1]||'':'');
+  (document.getElementById('hss_blood')||{}).value     = s.blood || '';
+  (document.getElementById('hss_insurance')||{}).value = s.insurance || '';
+  (document.getElementById('hss_medical')||{}).value   = s.medical || '';
+  (document.getElementById('hss_trip_dest')||{}).value = s.trip_dest || (ME&&ME.current_location?ME.current_location:'Mallorca');
+  (document.getElementById('hss_trip_from')||{}).value = s.trip_from || '';
+  (document.getElementById('hss_trip_to')||{}).value   = s.trip_to || '';
+  // Buddy-Liste bauen
+  hsBuildBuddyList(s.buddy_id || null);
+  ov.classList.add('show');
+  if(navigator.vibrate) navigator.vibrate(15);
+};
+window.closeHsSetup = function(){
+  var ov=document.getElementById('hsSetupOv');
+  if(ov) ov.classList.remove('show');
+};
+
+window.hsPickBuddy = function(el, userId, name, photo){
+  document.querySelectorAll('#hssBuddyList .hss-buddy').forEach(function(e){e.classList.remove('sel')});
+  el.classList.add('sel');
+  el.dataset.selected = '1';
+  // Store in temp state, wird bei Save übernommen
+  el.closest('#hssBuddyList').dataset.selectedId = userId;
+  el.closest('#hssBuddyList').dataset.selectedName = name||'';
+  el.closest('#hssBuddyList').dataset.selectedPhoto = photo||'';
+};
+
+function hsBuildBuddyList(preSelId){
+  var wrap = document.getElementById('hssBuddyList');
+  if(!wrap) return;
+  wrap.innerHTML = '<div class="hss-buddy-empty">Lade Crew…</div>';
+  wrap.dataset.selectedId = preSelId || '';
+
+  // Aktive Crew-Mitglieder laden (best-effort)
+  function render(members){
+    if(!members || !members.length){
+      wrap.innerHTML = '<div class="hss-buddy-empty">Noch keine Crew — Buddy kannst du später festlegen.</div>';
+      return;
+    }
+    wrap.innerHTML = members.map(function(m){
+      var sel = (preSelId && m.user_id===preSelId) ? ' sel' : '';
+      var photo = m.photo_url || m.photo || '';
+      var name = esc(m.name||m.username||'Crew-Member');
+      var sub = m.hotel_name ? esc(m.hotel_name) : (m.sub||'Crew');
+      var imgHtml = photo ? '<img src="'+esc(photo)+'" alt=""/>' : '<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:13px;color:var(--t3)">'+name.charAt(0).toUpperCase()+'</div>';
+      return '<div class="hss-buddy'+sel+'" onclick="hsPickBuddy(this,\''+esc(m.user_id)+'\',\''+name.replace(/\'/g,"\\\'")+'\',\''+esc(photo)+'\')" data-id="'+esc(m.user_id)+'">'+
+        '<div class="bu-ava">'+imgHtml+'</div>'+
+        '<div class="bu-body"><div class="bu-name">'+name+'</div><div class="bu-sub">'+sub+'</div></div>'+
+        '<div class="bu-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>'+
+      '</div>';
+    }).join('');
+    if(preSelId){
+      var pre = wrap.querySelector('.hss-buddy.sel');
+      if(pre){
+        wrap.dataset.selectedId = preSelId;
+        wrap.dataset.selectedName = pre.querySelector('.bu-name').textContent;
+      }
+    }
+  }
+
+  // Versuche aktive Crew-Mitglieder zu bekommen
+  try{
+    if(typeof getActiveCrewId==='function' && sb){
+      var cid = getActiveCrewId();
+      if(!cid){ render([]); return; }
+      sb.from('crew_members').select('user_id').eq('crew_id',cid).then(function(r){
+        var ids = (r && r.data || []).map(function(x){return x.user_id});
+        if(!ids.length){ render([]); return; }
+        sb.from('profiles').select('user_id,name,username,photo_url,hotel_address').in('user_id',ids).then(function(pr){
+          var rows = (pr && pr.data || []).filter(function(x){return !ME || x.user_id!==ME.user_id});
+          rows.forEach(function(x){
+            try{ if(x.hotel_address){ var h=typeof x.hotel_address==='string'?JSON.parse(x.hotel_address):x.hotel_address; x.hotel_name=h.name||h.address||''; } }catch(e){}
+          });
+          render(rows);
+        }).catch(function(){ render([]); });
+      }).catch(function(){ render([]); });
+    } else {
+      render([]);
+    }
+  }catch(e){ render([]); }
+}
+
+window.hsSaveSetup = function(){
+  var prevList = document.getElementById('hssBuddyList');
+  var buddyId = prevList ? (prevList.dataset.selectedId||'') : '';
+  var buddyName = prevList ? (prevList.dataset.selectedName||'') : '';
+  var buddyPhoto = prevList ? (prevList.dataset.selectedPhoto||'') : '';
+  var obj = {
+    hotel_name: (document.getElementById('hss_hotel_name')||{}).value || '',
+    hotel_addr: (document.getElementById('hss_hotel_addr')||{}).value || '',
+    hotel_room: (document.getElementById('hss_hotel_room')||{}).value || '',
+    ec_name:    (document.getElementById('hss_ec_name')||{}).value || '',
+    ec_phone:   (document.getElementById('hss_ec_phone')||{}).value || '',
+    buddy_id:   buddyId,
+    buddy_name: buddyName,
+    buddy_photo: buddyPhoto,
+    blood:      (document.getElementById('hss_blood')||{}).value || '',
+    insurance:  (document.getElementById('hss_insurance')||{}).value || '',
+    medical:    (document.getElementById('hss_medical')||{}).value || '',
+    trip_dest:  (document.getElementById('hss_trip_dest')||{}).value || '',
+    trip_from:  (document.getElementById('hss_trip_from')||{}).value || '',
+    trip_to:    (document.getElementById('hss_trip_to')||{}).value || '',
+    saved_at:   new Date().toISOString()
+  };
+  hsSaveSetupObj(obj);
+  toast('Sicher-Heim eingerichtet ✓');
+  closeHsSetup();
+  hsRefreshSetupBanner();
+  hsUpdateHeaderDot();
+  // Wenn Home-Safe Popup offen: Actions & Hotel neu bauen
+  try{ hsBuildActions(); }catch(e){}
+};
+
+function hsRefreshSetupBanner(){
+  var wrap = document.getElementById('hsSetupBanner');
+  if(!wrap) return;
+  var s = hsGetSetup();
+  var info = hsSetupCompleteness(s);
+  if(info.ready){
+    // Ready-summary zeigen
+    var chips = [];
+    if(s.hotel_name||s.hotel_addr) chips.push('🏨 Hotel');
+    if(s.ec_name) chips.push('📞 Kontakt');
+    if(s.buddy_name) chips.push('👥 '+esc(s.buddy_name.split(' ')[0]));
+    if(s.blood||s.medical) chips.push('❤ Medizinisch');
+    if(s.trip_dest) chips.push('✈ '+esc(s.trip_dest.split(',')[0]));
+    wrap.innerHTML =
+      '<div class="hs-setup-banner ready" onclick="openHsSetup()">'+
+        '<div class="hsb-ico"><svg viewBox="0 0 24 24"><use href="#i-shield-check"/></svg></div>'+
+        '<div class="hsb-body">'+
+          '<div class="hsb-title">Einsatzbereit · '+info.count+'/'+info.total+' eingerichtet</div>'+
+          '<div class="hsb-sub">'+chips.slice(0,3).join(' · ')+'</div>'+
+        '</div>'+
+        '<div class="hsb-arrow"><svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><use href="#i-edit"/></svg></div>'+
+      '</div>';
+  } else {
+    wrap.innerHTML =
+      '<div class="hs-setup-banner" onclick="openHsSetup()">'+
+        '<div class="hsb-ico"><svg viewBox="0 0 24 24"><use href="#i-warning"/></svg></div>'+
+        '<div class="hsb-body">'+
+          '<div class="hsb-title">Einrichtung unvollständig</div>'+
+          '<div class="hsb-sub">Hotel + Notfallkontakt + Buddy einmal festlegen — dann ist im Ernstfall alles da.</div>'+
+        '</div>'+
+        '<div class="hsb-arrow">›</div>'+
+      '</div>';
+  }
+}
+
+function hsUpdateHeaderDot(){
+  var dot = document.getElementById('hdrHomeDot');
+  if(!dot) return;
+  var s = hsGetSetup();
+  var info = hsSetupCompleteness(s);
+  if(!info.ready){ dot.classList.add('show'); } else { dot.classList.remove('show'); }
+}
+
+// ============================================
 // HOME-SAFE — "Bring mich nach Hause"
 // Sicherheits-Check + Route zum Hotel / letzten Check-in
 // ============================================
@@ -8263,6 +8993,7 @@ window.openHomeSafe = function(){
   document.getElementById('homeSafeOv').classList.add('show');
   if(navigator.vibrate) navigator.vibrate([20,40,20]);
   hsResetUI();
+  hsRefreshSetupBanner();
   hsPrefillChecks();
   hsGetPosition();
 };
@@ -8351,7 +9082,15 @@ function hsGetPosition(){
 }
 
 function hsGetHotel(){
-  // Priorität: localStorage > ME.hotel_address > null
+  // Priorität: Setup > localStorage > ME.hotel_address > null
+  var setup = hsGetSetup();
+  if(setup && (setup.hotel_name || setup.hotel_addr)){
+    return {
+      name: setup.hotel_name || setup.hotel_addr,
+      address: setup.hotel_addr || setup.hotel_name,
+      room: setup.hotel_room || ''
+    };
+  }
   try{ var h=localStorage.getItem('hotel_address'); if(h) return JSON.parse(h); }catch(e){}
   if(ME && ME.hotel_address){
     try{ return typeof ME.hotel_address==='string'?JSON.parse(ME.hotel_address):ME.hotel_address; }catch(e){ return {name:ME.hotel_address, address:ME.hotel_address}; }
@@ -8482,21 +9221,24 @@ window.hsClearHotel = function(){
 };
 
 window.hsShareToCrew = async function(msg){
+  var setup = hsGetSetup();
+  var buddyTag = (setup && setup.buddy_name) ? ' @'+setup.buddy_name.split(' ')[0] : '';
+  var fullMsg = '🏠'+buddyTag+' '+msg;
   try{
     if(sb && ME && ME.user_id && HS_STATE.pos){
       // Best-effort: SOS-Alert in DB speichern (falls vorhanden)
-      sb.from('sos_alerts').insert({user_id:ME.user_id,lat:HS_STATE.pos.lat,lng:HS_STATE.pos.lng,message:msg}).then(function(){}).catch(function(){});
+      sb.from('sos_alerts').insert({user_id:ME.user_id,lat:HS_STATE.pos.lat,lng:HS_STATE.pos.lng,message:fullMsg}).then(function(){}).catch(function(){});
     }
     // Aktive Crew als Chat-Nachricht (falls verfügbar)
     if(typeof getActiveCrewId==='function'){
       var cid = getActiveCrewId();
       if(cid && sb){
-        sb.from('crew_messages').insert({crew_id:cid,user_id:ME.user_id,message:'🏠 '+msg,created_at:new Date().toISOString()}).then(function(){}).catch(function(){});
+        sb.from('crew_messages').insert({crew_id:cid,user_id:ME.user_id,message:fullMsg,created_at:new Date().toISOString()}).then(function(){}).catch(function(){});
       }
     }
   }catch(e){}
-  hsShareLink(msg);
-  toast('Crew benachrichtigt ✓');
+  hsShareLink(fullMsg);
+  toast(setup && setup.buddy_name ? ('Crew + '+setup.buddy_name.split(' ')[0]+' benachrichtigt ✓') : 'Crew benachrichtigt ✓');
 };
 
 window.hsShareLink = function(msg){
