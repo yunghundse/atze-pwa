@@ -151,6 +151,12 @@ var currentUser = null;
 var params = new URLSearchParams(window.location.search);
 var urlUserId = params.get('u');
 
+// If this is a crew join or partner redeem link, redirect to app.html
+var joinCrewParam = params.get('joincrew');
+var partnerParam = params.get('partner');
+if(joinCrewParam){window.location.href='app.html?joincrew='+encodeURIComponent(joinCrewParam);throw 'redirect'}
+if(partnerParam){window.location.href='app.html?partner='+encodeURIComponent(partnerParam);throw 'redirect'}
+
 // Partner login
 async function loginPartner(){
   var code = document.getElementById('partnerCode').value.trim().toLowerCase();

@@ -235,6 +235,7 @@ select.ri{appearance:none;-webkit-appearance:none}
 .no-profiles{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center;padding:40px 20px;color:var(--t3)}
 .no-profiles > div:first-child{font-size:72px;margin-bottom:20px;animation:float 3s ease-in-out infinite}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
+@keyframes scanLine{0%,100%{top:20%}50%{top:70%}}
 
 /* CREW */
 .crew-map-full{height:240px;margin:68px 12px 10px;border-radius:var(--r2);overflow:hidden;position:relative;z-index:1;border:1px solid rgba(255,255,255,.08);box-shadow:0 8px 32px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.06)}
@@ -1111,6 +1112,33 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
   </div>
 </div>
 
+<!-- QR SCANNER OVERLAY -->
+<div class="crew-profile-ov" id="qrScannerOv">
+  <button class="cp-back" onclick="closeQRScanner()">←</button>
+  <div style="padding:80px 20px 20px;text-align:center">
+    <div style="font-size:22px;font-weight:900;letter-spacing:-.5px;margin-bottom:4px">QR-Code scannen</div>
+    <div style="font-size:12px;color:var(--t3);margin-bottom:16px">Scanne einen Crew-, User- oder Partner-QR-Code</div>
+    <div id="qrVideoWrap" style="position:relative;width:100%;max-width:320px;margin:0 auto;border-radius:20px;overflow:hidden;border:2px solid rgba(255,109,46,.3);background:#000">
+      <video id="qrVideo" playsinline autoplay muted style="width:100%;display:block;min-height:280px"></video>
+      <div style="position:absolute;inset:0;border:3px solid rgba(255,109,46,.4);border-radius:20px;pointer-events:none"></div>
+      <div id="qrScanLine" style="position:absolute;left:10%;right:10%;top:30%;height:2px;background:var(--o);box-shadow:0 0 12px var(--o);animation:scanLine 2s ease-in-out infinite"></div>
+    </div>
+    <div id="qrScanStatus" style="margin-top:14px;font-size:13px;color:var(--t3)">Kamera wird geladen...</div>
+    <div id="qrScanResult" style="display:none;margin-top:16px;padding:16px;border-radius:14px;background:rgba(48,209,88,.08);border:1px solid rgba(48,209,88,.15)">
+      <div style="font-size:14px;font-weight:700;color:var(--mint)" id="qrResultText"></div>
+    </div>
+    <div style="margin-top:16px;display:flex;gap:10px;justify-content:center">
+      <button onclick="closeQRScanner()" style="padding:12px 24px;border-radius:14px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.06);color:var(--t2);font-size:13px;font-weight:700;cursor:pointer;font-family:inherit">Abbrechen</button>
+    </div>
+  </div>
+</div>
+
+<!-- PARTNER DEAL REDEEM OVERLAY -->
+<div class="crew-profile-ov" id="partnerRedeemOv">
+  <button class="cp-back" onclick="closePartnerRedeem()">←</button>
+  <div style="padding:80px 20px 40px;text-align:center" id="partnerRedeemContent"></div>
+</div>
+
 <!-- LOCATION CONSENT DIALOG -->
 <div id="locationConsentOv" style="display:none;position:fixed;inset:0;z-index:99997;background:rgba(0,0,0,.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);flex-direction:column;align-items:center;justify-content:center;padding:30px">
   <div style="max-width:380px;text-align:center">
@@ -1420,6 +1448,10 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
             <div class="cab-icon">💬</div>
             <span>Chat</span>
           </div>
+          <div class="crew-action-btn" onclick="openQRScanner()">
+            <div class="cab-icon">📷</div>
+            <span>QR Scan</span>
+          </div>
           <div class="crew-action-btn" onclick="sendSafeCheckIn()">
             <div class="cab-icon">✅</div>
             <span>Safe</span>
@@ -1637,6 +1669,7 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
     <div class="scr" id="screen-profile"><div class="prof-hero"><div class="prof-ava-wrap"><div class="prof-ava"><img id="profAvaImg" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80"></div><div class="prof-ava-edit" onclick="openPhotoUpload()">📷</div></div><h2><span id="profName">Laden...</span></h2><div class="handle" id="profHandle"></div><div class="prof-badges-row" id="profBadges"></div></div><div class="prof-vibe" id="profVibe"></div><div class="prof-socials" id="profSocials"></div><div class="prof-stats glass"><div class="pstat"><div class="pn" id="stM">0</div><div class="pl">Matches</div></div><div class="pstat"><div class="pn" id="stCrew">0</div><div class="pl">Crew</div></div><div class="pstat"><div class="pn" id="stPts">0</div><div class="pl">✨ Aura</div></div></div><div class="premium-cta" id="premCta" onclick="openPremium()"><h3>✨ crew Premium</h3><div class="pc-sub">Keine Werbung · Unlimited Swipes · VIP</div><div class="pc-btn">Ab 2,99€</div></div><div class="pmenu">
 <div class="pmi" id="adminMenuItem" style="display:none;background:linear-gradient(135deg,rgba(255,109,46,.08),rgba(255,109,46,.02));border:1px solid rgba(255,109,46,.2)" onclick="openAdminPanel()"><div class="pmi-icon o">👑</div><span class="pmi-label" style="color:var(--o);font-weight:700">Admin Dashboard</span><span class="pmi-arrow" style="color:var(--o)">›</span></div>
 <div class="pmi" style="background:linear-gradient(135deg,rgba(255,214,10,.08),rgba(255,214,10,.02));border:1px solid rgba(255,214,10,.15)" onclick="showMyQR()"><div class="pmi-icon o" style="background:rgba(255,214,10,.1)">📲</div><span class="pmi-label" style="font-weight:700">Mein QR-Code</span><span class="pmi-arrow" style="color:var(--yellow)">›</span></div>
+<div class="pmi" style="background:linear-gradient(135deg,rgba(48,209,88,.08),rgba(48,209,88,.02));border:1px solid rgba(48,209,88,.15)" onclick="openQRScanner()"><div class="pmi-icon o" style="background:rgba(48,209,88,.1)">📷</div><span class="pmi-label" style="font-weight:700">QR-Code scannen</span><span class="pmi-arrow" style="color:var(--mint)">›</span></div>
 <div class="pe-section">Profil & Einstellungen</div>
 <div class="pmi" onclick="editProfile()"><div class="pmi-icon o">✏️</div><span class="pmi-label">Profil bearbeiten</span><span class="pmi-arrow">›</span></div>
 <div class="pmi" onclick="editSocials()"><div class="pmi-icon o">📱</div><span class="pmi-label">Social Media verknüpfen</span><span class="pmi-arrow">›</span></div>
@@ -1675,7 +1708,7 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 48;
+  var APP_VERSION = 49;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     localStorage.setItem('crew_app_v', APP_VERSION);
@@ -2138,8 +2171,15 @@ document.addEventListener('DOMContentLoaded', async function(){
     }
 
     // Handle invite links — redirect non-logged-in users to landing page
-    var inviteParam = new URLSearchParams(window.location.search).get('invite');
+    var _urlParams = new URLSearchParams(window.location.search);
+    var inviteParam = _urlParams.get('invite');
     if(inviteParam) localStorage.setItem('crew_invited_by', inviteParam);
+    // Handle crew QR join link (?joincrew=CODE) — sanitize: only alphanumeric 4-8 chars
+    var joinCrewParam = _urlParams.get('joincrew');
+    if(joinCrewParam && /^[A-Z0-9]{4,8}$/i.test(joinCrewParam)) localStorage.setItem('crew_pending_join', joinCrewParam.toUpperCase());
+    // Handle partner QR (?partner=CODE) — sanitize: only alphanumeric/dash/underscore 2-30 chars
+    var partnerParam = _urlParams.get('partner');
+    if(partnerParam && /^[a-zA-Z0-9_-]{2,30}$/.test(partnerParam)) localStorage.setItem('crew_pending_partner', partnerParam);
 
     if(session && session.user){
       await loadUser(session.user);
@@ -2410,6 +2450,10 @@ async function loadUser(authUser){
     buildApp();
     // Check location consent after app is visible
     checkLocationConsent();
+    // Handle pending crew QR join
+    handlePendingCrewJoin();
+    // Handle pending partner QR
+    handlePendingPartnerRedeem();
   } catch(e) {
     console.error('[CREW] loadUser error:', e);
     document.getElementById('loadingScreen').classList.add('gone');
@@ -4077,6 +4121,17 @@ window.openMyCrewProfile=function(){
     html+='</div>';
     html+='<div style="font-size:10px;color:var(--t3);text-align:center;margin-top:8px;line-height:1.4">Teile diesen Code mit Freunden. Sie können ihn unter<br>Crew → 🔑 Code eingeben manuell eingeben.</div>';
     html+='</div>';
+    // Crew QR code
+    var crewQrData='https://partycrew.app/app.html?joincrew='+encodeURIComponent(boardEntry.invite_code);
+    var crewQrUrl='https://api.qrserver.com/v1/create-qr-code/?size=200x200&color=FF6D2E&bgcolor=0A0A0A&data='+encodeURIComponent(crewQrData);
+    html+='<div style="margin:12px 16px 0;padding:16px;border-radius:var(--r2);background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.08);text-align:center">';
+    html+='<div style="font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">📲 Crew QR-Code</div>';
+    html+='<img src="'+crewQrUrl+'" style="width:160px;height:160px;border-radius:12px;image-rendering:pixelated" alt="Crew QR">';
+    html+='<div style="font-size:11px;color:var(--t3);margin-top:8px">Freunde scannen diesen Code um direkt beizutreten</div>';
+    html+='<div style="display:flex;gap:8px;justify-content:center;margin-top:10px">';
+    html+='<div style="padding:8px 14px;border-radius:10px;background:var(--o);color:#fff;font-size:11px;font-weight:700;cursor:pointer" onclick="shareCrewQR(\''+esc(s.name)+'\',\''+boardEntry.invite_code+'\')">📤 Teilen</div>';
+    html+='<div style="padding:8px 14px;border-radius:10px;background:rgba(255,255,255,.06);color:var(--t2);font-size:11px;font-weight:700;cursor:pointer" onclick="downloadCrewQR(\''+esc(s.name)+'\',\''+boardEntry.invite_code+'\')">💾 Speichern</div>';
+    html+='</div></div>';
   }
   // Pending status warning
   if(boardEntry&&boardEntry.status==='pending'){
@@ -6106,6 +6161,8 @@ window.showMyQR = function(){
   c += '<div style="margin-top:20px;display:flex;gap:10px;justify-content:center">';
   c += '<button class="bs-btn" style="background:rgba(255,255,255,.06);color:var(--t);border:1px solid var(--glass-border);flex:1" onclick="shareQR()">📤 Teilen</button>';
   c += '<button class="bs-btn" style="background:rgba(255,255,255,.06);color:var(--t);border:1px solid var(--glass-border);flex:1" onclick="downloadQR()">💾 Speichern</button>';
+  c += '</div><div style="margin-top:10px;display:flex;gap:10px;justify-content:center">';
+  c += '<button class="bs-btn" style="background:rgba(48,209,88,.08);color:var(--mint);border:1px solid rgba(48,209,88,.15);flex:1" onclick="document.getElementById(\'bsheet\').classList.remove(\'show\');openQRScanner()">📷 QR scannen</button>';
   c += '</div>';
   c += '<div style="margin-top:16px;padding:14px;border-radius:12px;background:rgba(255,214,10,.06);border:1px solid rgba(255,214,10,.1);font-size:12px;color:var(--yellow);line-height:1.5">';
   c += '✨ <strong>+25 Aura</strong> pro Check-in<br>🎁 Exklusive Deals bei Partnern freischalten';
@@ -6132,6 +6189,266 @@ window.downloadQR = function(){
   document.body.appendChild(a);a.click();document.body.removeChild(a);
   toast('QR-Code wird heruntergeladen');
 };
+
+// ============================================
+// CREW QR CODE — Share & Download
+// ============================================
+window.shareCrewQR=function(crewName,invCode){
+  var link='https://partycrew.app/app.html?joincrew='+encodeURIComponent(invCode);
+  shareText('Tritt unserer Crew „'+crewName+'" bei! Scanne den QR-Code oder nutze diesen Link: '+link+' 🌴🔥');
+};
+window.downloadCrewQR=function(crewName,invCode){
+  var qrUrl='https://api.qrserver.com/v1/create-qr-code/?size=600x600&color=FF6D2E&bgcolor=0A0A0A&format=png&data='+encodeURIComponent('https://partycrew.app/app.html?joincrew='+invCode);
+  var a=document.createElement('a');a.href=qrUrl;a.download='crew-qr-'+crewName.replace(/[^a-zA-Z0-9]/g,'')+'.png';a.target='_blank';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  toast('Crew QR-Code wird heruntergeladen');
+};
+
+// ============================================
+// QR SCANNER (Camera-based)
+// ============================================
+var _qrStream=null;
+var _qrScanInterval=null;
+
+window.openQRScanner=function(){
+  document.getElementById('qrScannerOv').classList.add('show');
+  document.getElementById('qrScanResult').style.display='none';
+  document.getElementById('qrScanStatus').textContent='Kamera wird geladen...';
+  startQRCamera();
+};
+
+window.closeQRScanner=function(){
+  stopQRCamera();
+  document.getElementById('qrScannerOv').classList.remove('show');
+};
+
+async function startQRCamera(){
+  try{
+    _qrStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment',width:{ideal:640},height:{ideal:480}}});
+    var video=document.getElementById('qrVideo');
+    video.srcObject=_qrStream;
+    await video.play();
+    document.getElementById('qrScanStatus').textContent='Richte die Kamera auf einen QR-Code...';
+    // Start scanning frames
+    var canvas=document.createElement('canvas');
+    var ctx=canvas.getContext('2d');
+    _qrScanInterval=setInterval(function(){
+      if(video.readyState!==video.HAVE_ENOUGH_DATA)return;
+      canvas.width=video.videoWidth;
+      canvas.height=video.videoHeight;
+      ctx.drawImage(video,0,0,canvas.width,canvas.height);
+      var imageData=ctx.getImageData(0,0,canvas.width,canvas.height);
+      // Use jsQR if available, otherwise use BarcodeDetector API
+      if(window.BarcodeDetector){
+        var detector=new BarcodeDetector({formats:['qr_code']});
+        detector.detect(video).then(function(barcodes){
+          if(barcodes.length>0) handleQRResult(barcodes[0].rawValue);
+        }).catch(function(){});
+      }
+    },500);
+    // Fallback: also try BarcodeDetector continuous
+    if(!window.BarcodeDetector){
+      document.getElementById('qrScanStatus').innerHTML='Kamera aktiv — QR-Erkennung läuft...<br><span style="font-size:11px;color:var(--t3);margin-top:4px;display:block">Tipp: Du kannst auch den QR-Link direkt im Browser öffnen</span>';
+    }
+  }catch(e){
+    console.error('[QR] Camera error:',e);
+    document.getElementById('qrScanStatus').innerHTML='📷 Kamera nicht verfügbar.<br><span style="font-size:11px;color:var(--t3);margin-top:4px;display:block">Bitte Kamera-Berechtigung erlauben oder QR-Link direkt im Browser öffnen.</span>';
+  }
+}
+
+function stopQRCamera(){
+  if(_qrScanInterval){clearInterval(_qrScanInterval);_qrScanInterval=null}
+  if(_qrStream){_qrStream.getTracks().forEach(function(t){t.stop()});_qrStream=null}
+  var video=document.getElementById('qrVideo');
+  if(video)video.srcObject=null;
+}
+
+function handleQRResult(data){
+  if(!data)return;
+  stopQRCamera();
+  console.log('[QR] Scanned:',data);
+  document.getElementById('qrScanStatus').textContent='QR-Code erkannt!';
+
+  // Sanitize: only allow expected URL patterns
+  var safeData=String(data).trim();
+  if(safeData.length>500){toast('Ungültiger QR-Code');return}
+
+  // 1. Crew join QR: contains ?joincrew=CODE
+  var crewMatch=safeData.match(/[?&]joincrew=([A-Z0-9]{4,8})/i);
+  if(crewMatch){
+    var code=crewMatch[1].toUpperCase();
+    closeQRScanner();
+    joinCrewByQR(code);
+    return;
+  }
+
+  // 2. User QR: contains scan.html?u= or ?u=
+  var userMatch=safeData.match(/[?&]u=([a-f0-9-]{36})/i);
+  if(userMatch){
+    closeQRScanner();
+    openUserProfile(userMatch[1]);
+    toast('Profil wird geladen...');
+    return;
+  }
+
+  // 3. Partner QR: contains ?partner=CODE
+  var partnerMatch=safeData.match(/[?&]partner=([a-zA-Z0-9_-]{2,30})/);
+  if(partnerMatch){
+    closeQRScanner();
+    redeemPartnerQR(partnerMatch[1]);
+    return;
+  }
+
+  // 4. Strict partycrew.app URL — only exact domain (prevent open redirect)
+  if(/^https?:\/\/(www\.)?partycrew\.app(\/|$)/.test(safeData)){
+    closeQRScanner();
+    toast('crew.-Link erkannt! Wird verarbeitet...');
+    window.location.href=safeData;
+    return;
+  }
+
+  // Unknown QR
+  document.getElementById('qrScanResult').style.display='block';
+  document.getElementById('qrResultText').textContent='Unbekannter QR-Code: '+safeData.substring(0,80);
+}
+
+// ============================================
+// CREW JOIN VIA QR
+// ============================================
+async function joinCrewByQR(invCode){
+  if(!ME||!ME.user_id){toast('Bitte zuerst einloggen!');return}
+  try{
+    var {data:found}=await sb.from('crews').select('*').eq('invite_code',invCode.toUpperCase()).maybeSingle();
+    if(!found){toast('Crew mit Code „'+invCode+'" nicht gefunden! ❌');return}
+    if(isInCrew(found.id)){toast('Du bist bereits in „'+found.name+'"! ✅');return}
+    var ok=await joinCrew(found.id);
+    if(!ok){toast('Beitreten fehlgeschlagen. Crew ist vielleicht voll.');return}
+    toast('Willkommen bei „'+found.name+'"! 🎉');
+    if(navigator.vibrate)navigator.vibrate([10,80,10,80,10]);
+    updateCrewGate();buildCrewSwitcher();updateCrewIdentityCard();
+    // Switch to crew tab
+    go('crew');
+  }catch(e){
+    console.error('[QR] joinCrewByQR error:',e);
+    toast('Fehler beim Beitreten per QR. Versuche es nochmal.');
+  }
+}
+
+// Handle pending crew join from URL param (after login)
+async function handlePendingCrewJoin(){
+  var pending=localStorage.getItem('crew_pending_join');
+  if(!pending)return;
+  localStorage.removeItem('crew_pending_join');
+  // Clean URL
+  if(window.history.replaceState)window.history.replaceState({},'',window.location.pathname);
+  // Small delay to ensure app is ready
+  setTimeout(function(){joinCrewByQR(pending)},1000);
+}
+
+// ============================================
+// PARTNER QR REDEMPTION SYSTEM
+// ============================================
+async function redeemPartnerQR(partnerCode){
+  if(!ME||!ME.user_id){toast('Bitte zuerst einloggen!');return}
+  var ov=document.getElementById('partnerRedeemOv');
+  var content=document.getElementById('partnerRedeemContent');
+  content.innerHTML='<div style="font-size:48px;margin-bottom:16px">⏳</div><div style="font-size:16px;font-weight:700;color:var(--t2)">Partner wird geladen...</div>';
+  ov.classList.add('show');
+
+  try{
+    // Look up partner
+    var {data:partner,error}=await sb.from('partners').select('*').eq('partner_code',partnerCode).eq('is_active',true).maybeSingle();
+    if(error||!partner){
+      content.innerHTML='<div style="font-size:48px;margin-bottom:16px">❌</div><div style="font-size:18px;font-weight:900;margin-bottom:8px">Partner nicht gefunden</div><div style="font-size:13px;color:var(--t3)">Der Partner-Code „'+esc(partnerCode)+'" ist ungültig oder inaktiv.</div><button onclick="closePartnerRedeem()" style="margin-top:20px;padding:14px 30px;border-radius:14px;border:none;background:rgba(255,255,255,.06);color:var(--t2);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">Schließen</button>';
+      return;
+    }
+
+    // Check cooldown (max 1 check-in per partner per hour)
+    var cooldownKey='crew_partner_cd_'+partnerCode;
+    var lastRedeem=parseInt(localStorage.getItem(cooldownKey)||'0');
+    var now=Date.now();
+    var cooldownMs=3600000; // 1 hour
+    if(now-lastRedeem<cooldownMs){
+      var remaining=Math.ceil((cooldownMs-(now-lastRedeem))/60000);
+      content.innerHTML='<div style="font-size:48px;margin-bottom:16px">⏰</div><div style="font-size:18px;font-weight:900;margin-bottom:8px">Zu früh!</div><div style="font-size:13px;color:var(--t3);line-height:1.5">Du warst vor kurzem bei <strong>'+esc(partner.business_name)+'</strong>.<br>Nächster Check-in möglich in <strong>'+remaining+' Min.</strong></div><button onclick="closePartnerRedeem()" style="margin-top:20px;padding:14px 30px;border-radius:14px;border:none;background:rgba(255,255,255,.06);color:var(--t2);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">OK</button>';
+      return;
+    }
+
+    // Show partner info + redeem button
+    var html='<div style="font-size:48px;margin-bottom:12px">'+(partner.icon||'🏪')+'</div>';
+    html+='<div style="font-size:22px;font-weight:900;margin-bottom:4px">'+esc(partner.business_name)+'</div>';
+    html+='<div style="font-size:13px;color:var(--t3);margin-bottom:4px">'+esc(partner.business_type||'Partner')+(partner.location?' · '+esc(partner.location):'')+'</div>';
+    if(partner.deal_text){
+      html+='<div style="margin:16px 0;padding:16px;border-radius:14px;background:linear-gradient(135deg,rgba(255,109,46,.08),rgba(255,109,46,.03));border:1px solid rgba(255,109,46,.15)">';
+      html+='<div style="font-size:11px;font-weight:700;color:var(--o);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">🎁 Dein Deal</div>';
+      html+='<div style="font-size:16px;font-weight:800;color:var(--t1)">'+esc(partner.deal_text)+'</div>';
+      html+='</div>';
+    }
+    html+='<div style="font-size:12px;color:var(--t3);margin-bottom:16px;line-height:1.5">Check dich ein und erhalte <strong style="color:var(--o)">+25 Aura</strong> und schalte den Deal frei!</div>';
+    html+='<button id="partnerRedeemBtn" onclick="confirmPartnerRedeem(\''+esc(partnerCode)+'\')" style="width:100%;padding:18px;border-radius:16px;border:none;background:var(--gold);color:#000;font-size:16px;font-weight:800;cursor:pointer;font-family:inherit;box-shadow:0 8px 24px rgba(255,109,46,.2)">📲 Einchecken & Deal einlösen</button>';
+    html+='<button onclick="closePartnerRedeem()" style="width:100%;margin-top:10px;padding:14px;border-radius:14px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:var(--t3);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit">Abbrechen</button>';
+    content.innerHTML=html;
+
+  }catch(e){
+    console.error('[PARTNER] redeem error:',e);
+    content.innerHTML='<div style="font-size:48px;margin-bottom:16px">❌</div><div style="font-size:16px;font-weight:700">Fehler beim Laden</div><button onclick="closePartnerRedeem()" style="margin-top:20px;padding:14px 30px;border-radius:14px;border:none;background:rgba(255,255,255,.06);color:var(--t2);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">Schließen</button>';
+  }
+}
+
+window.confirmPartnerRedeem=async function(partnerCode){
+  var btn=document.getElementById('partnerRedeemBtn');
+  if(btn){btn.disabled=true;btn.textContent='Wird verarbeitet...'}
+  try{
+    // Record check-in via RPC (same as scan.html partner system)
+    var {data,error}=await sb.rpc('record_partner_checkin',{p_user_id:ME.user_id,p_partner_code:partnerCode});
+    if(error)throw error;
+    if(data&&!data.success){toast(data.error||'Check-in fehlgeschlagen');if(btn){btn.disabled=false;btn.textContent='📲 Einchecken & Deal einlösen'}return}
+
+    // Track for commission
+    try{
+      await sb.from('deal_clicks').insert({user_id:ME.user_id,deal_type:'partner_qr',partner:partnerCode,affiliate_url:'qr://'+partnerCode});
+    }catch(e){}
+
+    // Set cooldown
+    localStorage.setItem('crew_partner_cd_'+partnerCode,String(Date.now()));
+
+    // Show success
+    var pts=(data&&data.points)||25;
+    var deal=(data&&data.deal)||'';
+    var html='<div style="font-size:64px;margin-bottom:16px;animation:popIn .5s cubic-bezier(.175,.885,.32,1.275)">✅</div>';
+    html+='<div style="font-size:24px;font-weight:900;margin-bottom:8px">Check-in erfolgreich!</div>';
+    html+='<div style="font-size:18px;font-weight:700;color:var(--o);margin-bottom:4px">+'+pts+' Aura erhalten!</div>';
+    if(deal){
+      html+='<div style="margin:16px 0;padding:16px;border-radius:14px;background:rgba(255,214,10,.08);border:1px solid rgba(255,214,10,.15)">';
+      html+='<div style="font-size:14px;font-weight:800;color:var(--yellow)">🎁 '+esc(deal)+'</div>';
+      html+='<div style="font-size:11px;color:var(--t3);margin-top:4px">Zeig diese Seite dem Personal um deinen Deal einzulösen!</div>';
+      html+='</div>';
+    }
+    html+='<div style="margin-top:8px;font-size:12px;color:var(--t3)">Punkte wurden deinem Profil gutgeschrieben.</div>';
+    html+='<button onclick="closePartnerRedeem()" style="width:100%;margin-top:20px;padding:16px;border-radius:14px;border:none;background:var(--o);color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">Super! 🎉</button>';
+    document.getElementById('partnerRedeemContent').innerHTML=html;
+    if(navigator.vibrate)navigator.vibrate([50,30,50]);
+    // Refresh score
+    try{var {data:prof}=await sb.from('profiles').select('score').eq('user_id',ME.user_id).single();if(prof)ME.score=prof.score;updateProfile()}catch(e){}
+  }catch(e){
+    console.error('[PARTNER] confirm redeem error:',e);
+    toast('Fehler beim Check-in: '+(e.message||'Unbekannt'));
+    if(btn){btn.disabled=false;btn.textContent='📲 Einchecken & Deal einlösen'}
+  }
+};
+
+window.closePartnerRedeem=function(){
+  document.getElementById('partnerRedeemOv').classList.remove('show');
+};
+
+// Handle pending partner redeem from URL param
+async function handlePendingPartnerRedeem(){
+  var pending=localStorage.getItem('crew_pending_partner');
+  if(!pending)return;
+  localStorage.removeItem('crew_pending_partner');
+  if(window.history.replaceState)window.history.replaceState({},'',window.location.pathname);
+  setTimeout(function(){redeemPartnerQR(pending)},1200);
+}
 
 // ============================================
 // PROFILE EDIT
