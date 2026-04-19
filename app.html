@@ -3355,9 +3355,14 @@ window.pokeCrewMember=function(uid,name){
 // Open detailed Crew Profile — with mini-map, stats, socials
 var _crewProfileMap=null;
 window.openCrewProfile=function(uid){
-  sb.from('profiles').select('*').eq('user_id',uid).single().then(function(res){
-    if(!res.data)return;
-    var p=res.data;
+  // Load profile + their crew memberships in parallel
+  Promise.all([
+    sb.from('profiles').select('*').eq('user_id',uid).single(),
+    sb.from('crew_members').select('crew_id,role').eq('user_id',uid)
+  ]).then(function(results){
+    if(!results[0].data)return;
+    var p=results[0].data;
+    var theirCrews=(results[1].data||[]).map(function(m){return m.crew_id});
     var rank=getMalleRank(p.points||0);
     var nextRank=getNextRank(p.points||0);
     var lastActive=p.last_active?new Date(p.last_active).getTime():0;
@@ -3366,6 +3371,21 @@ window.openCrewProfile=function(uid){
     var statusLabel=status==='online'?'🟢 Gerade aktiv':status==='away'?'🟡 Vor '+minsAgo+' Min':'⚫ Offline';
     var _isBlocked=isBlocked(uid);
     var hasLoc=p.lat&&p.lng&&!isLocationStale(p.location_updated_at);
+    // Find shared crew (for chat button)
+    var sharedCrewId=null;var sharedCrewName='';
+    if(_myCrewMemberships&&_myCrewMemberships.length>0){
+      for(var i=0;i<_myCrewMemberships.length;i++){
+        if(theirCrews.indexOf(_myCrewMemberships[i].crew_id)!==-1){
+          sharedCrewId=_myCrewMemberships[i].crew_id;
+          sharedCrewName=_myCrewMemberships[i].crew&&_myCrewMemberships[i].crew.name||'';
+          break;
+        }
+      }
+    }
+    // Find their crew names for display
+    var theirCrewNames=[];
+    var allCrews=getAllCrews();
+    theirCrews.forEach(function(cid){var c=allCrews.find(function(x){return x.id===cid});if(c)theirCrewNames.push(c.name)});
     // Build socials
     var socials='';
     if(p.insta)socials+='<a class="cps-social" href="https://instagram.com/'+esc(p.insta)+'" target="_blank" rel="noopener" style="border-color:rgba(225,48,108,.2);color:#E1306C">📸 '+esc(p.insta)+'</a>';
@@ -3384,6 +3404,15 @@ window.openCrewProfile=function(uid){
     sheetHtml+='<div class="cps-handle">'+statusLabel+'</div>';
     if(p.mood)sheetHtml+='<div class="cps-mood-big">'+p.mood+'</div>';
     if(p.bio)sheetHtml+='<div style="font-size:12px;color:var(--t2);margin-top:6px;line-height:1.5">'+esc(p.bio)+'</div>';
+    // Crew badges
+    if(theirCrewNames.length>0){
+      sheetHtml+='<div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap;justify-content:center">';
+      theirCrewNames.forEach(function(cn){
+        var isShared=sharedCrewName===cn;
+        sheetHtml+='<span style="font-size:10px;font-weight:700;padding:4px 10px;border-radius:8px;'+(isShared?'background:rgba(255,109,46,.12);border:1px solid rgba(255,109,46,.2);color:var(--o)':'background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:var(--t3)')+'">👥 '+esc(cn)+(isShared?' ✓':'')+'</span>';
+      });
+      sheetHtml+='</div>';
+    }
     // Badges
     sheetHtml+='<div class="cps-badges">';
     sheetHtml+='<span class="cps-badge" style="background:rgba(255,255,255,.06);color:'+rank.color+'">'+rank.emoji+' '+rank.title+'</span>';
@@ -3391,7 +3420,7 @@ window.openCrewProfile=function(uid){
     if(p.club)sheetHtml+='<span class="cps-badge" style="background:rgba(255,109,46,.08);color:var(--o)">⚽ '+esc(p.club)+'</span>';
     if(p.gender)sheetHtml+='<span class="cps-badge" style="background:rgba(255,255,255,.04);color:var(--t2)">'+esc(p.gender)+'</span>';
     sheetHtml+='</div></div>';
-    // Stats grid — psychological social proof
+    // Stats grid
     sheetHtml+='<div class="cps-stats">';
     sheetHtml+='<div class="cps-stat"><div class="cps-stat-num" style="color:var(--o)">'+(p.points||0)+'</div><div class="cps-stat-label">✨ Aura</div></div>';
     sheetHtml+='<div class="cps-stat"><div class="cps-stat-num" style="color:#FFD60A">'+(p.streak||0)+'</div><div class="cps-stat-label">🔥 Streak</div></div>';
@@ -3407,9 +3436,13 @@ window.openCrewProfile=function(uid){
     }
     // Socials
     if(socials)sheetHtml+='<div class="cps-socials">'+socials+'</div>';
-    // Actions — reciprocity + belonging triggers
+    // Actions
     sheetHtml+='<div class="cps-actions">';
-    sheetHtml+='<button class="cps-btn primary" onclick="pokeCrewMember(\''+uid+'\',\''+esc(p.name)+'\');closeBS()">👋 '+esc(p.name)+' anpingen</button>';
+    // Chat button — if in same crew
+    if(sharedCrewId){
+      sheetHtml+='<button class="cps-btn primary" onclick="closeBS();openCrewChat(\''+sharedCrewId+'\',\''+esc(sharedCrewName)+'\')">💬 Chat mit '+esc(sharedCrewName)+'</button>';
+    }
+    sheetHtml+='<button class="cps-btn '+(sharedCrewId?'ghost':'primary')+'" onclick="pokeCrewMember(\''+uid+'\',\''+esc(p.name)+'\');closeBS()">👋 '+esc(p.name)+' anpingen</button>';
     if(hasLoc)sheetHtml+='<button class="cps-btn ghost" onclick="navigateToCrewMember('+p.lat+','+p.lng+',\''+esc(p.name)+'\');closeBS()">🗺️ Route anzeigen</button>';
     sheetHtml+='<button class="cps-btn ghost" onclick="shareText(\'Schau dir '+esc(p.name)+' auf crew. an! 🌴🔥 https://partycrew.app\');closeBS()">📤 Profil teilen</button>';
     sheetHtml+='<button class="cps-btn '+(_isBlocked?'primary':'danger')+'" onclick="toggleBlock(\''+uid+'\')">🚫 '+(_isBlocked?'Entblocken':'Blockieren')+'</button>';
@@ -6824,23 +6857,8 @@ async function buildMatchList(){
 }
 
 window.openUserProfile=function(uid){
-  var p=null;
-  // Find in profiles or matched profiles
-  var all=PROFILES.concat([]);
-  var ml=document.getElementById('matchFriendList');
-  // Fetch from match list data
-  var {data}=sb.from('profiles').select('*').eq('user_id',uid).single().then(function(res){
-    if(!res.data)return;
-    p=res.data;
-    var _ub=isBlocked(uid);
-    var soc='';
-    if(p.insta)soc+='<a class="ups-social" href="https://instagram.com/'+esc(p.insta)+'" target="_blank" rel="noopener" style="border-color:rgba(225,48,108,.25);color:#E1306C">📸 '+esc(p.insta)+'</a>';
-    if(p.tiktok)soc+='<a class="ups-social" href="https://tiktok.com/@'+esc(p.tiktok)+'" target="_blank" rel="noopener" style="border-color:rgba(255,0,80,.25);color:#FF0050">🎵 '+esc(p.tiktok)+'</a>';
-    if(p.snapchat)soc+='<a class="ups-social" href="https://snapchat.com/add/'+esc(p.snapchat)+'" target="_blank" rel="noopener" style="border-color:rgba(255,252,0,.25);color:#FFFC00">👻 '+esc(p.snapchat)+'</a>';
-    document.getElementById('bsImg').src=p.photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80';
-    document.getElementById('bsContent').innerHTML='<div style="text-align:center"><div class="ups-ava"><img src="'+(p.photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80')+'"></div><h2>'+esc(p.name)+', '+p.age+(p.mood?' '+p.mood:'')+'</h2><div class="bs-meta">'+(p.gender||'')+' · '+(p.status||'')+(p.club?' · ⚽ '+esc(p.club):'')+'</div></div>'+(p.bio?'<div class="bs-desc">'+esc(p.bio)+'</div>':'')+(soc?'<div class="ups-socials">'+soc+'</div>':'')+'<div class="bs-actions"><button class="bs-btn '+(_ub?'orange':'dark')+'" onclick="toggleBlock(\''+uid+'\')">🚫 '+(_ub?'Entblocken':'Blockieren')+'</button><button class="bs-btn dark" onclick="openReportForm(\''+uid+'\',\''+esc(p.name)+'\')">🚨 Melden</button><button class="bs-btn dark" onclick="closeBS()">Schließen</button></div>';
-    document.getElementById('bsheet').classList.add('show');
-  });
+  // Use the full crew profile view for all users (consistent experience)
+  openCrewProfile(uid);
 };
 
 // ============================================
