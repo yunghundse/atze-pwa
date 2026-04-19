@@ -180,9 +180,12 @@ select.ri{appearance:none;-webkit-appearance:none}
 .mood-bar>*{position:relative}
 .mood-bar .mb-label{font-size:11px;font-weight:700;color:var(--t3);white-space:nowrap;text-transform:uppercase;letter-spacing:.5px}
 .mood-emojis{display:flex;gap:5px;overflow-x:auto;scrollbar-width:none}.mood-emojis::-webkit-scrollbar{display:none}
-.mood-em{width:38px;height:38px;border-radius:50%;background:var(--glass);backdrop-filter:blur(20px);border:1.5px solid var(--glass-border);display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;flex-shrink:0;transition:all .15s;box-shadow:inset 0 1px 0 rgba(255,255,255,.04)}
-.mood-em:hover{border-color:rgba(255,109,46,.4);box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 0 12px rgba(255,109,46,.2)}
-.mood-em.sel{border-color:var(--o);background:rgba(255,109,46,.12);box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 0 12px rgba(255,109,46,.15)}
+.mood-em{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,rgba(255,255,255,.045),rgba(255,255,255,.015));backdrop-filter:blur(24px) saturate(160%);border:1.5px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all .2s var(--spring);box-shadow:inset 0 1px 0 rgba(255,255,255,.06);position:relative;color:var(--t2)}
+.mood-em svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s var(--spring)}
+.mood-em:hover{border-color:rgba(255,109,46,.35);color:var(--t);transform:translateY(-1px);box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 6px 16px rgba(255,109,46,.18)}
+.mood-em:hover svg{transform:scale(1.08)}
+.mood-em.sel{border-color:transparent;background:linear-gradient(135deg,var(--mood-c,var(--o)),color-mix(in srgb, var(--mood-c,var(--o)) 55%, #FE3C72 45%));color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 0 0 1px rgba(255,255,255,.08),0 8px 24px -6px var(--mood-c,rgba(255,109,46,.5))}
+.mood-em.sel svg{transform:scale(1.12)}
 .tonight{margin:0 14px 10px;padding:20px;border-radius:var(--r2);position:relative;overflow:hidden;background:linear-gradient(135deg,rgba(22,22,24,.72),rgba(28,28,32,.5));backdrop-filter:blur(60px) saturate(200%);-webkit-backdrop-filter:blur(60px) saturate(200%);border:1px solid rgba(255,255,255,.12);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),inset 0 -1px 0 rgba(0,0,0,.08),0 8px 32px rgba(0,0,0,.3),0 0 40px rgba(255,109,46,.04)}
 .tonight::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,109,46,.18),rgba(191,90,242,.12));pointer-events:none}
 .tonight>*{position:relative;z-index:1}
@@ -395,7 +398,11 @@ select.ri{appearance:none;-webkit-appearance:none}
 .prof-badges-row{display:flex;justify-content:center;gap:5px;margin-top:8px;flex-wrap:wrap}
 .pbadge{display:flex;align-items:center;gap:3px;padding:3px 10px;border-radius:16px;font-size:10px;font-weight:700}
 .pbadge.ok{background:rgba(52,199,89,.08);color:var(--green)}.pbadge.fire{background:rgba(255,109,46,.08);color:var(--o)}
-.prof-vibe{display:flex;align-items:center;justify-content:center;gap:6px;margin:10px 0 4px;font-size:13px;color:var(--t2)}.prof-vibe .pv-emoji{font-size:28px;animation:vb 2s ease infinite}.prof-vibe .pv-label{font-weight:600}
+.prof-vibe{display:inline-flex;align-items:center;justify-content:center;gap:8px;margin:10px auto 4px;padding:7px 14px;border-radius:999px;background:linear-gradient(135deg,rgba(255,109,46,.14),rgba(254,60,114,.10));border:1px solid rgba(255,255,255,.08);font-size:13px;color:var(--t2);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 4px 12px rgba(0,0,0,.18)}
+.prof-vibe .pv-ico{width:30px;height:30px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--pv-c,var(--o)),color-mix(in srgb, var(--pv-c,var(--o)) 50%, #FE3C72 50%));color:#fff;animation:vb 2.4s ease infinite;box-shadow:0 4px 14px -3px var(--pv-c,rgba(255,109,46,.5))}
+.prof-vibe .pv-ico svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.prof-vibe .pv-label{font-weight:700;letter-spacing:.2px;color:var(--t)}
+.prof-vibe .pv-sub{color:var(--t3);font-size:11px;margin-left:2px}
 @keyframes vb{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
 .prof-socials{display:flex;justify-content:center;gap:10px;margin:10px 0 6px}
 .prof-social-btn{padding:6px 14px;border-radius:20px;background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--glass-border);font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px;color:var(--t2);text-decoration:none;transition:all .15s;box-shadow:inset 0 1px 0 rgba(255,255,255,.04)}
@@ -948,9 +955,7 @@ select.ri{appearance:none;-webkit-appearance:none}
 .rnext{margin-top:auto;width:100%;padding:16px;border:none;border-radius:16px;background:var(--o);color:#fff;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s var(--ease);box-shadow:0 6px 20px rgba(255,109,46,.2)}.rnext:disabled{opacity:.2;cursor:default;box-shadow:none}
 .rnext:not(:disabled):active{transform:scale(.97)}
 
-/* Mood emojis enhanced */
-.mood-em{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;font-size:19px;cursor:pointer;flex-shrink:0;transition:all .2s var(--spring)}
-.mood-em.sel{border-color:var(--o);background:rgba(255,109,46,.1);transform:scale(1.15);box-shadow:0 0 16px rgba(255,109,46,.2)}
+/* Mood emojis enhanced (legacy — fresh style in Design 2.0 block below) */
 
 /* Crew center button enhanced */
 nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:21px;color:#fff;box-shadow:0 6px 20px rgba(255,109,46,.35),0 0 0 4px rgba(255,109,46,.1),0 0 40px rgba(255,109,46,.15);transition:all .25s var(--spring)}
@@ -1459,7 +1464,33 @@ nav .crew-center-btn:hover .ni{
   backdrop-filter:blur(40px) saturate(220%);
   -webkit-backdrop-filter:blur(40px) saturate(220%);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 8px 24px rgba(0,0,0,.3) !important;
+  transition:transform .2s var(--spring),box-shadow .25s ease,border-color .25s ease;
 }
+.weather-card::after{
+  content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:radial-gradient(120% 90% at 90% 0%,rgba(255,214,10,.12),transparent 55%),
+             radial-gradient(80% 70% at 0% 100%,rgba(10,132,255,.10),transparent 60%);
+  opacity:.8;
+}
+.weather-card:active{transform:scale(.985)}
+.weather-card .wx-ico{
+  width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,rgba(255,214,10,.22),rgba(255,109,46,.16));
+  border:1px solid rgba(255,255,255,.10);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.15),0 8px 20px -6px rgba(255,159,0,.35);
+  color:#FFD60A;flex-shrink:0;
+}
+.weather-card .wx-ico svg{width:28px;height:28px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.weather-card[data-state="idle"] .wx-ico{color:#FF9500;animation:pulseIdle 2.4s ease-in-out infinite}
+.weather-card[data-state="loading"] .wx-ico svg{animation:spin 1s linear infinite}
+.weather-card[data-state="sun"] .wx-ico{background:linear-gradient(135deg,rgba(255,214,10,.28),rgba(255,149,0,.18));color:#FFD60A}
+.weather-card[data-state="cloud"] .wx-ico{background:linear-gradient(135deg,rgba(175,185,195,.22),rgba(120,130,140,.14));color:#DDE3EA}
+.weather-card[data-state="rain"] .wx-ico{background:linear-gradient(135deg,rgba(10,132,255,.22),rgba(94,92,230,.16));color:#64B5FF}
+.weather-card[data-state="snow"] .wx-ico{background:linear-gradient(135deg,rgba(220,235,250,.22),rgba(170,190,210,.14));color:#E6F0FA}
+.weather-card[data-state="fog"] .wx-ico{background:linear-gradient(135deg,rgba(160,170,180,.18),rgba(120,130,140,.12));color:#C7CED6}
+.weather-card[data-state="thunder"] .wx-ico{background:linear-gradient(135deg,rgba(191,90,242,.22),rgba(94,92,230,.16));color:#FFD60A}
+@keyframes pulseIdle{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.06);opacity:.82}}
+@keyframes spin{to{transform:rotate(360deg)}}
 
 /* — Crew status bar (gamified) — */
 .crew-status-bar{
@@ -1874,6 +1905,125 @@ nav button.active::after{
 .ach-crewpts-icn svg{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;color:var(--mint)}
 
 /* — END DESIGN 2.0 — */
+
+/* ═══════════════════════════════════════════════════════════════
+   DESIGN 2.1 — COLOR FLOW / HARMONIZATION LAYER (v65)
+   "verbinde das design untereinander dass die farben zusammenlaufen"
+   Zwei globale Gradient-Veils + einheitliche Glas-Token,
+   weichere Tile-Ränder, konsistentere Card-Farbverläufe.
+   ═══════════════════════════════════════════════════════════════ */
+
+:root{
+  --veil-warm:radial-gradient(60% 50% at 50% 0%, rgba(254,60,114,.07) 0%, rgba(217,119,87,.04) 40%, transparent 75%);
+  --veil-deep:radial-gradient(80% 70% at 50% 100%, rgba(191,90,242,.05) 0%, rgba(10,132,255,.03) 45%, transparent 80%);
+  --flow-glass:linear-gradient(160deg, rgba(28,22,32,.72) 0%, rgba(24,20,28,.56) 55%, rgba(18,13,18,.66) 100%);
+  --flow-border:rgba(255,255,255,.09);
+  --flow-border-warm:rgba(255,138,110,.18);
+  --flow-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 10px 32px rgba(0,0,0,.38);
+}
+
+/* Sanfter Übergang zwischen Screens + Sub-Sections */
+.scr{
+  background-image:var(--veil-warm),var(--veil-deep);
+  background-attachment:local;
+}
+
+/* Alle Glass-Cards sprechen jetzt dieselbe "Sprache" */
+.glass,
+.mood-bar,
+.weather-card,
+.island-mood,
+.countdown-card,
+.ex-tile,
+.gc-game,
+.ach-stats > div,
+.ach-qr{
+  background:var(--flow-glass) !important;
+  border:1px solid var(--flow-border) !important;
+  box-shadow:var(--flow-shadow) !important;
+  -webkit-backdrop-filter:blur(36px) saturate(200%);
+  backdrop-filter:blur(36px) saturate(200%);
+}
+
+/* Feine Innenlinie für mehr "Tiefe" statt harter Kanten (nur Elemente ohne eigenes ::before) */
+.mood-bar,.weather-card,.island-mood,.countdown-card{position:relative}
+.mood-bar::after,
+.weather-card::before,
+.island-mood::after{
+  content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(180deg,rgba(255,255,255,.05),transparent 30%,transparent 70%,rgba(0,0,0,.12));
+  mix-blend-mode:overlay;opacity:.6;
+}
+
+/* Section-Labels blenden sanft von einer Farbe zur nächsten */
+.sec-label{
+  background:linear-gradient(90deg,var(--t) 0%,rgba(255,88,100,.85) 55%,rgba(217,119,87,.7) 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent !important;
+  opacity:.95;
+}
+/* Ausnahme: wenn sec-label bereits explizite Farbe hat */
+.sec-label[style*="color"]{background:none;-webkit-background-clip:initial;background-clip:initial;color:var(--t) !important}
+
+/* Hero/Deals-Hero Farben fließen in den Hub */
+.deals-hero,.sub-hdr{
+  background:linear-gradient(180deg,rgba(254,60,114,.06) 0%,rgba(217,119,87,.04) 60%,transparent 100%) !important;
+}
+
+/* Bottom-Nav bekommt denselben Flow */
+nav{
+  background:linear-gradient(180deg,rgba(14,12,18,.45) 0%,rgba(7,6,10,.82) 100%) !important;
+  border-top:1px solid var(--flow-border) !important;
+  -webkit-backdrop-filter:blur(32px) saturate(200%);
+  backdrop-filter:blur(32px) saturate(200%);
+}
+
+/* Vereinheitlichte Pills/Badges für kohärenten Look */
+.pbadge,.csh-badge,.ex-badge,.gc-game-tag{
+  background:linear-gradient(135deg,rgba(255,88,100,.14),rgba(217,119,87,.08)) !important;
+  border:1px solid rgba(255,88,100,.22) !important;
+  color:#FFB8A6 !important;
+}
+.pbadge.ok{background:linear-gradient(135deg,rgba(48,209,88,.18),rgba(10,132,255,.08)) !important;border-color:rgba(48,209,88,.3) !important;color:#7FE3A0 !important}
+.pbadge.fire{background:linear-gradient(135deg,rgba(255,59,48,.2),rgba(254,60,114,.1)) !important;border-color:rgba(255,88,100,.3) !important;color:#FF8A7A !important}
+.gc-game-tag.live{background:linear-gradient(135deg,rgba(48,209,88,.22),rgba(10,132,255,.1)) !important;border-color:rgba(48,209,88,.3) !important;color:#7FE3A0 !important}
+.gc-game-tag.soon{background:linear-gradient(135deg,rgba(255,214,10,.18),rgba(255,109,46,.1)) !important;border-color:rgba(255,214,10,.28) !important;color:#FFD96B !important}
+
+/* Explore-Tiles: sanfterer Farb-Übergang */
+.ex-tile{
+  background:linear-gradient(155deg,rgba(28,22,32,.78) 0%,rgba(20,16,22,.6) 100%) !important;
+  transition:transform .25s var(--spring),box-shadow .25s ease,border-color .25s ease;
+}
+.ex-tile:hover{
+  border-color:rgba(255,138,110,.25) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 14px 36px rgba(0,0,0,.44),0 0 28px var(--tile-glow,rgba(255,88,100,.1)) !important;
+}
+
+/* App-Hintergrund: zusätzliche Farb-Brücke oben/unten */
+#app::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(120% 40% at 50% -10%, rgba(254,60,114,.09) 0%, transparent 55%),
+    radial-gradient(100% 30% at 50% 110%, rgba(191,90,242,.06) 0%, transparent 55%);
+}
+#app > *{position:relative;z-index:1}
+
+/* Mood-Bar + Weather-Card Übergangs-Harmonie */
+.mood-bar + .island-mood,
+.island-mood + .weather-card,
+.mood-bar + .weather-card{
+  margin-top:8px !important;
+}
+
+/* Nav-Buttons: aktiver Zustand fließt mit dem Content-Akzent */
+nav button.active{
+  color:var(--o) !important;
+}
+nav button.active::after{
+  content:'';position:absolute;bottom:4px;left:50%;transform:translateX(-50%);
+  width:18px;height:3px;border-radius:2px;
+  background:linear-gradient(90deg,#FE3C72,#FF5864,#FF7854);
+  box-shadow:0 0 10px rgba(254,60,114,.5);
+}
 </style>
 </head>
 <body>
@@ -2183,6 +2333,92 @@ nav button.active::after{
     <path d="M3 21V4l6 2 3-2 3 2 6-2v17"/>
     <circle cx="12" cy="12" r="1" fill="currentColor"/>
     <path d="M10 12l-3-1M17 11l-3 1"/>
+  </symbol>
+  <!-- VIBE / MOOD ICONS -->
+  <symbol id="i-palm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 22V11"/>
+    <path d="M12 11c-1-4-5-6-9-4 2-2 6-3 9 0"/>
+    <path d="M12 11c1-4 5-6 9-4-2-2-6-3-9 0"/>
+    <path d="M12 11c-3-2-7-1-9 3 3-3 6-3 9 0"/>
+    <path d="M12 11c3-2 7-1 9 3-3-3-6-3-9 0"/>
+    <circle cx="12" cy="11" r="1" fill="currentColor"/>
+  </symbol>
+  <symbol id="i-cocktail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4 4h16l-8 9-8-9z"/>
+    <path d="M12 13v7"/>
+    <path d="M8 20h8"/>
+    <path d="M18 2l2 2-2 2"/>
+  </symbol>
+  <symbol id="i-sunglasses" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M2 10h20"/>
+    <rect x="3" y="10" width="8" height="7" rx="2" fill="currentColor" fill-opacity=".25"/>
+    <rect x="13" y="10" width="8" height="7" rx="2" fill="currentColor" fill-opacity=".25"/>
+    <path d="M11 13h2"/>
+  </symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+  </symbol>
+  <symbol id="i-sunrise" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M17 18a5 5 0 0 0-10 0"/>
+    <path d="M12 2v6M5.2 9.2l1.4 1.4M18.8 9.2l-1.4 1.4M2 18h20M8 6l4-4 4 4"/>
+  </symbol>
+  <symbol id="i-crazy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10"/>
+    <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+    <path d="M7 9l2-1 2 1M13 9l2-1 2 1"/>
+  </symbol>
+  <symbol id="i-dance" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="13" cy="4" r="2"/>
+    <path d="M13 6c0 2-2 4-2 4l2 5-4 6"/>
+    <path d="M13 15l3 5"/>
+    <path d="M11 10l-4-2M13 10l5-1"/>
+  </symbol>
+  <!-- WEATHER ICONS -->
+  <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="4" fill="currentColor" fill-opacity=".2"/>
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+  </symbol>
+  <symbol id="i-cloud-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 3v1M5.7 5.7l.7.7M3 12h1M18.4 6.4l.7-.7"/>
+    <path d="M12 9a3 3 0 0 0-3 3"/>
+    <path d="M17 20H7a4 4 0 0 1 0-8 5 5 0 0 1 9.58-1A4 4 0 0 1 17 20z" fill="currentColor" fill-opacity=".12"/>
+  </symbol>
+  <symbol id="i-cloud" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M17 18H7a4 4 0 0 1 0-8 5 5 0 0 1 9.58-1A4 4 0 0 1 17 18z" fill="currentColor" fill-opacity=".18"/>
+  </symbol>
+  <symbol id="i-fog" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M17 14H7a4 4 0 0 1 0-8 5 5 0 0 1 9.58-1A4 4 0 0 1 17 14z" fill="currentColor" fill-opacity=".12"/>
+    <path d="M4 18h16M6 22h12"/>
+  </symbol>
+  <symbol id="i-rain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M17 14H7a4 4 0 0 1 0-8 5 5 0 0 1 9.58-1A4 4 0 0 1 17 14z" fill="currentColor" fill-opacity=".12"/>
+    <path d="M8 18v3M12 18v3M16 18v3"/>
+  </symbol>
+  <symbol id="i-snow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M17 14H7a4 4 0 0 1 0-8 5 5 0 0 1 9.58-1A4 4 0 0 1 17 14z" fill="currentColor" fill-opacity=".12"/>
+    <circle cx="8" cy="20" r="1" fill="currentColor"/>
+    <circle cx="12" cy="20" r="1" fill="currentColor"/>
+    <circle cx="16" cy="20" r="1" fill="currentColor"/>
+  </symbol>
+  <symbol id="i-thunder" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M17 14H7a4 4 0 0 1 0-8 5 5 0 0 1 9.58-1A4 4 0 0 1 17 14z" fill="currentColor" fill-opacity=".12"/>
+    <path d="M13 14l-3 4h3l-2 4" stroke-width="2.2"/>
+  </symbol>
+  <symbol id="i-wind" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 8h11a3 3 0 1 0-3-3"/>
+    <path d="M3 13h15a3 3 0 1 1-3 3"/>
+    <path d="M3 18h7"/>
+  </symbol>
+  <symbol id="i-drop" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 3s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11z" fill="currentColor" fill-opacity=".15"/>
+  </symbol>
+  <symbol id="i-thermometer" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/>
+    <circle cx="11.5" cy="17.5" r="1.5" fill="currentColor"/>
+  </symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 12a9 9 0 1 1-3-6.7L21 8"/>
+    <path d="M21 3v5h-5"/>
   </symbol>
 </svg>
 
@@ -2628,15 +2864,15 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
           <div id="islandMoodContent" style="font-size:14px;font-weight:700"></div>
           <div id="islandMoodBar" style="display:flex;gap:3px;margin-top:8px;height:6px"></div>
         </div>
-        <div class="weather-card glass anim" id="weatherCard" style="margin:0 14px 10px;padding:14px 16px;display:flex;align-items:center;gap:14px;cursor:pointer" onclick="refreshWeather()">
-          <div id="weatherIcon" style="font-size:36px">☀️</div>
-          <div style="flex:1">
+        <div class="weather-card glass anim" id="weatherCard" data-state="idle" style="margin:0 14px 10px;padding:14px 16px;display:flex;align-items:center;gap:14px;cursor:pointer" onclick="refreshWeather()">
+          <div id="weatherIcon" class="wx-ico"><svg viewBox="0 0 24 24"><use href="#i-refresh"/></svg></div>
+          <div style="flex:1;min-width:0">
             <div style="font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px">Mallorca jetzt</div>
-            <div style="display:flex;align-items:baseline;gap:6px"><span id="weatherTemp" style="font-size:24px;font-weight:900">--°</span><span id="weatherDesc" style="font-size:12px;color:var(--t2)">Lädt...</span></div>
+            <div style="display:flex;align-items:baseline;gap:6px"><span id="weatherTemp" style="font-size:22px;font-weight:900;letter-spacing:-.5px">Tippen</span><span id="weatherDesc" style="font-size:12px;color:var(--t2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">zum Aktualisieren</span></div>
           </div>
-          <div style="text-align:right">
-            <div id="weatherWind" style="font-size:11px;color:var(--t3)">💨 --</div>
-            <div id="weatherHumid" style="font-size:11px;color:var(--t3);margin-top:2px">💧 --</div>
+          <div class="wx-meta" style="text-align:right;flex-shrink:0">
+            <div id="weatherWind" style="font-size:11px;color:var(--t3);display:flex;align-items:center;gap:4px;justify-content:flex-end"><svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><use href="#i-wind"/></svg><span>–</span></div>
+            <div id="weatherHumid" style="font-size:11px;color:var(--t3);margin-top:3px;display:flex;align-items:center;gap:4px;justify-content:flex-end"><svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:currentColor;fill-opacity:.2;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><use href="#i-drop"/></svg><span>–</span></div>
           </div>
         </div>
         <div class="sec-label anim">🔥 Live auf der Insel</div>
@@ -3175,7 +3411,7 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 64;
+  var APP_VERSION = 65;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     // Force-clear old non-UUID crew IDs
@@ -3203,6 +3439,19 @@ var VENUES = []; // From DB
 var PROFILES = []; // For matching
 var rMap, cMap;
 var MOODS = ['🥳','🔥','💃','🍻','🌴','🍹','😎','🤪','💤','🌅'];
+// Mood meta: icon + label + color (emoji remains the DB key for backward compat)
+var MOOD_META = {
+  '🥳':{icon:'i-confetti',label:'Party',color:'#FFD60A'},
+  '🔥':{icon:'i-flame',label:'On Fire',color:'#FF6D2E'},
+  '💃':{icon:'i-dance',label:'Tanz',color:'#BF5AF2'},
+  '🍻':{icon:'i-beer-mug',label:'Bier-Zeit',color:'#FF9500'},
+  '🌴':{icon:'i-palm',label:'Chill',color:'#34C759'},
+  '🍹':{icon:'i-cocktail',label:'Cocktail',color:'#FF5864'},
+  '😎':{icon:'i-sunglasses',label:'Cool',color:'#0A84FF'},
+  '🤪':{icon:'i-crazy',label:'Crazy',color:'#FF3B30'},
+  '💤':{icon:'i-moon',label:'Sleep',color:'#8E8E93'},
+  '🌅':{icon:'i-sunrise',label:'Sunset',color:'#FF9500'}
+};
 var CLUBS = {'Bundesliga':['Bayern München','Borussia Dortmund','Bayer Leverkusen','RB Leipzig','VfB Stuttgart','Eintracht Frankfurt','Wolfsburg','SC Freiburg','Union Berlin','Gladbach','Hoffenheim','Werder Bremen','Mainz 05','Augsburg','Bochum','Heidenheim','1. FC Köln','Schalke 04','HSV','Hertha BSC','St. Pauli','Kaiserslautern','Düsseldorf'],'Premier League':['Arsenal','Chelsea','Liverpool','Man City','Man United','Newcastle','Tottenham','West Ham','Aston Villa','Brighton','Everton'],'La Liga':['Real Madrid','FC Barcelona','Atlético Madrid','Real Sociedad','Athletic Bilbao','Betis','Villarreal','Sevilla','Mallorca'],'Serie A':['AC Milan','Inter','Juventus','Neapel','AS Rom','Lazio','Atalanta','Fiorentina'],'Ligue 1':['PSG','Marseille','Monaco','Lille','Lyon','Lens'],'Andere':['Ajax','PSV','Feyenoord','Benfica','Porto','Galatasaray','Fenerbahçe','RB Salzburg','Rapid Wien','Basel','Young Boys']};
 var MALLE_BOUNDS = {latMin:39.2,latMax:39.97,lngMin:2.3,lngMax:3.5};
 function isOnMallorca(){
@@ -4830,13 +5079,18 @@ function spawnP(){var c=document.getElementById('particles');c.innerHTML='';var 
 // ============================================
 function buildMoodBar(){
   var el=document.getElementById('moodBar');if(!el)return;
-  el.innerHTML=MOODS.map(function(m){return '<div class="mood-em'+(ME.mood===m?' sel':'')+'" onclick="setMood(this,\''+m+'\')">'+m+'</div>'}).join('');
+  el.innerHTML=MOODS.map(function(m){
+    var meta=MOOD_META[m]||{icon:'i-sparkle',label:'Vibe',color:'var(--o)'};
+    var sel=(ME&&ME.mood===m)?' sel':'';
+    return '<div class="mood-em'+sel+'" title="'+meta.label+'" style="--mood-c:'+meta.color+'" onclick="setMood(this,\''+m+'\')"><svg viewBox="0 0 24 24"><use href="#'+meta.icon+'"/></svg></div>';
+  }).join('');
 }
 window.setMood = async function(el,m){
   document.querySelectorAll('.mood-em').forEach(function(e){e.classList.remove('sel')});
   el.classList.add('sel');ME.mood=m;
   await sb.from('profiles').update({mood:m}).eq('user_id',ME.user_id);
-  toast('Stimmung: '+m);
+  var meta=MOOD_META[m]; toast('Stimmung: '+(meta?meta.label:m));
+  try{ updateProfile(); }catch(e){}
 };
 
 // ============================================
@@ -4853,7 +5107,14 @@ function updateProfile(){
   if(adminItem)adminItem.style.display=ME.is_admin?'flex':'none';
   // Vibe
   var pv=document.getElementById('profVibe');
-  if(pv)pv.innerHTML=ME.mood?'<span class="pv-emoji">'+ME.mood+'</span><span class="pv-label">Aktueller Vibe</span>':'<span style="color:var(--t3);font-size:12px">Wähl deinen Vibe auf dem Radar!</span>';
+  if(pv){
+    if(ME.mood){
+      var _mm=MOOD_META[ME.mood]||{icon:'i-sparkle',label:'Vibe',color:'var(--o)'};
+      pv.innerHTML='<span class="pv-ico" style="--pv-c:'+_mm.color+'"><svg viewBox="0 0 24 24"><use href="#'+_mm.icon+'"/></svg></span><span class="pv-label">'+_mm.label+'</span><span class="pv-sub">· dein Vibe</span>';
+    } else {
+      pv.innerHTML='<span style="color:var(--t3);font-size:12px">Wähl deinen Vibe auf dem Radar!</span>';
+    }
+  }
   // Socials
   var ps=document.getElementById('profSocials');
   if(ps){
@@ -8910,36 +9171,47 @@ function shareText(text){if(navigator.share)navigator.share({title:'crew.',text:
 window.toast=function(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2200)};
 
 async function fetchWeather(){
+  var card = document.getElementById('weatherCard');
+  if(card) card.setAttribute('data-state','loading');
   try {
     var resp = await fetch('https://api.open-meteo.com/v1/forecast?latitude=39.5696&longitude=2.6502&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&timezone=Europe/Madrid');
     var data = await resp.json();
-    if(!data.current) return;
+    if(!data.current){ if(card) card.setAttribute('data-state','idle'); return; }
 
     var temp = Math.round(data.current.temperature_2m);
     var humidity = data.current.relative_humidity_2m;
     var wind = Math.round(data.current.wind_speed_10m);
     var code = data.current.weather_code;
 
-    // WMO Weather codes to emoji + description
+    // WMO weather codes → SVG icon + state + description
     var weatherMap = {
-      0:{icon:'☀️',de:'Sonnig'},1:{icon:'🌤️',de:'Überwiegend klar'},2:{icon:'⛅',de:'Teilweise bewölkt'},3:{icon:'☁️',de:'Bewölkt'},
-      45:{icon:'🌫️',de:'Nebel'},48:{icon:'🌫️',de:'Reifnebel'},
-      51:{icon:'🌦️',de:'Leichter Nieselregen'},53:{icon:'🌦️',de:'Nieselregen'},55:{icon:'🌧️',de:'Starker Nieselregen'},
-      61:{icon:'🌧️',de:'Leichter Regen'},63:{icon:'🌧️',de:'Regen'},65:{icon:'🌧️',de:'Starkregen'},
-      71:{icon:'🌨️',de:'Leichter Schnee'},73:{icon:'🌨️',de:'Schnee'},75:{icon:'❄️',de:'Starker Schnee'},
-      80:{icon:'🌦️',de:'Regenschauer'},81:{icon:'🌧️',de:'Starke Schauer'},82:{icon:'⛈️',de:'Gewitter-Schauer'},
-      95:{icon:'⛈️',de:'Gewitter'},96:{icon:'⛈️',de:'Gewitter mit Hagel'},99:{icon:'⛈️',de:'Schweres Gewitter'}
+      0:{icon:'i-sun',state:'sun',de:'Sonnig'},1:{icon:'i-cloud-sun',state:'sun',de:'Überwiegend klar'},2:{icon:'i-cloud-sun',state:'cloud',de:'Teilweise bewölkt'},3:{icon:'i-cloud',state:'cloud',de:'Bewölkt'},
+      45:{icon:'i-fog',state:'fog',de:'Nebel'},48:{icon:'i-fog',state:'fog',de:'Reifnebel'},
+      51:{icon:'i-rain',state:'rain',de:'Leichter Nieselregen'},53:{icon:'i-rain',state:'rain',de:'Nieselregen'},55:{icon:'i-rain',state:'rain',de:'Starker Nieselregen'},
+      61:{icon:'i-rain',state:'rain',de:'Leichter Regen'},63:{icon:'i-rain',state:'rain',de:'Regen'},65:{icon:'i-rain',state:'rain',de:'Starkregen'},
+      71:{icon:'i-snow',state:'snow',de:'Leichter Schnee'},73:{icon:'i-snow',state:'snow',de:'Schnee'},75:{icon:'i-snow',state:'snow',de:'Starker Schnee'},
+      80:{icon:'i-rain',state:'rain',de:'Regenschauer'},81:{icon:'i-rain',state:'rain',de:'Starke Schauer'},82:{icon:'i-thunder',state:'thunder',de:'Gewitter-Schauer'},
+      95:{icon:'i-thunder',state:'thunder',de:'Gewitter'},96:{icon:'i-thunder',state:'thunder',de:'Gewitter mit Hagel'},99:{icon:'i-thunder',state:'thunder',de:'Schweres Gewitter'}
     };
 
-    var w = weatherMap[code] || {icon:'🌡️',de:'Wetter'};
+    var w = weatherMap[code] || {icon:'i-thermometer',state:'cloud',de:'Wetter'};
 
-    document.getElementById('weatherIcon').textContent = w.icon;
+    var wi = document.getElementById('weatherIcon');
+    if(wi) wi.innerHTML = '<svg viewBox="0 0 24 24"><use href="#'+w.icon+'"/></svg>';
     document.getElementById('weatherTemp').textContent = temp + '°';
     document.getElementById('weatherDesc').textContent = w.de;
-    document.getElementById('weatherWind').textContent = '💨 ' + wind + ' km/h';
-    document.getElementById('weatherHumid').textContent = '💧 ' + humidity + '%';
+    var wwEl = document.getElementById('weatherWind');
+    if(wwEl){
+      var ws = wwEl.querySelector('span'); if(ws) ws.textContent = wind + ' km/h';
+    }
+    var whEl = document.getElementById('weatherHumid');
+    if(whEl){
+      var hs = whEl.querySelector('span'); if(hs) hs.textContent = humidity + '%';
+    }
+    if(card) card.setAttribute('data-state', w.state);
   } catch(e) {
     console.warn('Weather fetch failed:', e);
+    if(card) card.setAttribute('data-state','idle');
   }
 }
 
@@ -9017,16 +9289,15 @@ function updateIslandMood(){
 
     var moodLabels = {'🥳':'Party-Modus','🔥':'On Fire','💃':'Tanz-Laune','🍻':'Bier-Zeit','🌴':'Chill-Vibes','🍹':'Cocktail-Hour','😎':'Cool & Relaxed','🤪':'Crazy Night','💤':'Ausschlafen','🌅':'Sunset-Mood'};
     var label = moodLabels[topMood.mood] || 'Gut drauf';
-
-    document.getElementById('islandMoodContent').innerHTML = topMood.mood + ' ' + label + ' — <span style="color:var(--o)">' + pct + '%</span> der Leute';
+    var tmMeta = MOOD_META[topMood.mood]||{icon:'i-sparkle',color:'var(--o)'};
+    document.getElementById('islandMoodContent').innerHTML = '<span style="display:inline-flex;align-items:center;gap:6px;vertical-align:-4px"><span style="width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:'+tmMeta.color+';color:#fff"><svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><use href="#'+tmMeta.icon+'"/></svg></span></span> ' + label + ' — <span style="color:var(--o)">' + pct + '%</span> der Leute';
 
     // Build mood bar
     var barHtml = '';
-    var moodColors = {'🥳':'#FFD60A','🔥':'#FF6D2E','💃':'#BF5AF2','🍻':'#FF9500','🌴':'#34C759','🍹':'#FF6B6B','😎':'#0A84FF','🤪':'#FF3B30','💤':'#8E8E93','🌅':'#FF9500'};
     moods.forEach(function(m){
       var w = Math.round((parseInt(m.count) / total) * 100);
-      var col = moodColors[m.mood] || 'var(--o)';
-      barHtml += '<div title="'+m.mood+' '+w+'%" style="flex:'+w+';height:100%;border-radius:3px;background:'+col+'"></div>';
+      var meta = MOOD_META[m.mood]||{color:'var(--o)',label:'Vibe'};
+      barHtml += '<div title="'+meta.label+' '+w+'%" style="flex:'+w+';height:100%;border-radius:3px;background:'+meta.color+'"></div>';
     });
     document.getElementById('islandMoodBar').innerHTML = barHtml;
   }).catch(function(e){
