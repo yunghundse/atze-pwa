@@ -1732,7 +1732,7 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 59;
+  var APP_VERSION = 60;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     // Force-clear old non-UUID crew IDs
@@ -5899,25 +5899,18 @@ async function buildDailyVoting(){
 
     // Load ALL votes for today from Supabase
     var allVotes={};
-    var _useLocalVotes=false;
     try{
       var {data:vdata,error:verr}=await sb.from('crew_votes').select('category,voter_id,voted_for').eq('crew_id',crewId).eq('date',today);
-      if(verr||!vdata){
-        _useLocalVotes=true;
-      } else {
+      if(verr){console.error('Vote load error:',JSON.stringify(verr))}
+      if(vdata&&vdata.length>0){
         vdata.forEach(function(v){
           if(!allVotes[v.category])allVotes[v.category]={};
           allVotes[v.category][v.voter_id]=v.voted_for;
         });
       }
+      console.log('[VOTES] Loaded '+((vdata&&vdata.length)||0)+' votes from Supabase for crew '+crewId);
     }catch(e){
-      _useLocalVotes=true;
-    }
-    if(_useLocalVotes){
-      todaySet.forEach(function(q){
-        var lk='crew_vote_'+crewId+'_'+q.id+'_'+today;
-        try{allVotes[q.id]=JSON.parse(localStorage.getItem(lk)||'{}');}catch(x){allVotes[q.id]={}}
-      });
+      console.error('Vote load exception:',e);
     }
 
     // Build HTML — one card per question
@@ -6009,14 +6002,9 @@ window.voteCrewCategory=async function(category,uid,name){
     }
     supaOk=true;
   }catch(e){
-    console.warn('Vote Supabase fallback:',e.message||e);
-    // Fallback localStorage — works per-device only
-    var lk='crew_vote_'+crewId+'_'+category+'_'+today;
-    var votes={};
-    try{votes=JSON.parse(localStorage.getItem(lk)||'{}');}catch(x){}
-    if(votes[ME.user_id]===uid){delete votes[ME.user_id];toast('Vote zurückgenommen')}
-    else{votes[ME.user_id]=uid;toast('⭐ Vote für '+name+'!')}
-    localStorage.setItem(lk,JSON.stringify(votes));
+    var errMsg=e&&e.message?e.message:(typeof e==='object'?JSON.stringify(e):String(e));
+    console.error('Vote Supabase ERROR:',errMsg);
+    toast('DB-Fehler: '+errMsg.substring(0,60));
   }
   if(navigator.vibrate)navigator.vibrate(15);
   try{await buildDailyVoting();}catch(e){console.error('Rebuild voting UI error:',e)}
