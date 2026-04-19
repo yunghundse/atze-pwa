@@ -2898,10 +2898,9 @@ async function buildNearby(){
   var el=document.getElementById('nearbyCrewList');if(!el)return;
   if(!ME||!ME.user_id){return}
   if(!userLat||!userLng){el.innerHTML='<p style="color:var(--t3);font-size:13px">Aktiviere deinen Standort um Crew in der Nähe zu sehen.</p>';return}
-  // Get matches
-  var {data:matches}=await sb.from('matches').select('to_user').eq('from_user',ME.user_id).eq('is_match',true);
-  if(!matches||matches.length===0){el.innerHTML='<p style="color:var(--t3);font-size:13px">Matche mit Leuten um sie hier zu sehen!</p>';return}
-  var ids=matches.map(function(m){return m.to_user});
+  // Get active crew members
+  var ids=await getActiveCrewMemberIds();
+  if(!ids||ids.length===0){el.innerHTML='<p style="color:var(--t3);font-size:13px">Tritt einer Crew bei um Mitglieder hier zu sehen!</p>';return}
   var {data:profiles}=await sb.from('profiles').select('user_id,name,photo_url,lat,lng,mood,location_updated_at').in('user_id',ids).not('lat','is',null);
   if(!profiles||profiles.length===0){el.innerHTML='<p style="color:var(--t3);font-size:13px">Keine Crew-Mitglieder mit Standort in der Nähe.</p>';return}
   // Calc distances
@@ -3263,15 +3262,14 @@ var _crewProfiles = []; // cached crew profiles for reuse
 async function buildCrewList(){
   var el=document.getElementById('crewList');if(!el)return;
   try{
-    var {data:matches}=await sb.from('matches').select('to_user').eq('from_user',ME.user_id).eq('is_match',true);
-    if(!matches||matches.length===0){
-      el.innerHTML='<div class="crew-empty-state"><div class="crew-empty-icon">👯‍♂️</div><div class="crew-empty-title">Deine Crew wartet!</div><div class="crew-empty-desc">Lade deine Freunde ein oder matche mit Leuten in der Nähe — zusammen macht Malle mehr Spaß!</div><button class="crew-empty-btn" onclick="inviteCrew()">📲 Crew einladen</button></div>';
+    var ids=await getActiveCrewMemberIds();
+    if(!ids||ids.length===0){
+      el.innerHTML='<div class="crew-empty-state"><div class="crew-empty-icon">👯‍♂️</div><div class="crew-empty-title">Deine Crew wartet!</div><div class="crew-empty-desc">Lade deine Freunde ein oder teile den Invite-Code — zusammen macht Malle mehr Spaß!</div><button class="crew-empty-btn" onclick="inviteCrew()">📲 Crew einladen</button></div>';
       document.getElementById('crewCount').textContent='0/'+CREW_MAX;
       return;
     }
-    var ids=matches.map(function(m){return m.to_user});
     var {data:profiles}=await sb.from('profiles').select('*').in('user_id',ids);
-    if(!profiles||profiles.length===0){el.innerHTML='<div class="crew-empty-state"><div class="crew-empty-icon">🔍</div><div class="crew-empty-title">Keine Crew-Mitglieder</div><div class="crew-empty-desc">Swipe los um deine Crew aufzubauen!</div></div>';return}
+    if(!profiles||profiles.length===0){el.innerHTML='<div class="crew-empty-state"><div class="crew-empty-icon">🔍</div><div class="crew-empty-title">Keine Crew-Mitglieder</div><div class="crew-empty-desc">Teile den Invite-Code um Leute einzuladen!</div></div>';return}
     // Filter blocked users (unified Supabase system)
     profiles=profiles.filter(function(p){return !isBlocked(p.user_id)});
     _crewProfiles=profiles;
@@ -3524,9 +3522,8 @@ function buildCrewActivityFeed(){
 async function buildCrewLocations(){
   var el=document.getElementById('crewLocationList');if(!el)return;
   try{
-    var {data:matches}=await sb.from('matches').select('to_user').eq('from_user',ME.user_id).eq('is_match',true);
-    if(!matches||matches.length===0){el.innerHTML='<p class="crew-empty">Matche mit Leuten um ihre Standorte zu sehen!</p>';return}
-    var ids=matches.map(function(m){return m.to_user});
+    var ids=await getActiveCrewMemberIds();
+    if(!ids||ids.length===0){el.innerHTML='<p class="crew-empty">Tritt einer Crew bei um Standorte zu sehen!</p>';return}
     var {data:profiles}=await sb.from('profiles').select('user_id,name,photo_url,lat,lng,mood,last_active,location_updated_at').in('user_id',ids);
     if(!profiles||profiles.length===0){el.innerHTML='<p class="crew-empty">Keine Crew-Mitglieder gefunden.</p>';return}
     // Filter blocked (unified Supabase system)
@@ -4040,6 +4037,19 @@ function isInCrew(crewId){
 }
 
 function getMyCrewCount(){return _myCrewMemberships.length}
+
+// Helper: Get all member user_ids of the active crew (excluding self)
+var _activeCrewMemberIds=[];
+async function getActiveCrewMemberIds(){
+  var crewId=getActiveCrewId();
+  if(!crewId){_activeCrewMemberIds=[];return []}
+  try{
+    var {data}=await sb.from('crew_members').select('user_id').eq('crew_id',crewId);
+    if(!data){_activeCrewMemberIds=[];return []}
+    _activeCrewMemberIds=data.map(function(m){return m.user_id}).filter(function(id){return id!==ME.user_id});
+    return _activeCrewMemberIds;
+  }catch(e){console.error('getActiveCrewMemberIds error:',e);return _activeCrewMemberIds}
+}
 
 function getCrewLimit(){
   var isPremium=localStorage.getItem('is_premium')==='true';
@@ -5693,9 +5703,8 @@ var DAILY_QUESTIONS = [
 async function buildDailyVoting(){
   var el=document.getElementById('dailyVoting');if(!el)return;
   try{
-    var {data:matches}=await sb.from('matches').select('to_user').eq('from_user',ME.user_id).eq('is_match',true);
-    if(!matches||matches.length===0){el.innerHTML='<p class="crew-empty">Matche mit Leuten um abstimmen zu können!</p>';return}
-    var ids=matches.map(function(m){return m.to_user});
+    var ids=await getActiveCrewMemberIds();
+    if(!ids||ids.length===0){el.innerHTML='<p class="crew-empty">Tritt einer Crew bei um abstimmen zu können!</p>';return}
     var {data:profiles}=await sb.from('profiles').select('user_id,name,photo_url').in('user_id',ids);
     if(!profiles||profiles.length===0){el.innerHTML='<p class="crew-empty">Keine Crew zum Voten.</p>';return}
     profiles=profiles.filter(function(p){return !isBlocked(p.user_id)});
@@ -6938,11 +6947,10 @@ window.deletePhoto=async function(){
 // ============================================
 async function buildMatchList(){
   var ml=document.getElementById('matchFriendList');if(!ml)return;
-  var {data:matches}=await sb.from('matches').select('to_user').eq('from_user',ME.user_id).eq('is_match',true);
-  if(!matches||matches.length===0){ml.innerHTML='<p style="padding:14px;color:var(--t3);font-size:13px">Noch keine Matches. Swipe los!</p>';return}
-  var ids=matches.map(function(m){return m.to_user});
+  var ids=await getActiveCrewMemberIds();
+  if(!ids||ids.length===0){ml.innerHTML='<p style="padding:14px;color:var(--t3);font-size:13px">Noch keine Crew-Mitglieder. Teile den Invite-Code!</p>';return}
   var {data:profiles}=await sb.from('profiles').select('*').in('user_id',ids);
-  if(!profiles||profiles.length===0){ml.innerHTML='<p style="padding:14px;color:var(--t3);font-size:13px">Noch keine Matches.</p>';return}
+  if(!profiles||profiles.length===0){ml.innerHTML='<p style="padding:14px;color:var(--t3);font-size:13px">Keine Crew-Mitglieder gefunden.</p>';return}
   // Filter blocked (using unified Supabase block system)
   profiles=profiles.filter(function(p){return !isBlocked(p.user_id)});
   ml.innerHTML=profiles.map(function(p){
@@ -7196,8 +7204,7 @@ async function buildLeaderboard(){
   try{
     var el=document.getElementById('leaderboardList');if(!el)return;
     // Include ME in leaderboard
-    var {data:matches}=await sb.from('matches').select('to_user').eq('from_user',ME.user_id).eq('is_match',true);
-    var ids=matches?matches.map(function(m){return m.to_user}):[];
+    var ids=await getActiveCrewMemberIds();
     ids.push(ME.user_id);
     var {data:profiles}=await sb.from('profiles').select('*').in('user_id',ids).order('points',{ascending:false});
     if(!profiles||profiles.length===0){el.innerHTML='<p style="color:var(--t3);font-size:13px">Keine Daten.</p>';return}
@@ -7391,9 +7398,8 @@ function buildCrewTips(){
 async function buildDrunkList(){
   try{
     var el=document.getElementById('drunkList');if(!el)return;
-    var {data:matches}=await sb.from('matches').select('to_user').eq('from_user',ME.user_id).eq('is_match',true);
-    if(!matches||matches.length===0){el.innerHTML='<p style="color:var(--t3);font-size:13px;width:100%">Noch keine Matches.</p>';return}
-    var ids=matches.map(function(m){return m.to_user});
+    var ids=await getActiveCrewMemberIds();
+    if(!ids||ids.length===0){el.innerHTML='<p style="color:var(--t3);font-size:13px;width:100%">Noch keine Crew-Mitglieder.</p>';return}
     var {data:profiles}=await sb.from('profiles').select('*').in('user_id',ids);
     if(!profiles||profiles.length===0){el.innerHTML='<p style="color:var(--t3);font-size:13px;width:100%">Keine Crew.</p>';return}
     var today=new Date().toISOString().split('T')[0];
@@ -7547,8 +7553,8 @@ window.openPremium=function(){
 // 9. TAXI SPLITTER
 window.openTaxiSplitter=async function(){
   try{
-    var {data:matches}=await sb.from('matches').select('to_user').eq('from_user',ME.user_id).eq('is_match',true);
-    var count=(matches||[]).length+1;
+    var ids=await getActiveCrewMemberIds();
+    var count=(ids||[]).length+1;
     document.getElementById('taxiPeople').textContent=count;
     updateTaxiCalc();
     document.getElementById('taxiOv').classList.add('show');
