@@ -436,80 +436,89 @@ select.ri{appearance:none;-webkit-appearance:none}
 .crew-limit-badge{padding:3px 10px;border-radius:10px;font-size:10px;font-weight:800;background:rgba(255,109,46,.12);color:var(--o);border:1px solid rgba(255,109,46,.2)}
 .crew-empty{padding:14px;color:var(--t3);font-size:13px}
 .highlight-section{margin:0 10px 10px;border-radius:var(--r2);background:linear-gradient(135deg,rgba(255,109,46,.06),rgba(191,90,242,.04));backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);border:1px solid rgba(255,109,46,.12);overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 6px 24px rgba(0,0,0,.3),0 0 40px rgba(255,109,46,.04)}
-/* AURA CHECK — Crew Voting */
-.aura-check-badge{background:rgba(191,90,242,.12);color:#BF5AF2;border:1px solid rgba(191,90,242,.2)}
-.aura-cat-grid{display:flex;gap:8px;padding:0 14px 14px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-.aura-cat-grid::-webkit-scrollbar{display:none}
-.aura-cat{padding:8px 14px;border-radius:14px;background:linear-gradient(135deg,rgba(22,22,24,.7),rgba(28,28,32,.5));backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);border:1px solid rgba(255,255,255,.08);cursor:pointer;transition:all .2s var(--ease);white-space:nowrap;text-align:center}
-.aura-cat:active{transform:scale(.95)}
-.aura-cat.sel{border-color:rgba(191,90,242,.4);background:linear-gradient(135deg,rgba(191,90,242,.15),rgba(191,90,242,.05));box-shadow:0 0 16px rgba(191,90,242,.1)}
-.aura-cat-emoji{font-size:22px;display:block;margin-bottom:2px}
-.aura-cat-label{font-size:10px;font-weight:700;color:var(--t2)}
-.aura-vote-area{padding:0 14px 14px}
-.aura-vote-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--r);background:linear-gradient(135deg,rgba(22,22,24,.6),rgba(28,28,32,.4));border:1px solid rgba(255,255,255,.06);margin-bottom:6px;cursor:pointer;transition:all .2s var(--ease)}
-.aura-vote-row:active{transform:scale(.98)}
-.aura-vote-row.voted{border-color:rgba(191,90,242,.3);background:linear-gradient(135deg,rgba(191,90,242,.12),rgba(191,90,242,.04))}
-.avr-ava{width:36px;height:36px;border-radius:50%;overflow:hidden;flex-shrink:0}.avr-ava img{width:100%;height:100%;object-fit:cover}
-.avr-name{flex:1;font-size:13px;font-weight:700}
-.avr-count{font-size:12px;font-weight:800;color:#BF5AF2}
-.aura-result{margin:0 14px 14px;padding:12px;border-radius:var(--r);background:linear-gradient(135deg,rgba(191,90,242,.15),rgba(191,90,242,.05));border:1px solid rgba(191,90,242,.2);text-align:center}
-.aura-result-label{font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
-.aura-result-name{font-size:16px;font-weight:900;color:#BF5AF2}
-/* RIZZ RANKING */
-.rizz-badge{background:rgba(255,59,48,.12);color:#FF3B30;border:1px solid rgba(255,59,48,.2)}
-.rizz-podium{display:flex;gap:8px;padding:0 14px 10px;align-items:flex-end}
-.rizz-pod{flex:1;text-align:center;padding:12px 6px;border-radius:var(--r);background:linear-gradient(135deg,rgba(22,22,24,.7),rgba(28,28,32,.5));backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);border:1px solid rgba(255,255,255,.08);position:relative;overflow:hidden}
-.rizz-pod.gold{border-color:rgba(255,214,10,.3);background:linear-gradient(135deg,rgba(255,214,10,.1),rgba(255,214,10,.03))}
-.rizz-pod.gold::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,214,10,.08),transparent);pointer-events:none}
-.rizz-pod .rp-place{font-size:20px;margin-bottom:4px}
-.rizz-pod .rp-ava{width:48px;height:48px;border-radius:50%;overflow:hidden;margin:0 auto 6px;border:2px solid rgba(255,255,255,.1)}.rizz-pod.gold .rp-ava{border-color:rgba(255,214,10,.4);width:56px;height:56px}
-.rizz-pod .rp-ava img{width:100%;height:100%;object-fit:cover}
-.rizz-pod .rp-name{font-size:11px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.rizz-pod .rp-score{font-size:14px;font-weight:900;color:#FF6B6B;margin-top:2px}
-.rizz-rate-area{padding:0 14px 14px}
-.rizz-rate-card{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--r);background:linear-gradient(135deg,rgba(22,22,24,.6),rgba(28,28,32,.4));border:1px solid rgba(255,255,255,.06);margin-bottom:6px}
-.rrc-ava{width:36px;height:36px;border-radius:50%;overflow:hidden;flex-shrink:0}.rrc-ava img{width:100%;height:100%;object-fit:cover}
-.rrc-name{flex:1;font-size:13px;font-weight:700}
-.rrc-hearts{display:flex;gap:3px}
-.rrc-heart{font-size:18px;cursor:pointer;transition:transform .15s;opacity:.3}
-.rrc-heart:active{transform:scale(1.3)}
-.rrc-heart.lit{opacity:1;filter:drop-shadow(0 0 4px rgba(255,59,48,.4))}
-/* CONFESSION WALL */
-.confess-badge{background:rgba(90,200,250,.12);color:#5AC8FA;border:1px solid rgba(90,200,250,.2)}
-.confess-list{padding:0 14px 8px}
-.confess-card{padding:14px;border-radius:var(--r);background:linear-gradient(135deg,rgba(22,22,24,.7),rgba(28,28,32,.5));backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);border:1px solid rgba(255,255,255,.08);margin-bottom:8px;position:relative;overflow:hidden}
-.confess-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;border-radius:2px}
-.confess-card:nth-child(odd)::before{background:linear-gradient(180deg,#BF5AF2,#5AC8FA)}
-.confess-card:nth-child(even)::before{background:linear-gradient(180deg,#FF6B6B,#FFD60A)}
-.confess-anon{font-size:10px;font-weight:700;color:var(--t3);margin-bottom:6px;display:flex;align-items:center;gap:5px}
-.confess-anon::before{content:'👻';font-size:14px}
-.confess-text{font-size:14px;font-weight:600;line-height:1.5;color:var(--t1)}
-.confess-time{font-size:10px;color:var(--t3);margin-top:8px}
-.confess-react{display:flex;gap:8px;margin-top:8px}
-.confess-react-btn{padding:4px 10px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.06);font-size:12px;cursor:pointer;transition:all .15s}
-.confess-react-btn:active{transform:scale(.9)}
-.confess-react-btn.reacted{background:rgba(255,109,46,.12);border-color:rgba(255,109,46,.2)}
-.confess-input-area{padding:0 14px 14px;display:flex;gap:8px}
-.confess-input{flex:1;padding:10px 14px;border-radius:14px;background:rgba(22,22,24,.6);border:1px solid rgba(255,255,255,.1);color:var(--t1);font-size:13px;font-family:inherit;outline:none;transition:border-color .2s}
-.confess-input:focus{border-color:rgba(90,200,250,.4)}
-.confess-input::placeholder{color:var(--t3)}
-.confess-send{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#5AC8FA,#BF5AF2);border:none;color:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .15s}
-.confess-send:active{transform:scale(.85)}
-/* STORY RECAP */
+/* CREW WALL — 24h Posts + Location Pins */
+.wall-badge{background:rgba(255,109,46,.12);color:var(--o);border:1px solid rgba(255,109,46,.2);position:relative}
+.wall-badge::before{content:'';display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--o);margin-right:4px;animation:activePulse 2s ease infinite}
+.wall-posts{padding:0 14px 8px}
+.wall-post{padding:14px;border-radius:var(--r);background:linear-gradient(135deg,rgba(22,22,24,.7),rgba(28,28,32,.5));backdrop-filter:blur(50px) saturate(200%);-webkit-backdrop-filter:blur(50px) saturate(200%);border:1px solid rgba(255,255,255,.08);margin-bottom:8px;position:relative;overflow:hidden}
+.wall-post-header{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.wp-ava{width:32px;height:32px;border-radius:50%;overflow:hidden;flex-shrink:0;border:1.5px solid rgba(255,255,255,.12)}.wp-ava img{width:100%;height:100%;object-fit:cover}
+.wp-info{flex:1;min-width:0}
+.wp-name{font-size:12px;font-weight:800}
+.wp-time{font-size:10px;color:var(--t3)}
+.wp-expire{font-size:9px;color:var(--o);font-weight:700;display:flex;align-items:center;gap:3px}
+.wall-post-text{font-size:14px;font-weight:500;line-height:1.5;color:var(--t1);margin-bottom:6px}
+.wall-post-loc{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:10px;background:rgba(255,109,46,.08);border:1px solid rgba(255,109,46,.12);font-size:11px;font-weight:700;color:var(--o);margin-bottom:8px;cursor:pointer}
+.wall-post-loc:active{transform:scale(.96)}
+.wall-post-react{display:flex;gap:6px}
+.wall-react-btn{padding:4px 10px;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.06);font-size:12px;cursor:pointer;transition:all .15s}
+.wall-react-btn:active{transform:scale(.9)}
+.wall-react-btn.reacted{background:rgba(255,109,46,.1);border-color:rgba(255,109,46,.15)}
+.wall-input-area{padding:0 14px 14px;display:flex;gap:6px;align-items:center}
+.wall-input{flex:1;padding:10px 14px;border-radius:14px;background:rgba(22,22,24,.6);border:1px solid rgba(255,255,255,.1);color:var(--t1);font-size:13px;font-family:inherit;outline:none;transition:border-color .2s}
+.wall-input:focus{border-color:rgba(255,109,46,.4)}
+.wall-input::placeholder{color:var(--t3)}
+.wall-pin-btn{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+.wall-pin-btn:active{transform:scale(.85)}
+.wall-pin-btn.pinned{background:rgba(255,109,46,.15);border-color:rgba(255,109,46,.3)}
+.wall-send-btn{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--o),#FF6B6B);border:none;color:#fff;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .15s}
+.wall-send-btn:active{transform:scale(.85)}
+.wall-empty{padding:20px 14px;text-align:center}
+.wall-empty-icon{font-size:36px;margin-bottom:6px}
+.wall-empty-text{font-size:13px;color:var(--t3);font-weight:600}
+/* CREW STORY — Snap-style fullscreen */
 .recap-badge{background:linear-gradient(135deg,rgba(255,109,46,.12),rgba(191,90,242,.12));color:var(--o);border:1px solid rgba(255,109,46,.2)}
-.recap-carousel{display:flex;gap:10px;padding:0 14px 14px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-.recap-carousel::-webkit-scrollbar{display:none}
-.recap-card{min-width:200px;padding:16px;border-radius:var(--r2);position:relative;overflow:hidden;flex-shrink:0;cursor:pointer;transition:transform .2s var(--ease)}
-.recap-card:active{transform:scale(.96)}
-.recap-card.rc-highlights{background:linear-gradient(135deg,rgba(255,109,46,.2),rgba(191,90,242,.1));border:1px solid rgba(255,109,46,.15)}
-.recap-card.rc-stats{background:linear-gradient(135deg,rgba(90,200,250,.15),rgba(52,199,89,.08));border:1px solid rgba(90,200,250,.15)}
-.recap-card.rc-moments{background:linear-gradient(135deg,rgba(255,214,10,.15),rgba(255,107,107,.08));border:1px solid rgba(255,214,10,.15)}
-.recap-card.rc-awards{background:linear-gradient(135deg,rgba(191,90,242,.2),rgba(255,59,48,.08));border:1px solid rgba(191,90,242,.15)}
-.rc-icon{font-size:28px;margin-bottom:8px}
-.rc-title{font-size:14px;font-weight:900;margin-bottom:4px}
-.rc-desc{font-size:11px;color:var(--t2);line-height:1.4}
-.rc-stat{font-size:22px;font-weight:900;color:var(--o);margin:6px 0 2px}
-.rc-stat-label{font-size:10px;color:var(--t3);font-weight:600}
+.story-actions{display:flex;gap:8px;padding:0 14px 14px}
+.story-add-btn,.story-play-btn{flex:1;padding:12px;border-radius:14px;font-size:13px;font-weight:800;cursor:pointer;transition:all .2s var(--ease);text-align:center;border:none;font-family:inherit}
+.story-add-btn{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:var(--t1)}
+.story-add-btn:active{transform:scale(.96);background:rgba(255,255,255,.1)}
+.story-play-btn{background:linear-gradient(135deg,var(--o),#FF6B6B);color:#fff;border:1px solid transparent;box-shadow:0 4px 16px rgba(255,109,46,.2)}
+.story-play-btn:active{transform:scale(.96)}
+.story-play-btn:disabled{opacity:.4;pointer-events:none}
+.story-preview-grid{display:flex;gap:6px;padding:0 14px 10px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.story-preview-grid::-webkit-scrollbar{display:none}
+.story-slide-mini{width:64px;height:90px;border-radius:10px;overflow:hidden;position:relative;flex-shrink:0;border:2px solid rgba(255,255,255,.1);cursor:pointer}
+.story-slide-mini.my-slide{border-color:rgba(255,109,46,.4)}
+.ssm-bg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;padding:4px;text-align:center;color:#fff;line-height:1.2}
+.ssm-ava{position:absolute;bottom:3px;right:3px;width:18px;height:18px;border-radius:50%;border:1.5px solid rgba(0,0,0,.5);overflow:hidden}.ssm-ava img{width:100%;height:100%;object-fit:cover}
+/* Fullscreen Story Overlay */
+.story-fullscreen{position:fixed;inset:0;z-index:9999;background:#000;display:none;flex-direction:column;-webkit-user-select:none;user-select:none}
+.story-fullscreen.show{display:flex}
+.story-fs-bar{display:flex;align-items:center;gap:8px;padding:12px 16px;padding-top:max(env(safe-area-inset-top),12px)}
+.story-fs-progress{flex:1;display:flex;gap:3px}
+.sfp-seg{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.2);overflow:hidden}
+.sfp-seg .sfp-fill{height:100%;background:#fff;border-radius:2px;width:0;transition:width .1s linear}
+.sfp-seg.done .sfp-fill{width:100%}
+.sfp-seg.active .sfp-fill{width:0;animation:storyProgress 6s linear forwards}
+@keyframes storyProgress{from{width:0}to{width:100%}}
+.story-fs-close{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;color:#fff;border:none;flex-shrink:0}
+.story-fs-slide{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;position:relative;overflow:hidden}
+.story-fs-slide .sfs-text{font-size:22px;font-weight:900;text-align:center;line-height:1.4;color:#fff;max-width:300px;text-shadow:0 2px 12px rgba(0,0,0,.5)}
+.story-fs-author{position:absolute;bottom:80px;left:0;right:0;text-align:center}
+.sfs-author-name{font-size:13px;font-weight:700;color:rgba(255,255,255,.8)}
+.sfs-author-time{font-size:11px;color:rgba(255,255,255,.4);margin-top:2px}
+.story-fs-nav{position:absolute;top:0;bottom:0;width:40%;z-index:2}
+.story-fs-nav.prev{left:0}
+.story-fs-nav.next{right:0}
+/* Story Editor Modal */
+.story-editor-ov{position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:none;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+.story-editor-ov.show{display:flex}
+.story-editor{width:100%;max-width:340px;border-radius:var(--r2);background:linear-gradient(135deg,rgba(28,28,32,.95),rgba(22,22,24,.95));border:1px solid rgba(255,255,255,.12);padding:24px;box-shadow:0 24px 80px rgba(0,0,0,.6)}
+.se-title{font-size:18px;font-weight:900;text-align:center;margin-bottom:16px}
+.se-colors{display:flex;gap:8px;justify-content:center;margin-bottom:16px}
+.se-color{width:32px;height:32px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .15s}
+.se-color:active{transform:scale(.9)}
+.se-color.sel{border-color:#fff;box-shadow:0 0 12px rgba(255,255,255,.3)}
+.se-textarea{width:100%;height:120px;border-radius:14px;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.1);color:#fff;font-size:16px;font-weight:700;font-family:inherit;padding:14px;outline:none;resize:none;text-align:center}
+.se-textarea::placeholder{color:rgba(255,255,255,.3)}
+.se-loc-toggle{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px;font-size:12px;color:var(--t2);font-weight:600;cursor:pointer}
+.se-loc-toggle .se-loc-check{width:20px;height:20px;border-radius:6px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-size:12px;transition:all .15s}
+.se-loc-toggle .se-loc-check.on{background:rgba(255,109,46,.2);border-color:var(--o)}
+.se-btns{display:flex;gap:8px;margin-top:16px}
+.se-btn-cancel,.se-btn-post{flex:1;padding:12px;border-radius:14px;font-size:14px;font-weight:800;cursor:pointer;text-align:center;border:none;font-family:inherit;transition:transform .15s}
+.se-btn-cancel{background:rgba(255,255,255,.06);color:var(--t2);border:1px solid rgba(255,255,255,.1)}
+.se-btn-post{background:linear-gradient(135deg,var(--o),#FF6B6B);color:#fff}
+.se-btn-cancel:active,.se-btn-post:active{transform:scale(.96)}
 
 /* CREW LOCATION CARDS */
 .crew-loc-card{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid rgba(255,255,255,.04);transition:all .2s var(--ease)}
@@ -928,6 +937,10 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
 
 <!-- CELE --><div class="cele" id="cele"><div class="cele-bg"></div><div class="particles" id="particles"></div><div class="cele-ct"><div class="cele-title">It's a Match!</div><div class="cele-sub">Ihr wollt beide zusammen feiern</div><div class="cele-avatars"><img class="cele-ava" id="celeAva1" src=""><span class="cele-heart">🔥</span><img class="cele-ava" id="celeAva2" src=""></div><div class="cele-name" id="celeName"></div><div class="cele-btns"><button class="cb ghost" onclick="closeCele()">Weiter swipen</button></div></div></div>
 
+<!-- STORY FULLSCREEN --><div class="story-fullscreen" id="storyFullscreen"><div class="story-fs-bar"><div class="story-fs-progress" id="storyFsProgress"></div><button class="story-fs-close" onclick="closeCrewStory()">✕</button></div><div class="story-fs-slide" id="storyFsSlide"><div class="sfs-text" id="sfsText"></div><div class="story-fs-author"><div class="sfs-author-name" id="sfsAuthor"></div><div class="sfs-author-time" id="sfsTime"></div></div></div><div class="story-fs-nav prev" onclick="storyPrev()"></div><div class="story-fs-nav next" onclick="storyNext()"></div></div>
+
+<!-- STORY EDITOR --><div class="story-editor-ov" id="storyEditorOv"><div class="story-editor"><div class="se-title">📸 Slide erstellen</div><div class="se-colors" id="seColors"></div><textarea class="se-textarea" id="seText" placeholder="Was war dein Highlight heute?" maxlength="120"></textarea><div class="se-loc-toggle" onclick="toggleSeLoc()"><div class="se-loc-check" id="seLocCheck"></div><span>📍 Standort anheften</span></div><div class="se-btns"><button class="se-btn-cancel" onclick="closeStoryEditor()">Abbrechen</button><button class="se-btn-post" onclick="postStorySlide()">Posten</button></div></div></div>
+
 <!-- PHOTO UPLOAD --><div class="photo-upload-ov" id="photoUploadOv"><div style="font-size:18px;font-weight:900;margin-bottom:16px">Profilbild</div><div class="pu-preview" id="puPreview"><img id="puImg" src=""></div><div class="pu-zoom"><span>🔍</span><input type="range" id="puZoom" min="1" max="3" step="0.1" value="1" oninput="zoomPhoto(this.value)"><span id="puZoomVal">1x</span></div><input type="file" id="puFile" accept="image/*" style="display:none" onchange="previewPhoto(this)"><div class="pu-actions"><button class="pu-btn cancel" onclick="closePhotoUpload()">Abbrechen</button><button class="pu-btn save" onclick="document.getElementById('puFile').click()">📷 Foto wählen</button><button class="pu-btn save" onclick="savePhoto()">✅ Speichern</button><button class="pu-btn del" onclick="deletePhoto()">🗑 Löschen</button></div></div>
 
 <!-- COLOR PICKER --><div class="color-picker-ov" id="colorPickerOv"><div class="cp-title">🎨 Profilfarbe</div><div class="cp-sub">Ab 6 eingeladenen Freunden freigeschaltet!</div><div class="cp-grid" id="cpGrid"></div><div class="pu-actions"><button class="pu-btn cancel" onclick="closeColorPicker()">Abbrechen</button><button class="pu-btn save" onclick="saveColor()">Speichern</button></div></div>
@@ -1146,46 +1159,31 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
           <div id="crewActivityFeed"></div>
         </div>
 
-        <!-- AURA CHECK — Who has the most aura? -->
-        <div class="crew-section highlight-section">
-          <div class="crew-section-header">
-            <div class="csh-left"><span class="csh-emoji">✨</span><span class="csh-title">Aura-Check</span></div>
-            <div class="csh-badge aura-check-badge">VOTE NOW</div>
-          </div>
-          <div id="auraCheckCategories"></div>
-          <div id="auraCheckVotes"></div>
-        </div>
-
-        <!-- RIZZ RANKING — Rate the crew -->
+        <!-- CREW WALL — 24h Posts mit Location-Pins -->
         <div class="crew-section">
           <div class="crew-section-header">
-            <div class="csh-left"><span class="csh-emoji">💘</span><span class="csh-title">Rizz-Ranking</span></div>
-            <div class="csh-badge rizz-badge">HOT OR NOT</div>
+            <div class="csh-left"><span class="csh-emoji">📍</span><span class="csh-title">Crew Wall</span></div>
+            <div class="csh-badge wall-badge">24H</div>
           </div>
-          <div id="rizzPodium"></div>
-          <div id="rizzRateArea"></div>
-        </div>
-
-        <!-- CONFESSION WALL — Anonymous crew confessions -->
-        <div class="crew-section">
-          <div class="crew-section-header">
-            <div class="csh-left"><span class="csh-emoji">👻</span><span class="csh-title">Confession Wall</span></div>
-            <div class="csh-badge confess-badge">ANONYM</div>
-          </div>
-          <div id="confessionList"></div>
-          <div class="confess-input-area">
-            <input type="text" class="confess-input" id="confessInput" placeholder="Dein anonymes Geständnis..." maxlength="200">
-            <button class="confess-send" onclick="submitConfession()">➤</button>
+          <div id="crewWallPosts"></div>
+          <div class="wall-input-area">
+            <input type="text" class="wall-input" id="wallInput" placeholder="Was geht ab? Teile es mit deiner Crew..." maxlength="280">
+            <button class="wall-pin-btn" id="wallPinBtn" onclick="toggleWallPin()" title="Standort anheften">📍</button>
+            <button class="wall-send-btn" onclick="submitWallPost()">➤</button>
           </div>
         </div>
 
-        <!-- STORY RECAP — Daily/Weekly Highlights -->
+        <!-- STORY RECAP — Fullscreen Snap-style, Crew Slides -->
         <div class="crew-section">
           <div class="crew-section-header">
-            <div class="csh-left"><span class="csh-emoji">📸</span><span class="csh-title">Story Recap</span></div>
-            <div class="csh-badge recap-badge">TODAY</div>
+            <div class="csh-left"><span class="csh-emoji">📸</span><span class="csh-title">Crew Story</span></div>
+            <div class="csh-badge recap-badge" id="storySlideCount">0 SLIDES</div>
           </div>
-          <div id="storyRecap"></div>
+          <div id="storyPreview"></div>
+          <div class="story-actions">
+            <button class="story-add-btn" onclick="openStoryEditor()">+ Slide hinzufügen</button>
+            <button class="story-play-btn" onclick="playCrewStory()">▶ Story ansehen</button>
+          </div>
         </div>
 
         <!-- DAILY QUESTION — Tagesvollster + Tagesrituale -->
@@ -1376,7 +1374,7 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 38;
+  var APP_VERSION = 39;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     localStorage.setItem('crew_app_v', APP_VERSION);
@@ -3072,209 +3070,17 @@ window.shareCrewLocation=function(){
 };
 
 // ============================================
-// AURA CHECK — "Wer hat die meiste Aura?" Crew Voting
+// CREW WALL — 24h Posts mit Location-Pins
 // ============================================
-var AURA_CATEGORIES = [
-  {id:'mainchar',emoji:'⭐',label:'Main Character',desc:'Wer steht immer im Mittelpunkt?'},
-  {id:'npc',emoji:'🤖',label:'NPC Energy',desc:'Wer läuft nur mit?'},
-  {id:'rizz',emoji:'💘',label:'Most Rizz',desc:'Wer hat den meisten Rizz?'},
-  {id:'villain',emoji:'😈',label:'Villain Arc',desc:'Wer startet den Villain Arc?'},
-  {id:'clown',emoji:'🤡',label:'Crew Clown',desc:'Wer bringt alle zum Lachen?'},
-  {id:'drama',emoji:'🎭',label:'Drama Queen',desc:'Wer macht immer Drama?'},
-  {id:'drunk',emoji:'🍻',label:'Party Animal',desc:'Wer geht am härtesten?'},
-  {id:'wholesome',emoji:'🥰',label:'Wholesome King',desc:'Wer ist der/die Süßeste?'}
-];
-var _auraCheckCat = 'mainchar';
+var _wallPinActive = false;
 
-async function buildAuraCheck(){
-  var catEl=document.getElementById('auraCheckCategories');
-  var voteEl=document.getElementById('auraCheckVotes');
-  if(!catEl||!voteEl)return;
-  // Category pills
-  var catHtml='<div class="aura-cat-grid">';
-  AURA_CATEGORIES.forEach(function(c){
-    catHtml+='<div class="aura-cat'+(c.id===_auraCheckCat?' sel':'')+'" onclick="selectAuraCat(\''+c.id+'\')">';
-    catHtml+='<span class="aura-cat-emoji">'+c.emoji+'</span>';
-    catHtml+='<span class="aura-cat-label">'+c.label+'</span>';
-    catHtml+='</div>';
-  });
-  catHtml+='</div>';
-  catEl.innerHTML=catHtml;
-
-  // Load crew
-  try{
-    var {data:matches}=await sb.from('matches').select('to_user').eq('from_user',ME.user_id).eq('is_match',true);
-    if(!matches||matches.length===0){voteEl.innerHTML='<p class="crew-empty">Matche mit Leuten um den Aura-Check zu starten!</p>';return}
-    var ids=matches.map(function(m){return m.to_user});
-    var {data:profiles}=await sb.from('profiles').select('user_id,name,photo_url').in('user_id',ids);
-    if(!profiles||profiles.length===0){voteEl.innerHTML='<p class="crew-empty">Keine Crew gefunden.</p>';return}
-    var blocked=JSON.parse(localStorage.getItem('crew_blocked')||'[]');
-    profiles=profiles.filter(function(p){return blocked.indexOf(p.user_id)===-1});
-    var cat=AURA_CATEGORIES.find(function(c){return c.id===_auraCheckCat});
-    var today=new Date().toISOString().split('T')[0];
-    var voteKey='aura_check_'+_auraCheckCat+'_'+today;
-    var votes=JSON.parse(localStorage.getItem(voteKey)||'{}');
-    var voteCount={};
-    Object.values(votes).forEach(function(v){voteCount[v]=(voteCount[v]||0)+1});
-    var userVote=votes[ME.user_id];
-    var maxVotes=0;var winnerId=null;
-    Object.keys(voteCount).forEach(function(k){if(voteCount[k]>maxVotes){maxVotes=voteCount[k];winnerId=k}});
-
-    var html='<div style="padding:0 14px 8px;font-size:13px;color:var(--t2);font-weight:600">'+cat.emoji+' '+cat.desc+'</div>';
-    html+='<div class="aura-vote-area">';
-    profiles.forEach(function(p){
-      var isVoted=userVote===p.user_id;
-      html+='<div class="aura-vote-row'+(isVoted?' voted':'')+'" onclick="voteAuraCheck(\''+voteKey+'\',\''+p.user_id+'\',\''+esc(p.name)+'\')">';
-      html+='<div class="avr-ava"><img src="'+(p.photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80')+'" loading="lazy"></div>';
-      html+='<div class="avr-name">'+esc(p.name)+'</div>';
-      html+='<div class="avr-count">'+(voteCount[p.user_id]||0)+' ✨</div>';
-      html+='</div>';
-    });
-    html+='</div>';
-    if(winnerId&&maxVotes>0){
-      var wp=profiles.find(function(p){return p.user_id===winnerId});
-      if(wp){
-        html+='<div class="aura-result"><div class="aura-result-label">'+cat.emoji+' '+cat.label+'</div>';
-        html+='<div class="aura-result-name">'+esc(wp.name)+' 👑</div></div>';
-      }
-    }
-    voteEl.innerHTML=html;
-  }catch(e){console.error('buildAuraCheck error:',e);voteEl.innerHTML='<p class="crew-empty">Aura-Check nicht verfügbar.</p>'}
-}
-
-window.selectAuraCat=function(catId){
-  _auraCheckCat=catId;
-  buildAuraCheck();
-  if(navigator.vibrate)navigator.vibrate(10);
-};
-
-window.voteAuraCheck=function(voteKey,uid,name){
-  if(uid===ME.user_id){toast('Du kannst dir nicht selbst Aura geben! 😄');return}
-  var votes=JSON.parse(localStorage.getItem(voteKey)||'{}');
-  if(votes[ME.user_id]===uid){delete votes[ME.user_id];toast('Vote zurückgenommen')}
-  else{votes[ME.user_id]=uid;toast(name+' hat die Aura! ✨');if(navigator.vibrate)navigator.vibrate(15)}
-  localStorage.setItem(voteKey,JSON.stringify(votes));
-  buildAuraCheck();
-};
-
-// ============================================
-// RIZZ RANKING — Rate your crew's rizz
-// ============================================
-async function buildRizzRanking(){
-  var podEl=document.getElementById('rizzPodium');
-  var rateEl=document.getElementById('rizzRateArea');
-  if(!podEl||!rateEl)return;
-  try{
-    var {data:matches}=await sb.from('matches').select('to_user').eq('from_user',ME.user_id).eq('is_match',true);
-    if(!matches||matches.length===0){podEl.innerHTML='<p class="crew-empty">Matche mit Leuten für das Rizz-Ranking!</p>';rateEl.innerHTML='';return}
-    var ids=matches.map(function(m){return m.to_user});
-    var {data:profiles}=await sb.from('profiles').select('user_id,name,photo_url').in('user_id',ids);
-    if(!profiles||profiles.length===0){podEl.innerHTML='<p class="crew-empty">Keine Crew gefunden.</p>';rateEl.innerHTML='';return}
-    var blocked=JSON.parse(localStorage.getItem('crew_blocked')||'[]');
-    profiles=profiles.filter(function(p){return blocked.indexOf(p.user_id)===-1});
-
-    // Load ratings from localStorage
-    var rizzKey='crew_rizz_ratings';
-    var allRatings=JSON.parse(localStorage.getItem(rizzKey)||'{}');
-    // Calculate averages
-    var scored=profiles.map(function(p){
-      var ratings=allRatings[p.user_id]||{};
-      var vals=Object.values(ratings);
-      var avg=vals.length>0?vals.reduce(function(a,b){return a+b},0)/vals.length:0;
-      return {user_id:p.user_id,name:p.name,photo_url:p.photo_url,avg:Math.round(avg*10)/10,count:vals.length};
-    });
-    scored.sort(function(a,b){return b.avg-a.avg});
-
-    // Podium (top 3)
-    var podHtml='<div class="rizz-podium">';
-    var podOrder=[1,0,2]; // silver, gold, bronze display order
-    podOrder.forEach(function(idx){
-      if(!scored[idx])return;
-      var p=scored[idx];
-      var place=idx===0?'👑':idx===1?'🥈':'🥉';
-      podHtml+='<div class="rizz-pod'+(idx===0?' gold':'')+'">';
-      podHtml+='<div class="rp-place">'+place+'</div>';
-      podHtml+='<div class="rp-ava"><img src="'+(p.photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80')+'" loading="lazy"></div>';
-      podHtml+='<div class="rp-name">'+esc(p.name)+'</div>';
-      podHtml+='<div class="rp-score">'+(p.avg>0?p.avg+' 🔥':'—')+'</div>';
-      podHtml+='</div>';
-    });
-    podHtml+='</div>';
-    podEl.innerHTML=podHtml;
-
-    // Rating cards
-    var rateHtml='<div class="rizz-rate-area">';
-    profiles.forEach(function(p){
-      if(p.user_id===ME.user_id)return;
-      var myRating=(allRatings[p.user_id]&&allRatings[p.user_id][ME.user_id])||0;
-      rateHtml+='<div class="rizz-rate-card">';
-      rateHtml+='<div class="rrc-ava"><img src="'+(p.photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80')+'" loading="lazy"></div>';
-      rateHtml+='<div class="rrc-name">'+esc(p.name)+'</div>';
-      rateHtml+='<div class="rrc-hearts">';
-      for(var i=1;i<=5;i++){
-        rateHtml+='<span class="rrc-heart'+(i<=myRating?' lit':'')+'" onclick="rateRizz(\''+p.user_id+'\','+i+')">🔥</span>';
-      }
-      rateHtml+='</div>';
-      rateHtml+='</div>';
-    });
-    rateHtml+='</div>';
-    rateEl.innerHTML=rateHtml;
-  }catch(e){console.error('buildRizzRanking error:',e);podEl.innerHTML='<p class="crew-empty">Rizz-Ranking nicht verfügbar.</p>';rateEl.innerHTML=''}
-}
-
-window.rateRizz=function(uid,score){
-  var rizzKey='crew_rizz_ratings';
-  var allRatings=JSON.parse(localStorage.getItem(rizzKey)||'{}');
-  if(!allRatings[uid])allRatings[uid]={};
-  allRatings[uid][ME.user_id]=score;
-  localStorage.setItem(rizzKey,JSON.stringify(allRatings));
-  toast(score+'/5 Rizz! 🔥');
-  if(navigator.vibrate)navigator.vibrate(15);
-  buildRizzRanking();
-};
-
-// ============================================
-// CONFESSION WALL — Anonymous crew confessions
-// ============================================
-function buildConfessionWall(){
-  var el=document.getElementById('confessionList');if(!el)return;
-  var confKey='crew_confessions';
-  var confessions=JSON.parse(localStorage.getItem(confKey)||'[]');
-  // Predefined starter confessions for new users
-  if(confessions.length===0){
-    confessions=[
-      {id:'c1',text:'Jemand aus deiner Crew stalkt heimlich deinen Insta... 👀',time:Date.now()-3600000,reactions:{'😂':3,'💀':1}},
-      {id:'c2',text:'Ich hab gestern am Ballermann einen Shot geklaut... sorry nicht sorry 🍹',time:Date.now()-7200000,reactions:{'😂':5,'🫣':2}},
-      {id:'c3',text:'Jemand findet dich lowkey attractive aber will es nicht zugeben 💘',time:Date.now()-1800000,reactions:{'👀':4,'💀':1,'❤️':3}}
-    ];
-    localStorage.setItem(confKey,JSON.stringify(confessions));
-  }
-  // Sort newest first, limit to 10
-  confessions.sort(function(a,b){return b.time-a.time});
-  confessions=confessions.slice(0,10);
-
-  var html='<div class="confess-list">';
-  confessions.forEach(function(c){
-    var ago=getTimeAgo(c.time);
-    html+='<div class="confess-card">';
-    html+='<div class="confess-anon">Anonymes Geständnis</div>';
-    html+='<div class="confess-text">'+esc(c.text)+'</div>';
-    html+='<div class="confess-time">'+ago+'</div>';
-    html+='<div class="confess-react">';
-    var reacts=['😂','💀','👀','❤️','🫣'];
-    reacts.forEach(function(r){
-      var count=(c.reactions&&c.reactions[r])||0;
-      var myReacts=JSON.parse(localStorage.getItem('confess_reacted_'+c.id)||'[]');
-      var reacted=myReacts.indexOf(r)!==-1;
-      html+='<span class="confess-react-btn'+(reacted?' reacted':'')+'" onclick="reactConfession(\''+c.id+'\',\''+r+'\')">';
-      html+=r+(count>0?' '+count:'');
-      html+='</span>';
-    });
-    html+='</div>';
-    html+='</div>';
-  });
-  html+='</div>';
-  el.innerHTML=html;
+function cleanExpiredWallPosts(){
+  var wallKey='crew_wall_posts';
+  var posts=JSON.parse(localStorage.getItem(wallKey)||'[]');
+  var cutoff=Date.now()-86400000; // 24h
+  var filtered=posts.filter(function(p){return p.time>cutoff});
+  if(filtered.length!==posts.length)localStorage.setItem(wallKey,JSON.stringify(filtered));
+  return filtered;
 }
 
 function getTimeAgo(ts){
@@ -3287,112 +3093,375 @@ function getTimeAgo(ts){
   return 'Vor '+Math.floor(hours/24)+' Tag(en)';
 }
 
-window.submitConfession=function(){
-  var input=document.getElementById('confessInput');
+function getTimeRemaining(ts){
+  var remaining=ts+86400000-Date.now();
+  if(remaining<=0)return 'Abgelaufen';
+  var h=Math.floor(remaining/3600000);
+  var m=Math.floor((remaining%3600000)/60000);
+  return h+'h '+m+'m übrig';
+}
+
+// MALLE LOCATIONS for random pins
+var MALLE_SPOTS=[
+  {name:'Bierkönig',lat:39.5088,lng:2.5336},
+  {name:'Megapark',lat:39.5092,lng:2.5328},
+  {name:'Ballermann 6',lat:39.5078,lng:2.5345},
+  {name:'Schinkenstraße',lat:39.5085,lng:2.5340},
+  {name:'Playa de Palma',lat:39.5070,lng:2.5360},
+  {name:'Oberbayern',lat:39.5090,lng:2.5332},
+  {name:'Arenal',lat:39.5065,lng:2.5375},
+  {name:'Palma Altstadt',lat:39.5696,lng:2.6502},
+  {name:'El Arenal Beach',lat:39.5055,lng:2.5395}
+];
+
+async function buildCrewWall(){
+  var el=document.getElementById('crewWallPosts');if(!el)return;
+  var posts=cleanExpiredWallPosts();
+
+  // Try to get crew profile data for display
+  var profileMap={};
+  if(_crewProfiles&&_crewProfiles.length>0){
+    _crewProfiles.forEach(function(p){profileMap[p.user_id]={name:p.name,photo:p.photo_url}});
+  }
+  // Add self
+  profileMap[ME.user_id]={name:ME.name||'Du',photo:ME.photo_url||''};
+
+  if(posts.length===0){
+    el.innerHTML='<div class="wall-empty"><div class="wall-empty-icon">📍</div><div class="wall-empty-text">Noch keine Posts. Sei der Erste!</div></div>';
+    return;
+  }
+
+  // Sort newest first
+  posts.sort(function(a,b){return b.time-a.time});
+
+  var html='<div class="wall-posts">';
+  posts.forEach(function(p){
+    var profile=profileMap[p.uid]||{name:'Crew-Mitglied',photo:''};
+    var ago=getTimeAgo(p.time);
+    var remaining=getTimeRemaining(p.time);
+    html+='<div class="wall-post">';
+    html+='<div class="wall-post-header">';
+    html+='<div class="wp-ava"><img src="'+(profile.photo||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80')+'" loading="lazy"></div>';
+    html+='<div class="wp-info"><div class="wp-name">'+esc(profile.name)+'</div><div class="wp-time">'+ago+'</div></div>';
+    html+='<div class="wp-expire">⏳ '+remaining+'</div>';
+    html+='</div>';
+    html+='<div class="wall-post-text">'+esc(p.text)+'</div>';
+    if(p.loc){
+      html+='<div class="wall-post-loc" onclick="focusWallLoc('+p.loc.lat+','+p.loc.lng+')">📍 '+esc(p.loc.name)+'</div>';
+    }
+    // Reactions
+    html+='<div class="wall-post-react">';
+    var reacts=['🔥','😂','🤙','❤️','👀'];
+    reacts.forEach(function(r){
+      var count=(p.reactions&&p.reactions[r])||0;
+      var myReacts=JSON.parse(localStorage.getItem('wall_reacted_'+p.id)||'[]');
+      var reacted=myReacts.indexOf(r)!==-1;
+      html+='<span class="wall-react-btn'+(reacted?' reacted':'')+'" onclick="reactWallPost(\''+p.id+'\',\''+r+'\')">'+r+(count>0?' '+count:'')+'</span>';
+    });
+    html+='</div>';
+    html+='</div>';
+  });
+  html+='</div>';
+  el.innerHTML=html;
+}
+
+window.toggleWallPin=function(){
+  _wallPinActive=!_wallPinActive;
+  var btn=document.getElementById('wallPinBtn');
+  if(btn)btn.classList.toggle('pinned',_wallPinActive);
+  if(_wallPinActive)toast('📍 Standort wird angeheftet');
+  else toast('Standort entfernt');
+  if(navigator.vibrate)navigator.vibrate(10);
+};
+
+window.submitWallPost=function(){
+  var input=document.getElementById('wallInput');
   if(!input)return;
   var text=input.value.trim();
-  if(!text){toast('Schreib erstmal was! 👻');return}
-  if(text.length<3){toast('Zu kurz! Mindestens 3 Zeichen.');return}
-  var confKey='crew_confessions';
-  var confessions=JSON.parse(localStorage.getItem(confKey)||'[]');
-  confessions.push({
-    id:'c_'+Date.now(),
+  if(!text){toast('Schreib was rein!');return}
+  if(text.length<2){toast('Mindestens 2 Zeichen!');return}
+
+  var post={
+    id:'w_'+Date.now(),
+    uid:ME.user_id,
     text:text,
     time:Date.now(),
     reactions:{}
-  });
-  localStorage.setItem(confKey,JSON.stringify(confessions));
+  };
+
+  // Attach location if pin active
+  if(_wallPinActive){
+    if(userLat&&userLng){
+      // Find closest known Malle spot
+      var closest=MALLE_SPOTS[0];var minDist=Infinity;
+      MALLE_SPOTS.forEach(function(s){
+        var d=Math.abs(s.lat-userLat)+Math.abs(s.lng-userLng);
+        if(d<minDist){minDist=d;closest=s}
+      });
+      post.loc={name:closest.name,lat:userLat,lng:userLng};
+    }else{
+      var spot=MALLE_SPOTS[Math.floor(Math.random()*MALLE_SPOTS.length)];
+      post.loc={name:spot.name,lat:spot.lat,lng:spot.lng};
+    }
+  }
+
+  var wallKey='crew_wall_posts';
+  var posts=JSON.parse(localStorage.getItem(wallKey)||'[]');
+  posts.push(post);
+  localStorage.setItem(wallKey,JSON.stringify(posts));
   input.value='';
-  toast('Geständnis gepostet! 👻');
+  _wallPinActive=false;
+  var btn=document.getElementById('wallPinBtn');
+  if(btn)btn.classList.remove('pinned');
+  toast('Gepostet! 📍');
   if(navigator.vibrate)navigator.vibrate([10,50,10]);
-  buildConfessionWall();
+  buildCrewWall();
 };
 
-window.reactConfession=function(confId,emoji){
-  var confKey='crew_confessions';
-  var confessions=JSON.parse(localStorage.getItem(confKey)||'[]');
-  var conf=confessions.find(function(c){return c.id===confId});
-  if(!conf)return;
-  if(!conf.reactions)conf.reactions={};
-  var myKey='confess_reacted_'+confId;
+window.reactWallPost=function(postId,emoji){
+  var wallKey='crew_wall_posts';
+  var posts=JSON.parse(localStorage.getItem(wallKey)||'[]');
+  var post=posts.find(function(p){return p.id===postId});
+  if(!post)return;
+  if(!post.reactions)post.reactions={};
+  var myKey='wall_reacted_'+postId;
   var myReacts=JSON.parse(localStorage.getItem(myKey)||'[]');
   if(myReacts.indexOf(emoji)!==-1){
-    // Unreact
     myReacts=myReacts.filter(function(r){return r!==emoji});
-    conf.reactions[emoji]=Math.max(0,(conf.reactions[emoji]||1)-1);
+    post.reactions[emoji]=Math.max(0,(post.reactions[emoji]||1)-1);
   }else{
     myReacts.push(emoji);
-    conf.reactions[emoji]=(conf.reactions[emoji]||0)+1;
+    post.reactions[emoji]=(post.reactions[emoji]||0)+1;
   }
   localStorage.setItem(myKey,JSON.stringify(myReacts));
-  localStorage.setItem(confKey,JSON.stringify(confessions));
+  localStorage.setItem(wallKey,JSON.stringify(posts));
   if(navigator.vibrate)navigator.vibrate(10);
-  buildConfessionWall();
+  buildCrewWall();
+};
+
+window.focusWallLoc=function(lat,lng){
+  if(cMap){cMap.flyTo([lat,lng],16,{duration:0.8})}
+  window.scrollTo({top:0,behavior:'smooth'});
 };
 
 // ============================================
-// STORY RECAP — Daily crew highlights
+// CREW STORY — Snap-style fullscreen, one-time view
 // ============================================
-async function buildCrewRecap(){
-  var el=document.getElementById('storyRecap');if(!el)return;
-  try{
-    var {data:matches}=await sb.from('matches').select('to_user').eq('from_user',ME.user_id).eq('is_match',true);
-    var crewSize=(matches&&matches.length)||0;
-    // Pull some stats from cached profiles
-    var totalAura=0;var activeToday=0;var topStreak=0;
-    if(_crewProfiles&&_crewProfiles.length>0){
-      _crewProfiles.forEach(function(p){
-        totalAura+=(p.points||0);
-        if(p.last_active){
-          var diff=Date.now()-new Date(p.last_active).getTime();
-          if(diff<86400000)activeToday++;
-        }
-        if((p.streak||0)>topStreak)topStreak=p.streak||0;
-      });
-    }
-    // Build recap cards
-    var today=new Date();
-    var dayName=['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'][today.getDay()];
-    var html='<div class="recap-carousel">';
+var STORY_COLORS=['linear-gradient(135deg,#FF6B6B,#FF8E53)','linear-gradient(135deg,#667eea,#764ba2)','linear-gradient(135deg,#f093fb,#f5576c)','linear-gradient(135deg,#4facfe,#00f2fe)','linear-gradient(135deg,#43e97b,#38f9d7)','linear-gradient(135deg,#fa709a,#fee140)','linear-gradient(135deg,#a18cd1,#fbc2eb)','linear-gradient(135deg,#fccb90,#d57eeb)'];
+var _storySlideIdx=0;
+var _storyTimer=null;
+var _seLocActive=false;
+var _seColorIdx=0;
 
-    // Card 1: Today's Highlights
-    html+='<div class="recap-card rc-highlights">';
-    html+='<div class="rc-icon">🔥</div>';
-    html+='<div class="rc-title">'+dayName+' Recap</div>';
-    html+='<div class="rc-desc">'+activeToday+' Crew-Mitglieder heute aktiv. ';
-    html+=(crewSize>3?'Die Crew ist am Start!':'Lade mehr Leute ein!')+'</div>';
-    html+='</div>';
-
-    // Card 2: Crew Stats
-    html+='<div class="recap-card rc-stats">';
-    html+='<div class="rc-icon">📊</div>';
-    html+='<div class="rc-title">Crew Stats</div>';
-    html+='<div class="rc-stat">'+totalAura+'</div>';
-    html+='<div class="rc-stat-label">Aura insgesamt</div>';
-    html+='</div>';
-
-    // Card 3: Top Moments
-    var confessions=JSON.parse(localStorage.getItem('crew_confessions')||'[]');
-    var todayConf=confessions.filter(function(c){return Date.now()-c.time<86400000}).length;
-    html+='<div class="recap-card rc-moments">';
-    html+='<div class="rc-icon">💬</div>';
-    html+='<div class="rc-title">Heute passiert</div>';
-    html+='<div class="rc-stat">'+todayConf+'</div>';
-    html+='<div class="rc-stat-label">Confessions heute</div>';
-    html+='</div>';
-
-    // Card 4: Awards
-    html+='<div class="recap-card rc-awards">';
-    html+='<div class="rc-icon">🏆</div>';
-    html+='<div class="rc-title">Streak Leader</div>';
-    html+='<div class="rc-stat">'+topStreak+' 🔥</div>';
-    html+='<div class="rc-stat-label">Längste Streak in der Crew</div>';
-    html+='</div>';
-
-    html+='</div>';
-    el.innerHTML=html;
-  }catch(e){console.error('buildCrewRecap error:',e);el.innerHTML='<p class="crew-empty">Recap nicht verfügbar.</p>'}
+function cleanExpiredStorySlides(){
+  var key='crew_story_slides';
+  var slides=JSON.parse(localStorage.getItem(key)||'[]');
+  var cutoff=Date.now()-86400000;
+  var filtered=slides.filter(function(s){return s.time>cutoff});
+  if(filtered.length!==slides.length)localStorage.setItem(key,JSON.stringify(filtered));
+  return filtered;
 }
+
+function buildStoryPreview(){
+  var el=document.getElementById('storyPreview');
+  var countEl=document.getElementById('storySlideCount');
+  if(!el)return;
+  var slides=cleanExpiredStorySlides();
+  if(countEl)countEl.textContent=slides.length+' SLIDE'+(slides.length!==1?'S':'');
+
+  // Update play button state
+  var playBtn=document.querySelector('.story-play-btn');
+  if(playBtn)playBtn.disabled=slides.length===0;
+
+  if(slides.length===0){
+    el.innerHTML='<div style="padding:10px 14px 4px;font-size:12px;color:var(--t3);text-align:center">Noch keine Slides. Füge dein Highlight hinzu!</div>';
+    return;
+  }
+
+  var profileMap={};
+  if(_crewProfiles&&_crewProfiles.length>0){
+    _crewProfiles.forEach(function(p){profileMap[p.user_id]={name:p.name,photo:p.photo_url}});
+  }
+  profileMap[ME.user_id]={name:ME.name||'Du',photo:ME.photo_url||''};
+
+  var html='<div class="story-preview-grid">';
+  slides.forEach(function(s,i){
+    var profile=profileMap[s.uid]||{name:'?',photo:''};
+    var isMe=s.uid===ME.user_id;
+    html+='<div class="story-slide-mini'+(isMe?' my-slide':'')+'" style="background:'+s.color+'" onclick="playCrewStory('+i+')">';
+    html+='<div class="ssm-bg">'+esc(s.text.substring(0,40))+'</div>';
+    html+='<div class="ssm-ava"><img src="'+(profile.photo||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80')+'" loading="lazy"></div>';
+    html+='</div>';
+  });
+  html+='</div>';
+  el.innerHTML=html;
+}
+
+window.openStoryEditor=function(){
+  var ov=document.getElementById('storyEditorOv');if(!ov)return;
+  _seColorIdx=Math.floor(Math.random()*STORY_COLORS.length);
+  _seLocActive=false;
+
+  // Build color picker
+  var colEl=document.getElementById('seColors');
+  if(colEl){
+    var ch='';
+    STORY_COLORS.forEach(function(c,i){
+      ch+='<div class="se-color'+(i===_seColorIdx?' sel':'')+'" style="background:'+c+'" onclick="selectSeColor('+i+')"></div>';
+    });
+    colEl.innerHTML=ch;
+  }
+  var textarea=document.getElementById('seText');
+  if(textarea){textarea.value='';textarea.style.background=STORY_COLORS[_seColorIdx]}
+  var locCheck=document.getElementById('seLocCheck');
+  if(locCheck){locCheck.className='se-loc-check';locCheck.textContent=''}
+  ov.classList.add('show');
+  setTimeout(function(){if(textarea)textarea.focus()},300);
+};
+
+window.closeStoryEditor=function(){
+  var ov=document.getElementById('storyEditorOv');if(ov)ov.classList.remove('show');
+};
+
+window.selectSeColor=function(idx){
+  _seColorIdx=idx;
+  document.querySelectorAll('.se-color').forEach(function(el,i){el.classList.toggle('sel',i===idx)});
+  var textarea=document.getElementById('seText');
+  if(textarea)textarea.style.background=STORY_COLORS[idx];
+};
+
+window.toggleSeLoc=function(){
+  _seLocActive=!_seLocActive;
+  var locCheck=document.getElementById('seLocCheck');
+  if(locCheck){
+    locCheck.classList.toggle('on',_seLocActive);
+    locCheck.textContent=_seLocActive?'✓':'';
+  }
+};
+
+window.postStorySlide=function(){
+  var textarea=document.getElementById('seText');
+  if(!textarea)return;
+  var text=textarea.value.trim();
+  if(!text){toast('Schreib was für deine Slide!');return}
+
+  var slide={
+    id:'ss_'+Date.now(),
+    uid:ME.user_id,
+    text:text,
+    color:STORY_COLORS[_seColorIdx],
+    time:Date.now()
+  };
+
+  if(_seLocActive&&userLat&&userLng){
+    var closest=MALLE_SPOTS[0];var minDist=Infinity;
+    MALLE_SPOTS.forEach(function(s){
+      var d=Math.abs(s.lat-userLat)+Math.abs(s.lng-userLng);
+      if(d<minDist){minDist=d;closest=s}
+    });
+    slide.loc={name:closest.name,lat:userLat,lng:userLng};
+  }
+
+  var key='crew_story_slides';
+  var slides=JSON.parse(localStorage.getItem(key)||'[]');
+  slides.push(slide);
+  localStorage.setItem(key,JSON.stringify(slides));
+  closeStoryEditor();
+  toast('Slide gepostet! 📸');
+  if(navigator.vibrate)navigator.vibrate([10,50,10]);
+  buildStoryPreview();
+};
+
+window.playCrewStory=function(startIdx){
+  var slides=cleanExpiredStorySlides();
+  if(slides.length===0){toast('Keine Slides vorhanden!');return}
+
+  // Mark as viewed — track which slides user already saw
+  var viewedKey='crew_story_viewed_'+new Date().toISOString().split('T')[0];
+  var viewed=JSON.parse(localStorage.getItem(viewedKey)||'[]');
+
+  _storySlideIdx=startIdx||0;
+  var fs=document.getElementById('storyFullscreen');if(!fs)return;
+
+  // Screenshot prevention via CSS
+  fs.style.webkitUserSelect='none';
+  fs.style.userSelect='none';
+
+  var profileMap={};
+  if(_crewProfiles&&_crewProfiles.length>0){
+    _crewProfiles.forEach(function(p){profileMap[p.user_id]={name:p.name,photo:p.photo_url}});
+  }
+  profileMap[ME.user_id]={name:ME.name||'Du',photo:ME.photo_url||''};
+
+  function showSlide(){
+    if(_storySlideIdx>=slides.length){closeCrewStory();return}
+    var s=slides[_storySlideIdx];
+    var profile=profileMap[s.uid]||{name:'Crew-Mitglied',photo:''};
+
+    // Mark viewed
+    if(viewed.indexOf(s.id)===-1)viewed.push(s.id);
+    localStorage.setItem(viewedKey,JSON.stringify(viewed));
+
+    // Progress bar
+    var progEl=document.getElementById('storyFsProgress');
+    if(progEl){
+      var ph='';
+      slides.forEach(function(_,i){
+        var cls=i<_storySlideIdx?'done':i===_storySlideIdx?'active':'';
+        ph+='<div class="sfp-seg '+cls+'"><div class="sfp-fill"></div></div>';
+      });
+      progEl.innerHTML=ph;
+    }
+
+    // Slide content
+    var slideEl=document.getElementById('storyFsSlide');
+    if(slideEl)slideEl.style.background=s.color;
+    var textEl=document.getElementById('sfsText');
+    if(textEl)textEl.textContent=s.text;
+    var authorEl=document.getElementById('sfsAuthor');
+    if(authorEl)authorEl.textContent=profile.name;
+    var timeEl=document.getElementById('sfsTime');
+    if(timeEl)timeEl.textContent=getTimeAgo(s.time);
+
+    // Auto-advance
+    if(_storyTimer)clearTimeout(_storyTimer);
+    _storyTimer=setTimeout(function(){
+      _storySlideIdx++;
+      showSlide();
+    },6000);
+  }
+
+  fs.classList.add('show');
+  showSlide();
+};
+
+window.storyNext=function(){
+  if(_storyTimer)clearTimeout(_storyTimer);
+  _storySlideIdx++;
+  var slides=cleanExpiredStorySlides();
+  if(_storySlideIdx>=slides.length){closeCrewStory();return}
+  playCrewStory(_storySlideIdx);
+};
+
+window.storyPrev=function(){
+  if(_storyTimer)clearTimeout(_storyTimer);
+  if(_storySlideIdx>0)_storySlideIdx--;
+  playCrewStory(_storySlideIdx);
+};
+
+window.closeCrewStory=function(){
+  if(_storyTimer){clearTimeout(_storyTimer);_storyTimer=null}
+  var fs=document.getElementById('storyFullscreen');if(fs)fs.classList.remove('show');
+};
+
+// Prevent screenshot on story (visibilitychange-based blur)
+document.addEventListener('visibilitychange',function(){
+  var fs=document.getElementById('storyFullscreen');
+  if(fs&&fs.classList.contains('show')&&document.hidden){
+    closeCrewStory();
+    toast('Story geschlossen — kein Screenshot möglich 📸');
+  }
+});
 
 // ============================================
 // DAILY VOTING SYSTEM (rotates questions daily)
@@ -3507,7 +3576,7 @@ window.go=function(n,b){
   if(b)b.classList.add('active');
   setTimeout(function(){if(n==='radar'&&rMap)rMap.invalidateSize();if(n==='crew'&&cMap)cMap.invalidateSize()},200);
   if(n==='match')buildCards();
-  if(n==='crew'){buildCrewStatus();buildCrewList().then(buildCrewActivityFeed);buildMatchList();buildCrewLocations();buildAuraCheck();buildRizzRanking();buildConfessionWall();buildCrewRecap();buildDailyVoting();buildLeaderboard();buildTonightPlanner();buildChallenges();buildCrewTips();updateChallengeTimer()}
+  if(n==='crew'){buildCrewStatus();buildCrewList().then(buildCrewActivityFeed);buildMatchList();buildCrewLocations();buildCrewWall();buildStoryPreview();buildDailyVoting();buildLeaderboard();buildTonightPlanner();buildChallenges();buildCrewTips();updateChallengeTimer()}
 };
 
 // ============================================
