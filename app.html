@@ -1639,6 +1639,229 @@ button:focus-visible,select:focus-visible,input:focus-visible{
 .tm-row-name{font-size:13px;font-weight:800;letter-spacing:-.2px;color:var(--t);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tm-row-sub{font-size:11px;color:var(--t3);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
+/* ════════════════════════════════════════════
+   NAV V2 — Icon-only Bottom Navigation
+   Labels versteckt, größere Icons, cleaner Look
+   ════════════════════════════════════════════ */
+nav button > span:not(.ni):not(.match-dot){display:none !important}
+nav button{padding:10px 14px !important;gap:0 !important}
+nav button .ni{font-size:26px !important}
+nav button .ni svg{width:26px;height:26px}
+nav .crew-center-btn .ni{width:54px;height:54px}
+nav .crew-center-btn .ni svg{width:28px;height:28px}
+nav button.active::after{
+  bottom:4px !important;
+  width:22px !important;
+  height:3px !important;
+}
+
+/* ════════════════════════════════════════════
+   EXPLORE HUB — Menü-Kacheln für Deals/Games/QR
+   ════════════════════════════════════════════ */
+.explore-wrap{padding:64px 16px 100px;max-width:480px;margin:0 auto}
+.explore-hero{text-align:center;padding:8px 0 20px}
+.explore-hero .eyebrow{font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;background:var(--flame);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px}
+.explore-hero h1{font-size:28px;font-weight:900;letter-spacing:-1px;margin:0}
+.explore-hero p{font-size:13px;color:var(--t3);margin-top:6px;line-height:1.5}
+.explore-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
+.ex-tile{
+  position:relative;overflow:hidden;
+  border-radius:22px;padding:18px;min-height:150px;
+  background:var(--glass);backdrop-filter:blur(22px) saturate(1.6);
+  -webkit-backdrop-filter:blur(22px) saturate(1.6);
+  border:1px solid var(--glass-border);
+  cursor:pointer;transition:transform .25s var(--spring),box-shadow .25s,border-color .25s;
+  display:flex;flex-direction:column;justify-content:space-between;
+}
+.ex-tile::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 85% 0%,var(--tile-glow,rgba(254,60,114,.25)) 0%,transparent 55%);
+  opacity:.85;pointer-events:none;
+}
+.ex-tile:active{transform:scale(.97)}
+.ex-tile:hover{transform:translateY(-2px);border-color:rgba(254,60,114,.3);box-shadow:0 16px 40px rgba(0,0,0,.5),0 0 30px rgba(254,60,114,.15)}
+.ex-tile.wide{grid-column:span 2;min-height:110px;flex-direction:row;align-items:center;gap:14px}
+.ex-tile .ex-icn{
+  width:46px;height:46px;border-radius:14px;
+  background:rgba(255,255,255,.06);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 4px 12px rgba(0,0,0,.3);
+  position:relative;z-index:1;
+}
+.ex-tile .ex-icn svg{width:26px;height:26px;color:var(--tile-color,#FE3C72)}
+.ex-tile .ex-body{position:relative;z-index:1;flex:1;min-width:0}
+.ex-tile .ex-ttl{font-size:16px;font-weight:900;letter-spacing:-.3px;margin-bottom:2px}
+.ex-tile .ex-desc{font-size:11px;color:var(--t3);line-height:1.4}
+.ex-tile .ex-badge{
+  position:absolute;top:10px;right:10px;z-index:2;
+  font-size:9px;font-weight:900;letter-spacing:1px;
+  padding:3px 8px;border-radius:999px;
+  background:var(--flame);color:#fff;
+  box-shadow:0 4px 12px rgba(254,60,114,.5);
+}
+.ex-tile .ex-stat{
+  position:relative;z-index:1;
+  font-size:22px;font-weight:900;letter-spacing:-.8px;
+  color:var(--tile-color,#FE3C72);margin-top:4px;
+}
+
+/* Sub-View Container */
+.explore-sub{display:none}
+.explore-sub.active{display:block}
+.sub-hdr{
+  display:flex;align-items:center;gap:12px;
+  padding:58px 16px 10px;
+  position:sticky;top:0;z-index:50;
+  background:linear-gradient(to bottom,rgba(7,6,10,.92) 0%,rgba(7,6,10,.8) 70%,transparent 100%);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+}
+.sub-back{
+  width:36px;height:36px;border-radius:50%;
+  background:rgba(255,255,255,.06);border:1px solid var(--glass-border);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--t);flex-shrink:0;
+  transition:background .2s;
+}
+.sub-back:active{background:rgba(255,255,255,.12);transform:scale(.92)}
+.sub-back svg{width:18px;height:18px}
+.sub-hdr h2{font-size:22px;font-weight:900;letter-spacing:-.5px;margin:0;flex:1}
+
+/* Game Center */
+.gc-wrap{padding:0 16px 100px;max-width:480px;margin:0 auto}
+.gc-hero{
+  margin-top:8px;padding:22px;border-radius:24px;
+  background:linear-gradient(135deg,rgba(254,60,114,.15),rgba(217,119,87,.1));
+  border:1px solid rgba(254,60,114,.25);
+  text-align:center;position:relative;overflow:hidden;
+}
+.gc-hero::before{
+  content:'';position:absolute;inset:-50%;
+  background:radial-gradient(circle,rgba(254,60,114,.2) 0%,transparent 60%);
+  animation:gcPulse 4s ease-in-out infinite;
+}
+@keyframes gcPulse{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.15);opacity:1}}
+.gc-hero h3{font-size:20px;font-weight:900;letter-spacing:-.4px;margin:0;position:relative;z-index:1}
+.gc-hero p{font-size:12px;color:var(--t2);margin-top:4px;position:relative;z-index:1}
+.gc-section-ttl{font-size:13px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--t3);margin:24px 4px 10px}
+.gc-connect{
+  display:flex;gap:10px;margin-top:14px;
+}
+.gc-connect-btn{
+  flex:1;padding:14px;border-radius:14px;
+  background:var(--flame);color:#fff;
+  font-weight:800;font-size:13px;
+  border:none;cursor:pointer;font-family:inherit;
+  box-shadow:0 8px 20px rgba(254,60,114,.4);
+  transition:transform .15s var(--bounce);
+}
+.gc-connect-btn:active{transform:scale(.96)}
+.gc-connect-btn.ghost{background:rgba(255,255,255,.06);color:var(--t);border:1px solid var(--glass-border);box-shadow:none}
+.gc-game{
+  padding:16px;border-radius:18px;margin-bottom:10px;
+  background:var(--glass);backdrop-filter:blur(16px);
+  border:1px solid var(--glass-border);
+  display:flex;align-items:center;gap:14px;
+  cursor:pointer;transition:all .2s;
+}
+.gc-game:active{transform:scale(.98)}
+.gc-game:hover{border-color:rgba(254,60,114,.3)}
+.gc-game-emoji{
+  width:52px;height:52px;border-radius:16px;
+  background:var(--game-bg,rgba(254,60,114,.12));
+  display:flex;align-items:center;justify-content:center;
+  font-size:26px;flex-shrink:0;
+}
+.gc-game-body{flex:1;min-width:0}
+.gc-game-ttl{font-size:15px;font-weight:800;letter-spacing:-.2px;display:flex;align-items:center;gap:6px}
+.gc-game-desc{font-size:11px;color:var(--t3);margin-top:3px;line-height:1.4}
+.gc-game-tag{
+  font-size:9px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;
+  padding:3px 7px;border-radius:6px;
+  background:rgba(255,214,10,.12);color:var(--yellow);
+}
+.gc-game-tag.live{background:rgba(48,209,88,.12);color:var(--mint)}
+.gc-game-tag.soon{background:rgba(255,255,255,.06);color:var(--t3)}
+.gc-game-arrow{color:var(--t3);font-size:20px;flex-shrink:0}
+.gc-crew-conn{
+  padding:14px;border-radius:16px;margin-bottom:8px;
+  background:var(--glass);border:1px solid var(--glass-border);
+  display:flex;align-items:center;gap:12px;
+}
+.gc-crew-conn-ava{width:42px;height:42px;border-radius:12px;background:var(--flame);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:15px;flex-shrink:0}
+.gc-crew-conn-body{flex:1;min-width:0}
+.gc-crew-conn-name{font-size:14px;font-weight:800;letter-spacing:-.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gc-crew-conn-meta{font-size:10.5px;color:var(--t3);margin-top:2px}
+.gc-crew-conn-btn{
+  padding:8px 14px;border-radius:10px;
+  background:rgba(254,60,114,.12);color:#FE3C72;
+  border:1px solid rgba(254,60,114,.25);
+  font-size:11.5px;font-weight:800;cursor:pointer;font-family:inherit;
+}
+
+/* Achievements */
+.ach-wrap{padding:0 16px 100px;max-width:480px;margin:0 auto}
+.ach-qr{
+  margin-top:8px;padding:20px;border-radius:24px;
+  background:linear-gradient(135deg,rgba(255,214,10,.08),rgba(255,109,46,.04));
+  border:1px solid rgba(255,214,10,.2);
+  text-align:center;
+}
+.ach-qr img{width:200px;height:200px;border-radius:14px;background:#fff;padding:8px;image-rendering:pixelated}
+.ach-qr-name{font-size:15px;font-weight:900;margin-top:10px;color:var(--yellow)}
+.ach-qr-handle{font-size:11.5px;color:var(--t3)}
+.ach-qr-actions{display:flex;gap:8px;margin-top:12px}
+.ach-qr-btn{flex:1;padding:10px;border-radius:10px;background:rgba(255,255,255,.06);border:1px solid var(--glass-border);color:var(--t);font-size:11.5px;font-weight:700;cursor:pointer;font-family:inherit}
+.ach-stats{
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:16px;
+}
+.ach-stat{
+  padding:14px 10px;border-radius:16px;
+  background:var(--glass);border:1px solid var(--glass-border);
+  text-align:center;
+}
+.ach-stat-n{font-size:24px;font-weight:900;letter-spacing:-.5px;color:var(--as-color,#FE3C72)}
+.ach-stat-l{font-size:10px;color:var(--t3);margin-top:2px;text-transform:uppercase;letter-spacing:.8px;font-weight:700}
+.ach-crewpts{
+  margin-top:16px;padding:18px;border-radius:18px;
+  background:linear-gradient(135deg,rgba(48,209,88,.1),rgba(0,199,190,.05));
+  border:1px solid rgba(48,209,88,.2);
+  display:flex;align-items:center;gap:14px;
+}
+.ach-crewpts-icn{
+  width:52px;height:52px;border-radius:14px;
+  background:rgba(48,209,88,.15);
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;flex-shrink:0;
+}
+.ach-crewpts-body{flex:1}
+.ach-crewpts-ttl{font-size:12px;color:var(--t3);text-transform:uppercase;letter-spacing:1px;font-weight:800}
+.ach-crewpts-n{font-size:22px;font-weight:900;color:var(--mint);letter-spacing:-.5px}
+.ach-section-ttl{font-size:13px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--t3);margin:22px 4px 10px}
+.ach-ci-row{
+  padding:12px 14px;border-radius:14px;margin-bottom:8px;
+  background:var(--glass);border:1px solid var(--glass-border);
+  display:flex;align-items:center;gap:12px;
+}
+.ach-ci-icn{width:38px;height:38px;border-radius:10px;background:rgba(255,109,46,.1);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.ach-ci-body{flex:1;min-width:0}
+.ach-ci-name{font-size:13px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ach-ci-meta{font-size:10.5px;color:var(--t3);margin-top:2px}
+.ach-ci-pts{font-size:13px;font-weight:900;color:var(--o)}
+.ach-empty{text-align:center;padding:24px 12px;color:var(--t3);font-size:12px;line-height:1.5}
+.ach-badges{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.ach-badge{
+  padding:8px 12px;border-radius:999px;
+  background:var(--glass);border:1px solid var(--glass-border);
+  font-size:11px;font-weight:800;letter-spacing:.2px;
+  display:flex;align-items:center;gap:6px;
+}
+.ach-badge.unlocked{
+  background:linear-gradient(135deg,rgba(255,214,10,.12),rgba(255,109,46,.06));
+  border-color:rgba(255,214,10,.25);
+  color:var(--yellow);
+}
+.ach-badge.locked{color:var(--t3);opacity:.6}
+
 /* — END DESIGN 2.0 — */
 </style>
 </head>
@@ -1706,6 +1929,53 @@ button:focus-visible,select:focus-visible,input:focus-visible{
   <symbol id="i-sos" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <circle cx="12" cy="12" r="10"/>
     <path d="M12 7v5l3 2"/>
+  </symbol>
+  <symbol id="i-arrow-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/>
+  </symbol>
+  <symbol id="i-compass" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10"/>
+    <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+  </symbol>
+  <symbol id="i-gamepad" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="6" y1="11" x2="10" y2="11"/>
+    <line x1="8" y1="9" x2="8" y2="13"/>
+    <circle cx="15" cy="12" r="1"/>
+    <circle cx="18" cy="10" r="1"/>
+    <path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59L2.05 14.54a2.5 2.5 0 0 0 4.654 1.85l1.273-2.06a1.5 1.5 0 0 1 1.27-.67h5.506a1.5 1.5 0 0 1 1.27.67l1.273 2.06a2.5 2.5 0 0 0 4.654-1.85l-.652-5.95A4 4 0 0 0 17.32 5z"/>
+  </symbol>
+  <symbol id="i-qrcode" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="3" width="7" height="7" rx="1"/>
+    <rect x="14" y="3" width="7" height="7" rx="1"/>
+    <rect x="3" y="14" width="7" height="7" rx="1"/>
+    <path d="M14 14h3v3h-3zM20 14h1M14 20h1M20 17h1v4h-4v-1"/>
+  </symbol>
+  <symbol id="i-trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
+    <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
+    <path d="M4 22h16"/>
+    <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/>
+    <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/>
+    <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
+  </symbol>
+  <symbol id="i-swords" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="14.5 17.5 3 6 3 3 6 3 17.5 14.5"/>
+    <line x1="13" y1="19" x2="19" y2="13"/>
+    <line x1="16" y1="16" x2="20" y2="20"/>
+    <line x1="19" y1="21" x2="21" y2="19"/>
+    <polyline points="14.5 6.5 18 3 21 3 21 6 17.5 9.5"/>
+    <line x1="5" y1="14" x2="9" y2="18"/>
+    <line x1="7" y1="17" x2="4" y2="20"/>
+    <line x1="3" y1="19" x2="5" y2="21"/>
+  </symbol>
+  <symbol id="i-coin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="9"/>
+    <path d="M14.5 9h-3a1.5 1.5 0 0 0 0 3h1a1.5 1.5 0 1 1 0 3h-3"/>
+    <path d="M12 8v1M12 15v1"/>
+  </symbol>
+  <symbol id="i-tag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+    <line x1="7" y1="7" x2="7.01" y2="7"/>
   </symbol>
 </svg>
 
@@ -2384,11 +2654,66 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
         </div><!-- /crewFeatures -->
       </div>
     </div>
-    <div class="scr" id="screen-deals"><div class="deals-wrap">
-      <div class="deals-hero" style="padding:68px 16px 8px;text-align:center">
+    <div class="scr" id="screen-deals">
+    <!-- ═══════════ EXPLORE HUB (Default) ═══════════ -->
+    <div class="explore-sub active" id="exsub-hub">
+      <div class="explore-wrap">
+        <div class="explore-hero">
+          <div class="eyebrow">crew · explore</div>
+          <h1>Entdecken</h1>
+          <p>Deals, Games, QR-Code &amp; deine Crew-Erfolge — alles an einem Ort.</p>
+        </div>
+        <div class="explore-grid">
+          <div class="ex-tile" style="--tile-glow:rgba(255,214,10,.3);--tile-color:#FFD60A" onclick="exploreGo('deals')">
+            <div class="ex-icn"><svg viewBox="0 0 24 24"><use href="#i-tag"/></svg></div>
+            <div class="ex-body">
+              <div class="ex-ttl">Deals</div>
+              <div class="ex-desc">Flüge, Hotels, Mietwagen &amp; Erlebnisse für deinen Trip.</div>
+            </div>
+          </div>
+          <div class="ex-tile" style="--tile-glow:rgba(254,60,114,.35);--tile-color:#FE3C72" onclick="exploreGo('games')">
+            <span class="ex-badge">NEU</span>
+            <div class="ex-icn"><svg viewBox="0 0 24 24"><use href="#i-gamepad"/></svg></div>
+            <div class="ex-body">
+              <div class="ex-ttl">Game Center</div>
+              <div class="ex-desc">Crew-vs-Crew Challenges &amp; Community-Games.</div>
+            </div>
+          </div>
+          <div class="ex-tile" style="--tile-glow:rgba(255,214,10,.25);--tile-color:#FFD60A" onclick="exploreGo('achieve')">
+            <div class="ex-icn"><svg viewBox="0 0 24 24"><use href="#i-qrcode"/></svg></div>
+            <div class="ex-body">
+              <div class="ex-ttl">Mein QR &amp; Punkte</div>
+              <div class="ex-desc">Dein Code, Check-ins, Orte, Crew-Punkte.</div>
+            </div>
+          </div>
+          <div class="ex-tile" style="--tile-glow:rgba(217,119,87,.3);--tile-color:#D97757" onclick="exploreGo('trophy')">
+            <div class="ex-icn"><svg viewBox="0 0 24 24"><use href="#i-trophy"/></svg></div>
+            <div class="ex-body">
+              <div class="ex-ttl">Erfolge</div>
+              <div class="ex-desc">Badges &amp; Meilensteine die du erreicht hast.</div>
+            </div>
+          </div>
+          <div class="ex-tile wide" style="--tile-glow:rgba(48,209,88,.3);--tile-color:#30D158" onclick="openQRScanner()">
+            <div class="ex-icn"><svg viewBox="0 0 24 24" style="color:#30D158"><use href="#i-qrcode"/></svg></div>
+            <div class="ex-body">
+              <div class="ex-ttl">QR-Code scannen</div>
+              <div class="ex-desc">Check dich bei einem Partner ein &amp; hol dir Punkte für deine Crew.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ═══════════ DEALS SUB-VIEW ═══════════ -->
+    <div class="explore-sub" id="exsub-deals">
+      <div class="sub-hdr">
+        <div class="sub-back" onclick="exploreGo('hub')"><svg viewBox="0 0 24 24"><use href="#i-arrow-left"/></svg></div>
+        <h2>Deals</h2>
+      </div>
+      <div class="deals-wrap" style="padding-top:0">
+      <div class="deals-hero" style="padding:4px 16px 8px;text-align:center">
         <div style="font-size:11px;font-weight:700;color:var(--o);text-transform:uppercase;letter-spacing:2px;margin-bottom:4px">Dein Mallorca-Trip</div>
-        <h2 style="font-size:22px;font-weight:900;letter-spacing:-.5px">Deals & Angebote</h2>
-        <p style="font-size:12px;color:var(--t3);margin-top:4px">Persönlich für dich — Flüge, Unterkünfte, Mietwagen & mehr</p>
+        <h2 style="font-size:22px;font-weight:900;letter-spacing:-.5px">Deals &amp; Angebote</h2>
+        <p style="font-size:12px;color:var(--t3);margin-top:4px">Persönlich für dich — Flüge, Unterkünfte, Mietwagen &amp; mehr</p>
       </div>
       <!-- Deal Profile -->
       <div class="deal-profile" id="dealProfile">
@@ -2463,7 +2788,143 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
       </div>
       <div id="dealsContent"></div>
       <div class="deal-disclosure">⚠️ Affiliate-Hinweis: Einige Links sind Partnerlinks. Bei einer Buchung/Kauf erhalten wir eine kleine Provision — für dich ändert sich der Preis nicht. Butterbread Technologies · DSGVO-konform · Server EU</div>
-    </div></div>
+    </div>
+    </div><!-- /exsub-deals -->
+
+    <!-- ═══════════ GAME CENTER SUB-VIEW ═══════════ -->
+    <div class="explore-sub" id="exsub-games">
+      <div class="sub-hdr">
+        <div class="sub-back" onclick="exploreGo('hub')"><svg viewBox="0 0 24 24"><use href="#i-arrow-left"/></svg></div>
+        <h2>Game Center</h2>
+      </div>
+      <div class="gc-wrap">
+        <div class="gc-hero">
+          <h3>🎮 Crew vs. Crew</h3>
+          <p>Tretet gegen andere Crews an, sammelt Punkte &amp; werdet die #1 Crew der App.</p>
+          <div class="gc-connect">
+            <button class="gc-connect-btn" onclick="gcFindCrews()">🔥 Gegner finden</button>
+            <button class="gc-connect-btn ghost" onclick="gcOpenLeaderboard()">🏆 Ranking</button>
+          </div>
+        </div>
+
+        <div class="gc-section-ttl">Deine Crew-Verbindungen</div>
+        <div id="gcCrewConnections"><div class="ach-empty">Lade Crews…</div></div>
+
+        <div class="gc-section-ttl">Verfügbare Games</div>
+        <div class="gc-game" style="--game-bg:rgba(254,60,114,.14)" onclick="gcOpenGame('foto')">
+          <div class="gc-game-emoji">📸</div>
+          <div class="gc-game-body">
+            <div class="gc-game-ttl">Foto-Battle <span class="gc-game-tag live">LIVE</span></div>
+            <div class="gc-game-desc">Beste Crew-Foto der Woche. Community-Voting.</div>
+          </div>
+          <span class="gc-game-arrow">›</span>
+        </div>
+        <div class="gc-game" style="--game-bg:rgba(255,214,10,.14)" onclick="gcOpenGame('quiz')">
+          <div class="gc-game-emoji">🧠</div>
+          <div class="gc-game-body">
+            <div class="gc-game-ttl">Crew-Quiz <span class="gc-game-tag live">LIVE</span></div>
+            <div class="gc-game-desc">Wer kennt seine Crew am besten? 10 Fragen, 60 Sekunden.</div>
+          </div>
+          <span class="gc-game-arrow">›</span>
+        </div>
+        <div class="gc-game" style="--game-bg:rgba(48,209,88,.14)" onclick="gcOpenGame('run')">
+          <div class="gc-game-emoji">🍻</div>
+          <div class="gc-game-body">
+            <div class="gc-game-ttl">Kneipen-Run <span class="gc-game-tag soon">BALD</span></div>
+            <div class="gc-game-desc">Checkt in 5 Bars ein. Schnellste Crew gewinnt.</div>
+          </div>
+          <span class="gc-game-arrow">›</span>
+        </div>
+        <div class="gc-game" style="--game-bg:rgba(255,109,46,.14)" onclick="gcOpenGame('duel')">
+          <div class="gc-game-emoji">⚔️</div>
+          <div class="gc-game-body">
+            <div class="gc-game-ttl">Crew-Duell <span class="gc-game-tag soon">BALD</span></div>
+            <div class="gc-game-desc">Head-to-Head: Challenge eine andere Crew direkt heraus.</div>
+          </div>
+          <span class="gc-game-arrow">›</span>
+        </div>
+        <div class="gc-game" style="--game-bg:rgba(217,119,87,.14)" onclick="gcOpenGame('dance')">
+          <div class="gc-game-emoji">💃</div>
+          <div class="gc-game-body">
+            <div class="gc-game-ttl">Tanz-Off <span class="gc-game-tag soon">BALD</span></div>
+            <div class="gc-game-desc">15-sek Video-Battle. Die Community entscheidet.</div>
+          </div>
+          <span class="gc-game-arrow">›</span>
+        </div>
+        <div class="gc-game" style="--game-bg:rgba(0,199,190,.14)" onclick="gcOpenGame('trivia')">
+          <div class="gc-game-emoji">🎯</div>
+          <div class="gc-game-body">
+            <div class="gc-game-ttl">Weekly Challenge <span class="gc-game-tag">NEU</span></div>
+            <div class="gc-game-desc">Jede Woche neue Aufgabe. Alle Crews, ein Ziel.</div>
+          </div>
+          <span class="gc-game-arrow">›</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ QR + ACHIEVEMENTS SUB-VIEW ═══════════ -->
+    <div class="explore-sub" id="exsub-achieve">
+      <div class="sub-hdr">
+        <div class="sub-back" onclick="exploreGo('hub')"><svg viewBox="0 0 24 24"><use href="#i-arrow-left"/></svg></div>
+        <h2>Mein QR &amp; Punkte</h2>
+      </div>
+      <div class="ach-wrap">
+        <div class="ach-qr">
+          <img id="achQRImg" src="" alt="Mein QR-Code">
+          <div class="ach-qr-name" id="achQRName">—</div>
+          <div class="ach-qr-handle" id="achQRHandle">—</div>
+          <div class="ach-qr-actions">
+            <button class="ach-qr-btn" onclick="shareQR()">📤 Teilen</button>
+            <button class="ach-qr-btn" onclick="downloadQR()">💾 Speichern</button>
+            <button class="ach-qr-btn" onclick="openQRScanner()" style="background:rgba(48,209,88,.1);border-color:rgba(48,209,88,.2);color:var(--mint)">📷 Scannen</button>
+          </div>
+        </div>
+
+        <div class="ach-stats">
+          <div class="ach-stat" style="--as-color:#FE3C72"><div class="ach-stat-n" id="achNPlaces">0</div><div class="ach-stat-l">Orte</div></div>
+          <div class="ach-stat" style="--as-color:#FFD60A"><div class="ach-stat-n" id="achNCheckins">0</div><div class="ach-stat-l">Check-ins</div></div>
+          <div class="ach-stat" style="--as-color:#D97757"><div class="ach-stat-n" id="achNBadges">0</div><div class="ach-stat-l">Badges</div></div>
+        </div>
+
+        <div class="ach-crewpts">
+          <div class="ach-crewpts-icn">🪙</div>
+          <div class="ach-crewpts-body">
+            <div class="ach-crewpts-ttl">Für meine Crew gesammelt</div>
+            <div class="ach-crewpts-n"><span id="achCrewPts">0</span> Punkte</div>
+          </div>
+        </div>
+
+        <div class="ach-section-ttl">Meine Badges</div>
+        <div class="ach-badges" id="achBadges"></div>
+
+        <div class="ach-section-ttl">Wo du gesprayt hast</div>
+        <div id="achCheckinsList"><div class="ach-empty">Noch keine Check-ins. Scanne den QR eines Partners um loszulegen.</div></div>
+      </div>
+    </div>
+
+    <!-- ═══════════ ERFOLGE SUB-VIEW ═══════════ -->
+    <div class="explore-sub" id="exsub-trophy">
+      <div class="sub-hdr">
+        <div class="sub-back" onclick="exploreGo('hub')"><svg viewBox="0 0 24 24"><use href="#i-arrow-left"/></svg></div>
+        <h2>Erfolge</h2>
+      </div>
+      <div class="ach-wrap">
+        <div class="gc-hero" style="background:linear-gradient(135deg,rgba(217,119,87,.15),rgba(255,214,10,.05));border-color:rgba(217,119,87,.25)">
+          <h3>🏆 Deine Meilensteine</h3>
+          <p>Schalte Badges frei durch Check-ins, Reisen &amp; Crew-Aktivität.</p>
+        </div>
+        <div class="ach-stats" style="margin-top:14px">
+          <div class="ach-stat" style="--as-color:#FE3C72"><div class="ach-stat-n" id="tphN1">0</div><div class="ach-stat-l">Matches</div></div>
+          <div class="ach-stat" style="--as-color:#30D158"><div class="ach-stat-n" id="tphN2">0</div><div class="ach-stat-l">Crews</div></div>
+          <div class="ach-stat" style="--as-color:#FFD60A"><div class="ach-stat-n" id="tphN3">0</div><div class="ach-stat-l">Aura</div></div>
+        </div>
+        <div class="ach-section-ttl">Badges</div>
+        <div class="ach-badges" id="tphBadges"></div>
+        <div class="ach-section-ttl">Leaderboard – Top Crews</div>
+        <div id="tphLB"><div class="ach-empty">Leaderboard lädt…</div></div>
+      </div>
+    </div>
+    </div>
     <div class="scr" id="screen-profile"><div class="prof-hero"><div class="prof-ava-wrap"><div class="prof-ava"><img id="profAvaImg" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80"></div><div class="prof-ava-edit" onclick="openPhotoUpload()">📷</div></div><h2><span id="profName">Laden...</span></h2><div class="handle" id="profHandle"></div><div class="prof-badges-row" id="profBadges"></div></div><div class="prof-vibe" id="profVibe"></div><div class="prof-socials" id="profSocials"></div><div class="prof-stats glass"><div class="pstat"><div class="pn" id="stM">0</div><div class="pl">Matches</div></div><div class="pstat"><div class="pn" id="stCrew">0</div><div class="pl">Crew</div></div><div class="pstat"><div class="pn" id="stPts">0</div><div class="pl">✨ Aura</div></div></div><div class="premium-cta" id="premCta" onclick="openPremium()"><h3>✨ crew Premium</h3><div class="pc-sub">Keine Werbung · Unlimited Swipes · VIP</div><div class="pc-btn">Ab 2,99€</div></div><div class="pmenu">
 <div class="pmi" id="adminMenuItem" style="display:none;background:linear-gradient(135deg,rgba(255,109,46,.08),rgba(255,109,46,.02));border:1px solid rgba(255,109,46,.2)" onclick="openAdminPanel()"><div class="pmi-icon o">👑</div><span class="pmi-label" style="color:var(--o);font-weight:700">Admin Dashboard</span><span class="pmi-arrow" style="color:var(--o)">›</span></div>
 <div class="pmi" style="background:linear-gradient(135deg,rgba(255,214,10,.08),rgba(255,214,10,.02));border:1px solid rgba(255,214,10,.15)" onclick="showMyQR()"><div class="pmi-icon o" style="background:rgba(255,214,10,.1)">📲</div><span class="pmi-label" style="font-weight:700">Mein QR-Code</span><span class="pmi-arrow" style="color:var(--yellow)">›</span></div>
@@ -2507,7 +2968,7 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 62;
+  var APP_VERSION = 63;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     // Force-clear old non-UUID crew IDs
@@ -7025,6 +7486,7 @@ window.go=function(n,b){
   if(b)b.classList.add('active');
   setTimeout(function(){if(n==='radar'&&rMap)rMap.invalidateSize();if(n==='crew'&&cMap)cMap.invalidateSize()},200);
   if(n==='match')buildCards();
+  if(n==='deals'){ try{ exploreGo('hub'); }catch(e){} }
   if(n==='crew'){fetchAllCrews().then(function(){return loadMyCrewMemberships()}).then(function(){updateCrewGate();buildCrewSwitcher();renderCrewBoard();updateCrewIdentityCard();buildCrewStatus();buildCrewList().then(buildCrewActivityFeed);buildCrewLocations();buildMiniChat();buildDailyVoting();buildLeaderboard();buildChallenges();updateChallengeTimer()}).catch(function(e){console.error('Crew load error:',e);updateCrewGate()})}
 };
 
@@ -7580,6 +8042,272 @@ window.downloadCrewQR=function(crewName,invCode){
   document.body.appendChild(a);a.click();document.body.removeChild(a);
   toast('Crew QR-Code wird heruntergeladen');
 };
+
+// ============================================
+// EXPLORE HUB — Navigation zwischen Sub-Views
+// ============================================
+window.exploreGo = function(section){
+  var subs = ['hub','deals','games','achieve','trophy'];
+  subs.forEach(function(s){
+    var el = document.getElementById('exsub-'+s);
+    if(el) el.classList.toggle('active', s === section);
+  });
+  // Scroll to top when switching
+  try{ var scr = document.getElementById('screen-deals'); if(scr) scr.scrollTop = 0; }catch(e){}
+  // Load lazy content
+  if(section === 'achieve') loadAchievementsPanel();
+  if(section === 'trophy') loadTrophyPanel();
+  if(section === 'games') loadGameCenterCrews();
+};
+
+// ============================================
+// GAME CENTER
+// ============================================
+window.gcFindCrews = function(){
+  exploreGo('games');
+  loadGameCenterCrews(true);
+};
+window.gcOpenLeaderboard = function(){
+  exploreGo('trophy');
+};
+window.gcOpenGame = function(id){
+  var games = {
+    foto:    {emoji:'📸', title:'Foto-Battle', desc:'Lade diese Woche euer bestes Crew-Foto hoch. Die Community voted. Gewinner-Crew bekommt +500 Crew-Punkte.', live:true},
+    quiz:    {emoji:'🧠', title:'Crew-Quiz', desc:'10 Fragen über deine Crew-Mitglieder. Schnellste richtige Antworten gewinnen. Startet in Kürze.', live:true},
+    run:     {emoji:'🍻', title:'Kneipen-Run', desc:'Checkt als Crew in 5 verschiedene Bars ein (QR-Scan). Schnellste Crew der Nacht gewinnt.', live:false},
+    duel:    {emoji:'⚔️', title:'Crew-Duell', desc:'Fordere eine andere Crew direkt heraus. Best-of-3 in zufälligen Mini-Games.', live:false},
+    dance:   {emoji:'💃', title:'Tanz-Off', desc:'15-Sekunden Video-Battle. Community stimmt ab. Monatlicher Gewinner bekommt exklusives Crew-Badge.', live:false},
+    trivia:  {emoji:'🎯', title:'Weekly Challenge', desc:'Jede Woche eine neue Aufgabe für alle Crews. Diese Woche: "Besucht 3 neue Städte".', live:true}
+  };
+  var g = games[id] || games.foto;
+  var c = '<div style="text-align:center;padding:6px 0">';
+  c += '<div style="font-size:56px;margin-bottom:10px">'+g.emoji+'</div>';
+  c += '<h2 style="font-size:22px;font-weight:900;letter-spacing:-.5px">'+esc(g.title)+'</h2>';
+  if(g.live){
+    c += '<div style="display:inline-block;margin-top:6px;padding:3px 10px;border-radius:999px;background:rgba(48,209,88,.12);color:var(--mint);font-size:10px;font-weight:900;letter-spacing:1px">LIVE</div>';
+  } else {
+    c += '<div style="display:inline-block;margin-top:6px;padding:3px 10px;border-radius:999px;background:rgba(255,255,255,.06);color:var(--t3);font-size:10px;font-weight:900;letter-spacing:1px">COMING SOON</div>';
+  }
+  c += '<p style="font-size:13px;color:var(--t2);line-height:1.6;margin-top:12px;padding:0 8px">'+esc(g.desc)+'</p>';
+  c += '<div class="bs-actions" style="margin-top:18px">';
+  if(g.live){
+    c += '<button class="bs-btn orange" onclick="closeBS();toast(\'🔥 Challenge gestartet — bald im Chat!\')">🔥 Mitmachen</button>';
+  } else {
+    c += '<button class="bs-btn" style="background:rgba(255,255,255,.06);color:var(--t);border:1px solid var(--glass-border)" onclick="closeBS();toast(\'🔔 Wir benachrichtigen dich beim Launch\')">🔔 Benachrichtigen</button>';
+  }
+  c += '<button class="bs-btn" style="background:rgba(255,255,255,.04);color:var(--t2);border:1px solid var(--glass-border)" onclick="closeBS()">Schließen</button>';
+  c += '</div>';
+  c += '</div>';
+  document.getElementById('bsImg').src='https://images.unsplash.com/photo-1511512578047-dfb367046420?w=800&q=60';
+  document.getElementById('bsContent').innerHTML=c;
+  document.getElementById('bsheet').classList.add('show');
+};
+
+async function loadGameCenterCrews(showToast){
+  var box = document.getElementById('gcCrewConnections'); if(!box) return;
+  try {
+    var crews = (typeof getAllCrews === 'function') ? (getAllCrews() || []) : [];
+    if((!crews || !crews.length) && typeof fetchAllCrews === 'function'){
+      try { await fetchAllCrews(); crews = getAllCrews() || []; } catch(e){}
+    }
+    if(!crews || !crews.length){
+      box.innerHTML = '<div class="ach-empty">Noch keine anderen Crews gefunden. Check später nochmal.</div>';
+      return;
+    }
+    // Show up to 5 random-ish other crews (exclude own crews if possible)
+    var myCrewIds = [];
+    try {
+      if(typeof MY_CREWS !== 'undefined' && MY_CREWS && MY_CREWS.length){
+        myCrewIds = MY_CREWS.map(function(c){ return c.id; });
+      } else if(typeof activeCrewId !== 'undefined'){
+        myCrewIds = [activeCrewId];
+      }
+    } catch(e){}
+    var others = crews.filter(function(c){ return c && c.id && myCrewIds.indexOf(c.id) === -1; }).slice(0,6);
+    if(!others.length){ others = crews.slice(0,5); }
+    box.innerHTML = others.map(function(c){
+      var name = esc(c.name || 'Crew');
+      var initial = (c.name||'C').charAt(0).toUpperCase();
+      var mCount = (c.member_count != null ? c.member_count : (c.members||c.aura||0));
+      var safeId = String(c.id||'').replace(/['"<>]/g,'');
+      var safeName = String(c.name||'Crew').replace(/['"<>]/g,'');
+      return '<div class="gc-crew-conn">'+
+        '<div class="gc-crew-conn-ava">'+initial+'</div>'+
+        '<div class="gc-crew-conn-body">'+
+          '<div class="gc-crew-conn-name">'+name+'</div>'+
+          '<div class="gc-crew-conn-meta">'+mCount+' Mitglieder · Aura '+(c.aura||0)+'</div>'+
+        '</div>'+
+        '<button class="gc-crew-conn-btn" onclick="gcChallengeCrew(\''+safeId+'\',\''+safeName+'\')">Challenge</button>'+
+      '</div>';
+    }).join('');
+    if(showToast) toast('🔥 '+others.length+' Crews bereit für Challenges');
+  } catch(e){
+    console.log('[GC] loadCrews error', e);
+    box.innerHTML = '<div class="ach-empty">Fehler beim Laden der Crews.</div>';
+  }
+}
+
+window.gcChallengeCrew = function(crewId, crewName){
+  toast('⚔️ Challenge an „'+crewName+'" gesendet!');
+};
+
+// ============================================
+// ACHIEVEMENTS & QR PANEL
+// ============================================
+async function loadAchievementsPanel(){
+  if(!ME) return;
+  try {
+    var uid = ME.user_id;
+    // QR
+    var qrData = 'https://partycrew.app/scan.html?u=' + uid;
+    var qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=400x400&color=0A0A0A&bgcolor=FFFFFF&margin=10&data=' + encodeURIComponent(qrData);
+    var imgEl = document.getElementById('achQRImg'); if(imgEl) imgEl.src = qrUrl;
+    var nm = document.getElementById('achQRName'); if(nm) nm.textContent = ME.name || '—';
+    var hd = document.getElementById('achQRHandle'); if(hd) hd.textContent = '@' + (ME.username || 'user');
+
+    // Visited places count (from localStorage cache)
+    var places = 0;
+    try {
+      var vp = JSON.parse(localStorage.getItem('crew_visited_places_'+uid) || '[]');
+      places = (vp && vp.length) || 0;
+    } catch(e){}
+    var pEl = document.getElementById('achNPlaces'); if(pEl) pEl.textContent = places;
+
+    // Check-ins & points
+    var checkins = 0, crewPts = 0, ciRows = [];
+    try {
+      var res = await sb.from('partner_checkins').select('partner_code,points_awarded,deal_text,created_at,partners!partner_checkins_partner_id_fkey(business_name,location)').eq('user_id', uid).order('created_at',{ascending:false}).limit(20);
+      if(res && res.data){
+        checkins = res.data.length;
+        crewPts = res.data.reduce(function(s,x){ return s + (Number(x.points_awarded)||0); }, 0);
+        ciRows = res.data;
+      }
+    } catch(e){
+      // Fallback without join
+      try {
+        var r2 = await sb.from('partner_checkins').select('partner_code,points_awarded,deal_text,created_at').eq('user_id', uid).order('created_at',{ascending:false}).limit(20);
+        if(r2 && r2.data){
+          checkins = r2.data.length;
+          crewPts = r2.data.reduce(function(s,x){ return s + (Number(x.points_awarded)||0); }, 0);
+          ciRows = r2.data;
+        }
+      } catch(e2){ console.log('[ACH] partner_checkins fail', e2); }
+    }
+    var cEl = document.getElementById('achNCheckins'); if(cEl) cEl.textContent = checkins;
+    var cpEl = document.getElementById('achCrewPts'); if(cpEl) cpEl.textContent = crewPts;
+
+    // Badges
+    var badges = computeBadges({places:places, checkins:checkins, crewPts:crewPts});
+    var bEl = document.getElementById('achBadges');
+    if(bEl){
+      bEl.innerHTML = badges.map(function(b){
+        return '<div class="ach-badge '+(b.unlocked?'unlocked':'locked')+'">'+b.emoji+' '+esc(b.label)+'</div>';
+      }).join('');
+    }
+    var bcEl = document.getElementById('achNBadges'); if(bcEl) bcEl.textContent = badges.filter(function(x){return x.unlocked}).length;
+
+    // Check-in list
+    var ciBox = document.getElementById('achCheckinsList');
+    if(ciBox){
+      if(!ciRows.length){
+        ciBox.innerHTML = '<div class="ach-empty">Noch keine Check-ins. Scanne den QR eines Partners um loszulegen.</div>';
+      } else {
+        ciBox.innerHTML = ciRows.map(function(c){
+          var biz = (c.partners && c.partners.business_name) || c.partner_code || 'Partner';
+          var loc = (c.partners && c.partners.location) || c.deal_text || '';
+          var d = c.created_at ? new Date(c.created_at) : null;
+          var dstr = d ? d.toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'2-digit'}) : '';
+          return '<div class="ach-ci-row">'+
+            '<div class="ach-ci-icn">📍</div>'+
+            '<div class="ach-ci-body">'+
+              '<div class="ach-ci-name">'+esc(biz)+'</div>'+
+              '<div class="ach-ci-meta">'+esc(loc)+(dstr?' · '+dstr:'')+'</div>'+
+            '</div>'+
+            '<div class="ach-ci-pts">+'+(c.points_awarded||0)+'</div>'+
+          '</div>';
+        }).join('');
+      }
+    }
+  } catch(e){
+    console.log('[ACH] loadAchievements error', e);
+  }
+}
+
+async function loadTrophyPanel(){
+  if(!ME) return;
+  try {
+    var uid = ME.user_id;
+    // Simple stats from ME + cached
+    var n1 = (ME.match_count != null ? ME.match_count : 0);
+    var n2 = (ME.crew_count != null ? ME.crew_count : 0);
+    var n3 = (ME.aura_points != null ? ME.aura_points : 0);
+    try {
+      var mEl = document.getElementById('stM'); if(mEl && mEl.textContent) n1 = Number(mEl.textContent)||n1;
+      var cEl = document.getElementById('stCrew'); if(cEl && cEl.textContent) n2 = Number(cEl.textContent)||n2;
+      var pEl = document.getElementById('stPts'); if(pEl && pEl.textContent) n3 = Number(pEl.textContent)||n3;
+    } catch(e){}
+    var e1 = document.getElementById('tphN1'); if(e1) e1.textContent = n1;
+    var e2 = document.getElementById('tphN2'); if(e2) e2.textContent = n2;
+    var e3 = document.getElementById('tphN3'); if(e3) e3.textContent = n3;
+
+    // Badges (re-use computeBadges with the shown stats)
+    var places = 0;
+    try { places = (JSON.parse(localStorage.getItem('crew_visited_places_'+uid) || '[]')||[]).length; } catch(e){}
+    var badges = computeBadges({places:places, checkins:0, crewPts:n3, matches:n1, crews:n2});
+    var bEl = document.getElementById('tphBadges');
+    if(bEl) bEl.innerHTML = badges.map(function(b){
+      return '<div class="ach-badge '+(b.unlocked?'unlocked':'locked')+'">'+b.emoji+' '+esc(b.label)+'</div>';
+    }).join('');
+
+    // Leaderboard: top 5 crews by aura / member count
+    var lbBox = document.getElementById('tphLB'); if(!lbBox) return;
+    var crews = (typeof getAllCrews === 'function') ? (getAllCrews() || []).slice() : [];
+    if((!crews || !crews.length) && typeof fetchAllCrews === 'function'){
+      try { await fetchAllCrews(); crews = (getAllCrews()||[]).slice(); } catch(e){}
+    }
+    if(!crews || !crews.length){
+      lbBox.innerHTML = '<div class="ach-empty">Noch keine Crews im Ranking.</div>';
+      return;
+    }
+    crews.sort(function(a,b){
+      var av = (a.aura||a.member_count||0);
+      var bv = (b.aura||b.member_count||0);
+      return bv - av;
+    });
+    var top = crews.slice(0,5);
+    lbBox.innerHTML = top.map(function(c,i){
+      var rank = i+1;
+      var medal = rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':'#'+rank;
+      var pts = c.aura || 0;
+      return '<div class="ach-ci-row">'+
+        '<div class="ach-ci-icn" style="background:rgba(255,214,10,.1);font-size:16px;font-weight:900">'+medal+'</div>'+
+        '<div class="ach-ci-body">'+
+          '<div class="ach-ci-name">'+esc(c.name||'Crew')+'</div>'+
+          '<div class="ach-ci-meta">'+(c.member_count||0)+' Mitglieder</div>'+
+        '</div>'+
+        '<div class="ach-ci-pts">'+pts+' Aura</div>'+
+      '</div>';
+    }).join('');
+  } catch(e){ console.log('[TPH] loadTrophy error', e); }
+}
+
+function computeBadges(stats){
+  stats = stats || {};
+  var p = stats.places||0, ci = stats.checkins||0, cp = stats.crewPts||0;
+  var m = stats.matches||0, cr = stats.crews||0;
+  return [
+    {emoji:'🗺️', label:'Erster Ort', unlocked: p >= 1},
+    {emoji:'🌍', label:'5 Orte besucht', unlocked: p >= 5},
+    {emoji:'✈️', label:'10 Orte besucht', unlocked: p >= 10},
+    {emoji:'📲', label:'Erster Check-in', unlocked: ci >= 1},
+    {emoji:'🔥', label:'5 Check-ins', unlocked: ci >= 5},
+    {emoji:'🪙', label:'100 Crew-Punkte', unlocked: cp >= 100},
+    {emoji:'💰', label:'500 Crew-Punkte', unlocked: cp >= 500},
+    {emoji:'💘', label:'Erstes Match', unlocked: m >= 1},
+    {emoji:'💎', label:'10 Matches', unlocked: m >= 10},
+    {emoji:'🏴‍☠️', label:'Crew-Member', unlocked: cr >= 1}
+  ];
+}
 
 // ============================================
 // QR SCANNER (Camera-based)
