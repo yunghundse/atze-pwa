@@ -1721,7 +1721,7 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 55;
+  var APP_VERSION = 56;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     // Force-clear old non-UUID crew IDs
@@ -7365,25 +7365,63 @@ var TONIGHT_FALLBACK = [
 ];
 async function buildTonightPlanner(){
   var el=document.getElementById('tonightPlanner');if(!el)return;
+  var crewId=getActiveCrewId();
+  if(!crewId){el.innerHTML='<p class="crew-empty">Tritt einer Crew bei!</p>';return}
   var today=new Date().toISOString().split('T')[0];
-  var votes=JSON.parse(localStorage.getItem('crew_tonight_vote_'+today)||'{}');
+
+  // Load tonight suggestions from Supabase (crew-specific, today only)
+  var customSuggestions=[];
+  try{
+    var {data:sdata}=await sb.from('tonight_suggestions').select('*').eq('crew_id',crewId).eq('date',today).order('created_at',{ascending:true});
+    if(sdata)customSuggestions=sdata;
+  }catch(e){console.warn('tonight_suggestions load:',e)}
+
+  // Load votes from Supabase
+  var votes={};
+  try{
+    var {data:vdata}=await sb.from('tonight_votes').select('user_id,venue_id').eq('crew_id',crewId).eq('date',today);
+    if(vdata)vdata.forEach(function(v){votes[v.user_id]=v.venue_id});
+  }catch(e){
+    // Fallback to localStorage if tables don't exist yet
+    votes=JSON.parse(localStorage.getItem('crew_tonight_vote_'+crewId+'_'+today)||'{}');
+  }
+
   var voteCount={};
   Object.values(votes).forEach(function(v){voteCount[v]=(voteCount[v]||0)+1});
   var userKey=ME?ME.user_id:'anon';
-  // Use DB venues if available, else fallback
-  var venueList=VENUES.length>0?VENUES.slice(0,6):TONIGHT_FALLBACK;
-  var html='<div class="tonight"><div style="position:relative;z-index:1"><h3>🌙 Wo geht\'s heute hin?</h3><div class="tc-sub">Stimm ab — deine Crew sieht das Ergebnis live!</div>';
+
+  // Merge: default venues + custom crew suggestions
+  var venueList=TONIGHT_FALLBACK.slice();
+  customSuggestions.forEach(function(s){
+    // Don't duplicate if already in defaults
+    if(!venueList.some(function(v){return v.name===s.name})){
+      venueList.push({id:'custom_'+s.id,name:s.name,icon:s.icon||'📍',type:s.type||'Vorschlag von '+(s.user_name||'Crew'),custom:true,user_name:s.user_name});
+    }
+  });
+
+  var html='<div class="tonight"><div style="position:relative;z-index:1">';
+  html+='<h3>🌙 Wo geht\'s heute hin?</h3>';
+  html+='<div class="tc-sub">Stimm ab oder schlage was eigenes vor!</div>';
+
   venueList.forEach(function(v){
     var vid=v.id||v.name;
     var isVoted=votes[userKey]===vid;
     var icon=v.icon||'📍';
     var vc=voteCount[vid]||0;
-    html+='<div class="vote-card'+(isVoted?' voted':'')+'" onclick="voteTonightVenue(\''+vid+'\')" style="display:flex;align-items:center;gap:10px">';
+    html+='<div class="vote-card'+(isVoted?' voted':'')+'" onclick="voteTonightVenue(\''+esc(vid)+'\')" style="display:flex;align-items:center;gap:10px;min-height:52px">';
     html+='<span style="font-size:22px">'+icon+'</span>';
-    html+='<div style="flex:1"><div class="vote-card-label" style="margin:0">'+esc(v.name)+'</div>'+(v.type?'<div style="font-size:10px;color:var(--t3)">'+esc(v.type)+'</div>':'')+'</div>';
-    html+='<div class="vote-badge">'+vc+' '+(vc===1?'Vote':'Votes')+'</div>';
+    html+='<div style="flex:1"><div class="vote-card-label" style="margin:0">'+esc(v.name)+'</div>';
+    html+='<div style="font-size:10px;color:var(--t3)">'+(v.custom?'💡 '+esc(v.user_name||'Crew'):(v.type||''))+'</div></div>';
+    html+='<div class="vote-badge" style="min-width:44px;text-align:center;padding:6px 10px">'+vc+'</div>';
     html+='</div>';
   });
+
+  // Custom suggestion input
+  html+='<div style="margin-top:12px;display:flex;gap:8px;align-items:center">';
+  html+='<input type="text" id="tonightCustomInput" placeholder="Eigenen Vorschlag..." maxlength="60" style="flex:1;padding:12px 14px;border-radius:14px;background:rgba(22,22,24,.6);border:1px solid rgba(255,255,255,.12);color:#fff;font-size:14px;font-family:inherit;outline:none;min-height:48px">';
+  html+='<button onclick="submitTonightSuggestion()" style="padding:12px 16px;border:none;border-radius:14px;background:var(--gold);color:#000;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;min-height:48px;white-space:nowrap">+ Vorschlag</button>';
+  html+='</div>';
+
   // Winner display
   var winner=Object.keys(voteCount).length>0?Object.keys(voteCount).reduce(function(a,b){return voteCount[a]>voteCount[b]?a:b}):null;
   if(winner&&voteCount[winner]>0){
@@ -7393,14 +7431,68 @@ async function buildTonightPlanner(){
   html+='</div></div>';
   el.innerHTML=html;
 }
-window.voteTonightVenue=function(venueId){
+
+window.voteTonightVenue=async function(venueId){
+  var crewId=getActiveCrewId();if(!crewId)return;
   var today=new Date().toISOString().split('T')[0];
-  var votes=JSON.parse(localStorage.getItem('crew_tonight_vote_'+today)||'{}');
   var userKey=ME?ME.user_id:'anon';
-  if(votes[userKey]===venueId){delete votes[userKey];toast('Vote zurückgenommen')}else{votes[userKey]=venueId;toast('Vote gespeichert! 🗳️')}
-  localStorage.setItem('crew_tonight_vote_'+today,JSON.stringify(votes));
-  buildTonightPlanner();
+
+  // Try Supabase first
+  try{
+    // Check if user already voted
+    var {data:existing}=await sb.from('tonight_votes').select('id,venue_id').eq('crew_id',crewId).eq('user_id',userKey).eq('date',today).limit(1);
+    if(existing&&existing.length>0){
+      if(existing[0].venue_id===venueId){
+        // Unvote
+        await sb.from('tonight_votes').delete().eq('id',existing[0].id);
+        toast('Vote zurückgenommen');
+      } else {
+        // Change vote
+        await sb.from('tonight_votes').update({venue_id:venueId}).eq('id',existing[0].id);
+        toast('Vote geändert! 🗳️');
+      }
+    } else {
+      // New vote
+      await sb.from('tonight_votes').insert({crew_id:crewId,user_id:userKey,venue_id:venueId,date:today});
+      toast('Vote gespeichert! 🗳️');
+    }
+  }catch(e){
+    // Fallback to localStorage if Supabase table doesn't exist
+    var lsKey='crew_tonight_vote_'+crewId+'_'+today;
+    var votes=JSON.parse(localStorage.getItem(lsKey)||'{}');
+    if(votes[userKey]===venueId){delete votes[userKey];toast('Vote zurückgenommen')}
+    else{votes[userKey]=venueId;toast('Vote gespeichert! 🗳️')}
+    localStorage.setItem(lsKey,JSON.stringify(votes));
+  }
   if(navigator.vibrate)navigator.vibrate(15);
+  buildTonightPlanner();
+};
+
+window.submitTonightSuggestion=async function(){
+  var input=document.getElementById('tonightCustomInput');
+  if(!input)return;
+  var name=input.value.trim();
+  if(!name){toast('Gib einen Namen ein!');return}
+  if(name.length<2){toast('Mindestens 2 Zeichen!');return}
+  var crewId=getActiveCrewId();if(!crewId){toast('Keine aktive Crew!');return}
+  var today=new Date().toISOString().split('T')[0];
+
+  try{
+    await sb.from('tonight_suggestions').insert({
+      crew_id:crewId,user_id:ME.user_id,user_name:ME.name||'Anonym',
+      name:name,icon:'📍',date:today
+    });
+    input.value='';
+    toast('Vorschlag hinzugefügt! 🌙');
+    if(navigator.vibrate)navigator.vibrate([10,50,10]);
+    buildTonightPlanner();
+  }catch(e){
+    // Fallback: add to local fallback list
+    TONIGHT_FALLBACK.push({id:'local_'+Date.now(),name:name,icon:'📍',type:'Vorschlag'});
+    input.value='';
+    toast('Vorschlag hinzugefügt! 🌙');
+    buildTonightPlanner();
+  }
 }
 
 // 3. CREW CHALLENGES — show 3 daily

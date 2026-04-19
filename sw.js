@@ -1,4 +1,4 @@
-const CACHE = 'crew-v55';
+const CACHE = 'crew-v56';
 const PRECACHE = [
   './',
   './index.html',
