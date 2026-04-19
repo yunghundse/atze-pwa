@@ -238,22 +238,19 @@ select.ri{appearance:none;-webkit-appearance:none}
 @keyframes scanLine{0%,100%{top:20%}50%{top:70%}}
 
 /* CREW */
-.crew-map-full{height:240px;margin:68px 12px 10px;border-radius:var(--r2);overflow:hidden;position:relative;z-index:1;border:1px solid rgba(255,255,255,.08);box-shadow:0 8px 32px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.06)}
+.crew-map-full{height:280px;margin:68px 12px 10px;border-radius:var(--r2);overflow:hidden;position:relative;z-index:1;border:1px solid rgba(255,255,255,.12);box-shadow:0 12px 40px rgba(0,0,0,.5),inset 0 2px 8px rgba(255,255,255,.1),0 0 40px rgba(255,109,46,.08)}
 .crew-map-full .leaflet-container{height:100%;width:100%;border-radius:var(--r2)}
 .crew-content{padding:0 0 90px}
-.crew-status-bar{margin:10px 14px;padding:14px 16px;border-radius:var(--r);display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,rgba(22,22,24,.72),rgba(28,28,32,.5));backdrop-filter:blur(60px) saturate(200%);-webkit-backdrop-filter:blur(60px) saturate(200%);border:1px solid rgba(255,255,255,.1);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 4px 20px rgba(0,0,0,.25)}
-.csb-ava{width:40px;height:40px;border-radius:50%;overflow:hidden;border:2px solid var(--o);flex-shrink:0}.csb-ava img{width:100%;height:100%;object-fit:cover}
-.csb-info{flex:1}.csb-name{font-size:13px;font-weight:800}.csb-rank{font-size:11px;font-weight:700;margin-top:1px}
-.csb-pts{text-align:right}.csb-pts-num{font-size:20px;font-weight:900;color:var(--o)}.csb-pts-label{font-size:9px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.5px}
-.csb-progress{height:4px;background:rgba(255,255,255,.06);border-radius:2px;margin-top:8px;overflow:hidden}.csb-progress-fill{height:100%;background:var(--gold);border-radius:2px;transition:width .6s var(--ease)}
-.crew-invite{margin:10px 14px;padding:14px;display:flex;align-items:center;gap:12px;cursor:pointer;position:relative;overflow:hidden;background:linear-gradient(135deg,rgba(22,22,24,.72),rgba(28,28,32,.5));backdrop-filter:blur(60px) saturate(200%);-webkit-backdrop-filter:blur(60px) saturate(200%);border:1px solid rgba(255,255,255,.12);border-radius:var(--r);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 4px 20px rgba(0,0,0,.25)}
-.crew-invite::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,109,46,.2),rgba(191,90,242,.12));border-radius:var(--r);pointer-events:none}
-.crew-invite .ci-icon{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.crew-invite h4{font-size:13px;font-weight:800}.crew-invite p{font-size:11px;color:var(--t2);margin-top:1px}
+.crew-status-bar{margin:10px 14px;padding:16px 20px;border-radius:var(--r);display:flex;align-items:center;gap:14px;background:linear-gradient(135deg,rgba(22,22,24,.8),rgba(28,28,32,.6));backdrop-filter:blur(80px) saturate(220%);-webkit-backdrop-filter:blur(80px) saturate(220%);border:1px solid rgba(255,255,255,.15);box-shadow:inset 0 2px 8px rgba(255,255,255,.12),0 8px 28px rgba(255,109,46,.12),0 0 30px rgba(255,109,46,.06)}
+.csb-ava{width:48px;height:48px;border-radius:50%;overflow:hidden;border:3px solid var(--o);flex-shrink:0;box-shadow:0 0 16px rgba(255,109,46,.3)}.csb-ava img{width:100%;height:100%;object-fit:cover}
+.csb-info{flex:1}.csb-name{font-size:15px;font-weight:800}.csb-rank{font-size:12px;font-weight:700;margin-top:2px;color:var(--o)}
+.csb-pts{text-align:right}.csb-pts-num{font-size:24px;font-weight:900;color:var(--o)}.csb-pts-label{font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.5px}
+.csb-progress{height:5px;background:rgba(255,255,255,.08);border-radius:3px;margin-top:10px;overflow:hidden;box-shadow:inset 0 1px 4px rgba(0,0,0,.4)}.csb-progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),#FFD60A);border-radius:3px;transition:width .6s var(--ease);box-shadow:0 0 12px rgba(255,214,10,.5)}
+.crew-invite{position:absolute;top:-9999px}
 /* CREW MEMBER CARDS — Rich Dashboard */
 .crew-member-grid{padding:0 10px 8px;display:flex;flex-direction:column;gap:8px}
-.crew-card{display:flex;align-items:center;gap:12px;padding:14px;border-radius:var(--r);background:linear-gradient(135deg,rgba(22,22,24,.72),rgba(28,28,32,.5));backdrop-filter:blur(50px) saturate(180%);-webkit-backdrop-filter:blur(50px) saturate(180%);border:1px solid rgba(255,255,255,.1);cursor:pointer;transition:all .2s var(--ease);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 3px 16px rgba(0,0,0,.2);position:relative;overflow:hidden}
-.crew-card:active{transform:scale(.98);background:linear-gradient(135deg,rgba(32,32,36,.8),rgba(38,38,42,.6))}
+.crew-card{display:flex;align-items:center;gap:12px;padding:14px;border-radius:var(--r);background:linear-gradient(135deg,rgba(22,22,24,.72),rgba(28,28,32,.5));backdrop-filter:blur(50px) saturate(180%);-webkit-backdrop-filter:blur(50px) saturate(180%);border:1px solid rgba(255,255,255,.1);cursor:pointer;transition:transform .15s var(--ease),box-shadow .2s;box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 3px 16px rgba(0,0,0,.2);position:relative;overflow:hidden}
+.crew-card:active{transform:scale(.97);box-shadow:0 0 20px rgba(255,109,46,.15)}
 .crew-card.is-me{border-color:rgba(255,109,46,.2);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 3px 16px rgba(0,0,0,.2),0 0 16px rgba(255,109,46,.06)}
 .cc-ava-wrap{position:relative;flex-shrink:0}
 .cc-ava{width:52px;height:52px;border-radius:50%;overflow:hidden;border:2.5px solid var(--bg4)}.cc-ava img{width:100%;height:100%;object-fit:cover}
@@ -405,30 +402,47 @@ select.ri{appearance:none;-webkit-appearance:none}
 .crew-map-pill::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);animation:activePulse 2s ease infinite}
 
 /* CREW SOS BAR */
-.crew-sos-bar{margin:10px 14px;padding:20px 18px;border-radius:var(--r);background:linear-gradient(135deg,rgba(255,59,48,.2),rgba(255,59,48,.08));backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);border:1px solid rgba(255,59,48,.4);display:flex;align-items:center;gap:14px;cursor:pointer;transition:all .15s;position:relative;overflow:hidden;box-shadow:0 0 40px rgba(255,59,48,.12),inset 0 1px 0 rgba(255,255,255,.06);-webkit-tap-highlight-color:rgba(255,59,48,.2)}
+.crew-sos-bar{margin:10px 14px;padding:20px 18px;border-radius:var(--r);background:linear-gradient(135deg,rgba(255,59,48,.25),rgba(255,59,48,.12));backdrop-filter:blur(50px);-webkit-backdrop-filter:blur(50px);border:1px solid rgba(255,59,48,.5);display:flex;align-items:center;gap:14px;cursor:pointer;transition:all .15s;position:relative;overflow:hidden;box-shadow:0 0 50px rgba(255,59,48,.2),inset 0 1px 0 rgba(255,255,255,.08),0 0 0 2px rgba(255,59,48,.1);-webkit-tap-highlight-color:rgba(255,59,48,.3)}
 .crew-sos-bar:active{transform:scale(.97)}
-.crew-sos-pulse{position:absolute;top:50%;left:16px;width:8px;height:8px;border-radius:50%;background:var(--fire);transform:translateY(-50%);box-shadow:0 0 12px var(--fire)}
-.crew-sos-pulse::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:2px solid var(--fire);animation:sosPulse 1.5s ease-out infinite;opacity:0}
-@keyframes sosPulse{0%{transform:scale(1);opacity:.6}100%{transform:scale(2.5);opacity:0}}
-.crew-sos-icon{font-size:32px;margin-left:12px}
+.crew-sos-pulse{position:absolute;top:50%;left:16px;width:10px;height:10px;border-radius:50%;background:var(--fire);transform:translateY(-50%);box-shadow:0 0 16px var(--fire)}
+.crew-sos-pulse::after{content:'';position:absolute;inset:-6px;border-radius:50%;border:2px solid var(--fire);animation:sosPulse 1.5s ease-out infinite;opacity:0}
+@keyframes sosPulse{0%{transform:scale(1);opacity:.6}100%{transform:scale(3);opacity:0}}
+.crew-sos-icon{font-size:36px;margin-left:12px}
 .crew-sos-text{flex:1}
 .crew-sos-title{font-size:14px;font-weight:800;color:var(--fire)}
 .crew-sos-sub{font-size:11px;color:var(--t3);margin-top:1px}
 .crew-sos-arrow{font-size:20px;color:var(--fire);font-weight:300}
 
 /* CREW QUICK ACTIONS */
-.crew-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:0 14px;margin-bottom:12px}
-.crew-action-btn{display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 8px;border-radius:var(--r);background:linear-gradient(135deg,rgba(22,22,24,.7),rgba(28,28,32,.5));backdrop-filter:blur(50px) saturate(180%);-webkit-backdrop-filter:blur(50px) saturate(180%);border:1px solid rgba(255,255,255,.12);cursor:pointer;transition:all .2s var(--spring);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),inset 0 -1px 0 rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.25),0 0 0 .5px rgba(255,255,255,.03);min-width:56px;-webkit-tap-highlight-color:rgba(255,109,46,.15)}
-.crew-action-btn:active{transform:scale(.88);background:linear-gradient(135deg,rgba(32,32,36,.8),rgba(38,38,42,.6))}
-.cab-icon{width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,rgba(255,109,46,.15),rgba(255,109,46,.05));display:flex;align-items:center;justify-content:center;font-size:26px;border:1px solid rgba(255,109,46,.1);box-shadow:0 0 20px rgba(255,109,46,.08)}
-.crew-action-btn span{font-size:11px;font-weight:800;color:var(--t2);letter-spacing:.3px}
+.crew-actions{display:flex;gap:8px;padding:0 14px;margin-bottom:12px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.crew-actions::-webkit-scrollbar{display:none}
+.crew-action-btn{display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 8px;border-radius:var(--r);background:linear-gradient(135deg,rgba(22,22,24,.7),rgba(28,28,32,.5));backdrop-filter:blur(50px) saturate(180%);-webkit-backdrop-filter:blur(50px) saturate(180%);border:1px solid rgba(255,255,255,.12);cursor:pointer;transition:all .2s var(--spring);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),inset 0 -1px 0 rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.25);min-width:70px;flex-shrink:0;-webkit-tap-highlight-color:rgba(255,109,46,.15)}
+.crew-action-btn:active{transform:scale(.92)}
+.cab-icon{width:56px;height:56px;border-radius:18px;background:linear-gradient(135deg,rgba(255,109,46,.15),rgba(255,109,46,.05));display:flex;align-items:center;justify-content:center;font-size:28px;border:1.5px solid rgba(255,109,46,.2);box-shadow:0 0 20px rgba(255,109,46,.1);transition:box-shadow .2s}
+.crew-action-btn span{font-size:11px;font-weight:800;color:var(--t2);letter-spacing:.3px;text-align:center}
+.cab-invite{background:linear-gradient(135deg,rgba(10,132,255,.2),rgba(10,132,255,.08))!important;border-color:rgba(10,132,255,.15)!important;box-shadow:0 0 20px rgba(10,132,255,.15)!important}
+.cab-drinks{background:linear-gradient(135deg,rgba(255,214,10,.2),rgba(255,214,10,.08))!important;border-color:rgba(255,214,10,.15)!important;box-shadow:0 0 20px rgba(255,214,10,.15)!important}
+.cab-taxi{background:linear-gradient(135deg,rgba(255,204,0,.2),rgba(255,204,0,.08))!important;border-color:rgba(255,204,0,.15)!important;box-shadow:0 0 20px rgba(255,204,0,.15)!important}
+.cab-location{background:linear-gradient(135deg,rgba(48,209,88,.2),rgba(48,209,88,.08))!important;border-color:rgba(48,209,88,.15)!important;box-shadow:0 0 20px rgba(48,209,88,.15)!important}
+.cab-chat{background:linear-gradient(135deg,rgba(191,90,242,.2),rgba(191,90,242,.08))!important;border-color:rgba(191,90,242,.15)!important;box-shadow:0 0 20px rgba(191,90,242,.15)!important}
+.cab-qr{background:linear-gradient(135deg,rgba(0,199,190,.2),rgba(0,199,190,.08))!important;border-color:rgba(0,199,190,.15)!important;box-shadow:0 0 20px rgba(0,199,190,.15)!important}
+.cab-safe{background:linear-gradient(135deg,rgba(52,199,89,.2),rgba(52,199,89,.08))!important;border-color:rgba(52,199,89,.15)!important;box-shadow:0 0 20px rgba(52,199,89,.15)!important}
 
 /* CREW SECTIONS */
-.crew-section{margin:0 0 8px}
-.crew-section-header{display:flex;align-items:center;justify-content:space-between;padding:16px 14px 10px}
+@keyframes crewSectionIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.crew-section{margin:0 0 8px;animation:crewSectionIn .4s var(--ease) both}
+.crew-section:nth-child(1){animation-delay:.05s}
+.crew-section:nth-child(2){animation-delay:.1s}
+.crew-section:nth-child(3){animation-delay:.15s}
+.crew-section:nth-child(4){animation-delay:.2s}
+.crew-section:nth-child(5){animation-delay:.25s}
+.crew-section:nth-child(6){animation-delay:.3s}
+.crew-section:nth-child(7){animation-delay:.35s}
+.crew-section:nth-child(8){animation-delay:.4s}
+.crew-section-header{display:flex;align-items:center;justify-content:space-between;padding:18px 14px 12px}
 .csh-left{display:flex;align-items:center;gap:8px}
-.csh-emoji{font-size:18px}
-.csh-title{font-size:15px;font-weight:800;letter-spacing:-.3px}
+.csh-emoji{font-size:20px;line-height:1}
+.csh-title{font-size:16px;font-weight:800;letter-spacing:-.3px}
 .csh-badge{padding:3px 10px;border-radius:10px;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.8px}
 .live-badge{background:rgba(52,199,89,.12);color:var(--green);border:1px solid rgba(52,199,89,.2)}
 .live-badge::before{content:'';display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--green);margin-right:4px;animation:activePulse 2s ease infinite}
@@ -440,30 +454,32 @@ select.ri{appearance:none;-webkit-appearance:none}
 /* CREW WALL — 24h Posts + Location Pins */
 .wall-badge{background:rgba(255,109,46,.12);color:var(--o);border:1px solid rgba(255,109,46,.2);position:relative}
 .wall-badge::before{content:'';display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--o);margin-right:4px;animation:activePulse 2s ease infinite}
+@keyframes shimmerSlide{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
 .wall-posts{padding:0 14px 8px}
-.wall-post{padding:14px;border-radius:var(--r);background:linear-gradient(135deg,rgba(22,22,24,.7),rgba(28,28,32,.5));backdrop-filter:blur(50px) saturate(200%);-webkit-backdrop-filter:blur(50px) saturate(200%);border:1px solid rgba(255,255,255,.08);margin-bottom:8px;position:relative;overflow:hidden}
+.wall-post{padding:14px;border-radius:var(--r);background:linear-gradient(135deg,rgba(22,22,24,.8),rgba(28,28,32,.6));backdrop-filter:blur(50px) saturate(200%);-webkit-backdrop-filter:blur(50px) saturate(200%);border:1px solid rgba(255,255,255,.12);margin-bottom:8px;position:relative;overflow:hidden;transition:all .2s;cursor:pointer}
+.wall-post:active{transform:scale(.98);box-shadow:0 0 20px rgba(255,109,46,.1)}
 .wall-post-header{display:flex;align-items:center;gap:10px;margin-bottom:8px}
 .wp-ava{width:32px;height:32px;border-radius:50%;overflow:hidden;flex-shrink:0;border:1.5px solid rgba(255,255,255,.12)}.wp-ava img{width:100%;height:100%;object-fit:cover}
 .wp-info{flex:1;min-width:0}
 .wp-name{font-size:12px;font-weight:800}
 .wp-time{font-size:10px;color:var(--t3)}
 .wp-expire{font-size:9px;color:var(--o);font-weight:700;display:flex;align-items:center;gap:3px}
-.wall-post-text{font-size:14px;font-weight:500;line-height:1.5;color:var(--t1);margin-bottom:6px}
-.wall-post-loc{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:10px;background:rgba(255,109,46,.08);border:1px solid rgba(255,109,46,.12);font-size:11px;font-weight:700;color:var(--o);margin-bottom:8px;cursor:pointer}
-.wall-post-loc:active{transform:scale(.96)}
-.wall-post-react{display:flex;gap:6px}
-.wall-react-btn{padding:4px 10px;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.06);font-size:12px;cursor:pointer;transition:all .15s}
-.wall-react-btn:active{transform:scale(.9)}
-.wall-react-btn.reacted{background:rgba(255,109,46,.1);border-color:rgba(255,109,46,.15)}
+.wall-post-text{font-size:15px;font-weight:500;line-height:1.5;color:var(--t1);margin-bottom:8px}
+.wall-post-loc{display:inline-flex;align-items:center;gap:4px;padding:6px 12px;border-radius:12px;background:rgba(255,109,46,.12);border:1px solid rgba(255,109,46,.2);font-size:12px;font-weight:700;color:var(--o);margin-bottom:8px;cursor:pointer;transition:all .15s}
+.wall-post-loc:active{transform:scale(.94)}
+.wall-post-react{display:flex;gap:6px;margin-top:4px}
+.wall-react-btn{padding:6px 12px;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);font-size:13px;cursor:pointer;transition:all .15s;font-weight:600}
+.wall-react-btn:active{transform:scale(.92)}
+.wall-react-btn.reacted{background:rgba(255,109,46,.15);border-color:rgba(255,109,46,.3);color:var(--o)}
 .wall-input-area{padding:0 14px 14px;display:flex;gap:8px;align-items:center}
-.wall-input{flex:1;padding:14px 16px;border-radius:16px;background:rgba(22,22,24,.6);border:1px solid rgba(255,255,255,.12);color:var(--t1);font-size:15px;font-family:inherit;outline:none;transition:border-color .2s}
-.wall-input:focus{border-color:rgba(255,109,46,.5)}
+.wall-input{flex:1;padding:14px 16px;border-radius:18px;background:rgba(22,22,24,.8);backdrop-filter:blur(20px);border:1.5px solid rgba(255,255,255,.15);color:var(--t1);font-size:15px;font-family:inherit;outline:none;transition:border-color .2s,box-shadow .2s;box-shadow:inset 0 1px 4px rgba(0,0,0,.3)}
+.wall-input:focus{border-color:rgba(255,109,46,.6);box-shadow:inset 0 1px 4px rgba(0,0,0,.3),0 0 16px rgba(255,109,46,.15)}
 .wall-input::placeholder{color:var(--t3)}
-.wall-pin-btn{width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;-webkit-tap-highlight-color:rgba(255,109,46,.15)}
-.wall-pin-btn:active{transform:scale(.85)}
-.wall-pin-btn.pinned{background:rgba(255,109,46,.2);border-color:rgba(255,109,46,.4)}
-.wall-send-btn{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--o),#FF6B6B);border:none;color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .15s;box-shadow:0 4px 16px rgba(255,109,46,.25);-webkit-tap-highlight-color:rgba(255,109,46,.2)}
-.wall-send-btn:active{transform:scale(.85)}
+.wall-pin-btn{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,rgba(255,109,46,.1),rgba(255,109,46,.04));border:1.5px solid rgba(255,109,46,.15);font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;-webkit-tap-highlight-color:rgba(255,109,46,.15)}
+.wall-pin-btn:active{transform:scale(.88)}
+.wall-pin-btn.pinned{background:linear-gradient(135deg,rgba(255,109,46,.25),rgba(255,109,46,.15));border-color:rgba(255,109,46,.5);box-shadow:0 0 20px rgba(255,109,46,.2)}
+.wall-send-btn{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--o),#FF6B6B);border:none;color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .15s,box-shadow .2s;box-shadow:0 6px 20px rgba(255,109,46,.3),0 0 20px rgba(255,109,46,.15);-webkit-tap-highlight-color:rgba(255,109,46,.2)}
+.wall-send-btn:active{transform:scale(.88);box-shadow:0 4px 12px rgba(255,109,46,.3)}
 .wall-empty{padding:20px 14px;text-align:center}
 .wall-empty-icon{font-size:36px;margin-bottom:6px}
 .wall-empty-text{font-size:13px;color:var(--t3);font-weight:600}
@@ -1409,12 +1425,6 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
           </div>
         </div>
 
-        <!-- CREW INVITE CTA -->
-        <div class="crew-invite" onclick="inviteCrew()">
-          <div class="ci-icon">📲</div>
-          <div><h4>Lade deine Crew ein!</h4><p>Teile deinen Link und sammle Bonus-Punkte</p></div>
-        </div>
-
         <!-- SOS EMERGENCY BUTTON — always visible on crew page -->
         <div class="crew-sos-bar" onclick="openSOS()">
           <div class="crew-sos-pulse"></div>
@@ -1429,36 +1439,36 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
         <!-- CREW QUICK ACTIONS -->
         <div class="crew-actions">
           <div class="crew-action-btn" onclick="inviteCrew()">
-            <div class="cab-icon">📲</div>
+            <div class="cab-icon cab-invite">📲</div>
             <span>Einladen</span>
           </div>
           <div class="crew-action-btn" onclick="openAlcoholTracker()">
-            <div class="cab-icon">🍺</div>
+            <div class="cab-icon cab-drinks">🍺</div>
             <span>Drinks</span>
           </div>
           <div class="crew-action-btn" onclick="openTaxiSplitter()">
-            <div class="cab-icon">🚕</div>
+            <div class="cab-icon cab-taxi">🚕</div>
             <span>Taxi-Split</span>
           </div>
           <div class="crew-action-btn" onclick="shareCrewLocation()">
-            <div class="cab-icon">📍</div>
+            <div class="cab-icon cab-location">📍</div>
             <span>Standort</span>
           </div>
           <div class="crew-action-btn" onclick="openCrewChat()">
-            <div class="cab-icon">💬</div>
+            <div class="cab-icon cab-chat">💬</div>
             <span>Chat</span>
           </div>
           <div class="crew-action-btn" onclick="openQRScanner()">
-            <div class="cab-icon">📷</div>
+            <div class="cab-icon cab-qr">📷</div>
             <span>QR Scan</span>
           </div>
           <div class="crew-action-btn" onclick="sendSafeCheckIn()">
-            <div class="cab-icon">✅</div>
+            <div class="cab-icon cab-safe">✅</div>
             <span>Safe</span>
           </div>
         </div>
 
-        <!-- CREW MEMBERS — The Heart (Dashboard) -->
+        <!-- CREW MEMBERS — The Heart (Dashboard) — SOCIAL PROOF -->
         <div class="crew-section">
           <div class="crew-section-header">
             <div class="csh-left"><span class="csh-emoji">👯</span><span class="csh-title">Deine Crew</span></div>
@@ -1467,16 +1477,7 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
           <div id="crewList"></div>
         </div>
 
-        <!-- CREW ACTIVITY FEED — What's happening -->
-        <div class="crew-section">
-          <div class="crew-section-header">
-            <div class="csh-left"><span class="csh-emoji">⚡</span><span class="csh-title">Crew-Aktivität</span></div>
-            <div class="csh-badge live-badge">LIVE</div>
-          </div>
-          <div id="crewActivityFeed"></div>
-        </div>
-
-        <!-- CREW WALL — 24h Posts mit Location-Pins -->
+        <!-- CREW WALL — 24h Posts mit Location-Pins — UGC ENGAGEMENT -->
         <div class="crew-section">
           <div class="crew-section-header">
             <div class="csh-left"><span class="csh-emoji">📍</span><span class="csh-title">Crew Wall</span></div>
@@ -1490,7 +1491,41 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
           </div>
         </div>
 
-        <!-- STORY RECAP — Fullscreen Snap-style, Crew Slides -->
+        <!-- DAILY QUESTION — Tages-Voting — GAMIFICATION -->
+        <div class="crew-section highlight-section">
+          <div class="crew-section-header">
+            <div class="csh-left"><span class="csh-emoji">🗳️</span><span class="csh-title">Tages-Voting</span></div>
+            <div class="csh-badge vote-badge">TÄGLICH NEU</div>
+          </div>
+          <div id="dailyVoting"><p class="crew-empty">Wird geladen...</p></div>
+        </div>
+
+        <!-- LEADERBOARD — Gamification + FOMO -->
+        <div class="crew-section">
+          <div class="crew-section-header">
+            <div class="csh-left"><span class="csh-emoji">🏆</span><span class="csh-title">Leaderboard</span></div>
+          </div>
+          <div id="leaderboardList" style="padding:0 14px 14px"><p class="crew-empty">Wird geladen...</p></div>
+        </div>
+
+        <!-- CREW ACTIVITY FEED — What's happening -->
+        <div class="crew-section">
+          <div class="crew-section-header">
+            <div class="csh-left"><span class="csh-emoji">⚡</span><span class="csh-title">Crew-Aktivität</span></div>
+            <div class="csh-badge live-badge">LIVE</div>
+          </div>
+          <div id="crewActivityFeed"></div>
+        </div>
+
+        <!-- TONIGHT PLANNER — Where are we going? -->
+        <div class="crew-section">
+          <div class="crew-section-header">
+            <div class="csh-left"><span class="csh-emoji">🌙</span><span class="csh-title">Heute Abend</span></div>
+          </div>
+          <div id="tonightPlanner" style="padding:0 14px 14px"><p class="crew-empty">Wird geladen...</p></div>
+        </div>
+
+        <!-- CREW STORY — Snap-style fullscreen, Crew Slides -->
         <div class="crew-section">
           <div class="crew-section-header">
             <div class="csh-left"><span class="csh-emoji">📸</span><span class="csh-title">Crew Story</span></div>
@@ -1503,45 +1538,12 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
           </div>
         </div>
 
-        <!-- DAILY QUESTION — Tagesvollster + Tagesrituale -->
-        <div class="crew-section highlight-section">
-          <div class="crew-section-header">
-            <div class="csh-left"><span class="csh-emoji">🗳️</span><span class="csh-title">Tages-Voting</span></div>
-            <div class="csh-badge vote-badge">TÄGLICH NEU</div>
-          </div>
-          <div id="dailyVoting"><p class="crew-empty">Wird geladen...</p></div>
-        </div>
-
-        <!-- TONIGHT PLANNER — Where are we going? -->
-        <div class="crew-section">
-          <div class="crew-section-header">
-            <div class="csh-left"><span class="csh-emoji">🌙</span><span class="csh-title">Heute Abend</span></div>
-          </div>
-          <div id="tonightPlanner" style="padding:0 14px 14px"><p class="crew-empty">Wird geladen...</p></div>
-        </div>
-
-        <!-- CREW LOCATIONS — Who's where -->
-        <div class="crew-section">
-          <div class="crew-section-header">
-            <div class="csh-left"><span class="csh-emoji">📍</span><span class="csh-title">Crew-Standorte</span></div>
-          </div>
-          <div id="crewLocationList" style="padding:0 14px 14px"></div>
-        </div>
-
         <!-- DRUNK LIST — Tagesvollster -->
         <div class="crew-section">
           <div class="crew-section-header">
             <div class="csh-left"><span class="csh-emoji">🍻</span><span class="csh-title">Tagesvollster</span></div>
           </div>
           <div id="drunkList" style="padding:0 14px 14px;display:flex;gap:10px;overflow-x:auto"></div>
-        </div>
-
-        <!-- CREW SUGGESTIONS — Time-based activity tips -->
-        <div class="crew-section">
-          <div class="crew-section-header">
-            <div class="csh-left"><span class="csh-emoji">💡</span><span class="csh-title">Crew-Tipps</span></div>
-          </div>
-          <div id="crewTips" style="padding:0 14px 14px"></div>
         </div>
 
         <!-- CREW CHALLENGE — Daily Mission -->
@@ -1553,12 +1555,20 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
           <div id="challengeList" style="padding:0 14px 14px"><p class="crew-empty">Wird geladen...</p></div>
         </div>
 
-        <!-- LEADERBOARD — Gamification -->
+        <!-- CREW SUGGESTIONS — Time-based activity tips -->
         <div class="crew-section">
           <div class="crew-section-header">
-            <div class="csh-left"><span class="csh-emoji">🏆</span><span class="csh-title">Leaderboard</span></div>
+            <div class="csh-left"><span class="csh-emoji">💡</span><span class="csh-title">Crew-Tipps</span></div>
           </div>
-          <div id="leaderboardList" style="padding:0 14px 14px"><p class="crew-empty">Wird geladen...</p></div>
+          <div id="crewTips" style="padding:0 14px 14px"></div>
+        </div>
+
+        <!-- PARTY GAMES -->
+        <div class="crew-section">
+          <div class="crew-section-header">
+            <div class="csh-left"><span class="csh-emoji">🎲</span><span class="csh-title">Party-Spiele</span></div>
+          </div>
+          <div id="gameList"></div>
         </div>
 
         <!-- CONNECT HINT -->
@@ -1569,14 +1579,6 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
             <div style="font-size:12px;color:var(--t3);margin-bottom:12px;line-height:1.5">Swipe durch Profile und connecte dich direkt über Instagram, Snapchat oder TikTok!</div>
             <button onclick="go('match',document.querySelectorAll('#navBar button')[3])" style="padding:12px 24px;border:none;border-radius:12px;background:var(--gold);color:#000;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit">🔥 Entdecken</button>
           </div>
-        </div>
-
-        <!-- PARTY GAMES -->
-        <div class="crew-section">
-          <div class="crew-section-header">
-            <div class="csh-left"><span class="csh-emoji">🎲</span><span class="csh-title">Party-Spiele</span></div>
-          </div>
-          <div id="gameList"></div>
         </div>
 
         <!-- CREW IDENTITY — Profile + Board + Battle -->
@@ -1726,7 +1728,7 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 50;
+  var APP_VERSION = 51;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     localStorage.setItem('crew_app_v', APP_VERSION);
@@ -3709,9 +3711,10 @@ window.submitWallPost=async function(){
   var crewId=getActiveCrewId();
   if(!crewId){toast('Keine aktive Crew!');return}
 
+  var sess=null;try{var {data:sd}=await sb.auth.getSession();sess=sd&&sd.session}catch(e){}
   var postData={
     crew_id:crewId,
-    user_id:ME.user_id,
+    user_id:(sess&&sess.user&&sess.user.id)||ME.user_id,
     user_name:ME.name||'Anonym',
     user_photo:ME.photo_url||'',
     message:text,
