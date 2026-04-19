@@ -1610,6 +1610,35 @@ button:focus-visible,select:focus-visible,input:focus-visible{
   filter:drop-shadow(0 0 18px rgba(254,60,114,.3));
 }
 
+/* — TRAVEL MAP OVERLAY — */
+.travel-ov{position:fixed;inset:0;z-index:99998;background:var(--bg);display:none;flex-direction:column}
+.travel-ov.show{display:flex}
+.tm-header{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.06);background:linear-gradient(180deg,rgba(7,6,10,.9),rgba(7,6,10,.7));backdrop-filter:blur(40px) saturate(220%);-webkit-backdrop-filter:blur(40px) saturate(220%);position:relative;z-index:3}
+.tm-back{width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.09);background:linear-gradient(135deg,rgba(255,255,255,.07),rgba(255,255,255,.03));color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.tm-title{flex:1}
+.tm-title h2{font-size:18px;font-weight:900;letter-spacing:-.4px;background:var(--flame);-webkit-background-clip:text;background-clip:text;color:transparent}
+.tm-title .tm-sub{font-size:11px;color:var(--t3);font-weight:600;margin-top:2px}
+.tm-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:12px 14px;background:linear-gradient(180deg,rgba(7,6,10,.7),transparent);position:relative;z-index:2}
+.tm-stat{padding:10px 8px;border-radius:14px;background:linear-gradient(135deg,rgba(24,20,28,.7),rgba(32,26,36,.45));border:1px solid rgba(255,255,255,.06);backdrop-filter:blur(24px) saturate(220%);-webkit-backdrop-filter:blur(24px) saturate(220%);text-align:center;box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
+.tm-stat-n{font-size:20px;font-weight:900;letter-spacing:-.6px;background:var(--flame);-webkit-background-clip:text;background-clip:text;color:transparent}
+.tm-stat-l{font-size:9px;font-weight:800;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;margin-top:2px}
+.tm-map-wrap{flex:1;position:relative;margin:0 12px;border-radius:22px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.4),inset 0 0 0 1px rgba(255,255,255,.05)}
+#travelMapC{position:absolute;inset:0;background:#0C0A10}
+.tm-pin{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(254,60,114,.95),rgba(255,88,100,.85));color:#fff;font-size:10px;font-weight:900;border:2px solid #07060A;box-shadow:0 4px 12px rgba(254,60,114,.5),0 0 0 2px rgba(254,60,114,.15)}
+.tm-pin span{display:block;line-height:1}
+.tm-pin-last{background:linear-gradient(135deg,#FFD60A,#FF7854);animation:tmLastPulse 2s ease-in-out infinite;box-shadow:0 4px 14px rgba(255,120,84,.6),0 0 0 4px rgba(255,120,84,.12)}
+@keyframes tmLastPulse{0%,100%{box-shadow:0 4px 14px rgba(255,120,84,.6),0 0 0 4px rgba(255,120,84,.12)}50%{box-shadow:0 4px 14px rgba(255,120,84,.6),0 0 0 14px rgba(255,120,84,.02)}}
+.tm-list-wrap{max-height:38%;overflow-y:auto;padding:14px 16px;background:linear-gradient(180deg,transparent,rgba(7,6,10,.9) 12%);position:relative;z-index:2;-webkit-overflow-scrolling:touch}
+.tm-list-wrap::-webkit-scrollbar{display:none}
+.tm-list-title{font-size:12px;font-weight:900;color:var(--t);letter-spacing:.5px;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.tm-list-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(255,255,255,.1),transparent);margin-left:6px}
+.tm-row{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.tm-row:last-child{border-bottom:none}
+.tm-row-dot{width:8px;height:8px;border-radius:50%;background:var(--flame);margin-top:6px;flex-shrink:0;box-shadow:0 0 10px rgba(254,60,114,.5)}
+.tm-row-body{flex:1;min-width:0}
+.tm-row-name{font-size:13px;font-weight:800;letter-spacing:-.2px;color:var(--t);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tm-row-sub{font-size:11px;color:var(--t3);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
 /* — END DESIGN 2.0 — */
 </style>
 </head>
@@ -1903,6 +1932,30 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
       <button onclick="acceptLocationConsent('session')" style="width:100%;padding:15px;border-radius:14px;border:none;background:rgba(255,255,255,.06);color:var(--t2);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;border:1px solid rgba(255,255,255,.1)">Nur für diese Sitzung</button>
       <button onclick="acceptLocationConsent('denied')" style="width:100%;padding:12px;border-radius:14px;border:none;background:none;color:var(--t3);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit">Nicht freigeben</button>
     </div>
+  </div>
+</div>
+
+<!-- TRAVEL MAP OVERLAY -->
+<div class="travel-ov" id="travelMapOv">
+  <div class="tm-header">
+    <button class="tm-back" onclick="closeTravelMap()" aria-label="Zurück">←</button>
+    <div class="tm-title">
+      <h2>Reise-Tracker</h2>
+      <div class="tm-sub">Alle Orte an denen du warst</div>
+    </div>
+  </div>
+  <div class="tm-stats">
+    <div class="tm-stat"><div class="tm-stat-n" id="tmStatPlaces">0</div><div class="tm-stat-l">Orte</div></div>
+    <div class="tm-stat"><div class="tm-stat-n" id="tmStatCities">0</div><div class="tm-stat-l">Städte</div></div>
+    <div class="tm-stat"><div class="tm-stat-n" id="tmStatCountries">0</div><div class="tm-stat-l">Länder</div></div>
+    <div class="tm-stat"><div class="tm-stat-n" id="tmStatKm">0</div><div class="tm-stat-l">km</div></div>
+  </div>
+  <div class="tm-map-wrap">
+    <div id="travelMapC"></div>
+  </div>
+  <div class="tm-list-wrap">
+    <div class="tm-list-title">Letzte Orte</div>
+    <div id="tmList"></div>
   </div>
 </div>
 
@@ -2415,6 +2468,7 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
 <div class="pmi" id="adminMenuItem" style="display:none;background:linear-gradient(135deg,rgba(255,109,46,.08),rgba(255,109,46,.02));border:1px solid rgba(255,109,46,.2)" onclick="openAdminPanel()"><div class="pmi-icon o">👑</div><span class="pmi-label" style="color:var(--o);font-weight:700">Admin Dashboard</span><span class="pmi-arrow" style="color:var(--o)">›</span></div>
 <div class="pmi" style="background:linear-gradient(135deg,rgba(255,214,10,.08),rgba(255,214,10,.02));border:1px solid rgba(255,214,10,.15)" onclick="showMyQR()"><div class="pmi-icon o" style="background:rgba(255,214,10,.1)">📲</div><span class="pmi-label" style="font-weight:700">Mein QR-Code</span><span class="pmi-arrow" style="color:var(--yellow)">›</span></div>
 <div class="pmi" style="background:linear-gradient(135deg,rgba(48,209,88,.08),rgba(48,209,88,.02));border:1px solid rgba(48,209,88,.15)" onclick="openQRScanner()"><div class="pmi-icon o" style="background:rgba(48,209,88,.1)">📷</div><span class="pmi-label" style="font-weight:700">QR-Code scannen</span><span class="pmi-arrow" style="color:var(--mint)">›</span></div>
+<div class="pmi" style="background:linear-gradient(135deg,rgba(254,60,114,.12),rgba(255,120,84,.04));border:1px solid rgba(254,60,114,.25)" onclick="openTravelMap()"><div class="pmi-icon o" style="background:linear-gradient(135deg,rgba(254,60,114,.2),rgba(255,120,84,.08));color:#FF5864">🗺️</div><span class="pmi-label" style="font-weight:800">Reise-Tracker <span style="font-size:10px;font-weight:700;color:#FF5864;margin-left:4px">NEU</span></span><span class="pmi-arrow" style="color:#FF5864">›</span></div>
 <div class="pe-section">Profil & Einstellungen</div>
 <div class="pmi" onclick="editProfile()"><div class="pmi-icon o">✏️</div><span class="pmi-label">Profil bearbeiten</span><span class="pmi-arrow">›</span></div>
 <div class="pmi" onclick="editSocials()"><div class="pmi-icon o">📱</div><span class="pmi-label">Social Media verknüpfen</span><span class="pmi-arrow">›</span></div>
@@ -2453,7 +2507,7 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 60;
+  var APP_VERSION = 62;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     // Force-clear old non-UUID crew IDs
@@ -2557,42 +2611,247 @@ function checkLocationConsent(){
   // Unknown — show consent dialog
   document.getElementById('locationConsentOv').style.display = 'flex';
 }
-function startGpsTracking(){
-  if(!navigator.geolocation){ _gpsStatus='unavailable'; return; }
-  navigator.geolocation.watchPosition(function(pos){
-    try {
-      var ll=[pos.coords.latitude,pos.coords.longitude];
-      var acc=pos.coords.accuracy;
-      _gpsStatus='active';
-      _gpsLastUpdate=Date.now();
-      _gpsAccuracy=acc;
-      userLat=ll[0];userLng=ll[1];
-      if(ME){ME.lat=ll[0];ME.lng=ll[1]}
-      if(userMarker)userMarker.setLatLng(ll);
-      if(userAccCircle&&rMap)rMap.removeLayer(userAccCircle);
-      if(rMap)userAccCircle=L.circle(ll,{radius:acc,color:'#0A84FF',fillColor:'#0A84FF',fillOpacity:0.08,weight:1,opacity:0.3}).addTo(rMap);
-      if(!window._mapCentered&&rMap){rMap.setView(ll,17);window._mapCentered=true}
-      if(cMap&&window._crewUserMarker){window._crewUserMarker.setLatLng(ll)}
-      if(ME&&ME.user_id)buildNearby().catch(function(e){console.warn('[CREW] buildNearby error:',e)});
-      var locMode=localStorage.getItem('location_sharing_mode')||'crew';
-      if(ME&&ME.user_id&&locMode!=='nobody'){
-        sb.from('profiles').update({lat:ll[0],lng:ll[1],location_updated_at:new Date().toISOString()}).eq('user_id',ME.user_id);
-      } else if(ME&&ME.user_id&&locMode==='nobody'){
-        sb.from('profiles').update({lat:null,lng:null,location_updated_at:new Date().toISOString()}).eq('user_id',ME.user_id);
-      }
-    } catch(e){ console.warn('[CREW] watchPosition callback error:', e); }
-  },function(err){
-    console.warn('[CREW] Geolocation error:',err.message,err.code);
-    if(err.code===1)_gpsStatus='denied';
-    else if(err.code===2)_gpsStatus='unavailable';
-    else if(err.code===3)_gpsStatus='timeout';
-    if(err.code===1&&ME){
+// ════════════════════════════════════════════════════════════
+// GPS TRACKING v2 — robust two-phase geolocation
+//   Phase 1: Fast low-accuracy initial fix (cached OK)
+//   Phase 2: High-accuracy continuous watchPosition with long timeout
+//   Auto-retry with exponential fallback on timeout
+//   Feeds travel-tracker (visited places)
+// ════════════════════════════════════════════════════════════
+var _gpsWatchId = null;
+var _gpsRetryCount = 0;
+function _onGpsFix(pos, source){
+  try {
+    var ll=[pos.coords.latitude,pos.coords.longitude];
+    var acc=pos.coords.accuracy;
+    _gpsStatus='active';
+    _gpsLastUpdate=Date.now();
+    _gpsAccuracy=acc;
+    _gpsRetryCount=0;
+    userLat=ll[0];userLng=ll[1];
+    if(ME){ME.lat=ll[0];ME.lng=ll[1]}
+    if(userMarker)userMarker.setLatLng(ll);
+    if(userAccCircle&&rMap)rMap.removeLayer(userAccCircle);
+    if(rMap)userAccCircle=L.circle(ll,{radius:acc,color:'#FE3C72',fillColor:'#FE3C72',fillOpacity:0.08,weight:1,opacity:0.3}).addTo(rMap);
+    if(!window._mapCentered&&rMap){rMap.setView(ll,17);window._mapCentered=true}
+    if(cMap&&window._crewUserMarker){window._crewUserMarker.setLatLng(ll)}
+    if(!window._cmapCentered&&cMap){cMap.setView(ll,17);window._cmapCentered=true}
+    if(ME&&ME.user_id)buildNearby().catch(function(e){console.warn('[CREW] buildNearby error:',e)});
+    var locMode=localStorage.getItem('location_sharing_mode')||'crew';
+    if(ME&&ME.user_id&&locMode!=='nobody'){
+      sb.from('profiles').update({lat:ll[0],lng:ll[1],location_updated_at:new Date().toISOString()}).eq('user_id',ME.user_id);
+    } else if(ME&&ME.user_id&&locMode==='nobody'){
+      sb.from('profiles').update({lat:null,lng:null,location_updated_at:new Date().toISOString()}).eq('user_id',ME.user_id);
+    }
+    // Feed travel-tracker (throttled inside)
+    try{ if(typeof maybeLogVisitedPlace==='function') maybeLogVisitedPlace(ll[0],ll[1],acc); }catch(e){}
+    updateGpsBanner();
+  } catch(e){ console.warn('[CREW] _onGpsFix error:', e); }
+}
+function _onGpsError(err){
+  console.warn('[CREW] Geolocation error:',err.message,err.code,'retry',_gpsRetryCount);
+  if(err.code===1){
+    _gpsStatus='denied';
+    if(ME){
       ME.lat=null;ME.lng=null;userLat=0;userLng=0;
       if(ME.user_id)sb.from('profiles').update({lat:null,lng:null}).eq('user_id',ME.user_id);
     }
-  },
-  {enableHighAccuracy:true,maximumAge:5000,timeout:10000});
+    updateGpsBanner();
+    return;
+  }
+  if(err.code===2) _gpsStatus='unavailable';
+  else if(err.code===3) _gpsStatus='timeout';
+  updateGpsBanner();
+  // Retry once with looser settings on timeout / position unavailable
+  if((err.code===3||err.code===2) && _gpsRetryCount<3){
+    _gpsRetryCount++;
+    setTimeout(function(){
+      if(!navigator.geolocation)return;
+      if(_gpsWatchId!==null){ try{navigator.geolocation.clearWatch(_gpsWatchId)}catch(e){} _gpsWatchId=null; }
+      navigator.geolocation.getCurrentPosition(
+        function(p){ _onGpsFix(p,'retry'); startGpsTracking(); },
+        function(e){ console.warn('[CREW] retry failed:',e.message); },
+        {enableHighAccuracy:false,maximumAge:60000,timeout:30000}
+      );
+    }, 2000*_gpsRetryCount);
+  }
 }
+function startGpsTracking(){
+  if(!navigator.geolocation){ _gpsStatus='unavailable'; updateGpsBanner(); return; }
+  // Clear any existing watch
+  if(_gpsWatchId!==null){ try{navigator.geolocation.clearWatch(_gpsWatchId)}catch(e){} _gpsWatchId=null; }
+  // Phase 1: Fast initial fix (cached OK, low accuracy, quick timeout)
+  navigator.geolocation.getCurrentPosition(
+    function(pos){ _onGpsFix(pos,'initial'); },
+    function(err){ console.warn('[CREW] Initial GPS fix failed:',err.message); },
+    {enableHighAccuracy:false,maximumAge:120000,timeout:8000}
+  );
+  // Phase 2: Continuous high-accuracy watch with generous timeout (30s)
+  _gpsWatchId = navigator.geolocation.watchPosition(
+    function(pos){ _onGpsFix(pos,'watch'); },
+    _onGpsError,
+    {enableHighAccuracy:true,maximumAge:10000,timeout:30000}
+  );
+}
+// ════════════════════════════════════════════════════════════
+// TRAVEL TRACKER — automatic visited-places logging
+//   Dedupes by distance (>80m) and cooldown (>2 min) vs last point
+//   Reverse-geocodes via Nominatim (OSM) best-effort
+//   Syncs to Supabase `visited_places` with local fallback
+// ════════════════════════════════════════════════════════════
+var VISITED = [];          // in-memory cache
+var _lastVisitTs = 0;
+var _lastVisitLL = null;
+var _visitsLoaded = false;
+function _haversine(a,b){
+  var R=6371, toR=Math.PI/180;
+  var dLat=(b[0]-a[0])*toR, dLng=(b[1]-a[1])*toR;
+  var s1=Math.sin(dLat/2), s2=Math.sin(dLng/2);
+  var h=s1*s1 + Math.cos(a[0]*toR)*Math.cos(b[0]*toR)*s2*s2;
+  return 2*R*Math.asin(Math.sqrt(h));
+}
+function maybeLogVisitedPlace(lat,lng,acc){
+  try{
+    if(!lat||!lng) return;
+    if(acc && acc>300) return;            // ignore very inaccurate fixes
+    var now=Date.now();
+    if(now-_lastVisitTs < 120000) return;  // min 2 min between logs
+    if(_lastVisitLL){
+      var dKm=_haversine(_lastVisitLL,[lat,lng]);
+      if(dKm*1000 < 80) return;            // need at least 80m movement
+    }
+    _lastVisitTs=now; _lastVisitLL=[lat,lng];
+    // Reverse geocode (best-effort, don't block)
+    var entry = { lat:lat, lng:lng, accuracy:acc||null, visited_at:new Date().toISOString(), place_name:null, city:null, country:null };
+    VISITED.push(entry);
+    _persistVisited();
+    fetch('https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat='+lat+'&lon='+lng+'&zoom=14&accept-language=de', {headers:{'Accept':'application/json'}})
+      .then(function(r){ return r.ok?r.json():null; })
+      .then(function(j){
+        if(!j) return;
+        var a=j.address||{};
+        entry.place_name = j.name || a.tourism || a.leisure || a.attraction || a.amenity || a.suburb || a.neighbourhood || a.village || a.town || a.city_district || a.city || a.state || null;
+        entry.city = a.city || a.town || a.village || a.municipality || a.county || null;
+        entry.country = a.country || null;
+        _persistVisited();
+        _syncVisitedToCloud(entry);
+      })
+      .catch(function(){
+        _syncVisitedToCloud(entry);
+      });
+  }catch(e){ console.warn('[TRAVEL] log error:',e); }
+}
+function _persistVisited(){
+  try{ localStorage.setItem('visited_places', JSON.stringify(VISITED.slice(-500))); }catch(e){}
+}
+function _syncVisitedToCloud(entry){
+  if(!ME||!ME.user_id||!sb) return;
+  try{
+    sb.from('visited_places').insert({
+      user_id: ME.user_id,
+      lat: entry.lat, lng: entry.lng,
+      accuracy: entry.accuracy,
+      place_name: entry.place_name, city: entry.city, country: entry.country,
+      visited_at: entry.visited_at
+    }).then(function(r){ /* silent */ }, function(e){ console.warn('[TRAVEL] cloud sync failed:',e) });
+  }catch(e){}
+}
+async function loadVisitedPlaces(){
+  // Local cache first
+  try{
+    var cache = localStorage.getItem('visited_places');
+    if(cache) VISITED = JSON.parse(cache)||[];
+  }catch(e){ VISITED = []; }
+  // Cloud sync
+  if(ME&&ME.user_id&&sb){
+    try{
+      var r = await sb.from('visited_places').select('*').eq('user_id',ME.user_id).order('visited_at',{ascending:false}).limit(500);
+      if(r&&r.data&&r.data.length){
+        VISITED = r.data.map(function(d){ return {lat:d.lat,lng:d.lng,accuracy:d.accuracy,visited_at:d.visited_at,place_name:d.place_name,city:d.city,country:d.country}; });
+        _persistVisited();
+      }
+    }catch(e){ console.warn('[TRAVEL] load from cloud failed:',e); }
+  }
+  _visitsLoaded=true;
+  return VISITED;
+}
+function formatDate(iso){
+  try{
+    var d=new Date(iso);
+    return d.toLocaleDateString('de-DE',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  }catch(e){ return iso; }
+}
+// Travel-Map overlay
+var _travelMap = null, _travelLayer = null;
+async function openTravelMap(){
+  var ov=document.getElementById('travelMapOv');
+  if(!ov){ console.warn('[TRAVEL] overlay missing'); return; }
+  ov.style.display='flex';
+  var list = await loadVisitedPlaces();
+  // Build stats
+  var cities = {}, countries = {}, totalKm = 0;
+  var sorted = list.slice().sort(function(a,b){ return new Date(a.visited_at)-new Date(b.visited_at); });
+  for(var i=0;i<sorted.length;i++){
+    if(sorted[i].city) cities[sorted[i].city]=1;
+    if(sorted[i].country) countries[sorted[i].country]=1;
+    if(i>0) totalKm += _haversine([sorted[i-1].lat,sorted[i-1].lng],[sorted[i].lat,sorted[i].lng]);
+  }
+  document.getElementById('tmStatPlaces').textContent = list.length;
+  document.getElementById('tmStatCities').textContent = Object.keys(cities).length;
+  document.getElementById('tmStatCountries').textContent = Object.keys(countries).length;
+  document.getElementById('tmStatKm').textContent = Math.round(totalKm).toLocaleString('de-DE');
+  // Build / reuse map
+  setTimeout(function(){
+    var c=document.getElementById('travelMapC');
+    if(!c) return;
+    if(!_travelMap){
+      _travelMap = L.map(c,{zoomControl:true,attributionControl:false,scrollWheelZoom:true,maxZoom:19,minZoom:2}).setView([39.57,2.65],6);
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{maxZoom:19,attribution:''}).addTo(_travelMap);
+    }
+    if(_travelLayer){ _travelMap.removeLayer(_travelLayer); _travelLayer=null; }
+    var group = L.layerGroup();
+    var polyPts = [];
+    var bounds = [];
+    sorted.forEach(function(p,i){
+      var isLast = (i===sorted.length-1);
+      var html='<div class="tm-pin'+(isLast?' tm-pin-last':'')+'"><span>'+(i+1)+'</span></div>';
+      L.marker([p.lat,p.lng],{icon:L.divIcon({html:html,className:'',iconSize:[28,28],iconAnchor:[14,14]})})
+        .bindPopup('<div style="min-width:180px;font-family:Inter,sans-serif"><div style="font-weight:800;font-size:13px;color:#FF5864">'+(p.place_name||'Ort '+(i+1))+'</div>'+(p.city?'<div style="font-size:11px;color:#666;margin-top:2px">'+p.city+(p.country?' · '+p.country:'')+'</div>':'')+'<div style="font-size:10px;color:#999;margin-top:4px">'+formatDate(p.visited_at)+'</div></div>')
+        .addTo(group);
+      polyPts.push([p.lat,p.lng]);
+      bounds.push([p.lat,p.lng]);
+    });
+    if(polyPts.length>1){
+      L.polyline(polyPts,{color:'#FE3C72',weight:2.5,opacity:.55,dashArray:'5,8'}).addTo(group);
+    }
+    _travelLayer = group;
+    group.addTo(_travelMap);
+    if(bounds.length){
+      _travelMap.fitBounds(bounds,{padding:[40,40],maxZoom:14});
+    } else if(userLat && userLng){
+      _travelMap.setView([userLat,userLng],10);
+    }
+    _travelMap.invalidateSize();
+  },100);
+  // Build recent list
+  var listEl = document.getElementById('tmList');
+  if(listEl){
+    if(!list.length){
+      listEl.innerHTML='<div style="padding:24px;text-align:center;color:var(--t3);font-size:13px;line-height:1.6">Noch keine Orte gespeichert.<br>Bewege dich mit aktivem GPS — Orte werden automatisch geloggt.</div>';
+    } else {
+      var recent = list.slice().sort(function(a,b){ return new Date(b.visited_at)-new Date(a.visited_at); }).slice(0,50);
+      listEl.innerHTML = recent.map(function(p,i){
+        return '<div class="tm-row"><div class="tm-row-dot"></div><div class="tm-row-body"><div class="tm-row-name">'+(p.place_name||'Unbekannter Ort')+'</div><div class="tm-row-sub">'+(p.city?p.city+(p.country?' · '+p.country:''):'GPS-Pin')+' · '+formatDate(p.visited_at)+'</div></div></div>';
+      }).join('');
+    }
+  }
+}
+function closeTravelMap(){
+  var ov=document.getElementById('travelMapOv');
+  if(ov) ov.style.display='none';
+}
+window.openTravelMap=openTravelMap;
+window.closeTravelMap=closeTravelMap;
 var GAMES = [
   {name:'Wer bin ich?',icon:'🤔',desc:'Rate die Person auf deiner Stirn',players:'2-10',cards:[
     'Ich bin ein deutscher Schlagerstar','Ich bin der DJ im Megapark','Ich bin ein Sangria-Eimer','Ich bin Jürgen Drews','Ich bin die Sonne auf Mallorca',
@@ -3738,7 +3997,7 @@ function initCMap(){
       var ll=[pos.coords.latitude,pos.coords.longitude];
       cMap.setView(ll,17);
       window._crewUserMarker.setLatLng(ll);
-    },function(){},{enableHighAccuracy:true,timeout:10000});
+    },function(e){console.warn('[CREW] crewMap getCurrentPosition:',e&&e.message)},{enableHighAccuracy:false,maximumAge:60000,timeout:30000});
   }
   setTimeout(function(){cMap.invalidateSize()},200);
 }
