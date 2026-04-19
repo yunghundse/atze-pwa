@@ -1724,7 +1724,7 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 49;
+  var APP_VERSION = 50;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     localStorage.setItem('crew_app_v', APP_VERSION);
@@ -6100,32 +6100,49 @@ window.openAdminPanel = async function(){
       }
     } catch(e){ console.log('Partner apps error:', e); }
 
-    // === PARTNER QR CHECK-IN STATS ===
+    // === PARTNER QR CHECK-IN STATS (direct query) ===
     try {
-      var {data:pStats} = await sb.rpc('get_partner_checkin_stats');
-      if(pStats && pStats.length > 0){
-        var totalCI = pStats.reduce(function(s,x){return s+(Number(x.total_checkins)||0)},0);
-        var totalUU = pStats.reduce(function(s,x){return s+(Number(x.unique_users)||0)},0);
-        html += '<div style="background:var(--glass);border:1px solid var(--glass-border);border-radius:16px;padding:16px;margin-bottom:16px">';
-        html += '<div style="font-size:11px;font-weight:700;color:var(--mint);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">📲 Partner QR Check-ins</div>';
-        html += '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px">';
-        html += '<div style="text-align:center;padding:10px;border-radius:12px;background:rgba(48,209,88,.06);border:1px solid rgba(48,209,88,.1)"><div style="font-size:20px;font-weight:900;color:var(--mint)">'+pStats.length+'</div><div style="font-size:9px;color:var(--t3);font-weight:600;text-transform:uppercase;margin-top:2px">Partner</div></div>';
-        html += '<div style="text-align:center;padding:10px;border-radius:12px;background:rgba(255,109,46,.06);border:1px solid rgba(255,109,46,.1)"><div style="font-size:20px;font-weight:900;color:var(--o)">'+totalCI+'</div><div style="font-size:9px;color:var(--t3);font-weight:600;text-transform:uppercase;margin-top:2px">Check-ins</div></div>';
-        html += '<div style="text-align:center;padding:10px;border-radius:12px;background:rgba(10,132,255,.06);border:1px solid rgba(10,132,255,.1)"><div style="font-size:20px;font-weight:900;color:var(--blue)">'+totalUU+'</div><div style="font-size:9px;color:var(--t3);font-weight:600;text-transform:uppercase;margin-top:2px">Unique User</div></div>';
-        html += '</div>';
-        pStats.forEach(function(p){
-          html += '<div style="padding:10px 0;border-bottom:1px solid var(--glass-border)">';
-          html += '<div style="display:flex;justify-content:space-between;align-items:start">';
-          html += '<div><div style="font-size:14px;font-weight:700">'+esc(p.business_name)+'</div>';
-          html += '<div style="font-size:11px;color:var(--t3);margin-top:2px">'+esc(p.business_type)+(p.location?' · 📍 '+esc(p.location):'')+'</div>';
-          html += '<div style="font-size:11px;color:var(--t3);margin-top:2px">Code: <span style="color:var(--o);font-weight:600">'+esc(p.partner_code)+'</span>'+(p.deal_text?' · 🎁 '+esc(p.deal_text):'')+'</div></div>';
-          html += '<div style="text-align:right"><div style="font-size:18px;font-weight:900;color:var(--mint)">'+p.total_checkins+'</div>';
-          html += '<div style="font-size:10px;color:var(--t3)">'+p.unique_users+' User</div></div>';
-          html += '</div>';
-          if(p.last_checkin) html += '<div style="font-size:10px;color:var(--t3);margin-top:4px">Letzter Check-in: '+new Date(p.last_checkin).toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'})+'</div>';
-          html += '</div>';
+      var {data:allCheckins} = await sb.from('partner_checkins').select('partner_id,partner_code,user_id,points_awarded,deal_text,created_at');
+      var {data:allPartners} = await sb.from('partners').select('id,business_name,business_type,partner_code,location,deal_text').eq('is_active',true);
+      if(allCheckins && allCheckins.length > 0 && allPartners){
+        // Aggregate stats per partner
+        var partnerMap = {};
+        allPartners.forEach(function(p){ partnerMap[p.id] = {business_name:p.business_name,business_type:p.business_type,partner_code:p.partner_code,location:p.location,deal_text:p.deal_text,total_checkins:0,unique_users:{},last_checkin:null}; });
+        allCheckins.forEach(function(c){
+          if(!partnerMap[c.partner_id]) return;
+          partnerMap[c.partner_id].total_checkins++;
+          partnerMap[c.partner_id].unique_users[c.user_id] = true;
+          if(!partnerMap[c.partner_id].last_checkin || c.created_at > partnerMap[c.partner_id].last_checkin) partnerMap[c.partner_id].last_checkin = c.created_at;
         });
-        html += '</div>';
+        var pStats = Object.keys(partnerMap).map(function(pid){
+          var p = partnerMap[pid];
+          return {partner_id:pid,business_name:p.business_name,business_type:p.business_type,partner_code:p.partner_code,location:p.location,deal_text:p.deal_text,total_checkins:p.total_checkins,unique_users:Object.keys(p.unique_users).length,last_checkin:p.last_checkin};
+        }).filter(function(p){return p.total_checkins>0});
+
+        if(pStats.length > 0){
+          var totalCI = pStats.reduce(function(s,x){return s+(Number(x.total_checkins)||0)},0);
+          var totalUU = pStats.reduce(function(s,x){return s+(Number(x.unique_users)||0)},0);
+          html += '<div style="background:var(--glass);border:1px solid var(--glass-border);border-radius:16px;padding:16px;margin-bottom:16px">';
+          html += '<div style="font-size:11px;font-weight:700;color:var(--mint);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">📲 Partner QR Check-ins</div>';
+          html += '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px">';
+          html += '<div style="text-align:center;padding:10px;border-radius:12px;background:rgba(48,209,88,.06);border:1px solid rgba(48,209,88,.1)"><div style="font-size:20px;font-weight:900;color:var(--mint)">'+pStats.length+'</div><div style="font-size:9px;color:var(--t3);font-weight:600;text-transform:uppercase;margin-top:2px">Partner</div></div>';
+          html += '<div style="text-align:center;padding:10px;border-radius:12px;background:rgba(255,109,46,.06);border:1px solid rgba(255,109,46,.1)"><div style="font-size:20px;font-weight:900;color:var(--o)">'+totalCI+'</div><div style="font-size:9px;color:var(--t3);font-weight:600;text-transform:uppercase;margin-top:2px">Check-ins</div></div>';
+          html += '<div style="text-align:center;padding:10px;border-radius:12px;background:rgba(10,132,255,.06);border:1px solid rgba(10,132,255,.1)"><div style="font-size:20px;font-weight:900;color:var(--blue)">'+totalUU+'</div><div style="font-size:9px;color:var(--t3);font-weight:600;text-transform:uppercase;margin-top:2px">Unique User</div></div>';
+          html += '</div>';
+          pStats.forEach(function(p){
+            html += '<div style="padding:10px 0;border-bottom:1px solid var(--glass-border)">';
+            html += '<div style="display:flex;justify-content:space-between;align-items:start">';
+            html += '<div><div style="font-size:14px;font-weight:700">'+esc(p.business_name)+'</div>';
+            html += '<div style="font-size:11px;color:var(--t3);margin-top:2px">'+esc(p.business_type)+(p.location?' · 📍 '+esc(p.location):'')+'</div>';
+            html += '<div style="font-size:11px;color:var(--t3);margin-top:2px">Code: <span style="color:var(--o);font-weight:600">'+esc(p.partner_code)+'</span>'+(p.deal_text?' · 🎁 '+esc(p.deal_text):'')+'</div></div>';
+            html += '<div style="text-align:right"><div style="font-size:18px;font-weight:900;color:var(--mint)">'+p.total_checkins+'</div>';
+            html += '<div style="font-size:10px;color:var(--t3)">'+p.unique_users+' User</div></div>';
+            html += '</div>';
+            if(p.last_checkin) html += '<div style="font-size:10px;color:var(--t3);margin-top:4px">Letzter Check-in: '+new Date(p.last_checkin).toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'})+'</div>';
+            html += '</div>';
+          });
+          html += '</div>';
+        }
       }
     } catch(e){ console.log('Partner checkin stats error:', e); }
 
@@ -6520,10 +6537,23 @@ window.confirmPartnerRedeem=async function(partnerCode){
   var btn=document.getElementById('partnerRedeemBtn');
   if(btn){btn.disabled=true;btn.textContent='Wird verarbeitet...'}
   try{
-    // Record check-in via RPC (same as scan.html partner system)
-    var {data,error}=await sb.rpc('record_partner_checkin',{p_user_id:ME.user_id,p_partner_code:partnerCode});
+    // Check cooldown: max 1 check-in per user per partner per 24h
+    var since=new Date(Date.now()-24*60*60*1000).toISOString();
+    var {data:existingCI}=await sb.from('partner_checkins').select('id').eq('user_id',ME.user_id).eq('partner_code',partnerCode).gte('created_at',since).limit(1);
+    if(existingCI&&existingCI.length>0){toast('Du wurdest in den letzten 24h bereits hier eingecheckt.');if(btn){btn.disabled=false;btn.textContent='📲 Einchecken & Deal einlösen'}return}
+
+    // Get partner info for deal text + ID
+    var {data:partnerInfo}=await sb.from('partners').select('id,deal_text').eq('partner_code',partnerCode).eq('is_active',true).single();
+    var pts=25;
+    var deal=(partnerInfo&&partnerInfo.deal_text)||'';
+    var partnerId=(partnerInfo&&partnerInfo.id)||null;
+
+    // Record check-in directly in partner_checkins table
+    var {error}=await sb.from('partner_checkins').insert({user_id:ME.user_id,partner_id:partnerId,partner_code:partnerCode,points_awarded:pts,deal_text:deal||null});
     if(error)throw error;
-    if(data&&!data.success){toast(data.error||'Check-in fehlgeschlagen');if(btn){btn.disabled=false;btn.textContent='📲 Einchecken & Deal einlösen'}return}
+
+    // Update own score
+    try{var newScore=(ME.score||0)+pts;await sb.from('profiles').update({score:newScore}).eq('user_id',ME.user_id);ME.score=newScore}catch(e){}
 
     // Track for commission
     try{
@@ -6532,10 +6562,6 @@ window.confirmPartnerRedeem=async function(partnerCode){
 
     // Set cooldown
     localStorage.setItem('crew_partner_cd_'+partnerCode,String(Date.now()));
-
-    // Show success
-    var pts=(data&&data.points)||25;
-    var deal=(data&&data.deal)||'';
     var html='<div style="font-size:64px;margin-bottom:16px;animation:popIn .5s cubic-bezier(.175,.885,.32,1.275)">✅</div>';
     html+='<div style="font-size:24px;font-weight:900;margin-bottom:8px">Check-in erfolgreich!</div>';
     html+='<div style="font-size:18px;font-weight:700;color:var(--o);margin-bottom:4px">+'+pts+' Aura erhalten!</div>';

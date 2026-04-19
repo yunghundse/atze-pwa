@@ -193,7 +193,7 @@ if(savedCode){
   loginPartner();
 }
 
-// Lookup user
+// Lookup user — direct profiles query (no RPC needed)
 async function lookupUser(){
   var input = document.getElementById('userIdInput').value.trim();
   var msg = document.getElementById('lookupMsg');
@@ -202,20 +202,32 @@ async function lookupUser(){
   if(input.includes('scan.html?u=')){
     input = input.split('u=')[1].split('&')[0];
   }
+  // Also handle full app URLs
+  if(input.includes('?u=')){
+    input = input.split('u=')[1].split('&')[0];
+  }
 
   if(!input){showMsg(msg,'error','Bitte User-ID eingeben oder QR-Code scannen.');return}
 
-  try {
-    var {data, error} = await sb.rpc('validate_user_qr', {qr_token: input});
-    if(error) throw error;
-    if(!data || !data.valid){showMsg(msg,'error',data?.error||'User nicht gefunden.');return}
+  // Validate UUID format loosely
+  input = input.trim();
 
-    currentUser = data;
+  try {
+    var {data, error} = await sb.from('profiles').select('user_id,name,username,photo_url,score,age,gender').eq('user_id', input).single();
+    if(error || !data){showMsg(msg,'error','User nicht gefunden. Prüfe die ID.');return}
+
+    currentUser = {
+      user_id: data.user_id,
+      name: data.name || 'Unbekannt',
+      username: data.username || 'user',
+      photo_url: data.photo_url || '',
+      score: data.score || 0
+    };
 
     // Show user card
-    document.getElementById('ucPhoto').src = data.photo_url || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80';
-    document.getElementById('ucName').textContent = data.name;
-    document.getElementById('ucHandle').textContent = '@' + (data.username || 'user');
+    document.getElementById('ucPhoto').src = currentUser.photo_url || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80';
+    document.getElementById('ucName').textContent = currentUser.name;
+    document.getElementById('ucHandle').textContent = '@' + currentUser.username;
 
     document.getElementById('userLookup').style.display = 'none';
     document.getElementById('userConfirmed').style.display = 'block';
@@ -224,7 +236,7 @@ async function lookupUser(){
   } catch(e){showMsg(msg,'error','Fehler: '+(e.message||'Ungültige User-ID'))}
 }
 
-// Do check-in
+// Do check-in — direct insert into partner_checkins table
 async function doCheckin(){
   if(!currentPartner || !currentUser) return;
   var btn = document.getElementById('checkinBtn');
@@ -232,27 +244,50 @@ async function doCheckin(){
   btn.textContent = 'Wird verarbeitet...';
 
   try {
-    var {data, error} = await sb.rpc('record_partner_checkin', {
-      p_user_id: currentUser.user_id,
-      p_partner_code: currentPartner.partner_code
-    });
-    if(error) throw error;
+    // Check cooldown: max 1 check-in per user per partner per 24h
+    var since = new Date(Date.now() - 24*60*60*1000).toISOString();
+    var {data:existing} = await sb.from('partner_checkins')
+      .select('id')
+      .eq('user_id', currentUser.user_id)
+      .eq('partner_code', currentPartner.partner_code)
+      .gte('created_at', since)
+      .limit(1);
 
-    if(!data.success){
+    if(existing && existing.length > 0){
       btn.disabled = false;
       btn.textContent = '📲 Check-in bestätigen';
-      alert(data.error);
+      alert('Dieser User wurde in den letzten 24h bereits bei dir eingecheckt.');
       return;
     }
+
+    var points = 25;
+    var dealText = currentPartner.deal_text || '';
+
+    // Insert check-in record
+    var {error: insertErr} = await sb.from('partner_checkins').insert({
+      user_id: currentUser.user_id,
+      partner_id: currentPartner.id,
+      partner_code: currentPartner.partner_code,
+      points_awarded: points,
+      deal_text: dealText || null
+    });
+    if(insertErr) throw insertErr;
+
+    // Update user score (add points)
+    try {
+      var {data:prof} = await sb.from('profiles').select('score').eq('user_id', currentUser.user_id).single();
+      var newScore = (prof && prof.score ? prof.score : 0) + points;
+      await sb.from('profiles').update({score: newScore}).eq('user_id', currentUser.user_id);
+    } catch(e){ console.log('Score update error (non-critical):', e); }
 
     // Show success
     document.getElementById('userConfirmed').style.display = 'none';
     document.getElementById('successPanel').classList.add('show');
-    document.getElementById('successPoints').textContent = '+' + data.points + ' 🍹 Sangria-Punkte für ' + currentUser.name;
+    document.getElementById('successPoints').textContent = '+' + points + ' 🍹 Sangria-Punkte für ' + currentUser.name;
 
-    if(data.deal){
+    if(dealText){
       document.getElementById('successDeal').style.display = 'block';
-      document.getElementById('successDeal').textContent = '🎁 Deal freigeschaltet: ' + data.deal;
+      document.getElementById('successDeal').textContent = '🎁 Deal freigeschaltet: ' + dealText;
     } else {
       document.getElementById('successDeal').style.display = 'none';
     }
@@ -281,20 +316,24 @@ function resetUser(){
   document.getElementById('checkinBtn').textContent = '📲 Check-in bestätigen';
 }
 
-// Load partner stats
+// Load partner stats — direct query from partner_checkins table
 async function loadPartnerStats(){
   if(!currentPartner) return;
   try {
-    var {data} = await sb.rpc('get_partner_checkin_stats');
-    if(data){
-      var mine = data.find(function(p){return p.partner_id === currentPartner.id});
-      if(mine){
-        document.getElementById('partnerStats').style.display = 'block';
-        document.getElementById('statCheckins').textContent = mine.total_checkins || 0;
-        document.getElementById('statUsers').textContent = mine.unique_users || 0;
-      }
-    }
-  } catch(e){}
+    var {data, error} = await sb.from('partner_checkins')
+      .select('user_id')
+      .eq('partner_id', currentPartner.id);
+    if(error || !data) return;
+
+    var totalCheckins = data.length;
+    var uniqueUsers = {};
+    data.forEach(function(r){ uniqueUsers[r.user_id] = true; });
+    var uniqueCount = Object.keys(uniqueUsers).length;
+
+    document.getElementById('partnerStats').style.display = 'block';
+    document.getElementById('statCheckins').textContent = totalCheckins;
+    document.getElementById('statUsers').textContent = uniqueCount;
+  } catch(e){ console.log('Stats error:', e); }
 }
 
 function showMsg(el,type,text){
