@@ -2033,6 +2033,187 @@ nav{padding-bottom:max(6px,env(safe-area-inset-bottom)) !important}
 @supports (-webkit-touch-callout:none){
   #app::before{background-attachment:scroll}
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   HOME-SAFE (v67) — "Bring mich nach Hause"
+   Header-Button + Sicherheits-Check-Modal
+   ═══════════════════════════════════════════════════════════════ */
+
+.hdr-btn.hdr-home{
+  background:linear-gradient(135deg,rgba(48,209,88,.22),rgba(10,132,255,.14));
+  border:1px solid rgba(48,209,88,.32);
+  color:#7FE3A0;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 2px 10px rgba(48,209,88,.25);
+  position:relative;
+}
+.hdr-btn.hdr-home::after{
+  content:'';position:absolute;inset:-2px;border-radius:50%;
+  background:radial-gradient(circle,rgba(48,209,88,.3),transparent 70%);
+  opacity:0;transition:opacity .25s;pointer-events:none;
+}
+.hdr-btn.hdr-home:hover::after{opacity:.8}
+.hdr-btn.hdr-home:hover{transform:translateY(-1px);box-shadow:inset 0 1px 0 rgba(255,255,255,.15),0 6px 18px rgba(48,209,88,.35)}
+
+/* Crew-SOS-Bar: ab jetzt Home-Safe-Styling */
+.crew-sos-bar.home-safe-bar{
+  background:linear-gradient(135deg,rgba(48,209,88,.10),rgba(10,132,255,.06),rgba(24,20,28,.7)) !important;
+  border:1px solid rgba(48,209,88,.22) !important;
+}
+.crew-sos-bar.home-safe-bar .crew-sos-icon{color:#7FE3A0}
+.crew-sos-bar.home-safe-bar .crew-sos-pulse{background:rgba(48,209,88,.3) !important}
+
+/* Overlay */
+.hs-ov{
+  position:fixed;inset:0;z-index:10005;display:none;
+  background:rgba(5,5,7,.82);
+  -webkit-backdrop-filter:blur(18px) saturate(170%);
+  backdrop-filter:blur(18px) saturate(170%);
+  padding:max(16px,env(safe-area-inset-top)) 0 max(16px,env(safe-area-inset-bottom));
+  overflow-y:auto;-webkit-overflow-scrolling:touch;
+}
+.hs-ov.show{display:flex;flex-direction:column;align-items:center;justify-content:flex-start}
+.hs-card{
+  width:100%;max-width:440px;margin:auto;padding:22px 18px 18px;
+  background:linear-gradient(160deg,rgba(28,22,32,.95),rgba(18,14,22,.88));
+  border:1px solid rgba(255,255,255,.10);border-radius:28px;
+  box-shadow:0 32px 80px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.08);
+  position:relative;
+}
+.hs-close{
+  position:absolute;top:14px;right:14px;width:34px;height:34px;border-radius:50%;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);color:var(--t2);
+  font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+}
+.hs-header{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.hs-header-ico{
+  width:48px;height:48px;border-radius:16px;flex-shrink:0;
+  background:linear-gradient(135deg,#30D158,#0A84FF);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 8px 22px -6px rgba(48,209,88,.5),inset 0 1px 0 rgba(255,255,255,.2);
+}
+.hs-header-ico svg{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.hs-title{font-size:20px;font-weight:900;letter-spacing:-.3px;color:var(--t);line-height:1.15}
+.hs-sub{font-size:12px;color:var(--t3);margin-top:2px}
+
+.hs-step{display:none}
+.hs-step.active{display:block;animation:hsStep .3s var(--spring)}
+@keyframes hsStep{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+.hs-step-title{font-size:13px;font-weight:800;color:var(--t2);margin:12px 0 10px;text-transform:uppercase;letter-spacing:.6px}
+
+/* Status-Grid: 3 Karten */
+.hs-status-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+.hs-status-opt{
+  padding:12px 8px;border-radius:16px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);
+  cursor:pointer;text-align:center;
+  transition:all .2s var(--spring);
+}
+.hs-status-opt:hover{background:rgba(255,255,255,.07);transform:translateY(-1px)}
+.hs-status-opt.sel{border-color:var(--so-color,#30D158);background:color-mix(in srgb, var(--so-color,#30D158) 16%, transparent)}
+.hs-status-opt .hs-so-emoji{font-size:22px;margin-bottom:4px}
+.hs-status-opt .hs-so-label{font-size:11px;font-weight:700;color:var(--t)}
+
+/* Checklist */
+.hs-checks{display:flex;flex-direction:column;gap:8px}
+.hs-check{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 14px;border-radius:14px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);
+  cursor:pointer;transition:all .2s var(--spring);
+}
+.hs-check:hover{background:rgba(255,255,255,.06)}
+.hs-check .hs-check-ico{
+  width:36px;height:36px;border-radius:50%;flex-shrink:0;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);
+  display:flex;align-items:center;justify-content:center;color:var(--t2);
+}
+.hs-check .hs-check-ico svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.hs-check .hs-check-body{flex:1;min-width:0}
+.hs-check .hs-check-title{font-size:14px;font-weight:700;color:var(--t);line-height:1.2}
+.hs-check .hs-check-sub{font-size:11px;color:var(--t3);margin-top:2px}
+.hs-check .hs-check-mark{
+  width:26px;height:26px;border-radius:50%;flex-shrink:0;
+  background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.1);
+  display:flex;align-items:center;justify-content:center;color:transparent;
+  transition:all .2s var(--spring);
+}
+.hs-check.done .hs-check-mark{
+  background:linear-gradient(135deg,#30D158,#0A84FF);border-color:transparent;color:#fff;
+  box-shadow:0 4px 12px -2px rgba(48,209,88,.5);
+}
+.hs-check.done .hs-check-mark svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.hs-check.done{border-color:rgba(48,209,88,.22);background:rgba(48,209,88,.06)}
+
+/* Action grid */
+.hs-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.hs-act{
+  padding:14px;border-radius:16px;
+  background:linear-gradient(135deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
+  border:1px solid rgba(255,255,255,.08);
+  display:flex;flex-direction:column;align-items:flex-start;gap:6px;
+  cursor:pointer;text-align:left;color:var(--t);
+  transition:all .2s var(--spring);
+}
+.hs-act:hover{transform:translateY(-1px);border-color:rgba(255,255,255,.16)}
+.hs-act:active{transform:scale(.97)}
+.hs-act .hs-act-ico{
+  width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+  background:var(--ha-bg,rgba(255,255,255,.05));color:var(--ha-c,var(--t));
+}
+.hs-act .hs-act-ico svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.hs-act .hs-act-title{font-size:13px;font-weight:800;letter-spacing:-.2px}
+.hs-act .hs-act-sub{font-size:11px;color:var(--t3);font-weight:600;line-height:1.3}
+.hs-act.primary{grid-column:1/-1;background:linear-gradient(135deg,#30D158,#0A84FF);border-color:transparent;box-shadow:0 10px 26px -6px rgba(48,209,88,.45)}
+.hs-act.primary .hs-act-ico{background:rgba(255,255,255,.18);color:#fff}
+.hs-act.primary .hs-act-title,.hs-act.primary .hs-act-sub{color:#fff}
+.hs-act.emergency{background:linear-gradient(135deg,rgba(255,59,48,.25),rgba(254,60,114,.12));border-color:rgba(255,59,48,.35)}
+.hs-act.emergency .hs-act-ico{background:rgba(255,59,48,.25);color:#fff}
+.hs-act.emergency .hs-act-title{color:#FF8A7A}
+
+/* Footer */
+.hs-footer{display:flex;gap:8px;margin-top:14px}
+.hs-foot-btn{
+  flex:1;padding:12px;border-radius:14px;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);
+  color:var(--t);font-size:13px;font-weight:700;cursor:pointer;
+  transition:all .2s var(--spring);
+}
+.hs-foot-btn:hover{background:rgba(255,255,255,.08)}
+.hs-foot-btn.prim{background:linear-gradient(135deg,#30D158,#0A84FF);border-color:transparent;color:#fff}
+.hs-foot-btn.ghost{background:transparent}
+
+/* Hotel-Input */
+.hs-hotel-box{
+  padding:14px;border-radius:16px;
+  background:linear-gradient(135deg,rgba(255,214,10,.10),rgba(255,109,46,.05));
+  border:1px solid rgba(255,214,10,.22);margin-top:10px;
+}
+.hs-hotel-box label{display:block;font-size:11px;font-weight:800;color:#FFD96B;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px}
+.hs-hotel-box input{
+  width:100%;padding:10px 12px;border-radius:10px;
+  background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.08);
+  color:var(--t);font-size:14px;
+}
+.hs-hotel-box input:focus{outline:none;border-color:rgba(255,214,10,.4)}
+.hs-hotel-sub{font-size:11px;color:var(--t3);margin-top:6px;line-height:1.4}
+
+/* Progress dots */
+.hs-progress{display:flex;gap:6px;justify-content:center;margin:10px 0 4px}
+.hs-progress span{
+  width:24px;height:4px;border-radius:2px;background:rgba(255,255,255,.1);
+  transition:background .25s,width .25s;
+}
+.hs-progress span.active{background:linear-gradient(90deg,#30D158,#0A84FF);width:36px}
+.hs-progress span.done{background:rgba(48,209,88,.5)}
+
+@media (max-width:374px){
+  .hs-card{padding:18px 14px 14px}
+  .hs-title{font-size:18px}
+  .hs-header-ico{width:42px;height:42px}
+  .hs-status-opt .hs-so-emoji{font-size:18px}
+  .hs-act{padding:12px}
+}
 </style>
 </head>
 <body>
@@ -2429,6 +2610,37 @@ nav{padding-bottom:max(6px,env(safe-area-inset-bottom)) !important}
     <path d="M21 12a9 9 0 1 1-3-6.7L21 8"/>
     <path d="M21 3v5h-5"/>
   </symbol>
+  <!-- SAFE HOME / BRING ME HOME -->
+  <symbol id="i-home-safe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 11l9-7 9 7v9a2 2 0 0 1-2 2h-4v-7H10v7H6a2 2 0 0 1-2-2z" fill="currentColor" fill-opacity=".12"/>
+    <circle cx="12" cy="13" r="2.2" fill="currentColor"/>
+  </symbol>
+  <symbol id="i-battery" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="2" y="7" width="17" height="10" rx="2"/>
+    <line x1="21" y1="10" x2="21" y2="14"/>
+    <rect x="4" y="9" width="10" height="6" fill="currentColor" fill-opacity=".3"/>
+  </symbol>
+  <symbol id="i-wallet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20 12V7a2 2 0 0 0-2-2H4a2 2 0 0 0 0 4h16v4"/>
+    <path d="M18 12a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h4v-6z" fill="currentColor" fill-opacity=".15"/>
+    <path d="M4 9v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-1"/>
+  </symbol>
+  <symbol id="i-taxi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M5 17h14M3 14l2-6a2 2 0 0 1 2-1h10a2 2 0 0 1 2 1l2 6v4a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-1H7v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/>
+    <path d="M9 5V4h6v1"/>
+    <circle cx="7.5" cy="14.5" r="1.5" fill="currentColor"/>
+    <circle cx="16.5" cy="14.5" r="1.5" fill="currentColor"/>
+  </symbol>
+  <symbol id="i-location-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 2L4 22l8-4 8 4z" fill="currentColor" fill-opacity=".2"/>
+  </symbol>
+  <symbol id="i-phone-112" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" fill="currentColor" fill-opacity=".15"/>
+  </symbol>
+  <symbol id="i-check-square" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="3" width="18" height="18" rx="4"/>
+    <polyline points="8 12 11 15 16 9"/>
+  </symbol>
 </svg>
 
 <style>
@@ -2741,7 +2953,111 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
   <div id="malleStatsContent"></div>
 </div>
 
-<!-- SOS --><div class="sos-ov" id="sosOv"><div class="sos-content"><h2>🚨 SOS NOTFALL</h2><p>Deine Crew wird sofort mit deinem Standort benachrichtigt.</p><div class="sos-btns"><button class="sos-btn white" onclick="window.open('tel:112')">🚨 Notruf 112</button><button class="sos-btn glass" onclick="sendSOS()">📢 SOS an Crew</button><button class="sos-btn glass" onclick="window.open('tel:+34971724020')">🏥 Hospital Son Llàtzer</button><button class="sos-btn glass" onclick="window.open('tel:+34971401212')">🚕 Taxi Palma</button><button class="sos-btn glass" onclick="window.open('tel:+34913642050')">🇩🇪 Deutsche Botschaft</button><button class="sos-btn glass" style="background:rgba(0,0,0,.25)" onclick="closeSOS()">Abbrechen</button></div></div></div>
+<!-- HOME-SAFE — "Bring mich nach Hause" -->
+<div class="hs-ov" id="homeSafeOv">
+  <div class="hs-card">
+    <button class="hs-close" onclick="closeHomeSafe()" aria-label="Schließen">✕</button>
+    <div class="hs-header">
+      <div class="hs-header-ico"><svg viewBox="0 0 24 24"><use href="#i-home-safe"/></svg></div>
+      <div>
+        <div class="hs-title">Bring mich nach Hause</div>
+        <div class="hs-sub" id="hsSub">Kurzer Sicherheits-Check — dann geht's los</div>
+      </div>
+    </div>
+    <div class="hs-progress" id="hsProgress">
+      <span class="active"></span><span></span><span></span>
+    </div>
+
+    <!-- STEP 1 — STATUS -->
+    <div class="hs-step active" id="hsStep1">
+      <div class="hs-step-title">Wie fühlst du dich gerade?</div>
+      <div class="hs-status-grid">
+        <div class="hs-status-opt" data-status="ok" style="--so-color:#30D158" onclick="hsSetStatus(this,'ok')">
+          <div class="hs-so-emoji">🙂</div>
+          <div class="hs-so-label">Alles gut</div>
+        </div>
+        <div class="hs-status-opt" data-status="tipsy" style="--so-color:#FFD60A" onclick="hsSetStatus(this,'tipsy')">
+          <div class="hs-so-emoji">🥴</div>
+          <div class="hs-so-label">Angeschickert</div>
+        </div>
+        <div class="hs-status-opt" data-status="help" style="--so-color:#FF3B30" onclick="hsSetStatus(this,'help')">
+          <div class="hs-so-emoji">🆘</div>
+          <div class="hs-so-label">Brauche Hilfe</div>
+        </div>
+      </div>
+      <div class="hs-footer">
+        <button class="hs-foot-btn ghost" onclick="closeHomeSafe()">Abbrechen</button>
+        <button class="hs-foot-btn prim" id="hsNext1" onclick="hsGoto(2)" disabled style="opacity:.5">Weiter</button>
+      </div>
+    </div>
+
+    <!-- STEP 2 — SAFETY CHECKS -->
+    <div class="hs-step" id="hsStep2">
+      <div class="hs-step-title">Sicherheits-Check</div>
+      <div class="hs-checks" id="hsChecks">
+        <div class="hs-check" data-key="battery" onclick="hsToggleCheck(this)">
+          <div class="hs-check-ico"><svg viewBox="0 0 24 24"><use href="#i-battery"/></svg></div>
+          <div class="hs-check-body">
+            <div class="hs-check-title">Handy-Akku</div>
+            <div class="hs-check-sub" id="hsBatSub">Lade dein Handy falls möglich</div>
+          </div>
+          <div class="hs-check-mark"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        </div>
+        <div class="hs-check" data-key="money" onclick="hsToggleCheck(this)">
+          <div class="hs-check-ico"><svg viewBox="0 0 24 24"><use href="#i-wallet"/></svg></div>
+          <div class="hs-check-body">
+            <div class="hs-check-title">Bargeld & Karte</div>
+            <div class="hs-check-sub">Genug dabei für Taxi / Getränk</div>
+          </div>
+          <div class="hs-check-mark"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        </div>
+        <div class="hs-check" data-key="location" onclick="hsToggleCheck(this)">
+          <div class="hs-check-ico"><svg viewBox="0 0 24 24"><use href="#i-pin"/></svg></div>
+          <div class="hs-check-body">
+            <div class="hs-check-title">Standort-Check</div>
+            <div class="hs-check-sub" id="hsLocSub">Weißt du, wo du gerade bist?</div>
+          </div>
+          <div class="hs-check-mark"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        </div>
+        <div class="hs-check" data-key="alone" onclick="hsToggleCheck(this)">
+          <div class="hs-check-ico"><svg viewBox="0 0 24 24"><use href="#i-users"/></svg></div>
+          <div class="hs-check-body">
+            <div class="hs-check-title">Nicht allein</div>
+            <div class="hs-check-sub">Jemand aus der Crew bei dir oder erreichbar</div>
+          </div>
+          <div class="hs-check-mark"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        </div>
+        <div class="hs-check" data-key="drink" onclick="hsToggleCheck(this)">
+          <div class="hs-check-ico"><svg viewBox="0 0 24 24"><use href="#i-drop"/></svg></div>
+          <div class="hs-check-body">
+            <div class="hs-check-title">Wasser</div>
+            <div class="hs-check-sub">Trink noch ein Glas bevor du gehst</div>
+          </div>
+          <div class="hs-check-mark"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        </div>
+      </div>
+      <div class="hs-footer">
+        <button class="hs-foot-btn" onclick="hsGoto(1)">Zurück</button>
+        <button class="hs-foot-btn prim" onclick="hsGoto(3)">Weiter</button>
+      </div>
+    </div>
+
+    <!-- STEP 3 — ACTIONS -->
+    <div class="hs-step" id="hsStep3">
+      <div class="hs-step-title">So bringen wir dich heim</div>
+      <div id="hsHotelWrap">
+        <!-- wird dynamisch gerendert -->
+      </div>
+      <div class="hs-actions" id="hsActions">
+        <!-- wird dynamisch gerendert -->
+      </div>
+      <div class="hs-footer">
+        <button class="hs-foot-btn" onclick="hsGoto(2)">Zurück</button>
+        <button class="hs-foot-btn ghost" onclick="closeHomeSafe()">Fertig</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- GAMES --><div class="game-ov" id="gameOv"><div class="game-header"><button class="ax" onclick="closeGame()">←</button><h3 id="gameTitle">Spiel</h3><div style="width:36px"></div></div><div class="game-body"><div class="game-card-display" id="gameCard"><div class="gcd-em" id="gcdEm">🎲</div><div class="gcd-text" id="gcdText">Tippe für die nächste Karte</div><div class="gcd-cat" id="gcdCat"></div></div><button class="abtn primary" style="max-width:260px" onclick="nextGameCard()">Nächste Karte</button></div></div>
 
@@ -2837,11 +3153,11 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
     <div class="logo">crew<span>.</span></div>
     <div class="hdr-actions">
       <div class="streak-badge" id="sBadge"><svg class="icn icn-fill" style="color:#FFD60A;width:11px;height:11px" viewBox="0 0 24 24"><use href="#i-flame"/></svg> <span id="sNum">0</span></div>
+      <button class="hdr-btn hdr-home" onclick="openHomeSafe()" aria-label="Bring mich nach Hause"><svg class="icn" style="width:18px;height:18px" viewBox="0 0 24 24"><use href="#i-home-safe"/></svg></button>
       <button class="hdr-btn" onclick="openAlcoholTracker()" aria-label="Drinks"><svg class="icn" style="width:18px;height:18px" viewBox="0 0 24 24"><use href="#i-beer"/></svg></button>
       <button class="hdr-btn" onclick="openNoti()" aria-label="Benachrichtigungen"><svg class="icn" style="width:17px;height:17px" viewBox="0 0 24 24"><use href="#i-bell"/></svg><span class="notif-dot"></span></button>
     </div>
   </div>
-  <div class="sos-float" onclick="openSOS()">SOS</div>
   <main>
     <div class="scr active" id="screen-radar">
       <div class="map-full"><div id="radarMap"></div><div class="map-fade"></div></div>
@@ -2936,13 +3252,13 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
           </div>
         </div>
 
-        <!-- SOS EMERGENCY BUTTON — always visible on crew page -->
-        <div class="crew-sos-bar" onclick="openSOS()">
+        <!-- HOME-SAFE BUTTON — always visible on crew page -->
+        <div class="crew-sos-bar home-safe-bar" onclick="openHomeSafe()">
           <div class="crew-sos-pulse"></div>
-          <div class="crew-sos-icon">🚨</div>
+          <div class="crew-sos-icon"><svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><use href="#i-home-safe"/></svg></div>
           <div class="crew-sos-text">
-            <div class="crew-sos-title">SOS Notfall</div>
-            <div class="crew-sos-sub">Crew + Standort sofort teilen</div>
+            <div class="crew-sos-title">Bring mich nach Hause</div>
+            <div class="crew-sos-sub">Sicher heim · Crew teilen · Route zum Hotel</div>
           </div>
           <div class="crew-sos-arrow">›</div>
         </div>
@@ -3420,7 +3736,7 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 66;
+  var APP_VERSION = 67;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     // Force-clear old non-UUID crew IDs
@@ -7937,21 +8253,264 @@ function updateChallengeTimer(){
 }
 
 // ============================================
-// SOS
+// HOME-SAFE — "Bring mich nach Hause"
+// Sicherheits-Check + Route zum Hotel / letzten Check-in
 // ============================================
-window.openSOS=function(){document.getElementById('sosOv').classList.add('show');if(navigator.vibrate)navigator.vibrate([200,100,200])};
-window.closeSOS=function(){document.getElementById('sosOv').classList.remove('show')};
-window.sendSOS = async function(){
-  if(navigator.geolocation){
-    navigator.geolocation.getCurrentPosition(async function(pos){
-      await sb.from('sos_alerts').insert({user_id:ME.user_id,lat:pos.coords.latitude,lng:pos.coords.longitude,message:'SOS von '+ME.name});
-      shareText('🚨 SOS von '+ME.name+'! Standort: https://www.google.com/maps?q='+pos.coords.latitude+','+pos.coords.longitude);
-      toast('SOS gesendet!');closeSOS();
-    },function(){
-      shareText('🚨 SOS von '+ME.name+'! Brauche Hilfe!');toast('SOS gesendet!');closeSOS();
-    });
-  } else {shareText('🚨 SOS von '+ME.name+'!');closeSOS()}
+var HS_STATE = { step:1, status:null, checks:{}, pos:null, placeName:null };
+
+window.openHomeSafe = function(){
+  HS_STATE = { step:1, status:null, checks:{}, pos:null, placeName:null };
+  document.getElementById('homeSafeOv').classList.add('show');
+  if(navigator.vibrate) navigator.vibrate([20,40,20]);
+  hsResetUI();
+  hsPrefillChecks();
+  hsGetPosition();
 };
+window.closeHomeSafe = function(){
+  document.getElementById('homeSafeOv').classList.remove('show');
+};
+
+function hsResetUI(){
+  ['hsStep1','hsStep2','hsStep3'].forEach(function(id,i){
+    document.getElementById(id).classList.toggle('active', i===0);
+  });
+  document.querySelectorAll('.hs-status-opt').forEach(function(e){e.classList.remove('sel')});
+  document.querySelectorAll('.hs-check').forEach(function(e){e.classList.remove('done')});
+  var nxt=document.getElementById('hsNext1'); if(nxt){nxt.disabled=true;nxt.style.opacity='.5'}
+  hsUpdateProgress(1);
+  var sub=document.getElementById('hsSub'); if(sub) sub.textContent='Kurzer Sicherheits-Check — dann geht\'s los';
+}
+
+function hsUpdateProgress(step){
+  var dots=document.querySelectorAll('#hsProgress span');
+  dots.forEach(function(d,i){
+    d.classList.remove('active','done');
+    if(i+1<step) d.classList.add('done');
+    else if(i+1===step) d.classList.add('active');
+  });
+}
+
+window.hsGoto = function(step){
+  HS_STATE.step = step;
+  ['hsStep1','hsStep2','hsStep3'].forEach(function(id,i){
+    document.getElementById(id).classList.toggle('active', i+1===step);
+  });
+  hsUpdateProgress(step);
+  if(step===3) hsBuildActions();
+};
+
+window.hsSetStatus = function(el, status){
+  document.querySelectorAll('.hs-status-opt').forEach(function(e){e.classList.remove('sel')});
+  el.classList.add('sel');
+  HS_STATE.status = status;
+  var nxt=document.getElementById('hsNext1');
+  if(nxt){nxt.disabled=false;nxt.style.opacity='1'}
+  // Bei akutem Notfall direkt zu Step 3 springen
+  if(status==='help'){
+    setTimeout(function(){ hsGoto(3); }, 280);
+  }
+};
+
+window.hsToggleCheck = function(el){
+  el.classList.toggle('done');
+  HS_STATE.checks[el.dataset.key] = el.classList.contains('done');
+};
+
+function hsPrefillChecks(){
+  // Battery API
+  if(navigator.getBattery){
+    navigator.getBattery().then(function(bat){
+      var pct = Math.round(bat.level*100);
+      var sub = document.getElementById('hsBatSub');
+      if(sub) sub.textContent = pct+'% Akku · '+(bat.charging?'lädt gerade':pct>40?'noch genug':'bald laden');
+      if(pct>40 && !bat.charging){
+        var row=document.querySelector('.hs-check[data-key="battery"]');
+        if(row){ row.classList.add('done'); HS_STATE.checks.battery=true; }
+      }
+    }).catch(function(){});
+  }
+}
+
+function hsGetPosition(){
+  if(!navigator.geolocation) return;
+  navigator.geolocation.getCurrentPosition(function(pos){
+    HS_STATE.pos = {lat:pos.coords.latitude, lng:pos.coords.longitude};
+    // Reverse geocode via Nominatim (leise)
+    try{
+      fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat='+pos.coords.latitude+'&lon='+pos.coords.longitude+'&zoom=16')
+        .then(function(r){return r.json()})
+        .then(function(d){
+          if(d && d.display_name){
+            HS_STATE.placeName = d.display_name.split(',').slice(0,2).join(',').trim();
+            var sub=document.getElementById('hsLocSub');
+            if(sub) sub.textContent = 'Du bist in der Nähe von '+HS_STATE.placeName;
+          }
+        }).catch(function(){});
+    }catch(e){}
+  }, function(){}, {enableHighAccuracy:true, timeout:6000, maximumAge:60000});
+}
+
+function hsGetHotel(){
+  // Priorität: localStorage > ME.hotel_address > null
+  try{ var h=localStorage.getItem('hotel_address'); if(h) return JSON.parse(h); }catch(e){}
+  if(ME && ME.hotel_address){
+    try{ return typeof ME.hotel_address==='string'?JSON.parse(ME.hotel_address):ME.hotel_address; }catch(e){ return {name:ME.hotel_address, address:ME.hotel_address}; }
+  }
+  return null;
+}
+
+function hsSaveHotel(){
+  var name = (document.getElementById('hsHotelName')||{}).value || '';
+  var addr = (document.getElementById('hsHotelAddr')||{}).value || '';
+  if(!name.trim() && !addr.trim()){ toast('Bitte Namen oder Adresse eingeben'); return; }
+  var obj = {name:name.trim()||addr.trim(), address:addr.trim()||name.trim(), saved_at:new Date().toISOString()};
+  try{ localStorage.setItem('hotel_address', JSON.stringify(obj)); }catch(e){}
+  // Best-effort in profiles speichern, falls Spalte existiert
+  if(sb && ME && ME.user_id){
+    sb.from('profiles').update({hotel_address:JSON.stringify(obj)}).eq('user_id',ME.user_id).then(function(){}).catch(function(){});
+  }
+  toast('Hotel gespeichert ✓');
+  hsBuildActions();
+}
+
+window.hsSaveHotel = hsSaveHotel;
+
+function hsBuildActions(){
+  var wrap = document.getElementById('hsHotelWrap');
+  var actEl = document.getElementById('hsActions');
+  if(!wrap || !actEl) return;
+  var hotel = hsGetHotel();
+  var pos = HS_STATE.pos;
+  var statusLabel = HS_STATE.status==='ok'?'mir geht\'s gut':HS_STATE.status==='tipsy'?'ich bin angeschickert':'ich brauche Hilfe';
+
+  // Hotel-Box
+  if(!hotel){
+    wrap.innerHTML =
+      '<div class="hs-hotel-box">'+
+      '<label>Hotel / Unterkunft speichern</label>'+
+      '<input id="hsHotelName" type="text" placeholder="z.B. Hotel Playa de Palma" autocomplete="off"/>'+
+      '<input id="hsHotelAddr" type="text" placeholder="Straße, Ort (optional)" autocomplete="off" style="margin-top:6px"/>'+
+      '<div class="hs-hotel-sub">Wird lokal gespeichert, damit wir dich beim nächsten Mal direkt hinführen können.</div>'+
+      '<button class="hs-foot-btn prim" style="margin-top:10px;width:100%" onclick="hsSaveHotel()">Speichern</button>'+
+      '</div>';
+  } else {
+    wrap.innerHTML =
+      '<div class="hs-hotel-box" style="background:linear-gradient(135deg,rgba(48,209,88,.10),rgba(10,132,255,.06));border-color:rgba(48,209,88,.22)">'+
+      '<label style="color:#7FE3A0">Dein Zuhause auf Malle</label>'+
+      '<div style="font-weight:800;font-size:15px;color:var(--t);margin-top:2px">'+esc(hotel.name||hotel.address||'Hotel')+'</div>'+
+      (hotel.address && hotel.address!==hotel.name?'<div style="font-size:12px;color:var(--t3);margin-top:2px">'+esc(hotel.address)+'</div>':'')+
+      '<button class="hs-foot-btn" style="margin-top:8px;width:100%;padding:8px;font-size:12px" onclick="hsClearHotel()">Ändern</button>'+
+      '</div>';
+  }
+
+  // Actions
+  var html = '';
+  // PRIMARY: Route nach Hause
+  if(hotel){
+    var dest = encodeURIComponent(hotel.address || hotel.name);
+    var mapsUrl = 'https://www.google.com/maps/dir/?api=1&destination='+dest+'&travelmode=driving';
+    html +=
+      '<button class="hs-act primary" onclick="window.open(\''+mapsUrl+'\',\'_blank\')">'+
+      '<div class="hs-act-ico"><svg viewBox="0 0 24 24"><use href="#i-location-arrow"/></svg></div>'+
+      '<div class="hs-act-title">Route zum Hotel</div>'+
+      '<div class="hs-act-sub">Google Maps · '+esc(hotel.name||'Hotel')+'</div>'+
+      '</button>';
+  } else if(HS_STATE.placeName){
+    // Fallback: Route vom aktuellen Standort zur nächsten belebten Ecke
+    html +=
+      '<button class="hs-act primary" onclick="window.open(\'https://www.google.com/maps/search/Hotel+near+'+encodeURIComponent(HS_STATE.placeName)+'\',\'_blank\')">'+
+      '<div class="hs-act-ico"><svg viewBox="0 0 24 24"><use href="#i-hotel"/></svg></div>'+
+      '<div class="hs-act-title">Hotel finden</div>'+
+      '<div class="hs-act-sub">Speichere zuerst deine Unterkunft</div>'+
+      '</button>';
+  }
+
+  // Standort an Crew teilen
+  var shareMsg;
+  if(pos){
+    var locUrl = 'https://www.google.com/maps?q='+pos.lat+','+pos.lng;
+    shareMsg = '🏠 Bring mich nach Hause — '+statusLabel+'. Mein Standort: '+locUrl;
+  } else {
+    shareMsg = '🏠 Bring mich nach Hause — '+statusLabel+'. '+(HS_STATE.placeName?'Ich bin bei '+HS_STATE.placeName:'Standort gerade nicht verfügbar');
+  }
+  html +=
+    '<button class="hs-act" style="--ha-bg:rgba(10,132,255,.2);--ha-c:#64B5FF" onclick="hsShareToCrew(\''+(shareMsg.replace(/\'/g,"\\\'"))+'\')">'+
+    '<div class="hs-act-ico"><svg viewBox="0 0 24 24"><use href="#i-users"/></svg></div>'+
+    '<div class="hs-act-title">Crew benachrichtigen</div>'+
+    '<div class="hs-act-sub">Standort + Status teilen</div>'+
+    '</button>';
+
+  // Standort allgemein teilen (Whatsapp, iMessage, etc via Share API)
+  html +=
+    '<button class="hs-act" style="--ha-bg:rgba(191,90,242,.2);--ha-c:#D49EFF" onclick="hsShareLink(\''+(shareMsg.replace(/\'/g,"\\\'"))+'\')">'+
+    '<div class="hs-act-ico"><svg viewBox="0 0 24 24"><use href="#i-share"/></svg></div>'+
+    '<div class="hs-act-title">Link teilen</div>'+
+    '<div class="hs-act-sub">WhatsApp, iMessage, …</div>'+
+    '</button>';
+
+  // Taxi Palma
+  html +=
+    '<button class="hs-act" style="--ha-bg:rgba(255,214,10,.22);--ha-c:#FFD96B" onclick="window.open(\'tel:+34971401212\')">'+
+    '<div class="hs-act-ico"><svg viewBox="0 0 24 24"><use href="#i-taxi"/></svg></div>'+
+    '<div class="hs-act-title">Taxi rufen</div>'+
+    '<div class="hs-act-sub">+34 971 40 12 12 · Palma</div>'+
+    '</button>';
+
+  // Notruf nur bei status==help prominent
+  if(HS_STATE.status==='help'){
+    html +=
+      '<button class="hs-act emergency" onclick="window.open(\'tel:112\')">'+
+      '<div class="hs-act-ico"><svg viewBox="0 0 24 24"><use href="#i-phone-112"/></svg></div>'+
+      '<div class="hs-act-title">Notruf 112</div>'+
+      '<div class="hs-act-sub">Polizei · Krankenwagen · Feuerwehr</div>'+
+      '</button>';
+  } else {
+    html +=
+      '<button class="hs-act" style="--ha-bg:rgba(255,59,48,.18);--ha-c:#FF8A7A" onclick="window.open(\'tel:112\')">'+
+      '<div class="hs-act-ico"><svg viewBox="0 0 24 24"><use href="#i-phone-112"/></svg></div>'+
+      '<div class="hs-act-title">Notruf 112</div>'+
+      '<div class="hs-act-sub">Nur im echten Notfall</div>'+
+      '</button>';
+  }
+
+  actEl.innerHTML = html;
+}
+
+window.hsClearHotel = function(){
+  try{ localStorage.removeItem('hotel_address'); }catch(e){}
+  hsBuildActions();
+};
+
+window.hsShareToCrew = async function(msg){
+  try{
+    if(sb && ME && ME.user_id && HS_STATE.pos){
+      // Best-effort: SOS-Alert in DB speichern (falls vorhanden)
+      sb.from('sos_alerts').insert({user_id:ME.user_id,lat:HS_STATE.pos.lat,lng:HS_STATE.pos.lng,message:msg}).then(function(){}).catch(function(){});
+    }
+    // Aktive Crew als Chat-Nachricht (falls verfügbar)
+    if(typeof getActiveCrewId==='function'){
+      var cid = getActiveCrewId();
+      if(cid && sb){
+        sb.from('crew_messages').insert({crew_id:cid,user_id:ME.user_id,message:'🏠 '+msg,created_at:new Date().toISOString()}).then(function(){}).catch(function(){});
+      }
+    }
+  }catch(e){}
+  hsShareLink(msg);
+  toast('Crew benachrichtigt ✓');
+};
+
+window.hsShareLink = function(msg){
+  if(navigator.share){
+    navigator.share({title:'crew. · Bring mich heim', text:msg}).catch(function(){});
+  } else if(navigator.clipboard){
+    navigator.clipboard.writeText(msg).catch(function(){});
+    toast('Link kopiert');
+  }
+};
+
+// Backward-compat shims — alte SOS-Aufrufe leiten auf Home-Safe um
+window.openSOS = window.openHomeSafe;
+window.closeSOS = window.closeHomeSafe;
 
 // ============================================
 // NAV
