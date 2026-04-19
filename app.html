@@ -405,12 +405,12 @@ select.ri{appearance:none;-webkit-appearance:none}
 .crew-map-pill::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);animation:activePulse 2s ease infinite}
 
 /* CREW SOS BAR */
-.crew-sos-bar{margin:10px 14px;padding:16px 18px;border-radius:var(--r);background:linear-gradient(135deg,rgba(255,59,48,.15),rgba(255,59,48,.05));backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);border:1px solid rgba(255,59,48,.3);display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .15s;position:relative;overflow:hidden;box-shadow:0 0 30px rgba(255,59,48,.08),inset 0 1px 0 rgba(255,255,255,.06)}
+.crew-sos-bar{margin:10px 14px;padding:20px 18px;border-radius:var(--r);background:linear-gradient(135deg,rgba(255,59,48,.2),rgba(255,59,48,.08));backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);border:1px solid rgba(255,59,48,.4);display:flex;align-items:center;gap:14px;cursor:pointer;transition:all .15s;position:relative;overflow:hidden;box-shadow:0 0 40px rgba(255,59,48,.12),inset 0 1px 0 rgba(255,255,255,.06);-webkit-tap-highlight-color:rgba(255,59,48,.2)}
 .crew-sos-bar:active{transform:scale(.97)}
 .crew-sos-pulse{position:absolute;top:50%;left:16px;width:8px;height:8px;border-radius:50%;background:var(--fire);transform:translateY(-50%);box-shadow:0 0 12px var(--fire)}
 .crew-sos-pulse::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:2px solid var(--fire);animation:sosPulse 1.5s ease-out infinite;opacity:0}
 @keyframes sosPulse{0%{transform:scale(1);opacity:.6}100%{transform:scale(2.5);opacity:0}}
-.crew-sos-icon{font-size:24px;margin-left:12px}
+.crew-sos-icon{font-size:32px;margin-left:12px}
 .crew-sos-text{flex:1}
 .crew-sos-title{font-size:14px;font-weight:800;color:var(--fire)}
 .crew-sos-sub{font-size:11px;color:var(--t3);margin-top:1px}
@@ -418,14 +418,14 @@ select.ri{appearance:none;-webkit-appearance:none}
 
 /* CREW QUICK ACTIONS */
 .crew-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:0 14px;margin-bottom:12px}
-.crew-action-btn{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 6px;border-radius:var(--r);background:linear-gradient(135deg,rgba(22,22,24,.7),rgba(28,28,32,.5));backdrop-filter:blur(50px) saturate(180%);-webkit-backdrop-filter:blur(50px) saturate(180%);border:1px solid rgba(255,255,255,.1);cursor:pointer;transition:all .2s var(--spring);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),inset 0 -1px 0 rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.25),0 0 0 .5px rgba(255,255,255,.03)}
-.crew-action-btn:active{transform:scale(.9);background:linear-gradient(135deg,rgba(32,32,36,.8),rgba(38,38,42,.6))}
-.cab-icon{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,rgba(255,109,46,.12),rgba(255,109,46,.04));display:flex;align-items:center;justify-content:center;font-size:20px;border:1px solid rgba(255,109,46,.08);box-shadow:0 0 16px rgba(255,109,46,.06)}
-.crew-action-btn span{font-size:10px;font-weight:700;color:var(--t2);letter-spacing:.2px}
+.crew-action-btn{display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 8px;border-radius:var(--r);background:linear-gradient(135deg,rgba(22,22,24,.7),rgba(28,28,32,.5));backdrop-filter:blur(50px) saturate(180%);-webkit-backdrop-filter:blur(50px) saturate(180%);border:1px solid rgba(255,255,255,.12);cursor:pointer;transition:all .2s var(--spring);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),inset 0 -1px 0 rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.25),0 0 0 .5px rgba(255,255,255,.03);min-width:56px;-webkit-tap-highlight-color:rgba(255,109,46,.15)}
+.crew-action-btn:active{transform:scale(.88);background:linear-gradient(135deg,rgba(32,32,36,.8),rgba(38,38,42,.6))}
+.cab-icon{width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,rgba(255,109,46,.15),rgba(255,109,46,.05));display:flex;align-items:center;justify-content:center;font-size:26px;border:1px solid rgba(255,109,46,.1);box-shadow:0 0 20px rgba(255,109,46,.08)}
+.crew-action-btn span{font-size:11px;font-weight:800;color:var(--t2);letter-spacing:.3px}
 
 /* CREW SECTIONS */
 .crew-section{margin:0 0 8px}
-.crew-section-header{display:flex;align-items:center;justify-content:space-between;padding:14px 14px 8px}
+.crew-section-header{display:flex;align-items:center;justify-content:space-between;padding:16px 14px 10px}
 .csh-left{display:flex;align-items:center;gap:8px}
 .csh-emoji{font-size:18px}
 .csh-title{font-size:15px;font-weight:800;letter-spacing:-.3px}
@@ -455,14 +455,14 @@ select.ri{appearance:none;-webkit-appearance:none}
 .wall-react-btn{padding:4px 10px;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.06);font-size:12px;cursor:pointer;transition:all .15s}
 .wall-react-btn:active{transform:scale(.9)}
 .wall-react-btn.reacted{background:rgba(255,109,46,.1);border-color:rgba(255,109,46,.15)}
-.wall-input-area{padding:0 14px 14px;display:flex;gap:6px;align-items:center}
-.wall-input{flex:1;padding:10px 14px;border-radius:14px;background:rgba(22,22,24,.6);border:1px solid rgba(255,255,255,.1);color:var(--t1);font-size:13px;font-family:inherit;outline:none;transition:border-color .2s}
-.wall-input:focus{border-color:rgba(255,109,46,.4)}
+.wall-input-area{padding:0 14px 14px;display:flex;gap:8px;align-items:center}
+.wall-input{flex:1;padding:14px 16px;border-radius:16px;background:rgba(22,22,24,.6);border:1px solid rgba(255,255,255,.12);color:var(--t1);font-size:15px;font-family:inherit;outline:none;transition:border-color .2s}
+.wall-input:focus{border-color:rgba(255,109,46,.5)}
 .wall-input::placeholder{color:var(--t3)}
-.wall-pin-btn{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+.wall-pin-btn{width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;-webkit-tap-highlight-color:rgba(255,109,46,.15)}
 .wall-pin-btn:active{transform:scale(.85)}
-.wall-pin-btn.pinned{background:rgba(255,109,46,.15);border-color:rgba(255,109,46,.3)}
-.wall-send-btn{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--o),#FF6B6B);border:none;color:#fff;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .15s}
+.wall-pin-btn.pinned{background:rgba(255,109,46,.2);border-color:rgba(255,109,46,.4)}
+.wall-send-btn{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--o),#FF6B6B);border:none;color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .15s;box-shadow:0 4px 16px rgba(255,109,46,.25);-webkit-tap-highlight-color:rgba(255,109,46,.2)}
 .wall-send-btn:active{transform:scale(.85)}
 .wall-empty{padding:20px 14px;text-align:center}
 .wall-empty-icon{font-size:36px;margin-bottom:6px}
@@ -3639,55 +3639,55 @@ var MALLE_SPOTS=[
   {name:'El Arenal Beach',lat:39.5055,lng:2.5395}
 ];
 
+// Crew Wall — Supabase-backed (survives browser clear)
 async function buildCrewWall(){
   var el=document.getElementById('crewWallPosts');if(!el)return;
-  var posts=cleanExpiredWallPosts();
+  var crewId=getActiveCrewId();
+  if(!crewId){el.innerHTML='<div class="wall-empty"><div class="wall-empty-icon">👯</div><div class="wall-empty-text">Tritt einer Crew bei!</div></div>';return}
 
-  // Try to get crew profile data for display
-  var profileMap={};
-  if(_crewProfiles&&_crewProfiles.length>0){
-    _crewProfiles.forEach(function(p){profileMap[p.user_id]={name:p.name,photo:p.photo_url}});
-  }
-  // Add self
-  profileMap[ME.user_id]={name:ME.name||'Du',photo:ME.photo_url||''};
+  try{
+    // Load last 24h of wall posts from Supabase
+    var since=new Date(Date.now()-86400000).toISOString();
+    var {data:posts,error}=await sb.from('crew_wall_posts').select('*').eq('crew_id',crewId).gte('created_at',since).order('created_at',{ascending:false}).limit(50);
+    if(error){console.error('Wall load error:',error);el.innerHTML='<div class="wall-empty"><div class="wall-empty-icon">⚠️</div><div class="wall-empty-text">Wall konnte nicht geladen werden.</div></div>';return}
 
-  if(posts.length===0){
-    el.innerHTML='<div class="wall-empty"><div class="wall-empty-icon">📍</div><div class="wall-empty-text">Noch keine Posts. Sei der Erste!</div></div>';
-    return;
-  }
-
-  // Sort newest first
-  posts.sort(function(a,b){return b.time-a.time});
-
-  var html='<div class="wall-posts">';
-  posts.forEach(function(p){
-    var profile=profileMap[p.uid]||{name:'Crew-Mitglied',photo:''};
-    var ago=getTimeAgo(p.time);
-    var remaining=getTimeRemaining(p.time);
-    html+='<div class="wall-post">';
-    html+='<div class="wall-post-header">';
-    html+='<div class="wp-ava"><img src="'+(profile.photo||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80')+'" loading="lazy"></div>';
-    html+='<div class="wp-info"><div class="wp-name">'+esc(profile.name)+'</div><div class="wp-time">'+ago+'</div></div>';
-    html+='<div class="wp-expire">⏳ '+remaining+'</div>';
-    html+='</div>';
-    html+='<div class="wall-post-text">'+esc(p.text)+'</div>';
-    if(p.loc){
-      html+='<div class="wall-post-loc" onclick="focusWallLoc('+p.loc.lat+','+p.loc.lng+')">📍 '+esc(p.loc.name)+'</div>';
+    if(!posts||posts.length===0){
+      el.innerHTML='<div class="wall-empty"><div class="wall-empty-icon">📍</div><div class="wall-empty-text">Noch keine Posts. Sei der Erste!</div></div>';
+      return;
     }
-    // Reactions
-    html+='<div class="wall-post-react">';
-    var reacts=['🔥','😂','🤙','❤️','👀'];
-    reacts.forEach(function(r){
-      var count=(p.reactions&&p.reactions[r])||0;
-      var myReacts=JSON.parse(localStorage.getItem('wall_reacted_'+p.id)||'[]');
-      var reacted=myReacts.indexOf(r)!==-1;
-      html+='<span class="wall-react-btn'+(reacted?' reacted':'')+'" onclick="reactWallPost(\''+p.id+'\',\''+r+'\')">'+r+(count>0?' '+count:'')+'</span>';
+
+    var html='<div class="wall-posts">';
+    posts.forEach(function(p){
+      var ts=new Date(p.created_at).getTime();
+      var ago=getTimeAgo(ts);
+      var remaining=getTimeRemaining(ts);
+      var isMe=p.user_id===ME.user_id;
+      html+='<div class="wall-post">';
+      html+='<div class="wall-post-header">';
+      html+='<div class="wp-ava" style="cursor:pointer" onclick="openCrewProfile(\''+p.user_id+'\')"><img src="'+(p.user_photo||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80')+'" loading="lazy"></div>';
+      html+='<div class="wp-info"><div class="wp-name" style="cursor:pointer" onclick="openCrewProfile(\''+p.user_id+'\')">'+esc(p.user_name||'Anonym')+'</div><div class="wp-time">'+ago+'</div></div>';
+      html+='<div class="wp-expire">⏳ '+remaining+'</div>';
+      html+='</div>';
+      html+='<div class="wall-post-text">'+esc(p.message)+'</div>';
+      if(p.loc_name){
+        html+='<div class="wall-post-loc" onclick="focusWallLoc('+(p.loc_lat||0)+','+(p.loc_lng||0)+')">📍 '+esc(p.loc_name)+'</div>';
+      }
+      // Reactions — big touch targets for drunk mode
+      html+='<div class="wall-post-react">';
+      var reacts=['🔥','😂','🤙','❤️','👀'];
+      var postReactions=p.reactions||{};
+      reacts.forEach(function(r){
+        var count=postReactions[r]||0;
+        var myReacts=JSON.parse(localStorage.getItem('wall_r_'+p.id)||'[]');
+        var reacted=myReacts.indexOf(r)!==-1;
+        html+='<span class="wall-react-btn'+(reacted?' reacted':'')+'" style="min-width:44px;min-height:44px;display:inline-flex;align-items:center;justify-content:center;font-size:16px;padding:6px 10px" onclick="reactWallPost(\''+p.id+'\',\''+r+'\')">'+r+(count>0?' <span style="font-size:12px">'+count+'</span>':'')+'</span>';
+      });
+      html+='</div>';
+      html+='</div>';
     });
     html+='</div>';
-    html+='</div>';
-  });
-  html+='</div>';
-  el.innerHTML=html;
+    el.innerHTML=html;
+  }catch(e){console.error('buildCrewWall error:',e)}
 }
 
 window.toggleWallPin=function(){
@@ -3699,69 +3699,78 @@ window.toggleWallPin=function(){
   if(navigator.vibrate)navigator.vibrate(10);
 };
 
-window.submitWallPost=function(){
+// Submit wall post — saves to Supabase
+window.submitWallPost=async function(){
   var input=document.getElementById('wallInput');
   if(!input)return;
   var text=input.value.trim();
   if(!text){toast('Schreib was rein!');return}
   if(text.length<2){toast('Mindestens 2 Zeichen!');return}
+  var crewId=getActiveCrewId();
+  if(!crewId){toast('Keine aktive Crew!');return}
 
-  var post={
-    id:'w_'+Date.now(),
-    uid:ME.user_id,
-    text:text,
-    time:Date.now(),
+  var postData={
+    crew_id:crewId,
+    user_id:ME.user_id,
+    user_name:ME.name||'Anonym',
+    user_photo:ME.photo_url||'',
+    message:text,
     reactions:{}
   };
 
   // Attach location if pin active
   if(_wallPinActive){
     if(userLat&&userLng){
-      // Find closest known Malle spot
       var closest=MALLE_SPOTS[0];var minDist=Infinity;
       MALLE_SPOTS.forEach(function(s){
         var d=Math.abs(s.lat-userLat)+Math.abs(s.lng-userLng);
         if(d<minDist){minDist=d;closest=s}
       });
-      post.loc={name:closest.name,lat:userLat,lng:userLng};
+      postData.loc_name=closest.name;
+      postData.loc_lat=userLat;
+      postData.loc_lng=userLng;
     }else{
       var spot=MALLE_SPOTS[Math.floor(Math.random()*MALLE_SPOTS.length)];
-      post.loc={name:spot.name,lat:spot.lat,lng:spot.lng};
+      postData.loc_name=spot.name;
+      postData.loc_lat=spot.lat;
+      postData.loc_lng=spot.lng;
     }
   }
 
-  var wallKey='crew_wall_posts';
-  var posts=JSON.parse(localStorage.getItem(wallKey)||'[]');
-  posts.push(post);
-  localStorage.setItem(wallKey,JSON.stringify(posts));
-  input.value='';
-  _wallPinActive=false;
-  var btn=document.getElementById('wallPinBtn');
-  if(btn)btn.classList.remove('pinned');
-  toast('Gepostet! 📍');
-  if(navigator.vibrate)navigator.vibrate([10,50,10]);
-  buildCrewWall();
+  try{
+    var {error}=await sb.from('crew_wall_posts').insert(postData);
+    if(error)throw error;
+    input.value='';
+    _wallPinActive=false;
+    var btn=document.getElementById('wallPinBtn');
+    if(btn)btn.classList.remove('pinned');
+    toast('Gepostet! 📍');
+    if(navigator.vibrate)navigator.vibrate([10,50,10]);
+    buildCrewWall();
+  }catch(e){toast('Fehler beim Posten: '+(e.message||''));console.error('submitWallPost error:',e)}
 };
 
-window.reactWallPost=function(postId,emoji){
-  var wallKey='crew_wall_posts';
-  var posts=JSON.parse(localStorage.getItem(wallKey)||'[]');
-  var post=posts.find(function(p){return p.id===postId});
-  if(!post)return;
-  if(!post.reactions)post.reactions={};
-  var myKey='wall_reacted_'+postId;
-  var myReacts=JSON.parse(localStorage.getItem(myKey)||'[]');
-  if(myReacts.indexOf(emoji)!==-1){
-    myReacts=myReacts.filter(function(r){return r!==emoji});
-    post.reactions[emoji]=Math.max(0,(post.reactions[emoji]||1)-1);
-  }else{
-    myReacts.push(emoji);
-    post.reactions[emoji]=(post.reactions[emoji]||0)+1;
-  }
-  localStorage.setItem(myKey,JSON.stringify(myReacts));
-  localStorage.setItem(wallKey,JSON.stringify(posts));
-  if(navigator.vibrate)navigator.vibrate(10);
-  buildCrewWall();
+// React to wall post — update reactions in Supabase
+window.reactWallPost=async function(postId,emoji){
+  try{
+    // Track own reactions locally (which emojis I used)
+    var myKey='wall_r_'+postId;
+    var myReacts=JSON.parse(localStorage.getItem(myKey)||'[]');
+    var adding=myReacts.indexOf(emoji)===-1;
+    if(adding){myReacts.push(emoji)}else{myReacts=myReacts.filter(function(r){return r!==emoji})}
+    localStorage.setItem(myKey,JSON.stringify(myReacts));
+
+    // Fetch current reactions from DB
+    var {data:post}=await sb.from('crew_wall_posts').select('reactions').eq('id',postId).single();
+    if(!post)return;
+    var reactions=post.reactions||{};
+    if(adding){reactions[emoji]=(reactions[emoji]||0)+1}
+    else{reactions[emoji]=Math.max(0,(reactions[emoji]||1)-1)}
+
+    await sb.from('crew_wall_posts').update({reactions:reactions}).eq('id',postId);
+    if(navigator.vibrate)navigator.vibrate(10);
+    buildCrewWall();
+  }catch(e){console.error('reactWallPost error:',e)}
 };
 
 window.focusWallLoc=function(lat,lng){
@@ -5414,13 +5423,13 @@ function renderChatMessages(){
     var time=d.toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'});
     html+='<div style="display:flex;gap:8px;padding:4px 14px;flex-direction:'+(isMe?'row-reverse':'row')+';align-items:flex-end">';
     if(!isMe){
-      html+='<div style="width:28px;height:28px;border-radius:50%;overflow:hidden;flex-shrink:0;background:rgba(255,255,255,.06)">';
+      html+='<div onclick="showChatMiniProfile(\''+msg.user_id+'\',\''+esc(msg.user_name||'Anonym')+'\',\''+esc(msg.user_photo||'')+'\',this)" style="width:36px;height:36px;border-radius:50%;overflow:hidden;flex-shrink:0;background:rgba(255,255,255,.06);cursor:pointer;border:2px solid transparent;transition:border-color .2s" ontouchstart="this.style.borderColor=\'var(--o)\'" ontouchend="this.style.borderColor=\'transparent\'">';
       if(msg.user_photo)html+='<img src="'+msg.user_photo+'" style="width:100%;height:100%;object-fit:cover">';
-      else html+='<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:12px">👤</div>';
+      else html+='<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:14px">👤</div>';
       html+='</div>';
     }
     html+='<div style="max-width:75%">';
-    if(!isMe)html+='<div style="font-size:10px;font-weight:700;color:var(--o);margin-bottom:2px;padding-left:2px">'+esc(msg.user_name||'Anonym')+'</div>';
+    if(!isMe)html+='<div style="font-size:10px;font-weight:700;color:var(--o);margin-bottom:2px;padding-left:2px;cursor:pointer" onclick="showChatMiniProfile(\''+msg.user_id+'\',\''+esc(msg.user_name||'Anonym')+'\',\''+esc(msg.user_photo||'')+'\',this)">'+esc(msg.user_name||'Anonym')+'</div>';
     html+='<div style="padding:8px 12px;border-radius:'+(isMe?'14px 14px 4px 14px':'14px 14px 14px 4px')+';background:'+(isMe?'var(--o)':'rgba(255,255,255,.08)')+';color:'+(isMe?'#fff':'var(--t1)')+';font-size:13px;line-height:1.4;word-break:break-word">'+esc(msg.message)+'</div>';
     html+='<div style="font-size:9px;color:var(--t3);margin-top:2px;padding:0 4px;text-align:'+(isMe?'right':'left')+'">'+time+'</div>';
     html+='</div>';
@@ -5436,6 +5445,29 @@ function scrollChatToBottom(){
   var el=document.getElementById('chatMessagesList');
   if(el)setTimeout(function(){el.scrollTop=el.scrollHeight},50);
 }
+
+// Mini profile popup in chat — shows quick info + link to full profile
+window.showChatMiniProfile=function(uid,name,photo,anchor){
+  // Remove existing popup
+  var old=document.getElementById('chatMiniProfile');if(old)old.remove();
+  var popup=document.createElement('div');
+  popup.id='chatMiniProfile';
+  popup.style.cssText='position:fixed;z-index:100010;left:50%;transform:translateX(-50%);bottom:80px;width:calc(100% - 32px);max-width:340px;padding:16px;border-radius:20px;background:rgba(20,20,24,.95);backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);border:1px solid rgba(255,255,255,.1);box-shadow:0 16px 40px rgba(0,0,0,.5);animation:slideUp .25s ease-out';
+  popup.innerHTML='<div style="display:flex;align-items:center;gap:14px">'+
+    '<div style="width:52px;height:52px;border-radius:50%;overflow:hidden;border:2px solid var(--o);flex-shrink:0"><img src="'+(photo||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80')+'" style="width:100%;height:100%;object-fit:cover"></div>'+
+    '<div style="flex:1;min-width:0"><div style="font-size:16px;font-weight:900">'+esc(name)+'</div><div style="font-size:11px;color:var(--t3);margin-top:2px">Tippe für volles Profil</div></div>'+
+    '<button onclick="document.getElementById(\'chatMiniProfile\').remove()" style="width:32px;height:32px;border-radius:50%;border:none;background:rgba(255,255,255,.08);color:var(--t2);font-size:14px;cursor:pointer;flex-shrink:0">✕</button>'+
+    '</div>'+
+    '<div style="display:flex;gap:8px;margin-top:14px">'+
+    '<button onclick="document.getElementById(\'chatMiniProfile\').remove();document.getElementById(\'crewChatOv\').classList.remove(\'show\');openCrewProfile(\''+uid+'\')" style="flex:1;padding:12px;border:none;border-radius:14px;background:var(--gold);color:#000;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit">👤 Profil ansehen</button>'+
+    '<button onclick="document.getElementById(\'chatMiniProfile\').remove();pokeCrewMember(\''+uid+'\',\''+esc(name)+'\')" style="padding:12px 16px;border:none;border-radius:14px;background:rgba(255,255,255,.08);color:var(--t1);font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;border:1px solid rgba(255,255,255,.1)">👋 Ping</button>'+
+    '</div>';
+  document.body.appendChild(popup);
+  // Auto-close after 6s
+  setTimeout(function(){var p=document.getElementById('chatMiniProfile');if(p)p.remove()},6000);
+  // Close on tap outside
+  setTimeout(function(){document.addEventListener('click',function handler(e){if(!popup.contains(e.target)&&e.target!==anchor){popup.remove();document.removeEventListener('click',handler)}},{once:false})},100);
+};
 
 window.sendChatMessage=async function(){
   var input=document.getElementById('chatInput');if(!input)return;
