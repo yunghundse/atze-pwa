@@ -1111,6 +1111,21 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
   </div>
 </div>
 
+<!-- LOCATION CONSENT DIALOG -->
+<div id="locationConsentOv" style="display:none;position:fixed;inset:0;z-index:99997;background:rgba(0,0,0,.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);flex-direction:column;align-items:center;justify-content:center;padding:30px">
+  <div style="max-width:380px;text-align:center">
+    <div style="font-size:52px;margin-bottom:16px">📍</div>
+    <div style="font-size:22px;font-weight:900;letter-spacing:-.5px;margin-bottom:8px">Standort freigeben?</div>
+    <div style="font-size:13px;color:var(--t2);line-height:1.6;margin-bottom:20px">crew. nutzt deinen Standort um dir Crew-Mitglieder in der Nähe zu zeigen, Check-Ins zu ermöglichen und dich im Notfall zu orten.<br><br>Dein Standort wird <strong>nie</strong> ohne deine Zustimmung geteilt. Du kannst jederzeit in den Sicherheitseinstellungen ändern wer deinen Standort sehen kann.</div>
+    <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:12px;margin-bottom:20px;font-size:11px;color:var(--t3);line-height:1.5">⚠️ Ohne Standort funktionieren einige Features eingeschränkt: Radar, Crew-Nähe, Check-Ins, SOS. VPN kann den Standort verfälschen.</div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <button onclick="acceptLocationConsent('permanent')" style="width:100%;padding:15px;border-radius:14px;border:none;background:var(--o);color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">📍 Standort dauerhaft freigeben</button>
+      <button onclick="acceptLocationConsent('session')" style="width:100%;padding:15px;border-radius:14px;border:none;background:rgba(255,255,255,.06);color:var(--t2);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;border:1px solid rgba(255,255,255,.1)">Nur für diese Sitzung</button>
+      <button onclick="acceptLocationConsent('denied')" style="width:100%;padding:12px;border-radius:14px;border:none;background:none;color:var(--t3);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit">Nicht freigeben</button>
+    </div>
+  </div>
+</div>
+
 <!-- SAFETY SETTINGS -->
 <div class="crew-profile-ov" id="safetySettingsOv">
   <button class="cp-back" onclick="closeSafetySettings()">←</button>
@@ -1660,7 +1675,7 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 47;
+  var APP_VERSION = 48;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     localStorage.setItem('crew_app_v', APP_VERSION);
@@ -1703,6 +1718,96 @@ function getGpsStatusText(){
   if(_gpsStatus==='unavailable') return '⚠️ Standort nicht verfügbar';
   if(_gpsStatus==='timeout') return '⚠️ GPS-Signal schwach';
   return '📍 Standort wird ermittelt...';
+}
+// ============================================
+// LOCATION CONSENT SYSTEM
+// ============================================
+var _locationConsent = 'unknown'; // 'permanent','session','denied','unknown'
+function getLocationConsent(){
+  // Check permanent consent first (stored in localStorage)
+  var perm = localStorage.getItem('location_consent');
+  if(perm === 'permanent') return 'permanent';
+  if(perm === 'denied') return 'denied';
+  // Check session consent (stored in sessionStorage — cleared on tab close)
+  var sess = sessionStorage.getItem('location_consent_session');
+  if(sess === 'session') return 'session';
+  if(sess === 'denied') return 'denied';
+  return 'unknown';
+}
+function acceptLocationConsent(choice){
+  _locationConsent = choice;
+  if(choice === 'permanent'){
+    localStorage.setItem('location_consent', 'permanent');
+    sessionStorage.removeItem('location_consent_session');
+  } else if(choice === 'session'){
+    localStorage.removeItem('location_consent');
+    sessionStorage.setItem('location_consent_session', 'session');
+  } else {
+    localStorage.setItem('location_consent', 'denied');
+    sessionStorage.removeItem('location_consent_session');
+    // Clear location from DB when denied
+    if(ME && ME.user_id){
+      ME.lat = null; ME.lng = null;
+      sb.from('profiles').update({lat:null, lng:null, location_updated_at:new Date().toISOString()}).eq('user_id', ME.user_id);
+    }
+    _gpsStatus = 'denied';
+  }
+  document.getElementById('locationConsentOv').style.display = 'none';
+  // Start GPS if consent given
+  if(choice !== 'denied') startGpsTracking();
+  updateGpsBanner();
+}
+function checkLocationConsent(){
+  var consent = getLocationConsent();
+  _locationConsent = consent;
+  if(consent === 'permanent' || consent === 'session'){
+    // Already consented, start GPS
+    startGpsTracking();
+    return;
+  }
+  if(consent === 'denied'){
+    // Explicitly denied — don't show dialog again this session, but don't start GPS
+    _gpsStatus = 'denied';
+    return;
+  }
+  // Unknown — show consent dialog
+  document.getElementById('locationConsentOv').style.display = 'flex';
+}
+function startGpsTracking(){
+  if(!navigator.geolocation){ _gpsStatus='unavailable'; return; }
+  navigator.geolocation.watchPosition(function(pos){
+    try {
+      var ll=[pos.coords.latitude,pos.coords.longitude];
+      var acc=pos.coords.accuracy;
+      _gpsStatus='active';
+      _gpsLastUpdate=Date.now();
+      _gpsAccuracy=acc;
+      userLat=ll[0];userLng=ll[1];
+      if(ME){ME.lat=ll[0];ME.lng=ll[1]}
+      if(userMarker)userMarker.setLatLng(ll);
+      if(userAccCircle&&rMap)rMap.removeLayer(userAccCircle);
+      if(rMap)userAccCircle=L.circle(ll,{radius:acc,color:'#0A84FF',fillColor:'#0A84FF',fillOpacity:0.08,weight:1,opacity:0.3}).addTo(rMap);
+      if(!window._mapCentered&&rMap){rMap.setView(ll,17);window._mapCentered=true}
+      if(cMap&&window._crewUserMarker){window._crewUserMarker.setLatLng(ll)}
+      if(ME&&ME.user_id)buildNearby().catch(function(e){console.warn('[CREW] buildNearby error:',e)});
+      var locMode=localStorage.getItem('location_sharing_mode')||'crew';
+      if(ME&&ME.user_id&&locMode!=='nobody'){
+        sb.from('profiles').update({lat:ll[0],lng:ll[1],location_updated_at:new Date().toISOString()}).eq('user_id',ME.user_id);
+      } else if(ME&&ME.user_id&&locMode==='nobody'){
+        sb.from('profiles').update({lat:null,lng:null,location_updated_at:new Date().toISOString()}).eq('user_id',ME.user_id);
+      }
+    } catch(e){ console.warn('[CREW] watchPosition callback error:', e); }
+  },function(err){
+    console.warn('[CREW] Geolocation error:',err.message,err.code);
+    if(err.code===1)_gpsStatus='denied';
+    else if(err.code===2)_gpsStatus='unavailable';
+    else if(err.code===3)_gpsStatus='timeout';
+    if(err.code===1&&ME){
+      ME.lat=null;ME.lng=null;userLat=0;userLng=0;
+      if(ME.user_id)sb.from('profiles').update({lat:null,lng:null}).eq('user_id',ME.user_id);
+    }
+  },
+  {enableHighAccuracy:true,maximumAge:5000,timeout:10000});
 }
 var GAMES = [
   {name:'Wer bin ich?',icon:'🤔',desc:'Rate die Person auf deiner Stirn',players:'2-10',cards:[
@@ -2252,6 +2357,11 @@ async function loadUser(authUser){
 
     // Load crews from Supabase
     try { await fetchAllCrews(); } catch(e) { console.warn('[CREW] crews load failed:', e); }
+    // Load user's crew memberships from Supabase
+    try { await loadMyCrewMemberships(); } catch(e) { console.warn('[CREW] memberships load failed:', e); }
+    // Clean up old localStorage crew data (migrated to Supabase)
+    localStorage.removeItem('crew_settings');
+    localStorage.removeItem('my_crew_memberships');
 
     // Load user blocks
     try { await loadMyBlocks(); } catch(e) { console.warn('[SAFETY] blocks load failed:', e); }
@@ -2298,6 +2408,8 @@ async function loadUser(authUser){
     document.getElementById('agegate').classList.add('gone');
     document.getElementById('app').style.display = 'flex';
     buildApp();
+    // Check location consent after app is visible
+    checkLocationConsent();
   } catch(e) {
     console.error('[CREW] loadUser error:', e);
     document.getElementById('loadingScreen').classList.add('gone');
@@ -2813,52 +2925,10 @@ function initMap(){
     L.marker([v.lat,v.lng],{icon:L.divIcon({html:d.outerHTML,className:'',iconSize:[44,44],iconAnchor:[22,22]})}).addTo(rMap)
       .bindPopup('<div style="min-width:140px"><h3 style="font-size:13px;font-weight:800;margin-bottom:3px">'+esc(v.name)+'</h3><p style="font-size:11px;color:#888;margin-bottom:6px">'+esc(v.description)+'</p><button style="display:block;width:100%;padding:7px;border:none;border-radius:8px;background:#FF6D2E;color:#fff;font-size:11px;font-weight:700;cursor:pointer" onclick="openVenue(\''+v.id+'\')">Details</button></div>');
   });
-  // User location with watch
+  // User location marker (GPS tracking is started via checkLocationConsent)
   var u=document.createElement('div');u.className='pin-user';
   userMarker = L.marker(PC,{icon:L.divIcon({html:u.outerHTML,className:'',iconSize:[16,16],iconAnchor:[8,8]})}).addTo(rMap);
-  if(navigator.geolocation){
-    navigator.geolocation.watchPosition(function(pos){
-      try {
-        var ll=[pos.coords.latitude,pos.coords.longitude];
-        var acc=pos.coords.accuracy;
-        _gpsStatus='active';
-        _gpsLastUpdate=Date.now();
-        _gpsAccuracy=acc;
-        userLat=ll[0];userLng=ll[1];
-        // Sync to ME object so isOnMallorca() works correctly
-        if(ME){ME.lat=ll[0];ME.lng=ll[1]}
-        if(userMarker)userMarker.setLatLng(ll);
-        // Accuracy circle
-        if(userAccCircle&&rMap)rMap.removeLayer(userAccCircle);
-        if(rMap)userAccCircle=L.circle(ll,{radius:acc,color:'#0A84FF',fillColor:'#0A84FF',fillOpacity:0.08,weight:1,opacity:0.3}).addTo(rMap);
-        if(!window._mapCentered&&rMap){rMap.setView(ll,17);window._mapCentered=true}
-        if(cMap&&window._crewUserMarker){window._crewUserMarker.setLatLng(ll)}
-        // Update nearby crew (only if app is loaded)
-        if(ME&&ME.user_id)buildNearby().catch(function(e){console.warn('[CREW] buildNearby error:',e)});
-        // Save location to DB — only if sharing is not set to 'nobody'
-        var locMode=localStorage.getItem('location_sharing_mode')||'crew';
-        if(ME&&ME.user_id&&locMode!=='nobody'){
-          sb.from('profiles').update({lat:ll[0],lng:ll[1],location_updated_at:new Date().toISOString()}).eq('user_id',ME.user_id);
-        } else if(ME&&ME.user_id&&locMode==='nobody'){
-          // Clear location from DB when sharing disabled
-          sb.from('profiles').update({lat:null,lng:null,location_updated_at:new Date().toISOString()}).eq('user_id',ME.user_id);
-        }
-      } catch(e){ console.warn('[CREW] watchPosition callback error:', e); }
-    },function(err){
-      console.warn('[CREW] Geolocation error:',err.message,err.code);
-      if(err.code===1)_gpsStatus='denied';
-      else if(err.code===2)_gpsStatus='unavailable';
-      else if(err.code===3)_gpsStatus='timeout';
-      // Clear stale location from ME and DB when GPS denied
-      if(err.code===1&&ME){
-        ME.lat=null;ME.lng=null;userLat=0;userLng=0;
-        if(ME.user_id)sb.from('profiles').update({lat:null,lng:null}).eq('user_id',ME.user_id);
-      }
-    },
-    {enableHighAccuracy:true,maximumAge:5000,timeout:10000});
-  } else {
-    _gpsStatus='unavailable';
-  }
+  // GPS tracking is now consent-gated — started in checkLocationConsent()
   setTimeout(function(){rMap.invalidateSize()},200);
 }
 function initCMap(){
@@ -2867,8 +2937,9 @@ function initCMap(){
   L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{maxZoom:20,attribution:''}).addTo(cMap);
   var u=document.createElement('div');u.className='pin-user';
   window._crewUserMarker = L.marker(PC,{icon:L.divIcon({html:u.outerHTML,className:'',iconSize:[16,16],iconAnchor:[8,8]})}).addTo(cMap);
-  // Center on user if available
-  if(navigator.geolocation){
+  // Center on user if available (only if consent given)
+  var cConsent=getLocationConsent();
+  if(navigator.geolocation&&(cConsent==='permanent'||cConsent==='session')){
     navigator.geolocation.getCurrentPosition(function(pos){
       var ll=[pos.coords.latitude,pos.coords.longitude];
       cMap.setView(ll,17);
@@ -2958,8 +3029,7 @@ function buildCards(){
   }
 
   s.innerHTML='';cIdx=0;
-  var blocked=JSON.parse(localStorage.getItem('crew_blocked')||'[]');
-  var list=(FILTERED_PROFILES.length>0?FILTERED_PROFILES:PROFILES).filter(function(p){return blocked.indexOf(p.user_id)===-1});
+  var list=(FILTERED_PROFILES.length>0?FILTERED_PROFILES:PROFILES).filter(function(p){return !isBlocked(p.user_id)});
   if(list.length===0){
     s.innerHTML='<div class="no-profiles"><div style="font-size:48px;margin-bottom:12px">🔍</div><div style="font-size:16px;font-weight:700;color:var(--t)">Keine neuen Leute</div><div style="font-size:13px;margin-top:4px">Ändere deine Filter oder schau später nochmal vorbei!</div></div>';
     return;
@@ -3829,129 +3899,147 @@ var CREW_ACHIEVEMENTS = [
   {id:'social',icon:'🤝',name:'Networker',desc:'Mit 5 anderen Crews connected'}
 ];
 
-var CREW_SETTINGS_DEFAULTS={name:'Meine Crew',motto:'Auf geht\'s nach Malle!',icon:'🏴‍☠️',visibility:'public',leader:null,malle_visits:1,founded:null,hometown:'',bio:'',photo_url:'',group_photo:'',tags:[],what_we_do:'',what_makes_us:''};
 var CREW_ICONS=['🏴‍☠️','👑','🔥','🍺','🎉','🏖️','🌴','⚡','🦈','🐊','💎','🎯','🚀','🌅','🍖','🎸','🤙','🦁','🐺','🎪'];
 
-function getCrewSettings(){
-  var s=JSON.parse(localStorage.getItem('crew_settings')||'null');
-  if(!s) return null;
-  return s;
-}
-function getOrCreateCrewSettings(){
-  var s=getCrewSettings();
-  if(!s){s=Object.assign({},CREW_SETTINGS_DEFAULTS);s.founded=new Date().toISOString().split('T')[0];localStorage.setItem('crew_settings',JSON.stringify(s))}
-  return s;
-}
-function hasActiveCrew(){return !!localStorage.getItem('crew_settings')}
-
-function saveCrewSettings(s){localStorage.setItem('crew_settings',JSON.stringify(s))}
-
 // ============================================
-// MULTI-CREW MEMBERSHIP SYSTEM
+// CREW MEMBERSHIP SYSTEM v2 — 100% Supabase
 // ============================================
+// All crew data lives in Supabase. localStorage is ONLY used for:
+// - active_crew_id (which crew is selected)
+// - is_premium (payment status)
+// No more crew_settings, no more my_crew_memberships.
+
 var CREW_LIMITS={free:2,premium:5};
+var _myCrewMemberships=[]; // [{crew_id, role, crew: {...}}]
 
-function getMyMemberships(){return JSON.parse(localStorage.getItem('my_crew_memberships')||'[]')}
-function saveMyMemberships(list){localStorage.setItem('my_crew_memberships',JSON.stringify(list))}
+async function loadMyCrewMemberships(){
+  if(!ME||!ME.user_id)return;
+  try{
+    var {data}=await sb.from('crew_members').select('crew_id,role').eq('user_id',ME.user_id);
+    if(!data||data.length===0){_myCrewMemberships=[];return}
+    // Enrich with crew data from cache
+    var crewIds=data.map(function(m){return m.crew_id});
+    var {data:crews}=await sb.from('crews').select('*').in('id',crewIds);
+    _myCrewMemberships=data.map(function(m){
+      var crew=(crews||[]).find(function(c){return c.id===m.crew_id});
+      return {crew_id:m.crew_id,role:m.role,crew:crew||null};
+    }).filter(function(m){return m.crew!==null});
+  }catch(e){console.error('[CREW] loadMyCrewMemberships failed:',e);_myCrewMemberships=[]}
+}
+
+// Get crew settings for the active crew (replaces old getCrewSettings)
+function getCrewSettings(){
+  var activeId=getActiveCrewId();
+  if(!activeId)return null;
+  var m=_myCrewMemberships.find(function(x){return x.crew_id===activeId});
+  if(!m||!m.crew)return null;
+  // Return crew object with role info
+  var c=Object.assign({},m.crew);
+  c.leader=c.created_by;
+  c._myRole=m.role;
+  return c;
+}
+
+function hasActiveCrew(){return _myCrewMemberships.length>0}
 
 function isInCrew(crewId){
-  var s=getCrewSettings();
-  if(s&&s.id===crewId)return true;
-  return getMyMemberships().indexOf(crewId)!==-1;
+  return _myCrewMemberships.some(function(m){return m.crew_id===crewId});
 }
 
-function getMyCrewCount(){
-  var count=getMyMemberships().length;
-  if(getCrewSettings())count++;
-  return count;
-}
+function getMyCrewCount(){return _myCrewMemberships.length}
 
 function getCrewLimit(){
   var isPremium=localStorage.getItem('is_premium')==='true';
   return isPremium?CREW_LIMITS.premium:CREW_LIMITS.free;
 }
 
-function canJoinMoreCrews(){
-  return getMyCrewCount()<getCrewLimit();
-}
+function canJoinMoreCrews(){return getMyCrewCount()<getCrewLimit()}
 
 async function joinCrew(crewId){
   if(isInCrew(crewId)){toast('Du bist bereits in dieser Crew!');return false}
   if(!canJoinMoreCrews()){
     var limit=getCrewLimit();
     var isPremium=localStorage.getItem('is_premium')==='true';
-    if(!isPremium){
-      toast('Max '+limit+' Crews als Free-User! Upgrade auf Premium für '+CREW_LIMITS.premium+' Crews 👑');
-    }else{
-      toast('Max '+limit+' Crews erreicht!');
-    }
+    toast(isPremium?'Max '+limit+' Crews erreicht!':'Max '+limit+' Crews als Free-User! Upgrade auf Premium für '+CREW_LIMITS.premium+' Crews 👑');
     return false;
   }
-  // Add to own memberships locally
-  var list=getMyMemberships();
-  list.push(crewId);
-  saveMyMemberships(list);
-  // Register as member in Supabase
   try{
     await sb.from('crew_members').upsert({crew_id:crewId,user_id:ME.user_id,role:'member'},{onConflict:'crew_id,user_id'});
-    // Update member count
     var {count}=await sb.from('crew_members').select('*',{count:'exact',head:true}).eq('crew_id',crewId);
     await sb.from('crews').update({members:count||1}).eq('id',crewId);
-    // Remove from join_requests if present
     await sb.from('crew_join_requests').delete().eq('crew_id',crewId).eq('user_id',ME.user_id);
-  }catch(e){console.error('[CREW] join failed:',e)}
-  await fetchAllCrews();
-  return true;
+    // Refresh memberships
+    await loadMyCrewMemberships();
+    await fetchAllCrews();
+    // Set as active if first crew
+    if(_myCrewMemberships.length===1)setActiveCrewId(crewId);
+    return true;
+  }catch(e){console.error('[CREW] join failed:',e);toast('Fehler beim Beitreten.');return false}
 }
 
-function leaveCrew(crewId){
-  var list=getMyMemberships().filter(function(id){return id!==crewId});
-  saveMyMemberships(list);
+async function leaveCrew(crewId){
+  try{
+    await sb.from('crew_members').delete().eq('crew_id',crewId).eq('user_id',ME.user_id);
+    var {count}=await sb.from('crew_members').select('*',{count:'exact',head:true}).eq('crew_id',crewId);
+    await sb.from('crews').update({members:Math.max(0,count||0)}).eq('id',crewId);
+    await loadMyCrewMemberships();
+    // If we left the active crew, switch
+    if(getActiveCrewId()===crewId){
+      setActiveCrewId(_myCrewMemberships.length>0?_myCrewMemberships[0].crew_id:null);
+    }
+  }catch(e){console.error('[CREW] leave failed:',e)}
 }
 
 function getAllMyCrews(){
-  var all=[];
-  var s=getCrewSettings();
-  if(s&&s.id)all.push(s);
-  var memberships=getMyMemberships();
-  var board=getAllCrews();
-  memberships.forEach(function(id){
-    var c=board.find(function(b){return b.id===id});
-    if(c)all.push(c);
+  return _myCrewMemberships.map(function(m){
+    var c=Object.assign({},m.crew);
+    c._myRole=m.role;
+    return c;
   });
-  return all;
 }
 
 var _activeCrewId=localStorage.getItem('active_crew_id')||null;
 function getActiveCrewId(){
-  if(!_activeCrewId){
-    var s=getCrewSettings();
-    if(s&&s.id)_activeCrewId=s.id;
+  if(!_activeCrewId&&_myCrewMemberships.length>0){
+    _activeCrewId=_myCrewMemberships[0].crew_id;
+    localStorage.setItem('active_crew_id',_activeCrewId);
   }
   return _activeCrewId;
 }
 function setActiveCrewId(id){
   _activeCrewId=id;
-  localStorage.setItem('active_crew_id',id);
+  if(id)localStorage.setItem('active_crew_id',id);
+  else localStorage.removeItem('active_crew_id');
 }
+
+// Backward compat — saveCrewSettings does nothing now (all in Supabase)
+function saveCrewSettings(s){/* deprecated */}
+function getOrCreateCrewSettings(){return getCrewSettings()}
 
 function updateCrewIdentityCard(){
   var s=getCrewSettings();
   if(!s){
     var el1=document.getElementById('myCrewIcon');if(el1)el1.textContent='➕';
-    var el2=document.getElementById('myCrewName');if(el2)el2.textContent='Crew gründen';
+    var el2=document.getElementById('myCrewName');if(el2)el2.textContent='Crew gründen oder beitreten';
     var el3=document.getElementById('myCrewMotto');if(el3)el3.textContent='Tippe um loszulegen';
     return;
   }
-  var el1=document.getElementById('myCrewIcon');if(el1)el1.textContent=s.icon;
-  var el2=document.getElementById('myCrewName');if(el2)el2.textContent=s.name;
-  var el3=document.getElementById('myCrewMotto');if(el3)el3.textContent=s.motto;
+  var el1=document.getElementById('myCrewIcon');if(el1)el1.textContent=s.icon||'🏴‍☠️';
+  var el2=document.getElementById('myCrewName');if(el2)el2.textContent=s.name||'Meine Crew';
+  var el3=document.getElementById('myCrewMotto');if(el3)el3.textContent=s.motto||'';
 }
 
 window.openMyCrewProfile=function(){
   var ov=document.getElementById('crewProfileOv');if(!ov)return;
   var s=getCrewSettings();
-  if(!s){openCrewCreate();return;}
+  if(!s){
+    // No active crew — offer to create or join
+    if(_myCrewMemberships.length===0){openCrewCreate();return}
+    // Has crews but none active — set first
+    setActiveCrewId(_myCrewMemberships[0].crew_id);
+    s=getCrewSettings();
+    if(!s){openCrewCreate();return}
+  }
   var crewSize=(_crewProfiles&&_crewProfiles.length)||0;
   var totalAura=0;var topStreak=0;
   if(_crewProfiles)_crewProfiles.forEach(function(p){totalAura+=(p.points||0);if((p.streak||0)>topStreak)topStreak=p.streak||0});
@@ -4155,41 +4243,57 @@ window.openMyCrewProfile=function(){
 
 window.closeCrewProfile=function(){document.getElementById('crewProfileOv').classList.remove('show')};
 
-window.updateCrewSetting=function(key,val){
-  var s=getCrewSettings();if(!s)return;s[key]=val;saveCrewSettings(s);updateCrewIdentityCard();
-  toast('Gespeichert ✓');
+window.updateCrewSetting=async function(key,val){
+  var s=getCrewSettings();if(!s||s.created_by!==ME.user_id){toast('Nur der Crew-Ersteller kann das ändern.');return}
+  var obj={};obj[key]=val;
+  try{
+    await sb.from('crews').update(obj).eq('id',s.id);
+    await fetchAllCrews();await loadMyCrewMemberships();
+    updateCrewIdentityCard();
+    toast('Gespeichert ✓');
+  }catch(e){toast('Fehler.')}
 };
 
-window.toggleCrewVisibility=function(){
-  var s=getCrewSettings();if(!s)return;
-  s.visibility=s.visibility==='public'?'private':'public';
-  saveCrewSettings(s);
-  openMyCrewProfile(); // refresh
-  toast(s.visibility==='public'?'Crew ist jetzt öffentlich 🌍':'Crew ist jetzt privat 🔒');
+window.toggleCrewVisibility=async function(){
+  var s=getCrewSettings();if(!s||s.created_by!==ME.user_id)return;
+  var newVis=s.visibility==='public'?'private':'public';
+  try{
+    await sb.from('crews').update({visibility:newVis}).eq('id',s.id);
+    await fetchAllCrews();await loadMyCrewMemberships();
+    openMyCrewProfile();
+    toast(newVis==='public'?'Crew ist jetzt öffentlich 🌍':'Crew ist jetzt privat 🔒');
+  }catch(e){toast('Fehler.')}
 };
 
 window.changeGroupPhoto=function(){
+  var s=getCrewSettings();if(!s||s.created_by!==ME.user_id){toast('Nur der Ersteller kann das Bild ändern.');return}
   var input=document.createElement('input');
   input.type='file';input.accept='image/*';
-  input.onchange=function(){
+  input.onchange=async function(){
     if(!input.files||!input.files[0])return;
     var reader=new FileReader();
-    reader.onload=function(e){
-      var s=getCrewSettings();if(!s)return;s.group_photo=e.target.result;saveCrewSettings(s);registerMyCrew();
-      toast('Gruppenbild aktualisiert! 📸');openMyCrewProfile();
+    reader.onload=async function(e){
+      try{
+        await sb.from('crews').update({group_photo:e.target.result}).eq('id',s.id);
+        await fetchAllCrews();await loadMyCrewMemberships();
+        toast('Gruppenbild aktualisiert! 📸');openMyCrewProfile();
+      }catch(er){toast('Fehler.')}
     };
     reader.readAsDataURL(input.files[0]);
   };
   input.click();
 };
 
-window.toggleCrewTag=function(tag){
-  var s=getCrewSettings();if(!s)return;
-  if(!s.tags)s.tags=[];
-  var idx=s.tags.indexOf(tag);
-  if(idx>=0)s.tags.splice(idx,1);
-  else{if(s.tags.length>=5){toast('Maximal 5 Tags!');return}s.tags.push(tag)}
-  saveCrewSettings(s);registerMyCrew();openMyCrewProfile();
+window.toggleCrewTag=async function(tag){
+  var s=getCrewSettings();if(!s||s.created_by!==ME.user_id)return;
+  var tags=s.tags||[];
+  var idx=tags.indexOf(tag);
+  if(idx>=0)tags.splice(idx,1);
+  else{if(tags.length>=5){toast('Maximal 5 Tags!');return}tags.push(tag)}
+  try{
+    await sb.from('crews').update({tags:tags}).eq('id',s.id);
+    await fetchAllCrews();await loadMyCrewMemberships();openMyCrewProfile();
+  }catch(e){toast('Fehler.')}
 };
 
 window.voteNewLeader=function(){
@@ -4337,34 +4441,18 @@ function generateInviteCode(){
   return code;
 }
 
+// registerMyCrew — syncs active crew data to Supabase (only if owner)
 async function registerMyCrew(){
   var s=getCrewSettings();
-  if(!s)return;
-  if(!s.id){s.id='crew_'+ME.user_id+'_'+Date.now();saveCrewSettings(s)}
-  var crewSize=(_crewProfiles&&_crewProfiles.length||0)+1;
-  var totalAura=parseInt(localStorage.getItem('crew_user_points')||'0');
-  if(_crewProfiles)_crewProfiles.forEach(function(p){totalAura+=(p.points||0)});
-
-  var entry={
-    id:s.id,created_by:ME.user_id,name:s.name,motto:s.motto||'',bio:s.bio||'',icon:s.icon||'🏴‍☠️',
-    photo_url:s.photo_url||'',group_photo:s.group_photo||'',visibility:s.visibility||'public',
-    members:crewSize,aura:totalAura,hometown:s.hometown||'',malle_visits:s.malle_visits||1,
-    founded:s.founded||new Date().toISOString().split('T')[0],
-    what_we_do:s.what_we_do||'',what_makes_us:s.what_makes_us||'',tags:s.tags||[]
-  };
-  // Preserve status and invite_code from DB
-  var existing=_crewsCache.find(function(c){return c.id===s.id});
-  entry.status=existing?existing.status:'pending';
-  entry.invite_code=existing&&existing.invite_code?existing.invite_code:(s.invite_code||generateInviteCode());
-  // Save invite_code to local settings too
-  if(!s.invite_code){s.invite_code=entry.invite_code;saveCrewSettings(s)}
-
-  await saveCrewToDb(entry);
-  // Also ensure owner is in crew_members
+  if(!s||!s.id)return;
+  // Only owner can update crew data
+  if(s.created_by!==ME.user_id)return;
   try{
-    await sb.from('crew_members').upsert({crew_id:s.id,user_id:ME.user_id,role:'owner'},{onConflict:'crew_id,user_id'});
-  }catch(e){}
-  await fetchAllCrews();
+    var {count}=await sb.from('crew_members').select('*',{count:'exact',head:true}).eq('crew_id',s.id);
+    await sb.from('crews').update({members:count||1}).eq('id',s.id);
+    await fetchAllCrews();
+    await loadMyCrewMemberships();
+  }catch(e){console.error('[CREW] registerMyCrew failed:',e)}
 }
 
 var _cbFilter='all';
@@ -4383,7 +4471,6 @@ function pickCrewOfTheDay(){
 
 window.openCrewBoard=async function(){
   var ov=document.getElementById('crewBoardOv');if(!ov)return;
-  await registerMyCrew(); // sync own crew to Supabase
   await fetchAllCrews(); // get all crews from DB
   pickCrewOfTheDay();
   var filterEl=document.getElementById('cbFilters');
@@ -4597,39 +4684,52 @@ window.submitCrewCreate=async function(){
   var whatMakesUs=(document.getElementById('ccWhatMakesUs').value||'').trim();
 
   var invCode=generateInviteCode();
-  var s={
-    id:'crew_'+ME.user_id+'_'+Date.now(),
-    name:name,bio:bio,motto:motto,icon:_ccSelectedIcon,
-    photo_url:_ccPhotoData,group_photo:_ccGroupPhotoData,visibility:visibility,
-    leader:ME.user_id,malle_visits:1,founded:new Date().toISOString().split('T')[0],
-    hometown:hometown,what_we_do:whatWeDo,what_makes_us:whatMakesUs,tags:[],
-    status:'pending',invite_code:invCode
-  };
-  saveCrewSettings(s);
-  await registerMyCrew();
-  updateCrewIdentityCard();
-  updateCrewGate();
-  buildCrewSwitcher();
-  closeCrewCreate();
-  toast('Crew „'+name+'" gegründet! Code: '+invCode+' ⏳');
-  if(navigator.vibrate)navigator.vibrate([10,80,10,80,10]);
-  renderCrewBoard();
+  var crewId='crew_'+ME.user_id+'_'+Date.now();
+
+  // Save crew directly to Supabase
+  try{
+    await saveCrewToDb({
+      id:crewId,created_by:ME.user_id,name:name,bio:bio,motto:motto,icon:_ccSelectedIcon,
+      photo_url:_ccPhotoData||'',group_photo:_ccGroupPhotoData||'',visibility:visibility,
+      members:1,aura:0,hometown:hometown,malle_visits:1,
+      founded:new Date().toISOString().split('T')[0],
+      what_we_do:whatWeDo,what_makes_us:whatMakesUs,tags:[],
+      status:'pending',invite_code:invCode
+    });
+    // Add creator as owner in crew_members
+    await sb.from('crew_members').upsert({crew_id:crewId,user_id:ME.user_id,role:'owner'},{onConflict:'crew_id,user_id'});
+    // Refresh data
+    await fetchAllCrews();
+    await loadMyCrewMemberships();
+    setActiveCrewId(crewId);
+    updateCrewIdentityCard();
+    updateCrewGate();
+    buildCrewSwitcher();
+    closeCrewCreate();
+    toast('Crew „'+name+'" gegründet! Code: '+invCode+' ⏳');
+    if(navigator.vibrate)navigator.vibrate([10,80,10,80,10]);
+    renderCrewBoard();
+  }catch(e){
+    console.error('[CREW] create failed:',e);
+    toast('Fehler beim Erstellen der Crew.');
+  }
 };
 
 // Change crew photo from profile
 window.changeCrewPhoto=function(){
+  var s=getCrewSettings();if(!s||s.created_by!==ME.user_id){toast('Nur der Ersteller kann das Foto ändern.');return}
   var input=document.createElement('input');
   input.type='file';input.accept='image/*';
   input.onchange=function(){
     if(!input.files||!input.files[0])return;
     var reader=new FileReader();
-    reader.onload=function(e){
-      var s=getCrewSettings();if(!s)return;
-      s.photo_url=e.target.result;
-      saveCrewSettings(s);
-      registerMyCrew();
-      toast('Crew-Foto aktualisiert! 📷');
-      openMyCrewProfile(); // refresh
+    reader.onload=async function(e){
+      try{
+        await sb.from('crews').update({photo_url:e.target.result}).eq('id',s.id);
+        await fetchAllCrews();await loadMyCrewMemberships();
+        toast('Crew-Foto aktualisiert! 📷');
+        openMyCrewProfile();
+      }catch(er){toast('Fehler.')}
     };
     reader.readAsDataURL(input.files[0]);
   };
@@ -4684,12 +4784,12 @@ window.confirmDeleteCrew=async function(){
     var s=getCrewSettings();
     try{
       await deleteCrewFromDb(s.id);
-      localStorage.removeItem('crew_settings');
       localStorage.removeItem('crew_delete_votes');
+      await fetchAllCrews();await loadMyCrewMemberships();
+      setActiveCrewId(_myCrewMemberships.length>0?_myCrewMemberships[0].crew_id:null);
       closeCrewDelete();
       closeCrewProfile();
       updateCrewIdentityCard();
-      await fetchAllCrews();
       updateCrewGate();
       toast('Crew wurde aufgelöst. 💨');
       if(navigator.vibrate)navigator.vibrate([100,50,100]);
@@ -4712,37 +4812,29 @@ window.adminDeleteCrew=async function(crewId,name){
   if(!confirm('Crew „'+name+'" wirklich löschen?'))return;
   try{
     await deleteCrewFromDb(crewId);
-    var s=getCrewSettings();
-    if(s&&s.id===crewId){
-      localStorage.removeItem('crew_settings');
-      localStorage.removeItem('crew_delete_votes');
-      updateCrewIdentityCard();
-    }
-    // Remove from memberships
-    leaveCrew(crewId);
-    await fetchAllCrews();
+    await fetchAllCrews();await loadMyCrewMemberships();
+    if(getActiveCrewId()===crewId)setActiveCrewId(_myCrewMemberships.length>0?_myCrewMemberships[0].crew_id:null);
+    updateCrewIdentityCard();
     toast('Crew „'+name+'" gelöscht ✓');
     if(navigator.vibrate)navigator.vibrate([50,30,50]);
     openAdminPanel();
   }catch(e){toast('Fehler.')}
 };
 
-// Admin delete own crew directly from crew profile
+// Admin/Owner delete own crew directly from crew profile
 window.adminDeleteOwnCrew=async function(){
-  if(!ME||!ME.is_admin)return;
   var s=getCrewSettings();
-  if(!s){toast('Keine aktive Crew.');return;}
-  if(!confirm('Deine Crew „'+s.name+'" wirklich löschen?'))return;
+  if(!s){toast('Keine aktive Crew.');return}
+  // Allow owner OR app admin
+  if(s.created_by!==ME.user_id&&!ME.is_admin){toast('Nur der Ersteller kann die Crew löschen.');return}
+  if(!confirm('Crew „'+s.name+'" wirklich löschen?'))return;
   try{
     await deleteCrewFromDb(s.id);
-    localStorage.removeItem('crew_settings');
     localStorage.removeItem('crew_delete_votes');
-    localStorage.removeItem('crew_wall_posts');
-    localStorage.removeItem('crew_story_slides');
-    localStorage.removeItem('crew_achievements');
+    await fetchAllCrews();await loadMyCrewMemberships();
+    setActiveCrewId(_myCrewMemberships.length>0?_myCrewMemberships[0].crew_id:null);
     updateCrewIdentityCard();
     closeCrewProfile();
-    await fetchAllCrews();
     updateCrewGate();
     toast('Crew aufgelöst ✓');
     if(navigator.vibrate)navigator.vibrate([100,50,100]);
@@ -5430,8 +5522,7 @@ async function buildDailyVoting(){
     var ids=matches.map(function(m){return m.to_user});
     var {data:profiles}=await sb.from('profiles').select('user_id,name,photo_url').in('user_id',ids);
     if(!profiles||profiles.length===0){el.innerHTML='<p class="crew-empty">Keine Crew zum Voten.</p>';return}
-    var blocked=JSON.parse(localStorage.getItem('crew_blocked')||'[]');
-    profiles=profiles.filter(function(p){return blocked.indexOf(p.user_id)===-1});
+    profiles=profiles.filter(function(p){return !isBlocked(p.user_id)});
 
     // Pick today's question based on day of year
     var doy=Math.floor((new Date()-new Date(new Date().getFullYear(),0,0))/86400000);
@@ -5519,7 +5610,7 @@ window.go=function(n,b){
   if(b)b.classList.add('active');
   setTimeout(function(){if(n==='radar'&&rMap)rMap.invalidateSize();if(n==='crew'&&cMap)cMap.invalidateSize()},200);
   if(n==='match')buildCards();
-  if(n==='crew'){fetchAllCrews().then(function(){updateCrewGate();buildCrewSwitcher();renderCrewBoard()});buildCrewStatus();buildCrewList().then(buildCrewActivityFeed);buildMatchList();buildCrewLocations();buildCrewWall();buildStoryPreview();buildDailyVoting();buildLeaderboard();buildTonightPlanner();buildChallenges();buildCrewTips();updateChallengeTimer();updateCrewIdentityCard()}
+  if(n==='crew'){fetchAllCrews().then(function(){loadMyCrewMemberships().then(function(){updateCrewGate();buildCrewSwitcher();renderCrewBoard();updateCrewIdentityCard()})});buildCrewStatus();buildCrewList().then(buildCrewActivityFeed);buildMatchList();buildCrewLocations();buildCrewWall();buildStoryPreview();buildDailyVoting();buildLeaderboard();buildTonightPlanner();buildChallenges();buildCrewTips();updateChallengeTimer()}
 };
 
 // ============================================
@@ -6223,11 +6314,15 @@ window.refreshWeather = function(){
 function updateGpsBanner(){
   var el=document.getElementById('gpsStatusBanner');if(!el)return;
   var locMode=localStorage.getItem('location_sharing_mode')||'crew';
-  if(_gpsStatus==='active'&&locMode!=='nobody'){
+  var consent=getLocationConsent();
+  if(_gpsStatus==='active'&&locMode!=='nobody'&&consent!=='denied'){
     el.style.display='none';return;
   }
   el.style.display='flex';
-  if(locMode==='nobody'){
+  if(consent==='denied'||consent==='unknown'){
+    el.style.background='rgba(255,214,10,.08)';el.style.border='1px solid rgba(255,214,10,.15)';el.style.color='var(--yellow)';
+    el.innerHTML='📍 Standortfreigabe nicht erteilt — <span onclick="document.getElementById(\'locationConsentOv\').style.display=\'flex\'" style="text-decoration:underline;cursor:pointer">jetzt freigeben</span>';
+  } else if(locMode==='nobody'){
     el.style.background='rgba(255,214,10,.08)';el.style.border='1px solid rgba(255,214,10,.15)';el.style.color='var(--yellow)';
     el.innerHTML='🔒 Standort-Sharing deaktiviert — <span onclick="openBlockList()" style="text-decoration:underline;cursor:pointer">ändern</span>';
   } else if(_gpsStatus==='denied'){
@@ -6657,8 +6752,7 @@ async function buildLeaderboard(){
     ids.push(ME.user_id);
     var {data:profiles}=await sb.from('profiles').select('*').in('user_id',ids).order('points',{ascending:false});
     if(!profiles||profiles.length===0){el.innerHTML='<p style="color:var(--t3);font-size:13px">Keine Daten.</p>';return}
-    var blocked=JSON.parse(localStorage.getItem('crew_blocked')||'[]');
-    profiles=profiles.filter(function(p){return blocked.indexOf(p.user_id)===-1||p.user_id===ME.user_id});
+    profiles=profiles.filter(function(p){return !isBlocked(p.user_id)||p.user_id===ME.user_id});
     var html='';
     // Top 3 podium
     if(profiles.length>=1){
