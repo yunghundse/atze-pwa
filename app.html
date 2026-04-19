@@ -3375,6 +3375,17 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
   </div>
 </div>
 
+<!-- CONSENT-HISTORY v72 -->
+<div id="consentHistoryOv" class="pmo-ov" style="display:none">
+  <div class="pmo-inner">
+    <button class="pmo-back" onclick="closeConsentHistory()">←</button>
+    <div class="pmo-title">Einwilligungs-Historie</div>
+    <div class="pmo-sub">Jede Änderung deiner Privatsphäre-Einstellungen — Art. 15 DSGVO (Auskunftsrecht).</div>
+    <div id="consentHistoryList" style="display:flex;flex-direction:column;gap:8px;margin-top:6px"></div>
+    <div class="pmo-legal">Dieser Verlauf wird auf unseren EU-Servern (Supabase Frankfurt) gespeichert und kann vom Nutzer nicht gelöscht werden — nur über "Account löschen" (cascade).</div>
+  </div>
+</div>
+
 <!-- HEIMATORT-PICKER v72 -->
 <div id="homeCityPickerOv" class="pmo-ov" style="display:none">
   <div class="pmo-inner">
@@ -4397,7 +4408,7 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 72;
+  var APP_VERSION = 73;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     // Force-clear old non-UUID crew IDs
@@ -4490,6 +4501,7 @@ function isPrivateMode(){ return getPrivacyMode()==='private'; }
 function setPrivacyMode(mode, opts){
   opts = opts || {};
   var cur = getPrivacyState() || {};
+  var prevMode = cur.mode || null;
   var next = {
     mode: mode,
     home_city: mode==='home' ? (opts.home_city || cur.home_city || null) : (cur.home_city || null),
@@ -4502,19 +4514,85 @@ function setPrivacyMode(mode, opts){
   };
   try{ localStorage.setItem(PRIVACY_MODE_KEY, JSON.stringify(next)); }catch(e){}
   try{ sessionStorage.removeItem('privacy_reminder_dismissed'); }catch(e){}
+  // v72: Server-side audit log (DSGVO Art. 7 Abs. 1 — Nachweispflicht)
+  try{ logPrivacyConsent(mode, prevMode, next); }catch(e){ console.warn('[PM] log err', e); }
   return next;
 }
+
+// Server-side consent logging — best-effort, non-blocking
+async function logPrivacyConsent(mode, previousMode, state){
+  try{
+    if(typeof sb === 'undefined' || !sb || typeof ME === 'undefined' || !ME || !ME.user_id) return;
+    var hc = state && state.home_city;
+    var row = {
+      user_id: ME.user_id,
+      mode: mode,
+      previous_mode: previousMode,
+      home_city_name: hc ? hc.name : null,
+      home_city_country: hc ? hc.country : null,
+      home_city_lat: hc ? hc.lat : null,
+      home_city_lng: hc ? hc.lng : null,
+      tracking_consent: !!(state.consent && state.consent.tracking_consent),
+      deals_consent: !!(state.consent && state.consent.deals_consent),
+      consent_version: 1,
+      user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
+      app_version: 73,
+      source: 'app'
+    };
+    // Insert into audit log (append-only)
+    var logRes = await sb.from('privacy_consent_log').insert(row);
+    if(logRes && logRes.error){ console.warn('[PM] consent log insert error:', logRes.error.message); }
+    // Mirror current state on profile (for server-side queries)
+    var profileUpdate = {
+      privacy_mode: mode,
+      privacy_mode_updated_at: new Date().toISOString(),
+      home_city_name: hc ? hc.name : null,
+      home_city_country: hc ? hc.country : null,
+      home_city_lat: hc ? hc.lat : null,
+      home_city_lng: hc ? hc.lng : null
+    };
+    // If user picks private mode, also null out live location
+    if(mode === 'private'){
+      profileUpdate.lat = null;
+      profileUpdate.lng = null;
+      profileUpdate.location_updated_at = new Date().toISOString();
+    }
+    var upRes = await sb.from('profiles').update(profileUpdate).eq('user_id', ME.user_id);
+    if(upRes && upRes.error){ console.warn('[PM] profile mirror error:', upRes.error.message); }
+  }catch(e){ console.warn('[PM] logPrivacyConsent err', e); }
+}
 function clearPrivacyData(){
+  var prev = getPrivacyState();
   try{ localStorage.removeItem(PRIVACY_MODE_KEY); }catch(e){}
   try{ localStorage.removeItem('location_consent'); }catch(e){}
   try{ sessionStorage.removeItem('location_consent_session'); }catch(e){}
   try{ sessionStorage.removeItem('privacy_reminder_dismissed'); }catch(e){}
-  // Clear location from DB
+  // Log the clear event + null out location & privacy fields on profile
   if(typeof ME!=='undefined' && ME && ME.user_id && typeof sb!=='undefined'){
     try{
       ME.lat=null; ME.lng=null;
-      sb.from('profiles').update({lat:null,lng:null,location_updated_at:new Date().toISOString()}).eq('user_id',ME.user_id);
-    }catch(e){}
+      var clearRow = {
+        user_id: ME.user_id,
+        mode: 'cleared',
+        previous_mode: prev ? prev.mode : null,
+        home_city_name: null,
+        home_city_country: null,
+        home_city_lat: null,
+        home_city_lng: null,
+        tracking_consent: false,
+        deals_consent: false,
+        consent_version: 1,
+        user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
+        app_version: 73,
+        source: 'user_reset'
+      };
+      sb.from('privacy_consent_log').insert(clearRow).then(function(r){ if(r&&r.error) console.warn('[PM] clear log err', r.error.message); });
+      sb.from('profiles').update({
+        lat:null, lng:null, location_updated_at:new Date().toISOString(),
+        privacy_mode:null, privacy_mode_updated_at:new Date().toISOString(),
+        home_city_name:null, home_city_country:null, home_city_lat:null, home_city_lng:null
+      }).eq('user_id',ME.user_id);
+    }catch(e){ console.warn('[PM] clear err', e); }
   }
 }
 function getEffectiveLocation(){
@@ -4658,6 +4736,50 @@ function renderPrivacyBadge(){
 window.openPrivacySettings = function(){
   // Re-open onboarding to allow switching mode
   openPrivacyOnboarding();
+};
+window.openConsentHistory = async function(){
+  var ov = document.getElementById('consentHistoryOv');
+  var list = document.getElementById('consentHistoryList');
+  if(!ov || !list) return;
+  ov.style.display = 'block';
+  list.innerHTML = '<div style="padding:14px;color:var(--t3);font-size:12px;text-align:center">Lade Historie…</div>';
+  try{
+    if(!sb || !ME || !ME.user_id){ list.innerHTML = '<div style="padding:14px;color:var(--t3);font-size:12px;text-align:center">Nicht angemeldet.</div>'; return; }
+    var res = await sb.from('privacy_consent_log').select('*').eq('user_id', ME.user_id).order('created_at',{ascending:false}).limit(100);
+    if(res.error){ list.innerHTML = '<div style="padding:14px;color:#FF6B6B;font-size:12px;text-align:center">Fehler: '+escapeHtml(res.error.message)+'</div>'; return; }
+    var rows = res.data || [];
+    if(!rows.length){ list.innerHTML = '<div style="padding:14px;color:var(--t3);font-size:12px;text-align:center">Noch keine Einträge vorhanden.</div>'; return; }
+    var html = '';
+    rows.forEach(function(r){
+      var d = new Date(r.created_at);
+      var when = d.toLocaleDateString('de-DE')+' '+d.toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'});
+      var lbl = privacyModeLabel(r.mode==='cleared' ? null : r.mode);
+      if(r.mode==='cleared') lbl = '🗑️ Daten gelöscht';
+      var prevTxt = r.previous_mode ? ('von '+privacyModeLabel(r.previous_mode)) : 'Erste Auswahl';
+      html += '<div style="padding:12px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07)">';
+      html += '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px">';
+      html += '<div style="font-size:13px;font-weight:800;color:#fff">'+escapeHtml(lbl)+'</div>';
+      html += '<div style="font-size:10.5px;color:var(--t3);font-weight:600">'+escapeHtml(when)+'</div>';
+      html += '</div>';
+      html += '<div style="font-size:11px;color:var(--t3);margin-top:4px">'+escapeHtml(prevTxt)+'</div>';
+      if(r.home_city_name){
+        html += '<div style="font-size:11px;color:var(--t2);margin-top:4px">🏠 '+escapeHtml(r.home_city_name)+(r.home_city_country?', '+escapeHtml(r.home_city_country):'')+'</div>';
+      }
+      html += '<div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap">';
+      html += '<span class="pmo-feat '+(r.tracking_consent?'yes':'no')+'">'+(r.tracking_consent?'✓':'·')+' Tracking</span>';
+      html += '<span class="pmo-feat '+(r.deals_consent?'yes':'no')+'">'+(r.deals_consent?'✓':'·')+' Angebote</span>';
+      html += '</div>';
+      html += '</div>';
+    });
+    list.innerHTML = html;
+  }catch(e){
+    console.warn('[PM] history err', e);
+    list.innerHTML = '<div style="padding:14px;color:#FF6B6B;font-size:12px;text-align:center">Fehler beim Laden.</div>';
+  }
+};
+window.closeConsentHistory = function(){
+  var ov = document.getElementById('consentHistoryOv');
+  if(ov) ov.style.display = 'none';
 };
 window.resetPrivacyData = function(){
   if(!confirm('Alle Privatsphäre-Daten löschen?\n\nDein Modus, Heimatort und Standortdaten werden gelöscht. Beim nächsten Start fragen wir dich erneut.')) return;
@@ -8545,6 +8667,7 @@ window.openBlockList=async function(){
     html+='<div class="ps-row"><div class="ps-row-label">Live-Tracking</div><div class="ps-row-val">'+(_pmMode==='travel'?'✓ aktiv':'– aus')+'</div></div>';
     html+='<div class="ps-row"><div class="ps-row-label">Personalisierte Angebote</div><div class="ps-row-val">'+((_pmMode==='travel'||_pmMode==='home')?'✓ aktiv':'– aus')+'</div></div>';
     html+='<button class="ps-btn" onclick="openPrivacySettings()">Modus wechseln</button>';
+    html+='<button class="ps-btn" onclick="openConsentHistory()">📜 Einwilligungs-Historie anzeigen</button>';
     html+='<button class="ps-btn danger" onclick="resetPrivacyData()">Alle Privatsphäre-Daten löschen</button>';
     html+='<div style="font-size:10.5px;color:var(--t3);line-height:1.55;padding-top:10px;text-align:center">Rechtsgrundlage: Art. 6 Abs. 1 a DSGVO (freiwillige Einwilligung). Widerruf jederzeit möglich.</div>';
     html+='</div>';
