@@ -69,7 +69,7 @@ nav button .ni{font-size:22px;transition:all .3s var(--spring)}
 nav button span{display:block}
 nav button.active{color:var(--o)}
 nav button.active .ni{transform:scale(1.15);filter:drop-shadow(0 0 12px rgba(255,109,46,.5))}
-nav button.active::after{content:'';position:absolute;bottom:1px;left:50%;transform:translateX(-50%);width:5px;height:5px;border-radius:50%;background:var(--o);box-shadow:0 0 10px rgba(255,109,46,.6)}
+nav button.active::after{display:none!important}
 nav .match-dot{position:absolute;top:4px;right:8px;width:8px;height:8px;border-radius:50%;background:var(--fire);border:2px solid rgba(14,14,14,.82);box-shadow:0 0 12px rgba(255,59,48,.5)}
 nav .crew-center-btn{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:2px 10px;color:var(--t3);font-size:9px;font-weight:600;position:relative;letter-spacing:.2px;margin-top:-18px}
 nav .crew-center-btn .ni{width:46px;height:46px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;box-shadow:0 4px 16px rgba(255,109,46,.3),0 0 0 6px rgba(255,109,46,.08),0 0 24px rgba(255,109,46,.2);transition:transform .2s var(--bounce)}
@@ -162,11 +162,14 @@ select.ri{appearance:none;-webkit-appearance:none}
 .sty-ring{width:54px;height:54px;border-radius:50%;padding:2.5px;background:var(--gold)}.sty-ring.seen{background:var(--bg4)}
 .sty-ring img{width:100%;height:100%;border-radius:50%;object-fit:cover;border:2px solid var(--bg)}
 .sty-name{font-size:9px;color:var(--t3);max-width:54px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-#screen-radar .map-full{position:absolute;top:0;left:0;right:0;height:48%;z-index:1}
-#screen-radar .map-full .leaflet-container{height:100%;width:100%}
+#screen-radar .map-full{position:absolute;top:0;left:0;right:0;height:48%;z-index:1;overflow:hidden}
+#screen-radar .map-full::before{content:'';position:absolute;inset:0;z-index:4;pointer-events:none;background:radial-gradient(ellipse at 50% 30%,transparent 40%,rgba(0,0,0,.55) 100%);mix-blend-mode:multiply}
+#screen-radar .map-full::after{content:'';position:absolute;top:0;left:0;right:0;height:calc(env(safe-area-inset-top,0) + 52px);z-index:4;pointer-events:none;background:linear-gradient(180deg,rgba(5,5,7,.92) 0%,rgba(5,5,7,.45) 70%,transparent 100%)}
+#screen-radar .map-full .leaflet-container{height:100%;width:100%;background:#0a0a0c!important;filter:saturate(1.15) brightness(1.02)}
 .leaflet-control-zoom,.leaflet-control-attribution{display:none!important}
-.map-fade{position:absolute;bottom:-1px;left:0;right:0;height:80px;background:linear-gradient(transparent,var(--bg));z-index:5;pointer-events:none}
-.radar-content{position:relative;z-index:10;margin-top:calc(48% - 24px);padding-bottom:90px}
+.map-fade{position:absolute;bottom:-1px;left:0;right:0;height:120px;background:linear-gradient(transparent 0%,rgba(5,5,7,.25) 30%,rgba(5,5,7,.75) 60%,var(--bg) 100%);z-index:5;pointer-events:none}
+.map-fade::after{content:'';position:absolute;bottom:100%;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,109,46,.25),rgba(254,60,114,.25),transparent)}
+.radar-content{position:relative;z-index:10;margin-top:calc(48% - 32px);padding-bottom:90px}
 /* Heim-Topbar über der Karte (absolut im screen, direkt unter Header) */
 .heim-topbar{display:flex;gap:8px;align-items:stretch;pointer-events:none;animation:heimTopSlide .45s var(--spring) both}
 #screen-radar .heim-topbar,#screen-crew .heim-topbar{position:absolute;top:calc(env(safe-area-inset-top,0) + 64px);left:10px;right:10px;z-index:420}
@@ -193,6 +196,32 @@ nav button.active::before{opacity:1}
 .hdr-btn,.hs-foot-btn,.abtn,.ex-tile,.vcard{transition:transform .15s var(--spring),filter .2s ease,box-shadow .2s ease}
 .hdr-btn:active,.abtn:active,.ex-tile:active,.vcard:active{transform:scale(.96)}
 .hs-foot-btn:active{transform:scale(.97)}
+/* v71: psychologische Mikro-Animationen */
+@media (prefers-reduced-motion: no-preference){
+  /* Sanftes Atmen der wichtigsten Cards */
+  .countdown-card,.weather-card,.island-mood,.active-counter{animation:breathe 6s ease-in-out infinite}
+  @keyframes breathe{0%,100%{transform:translateZ(0) scale(1)}50%{transform:translateZ(0) scale(1.006)}}
+  /* Quick-Stats Nummern: subtiler Count-Puls */
+  #qsMatches,#qsCrew,#qsAura{animation:numberPop 4s ease-in-out infinite;animation-delay:var(--np-d,0s)}
+  #qsMatches{--np-d:0s}#qsCrew{--np-d:1.2s}#qsAura{--np-d:2.4s}
+  @keyframes numberPop{0%,85%,100%{transform:scale(1);text-shadow:none}90%{transform:scale(1.12);text-shadow:0 0 18px currentColor}}
+  /* Section-Labels leichtes Shimmern */
+  .sec-label{background-size:200% 100%;animation:labelShimmer 8s linear infinite}
+  @keyframes labelShimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+  /* Aktive Dot-Indikatoren */
+  .active-dot{box-shadow:0 0 0 0 rgba(48,209,88,.5)}
+  /* Cards Tilt beim Erscheinen */
+  .anim{animation:cardArrive .55s var(--spring) both}
+  @keyframes cardArrive{0%{opacity:0;transform:translateY(14px) scale(.98)}100%{opacity:1;transform:none}}
+  /* Hover-Lift-Fallback für Touch */
+  .vcard:active,.ex-tile:active{filter:brightness(1.05)}
+  /* Heim-Button ambiente Glow */
+  .heim-btn-big:not(.needs-setup){animation:heimGlow 4s ease-in-out infinite,heimAmbient 9s ease-in-out infinite}
+  @keyframes heimAmbient{0%,100%{filter:brightness(1)}50%{filter:brightness(1.08) saturate(1.1)}}
+  /* Nav-Icon Active: leichter Wobble beim Tap */
+  nav button.active .ni{animation:navBob 2.6s ease-in-out infinite}
+  @keyframes navBob{0%,100%{transform:scale(1.2) translateY(-1px)}50%{transform:scale(1.24) translateY(-2px)}}
+}
 .heim-topbar > *{pointer-events:auto}
 .heim-btn-big{flex:1;min-height:52px;display:flex;align-items:center;gap:10px;padding:8px 14px;border-radius:16px;background:linear-gradient(135deg,rgba(48,209,88,.38),rgba(10,132,255,.22));border:1.5px solid rgba(48,209,88,.55);color:#DFFBEA;font-size:13px;font-weight:800;font-family:Inter,sans-serif;cursor:pointer;box-shadow:0 10px 28px rgba(0,0,0,.45),0 0 0 1px rgba(255,255,255,.05),inset 0 1px 0 rgba(255,255,255,.15);backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);transition:transform .2s var(--spring),box-shadow .2s var(--spring);animation:heimGlow 4s ease-in-out infinite;text-align:left}
 .heim-btn-big:active{transform:scale(.96)}
@@ -208,13 +237,30 @@ nav button.active::before{opacity:1}
 .heim-btn-big .hbig-arrow svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
 .heim-btn-big.needs-setup{background:linear-gradient(135deg,rgba(255,159,10,.38),rgba(255,69,58,.25));border-color:rgba(255,159,10,.6);color:#FFE8CC;animation:heimWarn 2.8s ease-in-out infinite}
 .heim-btn-big.needs-setup .hbig-ic{background:linear-gradient(135deg,#FF9F0A,#FF453A);box-shadow:0 4px 14px rgba(255,159,10,.55)}
+/* Dismiss-X — nur sichtbar wenn needs-setup */
+.heim-btn-big .hbig-dismiss{position:absolute;top:4px;right:6px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.35);display:none;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:rgba(255,255,255,.65);border:1px solid rgba(255,255,255,.12);cursor:pointer;line-height:1;z-index:2;transition:transform .18s var(--spring),background .18s}
+.heim-btn-big .hbig-dismiss:active{transform:scale(.88);background:rgba(0,0,0,.55);color:#fff}
+.heim-btn-big.needs-setup .hbig-dismiss{display:flex;animation:dismissFadeIn .4s .2s both}
+@keyframes dismissFadeIn{0%{opacity:0;transform:scale(.5)}100%{opacity:1;transform:scale(1)}}
+/* Mini-Reminder (Pill wenn dismissed) */
+.heim-mini-reminder{display:none;align-items:center;gap:6px;padding:6px 12px 6px 10px;border-radius:999px;background:linear-gradient(135deg,rgba(255,159,10,.22),rgba(255,159,10,.12));border:1px solid rgba(255,159,10,.35);color:#FFDAA0;font-size:11.5px;font-weight:800;font-family:Inter,sans-serif;cursor:pointer;box-shadow:0 8px 20px rgba(0,0,0,.35);backdrop-filter:blur(28px) saturate(160%);-webkit-backdrop-filter:blur(28px) saturate(160%);pointer-events:auto;animation:heimMrSlide .45s var(--spring) both;transition:transform .2s var(--spring)}
+.heim-mini-reminder:active{transform:scale(.94)}
+.heim-mini-reminder .hmr-icon{font-size:13px}
+.heim-mini-reminder .hmr-arrow{color:rgba(255,218,160,.7);font-weight:900;margin-left:2px}
+#screen-radar .heim-mini-reminder{position:absolute;top:calc(env(safe-area-inset-top,0) + 64px);right:10px;z-index:420}
+#screen-crew .heim-mini-reminder.crew-mini-reminder{position:absolute;top:calc(env(safe-area-inset-top,0) + 64px);right:10px;z-index:420}
+.heim-mini-reminder.show{display:inline-flex}
+@keyframes heimMrSlide{0%{opacity:0;transform:translateY(-8px) scale(.9)}100%{opacity:1;transform:none}}
 @keyframes heimGlow{0%,100%{box-shadow:0 10px 28px rgba(0,0,0,.45),0 0 0 1px rgba(255,255,255,.05),inset 0 1px 0 rgba(255,255,255,.15),0 0 0 2px rgba(48,209,88,.0)}50%{box-shadow:0 10px 30px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.05),inset 0 1px 0 rgba(255,255,255,.18),0 0 0 3px rgba(48,209,88,.2)}}
 @keyframes heimWarn{0%,100%{box-shadow:0 10px 28px rgba(0,0,0,.5),0 0 0 1px rgba(255,159,10,.08),inset 0 1px 0 rgba(255,255,255,.15)}50%{box-shadow:0 10px 30px rgba(0,0,0,.55),0 0 0 3px rgba(255,159,10,.25),inset 0 1px 0 rgba(255,255,255,.18)}}
-.heim-loc-pill{display:flex;align-items:center;gap:6px;padding:8px 12px;border-radius:16px;background:linear-gradient(135deg,rgba(22,22,28,.85),rgba(12,10,14,.75));backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);border:1px solid rgba(255,255,255,.12);color:#fff;font-size:11px;font-weight:800;cursor:pointer;min-height:52px;box-shadow:0 10px 28px rgba(0,0,0,.45);white-space:nowrap;max-width:42%;overflow:hidden;text-overflow:ellipsis}
+.heim-loc-pill{display:flex;align-items:center;gap:7px;padding:0 14px;height:52px;border-radius:16px;background:linear-gradient(135deg,rgba(22,22,28,.85),rgba(12,10,14,.75));backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);border:1px solid rgba(255,255,255,.12);color:#fff;font-size:12px;font-weight:900;cursor:pointer;box-shadow:0 10px 28px rgba(0,0,0,.45);white-space:nowrap;max-width:44%;overflow:hidden;position:relative;transition:transform .25s var(--spring),border-color .25s}
+.heim-loc-pill:active{transform:scale(.96)}
 .heim-loc-pill svg{width:14px;height:14px;stroke:#30D158;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
-.heim-loc-pill .hlp-text{display:flex;flex-direction:column;line-height:1.15;min-width:0}
-.heim-loc-pill .hlp-label{font-size:9px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.6px}
-.heim-loc-pill .hlp-city{font-size:12px;font-weight:900;color:#fff;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.heim-loc-pill .hlp-dot{width:7px;height:7px;border-radius:50%;background:#30D158;box-shadow:0 0 0 4px rgba(48,209,88,.18);flex-shrink:0;animation:locDotPulse 2.4s ease-in-out infinite}
+@keyframes locDotPulse{0%,100%{box-shadow:0 0 0 4px rgba(48,209,88,.18)}50%{box-shadow:0 0 0 7px rgba(48,209,88,.05)}}
+.heim-loc-pill .hlp-city{font-size:12.5px;font-weight:900;color:#fff;letter-spacing:.1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.heim-loc-pill.loading .hlp-dot{background:#FF9F0A;animation:locDotLoad 1s ease-in-out infinite}
+@keyframes locDotLoad{0%,100%{opacity:.4}50%{opacity:1}}
 @media (max-width:380px){
   .heim-btn-big .hbig-sub{display:none}
   .heim-btn-big{min-height:46px;padding:6px 10px}
@@ -1250,12 +1296,7 @@ nav button.active .ni{
   filter:drop-shadow(0 0 14px rgba(254,60,114,.6));
   transform:scale(1.18);
 }
-nav button.active::after{
-  content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%);
-  width:20px;height:3px;border-radius:2px;
-  background:var(--flame);
-  box-shadow:0 0 12px rgba(254,60,114,.7);
-}
+nav button.active::after{display:none!important;content:none!important}
 nav .match-dot{
   top:4px;right:8px;width:9px;height:9px;
   background:linear-gradient(135deg,#FE3C72,#FF5864);
@@ -1764,11 +1805,7 @@ nav button .ni{font-size:26px !important}
 nav button .ni svg{width:26px;height:26px}
 nav .crew-center-btn .ni{width:54px;height:54px}
 nav .crew-center-btn .ni svg{width:28px;height:28px}
-nav button.active::after{
-  bottom:4px !important;
-  width:22px !important;
-  height:3px !important;
-}
+nav button.active::after{display:none!important;content:none!important}
 
 /* ════════════════════════════════════════════
    EXPLORE HUB — Menü-Kacheln für Deals/Games/QR
@@ -2019,14 +2056,9 @@ nav button.active::after{
 }
 #app > *{position:relative;z-index:1}
 
-/* 4) NAV — aktive Unterstreichung + klare Icons */
+/* 4) NAV — Strich komplett raus (v71), Aktiv nur durch Farbe + Scale + Glow */
 nav button{position:relative}
-nav button.active::after{
-  content:'';position:absolute;left:50%;top:6px;transform:translateX(-50%);
-  width:22px;height:3px;border-radius:2px;
-  background:linear-gradient(90deg,#FE3C72,#FF5864,#FF7854);
-  box-shadow:0 0 8px rgba(254,60,114,.45);
-}
+nav button.active::after{display:none!important;content:none!important}
 /* unten safe-area aware */
 nav{padding-bottom:max(6px,env(safe-area-inset-bottom)) !important}
 
@@ -3428,9 +3460,7 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
 
 <!-- CELE --><div class="cele" id="cele"><div class="cele-bg"></div><div class="particles" id="particles"></div><div class="cele-ct"><div class="cele-title">It's a Match!</div><div class="cele-sub">Connectet euch auf Social Media 🤝</div><div class="cele-avatars"><img class="cele-ava" id="celeAva1" src=""><span class="cele-heart">🔥</span><img class="cele-ava" id="celeAva2" src=""></div><div class="cele-name" id="celeName"></div><div id="celeSocials" style="display:flex;flex-direction:column;gap:10px;margin-top:16px;width:100%;max-width:280px"></div><div class="cele-btns"><button class="cb ghost" onclick="closeCele()">Weiter entdecken</button></div></div></div>
 
-<!-- STORY FULLSCREEN --><div class="story-fullscreen" id="storyFullscreen"><div class="story-fs-bar"><div class="story-fs-progress" id="storyFsProgress"></div><button class="story-fs-close" onclick="closeCrewStory()">✕</button></div><div class="story-fs-slide" id="storyFsSlide"><div class="sfs-text" id="sfsText"></div><div class="story-fs-author"><div class="sfs-author-name" id="sfsAuthor"></div><div class="sfs-author-time" id="sfsTime"></div></div></div><div class="story-fs-nav prev" onclick="storyPrev()"></div><div class="story-fs-nav next" onclick="storyNext()"></div></div>
-
-<!-- STORY EDITOR --><div class="story-editor-ov" id="storyEditorOv"><div class="story-editor"><div class="se-title">📸 Slide erstellen</div><div class="se-colors" id="seColors"></div><textarea class="se-textarea" id="seText" placeholder="Was war dein Highlight heute?" maxlength="120"></textarea><div class="se-loc-toggle" onclick="toggleSeLoc()"><div class="se-loc-check" id="seLocCheck"></div><span>📍 Standort anheften</span></div><div class="se-btns"><button class="se-btn-cancel" onclick="closeStoryEditor()">Abbrechen</button><button class="se-btn-post" onclick="postStorySlide()">Posten</button></div></div></div>
+<!-- Story-System in v71 deaktiviert (buggy). Re-enable nach Rewrite. -->
 
 <!-- PHOTO UPLOAD --><div class="photo-upload-ov" id="photoUploadOv"><div style="font-size:18px;font-weight:900;margin-bottom:16px">Profilbild</div><div class="pu-preview" id="puPreview"><img id="puImg" src=""></div><div class="pu-zoom"><span>🔍</span><input type="range" id="puZoom" min="1" max="3" step="0.1" value="1" oninput="zoomPhoto(this.value)"><span id="puZoomVal">1x</span></div><input type="file" id="puFile" accept="image/*" style="display:none" onchange="previewPhoto(this)"><div class="pu-actions"><button class="pu-btn cancel" onclick="closePhotoUpload()">Abbrechen</button><button class="pu-btn save" onclick="document.getElementById('puFile').click()">📷 Foto wählen</button><button class="pu-btn save" onclick="savePhoto()">✅ Speichern</button><button class="pu-btn del" onclick="deletePhoto()">🗑 Löschen</button></div></div>
 
@@ -3526,7 +3556,7 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
   <main>
     <div class="scr active" id="screen-radar">
       <div class="map-full"><div id="radarMap"></div><div class="map-fade"></div></div>
-      <div class="heim-topbar">
+      <div class="heim-topbar" id="heimTopbarRadar">
         <button class="heim-btn-big" id="heimTopbarBtn" onclick="openHomeSafe()" aria-label="Bring mich nach Hause">
           <div class="hbig-ic"><svg viewBox="0 0 24 24"><use href="#i-home-safe"/></svg></div>
           <div class="hbig-txt">
@@ -3534,16 +3564,20 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
             <span class="hbig-sub" id="heimBigSub">Einrichten &amp; Crew informieren</span>
           </div>
           <span class="hbig-arrow"><svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg></span>
+          <span class="hbig-dismiss" onclick="event.stopPropagation();dismissHeimSetup();" aria-label="Später erinnern">✕</span>
         </button>
         <div class="heim-loc-pill" id="heimLocPill" onclick="refreshUserLocation()" aria-label="Aktueller Standort">
+          <span class="hlp-dot"></span>
           <svg viewBox="0 0 24 24"><path d="M12 22s-8-9-8-13a8 8 0 0 1 16 0c0 4-8 13-8 13z"/><circle cx="12" cy="9" r="2.5"/></svg>
-          <div class="hlp-text">
-            <span class="hlp-label" id="heimLocLabelTxt">Du bist in</span>
-            <span class="hlp-city" id="heimLocCity">Standort…</span>
-          </div>
+          <span class="hlp-city" id="heimLocCity">Standort…</span>
         </div>
       </div>
-      <div class="stories" id="storiesBar"></div>
+      <!-- Mini-Reminder wenn dismissed -->
+      <button class="heim-mini-reminder" id="heimMiniReminder" onclick="undismissHeimSetup()">
+        <span class="hmr-icon">🏠</span>
+        <span class="hmr-txt">Heim-Setup</span>
+        <span class="hmr-arrow">›</span>
+      </button>
       <div class="radar-content">
         <div class="active-counter anim" id="activeCounter" style="margin:0 14px 8px;display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;background:rgba(52,199,89,.06);border:1px solid rgba(52,199,89,.12)">
           <div class="active-dot" style="width:8px;height:8px;border-radius:50%;background:var(--green);animation:activePulse 2s ease infinite"></div>
@@ -3592,7 +3626,7 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
     <div class="scr" id="screen-match"><div class="match-area"><div class="match-filter-bar"><select class="mf-select" id="mfGender" onchange="applyFilters()"><option value="">Alle</option><option value="Mann">Mann</option><option value="Frau">Frau</option><option value="Divers">Divers</option></select><select class="mf-select" id="mfAge" onchange="applyFilters()"><option value="">Alter</option><option value="18-21">18-21</option><option value="22-25">22-25</option><option value="26-30">26-30</option><option value="31-40">31-40</option><option value="40+">40+</option></select><select class="mf-select" id="mfCity" onchange="applyFilters()"><option value="">Wohnort</option></select><select class="mf-select" id="mfClub" onchange="applyFilters()"><option value="">Verein</option></select></div><div class="match-stack" id="matchStack"></div><div class="mactions"><button class="ma sm" onclick="rewind()" aria-label="Zurück"><svg class="icn" style="width:20px;height:20px" viewBox="0 0 24 24"><use href="#i-rewind"/></svg></button><button class="ma nope" onclick="doSwipe('left')" aria-label="Nope"><svg class="icn" style="width:28px;height:28px" viewBox="0 0 24 24"><use href="#i-x"/></svg></button><button class="ma super" onclick="superLike()" aria-label="Superlike"><svg class="icn icn-fill" style="width:24px;height:24px;color:#fff" viewBox="0 0 24 24"><use href="#i-star"/></svg></button><button class="ma like" onclick="doSwipe('right')" aria-label="Like"><svg class="icn icn-fill" style="width:32px;height:32px;color:#fff" viewBox="0 0 24 24"><use href="#i-heart"/></svg></button><button class="ma sm" onclick="toast('Matche & connecte auf Social!')" aria-label="Chat"><svg class="icn" style="width:20px;height:20px" viewBox="0 0 24 24"><use href="#i-chat"/></svg></button></div></div></div>
     <div class="scr" id="screen-crew">
       <!-- HEIM-TOPBAR (absolute overlay above crew map) -->
-      <div class="heim-topbar crew-heim-topbar">
+      <div class="heim-topbar crew-heim-topbar" id="heimTopbarCrewWrap">
         <button class="heim-btn-big" id="heimTopbarBtnCrew" onclick="openHomeSafe()" aria-label="Bring mich nach Hause">
           <div class="hbig-ic"><svg viewBox="0 0 24 24"><use href="#i-home-safe"/></svg></div>
           <div class="hbig-txt">
@@ -3600,15 +3634,19 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
             <span class="hbig-sub" id="heimBigSubCrew">Crew informieren &amp; Route</span>
           </div>
           <span class="hbig-arrow"><svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg></span>
+          <span class="hbig-dismiss" onclick="event.stopPropagation();dismissHeimSetup();" aria-label="Später erinnern">✕</span>
         </button>
         <div class="heim-loc-pill" onclick="refreshUserLocation()" aria-label="Aktueller Standort">
+          <span class="hlp-dot"></span>
           <svg viewBox="0 0 24 24"><path d="M12 22s-8-9-8-13a8 8 0 0 1 16 0c0 4-8 13-8 13z"/><circle cx="12" cy="9" r="2.5"/></svg>
-          <div class="hlp-text">
-            <span class="hlp-label" id="heimLocLabelTxtCrew">Du bist in</span>
-            <span class="hlp-city" id="heimLocCityCrew">Standort…</span>
-          </div>
+          <span class="hlp-city" id="heimLocCityCrew">Standort…</span>
         </div>
       </div>
+      <button class="heim-mini-reminder crew-mini-reminder" id="heimMiniReminderCrew" onclick="undismissHeimSetup()">
+        <span class="hmr-icon">🏠</span>
+        <span class="hmr-txt">Heim-Setup</span>
+        <span class="hmr-arrow">›</span>
+      </button>
       <!-- CREW MAP — Where is everyone? -->
       <div class="crew-map-full"><div id="crewMap"></div>
         <div class="crew-map-overlay">
@@ -4128,7 +4166,7 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 70;
+  var APP_VERSION = 71;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     // Force-clear old non-UUID crew IDs
@@ -5600,16 +5638,7 @@ var VENUE_STORIES = [
   {name:'Ballermann',ig:'ballermann6.official',emoji:'☀️',img:'https://images.unsplash.com/photo-1504196606672-aef5c9cefc92?w=100&q=60'}
 ];
 
-function buildStories(){
-  var b = document.getElementById('storiesBar');
-  if(!b) return;
-  var html = '';
-  // Venue stories (Instagram links)
-  VENUE_STORIES.forEach(function(v){
-    html += '<div class="sty" onclick="window.open(\'https://instagram.com/'+v.ig+'\',\'_blank\')"><div class="sty-ring"><img src="'+v.img+'" alt="'+esc(v.name)+'"></div><div class="sty-name">'+v.emoji+' '+v.name+'</div></div>';
-  });
-  b.innerHTML = html;
-}
+function buildStories(){ /* v71: Story-System deaktiviert */ }
 
 var userMarker = null, userAccCircle = null, userLat = 0, userLng = 0;
 var _gpsStatus = 'unknown'; // 'active','denied','unavailable','timeout','unknown'
@@ -5684,14 +5713,15 @@ function _renderLocationLabels(){
   var c = window._userCity;
   var label = _cityLabelShort(c);
 
-  // Heim-Topbar-Pills (Radar + Crew)
+  // Heim-Topbar-Pills (Radar + Crew) — v71: nur Stadt, ohne "Du bist in"
   ['heimLocCity','heimLocCityCrew'].forEach(function(id){
     var el = document.getElementById(id);
-    if(el) el.textContent = label || (userLat ? 'Unbekannter Ort' : 'Standort…');
+    if(el) el.textContent = label || (userLat ? 'Unbekannt' : 'Standort…');
   });
-  ['heimLocLabelTxt','heimLocLabelTxtCrew'].forEach(function(id){
-    var el = document.getElementById(id);
-    if(el) el.textContent = label ? 'Du bist in' : 'Standort';
+  // Loading-state auf die Pill setzen (orange Dot wenn noch kein Fix)
+  document.querySelectorAll('.heim-loc-pill').forEach(function(p){
+    if(label && userLat) p.classList.remove('loading');
+    else p.classList.add('loading');
   });
 
   // Active counter
@@ -6754,223 +6784,30 @@ window.focusWallLoc=function(lat,lng){
 };
 
 // ============================================
-// CREW STORY — Snap-style fullscreen, one-time view
+// CREW STORY — v71: DEAKTIVIERT (buggy, kommt als Rewrite zurück)
+// Alle Funktionen als no-op, damit Alt-Aufrufe nicht crashen
 // ============================================
-var STORY_COLORS=['linear-gradient(135deg,#FF6B6B,#FF8E53)','linear-gradient(135deg,#667eea,#764ba2)','linear-gradient(135deg,#f093fb,#f5576c)','linear-gradient(135deg,#4facfe,#00f2fe)','linear-gradient(135deg,#43e97b,#38f9d7)','linear-gradient(135deg,#fa709a,#fee140)','linear-gradient(135deg,#a18cd1,#fbc2eb)','linear-gradient(135deg,#fccb90,#d57eeb)'];
+function cleanExpiredStorySlides(){ return []; }
+function buildStoryPreview(){ /* no-op */ }
+window.openStoryEditor=function(){ toast('Story-System wird gerade überarbeitet 🛠️'); };
+window.closeStoryEditor=function(){};
+window.selectSeColor=function(){};
+window.toggleSeLoc=function(){};
+window.postStorySlide=function(){};
+window.playCrewStory=function(){ toast('Story-System wird gerade überarbeitet 🛠️'); };
+window.storyNext=function(){};
+window.storyPrev=function(){};
+window.closeCrewStory=function(){};
+
+/* Alt-Code bleibt unten inaktiv — kein Element mehr im DOM. */
+var _STORY_DEAD = true; /* marker */
+var STORY_COLORS=[];
 var _storySlideIdx=0;
 var _storyTimer=null;
 var _seLocActive=false;
 var _seColorIdx=0;
 
-function cleanExpiredStorySlides(){
-  var key='crew_story_slides';
-  var slides=JSON.parse(localStorage.getItem(key)||'[]');
-  var cutoff=Date.now()-86400000;
-  var filtered=slides.filter(function(s){return s.time>cutoff});
-  if(filtered.length!==slides.length)localStorage.setItem(key,JSON.stringify(filtered));
-  return filtered;
-}
-
-function buildStoryPreview(){
-  var el=document.getElementById('storyPreview');
-  var countEl=document.getElementById('storySlideCount');
-  if(!el)return;
-  var slides=cleanExpiredStorySlides();
-  if(countEl)countEl.textContent=slides.length+' SLIDE'+(slides.length!==1?'S':'');
-
-  // Update play button state
-  var playBtn=document.querySelector('.story-play-btn');
-  if(playBtn)playBtn.disabled=slides.length===0;
-
-  if(slides.length===0){
-    el.innerHTML='<div style="padding:10px 14px 4px;font-size:12px;color:var(--t3);text-align:center">Noch keine Slides. Füge dein Highlight hinzu!</div>';
-    return;
-  }
-
-  var profileMap={};
-  if(_crewProfiles&&_crewProfiles.length>0){
-    _crewProfiles.forEach(function(p){profileMap[p.user_id]={name:p.name,photo:p.photo_url}});
-  }
-  profileMap[ME.user_id]={name:ME.name||'Du',photo:ME.photo_url||''};
-
-  var html='<div class="story-preview-grid">';
-  slides.forEach(function(s,i){
-    var profile=profileMap[s.uid]||{name:'?',photo:''};
-    var isMe=s.uid===ME.user_id;
-    html+='<div class="story-slide-mini'+(isMe?' my-slide':'')+'" style="background:'+s.color+'" onclick="playCrewStory('+i+')">';
-    html+='<div class="ssm-bg">'+esc(s.text.substring(0,40))+'</div>';
-    html+='<div class="ssm-ava"><img src="'+(profile.photo||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80')+'" loading="lazy"></div>';
-    html+='</div>';
-  });
-  html+='</div>';
-  el.innerHTML=html;
-}
-
-window.openStoryEditor=function(){
-  var ov=document.getElementById('storyEditorOv');if(!ov)return;
-  _seColorIdx=Math.floor(Math.random()*STORY_COLORS.length);
-  _seLocActive=false;
-
-  // Build color picker
-  var colEl=document.getElementById('seColors');
-  if(colEl){
-    var ch='';
-    STORY_COLORS.forEach(function(c,i){
-      ch+='<div class="se-color'+(i===_seColorIdx?' sel':'')+'" style="background:'+c+'" onclick="selectSeColor('+i+')"></div>';
-    });
-    colEl.innerHTML=ch;
-  }
-  var textarea=document.getElementById('seText');
-  if(textarea){textarea.value='';textarea.style.background=STORY_COLORS[_seColorIdx]}
-  var locCheck=document.getElementById('seLocCheck');
-  if(locCheck){locCheck.className='se-loc-check';locCheck.textContent=''}
-  ov.classList.add('show');
-  setTimeout(function(){if(textarea)textarea.focus()},300);
-};
-
-window.closeStoryEditor=function(){
-  var ov=document.getElementById('storyEditorOv');if(ov)ov.classList.remove('show');
-};
-
-window.selectSeColor=function(idx){
-  _seColorIdx=idx;
-  document.querySelectorAll('.se-color').forEach(function(el,i){el.classList.toggle('sel',i===idx)});
-  var textarea=document.getElementById('seText');
-  if(textarea)textarea.style.background=STORY_COLORS[idx];
-};
-
-window.toggleSeLoc=function(){
-  _seLocActive=!_seLocActive;
-  var locCheck=document.getElementById('seLocCheck');
-  if(locCheck){
-    locCheck.classList.toggle('on',_seLocActive);
-    locCheck.textContent=_seLocActive?'✓':'';
-  }
-};
-
-window.postStorySlide=function(){
-  var textarea=document.getElementById('seText');
-  if(!textarea)return;
-  var text=textarea.value.trim();
-  if(!text){toast('Schreib was für deine Slide!');return}
-
-  var slide={
-    id:'ss_'+Date.now(),
-    uid:ME.user_id,
-    text:text,
-    color:STORY_COLORS[_seColorIdx],
-    time:Date.now()
-  };
-
-  if(_seLocActive&&userLat&&userLng){
-    var closest=MALLE_SPOTS[0];var minDist=Infinity;
-    MALLE_SPOTS.forEach(function(s){
-      var d=Math.abs(s.lat-userLat)+Math.abs(s.lng-userLng);
-      if(d<minDist){minDist=d;closest=s}
-    });
-    slide.loc={name:closest.name,lat:userLat,lng:userLng};
-  }
-
-  var key='crew_story_slides';
-  var slides=JSON.parse(localStorage.getItem(key)||'[]');
-  slides.push(slide);
-  localStorage.setItem(key,JSON.stringify(slides));
-  closeStoryEditor();
-  toast('Slide gepostet! 📸');
-  if(navigator.vibrate)navigator.vibrate([10,50,10]);
-  buildStoryPreview();
-};
-
-window.playCrewStory=function(startIdx){
-  var slides=cleanExpiredStorySlides();
-  if(slides.length===0){toast('Keine Slides vorhanden!');return}
-
-  // Mark as viewed — track which slides user already saw
-  var viewedKey='crew_story_viewed_'+new Date().toISOString().split('T')[0];
-  var viewed=JSON.parse(localStorage.getItem(viewedKey)||'[]');
-
-  _storySlideIdx=startIdx||0;
-  var fs=document.getElementById('storyFullscreen');if(!fs)return;
-
-  // Screenshot prevention via CSS
-  fs.style.webkitUserSelect='none';
-  fs.style.userSelect='none';
-
-  var profileMap={};
-  if(_crewProfiles&&_crewProfiles.length>0){
-    _crewProfiles.forEach(function(p){profileMap[p.user_id]={name:p.name,photo:p.photo_url}});
-  }
-  profileMap[ME.user_id]={name:ME.name||'Du',photo:ME.photo_url||''};
-
-  function showSlide(){
-    if(_storySlideIdx>=slides.length){closeCrewStory();return}
-    var s=slides[_storySlideIdx];
-    var profile=profileMap[s.uid]||{name:'Crew-Mitglied',photo:''};
-
-    // Mark viewed
-    if(viewed.indexOf(s.id)===-1)viewed.push(s.id);
-    localStorage.setItem(viewedKey,JSON.stringify(viewed));
-
-    // Progress bar
-    var progEl=document.getElementById('storyFsProgress');
-    if(progEl){
-      var ph='';
-      slides.forEach(function(_,i){
-        var cls=i<_storySlideIdx?'done':i===_storySlideIdx?'active':'';
-        ph+='<div class="sfp-seg '+cls+'"><div class="sfp-fill"></div></div>';
-      });
-      progEl.innerHTML=ph;
-    }
-
-    // Slide content
-    var slideEl=document.getElementById('storyFsSlide');
-    if(slideEl)slideEl.style.background=s.color;
-    var textEl=document.getElementById('sfsText');
-    if(textEl)textEl.textContent=s.text;
-    var authorEl=document.getElementById('sfsAuthor');
-    if(authorEl)authorEl.textContent=profile.name;
-    var timeEl=document.getElementById('sfsTime');
-    if(timeEl)timeEl.textContent=getTimeAgo(s.time);
-
-    // Auto-advance
-    if(_storyTimer)clearTimeout(_storyTimer);
-    _storyTimer=setTimeout(function(){
-      _storySlideIdx++;
-      showSlide();
-    },6000);
-  }
-
-  fs.classList.add('show');
-  showSlide();
-};
-
-window.storyNext=function(){
-  if(_storyTimer)clearTimeout(_storyTimer);
-  _storySlideIdx++;
-  var slides=cleanExpiredStorySlides();
-  if(_storySlideIdx>=slides.length){closeCrewStory();return}
-  playCrewStory(_storySlideIdx);
-};
-
-window.storyPrev=function(){
-  if(_storyTimer)clearTimeout(_storyTimer);
-  if(_storySlideIdx>0)_storySlideIdx--;
-  playCrewStory(_storySlideIdx);
-};
-
-window.closeCrewStory=function(){
-  if(_storyTimer){clearTimeout(_storyTimer);_storyTimer=null}
-  var fs=document.getElementById('storyFullscreen');if(fs)fs.classList.remove('show');
-};
-
-// Prevent screenshot on story (visibilitychange-based blur)
-document.addEventListener('visibilitychange',function(){
-  var fs=document.getElementById('storyFullscreen');
-  if(fs&&fs.classList.contains('show')&&document.hidden){
-    closeCrewStory();
-    toast('Story geschlossen — kein Screenshot möglich 📸');
-  }
-});
+/* v71: Kompletter Legacy-Story-Code entfernt. Alle Aufrufer hängen an den Stubs weiter oben. */
 
 // ============================================
 // CREW PROFILE — Full crew identity page
@@ -9184,6 +9021,37 @@ function hsRefreshSetupBanner(){
   }
 }
 
+// ============================================
+// HEIM-SETUP Dismissible (v71)
+// ============================================
+var HEIM_DISMISS_KEY = 'heim_setup_dismissed_until_v1';
+var HEIM_DISMISS_HOURS = 8; // nach 8h wieder prompten
+
+function _heimIsDismissed(){
+  try{
+    var raw = localStorage.getItem(HEIM_DISMISS_KEY);
+    if(!raw) return false;
+    var until = parseInt(raw,10)||0;
+    return Date.now() < until;
+  }catch(e){ return false; }
+}
+
+window.dismissHeimSetup = function(){
+  var until = Date.now() + HEIM_DISMISS_HOURS*60*60*1000;
+  try { localStorage.setItem(HEIM_DISMISS_KEY, String(until)); } catch(e){}
+  if(navigator.vibrate) navigator.vibrate(8);
+  try{ toast('OK — wir erinnern dich in ein paar Stunden 🏠'); }catch(e){}
+  hsUpdateHeaderDot();
+};
+
+window.undismissHeimSetup = function(){
+  try { localStorage.removeItem(HEIM_DISMISS_KEY); } catch(e){}
+  if(navigator.vibrate) navigator.vibrate(10);
+  hsUpdateHeaderDot();
+  // direkt Setup öffnen damit der User gleich los kann
+  setTimeout(function(){ try{ openHomeSafe(); }catch(e){} }, 120);
+};
+
 function hsUpdateHeaderDot(){
   var dot = document.getElementById('hdrHomeDot');
   var s = hsGetSetup();
@@ -9202,13 +9070,30 @@ function hsUpdateHeaderDot(){
       }catch(e){}
     }
   }
+  var dismissed = _heimIsDismissed();
+  var needsSetup = !info.ready;
+
+  // Topbar-Container sichtbarkeit (wenn dismissed + needsSetup → mini-reminder)
+  ['heimTopbarRadar','heimTopbarCrewWrap'].forEach(function(wrapId){
+    var wrap = document.getElementById(wrapId);
+    if(!wrap) return;
+    if(needsSetup && dismissed){ wrap.style.display='none'; }
+    else { wrap.style.display=''; }
+  });
+  ['heimMiniReminder','heimMiniReminderCrew'].forEach(function(rid){
+    var r = document.getElementById(rid);
+    if(!r) return;
+    if(needsSetup && dismissed){ r.classList.add('show'); }
+    else { r.classList.remove('show'); }
+  });
+
   ['heimTopbarBtn','heimTopbarBtnCrew'].forEach(function(btnId, idx){
     var big = document.getElementById(btnId);
     if(!big) return;
     var suffix = idx===1 ? 'Crew' : '';
     var title = document.getElementById('heimBigTitle'+suffix);
     var sub = document.getElementById('heimBigSub'+suffix);
-    if(!info.ready){
+    if(needsSetup){
       big.classList.add('needs-setup');
       if(title) title.textContent = '⚠️ Heim-Setup einrichten';
       if(sub) sub.textContent = 'Tippe — Hotel & Buddy festlegen';
