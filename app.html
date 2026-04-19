@@ -1436,11 +1436,17 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
           <div class="crew-sos-arrow">›</div>
         </div>
 
-        <!-- CREW QUICK ACTIONS -->
+        <!-- ═══════════════════════════════════════ -->
+        <!-- ZONE 1: QUICK ACTIONS — Sofort-Zugriff -->
+        <!-- ═══════════════════════════════════════ -->
         <div class="crew-actions">
-          <div class="crew-action-btn" onclick="inviteCrew()">
-            <div class="cab-icon cab-invite">📲</div>
-            <span>Einladen</span>
+          <div class="crew-action-btn" onclick="openCrewChat()">
+            <div class="cab-icon cab-chat">💬</div>
+            <span>Chat</span>
+          </div>
+          <div class="crew-action-btn" onclick="shareCrewLocation()">
+            <div class="cab-icon cab-location">📍</div>
+            <span>Standort</span>
           </div>
           <div class="crew-action-btn" onclick="openAlcoholTracker()">
             <div class="cab-icon cab-drinks">🍺</div>
@@ -1448,19 +1454,11 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
           </div>
           <div class="crew-action-btn" onclick="openTaxiSplitter()">
             <div class="cab-icon cab-taxi">🚕</div>
-            <span>Taxi-Split</span>
+            <span>Taxi</span>
           </div>
-          <div class="crew-action-btn" onclick="shareCrewLocation()">
-            <div class="cab-icon cab-location">📍</div>
-            <span>Standort</span>
-          </div>
-          <div class="crew-action-btn" onclick="openCrewChat()">
-            <div class="cab-icon cab-chat">💬</div>
-            <span>Chat</span>
-          </div>
-          <div class="crew-action-btn" onclick="openQRScanner()">
-            <div class="cab-icon cab-qr">📷</div>
-            <span>QR Scan</span>
+          <div class="crew-action-btn" onclick="inviteCrew()">
+            <div class="cab-icon cab-invite">📲</div>
+            <span>Einladen</span>
           </div>
           <div class="crew-action-btn" onclick="sendSafeCheckIn()">
             <div class="cab-icon cab-safe">✅</div>
@@ -1468,7 +1466,9 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
           </div>
         </div>
 
-        <!-- CREW MEMBERS — The Heart (Dashboard) — SOCIAL PROOF -->
+        <!-- ═══════════════════════════════════════ -->
+        <!-- ZONE 2: DEINE CREW — Wer ist da? -->
+        <!-- ═══════════════════════════════════════ -->
         <div class="crew-section">
           <div class="crew-section-header">
             <div class="csh-left"><span class="csh-emoji">👯</span><span class="csh-title">Deine Crew</span></div>
@@ -1477,21 +1477,19 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
           <div id="crewList"></div>
         </div>
 
-        <!-- CREW WALL — 24h Posts mit Location-Pins — UGC ENGAGEMENT -->
+        <!-- ═══════════════════════════════════════ -->
+        <!-- ZONE 3: HEUTE ABEND — Was geht? -->
+        <!-- ═══════════════════════════════════════ -->
         <div class="crew-section">
           <div class="crew-section-header">
-            <div class="csh-left"><span class="csh-emoji">📍</span><span class="csh-title">Crew Wall</span></div>
-            <div class="csh-badge wall-badge">24H</div>
+            <div class="csh-left"><span class="csh-emoji">🌙</span><span class="csh-title">Heute Abend</span></div>
           </div>
-          <div id="crewWallPosts"></div>
-          <div class="wall-input-area">
-            <input type="text" class="wall-input" id="wallInput" placeholder="Was geht ab? Teile es mit deiner Crew..." maxlength="280">
-            <button class="wall-pin-btn" id="wallPinBtn" onclick="toggleWallPin()" title="Standort anheften">📍</button>
-            <button class="wall-send-btn" onclick="submitWallPost()">➤</button>
-          </div>
+          <div id="tonightPlanner" style="padding:0 14px 14px"><p class="crew-empty">Wird geladen...</p></div>
         </div>
 
-        <!-- DAILY QUESTION — Tages-Voting — GAMIFICATION -->
+        <!-- ═══════════════════════════════════════ -->
+        <!-- ZONE 4: GAMIFICATION — Spaß & Wettbewerb -->
+        <!-- ═══════════════════════════════════════ -->
         <div class="crew-section highlight-section">
           <div class="crew-section-header">
             <div class="csh-left"><span class="csh-emoji">🗳️</span><span class="csh-title">Tages-Voting</span></div>
@@ -1500,7 +1498,6 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
           <div id="dailyVoting"><p class="crew-empty">Wird geladen...</p></div>
         </div>
 
-        <!-- LEADERBOARD — Gamification + FOMO -->
         <div class="crew-section">
           <div class="crew-section-header">
             <div class="csh-left"><span class="csh-emoji">🏆</span><span class="csh-title">Leaderboard</span></div>
@@ -1508,45 +1505,6 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
           <div id="leaderboardList" style="padding:0 14px 14px"><p class="crew-empty">Wird geladen...</p></div>
         </div>
 
-        <!-- CREW ACTIVITY FEED — What's happening -->
-        <div class="crew-section">
-          <div class="crew-section-header">
-            <div class="csh-left"><span class="csh-emoji">⚡</span><span class="csh-title">Crew-Aktivität</span></div>
-            <div class="csh-badge live-badge">LIVE</div>
-          </div>
-          <div id="crewActivityFeed"></div>
-        </div>
-
-        <!-- TONIGHT PLANNER — Where are we going? -->
-        <div class="crew-section">
-          <div class="crew-section-header">
-            <div class="csh-left"><span class="csh-emoji">🌙</span><span class="csh-title">Heute Abend</span></div>
-          </div>
-          <div id="tonightPlanner" style="padding:0 14px 14px"><p class="crew-empty">Wird geladen...</p></div>
-        </div>
-
-        <!-- CREW STORY — Snap-style fullscreen, Crew Slides -->
-        <div class="crew-section">
-          <div class="crew-section-header">
-            <div class="csh-left"><span class="csh-emoji">📸</span><span class="csh-title">Crew Story</span></div>
-            <div class="csh-badge recap-badge" id="storySlideCount">0 SLIDES</div>
-          </div>
-          <div id="storyPreview"></div>
-          <div class="story-actions">
-            <button class="story-add-btn" onclick="openStoryEditor()">+ Slide hinzufügen</button>
-            <button class="story-play-btn" onclick="playCrewStory()">▶ Story ansehen</button>
-          </div>
-        </div>
-
-        <!-- DRUNK LIST — Tagesvollster -->
-        <div class="crew-section">
-          <div class="crew-section-header">
-            <div class="csh-left"><span class="csh-emoji">🍻</span><span class="csh-title">Tagesvollster</span></div>
-          </div>
-          <div id="drunkList" style="padding:0 14px 14px;display:flex;gap:10px;overflow-x:auto"></div>
-        </div>
-
-        <!-- CREW CHALLENGE — Daily Mission -->
         <div class="crew-section">
           <div class="crew-section-header">
             <div class="csh-left"><span class="csh-emoji">🎯</span><span class="csh-title">Crew-Challenge</span></div>
@@ -1555,15 +1513,34 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
           <div id="challengeList" style="padding:0 14px 14px"><p class="crew-empty">Wird geladen...</p></div>
         </div>
 
-        <!-- CREW SUGGESTIONS — Time-based activity tips -->
+        <!-- ═══════════════════════════════════════ -->
+        <!-- ZONE 5: LIVE — Was passiert gerade? -->
+        <!-- ═══════════════════════════════════════ -->
         <div class="crew-section">
           <div class="crew-section-header">
-            <div class="csh-left"><span class="csh-emoji">💡</span><span class="csh-title">Crew-Tipps</span></div>
+            <div class="csh-left"><span class="csh-emoji">⚡</span><span class="csh-title">Crew-Aktivität</span></div>
+            <div class="csh-badge live-badge">LIVE</div>
           </div>
-          <div id="crewTips" style="padding:0 14px 14px"></div>
+          <div id="crewActivityFeed"></div>
         </div>
 
-        <!-- PARTY GAMES -->
+        <div class="crew-section">
+          <div class="crew-section-header">
+            <div class="csh-left"><span class="csh-emoji">📍</span><span class="csh-title">Crew-Standorte</span></div>
+          </div>
+          <div id="crewLocationList" style="padding:0 14px 14px"></div>
+        </div>
+
+        <!-- ═══════════════════════════════════════ -->
+        <!-- ZONE 6: PARTY — Spiele & Extras -->
+        <!-- ═══════════════════════════════════════ -->
+        <div class="crew-section">
+          <div class="crew-section-header">
+            <div class="csh-left"><span class="csh-emoji">🍻</span><span class="csh-title">Tagesvollster</span></div>
+          </div>
+          <div id="drunkList" style="padding:0 14px 14px;display:flex;gap:10px;overflow-x:auto"></div>
+        </div>
+
         <div class="crew-section">
           <div class="crew-section-header">
             <div class="csh-left"><span class="csh-emoji">🎲</span><span class="csh-title">Party-Spiele</span></div>
@@ -1571,17 +1548,18 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
           <div id="gameList"></div>
         </div>
 
-        <!-- CONNECT HINT -->
+        <!-- ═══════════════════════════════════════ -->
+        <!-- ZONE 7: ENTDECKEN + CREW-ZENTRALE -->
+        <!-- ═══════════════════════════════════════ -->
         <div class="crew-section">
           <div style="padding:16px;border-radius:16px;background:linear-gradient(135deg,rgba(255,109,46,.06),rgba(255,109,46,.02));border:1px solid rgba(255,109,46,.12);text-align:center">
             <div style="font-size:28px;margin-bottom:8px">🔥</div>
             <div style="font-size:14px;font-weight:800;margin-bottom:4px">Neue Leute entdecken?</div>
-            <div style="font-size:12px;color:var(--t3);margin-bottom:12px;line-height:1.5">Swipe durch Profile und connecte dich direkt über Instagram, Snapchat oder TikTok!</div>
-            <button onclick="go('match',document.querySelectorAll('#navBar button')[3])" style="padding:12px 24px;border:none;border-radius:12px;background:var(--gold);color:#000;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit">🔥 Entdecken</button>
+            <div style="font-size:12px;color:var(--t3);margin-bottom:12px;line-height:1.5">Connecte dich direkt über Instagram, Snapchat oder TikTok!</div>
+            <button onclick="go('match',document.querySelectorAll('#navBar button')[3])" style="padding:14px 28px;border:none;border-radius:14px;background:var(--gold);color:#000;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;min-height:48px">🔥 Entdecken</button>
           </div>
         </div>
 
-        <!-- CREW IDENTITY — Profile + Board + Battle -->
         <div class="crew-section">
           <div class="crew-section-header">
             <div class="csh-left"><span class="csh-emoji">🛡️</span><span class="csh-title">Crew-Zentrale</span></div>
@@ -1594,12 +1572,12 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
               </div>
             </div>
             <div style="display:flex;gap:8px">
-              <div class="cb-cc-btn primary" onclick="openCrewBoard()" style="flex:1;padding:14px;font-size:13px">🌍 Crew Board</div>
-              <div class="cb-cc-btn secondary" onclick="openMyMalleStats()" style="flex:1;padding:14px;font-size:13px">📊 Meine Stats</div>
+              <div class="cb-cc-btn primary" onclick="openCrewBoard()" style="flex:1;padding:14px;font-size:13px;min-height:48px">🌍 Crew Board</div>
+              <div class="cb-cc-btn secondary" onclick="openMyMalleStats()" style="flex:1;padding:14px;font-size:13px;min-height:48px">📊 Meine Stats</div>
             </div>
-            <div style="display:flex;gap:8px;margin-top:8px">
-              <div class="cb-cc-btn secondary" onclick="openBlockList()" style="flex:1;padding:14px;font-size:13px">🛡️ Sicherheit</div>
-              <div class="cb-cc-btn secondary" onclick="openCrewChat()" style="flex:1;padding:14px;font-size:13px">💬 Crew Chat</div>
+            <div style="display:flex;gap:8px">
+              <div class="cb-cc-btn secondary" onclick="openBlockList()" style="flex:1;padding:14px;font-size:13px;min-height:48px">🛡️ Sicherheit</div>
+              <div class="cb-cc-btn secondary" onclick="openCrewChat()" style="flex:1;padding:14px;font-size:13px;min-height:48px">💬 Crew Chat</div>
             </div>
           </div>
         </div>
@@ -1728,7 +1706,7 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 53;
+  var APP_VERSION = 54;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     // Force-clear old non-UUID crew IDs
@@ -5877,7 +5855,7 @@ window.go=function(n,b){
   if(b)b.classList.add('active');
   setTimeout(function(){if(n==='radar'&&rMap)rMap.invalidateSize();if(n==='crew'&&cMap)cMap.invalidateSize()},200);
   if(n==='match')buildCards();
-  if(n==='crew'){fetchAllCrews().then(function(){return loadMyCrewMemberships()}).then(function(){updateCrewGate();buildCrewSwitcher();renderCrewBoard();updateCrewIdentityCard();buildCrewStatus();buildCrewList().then(buildCrewActivityFeed);buildCrewLocations();buildCrewWall();buildStoryPreview();buildDailyVoting();buildLeaderboard();buildTonightPlanner();buildChallenges();buildCrewTips();updateChallengeTimer()}).catch(function(e){console.error('Crew load error:',e);updateCrewGate()})}
+  if(n==='crew'){fetchAllCrews().then(function(){return loadMyCrewMemberships()}).then(function(){updateCrewGate();buildCrewSwitcher();renderCrewBoard();updateCrewIdentityCard();buildCrewStatus();buildCrewList().then(buildCrewActivityFeed);buildCrewLocations();buildDailyVoting();buildLeaderboard();buildTonightPlanner();buildChallenges();updateChallengeTimer()}).catch(function(e){console.error('Crew load error:',e);updateCrewGate()})}
 };
 
 // ============================================
