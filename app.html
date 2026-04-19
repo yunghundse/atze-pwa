@@ -520,6 +520,100 @@ select.ri{appearance:none;-webkit-appearance:none}
 .se-btn-post{background:linear-gradient(135deg,var(--o),#FF6B6B);color:#fff}
 .se-btn-cancel:active,.se-btn-post:active{transform:scale(.96)}
 
+/* ========== CREW PROFILE PAGE (Overlay) ========== */
+.crew-profile-ov{position:fixed;inset:0;z-index:9990;background:var(--bg);overflow-y:auto;-webkit-overflow-scrolling:touch;display:none;flex-direction:column}
+.crew-profile-ov.show{display:flex}
+.cp-back{position:fixed;top:max(env(safe-area-inset-top),12px);left:12px;z-index:9991;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.5);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;color:#fff;border:none}
+.cp-hero{position:relative;padding:80px 20px 20px;text-align:center;background:linear-gradient(180deg,rgba(255,109,46,.12),transparent 70%)}
+.cp-crew-ava{width:88px;height:88px;border-radius:24px;margin:0 auto 12px;background:linear-gradient(135deg,var(--o),#FF6B6B);display:flex;align-items:center;justify-content:center;font-size:40px;box-shadow:0 8px 32px rgba(255,109,46,.25);border:3px solid rgba(255,255,255,.15)}
+.cp-crew-name{font-size:24px;font-weight:900;letter-spacing:-.5px}
+.cp-crew-motto{font-size:13px;color:var(--t2);margin-top:4px;font-style:italic}
+.cp-visibility{display:inline-flex;align-items:center;gap:4px;padding:4px 12px;border-radius:10px;font-size:10px;font-weight:700;margin-top:8px}
+.cp-visibility.public{background:rgba(52,199,89,.12);color:var(--green);border:1px solid rgba(52,199,89,.2)}
+.cp-visibility.private{background:rgba(255,59,48,.12);color:#FF3B30;border:1px solid rgba(255,59,48,.2)}
+.cp-stats-row{display:flex;gap:8px;padding:16px 16px 0;justify-content:center}
+.cp-stat{flex:1;text-align:center;padding:14px 8px;border-radius:var(--r);background:linear-gradient(135deg,rgba(22,22,24,.7),rgba(28,28,32,.5));backdrop-filter:blur(50px) saturate(180%);-webkit-backdrop-filter:blur(50px) saturate(180%);border:1px solid rgba(255,255,255,.08)}
+.cp-stat-num{font-size:20px;font-weight:900;color:var(--o)}
+.cp-stat-label{font-size:9px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+.cp-leader{margin:16px;padding:14px;border-radius:var(--r);background:linear-gradient(135deg,rgba(255,214,10,.1),rgba(255,214,10,.03));border:1px solid rgba(255,214,10,.2);display:flex;align-items:center;gap:12px}
+.cp-leader-ava{width:44px;height:44px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,214,10,.4);flex-shrink:0}.cp-leader-ava img{width:100%;height:100%;object-fit:cover}
+.cp-leader-info{flex:1}.cp-leader-title{font-size:10px;font-weight:700;color:var(--yellow);text-transform:uppercase;letter-spacing:.5px}.cp-leader-name{font-size:14px;font-weight:800;margin-top:1px}
+.cp-leader-vote{padding:6px 14px;border-radius:12px;background:rgba(255,214,10,.15);border:1px solid rgba(255,214,10,.25);color:var(--yellow);font-size:11px;font-weight:700;cursor:pointer}
+.cp-section{padding:16px}.cp-section-title{font-size:15px;font-weight:800;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.cp-members-grid{display:flex;flex-wrap:wrap;gap:8px}
+.cp-member{display:flex;flex-direction:column;align-items:center;gap:4px;width:72px}
+.cp-member-ava{width:52px;height:52px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,255,255,.1)}.cp-member-ava img{width:100%;height:100%;object-fit:cover}
+.cp-member-name{font-size:10px;font-weight:700;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:72px}
+.cp-member-role{font-size:8px;color:var(--o);font-weight:700}
+/* Achievements */
+.cp-achievements{display:flex;flex-wrap:wrap;gap:8px}
+.cp-ach{padding:8px 12px;border-radius:12px;background:linear-gradient(135deg,rgba(22,22,24,.7),rgba(28,28,32,.5));border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700}
+.cp-ach.unlocked{border-color:rgba(255,214,10,.25);background:linear-gradient(135deg,rgba(255,214,10,.08),rgba(255,214,10,.02))}
+.cp-ach.locked{opacity:.4}
+.cp-ach-icon{font-size:18px}
+.cp-settings{margin:16px;padding:14px;border-radius:var(--r);background:linear-gradient(135deg,rgba(22,22,24,.7),rgba(28,28,32,.5));border:1px solid rgba(255,255,255,.08)}
+.cp-toggle-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.cp-toggle-row:last-child{border-bottom:none}
+.cp-toggle-label{font-size:13px;font-weight:700}
+.cp-toggle{width:44px;height:24px;border-radius:12px;background:rgba(255,255,255,.1);position:relative;cursor:pointer;transition:background .2s}
+.cp-toggle.on{background:var(--green)}
+.cp-toggle::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .2s}
+.cp-toggle.on::after{transform:translateX(20px)}
+/* Personal Malle Stats Card */
+.malle-stats-card{margin:16px;padding:16px;border-radius:var(--r2);background:linear-gradient(135deg,rgba(22,22,24,.75),rgba(28,28,32,.55));backdrop-filter:blur(60px) saturate(200%);-webkit-backdrop-filter:blur(60px) saturate(200%);border:1px solid rgba(255,255,255,.1);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 6px 24px rgba(0,0,0,.3)}
+.ms-header{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.ms-ava{width:48px;height:48px;border-radius:50%;overflow:hidden;border:2px solid var(--o);flex-shrink:0}.ms-ava img{width:100%;height:100%;object-fit:cover}
+.ms-name{font-size:16px;font-weight:900}.ms-hometown{font-size:11px;color:var(--t3);margin-top:1px}
+.ms-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ms-item{padding:12px;border-radius:var(--r);background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);text-align:center}
+.ms-item-val{font-size:18px;font-weight:900;color:var(--o)}
+.ms-item-label{font-size:9px;color:var(--t3);font-weight:700;text-transform:uppercase;letter-spacing:.3px;margin-top:2px}
+.ms-badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.ms-badge{padding:4px 10px;border-radius:10px;font-size:10px;font-weight:700;display:flex;align-items:center;gap:3px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06)}
+.ms-badge.earned{background:rgba(255,214,10,.08);border-color:rgba(255,214,10,.2);color:var(--yellow)}
+/* ========== CREW BOARD (Overlay) ========== */
+.crew-board-ov{position:fixed;inset:0;z-index:9990;background:var(--bg);overflow-y:auto;-webkit-overflow-scrolling:touch;display:none;flex-direction:column}
+.crew-board-ov.show{display:flex}
+.cb-header{padding:max(env(safe-area-inset-top),12px) 16px 12px;display:flex;align-items:center;gap:12px;background:linear-gradient(180deg,rgba(0,0,0,.5),transparent);position:sticky;top:0;z-index:2;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.cb-back{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;border:none;color:#fff;flex-shrink:0}
+.cb-title{font-size:18px;font-weight:900;flex:1}
+.cb-filter-row{display:flex;gap:6px;padding:8px 16px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.cb-filter-row::-webkit-scrollbar{display:none}
+.cb-filter{padding:6px 14px;border-radius:12px;font-size:11px;font-weight:700;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);cursor:pointer;white-space:nowrap;transition:all .15s}
+.cb-filter.sel{background:rgba(255,109,46,.12);border-color:rgba(255,109,46,.25);color:var(--o)}
+.cb-crews{padding:8px 16px}
+.cb-crew-card{padding:16px;border-radius:var(--r2);background:linear-gradient(135deg,rgba(22,22,24,.72),rgba(28,28,32,.5));backdrop-filter:blur(50px) saturate(180%);-webkit-backdrop-filter:blur(50px) saturate(180%);border:1px solid rgba(255,255,255,.08);margin-bottom:10px;cursor:pointer;transition:all .2s var(--ease);position:relative;overflow:hidden}
+.cb-crew-card:active{transform:scale(.98)}
+.cb-cc-header{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.cb-cc-ava{width:48px;height:48px;border-radius:16px;background:linear-gradient(135deg,var(--o),#FF6B6B);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;border:2px solid rgba(255,255,255,.1)}
+.cb-cc-info{flex:1;min-width:0}
+.cb-cc-name{font-size:15px;font-weight:900}
+.cb-cc-motto{font-size:11px;color:var(--t2);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cb-cc-vis{padding:3px 8px;border-radius:8px;font-size:9px;font-weight:700;flex-shrink:0}
+.cb-cc-stats{display:flex;gap:12px;margin-bottom:10px}
+.cb-cc-stat{font-size:11px;color:var(--t2)}.cb-cc-stat strong{color:var(--o);font-weight:800}
+.cb-cc-members{display:flex;margin-left:8px}
+.cb-cc-member-ava{width:28px;height:28px;border-radius:50%;overflow:hidden;border:2px solid var(--bg);margin-left:-8px;position:relative}.cb-cc-member-ava img{width:100%;height:100%;object-fit:cover}
+.cb-cc-actions{display:flex;gap:8px;margin-top:10px}
+.cb-cc-btn{flex:1;padding:10px;border-radius:12px;font-size:12px;font-weight:800;text-align:center;cursor:pointer;border:none;font-family:inherit;transition:transform .15s}
+.cb-cc-btn.primary{background:linear-gradient(135deg,var(--o),#FF6B6B);color:#fff}
+.cb-cc-btn.secondary{background:rgba(255,255,255,.06);color:var(--t1);border:1px solid rgba(255,255,255,.1)}
+.cb-cc-btn:active{transform:scale(.96)}
+/* Crew Battle / Leaderboard */
+.cb-cotd{margin:8px 16px;padding:16px;border-radius:var(--r2);background:linear-gradient(135deg,rgba(255,214,10,.12),rgba(255,214,10,.03));border:1px solid rgba(255,214,10,.2);text-align:center;position:relative;overflow:hidden}
+.cb-cotd::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,214,10,.06),transparent);pointer-events:none}
+.cb-cotd-label{font-size:10px;font-weight:700;color:var(--yellow);text-transform:uppercase;letter-spacing:1px}
+.cb-cotd-name{font-size:22px;font-weight:900;margin:6px 0 2px}
+.cb-cotd-motto{font-size:12px;color:var(--t2);font-style:italic}
+.cb-cotd-votes{font-size:11px;color:var(--t3);margin-top:6px}
+.cb-battle-card{margin:6px 16px;padding:14px;border-radius:var(--r);background:linear-gradient(135deg,rgba(255,59,48,.08),rgba(191,90,242,.06));border:1px solid rgba(255,59,48,.12);display:flex;align-items:center;gap:10px;cursor:pointer;transition:all .2s}
+.cb-battle-card:active{transform:scale(.98)}
+.cb-battle-vs{font-size:12px;font-weight:900;color:#FF3B30;flex-shrink:0}
+.cb-battle-info{flex:1;font-size:12px;font-weight:700}
+.cb-battle-status{font-size:10px;font-weight:700;padding:4px 10px;border-radius:8px}
+.cb-battle-status.live{background:rgba(52,199,89,.12);color:var(--green);border:1px solid rgba(52,199,89,.2)}
+.cb-battle-status.upcoming{background:rgba(90,200,250,.12);color:#5AC8FA;border:1px solid rgba(90,200,250,.2)}
+
 /* CREW LOCATION CARDS */
 .crew-loc-card{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid rgba(255,255,255,.04);transition:all .2s var(--ease)}
 .crew-loc-card:last-child{border-bottom:none}
@@ -931,6 +1025,28 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
   </div>
 </div>
 
+<!-- CREW PROFILE OVERLAY -->
+<div class="crew-profile-ov" id="crewProfileOv">
+  <button class="cp-back" onclick="closeCrewProfile()">←</button>
+  <div id="crewProfileContent"></div>
+</div>
+
+<!-- CREW BOARD OVERLAY -->
+<div class="crew-board-ov" id="crewBoardOv">
+  <div class="cb-header">
+    <button class="cb-back" onclick="closeCrewBoard()">←</button>
+    <div class="cb-title">Crew Board</div>
+  </div>
+  <div class="cb-filter-row" id="cbFilters"></div>
+  <div id="crewBoardContent"></div>
+</div>
+
+<!-- MALLE STATS OVERLAY -->
+<div class="crew-profile-ov" id="malleStatsOv">
+  <button class="cp-back" onclick="closeMalleStats()">←</button>
+  <div id="malleStatsContent"></div>
+</div>
+
 <!-- SOS --><div class="sos-ov" id="sosOv"><div class="sos-content"><h2>🚨 SOS NOTFALL</h2><p>Deine Crew wird sofort mit deinem Standort benachrichtigt.</p><div class="sos-btns"><button class="sos-btn white" onclick="window.open('tel:112')">🚨 Notruf 112</button><button class="sos-btn glass" onclick="sendSOS()">📢 SOS an Crew</button><button class="sos-btn glass" onclick="window.open('tel:+34971724020')">🏥 Hospital Son Llàtzer</button><button class="sos-btn glass" onclick="window.open('tel:+34971401212')">🚕 Taxi Palma</button><button class="sos-btn glass" onclick="window.open('tel:+34913642050')">🇩🇪 Deutsche Botschaft</button><button class="sos-btn glass" style="background:rgba(0,0,0,.25)" onclick="closeSOS()">Abbrechen</button></div></div></div>
 
 <!-- GAMES --><div class="game-ov" id="gameOv"><div class="game-header"><button class="ax" onclick="closeGame()">←</button><h3 id="gameTitle">Spiel</h3><div style="width:36px"></div></div><div class="game-body"><div class="game-card-display" id="gameCard"><div class="gcd-em" id="gcdEm">🎲</div><div class="gcd-text" id="gcdText">Tippe für die nächste Karte</div><div class="gcd-cat" id="gcdCat"></div></div><button class="abtn primary" style="max-width:260px" onclick="nextGameCard()">Nächste Karte</button></div></div>
@@ -1244,12 +1360,23 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
           <div id="gameList"></div>
         </div>
 
-        <!-- COMMUNITY TEASER -->
-        <div class="community-soon" onclick="toast('Community kommt bald! 🌍')">
-          <div style="font-size:32px;margin-bottom:8px">🌍</div>
-          <h4>Community — Coming Soon</h4>
-          <p>Triff tausende Leute auf Mallorca. Gemeinsame Events, Insider-Tipps & mehr.</p>
-          <div style="margin-top:10px;padding:8px 16px;border-radius:20px;background:linear-gradient(135deg,rgba(255,109,46,.12),rgba(191,90,242,.08));border:1px solid rgba(255,109,46,.15);display:inline-block;font-size:11px;font-weight:700;color:var(--o)">Benachrichtige mich 🔔</div>
+        <!-- CREW IDENTITY — Profile + Board + Battle -->
+        <div class="crew-section">
+          <div class="crew-section-header">
+            <div class="csh-left"><span class="csh-emoji">🛡️</span><span class="csh-title">Crew-Zentrale</span></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;padding:0 14px 14px">
+            <div class="cb-crew-card" onclick="openMyCrewProfile()" style="margin:0">
+              <div class="cb-cc-header" style="margin:0">
+                <div class="cb-cc-ava" id="myCrewIcon">🏴‍☠️</div>
+                <div class="cb-cc-info"><div class="cb-cc-name" id="myCrewName">Deine Crew</div><div class="cb-cc-motto" id="myCrewMotto">Crew-Profil öffnen →</div></div>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px">
+              <div class="cb-cc-btn primary" onclick="openCrewBoard()" style="flex:1;padding:14px;font-size:13px">🌍 Crew Board</div>
+              <div class="cb-cc-btn secondary" onclick="openMyMalleStats()" style="flex:1;padding:14px;font-size:13px">📊 Meine Stats</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -1374,7 +1501,7 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 39;
+  var APP_VERSION = 40;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     localStorage.setItem('crew_app_v', APP_VERSION);
@@ -3464,6 +3591,380 @@ document.addEventListener('visibilitychange',function(){
 });
 
 // ============================================
+// CREW PROFILE — Full crew identity page
+// ============================================
+var CREW_ACHIEVEMENTS = [
+  {id:'first_crew',icon:'🏴‍☠️',name:'Crew gegründet',desc:'Erste Crew erstellt'},
+  {id:'full_crew',icon:'👯',name:'Volle Crew',desc:'8/8 Mitglieder'},
+  {id:'bk_5x',icon:'👑',name:'Bierkönig Stammgäste',desc:'5x im Bierkönig gewesen'},
+  {id:'mega_3x',icon:'🎉',name:'Megapark Legends',desc:'3x im Megapark'},
+  {id:'malle_3rd',icon:'✈️',name:'Wiederholungstäter',desc:'3. Mal auf Malle'},
+  {id:'streak_7',icon:'🔥',name:'Wochenstreak',desc:'7 Tage Streak in der Crew'},
+  {id:'wall_50',icon:'📍',name:'Wall-Könige',desc:'50 Wall-Posts als Crew'},
+  {id:'battle_win',icon:'⚔️',name:'Battle-Sieger',desc:'Erstes Crew-Battle gewonnen'},
+  {id:'cotd',icon:'🏆',name:'Crew des Tages',desc:'Einmal Crew des Tages gewählt'},
+  {id:'night_owl',icon:'🦉',name:'Nachtschwärmer',desc:'3x nach 4 Uhr aktiv'},
+  {id:'early_bird',icon:'🌅',name:'Frühaufsteher',desc:'Vor 8 Uhr morgens aktiv'},
+  {id:'social',icon:'🤝',name:'Networker',desc:'Mit 5 anderen Crews connected'}
+];
+
+var CREW_SETTINGS_DEFAULTS={name:'Meine Crew',motto:'Auf geht\'s nach Malle!',icon:'🏴‍☠️',visibility:'public',leader:null,malle_visits:1,founded:null,hometown:''};
+
+function getCrewSettings(){
+  var s=JSON.parse(localStorage.getItem('crew_settings')||'null');
+  if(!s){s=Object.assign({},CREW_SETTINGS_DEFAULTS);s.founded=new Date().toISOString().split('T')[0];localStorage.setItem('crew_settings',JSON.stringify(s))}
+  return s;
+}
+
+function saveCrewSettings(s){localStorage.setItem('crew_settings',JSON.stringify(s))}
+
+function updateCrewIdentityCard(){
+  var s=getCrewSettings();
+  var el1=document.getElementById('myCrewIcon');if(el1)el1.textContent=s.icon;
+  var el2=document.getElementById('myCrewName');if(el2)el2.textContent=s.name;
+  var el3=document.getElementById('myCrewMotto');if(el3)el3.textContent=s.motto;
+}
+
+window.openMyCrewProfile=function(){
+  var ov=document.getElementById('crewProfileOv');if(!ov)return;
+  var s=getCrewSettings();
+  var crewSize=(_crewProfiles&&_crewProfiles.length)||0;
+  var totalAura=0;var topStreak=0;
+  if(_crewProfiles)_crewProfiles.forEach(function(p){totalAura+=(p.points||0);if((p.streak||0)>topStreak)topStreak=p.streak||0});
+
+  // Check achievements
+  var earned=JSON.parse(localStorage.getItem('crew_achievements')||'[]');
+  if(crewSize>0&&earned.indexOf('first_crew')===-1){earned.push('first_crew');localStorage.setItem('crew_achievements',JSON.stringify(earned))}
+  if(crewSize>=8&&earned.indexOf('full_crew')===-1){earned.push('full_crew');localStorage.setItem('crew_achievements',JSON.stringify(earned))}
+
+  var leaderProfile=null;
+  if(s.leader&&_crewProfiles){leaderProfile=_crewProfiles.find(function(p){return p.user_id===s.leader})}
+  if(!leaderProfile){leaderProfile={name:ME.name||'Du',photo_url:ME.photo_url||'',user_id:ME.user_id}}
+
+  var html='<div class="cp-hero">';
+  html+='<div class="cp-crew-ava">'+s.icon+'</div>';
+  html+='<div class="cp-crew-name">'+esc(s.name)+'</div>';
+  html+='<div class="cp-crew-motto">„'+esc(s.motto)+'"</div>';
+  html+='<div class="cp-visibility '+s.visibility+'">'+(s.visibility==='public'?'🌍 Öffentlich':'🔒 Privat')+'</div>';
+  html+='</div>';
+
+  // Stats
+  html+='<div class="cp-stats-row">';
+  html+='<div class="cp-stat"><div class="cp-stat-num">'+crewSize+'</div><div class="cp-stat-label">Mitglieder</div></div>';
+  html+='<div class="cp-stat"><div class="cp-stat-num">'+totalAura+'</div><div class="cp-stat-label">Crew-Aura</div></div>';
+  html+='<div class="cp-stat"><div class="cp-stat-num">'+(s.malle_visits||1)+'x</div><div class="cp-stat-label">Auf Malle</div></div>';
+  html+='<div class="cp-stat"><div class="cp-stat-num">'+topStreak+'</div><div class="cp-stat-label">Top-Streak</div></div>';
+  html+='</div>';
+
+  // Leader
+  html+='<div class="cp-leader">';
+  html+='<div class="cp-leader-ava"><img src="'+(leaderProfile.photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80')+'" loading="lazy"></div>';
+  html+='<div class="cp-leader-info"><div class="cp-leader-title">👑 Crew-Leader</div><div class="cp-leader-name">'+esc(leaderProfile.name)+'</div></div>';
+  html+='<div class="cp-leader-vote" onclick="voteNewLeader()">Abstimmen</div>';
+  html+='</div>';
+
+  // Members
+  html+='<div class="cp-section"><div class="cp-section-title">👯 Crew-Mitglieder</div><div class="cp-members-grid">';
+  // Self
+  html+='<div class="cp-member" onclick="openMyMalleStats()">';
+  html+='<div class="cp-member-ava"><img src="'+(ME.photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80')+'" loading="lazy"></div>';
+  html+='<div class="cp-member-name">'+(ME.name||'Du')+'</div>';
+  html+='<div class="cp-member-role">'+(s.leader===ME.user_id?'Leader':'Mitglied')+'</div>';
+  html+='</div>';
+  if(_crewProfiles)_crewProfiles.forEach(function(p){
+    html+='<div class="cp-member" onclick="openMemberMalleStats(\''+p.user_id+'\')">';
+    html+='<div class="cp-member-ava"><img src="'+(p.photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80')+'" loading="lazy"></div>';
+    html+='<div class="cp-member-name">'+esc(p.name)+'</div>';
+    html+='<div class="cp-member-role">'+(s.leader===p.user_id?'Leader':'Mitglied')+'</div>';
+    html+='</div>';
+  });
+  html+='</div></div>';
+
+  // Achievements
+  html+='<div class="cp-section"><div class="cp-section-title">🏆 Achievements</div><div class="cp-achievements">';
+  CREW_ACHIEVEMENTS.forEach(function(a){
+    var isEarned=earned.indexOf(a.id)!==-1;
+    html+='<div class="cp-ach '+(isEarned?'unlocked':'locked')+'" title="'+esc(a.desc)+'">';
+    html+='<span class="cp-ach-icon">'+a.icon+'</span>';
+    html+='<span>'+esc(a.name)+'</span>';
+    html+='</div>';
+  });
+  html+='</div></div>';
+
+  // Settings
+  html+='<div class="cp-section"><div class="cp-section-title">⚙️ Crew-Einstellungen</div>';
+  html+='<div class="cp-settings">';
+  html+='<div class="cp-toggle-row"><span class="cp-toggle-label">Crew-Name</span><input type="text" value="'+esc(s.name)+'" onchange="updateCrewSetting(\'name\',this.value)" style="background:none;border:none;color:var(--t1);font-size:13px;font-weight:700;text-align:right;font-family:inherit;outline:none;max-width:150px"></div>';
+  html+='<div class="cp-toggle-row"><span class="cp-toggle-label">Motto</span><input type="text" value="'+esc(s.motto)+'" onchange="updateCrewSetting(\'motto\',this.value)" style="background:none;border:none;color:var(--t1);font-size:13px;font-weight:700;text-align:right;font-family:inherit;outline:none;max-width:180px"></div>';
+  html+='<div class="cp-toggle-row"><span class="cp-toggle-label">Herkunft</span><input type="text" value="'+esc(s.hometown||'')+'" placeholder="z.B. Düsseldorf" onchange="updateCrewSetting(\'hometown\',this.value)" style="background:none;border:none;color:var(--t1);font-size:13px;font-weight:700;text-align:right;font-family:inherit;outline:none;max-width:150px"></div>';
+  html+='<div class="cp-toggle-row"><span class="cp-toggle-label">Malle-Besuche</span><input type="number" value="'+(s.malle_visits||1)+'" min="1" max="99" onchange="updateCrewSetting(\'malle_visits\',parseInt(this.value)||1)" style="background:none;border:none;color:var(--o);font-size:15px;font-weight:900;text-align:right;font-family:inherit;outline:none;width:50px"></div>';
+  html+='<div class="cp-toggle-row"><span class="cp-toggle-label">Öffentlich sichtbar</span><div class="cp-toggle '+(s.visibility==='public'?'on':'')+'" onclick="toggleCrewVisibility()"></div></div>';
+  html+='</div></div>';
+
+  html+='<div style="height:40px"></div>';
+  document.getElementById('crewProfileContent').innerHTML=html;
+  ov.classList.add('show');
+};
+
+window.closeCrewProfile=function(){document.getElementById('crewProfileOv').classList.remove('show')};
+
+window.updateCrewSetting=function(key,val){
+  var s=getCrewSettings();s[key]=val;saveCrewSettings(s);updateCrewIdentityCard();
+  toast('Gespeichert ✓');
+};
+
+window.toggleCrewVisibility=function(){
+  var s=getCrewSettings();
+  s.visibility=s.visibility==='public'?'private':'public';
+  saveCrewSettings(s);
+  openMyCrewProfile(); // refresh
+  toast(s.visibility==='public'?'Crew ist jetzt öffentlich 🌍':'Crew ist jetzt privat 🔒');
+};
+
+window.voteNewLeader=function(){
+  if(!_crewProfiles||_crewProfiles.length===0){toast('Du brauchst Crew-Mitglieder!');return}
+  var names=_crewProfiles.map(function(p){return p.name}).join(', ');
+  toast('Leader-Wahl: '+names+' — Feature kommt bald!');
+};
+
+// ============================================
+// PERSONAL MALLE STATS
+// ============================================
+var MALLE_PERSONAL_BADGES=[
+  {id:'first_trip',icon:'✈️',name:'Erster Malle-Trip'},
+  {id:'bk_regular',icon:'👑',name:'Bierkönig Regular'},
+  {id:'mega_fan',icon:'🎉',name:'Megapark Fan'},
+  {id:'sunrise',icon:'🌅',name:'Sonnenaufgang gesehen'},
+  {id:'50_drinks',icon:'🍺',name:'50 Drinks geloggt'},
+  {id:'100_aura',icon:'✨',name:'100 Aura erreicht'},
+  {id:'crew_founder',icon:'🏴‍☠️',name:'Crew-Gründer'},
+  {id:'social_butterfly',icon:'🦋',name:'10+ Matches'}
+];
+
+function getMalleStats(uid){
+  var key='malle_stats_'+(uid||ME.user_id);
+  var s=JSON.parse(localStorage.getItem(key)||'null');
+  if(!s)s={trips:1,fav_location:'Bierkönig',drinks:0,hometown:'',role:'Mitglied',badges:['first_trip']};
+  return s;
+}
+function saveMalleStats(uid,s){localStorage.setItem('malle_stats_'+(uid||ME.user_id),JSON.stringify(s))}
+
+window.openMyMalleStats=function(){
+  var ov=document.getElementById('malleStatsOv');if(!ov)return;
+  renderMalleStats(ME.user_id,ME.name||'Du',ME.photo_url||'');
+  ov.classList.add('show');
+};
+
+window.openMemberMalleStats=function(uid){
+  var ov=document.getElementById('malleStatsOv');if(!ov)return;
+  var profile=_crewProfiles?_crewProfiles.find(function(p){return p.user_id===uid}):null;
+  if(!profile){toast('Profil nicht gefunden');return}
+  renderMalleStats(uid,profile.name,profile.photo_url);
+  ov.classList.add('show');
+};
+
+function renderMalleStats(uid,name,photo){
+  var s=getMalleStats(uid);
+  var isMe=uid===ME.user_id;
+  var rank=MALLE_RANKS[0];
+  var pts=0;
+  if(isMe){pts=parseInt(localStorage.getItem('crew_user_points')||'0')}
+  else if(_crewProfiles){var p=_crewProfiles.find(function(x){return x.user_id===uid});if(p)pts=p.points||0}
+  for(var i=MALLE_RANKS.length-1;i>=0;i--){if(pts>=MALLE_RANKS[i].min){rank=MALLE_RANKS[i];break}}
+
+  var html='<div class="cp-hero" style="padding-bottom:10px">';
+  html+='<div style="width:80px;height:80px;border-radius:50%;overflow:hidden;margin:0 auto 10px;border:3px solid var(--o);box-shadow:0 0 30px rgba(255,109,46,.2)"><img src="'+(photo||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80')+'" style="width:100%;height:100%;object-fit:cover"></div>';
+  html+='<div class="cp-crew-name">'+esc(name)+'</div>';
+  html+='<div style="margin-top:4px;padding:4px 12px;border-radius:10px;display:inline-block;font-size:11px;font-weight:700;background:rgba(255,109,46,.12);color:var(--o);border:1px solid rgba(255,109,46,.2)">'+rank.emoji+' '+rank.title+' · '+pts+' Aura</div>';
+  html+='</div>';
+
+  // Stats Grid
+  html+='<div class="malle-stats-card">';
+  html+='<div class="ms-grid">';
+  html+='<div class="ms-item"><div class="ms-item-val">'+(s.trips||1)+'x</div><div class="ms-item-label">Malle-Trips</div></div>';
+  html+='<div class="ms-item"><div class="ms-item-val">'+esc(s.fav_location||'—')+'</div><div class="ms-item-label">Lieblings-Spot</div></div>';
+  html+='<div class="ms-item"><div class="ms-item-val">'+(s.drinks||0)+'</div><div class="ms-item-label">Drinks gesamt</div></div>';
+  html+='<div class="ms-item"><div class="ms-item-val">'+esc(s.hometown||'—')+'</div><div class="ms-item-label">Herkunft</div></div>';
+  html+='</div>';
+
+  // Badges
+  html+='<div class="ms-badges">';
+  MALLE_PERSONAL_BADGES.forEach(function(b){
+    var isEarned=s.badges&&s.badges.indexOf(b.id)!==-1;
+    html+='<div class="ms-badge '+(isEarned?'earned':'')+'">'+b.icon+' '+b.name+'</div>';
+  });
+  html+='</div>';
+  html+='</div>';
+
+  // Editable section (only for own profile)
+  if(isMe){
+    html+='<div class="cp-section"><div class="cp-section-title">✏️ Deine Daten</div>';
+    html+='<div class="cp-settings">';
+    html+='<div class="cp-toggle-row"><span class="cp-toggle-label">Malle-Trips</span><input type="number" value="'+(s.trips||1)+'" min="1" max="99" onchange="updateMalleStat(\'trips\',parseInt(this.value)||1)" style="background:none;border:none;color:var(--o);font-size:15px;font-weight:900;text-align:right;font-family:inherit;outline:none;width:50px"></div>';
+    html+='<div class="cp-toggle-row"><span class="cp-toggle-label">Lieblings-Location</span><select onchange="updateMalleStat(\'fav_location\',this.value)" style="background:none;border:none;color:var(--t1);font-size:13px;font-weight:700;text-align:right;font-family:inherit;outline:none;direction:rtl">';
+    ['Bierkönig','Megapark','Ballermann 6','Schinkenstraße','Oberbayern','Strandbar','Anderer Spot'].forEach(function(loc){
+      html+='<option value="'+loc+'"'+(s.fav_location===loc?' selected':'')+'>'+loc+'</option>';
+    });
+    html+='</select></div>';
+    html+='<div class="cp-toggle-row"><span class="cp-toggle-label">Herkunft</span><input type="text" value="'+esc(s.hometown||'')+'" placeholder="z.B. Köln" onchange="updateMalleStat(\'hometown\',this.value)" style="background:none;border:none;color:var(--t1);font-size:13px;font-weight:700;text-align:right;font-family:inherit;outline:none;max-width:150px"></div>';
+    html+='<div class="cp-toggle-row"><span class="cp-toggle-label">Drinks gesamt</span><input type="number" value="'+(s.drinks||0)+'" min="0" onchange="updateMalleStat(\'drinks\',parseInt(this.value)||0)" style="background:none;border:none;color:var(--o);font-size:15px;font-weight:900;text-align:right;font-family:inherit;outline:none;width:50px"></div>';
+    html+='</div></div>';
+  }
+
+  html+='<div style="height:40px"></div>';
+  document.getElementById('malleStatsContent').innerHTML=html;
+}
+
+window.closeMalleStats=function(){document.getElementById('malleStatsOv').classList.remove('show')};
+
+window.updateMalleStat=function(key,val){
+  var s=getMalleStats(ME.user_id);s[key]=val;saveMalleStats(ME.user_id,s);
+  toast('Gespeichert ✓');
+  renderMalleStats(ME.user_id,ME.name||'Du',ME.photo_url||'');
+};
+
+// ============================================
+// CREW BOARD — Discover other crews
+// ============================================
+var SAMPLE_CREWS=[
+  {id:'c1',name:'Die Bierkönige',motto:'Jeden Tag ein neuer Rekord',icon:'👑',visibility:'public',members:6,aura:2450,hometown:'Düsseldorf',malle_visits:5,vibe:'party'},
+  {id:'c2',name:'Schinkenstraße Gang',motto:'Von der Straße auf die Insel',icon:'🍖',visibility:'public',members:8,aura:3100,hometown:'Berlin',malle_visits:3,vibe:'party'},
+  {id:'c3',name:'Sunset Chasers',motto:'Für die goldene Stunde',icon:'🌅',visibility:'public',members:4,aura:890,hometown:'Hamburg',malle_visits:2,vibe:'chill'},
+  {id:'c4',name:'Mega Crew',motto:'Megapark ist unser Zuhause',icon:'🎉',visibility:'public',members:7,aura:4200,hometown:'München',malle_visits:8,vibe:'party'},
+  {id:'c5',name:'Beach Boys',motto:'Strand, Sonne, Sangria',icon:'🏖️',visibility:'public',members:5,aura:1560,hometown:'Köln',malle_visits:4,vibe:'chill'},
+  {id:'c6',name:'Private Legends',motto:'Was auf Malle passiert...',icon:'🔒',visibility:'private',members:4,aura:0,hometown:'???',malle_visits:0,vibe:'party'},
+  {id:'c7',name:'Ballermann Brüder',motto:'Bruderschaft seit 2019',icon:'🍺',visibility:'public',members:6,aura:2890,hometown:'Frankfurt',malle_visits:6,vibe:'party'},
+  {id:'c8',name:'Palma Vibes',motto:'Die Altstadt gehört uns',icon:'🌴',visibility:'public',members:3,aura:670,hometown:'Stuttgart',malle_visits:1,vibe:'chill'}
+];
+
+var _cbFilter='all';
+var _crewOfTheDay=null;
+
+function pickCrewOfTheDay(){
+  var today=new Date().toISOString().split('T')[0];
+  var stored=JSON.parse(localStorage.getItem('crew_of_the_day')||'null');
+  if(stored&&stored.date===today){_crewOfTheDay=stored;return}
+  // Pick random public crew
+  var pub=SAMPLE_CREWS.filter(function(c){return c.visibility==='public'});
+  var pick=pub[Math.floor(Math.random()*pub.length)];
+  _crewOfTheDay={date:today,crew:pick,votes:Math.floor(Math.random()*50)+10};
+  localStorage.setItem('crew_of_the_day',JSON.stringify(_crewOfTheDay));
+}
+
+window.openCrewBoard=function(){
+  var ov=document.getElementById('crewBoardOv');if(!ov)return;
+  pickCrewOfTheDay();
+
+  // Filters
+  var filterEl=document.getElementById('cbFilters');
+  if(filterEl){
+    var filters=[{id:'all',label:'Alle'},{id:'party',label:'🎉 Party'},{id:'chill',label:'🏖️ Chill'},{id:'top',label:'🏆 Top Crews'}];
+    filterEl.innerHTML=filters.map(function(f){
+      return '<div class="cb-filter'+(_cbFilter===f.id?' sel':'')+'" onclick="filterCrewBoard(\''+f.id+'\')">'+f.label+'</div>';
+    }).join('');
+  }
+
+  renderCrewBoard();
+  ov.classList.add('show');
+};
+
+window.closeCrewBoard=function(){document.getElementById('crewBoardOv').classList.remove('show')};
+
+window.filterCrewBoard=function(f){
+  _cbFilter=f;
+  document.querySelectorAll('.cb-filter').forEach(function(el){el.classList.remove('sel')});
+  event.target.classList.add('sel');
+  renderCrewBoard();
+};
+
+function renderCrewBoard(){
+  var el=document.getElementById('crewBoardContent');if(!el)return;
+  var html='';
+
+  // Crew of the Day
+  if(_crewOfTheDay&&_crewOfTheDay.crew){
+    var c=_crewOfTheDay.crew;
+    html+='<div class="cb-cotd">';
+    html+='<div class="cb-cotd-label">🏆 Crew des Tages</div>';
+    html+='<div class="cb-cotd-name">'+c.icon+' '+esc(c.name)+'</div>';
+    html+='<div class="cb-cotd-motto">'+esc(c.motto)+'</div>';
+    html+='<div class="cb-cotd-votes">'+_crewOfTheDay.votes+' Votes heute · '+c.members+' Mitglieder · '+c.aura+' Aura</div>';
+    html+='</div>';
+  }
+
+  // Active Battles
+  html+='<div style="padding:12px 16px 4px;font-size:13px;font-weight:800">⚔️ Aktive Crew-Battles</div>';
+  html+='<div class="cb-battle-card"><div class="cb-battle-vs">VS</div><div class="cb-battle-info">Die Bierkönige vs Mega Crew — Wer sammelt mehr Aura?</div><div class="cb-battle-status live">LIVE</div></div>';
+  html+='<div class="cb-battle-card"><div class="cb-battle-vs">VS</div><div class="cb-battle-info">Beach Boys vs Sunset Chasers — Strand-Challenge</div><div class="cb-battle-status upcoming">BALD</div></div>';
+
+  // Crew List
+  html+='<div style="padding:12px 16px 4px;font-size:13px;font-weight:800">🌍 Crews entdecken</div>';
+  var crews=SAMPLE_CREWS.slice();
+  if(_cbFilter==='party')crews=crews.filter(function(c){return c.vibe==='party'});
+  else if(_cbFilter==='chill')crews=crews.filter(function(c){return c.vibe==='chill'});
+  else if(_cbFilter==='top')crews.sort(function(a,b){return b.aura-a.aura});
+
+  html+='<div class="cb-crews">';
+  crews.forEach(function(c){
+    var isPrivate=c.visibility==='private';
+    html+='<div class="cb-crew-card">';
+    html+='<div class="cb-cc-header">';
+    html+='<div class="cb-cc-ava">'+c.icon+'</div>';
+    html+='<div class="cb-cc-info"><div class="cb-cc-name">'+esc(c.name)+'</div><div class="cb-cc-motto">'+esc(isPrivate?'Private Crew':c.motto)+'</div></div>';
+    html+='<div class="cb-cc-vis" style="'+(isPrivate?'background:rgba(255,59,48,.12);color:#FF3B30;border:1px solid rgba(255,59,48,.2)':'background:rgba(52,199,89,.12);color:var(--green);border:1px solid rgba(52,199,89,.2)')+'">'+(isPrivate?'🔒':'🌍')+'</div>';
+    html+='</div>';
+    if(!isPrivate){
+      html+='<div class="cb-cc-stats">';
+      html+='<div class="cb-cc-stat"><strong>'+c.members+'</strong> Mitglieder</div>';
+      html+='<div class="cb-cc-stat"><strong>'+c.aura+'</strong> Aura</div>';
+      html+='<div class="cb-cc-stat">'+esc(c.hometown)+'</div>';
+      html+='<div class="cb-cc-stat">'+c.malle_visits+'x Malle</div>';
+      html+='</div>';
+    }
+    html+='<div class="cb-cc-actions">';
+    html+='<div class="cb-cc-btn primary" onclick="requestCrewConnect(\''+c.id+'\',\''+esc(c.name)+'\')">🤝 Connecten</div>';
+    if(!isPrivate)html+='<div class="cb-cc-btn secondary" onclick="challengeCrew(\''+c.id+'\',\''+esc(c.name)+'\')">⚔️ Battle</div>';
+    html+='</div>';
+    html+='</div>';
+  });
+  html+='</div>';
+
+  // Vote for Crew des Tages
+  html+='<div style="padding:16px;text-align:center">';
+  html+='<div style="font-size:13px;font-weight:800;margin-bottom:8px">🗳️ Vote für Crew des Tages</div>';
+  html+='<div style="font-size:11px;color:var(--t3);margin-bottom:12px">Stimme täglich für deine Lieblings-Crew ab!</div>';
+  html+='<div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center">';
+  SAMPLE_CREWS.filter(function(c){return c.visibility==='public'}).forEach(function(c){
+    html+='<div style="padding:8px 14px;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);font-size:12px;font-weight:700;cursor:pointer" onclick="voteCotd(\''+c.id+'\',\''+esc(c.name)+'\')">'+c.icon+' '+esc(c.name)+'</div>';
+  });
+  html+='</div></div>';
+
+  html+='<div style="height:40px"></div>';
+  el.innerHTML=html;
+}
+
+window.requestCrewConnect=function(crewId,name){
+  toast('Anfrage an '+name+' gesendet! 🤝');
+  if(navigator.vibrate)navigator.vibrate(15);
+};
+
+window.challengeCrew=function(crewId,name){
+  toast('Battle-Anfrage an '+name+' gesendet! ⚔️');
+  if(navigator.vibrate)navigator.vibrate([10,50,10]);
+};
+
+window.voteCotd=function(crewId,name){
+  var today=new Date().toISOString().split('T')[0];
+  var voteKey='cotd_voted_'+today;
+  if(localStorage.getItem(voteKey)){toast('Du hast heute schon gevotet!');return}
+  localStorage.setItem(voteKey,crewId);
+  if(_crewOfTheDay)_crewOfTheDay.votes++;
+  toast('Vote für '+name+'! 🏆');
+  if(navigator.vibrate)navigator.vibrate(15);
+  renderCrewBoard();
+};
+
+// ============================================
 // DAILY VOTING SYSTEM (rotates questions daily)
 // ============================================
 var DAILY_QUESTIONS = [
@@ -3576,7 +4077,7 @@ window.go=function(n,b){
   if(b)b.classList.add('active');
   setTimeout(function(){if(n==='radar'&&rMap)rMap.invalidateSize();if(n==='crew'&&cMap)cMap.invalidateSize()},200);
   if(n==='match')buildCards();
-  if(n==='crew'){buildCrewStatus();buildCrewList().then(buildCrewActivityFeed);buildMatchList();buildCrewLocations();buildCrewWall();buildStoryPreview();buildDailyVoting();buildLeaderboard();buildTonightPlanner();buildChallenges();buildCrewTips();updateChallengeTimer()}
+  if(n==='crew'){buildCrewStatus();buildCrewList().then(buildCrewActivityFeed);buildMatchList();buildCrewLocations();buildCrewWall();buildStoryPreview();buildDailyVoting();buildLeaderboard();buildTonightPlanner();buildChallenges();buildCrewTips();updateChallengeTimer();updateCrewIdentityCard()}
 };
 
 // ============================================
