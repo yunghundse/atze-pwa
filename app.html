@@ -2534,6 +2534,21 @@ nav{padding-bottom:max(6px,env(safe-area-inset-bottom)) !important}
   font-size:13px;color:var(--t2,#b8b8c0);text-align:center;line-height:1.5;
   padding:0 8px;margin-bottom:8px;
 }
+.pmo-welcome-back{
+  display:flex;gap:10px;align-items:flex-start;
+  padding:12px 14px;border-radius:14px;
+  background:linear-gradient(135deg,rgba(255,109,46,.12),rgba(254,60,114,.12));
+  border:1px solid rgba(255,109,46,.3);
+  margin-bottom:4px;
+  animation:pmoPulse 2.4s ease-in-out infinite;
+}
+@keyframes pmoPulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(255,109,46,.0)}
+  50%{box-shadow:0 0 0 6px rgba(255,109,46,.08)}
+}
+.pmo-wb-ico{font-size:22px;line-height:1;flex-shrink:0}
+.pmo-wb-text{font-size:12px;color:var(--t1,#fff);line-height:1.55}
+.pmo-wb-text b{color:#FFB58A;font-weight:800}
 .pmo-card{
   padding:16px;border-radius:20px;
   background:linear-gradient(160deg,rgba(30,24,34,.85),rgba(18,14,22,.72));
@@ -3321,7 +3336,11 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
   <div class="pmo-inner">
     <div class="pmo-badge">🛡️ Dein Privatsphäre-Modus</div>
     <div class="pmo-title">Wie willst du crew. nutzen?</div>
-    <div class="pmo-sub">Du entscheidest, was wir über dich wissen. Jederzeit änderbar in deinem Profil.</div>
+    <div class="pmo-sub" id="pmoSubText">Du entscheidest, was wir über dich wissen. Jederzeit änderbar in deinem Profil.</div>
+    <div class="pmo-welcome-back" id="pmoWelcomeBack" style="display:none">
+      <div class="pmo-wb-ico">👋</div>
+      <div class="pmo-wb-text"><b>Willkommen zurück!</b><br>Wir haben unser Datenschutz-System erweitert. Mit deiner Auswahl bestätigst du freiwillig, wie wir deine Daten verwenden dürfen (DSGVO Art. 6 Abs. 1 a).</div>
+    </div>
 
     <div class="pmo-card" onclick="selectPrivacyMode('travel')">
       <div class="pmo-card-head">
@@ -4408,7 +4427,7 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 73;
+  var APP_VERSION = 74;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     // Force-clear old non-UUID crew IDs
@@ -4536,8 +4555,9 @@ async function logPrivacyConsent(mode, previousMode, state){
       deals_consent: !!(state.consent && state.consent.deals_consent),
       consent_version: 1,
       user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-      app_version: 73,
-      source: 'app'
+      app_version: 74,
+      // v73: tag source so we can see who was newly prompted vs. picked from settings
+      source: (!previousMode && ME && ME.created_at && (Date.now()-new Date(ME.created_at).getTime())>3600000) ? 'existing_user_v72_prompt' : (!previousMode ? 'first_run' : 'settings_change')
     };
     // Insert into audit log (append-only)
     var logRes = await sb.from('privacy_consent_log').insert(row);
@@ -4583,7 +4603,7 @@ function clearPrivacyData(){
         deals_consent: false,
         consent_version: 1,
         user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-        app_version: 73,
+        app_version: 74,
         source: 'user_reset'
       };
       sb.from('privacy_consent_log').insert(clearRow).then(function(r){ if(r&&r.error) console.warn('[PM] clear log err', r.error.message); });
@@ -4609,9 +4629,19 @@ function getEffectiveLocation(){
 }
 
 // ─── ONBOARDING FLOW ───────────────────────────────
-function openPrivacyOnboarding(){
+function openPrivacyOnboarding(isExistingUser){
   var ov = document.getElementById('privacyOnboardOv');
-  if(ov){ ov.style.display = 'block'; }
+  if(!ov) return;
+  // Show or hide the "welcome back" banner based on whether this is an existing user
+  var welcome = document.getElementById('pmoWelcomeBack');
+  var sub = document.getElementById('pmoSubText');
+  if(welcome){ welcome.style.display = isExistingUser ? 'block' : 'none'; }
+  if(sub){
+    sub.innerHTML = isExistingUser
+      ? 'Wir haben unser Privatsphäre-System überarbeitet — bitte wähl einmalig, wie wir dich behandeln dürfen. Jederzeit änderbar in deinem Profil.'
+      : 'Du entscheidest, was wir über dich wissen. Jederzeit änderbar in deinem Profil.';
+  }
+  ov.style.display = 'block';
 }
 function closePrivacyOnboarding(){
   var ov = document.getElementById('privacyOnboardOv');
@@ -5723,8 +5753,32 @@ async function loadUser(authUser){
     document.getElementById('app').style.display = 'flex';
     buildApp();
     // v72: First-run privacy mode selection → shown before GPS prompt
+    // v73: For existing users, hydrate localStorage from profile mirror if available
+    if(!hasSelectedMode() && ME && ME.privacy_mode){
+      try{
+        var hydrated = {
+          mode: ME.privacy_mode,
+          home_city: (ME.privacy_mode==='home' && ME.home_city_name && ME.home_city_lat) ? {
+            name: ME.home_city_name, country: ME.home_city_country||'',
+            lat: ME.home_city_lat, lng: ME.home_city_lng
+          } : null,
+          consent: {
+            mode_chosen_at: ME.privacy_mode_updated_at || new Date().toISOString(),
+            tracking_consent: ME.privacy_mode==='travel',
+            deals_consent: ME.privacy_mode!=='private',
+            version: 1
+          }
+        };
+        localStorage.setItem(PRIVACY_MODE_KEY, JSON.stringify(hydrated));
+        console.log('[PM] Hydrated localStorage from profile:', ME.privacy_mode);
+      }catch(e){ console.warn('[PM] hydrate err', e); }
+    }
     if(!hasSelectedMode()){
-      setTimeout(function(){ try{ openPrivacyOnboarding(); }catch(e){ console.warn('[PM] onboarding err',e); } }, 400);
+      // Existing user? Mark them so we can show a "welcome back" note in onboarding
+      var _isExistingUser = !!(ME && ME.created_at && ((Date.now() - new Date(ME.created_at).getTime()) > 3600000));
+      setTimeout(function(){
+        try{ openPrivacyOnboarding(_isExistingUser); }catch(e){ console.warn('[PM] onboarding err',e); }
+      }, 400);
     } else {
       // Check location consent after app is visible (only in travel mode)
       checkLocationConsent();
