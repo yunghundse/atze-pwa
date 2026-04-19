@@ -249,13 +249,66 @@ select.ri{appearance:none;-webkit-appearance:none}
 .crew-invite::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,109,46,.2),rgba(191,90,242,.12));border-radius:var(--r);pointer-events:none}
 .crew-invite .ci-icon{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
 .crew-invite h4{font-size:13px;font-weight:800}.crew-invite p{font-size:11px;color:var(--t2);margin-top:1px}
-.cmember{display:flex;align-items:center;gap:10px;padding:12px 14px}.cmember+.cmember{border-top:1px solid var(--brd)}
-.cm-ava{width:44px;height:44px;border-radius:50%;overflow:hidden;flex-shrink:0;border:2px solid var(--bg4);cursor:pointer}.cm-ava img{width:100%;height:100%;object-fit:cover}
-.cm-info{flex:1}.cm-name{font-size:14px;font-weight:700;display:flex;align-items:center;gap:5px}
-.cm-name .on{width:6px;height:6px;border-radius:50%;background:var(--green)}
-.cm-loc{font-size:11px;color:var(--t3);margin-top:1px}
-.cm-btn{padding:6px 12px;border-radius:16px;border:1px solid var(--glass-border);background:var(--glass-light);color:var(--t2);font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;backdrop-filter:blur(20px)}
-.cm-btn:active{transform:scale(.95);background:rgba(255,255,255,.1)}
+/* CREW MEMBER CARDS — Rich Dashboard */
+.crew-member-grid{padding:0 10px 8px;display:flex;flex-direction:column;gap:8px}
+.crew-card{display:flex;align-items:center;gap:12px;padding:14px;border-radius:var(--r);background:linear-gradient(135deg,rgba(22,22,24,.72),rgba(28,28,32,.5));backdrop-filter:blur(50px) saturate(180%);-webkit-backdrop-filter:blur(50px) saturate(180%);border:1px solid rgba(255,255,255,.1);cursor:pointer;transition:all .2s var(--ease);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 3px 16px rgba(0,0,0,.2);position:relative;overflow:hidden}
+.crew-card:active{transform:scale(.98);background:linear-gradient(135deg,rgba(32,32,36,.8),rgba(38,38,42,.6))}
+.crew-card.is-me{border-color:rgba(255,109,46,.2);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 3px 16px rgba(0,0,0,.2),0 0 16px rgba(255,109,46,.06)}
+.cc-ava-wrap{position:relative;flex-shrink:0}
+.cc-ava{width:52px;height:52px;border-radius:50%;overflow:hidden;border:2.5px solid var(--bg4)}.cc-ava img{width:100%;height:100%;object-fit:cover}
+.cc-ava-wrap .cc-status{position:absolute;bottom:0;right:0;width:14px;height:14px;border-radius:50%;border:2.5px solid rgba(22,22,24,.9);z-index:1}
+.cc-status.online{background:var(--green);box-shadow:0 0 8px rgba(52,199,89,.5)}.cc-status.away{background:#FFD60A}.cc-status.offline{background:var(--t3)}
+.cc-info{flex:1;min-width:0}
+.cc-name{font-size:14px;font-weight:800;display:flex;align-items:center;gap:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cc-name .cc-mood{font-size:16px}
+.cc-meta{display:flex;align-items:center;gap:6px;margin-top:3px;flex-wrap:wrap}
+.cc-rank-tag{font-size:9px;font-weight:700;padding:2px 7px;border-radius:6px;letter-spacing:.3px}
+.cc-streak{font-size:11px;font-weight:800;color:var(--yellow);display:flex;align-items:center;gap:2px}
+.cc-loc-mini{font-size:10px;color:var(--t3);display:flex;align-items:center;gap:3px;margin-top:2px}
+.cc-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0}
+.cc-pts{font-size:16px;font-weight:900;color:var(--o)}
+.cc-pts-label{font-size:8px;color:var(--t3);font-weight:600;text-transform:uppercase;letter-spacing:.3px}
+.cc-poke{padding:5px 12px;border-radius:16px;background:linear-gradient(135deg,rgba(255,109,46,.15),rgba(255,109,46,.06));border:1px solid rgba(255,109,46,.2);color:var(--o);font-size:10px;font-weight:700;cursor:pointer;transition:all .15s;white-space:nowrap}
+.cc-poke:active{transform:scale(.9);background:rgba(255,109,46,.25)}
+.cc-poke.poked{background:rgba(52,199,89,.1);border-color:rgba(52,199,89,.2);color:var(--green)}
+/* Crew empty state */
+.crew-empty-state{text-align:center;padding:24px 14px}
+.crew-empty-icon{font-size:48px;margin-bottom:10px}
+.crew-empty-title{font-size:16px;font-weight:900;margin-bottom:4px}
+.crew-empty-desc{font-size:12px;color:var(--t3);line-height:1.5;margin-bottom:14px}
+.crew-empty-btn{display:inline-flex;align-items:center;gap:6px;padding:12px 24px;border-radius:14px;background:var(--gold);color:#fff;font-size:13px;font-weight:800;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(255,109,46,.2)}
+.crew-empty-btn:active{transform:scale(.95)}
+/* Crew Profile Sheet */
+.crew-profile-sheet{padding:20px}
+.cps-header{display:flex;flex-direction:column;align-items:center;text-align:center;margin-bottom:16px}
+.cps-ava{width:88px;height:88px;border-radius:50%;overflow:hidden;border:3px solid var(--o);box-shadow:0 0 30px rgba(255,109,46,.15);margin-bottom:10px}.cps-ava img{width:100%;height:100%;object-fit:cover}
+.cps-name{font-size:22px;font-weight:900}
+.cps-handle{font-size:12px;color:var(--o);margin-top:2px}
+.cps-mood-big{font-size:28px;margin:6px 0}
+.cps-badges{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:8px}
+.cps-badge{padding:4px 10px;border-radius:12px;font-size:10px;font-weight:700;display:flex;align-items:center;gap:3px}
+.cps-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:16px 0}
+.cps-stat{padding:12px;border-radius:14px;text-align:center;background:linear-gradient(135deg,rgba(22,22,24,.7),rgba(28,28,32,.5));backdrop-filter:blur(40px);border:1px solid rgba(255,255,255,.08)}
+.cps-stat-num{font-size:22px;font-weight:900}.cps-stat-label{font-size:9px;color:var(--t3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+.cps-minimap{height:160px;border-radius:14px;overflow:hidden;margin:12px 0;border:1px solid rgba(255,255,255,.08);position:relative}
+.cps-minimap-placeholder{height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(22,22,24,.8),rgba(28,28,32,.6));color:var(--t3);font-size:12px}
+.cps-socials{display:flex;gap:8px;justify-content:center;margin:12px 0}
+.cps-social{padding:8px 16px;border-radius:20px;background:linear-gradient(135deg,rgba(22,22,24,.7),rgba(28,28,32,.5));backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.08);font-size:12px;font-weight:700;display:flex;align-items:center;gap:5px;color:var(--t2);text-decoration:none;cursor:pointer;transition:all .15s}
+.cps-social:active{transform:scale(.95)}
+.cps-actions{display:flex;flex-direction:column;gap:8px;margin-top:16px}
+.cps-btn{padding:14px;border-radius:14px;border:none;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .15s}
+.cps-btn:active{transform:scale(.97)}
+.cps-btn.primary{background:var(--gold);color:#fff;box-shadow:0 4px 16px rgba(255,109,46,.2)}
+.cps-btn.ghost{background:linear-gradient(135deg,rgba(22,22,24,.7),rgba(28,28,32,.5));backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.08);color:var(--t2)}
+.cps-btn.danger{background:rgba(255,59,48,.08);border:1px solid rgba(255,59,48,.15);color:var(--fire)}
+/* Crew Activity Feed */
+.crew-feed{padding:0 14px 8px}
+.crew-feed-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.03)}
+.crew-feed-item:last-child{border-bottom:none}
+.cfi-ava{width:32px;height:32px;border-radius:50%;overflow:hidden;flex-shrink:0}.cfi-ava img{width:100%;height:100%;object-fit:cover}
+.cfi-text{flex:1;font-size:12px;color:var(--t2);line-height:1.4}.cfi-text strong{color:#fff;font-weight:700}
+.cfi-time{font-size:10px;color:var(--t3);margin-top:2px}
+.cfi-emoji{font-size:18px;flex-shrink:0}
 .feed{padding:0 14px}
 .feed-item{display:flex;align-items:flex-start;gap:10px;padding:12px 0;border-bottom:1px solid var(--brd)}
 .feed-ava{width:36px;height:36px;border-radius:50%;overflow:hidden;flex-shrink:0}.feed-ava img{width:100%;height:100%;object-fit:cover}
@@ -1001,22 +1054,22 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
           </div>
         </div>
 
-        <!-- CREW MEMBERS — The Heart -->
+        <!-- CREW MEMBERS — The Heart (Dashboard) -->
         <div class="crew-section">
           <div class="crew-section-header">
             <div class="csh-left"><span class="csh-emoji">👯</span><span class="csh-title">Deine Crew</span></div>
             <div class="crew-limit-badge" id="crewCount">0/8</div>
           </div>
-          <div id="crewList"><p class="crew-empty">Noch keine Crew-Mitglieder. Lade Freunde ein!</p></div>
+          <div id="crewList"></div>
         </div>
 
-        <!-- CREW LIVE TRACKER — Where is everyone RIGHT NOW -->
+        <!-- CREW ACTIVITY FEED — What's happening -->
         <div class="crew-section">
           <div class="crew-section-header">
-            <div class="csh-left"><span class="csh-emoji">📍</span><span class="csh-title">Wo ist wer?</span></div>
+            <div class="csh-left"><span class="csh-emoji">⚡</span><span class="csh-title">Crew-Aktivität</span></div>
             <div class="csh-badge live-badge">LIVE</div>
           </div>
-          <div id="crewLocationList"><p class="crew-empty">Standortdaten werden geladen...</p></div>
+          <div id="crewActivityFeed"></div>
         </div>
 
         <!-- DAILY QUESTION — Tagesvollster + Tagesrituale -->
@@ -1207,7 +1260,7 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 36;
+  var APP_VERSION = 37;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     localStorage.setItem('crew_app_v', APP_VERSION);
@@ -2067,8 +2120,9 @@ function buildApp(){
   // Apply nav labels (i18n)
   applyLang();
 
-  // Crew status bar
+  // Crew status bar + crew list
   try{buildCrewStatus()}catch(e){console.error('buildCrewStatus failed:',e)}
+  try{buildCrewList().then(buildCrewActivityFeed)}catch(e){console.error('buildCrewList failed:',e)}
   // Party features
   try{buildLeaderboard()}catch(e){console.error('buildLeaderboard failed:',e)}
   try{buildTonightPlanner()}catch(e){console.error('buildTonightPlanner failed:',e)}
@@ -2611,6 +2665,235 @@ window.nextGameCard=function(){if(!curGame)return;gameIdx=(gameIdx+1)%curGame.ca
 window.closeGame=function(){document.getElementById('gameOv').classList.remove('show')};
 
 // ============================================
+// CREW MEMBER DASHBOARD — Rich Cards
+// ============================================
+var _crewProfiles = []; // cached crew profiles for reuse
+async function buildCrewList(){
+  var el=document.getElementById('crewList');if(!el)return;
+  try{
+    var {data:matches}=await sb.from('matches').select('to_user').eq('from_user',ME.user_id).eq('is_match',true);
+    if(!matches||matches.length===0){
+      el.innerHTML='<div class="crew-empty-state"><div class="crew-empty-icon">👯‍♂️</div><div class="crew-empty-title">Deine Crew wartet!</div><div class="crew-empty-desc">Lade deine Freunde ein oder matche mit Leuten in der Nähe — zusammen macht Malle mehr Spaß!</div><button class="crew-empty-btn" onclick="inviteCrew()">📲 Crew einladen</button></div>';
+      document.getElementById('crewCount').textContent='0/'+CREW_MAX;
+      return;
+    }
+    var ids=matches.map(function(m){return m.to_user});
+    var {data:profiles}=await sb.from('profiles').select('*').in('user_id',ids);
+    if(!profiles||profiles.length===0){el.innerHTML='<div class="crew-empty-state"><div class="crew-empty-icon">🔍</div><div class="crew-empty-title">Keine Crew-Mitglieder</div><div class="crew-empty-desc">Swipe los um deine Crew aufzubauen!</div></div>';return}
+    var blocked=JSON.parse(localStorage.getItem('crew_blocked')||'[]');
+    profiles=profiles.filter(function(p){return blocked.indexOf(p.user_id)===-1});
+    _crewProfiles=profiles;
+    var now=Date.now();
+    var pokedToday=JSON.parse(localStorage.getItem('crew_pokes_'+new Date().toISOString().split('T')[0])||'{}');
+    // Sort: online first, then by points
+    profiles.sort(function(a,b){
+      var aActive=a.last_active?new Date(a.last_active).getTime():0;
+      var bActive=b.last_active?new Date(b.last_active).getTime():0;
+      var aMins=Math.round((now-aActive)/60000);
+      var bMins=Math.round((now-bActive)/60000);
+      var aOnline=aMins<5?2:aMins<30?1:0;
+      var bOnline=bMins<5?2:bMins<30?1:0;
+      if(aOnline!==bOnline)return bOnline-aOnline;
+      return (b.points||0)-(a.points||0);
+    });
+    var html='<div class="crew-member-grid">';
+    profiles.forEach(function(p){
+      var lastActive=p.last_active?new Date(p.last_active).getTime():0;
+      var minsAgo=Math.round((now-lastActive)/60000);
+      var status=minsAgo<5?'online':minsAgo<30?'away':'offline';
+      var statusLabel=status==='online'?'Gerade aktiv':status==='away'?'Vor '+minsAgo+' Min':'Offline';
+      var rank=getMalleRank(p.points||0);
+      var hasLoc=p.lat&&p.lng;
+      var dist='';
+      if(hasLoc&&userLat&&userLng){
+        var d=getDistanceKm(userLat,userLng,p.lat,p.lng);
+        dist=d<1?Math.round(d*1000)+'m':d.toFixed(1)+'km';
+      }
+      var isPoked=pokedToday[p.user_id];
+      html+='<div class="crew-card" onclick="openCrewProfile(\''+p.user_id+'\')">';
+      // Avatar with status dot
+      html+='<div class="cc-ava-wrap"><div class="cc-ava"><img src="'+(p.photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&q=80')+'" loading="lazy"></div><div class="cc-status '+status+'"></div></div>';
+      // Info block
+      html+='<div class="cc-info">';
+      html+='<div class="cc-name">'+(p.mood?'<span class="cc-mood">'+p.mood+'</span>':'')+esc(p.name)+(p.age?', '+p.age:'')+'</div>';
+      html+='<div class="cc-meta">';
+      html+='<span class="cc-rank-tag" style="background:rgba(255,255,255,.06);color:'+rank.color+'">'+rank.emoji+' '+rank.title+'</span>';
+      if(p.streak&&p.streak>0)html+='<span class="cc-streak">🔥 '+p.streak+'</span>';
+      html+='<span style="font-size:10px;color:var(--t3)">'+statusLabel+'</span>';
+      html+='</div>';
+      if(hasLoc||p.club)html+='<div class="cc-loc-mini">'+(dist?'📍 '+dist+(p.club?' · ':''):'')+(p.club?'⚽ '+esc(p.club):'')+'</div>';
+      html+='</div>';
+      // Right side — points + poke
+      html+='<div class="cc-right">';
+      html+='<div class="cc-pts">'+(p.points||0)+'</div><div class="cc-pts-label">🍹 Sangrias</div>';
+      html+='<button class="cc-poke'+(isPoked?' poked':'')+'" onclick="event.stopPropagation();pokeCrewMember(\''+p.user_id+'\',\''+esc(p.name)+'\')">'+(isPoked?'✓ Gepingt':'👋 Ping')+'</button>';
+      html+='</div></div>';
+    });
+    html+='</div>';
+    el.innerHTML=html;
+    document.getElementById('crewCount').textContent=profiles.length+'/'+CREW_MAX;
+    // Update online counter on map pill
+    var onlineCount=0;
+    profiles.forEach(function(p){
+      var la=p.last_active?new Date(p.last_active).getTime():0;
+      if(Math.round((now-la)/60000)<5)onlineCount++;
+    });
+    var oc=document.getElementById('crewOnlineCount');
+    if(oc)oc.textContent=onlineCount;
+  }catch(e){
+    console.error('buildCrewList error:',e);
+    el.innerHTML='<p class="crew-empty">Crew konnte nicht geladen werden.</p>';
+  }
+}
+
+// Poke/Ping a crew member — psychological reciprocity trigger
+window.pokeCrewMember=function(uid,name){
+  var today=new Date().toISOString().split('T')[0];
+  var pokes=JSON.parse(localStorage.getItem('crew_pokes_'+today)||'{}');
+  if(pokes[uid]){toast('Du hast '+name+' heute schon gepingt! 😄');return}
+  pokes[uid]=Date.now();
+  localStorage.setItem('crew_pokes_'+today,JSON.stringify(pokes));
+  toast('👋 Ping an '+name+' gesendet!');
+  if(navigator.vibrate)navigator.vibrate([20,10,20]);
+  // Optimistic UI update
+  buildCrewList();
+};
+
+// Open detailed Crew Profile — with mini-map, stats, socials
+var _crewProfileMap=null;
+window.openCrewProfile=function(uid){
+  sb.from('profiles').select('*').eq('user_id',uid).single().then(function(res){
+    if(!res.data)return;
+    var p=res.data;
+    var rank=getMalleRank(p.points||0);
+    var nextRank=getNextRank(p.points||0);
+    var lastActive=p.last_active?new Date(p.last_active).getTime():0;
+    var minsAgo=Math.round((Date.now()-lastActive)/60000);
+    var status=minsAgo<5?'online':minsAgo<30?'away':'offline';
+    var statusLabel=status==='online'?'🟢 Gerade aktiv':status==='away'?'🟡 Vor '+minsAgo+' Min':'⚫ Offline';
+    var blocked=JSON.parse(localStorage.getItem('crew_blocked')||'[]');
+    var isBlocked=blocked.indexOf(uid)!==-1;
+    var hasLoc=p.lat&&p.lng;
+    // Build socials
+    var socials='';
+    if(p.insta)socials+='<a class="cps-social" href="https://instagram.com/'+esc(p.insta)+'" target="_blank" rel="noopener" style="border-color:rgba(225,48,108,.2);color:#E1306C">📸 '+esc(p.insta)+'</a>';
+    if(p.tiktok)socials+='<a class="cps-social" href="https://tiktok.com/@'+esc(p.tiktok)+'" target="_blank" rel="noopener" style="border-color:rgba(255,0,80,.2);color:#FF0050">🎵 '+esc(p.tiktok)+'</a>';
+    if(p.snapchat)socials+='<a class="cps-social" href="https://snapchat.com/add/'+esc(p.snapchat)+'" target="_blank" rel="noopener" style="border-color:rgba(255,252,0,.2);color:#FFFC00">👻 '+esc(p.snapchat)+'</a>';
+    // Progress to next rank
+    var progressHtml='';
+    if(nextRank){
+      var pct=Math.min(100,Math.round(((p.points||0)-rank.min)/(nextRank.min-rank.min)*100));
+      progressHtml='<div style="margin:12px 0"><div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:4px"><span style="color:'+rank.color+';font-weight:700">'+rank.emoji+' '+rank.title+'</span><span style="color:'+nextRank.color+';font-weight:700">'+nextRank.emoji+' '+nextRank.title+'</span></div><div style="height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:var(--gold);border-radius:3px"></div></div><div style="font-size:10px;color:var(--t3);margin-top:4px;text-align:center">Noch '+(nextRank.min-(p.points||0))+' Sangrias bis '+nextRank.emoji+'</div></div>';
+    }
+    var sheetHtml='<div class="crew-profile-sheet">';
+    // Header
+    sheetHtml+='<div class="cps-header"><div class="cps-ava"><img src="'+(p.photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80')+'"></div>';
+    sheetHtml+='<div class="cps-name">'+esc(p.name)+(p.age?', '+p.age:'')+'</div>';
+    sheetHtml+='<div class="cps-handle">'+statusLabel+'</div>';
+    if(p.mood)sheetHtml+='<div class="cps-mood-big">'+p.mood+'</div>';
+    if(p.bio)sheetHtml+='<div style="font-size:12px;color:var(--t2);margin-top:6px;line-height:1.5">'+esc(p.bio)+'</div>';
+    // Badges
+    sheetHtml+='<div class="cps-badges">';
+    sheetHtml+='<span class="cps-badge" style="background:rgba(255,255,255,.06);color:'+rank.color+'">'+rank.emoji+' '+rank.title+'</span>';
+    if(p.streak&&p.streak>0)sheetHtml+='<span class="cps-badge" style="background:rgba(255,214,10,.08);color:#FFD60A">🔥 '+p.streak+' Tage</span>';
+    if(p.club)sheetHtml+='<span class="cps-badge" style="background:rgba(255,109,46,.08);color:var(--o)">⚽ '+esc(p.club)+'</span>';
+    if(p.gender)sheetHtml+='<span class="cps-badge" style="background:rgba(255,255,255,.04);color:var(--t2)">'+esc(p.gender)+'</span>';
+    sheetHtml+='</div></div>';
+    // Stats grid — psychological social proof
+    sheetHtml+='<div class="cps-stats">';
+    sheetHtml+='<div class="cps-stat"><div class="cps-stat-num" style="color:var(--o)">'+(p.points||0)+'</div><div class="cps-stat-label">🍹 Sangrias</div></div>';
+    sheetHtml+='<div class="cps-stat"><div class="cps-stat-num" style="color:#FFD60A">'+(p.streak||0)+'</div><div class="cps-stat-label">🔥 Streak</div></div>';
+    sheetHtml+='<div class="cps-stat"><div class="cps-stat-num" style="color:var(--green)">'+(p.matches_count||'—')+'</div><div class="cps-stat-label">👥 Matches</div></div>';
+    sheetHtml+='</div>';
+    // Rank progress
+    sheetHtml+=progressHtml;
+    // Mini-map
+    if(hasLoc){
+      sheetHtml+='<div class="cps-minimap" id="crewProfileMap"></div>';
+    } else {
+      sheetHtml+='<div class="cps-minimap"><div class="cps-minimap-placeholder">📍 Standort nicht geteilt</div></div>';
+    }
+    // Socials
+    if(socials)sheetHtml+='<div class="cps-socials">'+socials+'</div>';
+    // Actions — reciprocity + belonging triggers
+    sheetHtml+='<div class="cps-actions">';
+    sheetHtml+='<button class="cps-btn primary" onclick="pokeCrewMember(\''+uid+'\',\''+esc(p.name)+'\');closeBS()">👋 '+esc(p.name)+' anpingen</button>';
+    if(hasLoc)sheetHtml+='<button class="cps-btn ghost" onclick="navigateToCrewMember('+p.lat+','+p.lng+',\''+esc(p.name)+'\');closeBS()">🗺️ Route anzeigen</button>';
+    sheetHtml+='<button class="cps-btn ghost" onclick="shareText(\'Schau dir '+esc(p.name)+' auf crew. an! 🌴🔥 https://partycrew.app\');closeBS()">📤 Profil teilen</button>';
+    sheetHtml+='<button class="cps-btn '+(isBlocked?'primary':'danger')+'" onclick="toggleBlock(\''+uid+'\');buildCrewList()">🚫 '+(isBlocked?'Entblocken':'Blockieren')+'</button>';
+    sheetHtml+='<button class="cps-btn ghost" onclick="openReportForm(\''+uid+'\',\''+esc(p.name)+'\')">🚨 Melden</button>';
+    sheetHtml+='</div></div>';
+    // Open in bottom sheet
+    document.getElementById('bsImg').src=p.photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80';
+    document.getElementById('bsContent').innerHTML=sheetHtml;
+    document.getElementById('bsheet').classList.add('show');
+    // Init mini-map after sheet is visible
+    if(hasLoc){
+      setTimeout(function(){
+        var mapEl=document.getElementById('crewProfileMap');
+        if(!mapEl)return;
+        if(_crewProfileMap){_crewProfileMap.remove();_crewProfileMap=null}
+        try{
+          _crewProfileMap=L.map(mapEl,{zoomControl:false,attributionControl:false,dragging:false,scrollWheelZoom:false,doubleClickZoom:false,touchZoom:false}).setView([p.lat,p.lng],15);
+          L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{maxZoom:19}).addTo(_crewProfileMap);
+          L.circleMarker([p.lat,p.lng],{radius:8,fillColor:'#FF6D2E',color:'#fff',weight:2,fillOpacity:.9}).addTo(_crewProfileMap).bindPopup('<b>'+esc(p.name)+'</b>');
+          // Show user's position too if available
+          if(userLat&&userLng){
+            L.circleMarker([userLat,userLng],{radius:6,fillColor:'#30D158',color:'#fff',weight:2,fillOpacity:.9}).addTo(_crewProfileMap).bindPopup('<b>Du</b>');
+            var bounds=L.latLngBounds([[p.lat,p.lng],[userLat,userLng]]);
+            _crewProfileMap.fitBounds(bounds,{padding:[30,30],maxZoom:15});
+          }
+        }catch(e){console.warn('minimap error:',e)}
+      },400);
+    }
+  });
+};
+
+// Crew Activity Feed — FOMO + social proof
+function buildCrewActivityFeed(){
+  var el=document.getElementById('crewActivityFeed');if(!el)return;
+  if(!_crewProfiles||_crewProfiles.length===0){
+    el.innerHTML='<p class="crew-empty" style="padding:14px">Matche mit Leuten um den Crew-Feed zu sehen!</p>';
+    return;
+  }
+  var now=Date.now();
+  var activities=[];
+  // Generate activity items from crew data — makes crew feel alive (psychological: social proof + FOMO)
+  _crewProfiles.forEach(function(p){
+    var lastActive=p.last_active?new Date(p.last_active).getTime():0;
+    var minsAgo=Math.round((now-lastActive)/60000);
+    if(minsAgo<5){
+      activities.push({photo:p.photo_url,name:p.name,text:'<strong>'+esc(p.name)+'</strong> ist gerade online '+((p.mood)||'🟢'),time:'Jetzt',priority:3});
+    } else if(minsAgo<60){
+      activities.push({photo:p.photo_url,name:p.name,text:'<strong>'+esc(p.name)+'</strong> war vor '+minsAgo+' Min aktiv',time:'Vor '+minsAgo+' Min',priority:2});
+    }
+    if(p.mood){
+      activities.push({photo:p.photo_url,name:p.name,text:'<strong>'+esc(p.name)+'</strong> fühlt sich '+p.mood,time:'Heute',emoji:p.mood,priority:1});
+    }
+    if(p.streak&&p.streak>=3){
+      activities.push({photo:p.photo_url,name:p.name,text:'<strong>'+esc(p.name)+'</strong> hat einen 🔥 '+p.streak+'-Tage-Streak!',time:'Streak',emoji:'🔥',priority:1});
+    }
+    var rank=getMalleRank(p.points||0);
+    if(rank.min>=150){
+      activities.push({photo:p.photo_url,name:p.name,text:'<strong>'+esc(p.name)+'</strong> ist jetzt '+rank.emoji+' '+rank.title,time:'Rang',emoji:rank.emoji,priority:0});
+    }
+  });
+  // Sort by priority (most engaging first), limit to 6
+  activities.sort(function(a,b){return b.priority-a.priority});
+  activities=activities.slice(0,6);
+  if(activities.length===0){
+    el.innerHTML='<p class="crew-empty" style="padding:14px">Noch keine Crew-Aktivitäten. Wird aktiver sobald deine Crew online ist!</p>';
+    return;
+  }
+  var html='<div class="crew-feed">';
+  activities.forEach(function(a){
+    html+='<div class="crew-feed-item"><div class="cfi-ava"><img src="'+(a.photo||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&q=80')+'" loading="lazy"></div><div><div class="cfi-text">'+a.text+'</div><div class="cfi-time">'+a.time+'</div></div>'+(a.emoji?'<div class="cfi-emoji">'+a.emoji+'</div>':'')+'</div>';
+  });
+  html+='</div>';
+  el.innerHTML=html;
+}
+
+// ============================================
 // CREW LIVE LOCATIONS
 // ============================================
 async function buildCrewLocations(){
@@ -2785,7 +3068,7 @@ window.go=function(n,b){
   if(b)b.classList.add('active');
   setTimeout(function(){if(n==='radar'&&rMap)rMap.invalidateSize();if(n==='crew'&&cMap)cMap.invalidateSize()},200);
   if(n==='match')buildCards();
-  if(n==='crew'){buildCrewStatus();buildMatchList();buildCrewLocations();buildDailyVoting();buildLeaderboard();buildTonightPlanner();buildChallenges();buildCrewTips();updateChallengeTimer()}
+  if(n==='crew'){buildCrewStatus();buildCrewList().then(buildCrewActivityFeed);buildMatchList();buildCrewLocations();buildDailyVoting();buildLeaderboard();buildTonightPlanner();buildChallenges();buildCrewTips();updateChallengeTimer()}
 };
 
 // ============================================
