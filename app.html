@@ -640,6 +640,8 @@ select.ri{appearance:none;-webkit-appearance:none}
 /* Crew Delete Confirm */
 .crew-delete-ov{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:none;align-items:center;justify-content:center;padding:20px}
 .crew-delete-ov.show{display:flex}
+#reportModal{display:none;position:fixed;inset:0;z-index:9995;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);align-items:center;justify-content:center}
+#reportModal.show{display:flex}
 .crew-delete-box{width:100%;max-width:320px;border-radius:var(--r2);background:linear-gradient(135deg,rgba(28,28,32,.95),rgba(22,22,24,.95));border:1px solid rgba(255,59,48,.2);padding:24px;text-align:center;box-shadow:0 24px 80px rgba(0,0,0,.6)}
 .cd-icon{font-size:48px;margin-bottom:10px}
 .cd-title{font-size:18px;font-weight:900;margin-bottom:6px}
@@ -1109,6 +1111,31 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
   </div>
 </div>
 
+<!-- SAFETY SETTINGS -->
+<div class="crew-profile-ov" id="safetySettingsOv">
+  <button class="cp-back" onclick="closeSafetySettings()">←</button>
+  <div id="safetySettingsContent"></div>
+</div>
+
+<!-- CREW CHAT -->
+<div class="crew-profile-ov" id="crewChatOv" data-crew-id="">
+  <div style="position:sticky;top:0;z-index:10;background:var(--bg);border-bottom:1px solid rgba(255,255,255,.06);padding:12px 14px;display:flex;align-items:center;gap:10px">
+    <button onclick="closeCrewChat()" style="background:none;border:none;color:var(--t1);font-size:20px;cursor:pointer;padding:4px">←</button>
+    <div style="flex:1"><div style="font-size:15px;font-weight:800" id="chatCrewName">Crew Chat</div><div style="font-size:10px;color:var(--t3)">Ende-zu-Ende verschlüsselt</div></div>
+    <div style="font-size:18px;cursor:pointer" onclick="openChatSettings()">⚙️</div>
+  </div>
+  <div id="chatMessagesList" style="flex:1;overflow-y:auto;padding:8px 0"></div>
+  <div style="padding:8px 12px;border-top:1px solid rgba(255,255,255,.06);display:flex;gap:8px;align-items:center;background:var(--bg)">
+    <input type="text" id="chatInput" placeholder="Nachricht..." maxlength="500" style="flex:1;padding:10px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:var(--t1);font-size:13px;font-family:inherit;outline:none" onkeydown="if(event.key==='Enter')sendChatMessage()">
+    <button onclick="sendChatMessage()" style="width:36px;height:36px;border-radius:50%;border:none;background:var(--o);color:#fff;font-size:16px;cursor:pointer;flex-shrink:0">➤</button>
+  </div>
+</div>
+
+<!-- REPORT MODAL -->
+<div class="crew-delete-ov" id="reportModal" style="z-index:9995">
+  <div style="max-width:340px;margin:auto;background:var(--card);border-radius:20px;padding:16px;max-height:80vh;overflow-y:auto"></div>
+</div>
+
 <!-- CREW CREATE MODAL -->
 <div class="crew-create-ov" id="crewCreateOv">
   <div class="crew-create">
@@ -1373,6 +1400,14 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
             <div class="cab-icon">📍</div>
             <span>Standort</span>
           </div>
+          <div class="crew-action-btn" onclick="openCrewChat()">
+            <div class="cab-icon">💬</div>
+            <span>Chat</span>
+          </div>
+          <div class="crew-action-btn" onclick="sendSafeCheckIn()">
+            <div class="cab-icon">✅</div>
+            <span>Safe</span>
+          </div>
         </div>
 
         <!-- CREW MEMBERS — The Heart (Dashboard) -->
@@ -1493,6 +1528,10 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
             <div style="display:flex;gap:8px">
               <div class="cb-cc-btn primary" onclick="openCrewBoard()" style="flex:1;padding:14px;font-size:13px">🌍 Crew Board</div>
               <div class="cb-cc-btn secondary" onclick="openMyMalleStats()" style="flex:1;padding:14px;font-size:13px">📊 Meine Stats</div>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:8px">
+              <div class="cb-cc-btn secondary" onclick="openBlockList()" style="flex:1;padding:14px;font-size:13px">🛡️ Sicherheit</div>
+              <div class="cb-cc-btn secondary" onclick="openCrewChat()" style="flex:1;padding:14px;font-size:13px">💬 Crew Chat</div>
             </div>
           </div>
         </div>
@@ -1620,7 +1659,7 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 45;
+  var APP_VERSION = 46;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     localStorage.setItem('crew_app_v', APP_VERSION);
@@ -2196,6 +2235,9 @@ async function loadUser(authUser){
 
     // Load crews from Supabase
     try { await fetchAllCrews(); } catch(e) { console.warn('[CREW] crews load failed:', e); }
+
+    // Load user blocks
+    try { await loadMyBlocks(); } catch(e) { console.warn('[SAFETY] blocks load failed:', e); }
 
     // Load profiles for matching
     try {
@@ -4785,6 +4827,375 @@ window.shareInviteCode=function(crewName,code){
   }
 };
 
+// ============================================
+// TRUST & SAFETY SYSTEM
+// ============================================
+var _myBlocks=[];
+
+async function loadMyBlocks(){
+  if(!ME)return;
+  try{
+    var {data}=await sb.from('user_blocks').select('blocked_id').eq('blocker_id',ME.user_id);
+    _myBlocks=(data||[]).map(function(b){return b.blocked_id});
+  }catch(e){_myBlocks=[]}
+}
+
+function isBlocked(userId){return _myBlocks.indexOf(userId)!==-1}
+
+window.blockUser=async function(userId,userName){
+  if(!ME||userId===ME.user_id)return;
+  if(!confirm('„'+userName+'" blockieren?\n\nDiese Person wird für dich unsichtbar — keine Nachrichten, kein Standort, keine Interaktion.'))return;
+  try{
+    await sb.from('user_blocks').upsert({blocker_id:ME.user_id,blocked_id:userId},{onConflict:'blocker_id,blocked_id'});
+    _myBlocks.push(userId);
+    toast(userName+' blockiert. Du siehst diese Person nicht mehr.');
+    if(navigator.vibrate)navigator.vibrate(15);
+  }catch(e){toast('Fehler beim Blockieren.')}
+};
+
+window.unblockUser=async function(userId,userName){
+  if(!ME)return;
+  if(!confirm('„'+userName+'" wieder freigeben?'))return;
+  try{
+    await sb.from('user_blocks').delete().eq('blocker_id',ME.user_id).eq('blocked_id',userId);
+    _myBlocks=_myBlocks.filter(function(id){return id!==userId});
+    toast(userName+' freigegeben ✓');
+  }catch(e){toast('Fehler.')}
+};
+
+window.openBlockList=async function(){
+  var ov=document.getElementById('safetySettingsOv');if(!ov)return;
+  await loadMyBlocks();
+  var html='<div style="padding:60px 16px 20px">';
+  html+='<div style="font-size:22px;font-weight:900;letter-spacing:-.5px;margin-bottom:16px">🛡️ Sicherheit & Datenschutz</div>';
+
+  // Trust Score
+  html+='<div style="padding:16px;border-radius:var(--r2);background:linear-gradient(135deg,rgba(52,199,89,.08),rgba(52,199,89,.02));border:1px solid rgba(52,199,89,.15);margin-bottom:12px">';
+  html+='<div style="display:flex;align-items:center;gap:12px">';
+  html+='<div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--green),#34C759);display:flex;align-items:center;justify-content:center;font-size:22px">🛡️</div>';
+  html+='<div><div style="font-size:14px;font-weight:800">Dein Trust-Score</div>';
+  var ts=ME.trust_score||0;
+  var tsLabel=ts<20?'Neu':ts<50?'Aufsteigend':ts<100?'Vertrauenswürdig':'Top-Mitglied';
+  html+='<div style="font-size:24px;font-weight:900;color:var(--green)">'+ts+' <span style="font-size:12px;font-weight:700;color:var(--t3)">/ 100 — '+tsLabel+'</span></div>';
+  html+='</div></div>';
+  html+='<div style="height:6px;border-radius:3px;background:rgba(255,255,255,.06);margin-top:10px;overflow:hidden"><div style="height:100%;width:'+Math.min(ts,100)+'%;border-radius:3px;background:linear-gradient(90deg,var(--green),#34C759)"></div></div>';
+  html+='<div style="font-size:10px;color:var(--t3);margin-top:6px">Verifizierung, aktive Teilnahme und positives Verhalten erhöhen deinen Score.</div>';
+  html+='</div>';
+
+  // Verifizierung
+  html+='<div style="padding:14px;border-radius:var(--r2);background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);margin-bottom:12px">';
+  html+='<div style="display:flex;align-items:center;justify-content:space-between">';
+  html+='<div><div style="font-size:13px;font-weight:800">✓ Verifizierung</div>';
+  html+='<div style="font-size:11px;color:var(--t3);margin-top:2px">'+(ME.is_verified?'Dein Profil ist verifiziert':'Verifiziere dein Profil für mehr Vertrauen')+'</div></div>';
+  if(ME.is_verified){
+    html+='<div style="padding:6px 14px;border-radius:10px;background:rgba(52,199,89,.12);color:var(--green);font-size:12px;font-weight:800">✓ Verifiziert</div>';
+  }else{
+    html+='<div style="padding:6px 14px;border-radius:10px;background:var(--o);color:#fff;font-size:12px;font-weight:800;cursor:pointer" onclick="requestVerification()">Verifizieren</div>';
+  }
+  html+='</div></div>';
+
+  // Notfallkontakt
+  html+='<div style="padding:14px;border-radius:var(--r2);background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);margin-bottom:12px">';
+  html+='<div style="font-size:13px;font-weight:800;margin-bottom:8px">🆘 Notfallkontakt</div>';
+  html+='<div style="font-size:11px;color:var(--t3);margin-bottom:8px">Diese Person wird bei einem SOS-Alarm automatisch benachrichtigt.</div>';
+  html+='<input type="text" value="'+esc(ME.emergency_contact||'')+'" placeholder="Name + Telefonnummer" onchange="updateEmergencyContact(this.value)" style="width:100%;padding:10px 14px;border-radius:10px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:var(--t1);font-size:13px;font-family:inherit;outline:none;box-sizing:border-box">';
+  html+='</div>';
+
+  // Standort-Sharing
+  html+='<div style="padding:14px;border-radius:var(--r2);background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);margin-bottom:12px">';
+  html+='<div style="font-size:13px;font-weight:800;margin-bottom:4px">📍 Standort-Sharing</div>';
+  html+='<div style="font-size:11px;color:var(--t3);margin-bottom:8px">Entscheide wer deinen Standort in der Crew sehen kann.</div>';
+  var locMode=localStorage.getItem('location_sharing_mode')||'crew';
+  var locModes=[{id:'everyone',label:'🌍 Alle',desc:'Jeder in deinen Crews'},{id:'crew',label:'👯 Nur Crew',desc:'Nur bestätigte Crew-Mitglieder'},{id:'trusted',label:'🤝 Vertrauenspersonen',desc:'Nur manuell ausgewählte'},{id:'nobody',label:'🔒 Niemand',desc:'Standort komplett privat'}];
+  html+='<div style="display:flex;flex-wrap:wrap;gap:6px">';
+  locModes.forEach(function(m){
+    html+='<div onclick="setLocationMode(\''+m.id+'\')" style="padding:8px 14px;border-radius:10px;font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;'+(locMode===m.id?'background:rgba(255,109,46,.15);border:1px solid rgba(255,109,46,.25);color:var(--o)':'background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);color:var(--t2)')+'">'+m.label+'</div>';
+  });
+  html+='</div>';
+  html+='</div>';
+
+  // Blockierte User
+  html+='<div style="padding:14px;border-radius:var(--r2);background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);margin-bottom:12px">';
+  html+='<div style="font-size:13px;font-weight:800;margin-bottom:8px">🚫 Blockierte Personen ('+_myBlocks.length+')</div>';
+  if(_myBlocks.length===0){
+    html+='<div style="font-size:12px;color:var(--t3)">Niemand blockiert. Blockierte Personen werden unsichtbar — keine Nachrichten, kein Standort.</div>';
+  }else{
+    html+='<div id="blockListItems">Wird geladen...</div>';
+  }
+  html+='</div>';
+
+  // Community Regeln
+  html+='<div style="padding:14px;border-radius:var(--r2);background:linear-gradient(135deg,rgba(255,109,46,.06),rgba(255,109,46,.02));border:1px solid rgba(255,109,46,.12);margin-bottom:12px">';
+  html+='<div style="font-size:13px;font-weight:800;margin-bottom:6px">📜 Community-Regeln</div>';
+  html+='<div style="font-size:11px;color:var(--t2);line-height:1.6">';
+  html+='• Respektvoller Umgang miteinander<br>';
+  html+='• Kein Spam, keine Belästigung<br>';
+  html+='• Achte auf die Sicherheit anderer<br>';
+  html+='• Melde verdächtiges Verhalten<br>';
+  html+='• Was auf Malle passiert, bleibt auf Malle 🤙';
+  html+='</div></div>';
+
+  html+='<div style="height:40px"></div></div>';
+  document.getElementById('safetySettingsContent').innerHTML=html;
+  ov.classList.add('show');
+
+  // Load blocked users details
+  if(_myBlocks.length>0){
+    try{
+      var {data:blockedProfiles}=await sb.from('profiles').select('user_id,name,photo_url').in('user_id',_myBlocks);
+      var bhtml='';
+      (blockedProfiles||[]).forEach(function(p){
+        bhtml+='<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04)">';
+        bhtml+='<div style="width:32px;height:32px;border-radius:50%;overflow:hidden;flex-shrink:0;background:rgba(255,255,255,.06)"><img src="'+(p.photo_url||'')+'" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display=\'none\'"></div>';
+        bhtml+='<div style="flex:1;font-size:13px;font-weight:700;color:var(--t2)">'+esc(p.name||'Unbekannt')+'</div>';
+        bhtml+='<div style="padding:5px 12px;border-radius:8px;background:rgba(52,199,89,.1);color:var(--green);font-size:11px;font-weight:700;cursor:pointer" onclick="unblockUser(\''+p.user_id+'\',\''+esc(p.name)+'\')">Freigeben</div>';
+        bhtml+='</div>';
+      });
+      var el=document.getElementById('blockListItems');if(el)el.innerHTML=bhtml;
+    }catch(e){}
+  }
+};
+
+window.closeSafetySettings=function(){document.getElementById('safetySettingsOv').classList.remove('show')};
+
+window.setLocationMode=function(mode){
+  localStorage.setItem('location_sharing_mode',mode);
+  toast('Standort: '+(mode==='everyone'?'Für alle sichtbar':mode==='crew'?'Nur für Crew':mode==='trusted'?'Nur Vertrauenspersonen':'Für niemanden sichtbar'));
+  openBlockList(); // refresh
+};
+
+window.updateEmergencyContact=async function(val){
+  if(!ME)return;
+  ME.emergency_contact=val;
+  try{await sb.from('profiles').update({emergency_contact:val}).eq('user_id',ME.user_id)}catch(e){}
+  toast('Notfallkontakt gespeichert ✓');
+};
+
+window.requestVerification=function(){
+  toast('Verifizierungsanfrage gesendet! Ein Admin wird dein Profil prüfen. ✓');
+};
+
+// ============================================
+// REPORT SYSTEM
+// ============================================
+var REPORT_REASONS=[
+  {id:'harassment',icon:'🚫',label:'Belästigung'},
+  {id:'spam',icon:'📢',label:'Spam'},
+  {id:'fake',icon:'🎭',label:'Fake-Profil'},
+  {id:'inappropriate',icon:'⚠️',label:'Unangemessene Inhalte'},
+  {id:'safety',icon:'🔴',label:'Sicherheitsbedenken'},
+  {id:'other',icon:'📝',label:'Sonstiges'}
+];
+
+window.reportUser=function(userId,userName){
+  if(!ME||userId===ME.user_id)return;
+  var html='<div style="text-align:center;padding:20px 0 10px"><div style="font-size:36px;margin-bottom:8px">🚩</div>';
+  html+='<div style="font-size:18px;font-weight:900">'+esc(userName)+' melden</div>';
+  html+='<div style="font-size:12px;color:var(--t3);margin-top:4px">Dein Report wird vertraulich behandelt.</div></div>';
+  html+='<div style="display:flex;flex-direction:column;gap:6px;padding:0 16px">';
+  REPORT_REASONS.forEach(function(r){
+    html+='<div onclick="submitReport(\''+userId+'\',\''+esc(userName)+'\',\''+r.id+'\')" style="padding:14px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);cursor:pointer;display:flex;align-items:center;gap:10px">';
+    html+='<span style="font-size:18px">'+r.icon+'</span>';
+    html+='<span style="font-size:13px;font-weight:700">'+r.label+'</span>';
+    html+='</div>';
+  });
+  html+='</div>';
+  html+='<div style="padding:16px;text-align:center"><div style="padding:10px;border-radius:10px;background:rgba(255,255,255,.03);font-size:11px;color:var(--t3);cursor:pointer" onclick="closeReportModal()">Abbrechen</div></div>';
+  var modal=document.getElementById('reportModal');
+  if(modal){modal.innerHTML=html;modal.classList.add('show')}
+};
+
+window.submitReport=async function(userId,userName,reason){
+  try{
+    await sb.from('user_reports').insert({reporter_id:ME.user_id,reported_id:userId,reported_type:'user',reason:reason});
+    closeReportModal();
+    toast('Report gesendet. Danke für deinen Beitrag zur Sicherheit! 🛡️');
+    if(navigator.vibrate)navigator.vibrate(15);
+  }catch(e){toast('Fehler beim Melden.')}
+};
+
+window.closeReportModal=function(){
+  var m=document.getElementById('reportModal');if(m)m.classList.remove('show');
+};
+
+// ============================================
+// CREW CHAT SYSTEM
+// ============================================
+var _chatMessages=[];
+var _chatLoading=false;
+
+window.openCrewChat=async function(crewId,crewName){
+  if(!crewId){var s=getCrewSettings();if(!s)return;crewId=s.id;crewName=s.name}
+  var ov=document.getElementById('crewChatOv');if(!ov)return;
+  ov.dataset.crewId=crewId;
+  document.getElementById('chatCrewName').textContent=crewName||'Crew Chat';
+  ov.classList.add('show');
+  await loadChatMessages(crewId);
+  scrollChatToBottom();
+};
+
+window.closeCrewChat=function(){document.getElementById('crewChatOv').classList.remove('show')};
+
+async function loadChatMessages(crewId){
+  _chatLoading=true;
+  try{
+    var {data}=await sb.from('crew_chat_messages').select('*').eq('crew_id',crewId).order('created_at',{ascending:true}).limit(100);
+    _chatMessages=data||[];
+  }catch(e){_chatMessages=[]}
+  _chatLoading=false;
+  renderChatMessages();
+}
+
+function renderChatMessages(){
+  var el=document.getElementById('chatMessagesList');if(!el)return;
+  if(_chatMessages.length===0){
+    el.innerHTML='<div style="text-align:center;padding:40px 20px;color:var(--t3)"><div style="font-size:36px;margin-bottom:8px">💬</div><div style="font-size:14px;font-weight:700">Noch keine Nachrichten</div><div style="font-size:12px;margin-top:4px">Starte die Unterhaltung!</div></div>';
+    return;
+  }
+  var html='';var lastDate='';
+  _chatMessages.forEach(function(msg){
+    // Skip blocked users
+    if(isBlocked(msg.user_id))return;
+    var d=new Date(msg.created_at);
+    var dateStr=d.toLocaleDateString('de-DE',{day:'numeric',month:'short'});
+    if(dateStr!==lastDate){
+      html+='<div style="text-align:center;padding:8px 0"><span style="font-size:10px;font-weight:700;color:var(--t3);background:rgba(0,0,0,.3);padding:3px 10px;border-radius:8px">'+dateStr+'</span></div>';
+      lastDate=dateStr;
+    }
+    var isMe=msg.user_id===ME.user_id;
+    var time=d.toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'});
+    html+='<div style="display:flex;gap:8px;padding:4px 14px;flex-direction:'+(isMe?'row-reverse':'row')+';align-items:flex-end">';
+    if(!isMe){
+      html+='<div style="width:28px;height:28px;border-radius:50%;overflow:hidden;flex-shrink:0;background:rgba(255,255,255,.06)">';
+      if(msg.user_photo)html+='<img src="'+msg.user_photo+'" style="width:100%;height:100%;object-fit:cover">';
+      else html+='<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:12px">👤</div>';
+      html+='</div>';
+    }
+    html+='<div style="max-width:75%">';
+    if(!isMe)html+='<div style="font-size:10px;font-weight:700;color:var(--o);margin-bottom:2px;padding-left:2px">'+esc(msg.user_name||'Anonym')+'</div>';
+    html+='<div style="padding:8px 12px;border-radius:'+(isMe?'14px 14px 4px 14px':'14px 14px 14px 4px')+';background:'+(isMe?'var(--o)':'rgba(255,255,255,.08)')+';color:'+(isMe?'#fff':'var(--t1)')+';font-size:13px;line-height:1.4;word-break:break-word">'+esc(msg.message)+'</div>';
+    html+='<div style="font-size:9px;color:var(--t3);margin-top:2px;padding:0 4px;text-align:'+(isMe?'right':'left')+'">'+time+'</div>';
+    html+='</div>';
+    if(!isMe){
+      html+='<div style="font-size:10px;color:var(--t3);cursor:pointer;opacity:.4;padding:4px" onclick="showUserActions(\''+msg.user_id+'\',\''+esc(msg.user_name||'Anonym')+'\')">•••</div>';
+    }
+    html+='</div>';
+  });
+  el.innerHTML=html;
+}
+
+function scrollChatToBottom(){
+  var el=document.getElementById('chatMessagesList');
+  if(el)setTimeout(function(){el.scrollTop=el.scrollHeight},50);
+}
+
+window.sendChatMessage=async function(){
+  var input=document.getElementById('chatInput');if(!input)return;
+  var msg=input.value.trim();if(!msg)return;
+  var crewId=document.getElementById('crewChatOv').dataset.crewId;
+  if(!crewId)return;
+  input.value='';
+  try{
+    await sb.from('crew_chat_messages').insert({
+      crew_id:crewId,user_id:ME.user_id,
+      user_name:ME.name||'Anonym',user_photo:ME.photo_url||'',
+      message:msg,msg_type:'text'
+    });
+    await loadChatMessages(crewId);
+    scrollChatToBottom();
+  }catch(e){toast('Nachricht konnte nicht gesendet werden.')}
+};
+
+window.showUserActions=function(userId,userName){
+  if(userId===ME.user_id)return;
+  var actions=[
+    {label:'🚫 '+userName+' blockieren',fn:'blockUser(\''+userId+'\',\''+esc(userName)+'\')'},
+    {label:'🚩 '+userName+' melden',fn:'reportUser(\''+userId+'\',\''+esc(userName)+'\')'}
+  ];
+  var html='<div style="padding:16px">';
+  actions.forEach(function(a){
+    html+='<div onclick="'+a.fn+';closeUserActions()" style="padding:14px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);margin-bottom:6px;font-size:13px;font-weight:700;cursor:pointer">'+a.label+'</div>';
+  });
+  html+='<div onclick="closeUserActions()" style="padding:12px;text-align:center;font-size:12px;color:var(--t3);cursor:pointer;margin-top:4px">Abbrechen</div>';
+  html+='</div>';
+  var modal=document.getElementById('reportModal');
+  if(modal){modal.innerHTML=html;modal.classList.add('show')}
+};
+window.closeUserActions=function(){closeReportModal()};
+
+// ============================================
+// SAFE CHECK-IN
+// ============================================
+window.sendSafeCheckIn=async function(){
+  if(!ME)return;
+  var s=getCrewSettings();
+  var crewId=s?s.id:'';
+  var lat=ME.lat||null;
+  var lng=ME.lng||null;
+  try{
+    await sb.from('safe_checkins').insert({user_id:ME.user_id,crew_id:crewId,status:'safe',lat:lat,lng:lng});
+    toast('Safe Check-In gesendet ✓ Deine Crew weiß dass es dir gut geht!');
+    if(navigator.vibrate)navigator.vibrate([10,50,10]);
+  }catch(e){toast('Fehler beim Check-In.')}
+};
+
+window.sendUnsafeCheckIn=async function(){
+  if(!ME)return;
+  var s=getCrewSettings();
+  var crewId=s?s.id:'';
+  var lat=ME.lat||null;
+  var lng=ME.lng||null;
+  try{
+    await sb.from('safe_checkins').insert({user_id:ME.user_id,crew_id:crewId,status:'help',message:'Brauche Hilfe!',lat:lat,lng:lng});
+    toast('🚨 Hilferuf gesendet! Deine Crew wird benachrichtigt.');
+    if(navigator.vibrate)navigator.vibrate([100,50,100,50,100]);
+  }catch(e){toast('Fehler.')}
+};
+
+// ============================================
+// CHAT SETTINGS (for crew leader)
+// ============================================
+window.openChatSettings=async function(){
+  var crewId=document.getElementById('crewChatOv').dataset.crewId;
+  if(!crewId)return;
+  var s=getCrewSettings();
+  var isLeader=s&&s.leader===ME.user_id;
+  var isAdmin=ME&&ME.is_admin;
+  if(!isLeader&&!isAdmin){toast('Nur der Crew-Leader kann Chat-Einstellungen ändern.');return}
+
+  try{
+    var {data:settings}=await sb.from('crew_chat_settings').select('*').eq('crew_id',crewId).maybeSingle();
+    if(!settings)settings={chat_enabled:true,only_members:true,slow_mode:0};
+
+    var html='<div style="text-align:center;padding:20px 0 10px"><div style="font-size:28px;margin-bottom:4px">⚙️</div><div style="font-size:16px;font-weight:900">Chat-Einstellungen</div></div>';
+    html+='<div style="padding:0 16px">';
+    html+='<div style="padding:12px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);margin-bottom:8px;display:flex;align-items:center;justify-content:space-between"><span style="font-size:13px;font-weight:700">Chat aktiv</span><div class="cp-toggle '+(settings.chat_enabled?'on':'')+'" onclick="toggleChatSetting(\''+crewId+'\',\'chat_enabled\','+!settings.chat_enabled+')"></div></div>';
+    html+='<div style="padding:12px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);margin-bottom:8px;display:flex;align-items:center;justify-content:space-between"><span style="font-size:13px;font-weight:700">Nur Mitglieder</span><div class="cp-toggle '+(settings.only_members?'on':'')+'" onclick="toggleChatSetting(\''+crewId+'\',\'only_members\','+!settings.only_members+')"></div></div>';
+    html+='<div style="padding:12px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);margin-bottom:8px"><div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:13px;font-weight:700">Slow Mode</span><span style="font-size:12px;color:var(--o);font-weight:800">'+(settings.slow_mode||0)+'s</span></div><input type="range" min="0" max="60" step="5" value="'+(settings.slow_mode||0)+'" onchange="setChatSlowMode(\''+crewId+'\',this.value)" style="width:100%;margin-top:8px"></div>';
+    html+='</div>';
+    html+='<div onclick="closeReportModal()" style="padding:12px;text-align:center;font-size:12px;color:var(--t3);cursor:pointer">Schließen</div>';
+
+    var modal=document.getElementById('reportModal');
+    if(modal){modal.innerHTML=html;modal.classList.add('show')}
+  }catch(e){toast('Fehler.')}
+};
+
+window.toggleChatSetting=async function(crewId,key,val){
+  try{
+    var obj={};obj[key]=val;obj.updated_by=ME.user_id;obj.updated_at=new Date().toISOString();obj.crew_id=crewId;
+    await sb.from('crew_chat_settings').upsert(obj,{onConflict:'crew_id'});
+    toast('Einstellung gespeichert ✓');
+    openChatSettings();
+  }catch(e){toast('Fehler.')}
+};
+
+window.setChatSlowMode=async function(crewId,val){
+  try{
+    await sb.from('crew_chat_settings').upsert({crew_id:crewId,slow_mode:parseInt(val)||0,updated_by:ME.user_id,updated_at:new Date().toISOString()},{onConflict:'crew_id'});
+    toast('Slow Mode: '+val+'s');
+  }catch(e){}
+};
+
 // Admin approve/reject crews
 window.adminApproveCrew=async function(crewId,name){
   if(!ME||!ME.is_admin)return;
@@ -4805,6 +5216,23 @@ window.adminRejectCrew=async function(crewId,name){
     await fetchAllCrews();
     toast('Crew „'+name+'" abgelehnt. ❌');
     if(navigator.vibrate)navigator.vibrate([50,30,50]);
+    openAdminPanel();
+  }catch(e){toast('Fehler.')}
+};
+
+window.resolveReport=async function(reportId){
+  try{
+    await sb.from('user_reports').update({status:'resolved'}).eq('id',reportId);
+    toast('Report erledigt ✓');
+    openAdminPanel();
+  }catch(e){}
+};
+
+window.adminBanUser=async function(userId){
+  if(!confirm('User wirklich bannen?'))return;
+  try{
+    await sb.from('profiles').update({is_banned:true}).eq('user_id',userId);
+    toast('User gebannt ✓');
     openAdminPanel();
   }catch(e){toast('Fehler.')}
 };
@@ -5252,6 +5680,28 @@ window.openAdminPanel = async function(){
       });
       html += '</div>';
     }
+
+    // === USER REPORTS SECTION ===
+    try{
+      var {data:userReports}=await sb.from('user_reports').select('*').eq('status','pending').order('created_at',{ascending:false}).limit(20);
+      html += '<div style="background:linear-gradient(135deg,rgba(255,59,48,.08),rgba(255,59,48,.02));border:1px solid rgba(255,59,48,.2);border-radius:16px;padding:16px;margin-bottom:16px">';
+      html += '<div style="font-size:11px;font-weight:700;color:#FF3B30;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">🚩 User Reports ('+(userReports?userReports.length:0)+')</div>';
+      if(!userReports||userReports.length===0){
+        html += '<div style="text-align:center;padding:12px;color:var(--t3);font-size:12px">Keine offenen Reports ✓</div>';
+      }else{
+        userReports.forEach(function(r){
+          html += '<div style="padding:10px;margin-bottom:6px;border-radius:10px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05)">';
+          html += '<div style="display:flex;justify-content:space-between;align-items:center">';
+          html += '<div><div style="font-size:12px;font-weight:700">'+esc(r.reason)+'</div>';
+          html += '<div style="font-size:10px;color:var(--t3)">Reporter: '+r.reporter_id.substring(0,8)+'... → '+r.reported_id.substring(0,8)+'...</div></div>';
+          html += '<div style="display:flex;gap:4px">';
+          html += '<div style="padding:4px 10px;border-radius:6px;background:rgba(52,199,89,.1);color:var(--green);font-size:10px;font-weight:700;cursor:pointer" onclick="resolveReport('+r.id+')">✓ Erledigt</div>';
+          html += '<div style="padding:4px 10px;border-radius:6px;background:rgba(255,59,48,.1);color:#FF3B30;font-size:10px;font-weight:700;cursor:pointer" onclick="adminBanUser(\''+r.reported_id+'\')">🔨 Bannen</div>';
+          html += '</div></div></div>';
+        });
+      }
+      html += '</div>';
+    }catch(e){}
 
     // === INVITE STATS ===
     try {
