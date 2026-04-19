@@ -167,6 +167,33 @@ select.ri{appearance:none;-webkit-appearance:none}
 .leaflet-control-zoom,.leaflet-control-attribution{display:none!important}
 .map-fade{position:absolute;bottom:-1px;left:0;right:0;height:80px;background:linear-gradient(transparent,var(--bg));z-index:5;pointer-events:none}
 .radar-content{position:relative;z-index:10;margin-top:calc(48% - 24px);padding-bottom:90px}
+/* Heim-Topbar über der Karte */
+.heim-topbar{position:absolute;top:max(10px,env(safe-area-inset-top,0));left:10px;right:10px;z-index:420;display:flex;gap:8px;align-items:stretch;pointer-events:none}
+.heim-topbar > *{pointer-events:auto}
+.heim-btn-big{flex:1;min-height:52px;display:flex;align-items:center;gap:10px;padding:8px 14px;border-radius:16px;background:linear-gradient(135deg,rgba(48,209,88,.38),rgba(10,132,255,.22));border:1.5px solid rgba(48,209,88,.55);color:#DFFBEA;font-size:13px;font-weight:800;font-family:Inter,sans-serif;cursor:pointer;box-shadow:0 10px 28px rgba(0,0,0,.45),0 0 0 1px rgba(255,255,255,.05),inset 0 1px 0 rgba(255,255,255,.15);backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);transition:transform .2s var(--spring),box-shadow .2s var(--spring);animation:heimGlow 4s ease-in-out infinite;text-align:left}
+.heim-btn-big:active{transform:scale(.97)}
+.heim-btn-big .hbig-ic{width:32px;height:32px;flex-shrink:0;border-radius:10px;background:linear-gradient(135deg,#30D158,#0A84FF);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(48,209,88,.5)}
+.heim-btn-big .hbig-ic svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.heim-btn-big .hbig-txt{display:flex;flex-direction:column;line-height:1.15;min-width:0;flex:1}
+.heim-btn-big .hbig-title{font-size:14px;font-weight:900;letter-spacing:.2px;color:#fff;white-space:nowrap}
+.heim-btn-big .hbig-sub{font-size:10.5px;font-weight:700;color:rgba(223,251,234,.75);text-transform:uppercase;letter-spacing:.6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.heim-btn-big .hbig-arrow{flex-shrink:0;color:rgba(255,255,255,.75);margin-left:4px}
+.heim-btn-big .hbig-arrow svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.heim-btn-big.needs-setup{background:linear-gradient(135deg,rgba(255,159,10,.38),rgba(255,69,58,.25));border-color:rgba(255,159,10,.6);color:#FFE8CC;animation:heimWarn 2.8s ease-in-out infinite}
+.heim-btn-big.needs-setup .hbig-ic{background:linear-gradient(135deg,#FF9F0A,#FF453A);box-shadow:0 4px 14px rgba(255,159,10,.55)}
+@keyframes heimGlow{0%,100%{box-shadow:0 10px 28px rgba(0,0,0,.45),0 0 0 1px rgba(255,255,255,.05),inset 0 1px 0 rgba(255,255,255,.15),0 0 0 2px rgba(48,209,88,.0)}50%{box-shadow:0 10px 30px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.05),inset 0 1px 0 rgba(255,255,255,.18),0 0 0 3px rgba(48,209,88,.2)}}
+@keyframes heimWarn{0%,100%{box-shadow:0 10px 28px rgba(0,0,0,.5),0 0 0 1px rgba(255,159,10,.08),inset 0 1px 0 rgba(255,255,255,.15)}50%{box-shadow:0 10px 30px rgba(0,0,0,.55),0 0 0 3px rgba(255,159,10,.25),inset 0 1px 0 rgba(255,255,255,.18)}}
+.heim-loc-pill{display:flex;align-items:center;gap:6px;padding:8px 12px;border-radius:16px;background:linear-gradient(135deg,rgba(22,22,28,.85),rgba(12,10,14,.75));backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);border:1px solid rgba(255,255,255,.12);color:#fff;font-size:11px;font-weight:800;cursor:pointer;min-height:52px;box-shadow:0 10px 28px rgba(0,0,0,.45);white-space:nowrap;max-width:42%;overflow:hidden;text-overflow:ellipsis}
+.heim-loc-pill svg{width:14px;height:14px;stroke:#30D158;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.heim-loc-pill .hlp-text{display:flex;flex-direction:column;line-height:1.15;min-width:0}
+.heim-loc-pill .hlp-label{font-size:9px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.6px}
+.heim-loc-pill .hlp-city{font-size:12px;font-weight:900;color:#fff;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media (max-width:380px){
+  .heim-btn-big .hbig-sub{display:none}
+  .heim-btn-big{min-height:46px;padding:6px 10px}
+  .heim-btn-big .hbig-ic{width:28px;height:28px}
+  .heim-loc-pill{padding:6px 10px;min-height:46px;max-width:38%}
+}
 .pin{border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;color:#fff;border:2px solid #fff;box-shadow:0 4px 12px rgba(0,0,0,.3);cursor:pointer}
 .pin-hot{width:44px;height:44px;background:var(--fire);animation:pg 2s infinite}
 .pin-busy{width:40px;height:40px;background:var(--o)}
@@ -3474,13 +3501,31 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
   </div>
   <main>
     <div class="scr active" id="screen-radar">
-      <div class="map-full"><div id="radarMap"></div><div class="map-fade"></div></div>
+      <div class="map-full"><div id="radarMap"></div><div class="map-fade"></div>
+        <div class="heim-topbar">
+          <button class="heim-btn-big" id="heimTopbarBtn" onclick="openHomeSafe()" aria-label="Bring mich nach Hause">
+            <div class="hbig-ic"><svg viewBox="0 0 24 24"><use href="#i-home-safe"/></svg></div>
+            <div class="hbig-txt">
+              <span class="hbig-title" id="heimBigTitle">🏠 Bring mich heim</span>
+              <span class="hbig-sub" id="heimBigSub">Einrichten & Crew informieren</span>
+            </div>
+            <span class="hbig-arrow"><svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg></span>
+          </button>
+          <div class="heim-loc-pill" id="heimLocPill" onclick="refreshUserLocation()" aria-label="Aktueller Standort">
+            <svg viewBox="0 0 24 24"><path d="M12 22s-8-9-8-13a8 8 0 0 1 16 0c0 4-8 13-8 13z"/><circle cx="12" cy="9" r="2.5"/></svg>
+            <div class="hlp-text">
+              <span class="hlp-label" id="heimLocLabelTxt">Du bist in</span>
+              <span class="hlp-city" id="heimLocCity">Standort…</span>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="stories" id="storiesBar"></div>
       <div class="radar-content">
         <div class="active-counter anim" id="activeCounter" style="margin:0 14px 8px;display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;background:rgba(52,199,89,.06);border:1px solid rgba(52,199,89,.12)">
           <div class="active-dot" style="width:8px;height:8px;border-radius:50%;background:var(--green);animation:activePulse 2s ease infinite"></div>
           <span style="font-size:13px;font-weight:700"><span id="activeCount">0</span> Leute online</span>
-          <span style="font-size:11px;color:var(--t3);margin-left:auto">auf Mallorca</span>
+          <span style="font-size:11px;color:var(--t3);margin-left:auto" id="activeCountLoc">in deiner Nähe</span>
         </div>
         <div id="gpsStatusBanner" style="margin:0 14px 8px;padding:8px 14px;border-radius:12px;font-size:12px;font-weight:700;display:none;align-items:center;gap:8px"></div>
         <div class="quick-stats anim" id="quickStats" style="margin:0 14px 8px;display:flex;gap:8px">
@@ -3506,7 +3551,7 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
         <div class="weather-card glass anim" id="weatherCard" data-state="idle" style="margin:0 14px 10px;padding:14px 16px;display:flex;align-items:center;gap:14px;cursor:pointer" onclick="refreshWeather()">
           <div id="weatherIcon" class="wx-ico"><svg viewBox="0 0 24 24"><use href="#i-refresh"/></svg></div>
           <div style="flex:1;min-width:0">
-            <div style="font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px">Mallorca jetzt</div>
+            <div style="font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px" id="weatherLoc">Wetter jetzt</div>
             <div style="display:flex;align-items:baseline;gap:6px"><span id="weatherTemp" style="font-size:22px;font-weight:900;letter-spacing:-.5px">Tippen</span><span id="weatherDesc" style="font-size:12px;color:var(--t2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">zum Aktualisieren</span></div>
           </div>
           <div class="wx-meta" style="text-align:right;flex-shrink:0">
@@ -3793,7 +3838,7 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
       </div>
       <div class="deals-wrap" style="padding-top:0">
       <div class="deals-hero" style="padding:4px 16px 8px;text-align:center">
-        <div style="font-size:11px;font-weight:700;color:var(--o);text-transform:uppercase;letter-spacing:2px;margin-bottom:4px">Dein Mallorca-Trip</div>
+        <div style="font-size:11px;font-weight:700;color:var(--o);text-transform:uppercase;letter-spacing:2px;margin-bottom:4px" id="dealsHeaderLoc">Dein Trip</div>
         <h2 style="font-size:22px;font-weight:900;letter-spacing:-.5px">Deals &amp; Angebote</h2>
         <p style="font-size:12px;color:var(--t3);margin-top:4px">Persönlich für dich — Flüge, Unterkünfte, Mietwagen &amp; mehr</p>
       </div>
@@ -4050,7 +4095,7 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 68;
+  var APP_VERSION = 69;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     // Force-clear old non-UUID crew IDs
@@ -4201,6 +4246,15 @@ function _onGpsFix(pos, source){
     }
     // Feed travel-tracker (throttled inside)
     try{ if(typeof maybeLogVisitedPlace==='function') maybeLogVisitedPlace(ll[0],ll[1],acc); }catch(e){}
+    // Reverse-Geocode → echter Städtename überall
+    try{ if(typeof updateUserCity==='function') updateUserCity(ll[0],ll[1]); }catch(e){}
+    // Wetter mit echten Koords nachladen (nur beim ersten Fix oder wenn Karten initial)
+    try{
+      if(!window._weatherLocated && typeof fetchWeather==='function'){
+        window._weatherLocated = true;
+        fetchWeather();
+      }
+    }catch(e){}
     updateGpsBanner();
   } catch(e){ console.warn('[CREW] _onGpsFix error:', e); }
 }
@@ -5528,6 +5582,114 @@ var userMarker = null, userAccCircle = null, userLat = 0, userLng = 0;
 var _gpsStatus = 'unknown'; // 'active','denied','unavailable','timeout','unknown'
 var _gpsLastUpdate = 0; // timestamp of last successful GPS fix
 var _gpsAccuracy = 9999; // last accuracy in meters
+
+// ============================================
+// DYNAMIC LOCATION NAME — Reverse-Geocoding
+// (statt hardcoded "Mallorca" überall)
+// ============================================
+window._userCity = null;        // { city, region, country, lat, lng, ts }
+var _CITY_CACHE_KEY = 'user_city_cache_v1';
+var _CITY_TTL_MS = 10*60*1000;  // 10min
+var _CITY_MOVE_THRESHOLD = 0.015; // ~1.5km Bewegung = neu geocoden
+
+function _loadCityCache(){
+  try {
+    var raw = localStorage.getItem(_CITY_CACHE_KEY);
+    if(!raw) return null;
+    var c = JSON.parse(raw);
+    if(!c || !c.ts) return null;
+    if(Date.now()-c.ts > _CITY_TTL_MS*6) return null; // 1h hard expire
+    return c;
+  } catch(e){ return null; }
+}
+
+function _saveCityCache(c){
+  try { localStorage.setItem(_CITY_CACHE_KEY, JSON.stringify(c)); } catch(e){}
+}
+
+function _cityLabelShort(c){
+  if(!c) return '';
+  if(c.city && c.region && c.city!==c.region) return c.city;
+  return c.city || c.region || c.country || '';
+}
+
+async function updateUserCity(lat, lng, opts){
+  opts = opts||{};
+  if(!lat || !lng) return null;
+  var cached = window._userCity || _loadCityCache();
+  if(cached && !opts.force){
+    var dLat = Math.abs(cached.lat-lat), dLng = Math.abs(cached.lng-lng);
+    var fresh = (Date.now()-cached.ts) < _CITY_TTL_MS;
+    if(fresh && dLat<_CITY_MOVE_THRESHOLD && dLng<_CITY_MOVE_THRESHOLD){
+      window._userCity = cached;
+      _renderLocationLabels();
+      return cached;
+    }
+  }
+  try {
+    var url = 'https://nominatim.openstreetmap.org/reverse?format=json&zoom=12&lat='+lat+'&lon='+lng+'&accept-language=de';
+    var resp = await fetch(url, {headers:{'Accept':'application/json'}});
+    if(!resp.ok) throw new Error('HTTP '+resp.status);
+    var data = await resp.json();
+    var a = data.address||{};
+    var city = a.city || a.town || a.village || a.municipality || a.suburb || a.hamlet || '';
+    var region = a.state || a.county || a.region || '';
+    var country = a.country || '';
+    var obj = {city:city, region:region, country:country, lat:lat, lng:lng, ts:Date.now()};
+    window._userCity = obj;
+    _saveCityCache(obj);
+    _renderLocationLabels();
+    return obj;
+  } catch(e){
+    console.warn('Reverse geocode failed:', e);
+    if(cached){ window._userCity = cached; _renderLocationLabels(); return cached; }
+    return null;
+  }
+}
+
+function _renderLocationLabels(){
+  var c = window._userCity;
+  var label = _cityLabelShort(c);
+  var region = c ? (c.region || c.country || '') : '';
+
+  // Heim-Topbar-Pill
+  var pillCity = document.getElementById('heimLocCity');
+  if(pillCity) pillCity.textContent = label || (userLat ? 'Unbekannter Ort' : 'Standort…');
+  var pillLab = document.getElementById('heimLocLabelTxt');
+  if(pillLab) pillLab.textContent = label ? 'Du bist in' : 'Standort';
+
+  // Active counter
+  var acl = document.getElementById('activeCountLoc');
+  if(acl) acl.textContent = label ? ('in '+label) : 'in deiner Nähe';
+
+  // Weather card header
+  var wl = document.getElementById('weatherLoc');
+  if(wl) wl.textContent = label ? (label+' jetzt') : 'Wetter jetzt';
+
+  // Deals-Header
+  var dh = document.getElementById('dealsHeaderLoc');
+  if(dh) dh.textContent = label ? ('Dein Trip: '+label) : 'Dein Trip';
+}
+
+window.refreshUserLocation = function(){
+  if(typeof requestLocationAccess === 'function' && (!userLat || !userLng)){
+    try { requestLocationAccess(); } catch(e){}
+  }
+  if(userLat && userLng){
+    toast('Standort wird aktualisiert…');
+    updateUserCity(userLat, userLng, {force:true}).then(function(c){
+      if(c && _cityLabelShort(c)) toast('📍 '+_cityLabelShort(c));
+    });
+    // Weather mit neuen Koords
+    if(typeof fetchWeather === 'function') fetchWeather();
+  } else {
+    toast('Standort noch nicht verfügbar');
+  }
+};
+
+// Initial: render cached label (optimistic)
+(function(){ var c=_loadCityCache(); if(c){ window._userCity=c; try{_renderLocationLabels();}catch(e){} } })();
+
 // ============================================
 // UNIFIED MAP SYSTEM v2 — Radar + Crew + Community-Live-Pins
 // Basierend auf Travel-Tracker-Style (CartoDB dark_all)
@@ -8976,10 +9138,29 @@ function hsRefreshSetupBanner(){
 
 function hsUpdateHeaderDot(){
   var dot = document.getElementById('hdrHomeDot');
-  if(!dot) return;
   var s = hsGetSetup();
   var info = hsSetupCompleteness(s);
-  if(!info.ready){ dot.classList.add('show'); } else { dot.classList.remove('show'); }
+  if(dot){
+    if(!info.ready){ dot.classList.add('show'); } else { dot.classList.remove('show'); }
+  }
+  // Heim-Topbar Big-Button Status
+  var big = document.getElementById('heimTopbarBtn');
+  var title = document.getElementById('heimBigTitle');
+  var sub = document.getElementById('heimBigSub');
+  if(big){
+    if(!info.ready){
+      big.classList.add('needs-setup');
+      if(title) title.textContent = '⚠️ Heim-Setup fehlt';
+      if(sub) sub.textContent = 'Jetzt einrichten für sicheren Heimweg';
+    } else {
+      big.classList.remove('needs-setup');
+      if(title) title.textContent = '🏠 Bring mich heim';
+      if(sub){
+        var hotel = s && s.hotel_address ? s.hotel_address : '';
+        sub.textContent = hotel ? ('→ '+hotel.split(',')[0]) : 'Crew informieren · Route starten';
+      }
+    }
+  }
 }
 
 // ============================================
@@ -10484,7 +10665,10 @@ async function fetchWeather(){
   var card = document.getElementById('weatherCard');
   if(card) card.setAttribute('data-state','loading');
   try {
-    var resp = await fetch('https://api.open-meteo.com/v1/forecast?latitude=39.5696&longitude=2.6502&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&timezone=Europe/Madrid');
+    // Use real user GPS if available, else fall back to Palma
+    var lat = (typeof userLat==='number' && userLat) ? userLat : (window._userLastLat || 39.5696);
+    var lng = (typeof userLng==='number' && userLng) ? userLng : (window._userLastLng || 2.6502);
+    var resp = await fetch('https://api.open-meteo.com/v1/forecast?latitude='+lat.toFixed(4)+'&longitude='+lng.toFixed(4)+'&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&timezone=auto');
     var data = await resp.json();
     if(!data.current){ if(card) card.setAttribute('data-state','idle'); return; }
 
