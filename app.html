@@ -1493,21 +1493,11 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
         </div>
 
         <!-- ═══════════════════════════════════════ -->
-        <!-- ZONE 3: HEUTE ABEND — Was geht? -->
-        <!-- ═══════════════════════════════════════ -->
-        <div class="crew-section">
-          <div class="crew-section-header">
-            <div class="csh-left"><span class="csh-emoji">🌙</span><span class="csh-title">Heute Abend</span></div>
-          </div>
-          <div id="tonightPlanner" style="padding:0 14px 14px"><p class="crew-empty">Wird geladen...</p></div>
-        </div>
-
-        <!-- ═══════════════════════════════════════ -->
-        <!-- ZONE 4: GAMIFICATION — Spaß & Wettbewerb -->
+        <!-- ZONE 3: CREW VOTES — Psychologische Votes -->
         <!-- ═══════════════════════════════════════ -->
         <div class="crew-section highlight-section">
           <div class="crew-section-header">
-            <div class="csh-left"><span class="csh-emoji">🗳️</span><span class="csh-title">Tages-Voting</span></div>
+            <div class="csh-left"><span class="csh-emoji">🗳️</span><span class="csh-title">Crew Votes</span></div>
             <div class="csh-badge vote-badge">TÄGLICH NEU</div>
           </div>
           <div id="dailyVoting"><p class="crew-empty">Wird geladen...</p></div>
@@ -1721,7 +1711,7 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 56;
+  var APP_VERSION = 57;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     // Force-clear old non-UUID crew IDs
@@ -5776,68 +5766,146 @@ function buildLeaderboard(){buildCrewLeaderboard()}
 var CREW_TAGS=['🎉 Party','🏖️ Strand','🍺 Bier','🍹 Cocktails','🎶 Musik','💃 Tanzen','🌅 Sonnenuntergang','🏄 Wassersport','🚗 Roadtrip','📸 Fotografie','🎯 Challenges','🤙 Chill','🍕 Essen','🎸 Live-Musik','⛵ Bootstrip','🧗 Abenteuer'];
 
 // ============================================
-// DAILY VOTING SYSTEM (rotates questions daily)
+// CREW VOTES — Psychologische Voting-Kategorien
+// Supabase-backed: alle Crew-Mitglieder sehen Votes live
 // ============================================
-var DAILY_QUESTIONS = [
-  {id:'drunk',emoji:'🍻',question:'Wer war gestern Tagesvollster?',label:'Tagesvollster'},
-  {id:'dancer',emoji:'💃',question:'Wer hat die besten Moves?',label:'Best Dancer'},
-  {id:'loudest',emoji:'📢',question:'Wer war am lautesten?',label:'Lautester'},
-  {id:'flirt',emoji:'😏',question:'Wer hat am meisten geflirtet?',label:'Flirt-King/Queen'},
-  {id:'funny',emoji:'🤣',question:'Wer hat die Crew am meisten zum Lachen gebracht?',label:'Crew-Clown'},
-  {id:'lost',emoji:'🧭',question:'Wer war am meisten lost?',label:'Lost-Award'},
-  {id:'mvp',emoji:'⭐',question:'Wer war der MVP gestern?',label:'Crew MVP'},
-  {id:'sleepy',emoji:'💤',question:'Wer ist als erstes eingepennt?',label:'Schlafmütze'},
-  {id:'sunburn',emoji:'☀️',question:'Wer hat den schlimmsten Sonnenbrand?',label:'Krebsrot'},
-  {id:'karaoke',emoji:'🎤',question:'Wer muss heute Karaoke singen?',label:'Karaoke-Star'}
+
+// 3 Votes pro Tag — rotieren täglich, psychologisch designt:
+// - Soziale Bestätigung (wer ist am coolsten)
+// - Humor/Selbstironie (wer hat sich blamiert)
+// - Zusammenhalt (wer hat der Crew am meisten gegeben)
+var VOTE_SETS = [
+  // Set 0 — Party-Nacht
+  [
+    {id:'mvp',emoji:'⭐',q:'Wer war gestern der absolute MVP?',label:'Crew MVP',color:'#FFD60A',bg:'rgba(255,214,10,.1)'},
+    {id:'drunk',emoji:'🍻',q:'Wer war am vollsten?',label:'Tagesvollster',color:'#FF6D2E',bg:'rgba(255,109,46,.1)'},
+    {id:'flirt',emoji:'😏',q:'Wer hat am härtesten geflirtet?',label:'Flirt-King/Queen',color:'#FF3B82',bg:'rgba(255,59,130,.1)'}
+  ],
+  // Set 1 — Moves & Vibes
+  [
+    {id:'dancer',emoji:'💃',q:'Wer hatte die besten Moves?',label:'Dance-King/Queen',color:'#BF5AF2',bg:'rgba(191,90,242,.1)'},
+    {id:'funny',emoji:'🤣',q:'Wer war am lustigsten?',label:'Crew-Clown',color:'#30D158',bg:'rgba(48,209,88,.1)'},
+    {id:'lost',emoji:'🧭',q:'Wer war am meisten lost?',label:'Lost-Award',color:'#0A84FF',bg:'rgba(10,132,255,.1)'}
+  ],
+  // Set 2 — Chaos & Ehre
+  [
+    {id:'loudest',emoji:'📢',q:'Wer war am lautesten?',label:'Megafon-Award',color:'#FF9500',bg:'rgba(255,149,0,.1)'},
+    {id:'sleepy',emoji:'💤',q:'Wer ist als erstes eingepennt?',label:'Schlafmütze',color:'#5E5CE6',bg:'rgba(94,92,230,.1)'},
+    {id:'hero',emoji:'🦸',q:'Wer hat jemanden gerettet/geholfen?',label:'Crew-Held',color:'#34C759',bg:'rgba(52,199,89,.1)'}
+  ],
+  // Set 3 — Style & Vibe
+  [
+    {id:'style',emoji:'👑',q:'Wer hatte den besten Style?',label:'Fashion-King/Queen',color:'#FFD60A',bg:'rgba(255,214,10,.1)'},
+    {id:'karaoke',emoji:'🎤',q:'Wer muss heute Karaoke singen?',label:'Karaoke-Opfer',color:'#FF375F',bg:'rgba(255,55,95,.1)'},
+    {id:'sunburn',emoji:'☀️',q:'Wer hat den schlimmsten Sonnenbrand?',label:'Krebsrot',color:'#FF6B6B',bg:'rgba(255,107,107,.1)'}
+  ],
+  // Set 4 — Bonding
+  [
+    {id:'therapist',emoji:'🧠',q:'Wer war der Crew-Therapeut?',label:'Crew-Therapeut',color:'#00C7BE',bg:'rgba(0,199,190,.1)'},
+    {id:'photographer',emoji:'📸',q:'Wer hat die besten Fotos gemacht?',label:'Crew-Fotograf',color:'#AF52DE',bg:'rgba(175,82,222,.1)'},
+    {id:'dj',emoji:'🎵',q:'Wer hatte den besten Musikgeschmack?',label:'Crew-DJ',color:'#FF2D55',bg:'rgba(255,45,85,.1)'}
+  ],
+  // Set 5 — Drama & Fun
+  [
+    {id:'drama',emoji:'🎭',q:'Wer hat am meisten Drama gemacht?',label:'Drama-Queen/King',color:'#FF3B30',bg:'rgba(255,59,48,.1)'},
+    {id:'hungry',emoji:'🍕',q:'Wer hatte den meisten Hunger?',label:'Fress-Monster',color:'#FF9F0A',bg:'rgba(255,159,10,.1)'},
+    {id:'wingman',emoji:'🤝',q:'Wer war der beste Wingman/Wingwoman?',label:'Best Wingman',color:'#30D158',bg:'rgba(48,209,88,.1)'}
+  ],
+  // Set 6 — Wild & Wholesome
+  [
+    {id:'wild',emoji:'🤪',q:'Wer war am wildesten?',label:'Wildcard',color:'#FF6D2E',bg:'rgba(255,109,46,.1)'},
+    {id:'romantic',emoji:'💕',q:'Wer hatte den romantischsten Moment?',label:'Love-Award',color:'#FF2D55',bg:'rgba(255,45,85,.1)'},
+    {id:'navigator',emoji:'🗺️',q:'Wer hat uns am besten durch die Nacht navigiert?',label:'Crew-Navigator',color:'#0A84FF',bg:'rgba(10,132,255,.1)'}
+  ]
 ];
 
 async function buildDailyVoting(){
   var el=document.getElementById('dailyVoting');if(!el)return;
+  var crewId=getActiveCrewId();
+  if(!crewId){el.innerHTML='<p class="crew-empty">Tritt einer Crew bei!</p>';return}
+
   try{
+    // Get crew members including self
     var ids=await getActiveCrewMemberIds();
-    // Add self to voting — everyone in the crew can be voted on
     var allIds=(ids||[]).slice();
     if(ME&&ME.user_id&&allIds.indexOf(ME.user_id)===-1)allIds.push(ME.user_id);
-    if(allIds.length===0){el.innerHTML='<p class="crew-empty">Tritt einer Crew bei um abstimmen zu können!</p>';return}
+    if(allIds.length===0){el.innerHTML='<p class="crew-empty">Tritt einer Crew bei um voten zu können!</p>';return}
+
     var {data:profiles}=await sb.from('profiles').select('user_id,name,photo_url').in('user_id',allIds);
-    if(!profiles||profiles.length===0){el.innerHTML='<p class="crew-empty">Keine Crew zum Voten.</p>';return}
+    if(!profiles||profiles.length===0){el.innerHTML='<p class="crew-empty">Keine Crew-Mitglieder.</p>';return}
     profiles=profiles.filter(function(p){return !isBlocked(p.user_id)});
 
-    // Pick today's question based on day of year
+    // Pick today's vote set (rotates daily)
     var doy=Math.floor((new Date()-new Date(new Date().getFullYear(),0,0))/86400000);
-    var q=DAILY_QUESTIONS[doy%DAILY_QUESTIONS.length];
+    var todaySet=VOTE_SETS[doy%VOTE_SETS.length];
     var today=new Date().toISOString().split('T')[0];
-    var voteKey='crew_vote_'+q.id+'_'+today;
-    var votes=JSON.parse(localStorage.getItem(voteKey)||'{}');
-    var voteCount={};
-    Object.values(votes).forEach(function(v){voteCount[v]=(voteCount[v]||0)+1});
-    var userVote=votes[ME.user_id];
-    // Find winner
-    var maxVotes=0;var winnerId=null;
-    Object.keys(voteCount).forEach(function(k){if(voteCount[k]>maxVotes){maxVotes=voteCount[k];winnerId=k}});
 
-    var html='<div class="daily-vote-question">'+q.emoji+' '+q.question+'</div>';
-    html+='<div class="daily-vote-grid">';
-    profiles.forEach(function(p){
-      var isVoted=userVote===p.user_id;
-      var isWinner=winnerId===p.user_id&&maxVotes>0;
-      html+='<div class="dv-card'+(isVoted?' voted':'')+(isWinner?' winner':'')+'" onclick="voteDailyQuestion(\''+voteKey+'\',\''+p.user_id+'\',\''+esc(p.name)+'\')">';
-      html+='<div class="dv-ava"><img src="'+(p.photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80')+'" loading="lazy"></div>';
-      html+='<div class="dv-name">'+esc(p.name)+'</div>';
-      html+='<div class="dv-votes">'+(voteCount[p.user_id]||0)+' '+(voteCount[p.user_id]===1?'Vote':'Votes')+'</div>';
+    // Load ALL votes for today from Supabase
+    var allVotes={};
+    try{
+      var {data:vdata}=await sb.from('crew_votes').select('category,voter_id,voted_for').eq('crew_id',crewId).eq('date',today);
+      if(vdata)vdata.forEach(function(v){
+        if(!allVotes[v.category])allVotes[v.category]={};
+        allVotes[v.category][v.voter_id]=v.voted_for;
+      });
+    }catch(e){
+      // Fallback to localStorage
+      todaySet.forEach(function(q){
+        var lk='crew_vote_'+crewId+'_'+q.id+'_'+today;
+        allVotes[q.id]=JSON.parse(localStorage.getItem(lk)||'{}');
+      });
+    }
+
+    // Build HTML — one card per question
+    var html='';
+    todaySet.forEach(function(q,qi){
+      var votes=allVotes[q.id]||{};
+      var voteCount={};
+      Object.values(votes).forEach(function(v){voteCount[v]=(voteCount[v]||0)+1});
+      var myVote=ME?votes[ME.user_id]:null;
+      var totalVotes=Object.keys(votes).length;
+
+      // Find winner
+      var maxV=0;var winnerId=null;
+      Object.keys(voteCount).forEach(function(k){if(voteCount[k]>maxV){maxV=voteCount[k];winnerId=k}});
+
+      html+='<div style="margin:0 14px '+(qi<todaySet.length-1?'10px':'14px')+';padding:16px;border-radius:var(--r);background:linear-gradient(135deg,'+q.bg+',rgba(22,22,24,.5));border:1px solid '+q.color+'22;position:relative;overflow:hidden">';
+      // Question header
+      html+='<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">';
+      html+='<span style="font-size:24px">'+q.emoji+'</span>';
+      html+='<div style="flex:1"><div style="font-size:14px;font-weight:800;color:var(--t)">'+q.q+'</div>';
+      html+='<div style="font-size:10px;color:var(--t3);margin-top:2px">'+totalVotes+' Vote'+(totalVotes!==1?'s':'')+' · Tippe zum Abstimmen</div></div>';
+      html+='</div>';
+
+      // Profile grid — horizontal scroll for drunk-friendly big targets
+      html+='<div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch">';
+      profiles.forEach(function(p){
+        var isVoted=myVote===p.user_id;
+        var isWinner=winnerId===p.user_id&&maxV>0;
+        var vc=voteCount[p.user_id]||0;
+        html+='<div onclick="voteCrewCategory(\''+q.id+'\',\''+p.user_id+'\',\''+esc(p.name)+'\')" style="flex-shrink:0;width:72px;text-align:center;padding:10px 4px;border-radius:14px;cursor:pointer;transition:all .15s;border:2px solid '+(isVoted?q.color:'transparent')+';background:'+(isVoted?q.bg:'rgba(255,255,255,.03)')+'">';
+        html+='<div style="width:48px;height:48px;border-radius:50%;overflow:hidden;margin:0 auto 6px;border:2px solid '+(isWinner?'#FFD60A':isVoted?q.color:'rgba(255,255,255,.1)')+'">';
+        html+='<img src="'+(p.photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80')+'" style="width:100%;height:100%;object-fit:cover" loading="lazy"></div>';
+        html+='<div style="font-size:11px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(p.name)+'</div>';
+        if(vc>0)html+='<div style="font-size:10px;font-weight:800;color:'+q.color+';margin-top:2px">'+vc+'</div>';
+        if(isWinner&&maxV>0)html+='<div style="font-size:12px;margin-top:1px">👑</div>';
+        html+='</div>';
+      });
+      html+='</div>';
+
+      // Winner bar
+      if(winnerId&&maxV>0){
+        var wp=profiles.find(function(p){return p.user_id===winnerId});
+        if(wp){
+          html+='<div style="margin-top:10px;padding:8px 12px;border-radius:10px;background:'+q.bg+';border:1px solid '+q.color+'33;display:flex;align-items:center;gap:8px">';
+          html+='<span style="font-size:16px">'+q.emoji+'</span>';
+          html+='<div style="flex:1;font-size:12px"><span style="font-weight:800;color:'+q.color+'">'+esc(wp.name)+'</span> <span style="color:var(--t3)">ist '+q.label+'</span></div>';
+          html+='<span style="font-size:14px">👑</span></div>';
+        }
+      }
       html+='</div>';
     });
-    html+='</div>';
 
-    if(winnerId&&maxVotes>0){
-      var wp=profiles.find(function(p){return p.user_id===winnerId});
-      if(wp){
-        html+='<div style="margin:0 14px 14px;padding:12px;border-radius:var(--r);background:linear-gradient(135deg,rgba(255,214,10,.15),rgba(255,214,10,.05));border:1px solid rgba(255,214,10,.2);text-align:center">';
-        html+='<div style="font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">'+q.emoji+' '+q.label+'</div>';
-        html+='<div style="font-size:16px;font-weight:900;color:#FFD60A">'+esc(wp.name)+' 👑</div>';
-        html+='</div>';
-      }
-    }
     el.innerHTML=html;
   }catch(e){
     console.error('buildDailyVoting error:',e);
@@ -5845,12 +5913,38 @@ async function buildDailyVoting(){
   }
 }
 
-window.voteDailyQuestion=function(voteKey,uid,name){
-  if(uid===ME.user_id){toast('Du kannst nicht für dich selbst abstimmen! 😄');return}
-  var votes=JSON.parse(localStorage.getItem(voteKey)||'{}');
-  if(votes[ME.user_id]===uid){delete votes[ME.user_id];toast('Vote zurückgenommen')}
-  else{votes[ME.user_id]=uid;toast('Vote für '+name+'! '+DAILY_QUESTIONS[0].emoji);if(navigator.vibrate)navigator.vibrate(15)}
-  localStorage.setItem(voteKey,JSON.stringify(votes));
+window.voteCrewCategory=async function(category,uid,name){
+  if(uid===ME.user_id){toast('Du kannst nicht für dich selbst voten! 😄');return}
+  var crewId=getActiveCrewId();if(!crewId)return;
+  var today=new Date().toISOString().split('T')[0];
+
+  try{
+    // Check existing vote
+    var {data:existing}=await sb.from('crew_votes').select('id,voted_for').eq('crew_id',crewId).eq('voter_id',ME.user_id).eq('category',category).eq('date',today).limit(1);
+    if(existing&&existing.length>0){
+      if(existing[0].voted_for===uid){
+        // Unvote
+        await sb.from('crew_votes').delete().eq('id',existing[0].id);
+        toast('Vote zurückgenommen');
+      } else {
+        // Change vote
+        await sb.from('crew_votes').update({voted_for:uid}).eq('id',existing[0].id);
+        toast('Vote für '+name+'! ');
+      }
+    } else {
+      // New vote
+      await sb.from('crew_votes').insert({crew_id:crewId,voter_id:ME.user_id,voted_for:uid,category:category,date:today});
+      toast('Vote für '+name+'! 🗳️');
+    }
+  }catch(e){
+    // Fallback localStorage
+    var lk='crew_vote_'+crewId+'_'+category+'_'+today;
+    var votes=JSON.parse(localStorage.getItem(lk)||'{}');
+    if(votes[ME.user_id]===uid){delete votes[ME.user_id];toast('Vote zurückgenommen')}
+    else{votes[ME.user_id]=uid;toast('Vote für '+name+'! 🗳️')}
+    localStorage.setItem(lk,JSON.stringify(votes));
+  }
+  if(navigator.vibrate)navigator.vibrate(15);
   buildDailyVoting();
 };
 
@@ -5889,7 +5983,7 @@ window.go=function(n,b){
   if(b)b.classList.add('active');
   setTimeout(function(){if(n==='radar'&&rMap)rMap.invalidateSize();if(n==='crew'&&cMap)cMap.invalidateSize()},200);
   if(n==='match')buildCards();
-  if(n==='crew'){fetchAllCrews().then(function(){return loadMyCrewMemberships()}).then(function(){updateCrewGate();buildCrewSwitcher();renderCrewBoard();updateCrewIdentityCard();buildCrewStatus();buildCrewList().then(buildCrewActivityFeed);buildCrewLocations();buildDailyVoting();buildLeaderboard();buildTonightPlanner();buildChallenges();updateChallengeTimer()}).catch(function(e){console.error('Crew load error:',e);updateCrewGate()})}
+  if(n==='crew'){fetchAllCrews().then(function(){return loadMyCrewMemberships()}).then(function(){updateCrewGate();buildCrewSwitcher();renderCrewBoard();updateCrewIdentityCard();buildCrewStatus();buildCrewList().then(buildCrewActivityFeed);buildCrewLocations();buildDailyVoting();buildLeaderboard();buildChallenges();updateChallengeTimer()}).catch(function(e){console.error('Crew load error:',e);updateCrewGate()})}
 };
 
 // ============================================
