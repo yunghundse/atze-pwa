@@ -1620,7 +1620,7 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 44;
+  var APP_VERSION = 45;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     localStorage.setItem('crew_app_v', APP_VERSION);
@@ -2193,6 +2193,9 @@ async function loadUser(authUser){
       var {data: venues} = await sb.from('venues').select('*').order('crowd_count', {ascending: false});
       VENUES = venues || [];
     } catch(e) { console.warn('[CREW] venues load failed:', e); VENUES = []; }
+
+    // Load crews from Supabase
+    try { await fetchAllCrews(); } catch(e) { console.warn('[CREW] crews load failed:', e); }
 
     // Load profiles for matching
     try {
@@ -3773,7 +3776,7 @@ function canJoinMoreCrews(){
   return getMyCrewCount()<getCrewLimit();
 }
 
-function joinCrew(crewId){
+async function joinCrew(crewId){
   if(isInCrew(crewId)){toast('Du bist bereits in dieser Crew!');return false}
   if(!canJoinMoreCrews()){
     var limit=getCrewLimit();
@@ -3785,9 +3788,20 @@ function joinCrew(crewId){
     }
     return false;
   }
+  // Add to own memberships locally
   var list=getMyMemberships();
   list.push(crewId);
   saveMyMemberships(list);
+  // Register as member in Supabase
+  try{
+    await sb.from('crew_members').upsert({crew_id:crewId,user_id:ME.user_id,role:'member'},{onConflict:'crew_id,user_id'});
+    // Update member count
+    var {count}=await sb.from('crew_members').select('*',{count:'exact',head:true}).eq('crew_id',crewId);
+    await sb.from('crews').update({members:count||1}).eq('id',crewId);
+    // Remove from join_requests if present
+    await sb.from('crew_join_requests').delete().eq('crew_id',crewId).eq('user_id',ME.user_id);
+  }catch(e){console.error('[CREW] join failed:',e)}
+  await fetchAllCrews();
   return true;
 }
 
@@ -3862,38 +3876,67 @@ window.openMyCrewProfile=function(){
   html+='<div class="cp-crew-motto">„'+esc(s.motto)+'"</div>';
   if(s.bio)html+='<div class="cp-bio">'+esc(s.bio)+'</div>';
   html+='<div class="cp-visibility '+s.visibility+'">'+(s.visibility==='public'?'🌍 Öffentlich':'🔒 Privat')+'</div>';
-  // Invite code display
+  // Invite code display — prominent card
   var boardEntry=getAllCrews().find(function(c){return c.id===s.id});
   if(boardEntry&&boardEntry.invite_code){
-    html+='<div style="margin-top:8px;padding:10px 16px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);display:inline-flex;align-items:center;gap:8px">';
-    html+='<span style="font-size:11px;color:var(--t3)">🔑 Einladungscode:</span>';
-    html+='<span style="font-family:monospace;font-size:16px;font-weight:900;letter-spacing:3px;color:var(--o)">'+boardEntry.invite_code+'</span>';
-    html+='<span style="font-size:10px;color:var(--t3);cursor:pointer" onclick="copyInviteCode(\''+boardEntry.invite_code+'\')">📋</span>';
+    html+='<div style="margin:12px 16px 0;padding:16px;border-radius:var(--r2);background:linear-gradient(135deg,rgba(255,109,46,.06),rgba(255,109,46,.02));border:1px solid rgba(255,109,46,.15)">';
+    html+='<div style="font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">🔑 Einladungscode</div>';
+    html+='<div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:10px">';
+    html+='<div style="font-family:monospace;font-size:28px;font-weight:900;letter-spacing:6px;color:var(--o);background:rgba(0,0,0,.2);padding:10px 20px;border-radius:12px;border:1px solid rgba(255,109,46,.2)">'+boardEntry.invite_code+'</div>';
+    html+='</div>';
+    html+='<div style="display:flex;gap:8px;justify-content:center">';
+    html+='<div style="padding:8px 16px;border-radius:10px;background:var(--o);color:#fff;font-size:12px;font-weight:700;cursor:pointer" onclick="copyInviteCode(\''+boardEntry.invite_code+'\')">📋 Code kopieren</div>';
+    html+='<div style="padding:8px 16px;border-radius:10px;background:rgba(255,255,255,.06);color:var(--t2);font-size:12px;font-weight:700;cursor:pointer" onclick="shareInviteCode(\''+esc(s.name)+'\',\''+boardEntry.invite_code+'\')">📤 Teilen</div>';
+    html+='</div>';
+    html+='<div style="font-size:10px;color:var(--t3);text-align:center;margin-top:8px;line-height:1.4">Teile diesen Code mit Freunden. Sie können ihn unter<br>Crew → 🔑 Code eingeben manuell eingeben.</div>';
     html+='</div>';
   }
   // Pending status warning
   if(boardEntry&&boardEntry.status==='pending'){
-    html+='<div style="margin-top:8px;padding:10px 16px;border-radius:12px;background:rgba(255,149,0,.08);border:1px solid rgba(255,149,0,.15);text-align:center">';
+    html+='<div style="margin:8px 16px 0;padding:12px 16px;border-radius:var(--r2);background:rgba(255,149,0,.08);border:1px solid rgba(255,149,0,.15);text-align:center">';
     html+='<div style="font-size:13px;font-weight:800;color:#FF9500">⏳ Wartet auf Freischaltung</div>';
-    html+='<div style="font-size:11px;color:var(--t3);margin-top:2px">Ein Admin muss deine Crew freischalten bevor sie im Board erscheint.</div>';
+    html+='<div style="font-size:11px;color:var(--t3);margin-top:2px">Deine Crew wartet auf Admin-Freischaltung. Per Einladungscode können Freunde aber jetzt schon beitreten!</div>';
     html+='</div>';
   }
-  // Join requests
-  if(boardEntry&&boardEntry.join_requests&&boardEntry.join_requests.length>0&&boardEntry.owner===ME.user_id){
-    html+='<div class="cp-section"><div class="cp-section-title">📩 Beitrittsanfragen ('+boardEntry.join_requests.length+')</div>';
-    boardEntry.join_requests.forEach(function(req){
-      html+='<div style="display:flex;align-items:center;gap:10px;padding:10px;border-radius:12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);margin-bottom:6px">';
-      html+='<div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--o),#FF6B6B);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0">';
-      if(req.photo_url)html+='<img src="'+req.photo_url+'" style="width:100%;height:100%;object-fit:cover">';
-      else html+='<span style="font-size:16px">👤</span>';
+  // Members list from board
+  if(boardEntry&&boardEntry.member_list&&boardEntry.member_list.length>0){
+    html+='<div class="cp-section"><div class="cp-section-title">👥 Beigetretene Mitglieder ('+boardEntry.member_list.length+')</div>';
+    html+='<div class="cp-members-grid">';
+    boardEntry.member_list.forEach(function(m){
+      html+='<div class="cp-member">';
+      html+='<div class="cp-member-ava"><img src="'+(m.photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80')+'" loading="lazy"></div>';
+      html+='<div class="cp-member-name">'+esc(m.name)+'</div>';
+      html+='<div class="cp-member-role">'+esc(m.role||'Mitglied')+'</div>';
       html+='</div>';
-      html+='<div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:700">'+esc(req.name)+'</div><div style="font-size:10px;color:var(--t3)">'+getTimeAgo(req.time)+'</div></div>';
-      html+='<div style="display:flex;gap:4px">';
-      html+='<div style="padding:6px 10px;border-radius:8px;background:rgba(52,199,89,.1);color:var(--green);font-size:11px;font-weight:700;cursor:pointer" onclick="approveJoinRequest(\''+boardEntry.id+'\',\''+req.user_id+'\')">✓</div>';
-      html+='<div style="padding:6px 10px;border-radius:8px;background:rgba(255,59,48,.1);color:#FF3B30;font-size:11px;font-weight:700;cursor:pointer" onclick="rejectJoinRequest(\''+boardEntry.id+'\',\''+req.user_id+'\')">✕</div>';
-      html+='</div></div>';
     });
-    html+='</div>';
+    html+='</div></div>';
+  }
+  // Join requests — loaded from Supabase in background
+  if(boardEntry&&boardEntry.created_by===ME.user_id){
+    html+='<div id="cpJoinRequests"></div>';
+    // Load async
+    setTimeout(async function(){
+      try{
+        var {data:reqs}=await sb.from('crew_join_requests').select('*').eq('crew_id',boardEntry.id);
+        if(!reqs||reqs.length===0)return;
+        var el=document.getElementById('cpJoinRequests');if(!el)return;
+        var rhtml='<div class="cp-section"><div class="cp-section-title">📩 Beitrittsanfragen ('+reqs.length+')</div>';
+        reqs.forEach(function(req){
+          rhtml+='<div style="display:flex;align-items:center;gap:10px;padding:10px;border-radius:12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);margin-bottom:6px">';
+          rhtml+='<div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--o),#FF6B6B);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0">';
+          if(req.photo_url)rhtml+='<img src="'+req.photo_url+'" style="width:100%;height:100%;object-fit:cover">';
+          else rhtml+='<span style="font-size:16px">👤</span>';
+          rhtml+='</div>';
+          rhtml+='<div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:700">'+esc(req.name||'Anonym')+'</div><div style="font-size:10px;color:var(--t3)">'+getTimeAgo(new Date(req.created_at).getTime())+'</div></div>';
+          rhtml+='<div style="display:flex;gap:4px">';
+          rhtml+='<div style="padding:6px 10px;border-radius:8px;background:rgba(52,199,89,.1);color:var(--green);font-size:11px;font-weight:700;cursor:pointer" onclick="approveJoinRequest(\''+boardEntry.id+'\',\''+req.user_id+'\')">✓</div>';
+          rhtml+='<div style="padding:6px 10px;border-radius:8px;background:rgba(255,59,48,.1);color:#FF3B30;font-size:11px;font-weight:700;cursor:pointer" onclick="rejectJoinRequest(\''+boardEntry.id+'\',\''+req.user_id+'\')">✕</div>';
+          rhtml+='</div></div>';
+        });
+        rhtml+='</div>';
+        el.innerHTML=rhtml;
+      }catch(e){}
+    },100);
   }
   // Tags
   if(s.tags&&s.tags.length>0){
@@ -4153,10 +4196,40 @@ window.updateMalleStat=function(key,val){
 };
 
 // ============================================
-// CREW BOARD — Real crews from localStorage
+// CREW BOARD — Supabase-synced crews
 // ============================================
-function getAllCrews(){return JSON.parse(localStorage.getItem('crew_board_list')||'[]')}
-function saveAllCrews(list){localStorage.setItem('crew_board_list',JSON.stringify(list))}
+var _crewsCache=[];
+var _crewsCacheTime=0;
+
+async function fetchAllCrews(){
+  try{
+    var {data,error}=await sb.from('crews').select('*').order('aura',{ascending:false});
+    if(error){console.error('[CREW] fetch error:',error);return _crewsCache}
+    _crewsCache=data||[];
+    _crewsCacheTime=Date.now();
+    return _crewsCache;
+  }catch(e){console.error('[CREW] fetch failed:',e);return _crewsCache}
+}
+
+function getAllCrews(){return _crewsCache}
+
+async function saveCrewToDb(crew){
+  try{
+    var {error}=await sb.from('crews').upsert(crew,{onConflict:'id'});
+    if(error)console.error('[CREW] save error:',error);
+  }catch(e){console.error('[CREW] save failed:',e)}
+}
+
+async function deleteCrewFromDb(crewId){
+  try{
+    await sb.from('crew_members').delete().eq('crew_id',crewId);
+    await sb.from('crew_join_requests').delete().eq('crew_id',crewId);
+    await sb.from('crews').delete().eq('id',crewId);
+  }catch(e){console.error('[CREW] delete failed:',e)}
+}
+
+// Backward compat stub
+function saveAllCrews(list){/* deprecated - use saveCrewToDb */}
 
 function generateInviteCode(){
   var chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -4165,27 +4238,34 @@ function generateInviteCode(){
   return code;
 }
 
-function registerMyCrew(){
+async function registerMyCrew(){
   var s=getCrewSettings();
   if(!s)return;
   if(!s.id){s.id='crew_'+ME.user_id+'_'+Date.now();saveCrewSettings(s)}
-  var list=getAllCrews();
-  var idx=list.findIndex(function(c){return c.id===s.id});
   var crewSize=(_crewProfiles&&_crewProfiles.length||0)+1;
   var totalAura=parseInt(localStorage.getItem('crew_user_points')||'0');
   if(_crewProfiles)_crewProfiles.forEach(function(p){totalAura+=(p.points||0)});
-  var existing=idx>=0?list[idx]:null;
+
   var entry={
-    id:s.id,owner:ME.user_id,name:s.name,motto:s.motto,bio:s.bio||'',icon:s.icon,
-    photo_url:s.photo_url||'',visibility:s.visibility,members:crewSize,
-    aura:totalAura,hometown:s.hometown||'',malle_visits:s.malle_visits||1,
+    id:s.id,created_by:ME.user_id,name:s.name,motto:s.motto||'',bio:s.bio||'',icon:s.icon||'🏴‍☠️',
+    photo_url:s.photo_url||'',group_photo:s.group_photo||'',visibility:s.visibility||'public',
+    members:crewSize,aura:totalAura,hometown:s.hometown||'',malle_visits:s.malle_visits||1,
     founded:s.founded||new Date().toISOString().split('T')[0],
-    status:existing?existing.status:'pending',
-    invite_code:existing&&existing.invite_code?existing.invite_code:generateInviteCode(),
-    join_requests:existing&&existing.join_requests?existing.join_requests:[]
+    what_we_do:s.what_we_do||'',what_makes_us:s.what_makes_us||'',tags:s.tags||[]
   };
-  if(idx>=0)list[idx]=entry;else list.push(entry);
-  saveAllCrews(list);
+  // Preserve status and invite_code from DB
+  var existing=_crewsCache.find(function(c){return c.id===s.id});
+  entry.status=existing?existing.status:'pending';
+  entry.invite_code=existing&&existing.invite_code?existing.invite_code:(s.invite_code||generateInviteCode());
+  // Save invite_code to local settings too
+  if(!s.invite_code){s.invite_code=entry.invite_code;saveCrewSettings(s)}
+
+  await saveCrewToDb(entry);
+  // Also ensure owner is in crew_members
+  try{
+    await sb.from('crew_members').upsert({crew_id:s.id,user_id:ME.user_id,role:'owner'},{onConflict:'crew_id,user_id'});
+  }catch(e){}
+  await fetchAllCrews();
 }
 
 var _cbFilter='all';
@@ -4202,9 +4282,10 @@ function pickCrewOfTheDay(){
   localStorage.setItem('crew_of_the_day',JSON.stringify(_crewOfTheDay));
 }
 
-window.openCrewBoard=function(){
+window.openCrewBoard=async function(){
   var ov=document.getElementById('crewBoardOv');if(!ov)return;
-  registerMyCrew(); // sync own crew to board
+  await registerMyCrew(); // sync own crew to Supabase
+  await fetchAllCrews(); // get all crews from DB
   pickCrewOfTheDay();
   var filterEl=document.getElementById('cbFilters');
   if(filterEl){
@@ -4253,7 +4334,7 @@ function renderCrewBoard(){
   else if(_cbFilter==='new')crews.sort(function(a,b){return(b.founded||'').localeCompare(a.founded||'')});
 
   // Only show public crews (or own crew)
-  var visible=crews.filter(function(c){return (c.visibility==='public'&&c.status!=='pending')||c.owner===ME.user_id});
+  var visible=crews.filter(function(c){return (c.visibility==='public'&&c.status!=='pending')||c.created_by===ME.user_id});
 
   if(visible.length===0){
     html+='<div class="cb-empty"><div class="cb-empty-icon">🌍</div>';
@@ -4265,7 +4346,7 @@ function renderCrewBoard(){
     html+='<div class="cb-crews">';
     visible.forEach(function(c){
       var isPrivate=c.visibility==='private';
-      var isMine=c.owner===ME.user_id;
+      var isMine=c.created_by===ME.user_id;
       html+='<div class="cb-crew-card"'+(isMine?' style="border-color:rgba(255,109,46,.2)"':'')+'>';
       html+='<div class="cb-cc-header">';
       if(c.photo_url){
@@ -4400,7 +4481,7 @@ window.previewGroupPhoto=function(input){
   reader.readAsDataURL(input.files[0]);
 };
 
-window.submitCrewCreate=function(){
+window.submitCrewCreate=async function(){
   var name=(document.getElementById('ccName').value||'').trim();
   if(!name){toast('Gib deiner Crew einen Namen!');return}
   if(name.length<2){toast('Mindestens 2 Zeichen!');return}
@@ -4416,21 +4497,22 @@ window.submitCrewCreate=function(){
   var whatWeDo=(document.getElementById('ccWhatWeDo').value||'').trim();
   var whatMakesUs=(document.getElementById('ccWhatMakesUs').value||'').trim();
 
+  var invCode=generateInviteCode();
   var s={
     id:'crew_'+ME.user_id+'_'+Date.now(),
     name:name,bio:bio,motto:motto,icon:_ccSelectedIcon,
     photo_url:_ccPhotoData,group_photo:_ccGroupPhotoData,visibility:visibility,
     leader:ME.user_id,malle_visits:1,founded:new Date().toISOString().split('T')[0],
     hometown:hometown,what_we_do:whatWeDo,what_makes_us:whatMakesUs,tags:[],
-    status:'pending',invite_code:generateInviteCode()
+    status:'pending',invite_code:invCode
   };
   saveCrewSettings(s);
-  registerMyCrew();
+  await registerMyCrew();
   updateCrewIdentityCard();
   updateCrewGate();
   buildCrewSwitcher();
   closeCrewCreate();
-  toast('Crew „'+name+'" gegründet! Wartet auf Admin-Freischaltung ⏳');
+  toast('Crew „'+name+'" gegründet! Code: '+invCode+' ⏳');
   if(navigator.vibrate)navigator.vibrate([10,80,10,80,10]);
   renderCrewBoard();
 };
@@ -4494,73 +4576,78 @@ window.openCrewDelete=function(){
 
 window.closeCrewDelete=function(){document.getElementById('crewDeleteOv').classList.remove('show')};
 
-window.confirmDeleteCrew=function(){
+window.confirmDeleteCrew=async function(){
   var crewSize=(_crewProfiles&&_crewProfiles.length||0)+1;
   var deleteVotes=JSON.parse(localStorage.getItem('crew_delete_votes')||'[]');
   var needed=crewSize<=2?1:3;
 
   if(deleteVotes.length>=needed){
-    // Actually delete
     var s=getCrewSettings();
-    var list=getAllCrews().filter(function(c){return c.id!==s.id});
-    saveAllCrews(list);
-    localStorage.removeItem('crew_settings');
-    localStorage.removeItem('crew_delete_votes');
-    closeCrewDelete();
-    closeCrewProfile();
-    updateCrewIdentityCard();
-    toast('Crew wurde aufgelöst. 💨');
-    if(navigator.vibrate)navigator.vibrate([100,50,100]);
+    try{
+      await deleteCrewFromDb(s.id);
+      localStorage.removeItem('crew_settings');
+      localStorage.removeItem('crew_delete_votes');
+      closeCrewDelete();
+      closeCrewProfile();
+      updateCrewIdentityCard();
+      await fetchAllCrews();
+      updateCrewGate();
+      toast('Crew wurde aufgelöst. 💨');
+      if(navigator.vibrate)navigator.vibrate([100,50,100]);
+    }catch(e){toast('Fehler.')}
     return;
   }
 
-  // Cast vote
   if(deleteVotes.indexOf(ME.user_id)===-1){
     deleteVotes.push(ME.user_id);
     localStorage.setItem('crew_delete_votes',JSON.stringify(deleteVotes));
     toast('Stimme registriert ('+deleteVotes.length+'/'+needed+')');
     if(navigator.vibrate)navigator.vibrate(15);
   }
-  openCrewDelete(); // refresh
+  openCrewDelete();
 };
 
 // Admin can delete ANY crew directly
-window.adminDeleteCrew=function(crewId,name){
+window.adminDeleteCrew=async function(crewId,name){
   if(!ME||!ME.is_admin)return;
-  if(!confirm('Crew „'+name+'" wirklich löschen? Das kann nicht rückgängig gemacht werden.')){return}
-  var list=getAllCrews().filter(function(c){return c.id!==crewId});
-  saveAllCrews(list);
-  // If it's own crew, also clear settings
-  var s=getCrewSettings();
-  if(s.id===crewId){
-    localStorage.removeItem('crew_settings');
-    localStorage.removeItem('crew_delete_votes');
-    updateCrewIdentityCard();
-  }
-  toast('Crew „'+name+'" gelöscht ✓');
-  if(navigator.vibrate)navigator.vibrate([50,30,50]);
-  openAdminPanel(); // refresh admin
+  if(!confirm('Crew „'+name+'" wirklich löschen?'))return;
+  try{
+    await deleteCrewFromDb(crewId);
+    var s=getCrewSettings();
+    if(s&&s.id===crewId){
+      localStorage.removeItem('crew_settings');
+      localStorage.removeItem('crew_delete_votes');
+      updateCrewIdentityCard();
+    }
+    // Remove from memberships
+    leaveCrew(crewId);
+    await fetchAllCrews();
+    toast('Crew „'+name+'" gelöscht ✓');
+    if(navigator.vibrate)navigator.vibrate([50,30,50]);
+    openAdminPanel();
+  }catch(e){toast('Fehler.')}
 };
 
 // Admin delete own crew directly from crew profile
-window.adminDeleteOwnCrew=function(){
+window.adminDeleteOwnCrew=async function(){
   if(!ME||!ME.is_admin)return;
   var s=getCrewSettings();
   if(!s){toast('Keine aktive Crew.');return;}
-  if(!confirm('Deine Crew „'+s.name+'" wirklich löschen? Das kann nicht rückgängig gemacht werden.'))return;
-  // Remove from board
-  var list=getAllCrews().filter(function(c){return c.id!==s.id});
-  saveAllCrews(list);
-  // Clear own crew
-  localStorage.removeItem('crew_settings');
-  localStorage.removeItem('crew_delete_votes');
-  localStorage.removeItem('crew_wall_posts');
-  localStorage.removeItem('crew_story_slides');
-  localStorage.removeItem('crew_achievements');
-  updateCrewIdentityCard();
-  closeCrewProfile();
-  toast('Crew aufgelöst ✓');
-  if(navigator.vibrate)navigator.vibrate([100,50,100]);
+  if(!confirm('Deine Crew „'+s.name+'" wirklich löschen?'))return;
+  try{
+    await deleteCrewFromDb(s.id);
+    localStorage.removeItem('crew_settings');
+    localStorage.removeItem('crew_delete_votes');
+    localStorage.removeItem('crew_wall_posts');
+    localStorage.removeItem('crew_story_slides');
+    localStorage.removeItem('crew_achievements');
+    updateCrewIdentityCard();
+    closeCrewProfile();
+    await fetchAllCrews();
+    updateCrewGate();
+    toast('Crew aufgelöst ✓');
+    if(navigator.vibrate)navigator.vibrate([100,50,100]);
+  }catch(e){toast('Fehler.')}
 };
 
 // ============================================
@@ -4574,66 +4661,69 @@ window.openJoinByCode=function(){
 
 window.closeJoinByCode=function(){document.getElementById('joinByCodeOv').classList.remove('show')};
 
-window.submitJoinByCode=function(){
+window.submitJoinByCode=async function(){
   var code=(document.getElementById('joinCodeInput').value||'').trim().toUpperCase();
-  if(code.length!==6){toast('Bitte 6-stelligen Code eingeben!');return}
-  var crews=getAllCrews();
-  var found=crews.find(function(c){return c.invite_code===code});
-  if(!found){toast('Code nicht gefunden! Überprüfe den Code. ❌');return}
-  if(found.status==='pending'){toast('Diese Crew wartet noch auf Admin-Freischaltung.');return}
-  if(isInCrew(found.id)){toast('Du bist bereits in dieser Crew!');return}
-  if(!canJoinMoreCrews()){
-    var isPremium=localStorage.getItem('is_premium')==='true';
-    toast(isPremium?'Max '+CREW_LIMITS.premium+' Crews erreicht!':'Upgrade auf Premium für mehr Crews! 👑');
-    return;
+  if(!code||code.length<4){toast('Bitte Einladungscode eingeben!');return}
+  // Look up code in Supabase (works across all users!)
+  try{
+    var {data:found}=await sb.from('crews').select('*').eq('invite_code',code).maybeSingle();
+    if(!found){
+      toast('Code „'+code+'" nicht gefunden! ❌');
+      return;
+    }
+    if(isInCrew(found.id)){toast('Du bist bereits in „'+found.name+'"!');return}
+    var ok=await joinCrew(found.id);
+    if(!ok)return;
+    closeJoinByCode();
+    toast('Willkommen bei „'+found.name+'"! 🎉');
+    if(navigator.vibrate)navigator.vibrate([10,80,10,80,10]);
+    updateCrewGate();
+    buildCrewSwitcher();
+    updateCrewIdentityCard();
+  }catch(e){
+    console.error('[CREW] join by code failed:',e);
+    toast('Fehler beim Beitreten. Versuche es nochmal.');
   }
-  joinCrew(found.id);
-  closeJoinByCode();
-  toast('Willkommen bei „'+found.name+'"! 🎉');
-  if(navigator.vibrate)navigator.vibrate([10,80,10,80,10]);
-  updateCrewGate();
-  buildCrewSwitcher();
 };
 
-window.requestJoinCrew=function(crewId,crewName){
+window.requestJoinCrew=async function(crewId,crewName){
   if(isInCrew(crewId)){toast('Du bist bereits in dieser Crew!');return}
   if(!canJoinMoreCrews()){
     var isPremium=localStorage.getItem('is_premium')==='true';
     toast(isPremium?'Max '+CREW_LIMITS.premium+' Crews erreicht!':'Upgrade auf Premium für mehr Crews! 👑');
     return;
   }
-  var crews=getAllCrews();
-  var crew=crews.find(function(c){return c.id===crewId});
-  if(!crew)return;
-  if(!crew.join_requests)crew.join_requests=[];
-  if(crew.join_requests.find(function(r){return r.user_id===ME.user_id})){
-    toast('Anfrage bereits gesendet!');return;
-  }
-  crew.join_requests.push({user_id:ME.user_id,name:ME.name||'Anonym',photo_url:ME.photo_url||'',time:Date.now()});
-  saveAllCrews(crews);
-  toast('Beitrittsanfrage an „'+crewName+'" gesendet! 📩');
-  if(navigator.vibrate)navigator.vibrate(15);
+  try{
+    var {error}=await sb.from('crew_join_requests').upsert({
+      crew_id:crewId,user_id:ME.user_id,name:ME.name||'Anonym',photo_url:ME.photo_url||''
+    },{onConflict:'crew_id,user_id'});
+    if(error){toast('Fehler: '+error.message);return}
+    toast('Beitrittsanfrage an „'+crewName+'" gesendet! 📩');
+    if(navigator.vibrate)navigator.vibrate(15);
+  }catch(e){toast('Fehler beim Senden.')}
 };
 
-window.approveJoinRequest=function(crewId,userId){
-  var crews=getAllCrews();
-  var crew=crews.find(function(c){return c.id===crewId});
-  if(!crew||!crew.join_requests)return;
-  crew.join_requests=crew.join_requests.filter(function(r){return r.user_id!==userId});
-  crew.members=(crew.members||1)+1;
-  saveAllCrews(crews);
-  toast('Mitglied aufgenommen! ✓');
-  openMyCrewProfile();
+window.approveJoinRequest=async function(crewId,userId){
+  try{
+    // Add as member
+    await sb.from('crew_members').upsert({crew_id:crewId,user_id:userId,role:'member'},{onConflict:'crew_id,user_id'});
+    // Remove request
+    await sb.from('crew_join_requests').delete().eq('crew_id',crewId).eq('user_id',userId);
+    // Update count
+    var {count}=await sb.from('crew_members').select('*',{count:'exact',head:true}).eq('crew_id',crewId);
+    await sb.from('crews').update({members:count||1}).eq('id',crewId);
+    await fetchAllCrews();
+    toast('Mitglied aufgenommen! ✓');
+    openMyCrewProfile();
+  }catch(e){toast('Fehler.')}
 };
 
-window.rejectJoinRequest=function(crewId,userId){
-  var crews=getAllCrews();
-  var crew=crews.find(function(c){return c.id===crewId});
-  if(!crew||!crew.join_requests)return;
-  crew.join_requests=crew.join_requests.filter(function(r){return r.user_id!==userId});
-  saveAllCrews(crews);
-  toast('Anfrage abgelehnt.');
-  openMyCrewProfile();
+window.rejectJoinRequest=async function(crewId,userId){
+  try{
+    await sb.from('crew_join_requests').delete().eq('crew_id',crewId).eq('user_id',userId);
+    toast('Anfrage abgelehnt.');
+    openMyCrewProfile();
+  }catch(e){toast('Fehler.')}
 };
 
 // CREW GATE — Show/hide based on membership
@@ -4684,27 +4774,39 @@ window.copyInviteCode=function(code){
   }
 };
 
-// Admin approve/reject crews
-window.adminApproveCrew=function(crewId,name){
-  if(!ME||!ME.is_admin)return;
-  var list=getAllCrews();
-  var crew=list.find(function(c){return c.id===crewId});
-  if(!crew)return;
-  crew.status='approved';
-  saveAllCrews(list);
-  toast('Crew „'+name+'" freigeschaltet! ✅');
-  if(navigator.vibrate)navigator.vibrate(15);
-  openAdminPanel();
+window.shareInviteCode=function(crewName,code){
+  var text='Tritt meiner Crew „'+crewName+'" bei! 🏴‍☠️\n\nEinladungscode: '+code+'\n\nÖffne die crew. App → Crew → 🔑 Code eingeben → '+code+'\n\nhttps://partycrew.app';
+  if(navigator.share){
+    navigator.share({title:'crew. Einladung',text:text}).catch(function(){});
+  }else if(navigator.clipboard){
+    navigator.clipboard.writeText(text).then(function(){toast('Einladung kopiert! 📤')});
+  }else{
+    toast('Code: '+code);
+  }
 };
 
-window.adminRejectCrew=function(crewId,name){
+// Admin approve/reject crews
+window.adminApproveCrew=async function(crewId,name){
+  if(!ME||!ME.is_admin)return;
+  try{
+    await sb.from('crews').update({status:'approved'}).eq('id',crewId);
+    await fetchAllCrews();
+    toast('Crew „'+name+'" freigeschaltet! ✅');
+    if(navigator.vibrate)navigator.vibrate(15);
+    openAdminPanel();
+  }catch(e){toast('Fehler.')}
+};
+
+window.adminRejectCrew=async function(crewId,name){
   if(!ME||!ME.is_admin)return;
   if(!confirm('Crew „'+name+'" ablehnen und löschen?'))return;
-  var list=getAllCrews().filter(function(c){return c.id!==crewId});
-  saveAllCrews(list);
-  toast('Crew „'+name+'" abgelehnt und entfernt. ❌');
-  if(navigator.vibrate)navigator.vibrate([50,30,50]);
-  openAdminPanel();
+  try{
+    await deleteCrewFromDb(crewId);
+    await fetchAllCrews();
+    toast('Crew „'+name+'" abgelehnt. ❌');
+    if(navigator.vibrate)navigator.vibrate([50,30,50]);
+    openAdminPanel();
+  }catch(e){toast('Fehler.')}
 };
 
 // ============================================
@@ -4927,7 +5029,7 @@ window.go=function(n,b){
   if(b)b.classList.add('active');
   setTimeout(function(){if(n==='radar'&&rMap)rMap.invalidateSize();if(n==='crew'&&cMap)cMap.invalidateSize()},200);
   if(n==='match')buildCards();
-  if(n==='crew'){updateCrewGate();buildCrewSwitcher();buildCrewStatus();buildCrewList().then(buildCrewActivityFeed);buildMatchList();buildCrewLocations();buildCrewWall();buildStoryPreview();buildDailyVoting();buildLeaderboard();buildTonightPlanner();buildChallenges();buildCrewTips();updateChallengeTimer();updateCrewIdentityCard()}
+  if(n==='crew'){fetchAllCrews().then(function(){updateCrewGate();buildCrewSwitcher();renderCrewBoard()});buildCrewStatus();buildCrewList().then(buildCrewActivityFeed);buildMatchList();buildCrewLocations();buildCrewWall();buildStoryPreview();buildDailyVoting();buildLeaderboard();buildTonightPlanner();buildChallenges();buildCrewTips();updateChallengeTimer();updateCrewIdentityCard()}
 };
 
 // ============================================
@@ -5289,7 +5391,7 @@ window.openAdminPanel = async function(){
         html += '</div>';
         if(crew.bio) html += '<div style="font-size:11px;color:var(--t2);line-height:1.4;margin-bottom:6px">'+esc(crew.bio)+'</div>';
         // Owner info
-        var ownerUser = users.find(function(u){return u.user_id===crew.owner});
+        var ownerUser = users.find(function(u){return u.user_id===crew.created_by});
         if(ownerUser) html += '<div style="font-size:10px;color:var(--t3)">👑 Leader: '+esc(ownerUser.name)+' (@'+(ownerUser.username||'—')+')</div>';
         // Status badge
         html += '<div style="margin-top:6px;margin-bottom:4px"><span style="font-size:10px;padding:3px 10px;border-radius:8px;font-weight:800;'+(crew.status==='pending'?'background:rgba(255,149,0,.12);color:#FF9500;border:1px solid rgba(255,149,0,.2)':'background:rgba(52,199,89,.12);color:var(--green);border:1px solid rgba(52,199,89,.2)')+'">'+((crew.status==='pending')?'⏳ Wartet auf Freischaltung':'✅ Freigeschaltet')+'</span></div>';
