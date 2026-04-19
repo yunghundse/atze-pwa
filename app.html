@@ -53,6 +53,16 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;color:var(-
 .crew-float-btn:active{transform:scale(.88)}
 .cfb-chat{background:linear-gradient(135deg,rgba(191,90,242,.9),rgba(191,90,242,.7));border:2px solid rgba(255,255,255,.2);box-shadow:0 4px 20px rgba(191,90,242,.4)}
 .cfb-loc{background:linear-gradient(135deg,rgba(48,209,88,.9),rgba(48,209,88,.7));border:2px solid rgba(255,255,255,.2);box-shadow:0 4px 20px rgba(48,209,88,.4)}
+.mini-chat-msg{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.mini-chat-msg:last-child{border-bottom:none}
+.mini-chat-ava{width:32px;height:32px;border-radius:50%;overflow:hidden;flex-shrink:0;background:rgba(255,255,255,.06)}
+.mini-chat-ava img{width:100%;height:100%;object-fit:cover}
+.mini-chat-body{flex:1;min-width:0}
+.mini-chat-name{font-size:11px;font-weight:800;color:var(--o)}
+.mini-chat-text{font-size:12px;color:var(--t2);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.4}
+.mini-chat-time{font-size:9px;color:var(--t3);flex-shrink:0;padding-top:2px}
+.mini-chat-empty{text-align:center;padding:16px;color:var(--t3);font-size:12px}
+.mini-chat-more{text-align:center;padding:8px 0 4px;font-size:11px;font-weight:700;color:var(--o)}
 nav{position:absolute;bottom:0;left:0;right:0;z-index:200;height:76px;padding-bottom:env(safe-area-inset-bottom,8px);display:flex;align-items:center;justify-content:space-around;background:linear-gradient(0deg,rgba(5,5,7,.8),rgba(5,5,7,.6));border-top:none;backdrop-filter:blur(80px) saturate(220%);-webkit-backdrop-filter:blur(80px) saturate(220%);border-radius:28px 28px 0 0;box-shadow:0 -1px 0 rgba(255,255,255,.06),inset 0 1px 0 rgba(255,255,255,.04),0 -8px 30px rgba(0,0,0,.2)}
 nav button{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 10px;color:var(--t3);font-size:9px;font-weight:500;transition:all .25s var(--ease);position:relative;letter-spacing:.1px}
 nav button .ni{font-size:22px;transition:all .3s var(--spring)}
@@ -1482,6 +1492,17 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
         </div>
 
         <!-- ═══════════════════════════════════════ -->
+        <!-- MINI-CHAT PREVIEW — Live-Ausschnitt -->
+        <!-- ═══════════════════════════════════════ -->
+        <div class="crew-section" id="miniChatSection" style="display:none">
+          <div class="crew-section-header" onclick="openCrewChat()" style="cursor:pointer">
+            <div class="csh-left"><span class="csh-emoji">💬</span><span class="csh-title">Crew Chat</span></div>
+            <div class="csh-badge live-badge">LIVE</div>
+          </div>
+          <div id="miniChatPreview" onclick="openCrewChat()" style="padding:0 14px 14px;cursor:pointer"></div>
+        </div>
+
+        <!-- ═══════════════════════════════════════ -->
         <!-- ZONE 2: DEINE CREW — Wer ist da? -->
         <!-- ═══════════════════════════════════════ -->
         <div class="crew-section">
@@ -1711,7 +1732,7 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 58;
+  var APP_VERSION = 59;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     // Force-clear old non-UUID crew IDs
@@ -5435,6 +5456,41 @@ async function loadChatMessages(crewId){
   renderChatMessages();
 }
 
+async function buildMiniChat(){
+  var sec=document.getElementById('miniChatSection');
+  var el=document.getElementById('miniChatPreview');
+  if(!sec||!el)return;
+  var crewId=getActiveCrewId();
+  if(!crewId){sec.style.display='none';return}
+  try{
+    var {data:msgs,error:msgErr}=await sb.from('crew_chat_messages').select('user_id,user_name,user_photo,message,created_at').eq('crew_id',crewId).order('created_at',{ascending:false}).limit(3);
+    if(msgErr||!msgs||msgs.length===0){sec.style.display='none';return}
+    sec.style.display='block';
+    var html='';
+    msgs.reverse().forEach(function(m){
+      if(isBlocked(m.user_id))return;
+      var d=new Date(m.created_at);
+      var time=d.toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'});
+      var isMe=ME&&m.user_id===ME.user_id;
+      html+='<div class="mini-chat-msg">';
+      html+='<div class="mini-chat-ava">';
+      if(m.user_photo)html+='<img src="'+m.user_photo+'" loading="lazy">';
+      else html+='<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:14px">👤</div>';
+      html+='</div>';
+      html+='<div class="mini-chat-body">';
+      html+='<div class="mini-chat-name">'+(isMe?'Du':esc(m.user_name||'Anonym'))+'</div>';
+      html+='<div class="mini-chat-text">'+esc(m.message)+'</div>';
+      html+='</div>';
+      html+='<div class="mini-chat-time">'+time+'</div>';
+      html+='</div>';
+    });
+    html+='<div class="mini-chat-more">Chat öffnen →</div>';
+    el.innerHTML=html;
+  }catch(e){
+    sec.style.display='none';
+  }
+}
+
 function renderChatMessages(){
   var el=document.getElementById('chatMessagesList');if(!el)return;
   if(_chatMessages.length===0){
@@ -5515,6 +5571,7 @@ window.sendChatMessage=async function(){
     });
     await loadChatMessages(crewId);
     scrollChatToBottom();
+    buildMiniChat();
   }catch(e){toast('Nachricht konnte nicht gesendet werden.')}
 };
 
@@ -5921,43 +5978,48 @@ async function buildDailyVoting(){
 }
 
 window.voteCrewCategory=async function(category,uid,name){
+  if(!ME||!ME.user_id){toast('Bitte erst einloggen');return}
   if(uid===ME.user_id){toast('Du kannst nicht für dich selbst voten! 😄');return}
-  var crewId=getActiveCrewId();if(!crewId)return;
+  var crewId=getActiveCrewId();if(!crewId){toast('Keine Crew ausgewählt');return}
   var today=new Date().toISOString().split('T')[0];
   var supaOk=false;
 
   try{
-    // Check existing vote
+    // Use upsert-style: delete existing then insert, or just delete if same person (unvote)
     var {data:existing,error:exErr}=await sb.from('crew_votes').select('id,voted_for').eq('crew_id',crewId).eq('voter_id',ME.user_id).eq('category',category).eq('date',today).limit(1);
-    if(exErr) throw exErr;
+    if(exErr){console.error('Vote select error:',JSON.stringify(exErr));throw exErr}
+
     if(existing&&existing.length>0){
       if(existing[0].voted_for===uid){
+        // Unvote
         var {error:delErr}=await sb.from('crew_votes').delete().eq('id',existing[0].id);
-        if(delErr) throw delErr;
+        if(delErr){console.error('Vote delete error:',JSON.stringify(delErr));throw delErr}
         toast('Vote zurückgenommen');
       } else {
+        // Change vote
         var {error:updErr}=await sb.from('crew_votes').update({voted_for:uid}).eq('id',existing[0].id);
-        if(updErr) throw updErr;
-        toast('Vote für '+name+'! ');
+        if(updErr){console.error('Vote update error:',JSON.stringify(updErr));throw updErr}
+        toast('⭐ Vote für '+name+'!');
       }
     } else {
+      // New vote
       var {error:insErr}=await sb.from('crew_votes').insert({crew_id:crewId,voter_id:ME.user_id,voted_for:uid,category:category,date:today});
-      if(insErr) throw insErr;
-      toast('Vote für '+name+'! 🗳️');
+      if(insErr){console.error('Vote insert error:',JSON.stringify(insErr));throw insErr}
+      toast('⭐ Vote für '+name+'!');
     }
     supaOk=true;
   }catch(e){
-    console.warn('Vote Supabase error, using localStorage:',e);
-    // Fallback localStorage
+    console.warn('Vote Supabase fallback:',e.message||e);
+    // Fallback localStorage — works per-device only
     var lk='crew_vote_'+crewId+'_'+category+'_'+today;
     var votes={};
     try{votes=JSON.parse(localStorage.getItem(lk)||'{}');}catch(x){}
     if(votes[ME.user_id]===uid){delete votes[ME.user_id];toast('Vote zurückgenommen')}
-    else{votes[ME.user_id]=uid;toast('Vote für '+name+'! 🗳️')}
+    else{votes[ME.user_id]=uid;toast('⭐ Vote für '+name+'!')}
     localStorage.setItem(lk,JSON.stringify(votes));
   }
   if(navigator.vibrate)navigator.vibrate(15);
-  try{await buildDailyVoting();}catch(e){console.error('Rebuild voting error:',e)}
+  try{await buildDailyVoting();}catch(e){console.error('Rebuild voting UI error:',e)}
 };
 
 // Challenge timer
@@ -5995,7 +6057,7 @@ window.go=function(n,b){
   if(b)b.classList.add('active');
   setTimeout(function(){if(n==='radar'&&rMap)rMap.invalidateSize();if(n==='crew'&&cMap)cMap.invalidateSize()},200);
   if(n==='match')buildCards();
-  if(n==='crew'){fetchAllCrews().then(function(){return loadMyCrewMemberships()}).then(function(){updateCrewGate();buildCrewSwitcher();renderCrewBoard();updateCrewIdentityCard();buildCrewStatus();buildCrewList().then(buildCrewActivityFeed);buildCrewLocations();buildDailyVoting();buildLeaderboard();buildChallenges();updateChallengeTimer()}).catch(function(e){console.error('Crew load error:',e);updateCrewGate()})}
+  if(n==='crew'){fetchAllCrews().then(function(){return loadMyCrewMemberships()}).then(function(){updateCrewGate();buildCrewSwitcher();renderCrewBoard();updateCrewIdentityCard();buildCrewStatus();buildCrewList().then(buildCrewActivityFeed);buildCrewLocations();buildMiniChat();buildDailyVoting();buildLeaderboard();buildChallenges();updateChallengeTimer()}).catch(function(e){console.error('Crew load error:',e);updateCrewGate()})}
 };
 
 // ============================================
