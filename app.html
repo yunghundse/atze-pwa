@@ -4152,6 +4152,8 @@ function getAllMyCrews(){
 }
 
 var _activeCrewId=localStorage.getItem('active_crew_id')||null;
+// Validate: must be a real UUID (not old localStorage format like crew_xxx_timestamp)
+if(_activeCrewId&&!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(_activeCrewId)){console.warn('Clearing invalid crew_id from localStorage:',_activeCrewId);_activeCrewId=null;localStorage.removeItem('active_crew_id')}
 function getActiveCrewId(){
   if(!_activeCrewId&&_myCrewMemberships.length>0){
     _activeCrewId=_myCrewMemberships[0].crew_id;
