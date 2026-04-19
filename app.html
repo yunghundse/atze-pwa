@@ -1728,7 +1728,7 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 51;
+  var APP_VERSION = 52;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     localStorage.setItem('crew_app_v', APP_VERSION);
@@ -4151,17 +4151,39 @@ function getAllMyCrews(){
   });
 }
 
+var _uuidRe=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+function _isValidUUID(v){return v&&_uuidRe.test(v)}
+
+// Clean ALL old non-UUID crew data from localStorage on startup
+(function(){
+  var old=localStorage.getItem('active_crew_id');
+  if(old&&!_isValidUUID(old)){console.warn('Removing old crew_id:',old);localStorage.removeItem('active_crew_id')}
+  // Also clean any other old crew_ keys
+  var keysToRemove=[];
+  for(var i=0;i<localStorage.length;i++){
+    var k=localStorage.key(i);
+    if(k&&k.indexOf('crew_')===0&&k.indexOf('crew_wall')!==0&&k.indexOf('crew_story')!==0&&k.indexOf('crew_pokes')!==0&&k.indexOf('crew_vote')!==0&&k.indexOf('crew_app')!==0){
+      var v=localStorage.getItem(k);
+      if(v&&v.indexOf('crew_')===0&&!_isValidUUID(v))keysToRemove.push(k);
+    }
+  }
+  keysToRemove.forEach(function(k){localStorage.removeItem(k)});
+})();
+
 var _activeCrewId=localStorage.getItem('active_crew_id')||null;
-// Validate: must be a real UUID (not old localStorage format like crew_xxx_timestamp)
-if(_activeCrewId&&!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(_activeCrewId)){console.warn('Clearing invalid crew_id from localStorage:',_activeCrewId);_activeCrewId=null;localStorage.removeItem('active_crew_id')}
+if(!_isValidUUID(_activeCrewId))_activeCrewId=null;
+
 function getActiveCrewId(){
+  // Always validate — never return a non-UUID
+  if(_activeCrewId&&!_isValidUUID(_activeCrewId)){_activeCrewId=null;localStorage.removeItem('active_crew_id')}
   if(!_activeCrewId&&_myCrewMemberships.length>0){
     _activeCrewId=_myCrewMemberships[0].crew_id;
-    localStorage.setItem('active_crew_id',_activeCrewId);
+    if(_isValidUUID(_activeCrewId))localStorage.setItem('active_crew_id',_activeCrewId);
   }
   return _activeCrewId;
 }
 function setActiveCrewId(id){
+  if(id&&!_isValidUUID(id)){console.warn('Rejected non-UUID crew_id:',id);return}
   _activeCrewId=id;
   if(id)localStorage.setItem('active_crew_id',id);
   else localStorage.removeItem('active_crew_id');
