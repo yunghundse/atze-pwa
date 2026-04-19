@@ -48,6 +48,11 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;color:var(-
 @keyframes streakPulse{0%,100%{box-shadow:0 0 20px rgba(255,214,10,.15)}50%{box-shadow:0 0 30px rgba(255,214,10,.3)}}
 .sos-float{position:absolute;bottom:88px;right:14px;z-index:190;width:48px;height:48px;border-radius:50%;background:var(--fire);border:2px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#fff;cursor:pointer;box-shadow:0 4px 16px rgba(255,59,48,.5);letter-spacing:.5px;animation:sosPulse 1.5s ease-in-out infinite}
 @keyframes sosPulse{0%,100%{box-shadow:0 4px 16px rgba(255,59,48,.5),0 0 0 0 rgba(255,59,48,.3)}50%{box-shadow:0 4px 16px rgba(255,59,48,.5),0 0 0 16px rgba(255,59,48,.08)}}
+.crew-float-btns{position:sticky;bottom:84px;z-index:180;display:flex;justify-content:flex-end;gap:10px;padding:0 14px;pointer-events:none}
+.crew-float-btn{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;pointer-events:all;transition:transform .15s var(--ease);box-shadow:0 4px 20px rgba(0,0,0,.4)}
+.crew-float-btn:active{transform:scale(.88)}
+.cfb-chat{background:linear-gradient(135deg,rgba(191,90,242,.9),rgba(191,90,242,.7));border:2px solid rgba(255,255,255,.2);box-shadow:0 4px 20px rgba(191,90,242,.4)}
+.cfb-loc{background:linear-gradient(135deg,rgba(48,209,88,.9),rgba(48,209,88,.7));border:2px solid rgba(255,255,255,.2);box-shadow:0 4px 20px rgba(48,209,88,.4)}
 nav{position:absolute;bottom:0;left:0;right:0;z-index:200;height:76px;padding-bottom:env(safe-area-inset-bottom,8px);display:flex;align-items:center;justify-content:space-around;background:linear-gradient(0deg,rgba(5,5,7,.8),rgba(5,5,7,.6));border-top:none;backdrop-filter:blur(80px) saturate(220%);-webkit-backdrop-filter:blur(80px) saturate(220%);border-radius:28px 28px 0 0;box-shadow:0 -1px 0 rgba(255,255,255,.06),inset 0 1px 0 rgba(255,255,255,.04),0 -8px 30px rgba(0,0,0,.2)}
 nav button{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 10px;color:var(--t3);font-size:9px;font-weight:500;transition:all .25s var(--ease);position:relative;letter-spacing:.1px}
 nav button .ni{font-size:22px;transition:all .3s var(--spring)}
@@ -1436,6 +1441,16 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
           <div class="crew-sos-arrow">›</div>
         </div>
 
+        <!-- FLOATING MINI BUTTONS — Chat + Location always accessible -->
+        <div class="crew-float-btns">
+          <div class="crew-float-btn cfb-loc" onclick="shareCrewLocation()" title="Standort teilen">
+            <span>📍</span>
+          </div>
+          <div class="crew-float-btn cfb-chat" onclick="openCrewChat()" title="Crew Chat">
+            <span>💬</span>
+          </div>
+        </div>
+
         <!-- ═══════════════════════════════════════ -->
         <!-- ZONE 1: QUICK ACTIONS — Sofort-Zugriff -->
         <!-- ═══════════════════════════════════════ -->
@@ -1706,7 +1721,7 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 54;
+  var APP_VERSION = 55;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     // Force-clear old non-UUID crew IDs
@@ -3576,8 +3591,24 @@ window.navigateToCrewMember=function(lat,lng,name){
 };
 
 window.shareCrewLocation=function(){
-  if(!userLat||!userLng){toast('Standort nicht verfügbar');return}
-  shareText('📍 Mein Standort: https://www.google.com/maps?q='+userLat+','+userLng+' — crew. App');
+  if(userLat&&userLng){
+    shareText('📍 Mein Standort: https://www.google.com/maps?q='+userLat+','+userLng+' — crew. App');
+    toast('📍 Standort geteilt!');
+    return;
+  }
+  // Try to get fresh location
+  if(navigator.geolocation){
+    toast('📍 Standort wird abgerufen...');
+    navigator.geolocation.getCurrentPosition(function(pos){
+      userLat=pos.coords.latitude;userLng=pos.coords.longitude;
+      shareText('📍 Mein Standort: https://www.google.com/maps?q='+userLat+','+userLng+' — crew. App');
+      toast('📍 Standort geteilt!');
+    },function(){
+      toast('Standort nicht verfügbar — aktiviere GPS in den Einstellungen');
+    },{enableHighAccuracy:true,timeout:10000});
+  } else {
+    toast('Standort nicht verfügbar auf diesem Gerät');
+  }
 };
 
 // ============================================
@@ -5764,8 +5795,11 @@ async function buildDailyVoting(){
   var el=document.getElementById('dailyVoting');if(!el)return;
   try{
     var ids=await getActiveCrewMemberIds();
-    if(!ids||ids.length===0){el.innerHTML='<p class="crew-empty">Tritt einer Crew bei um abstimmen zu können!</p>';return}
-    var {data:profiles}=await sb.from('profiles').select('user_id,name,photo_url').in('user_id',ids);
+    // Add self to voting — everyone in the crew can be voted on
+    var allIds=(ids||[]).slice();
+    if(ME&&ME.user_id&&allIds.indexOf(ME.user_id)===-1)allIds.push(ME.user_id);
+    if(allIds.length===0){el.innerHTML='<p class="crew-empty">Tritt einer Crew bei um abstimmen zu können!</p>';return}
+    var {data:profiles}=await sb.from('profiles').select('user_id,name,photo_url').in('user_id',allIds);
     if(!profiles||profiles.length===0){el.innerHTML='<p class="crew-empty">Keine Crew zum Voten.</p>';return}
     profiles=profiles.filter(function(p){return !isBlocked(p.user_id)});
 
