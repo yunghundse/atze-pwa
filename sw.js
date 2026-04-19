@@ -1,8 +1,9 @@
-const CACHE = 'crew-v34';
+const CACHE = 'crew-v35';
 const PRECACHE = [
   './',
   './index.html',
   './app.html',
+  './scan.html',
   './config.js',
   './manifest.json',
   'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
