@@ -3651,7 +3651,7 @@ async function buildCrewWall(){
     // Load last 24h of wall posts from Supabase
     var since=new Date(Date.now()-86400000).toISOString();
     var {data:posts,error}=await sb.from('crew_wall_posts').select('*').eq('crew_id',crewId).gte('created_at',since).order('created_at',{ascending:false}).limit(50);
-    if(error){console.error('Wall load error:',error);el.innerHTML='<div class="wall-empty"><div class="wall-empty-icon">⚠️</div><div class="wall-empty-text">Wall konnte nicht geladen werden.</div></div>';return}
+    if(error){console.error('Wall load error:',error);el.innerHTML='<div class="wall-empty"><div class="wall-empty-icon">⚠️</div><div class="wall-empty-text">Wall-Fehler: '+esc(error.message||error.code||JSON.stringify(error))+'</div></div>';return}
 
     if(!posts||posts.length===0){
       el.innerHTML='<div class="wall-empty"><div class="wall-empty-icon">📍</div><div class="wall-empty-text">Noch keine Posts. Sei der Erste!</div></div>';
@@ -3750,7 +3750,7 @@ window.submitWallPost=async function(){
     toast('Gepostet! 📍');
     if(navigator.vibrate)navigator.vibrate([10,50,10]);
     buildCrewWall();
-  }catch(e){toast('Fehler beim Posten: '+(e.message||''));console.error('submitWallPost error:',e)}
+  }catch(e){toast('Post-Fehler: '+(e.message||e.code||JSON.stringify(e)));console.error('submitWallPost error:',e)}
 };
 
 // React to wall post — update reactions in Supabase
@@ -5847,7 +5847,7 @@ window.go=function(n,b){
   if(b)b.classList.add('active');
   setTimeout(function(){if(n==='radar'&&rMap)rMap.invalidateSize();if(n==='crew'&&cMap)cMap.invalidateSize()},200);
   if(n==='match')buildCards();
-  if(n==='crew'){fetchAllCrews().then(function(){loadMyCrewMemberships().then(function(){updateCrewGate();buildCrewSwitcher();renderCrewBoard();updateCrewIdentityCard()})});buildCrewStatus();buildCrewList().then(buildCrewActivityFeed);buildCrewLocations();buildCrewWall();buildStoryPreview();buildDailyVoting();buildLeaderboard();buildTonightPlanner();buildChallenges();buildCrewTips();updateChallengeTimer()}
+  if(n==='crew'){fetchAllCrews().then(function(){return loadMyCrewMemberships()}).then(function(){updateCrewGate();buildCrewSwitcher();renderCrewBoard();updateCrewIdentityCard();buildCrewStatus();buildCrewList().then(buildCrewActivityFeed);buildCrewLocations();buildCrewWall();buildStoryPreview();buildDailyVoting();buildLeaderboard();buildTonightPlanner();buildChallenges();buildCrewTips();updateChallengeTimer()}).catch(function(e){console.error('Crew load error:',e);updateCrewGate()})}
 };
 
 // ============================================
