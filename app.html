@@ -1218,7 +1218,7 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
 
 <!-- GAMES --><div class="game-ov" id="gameOv"><div class="game-header"><button class="ax" onclick="closeGame()">←</button><h3 id="gameTitle">Spiel</h3><div style="width:36px"></div></div><div class="game-body"><div class="game-card-display" id="gameCard"><div class="gcd-em" id="gcdEm">🎲</div><div class="gcd-text" id="gcdText">Tippe für die nächste Karte</div><div class="gcd-cat" id="gcdCat"></div></div><button class="abtn primary" style="max-width:260px" onclick="nextGameCard()">Nächste Karte</button></div></div>
 
-<!-- CELE --><div class="cele" id="cele"><div class="cele-bg"></div><div class="particles" id="particles"></div><div class="cele-ct"><div class="cele-title">It's a Match!</div><div class="cele-sub">Ihr wollt beide zusammen feiern</div><div class="cele-avatars"><img class="cele-ava" id="celeAva1" src=""><span class="cele-heart">🔥</span><img class="cele-ava" id="celeAva2" src=""></div><div class="cele-name" id="celeName"></div><div class="cele-btns"><button class="cb ghost" onclick="closeCele()">Weiter swipen</button></div></div></div>
+<!-- CELE --><div class="cele" id="cele"><div class="cele-bg"></div><div class="particles" id="particles"></div><div class="cele-ct"><div class="cele-title">It's a Match!</div><div class="cele-sub">Connectet euch auf Social Media 🤝</div><div class="cele-avatars"><img class="cele-ava" id="celeAva1" src=""><span class="cele-heart">🔥</span><img class="cele-ava" id="celeAva2" src=""></div><div class="cele-name" id="celeName"></div><div id="celeSocials" style="display:flex;flex-direction:column;gap:10px;margin-top:16px;width:100%;max-width:280px"></div><div class="cele-btns"><button class="cb ghost" onclick="closeCele()">Weiter entdecken</button></div></div></div>
 
 <!-- STORY FULLSCREEN --><div class="story-fullscreen" id="storyFullscreen"><div class="story-fs-bar"><div class="story-fs-progress" id="storyFsProgress"></div><button class="story-fs-close" onclick="closeCrewStory()">✕</button></div><div class="story-fs-slide" id="storyFsSlide"><div class="sfs-text" id="sfsText"></div><div class="story-fs-author"><div class="sfs-author-name" id="sfsAuthor"></div><div class="sfs-author-time" id="sfsTime"></div></div></div><div class="story-fs-nav prev" onclick="storyPrev()"></div><div class="story-fs-nav next" onclick="storyNext()"></div></div>
 
@@ -1329,7 +1329,7 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
         <div class="quick-stats anim" id="quickStats" style="margin:0 14px 8px;display:flex;gap:8px">
           <div onclick="go('match',document.querySelectorAll('#navBar button')[3])" style="flex:1;padding:10px;border-radius:12px;background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--glass-border);text-align:center;cursor:pointer">
             <div style="font-size:18px;font-weight:900;color:#FF6B6B" id="qsMatches">0</div>
-            <div style="font-size:9px;font-weight:700;color:var(--t3);text-transform:uppercase">Matches</div>
+            <div style="font-size:9px;font-weight:700;color:var(--t3);text-transform:uppercase">Connects</div>
           </div>
           <div onclick="go('crew',document.querySelectorAll('#navBar button')[2])" style="flex:1;padding:10px;border-radius:12px;background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--glass-border);text-align:center;cursor:pointer">
             <div style="font-size:18px;font-weight:900;color:var(--green)" id="qsCrew">0</div>
@@ -1364,7 +1364,7 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
         <div class="countdown-card anim d1" onclick="setTripDate()" id="countdownCard" style="margin:10px 14px"><h3>✈️ Malle-Countdown</h3><p>Tippe um dein Abreisedatum zu setzen</p></div>
       </div>
     </div>
-    <div class="scr" id="screen-match"><div class="match-area"><div class="match-filter-bar"><select class="mf-select" id="mfGender" onchange="applyFilters()"><option value="">Alle</option><option value="Mann">Mann</option><option value="Frau">Frau</option><option value="Divers">Divers</option></select><select class="mf-select" id="mfAge" onchange="applyFilters()"><option value="">Alter</option><option value="18-21">18-21</option><option value="22-25">22-25</option><option value="26-30">26-30</option><option value="31-40">31-40</option><option value="40+">40+</option></select><select class="mf-select" id="mfCity" onchange="applyFilters()"><option value="">Wohnort</option></select><select class="mf-select" id="mfClub" onchange="applyFilters()"><option value="">Verein</option></select></div><div class="match-stack" id="matchStack"></div><div class="mactions"><button class="ma sm" onclick="rewind()">↩</button><button class="ma nope" onclick="doSwipe('left')">✕</button><button class="ma super" onclick="superLike()">⭐</button><button class="ma like" onclick="doSwipe('right')">🔥</button><button class="ma sm" onclick="toast('Chat kommt bald!')">💬</button></div></div></div>
+    <div class="scr" id="screen-match"><div class="match-area"><div class="match-filter-bar"><select class="mf-select" id="mfGender" onchange="applyFilters()"><option value="">Alle</option><option value="Mann">Mann</option><option value="Frau">Frau</option><option value="Divers">Divers</option></select><select class="mf-select" id="mfAge" onchange="applyFilters()"><option value="">Alter</option><option value="18-21">18-21</option><option value="22-25">22-25</option><option value="26-30">26-30</option><option value="31-40">31-40</option><option value="40+">40+</option></select><select class="mf-select" id="mfCity" onchange="applyFilters()"><option value="">Wohnort</option></select><select class="mf-select" id="mfClub" onchange="applyFilters()"><option value="">Verein</option></select></div><div class="match-stack" id="matchStack"></div><div class="mactions"><button class="ma sm" onclick="rewind()">↩</button><button class="ma nope" onclick="doSwipe('left')">✕</button><button class="ma super" onclick="superLike()">⭐</button><button class="ma like" onclick="doSwipe('right')">🔥</button><button class="ma sm" onclick="toast('Matche & connecte auf Social! 📸')">💬</button></div></div></div>
     <div class="scr" id="screen-crew">
       <!-- CREW MAP — Where is everyone? -->
       <div class="crew-map-full"><div id="crewMap"></div>
@@ -1561,12 +1561,14 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
           <div id="leaderboardList" style="padding:0 14px 14px"><p class="crew-empty">Wird geladen...</p></div>
         </div>
 
-        <!-- MATCHES -->
+        <!-- CONNECT HINT -->
         <div class="crew-section">
-          <div class="crew-section-header">
-            <div class="csh-left"><span class="csh-emoji">🔥</span><span class="csh-title">Deine Matches</span></div>
+          <div style="padding:16px;border-radius:16px;background:linear-gradient(135deg,rgba(255,109,46,.06),rgba(255,109,46,.02));border:1px solid rgba(255,109,46,.12);text-align:center">
+            <div style="font-size:28px;margin-bottom:8px">🔥</div>
+            <div style="font-size:14px;font-weight:800;margin-bottom:4px">Neue Leute entdecken?</div>
+            <div style="font-size:12px;color:var(--t3);margin-bottom:12px;line-height:1.5">Swipe durch Profile und connecte dich direkt über Instagram, Snapchat oder TikTok!</div>
+            <button onclick="go('match',document.querySelectorAll('#navBar button')[3])" style="padding:12px 24px;border:none;border-radius:12px;background:var(--gold);color:#000;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit">🔥 Entdecken</button>
           </div>
-          <div id="matchFriendList"><p class="crew-empty">Matche mit Leuten um sie hier zu sehen!</p></div>
         </div>
 
         <!-- PARTY GAMES -->
@@ -1708,7 +1710,7 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
     <button class="active" onclick="go('radar',this)"><span class="ni">📍</span><span>Radar</span></button>
     <button onclick="go('deals',this)"><span class="ni">🤝</span><span>Deals</span></button>
     <button class="crew-center-btn" onclick="go('crew',this)"><span class="ni">👯</span><span>Crew</span></button>
-    <button onclick="go('match',this)"><span class="ni">🔥</span><span>Match</span><span class="match-dot" id="matchDot" style="display:none"></span></button>
+    <button onclick="go('match',this)"><span class="ni">🔥</span><span>Entdecken</span><span class="match-dot" id="matchDot" style="display:none"></span></button>
     <button onclick="go('profile',this)"><span class="ni">👤</span><span>Profil</span></button>
   </nav>
 </div>
@@ -3148,8 +3150,15 @@ function showCele(p){
   document.getElementById('celeAva1').src=ME.photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80';
   document.getElementById('celeAva2').src=p.photo_url||'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=200&q=80';
   document.getElementById('celeName').textContent='Du & '+p.name;
+  // Social connect buttons
+  var socHtml='';
+  if(p.insta)socHtml+='<button onclick="window.open(\'https://instagram.com/'+esc(p.insta)+'\',\'_blank\')" style="width:100%;padding:14px;border:none;border-radius:14px;background:linear-gradient(135deg,#833AB4,#E1306C,#F77737);color:#fff;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit">📸 @'+esc(p.insta)+' auf Instagram</button>';
+  if(p.snapchat)socHtml+='<button onclick="window.open(\'https://snapchat.com/add/'+esc(p.snapchat)+'\',\'_blank\')" style="width:100%;padding:14px;border:none;border-radius:14px;background:#FFFC00;color:#000;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit">👻 '+esc(p.snapchat)+' auf Snapchat</button>';
+  if(p.tiktok)socHtml+='<button onclick="window.open(\'https://tiktok.com/@'+esc(p.tiktok)+'\',\'_blank\')" style="width:100%;padding:14px;border:none;border-radius:14px;background:#000;color:#fff;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;border:1px solid rgba(255,255,255,.2)">🎵 @'+esc(p.tiktok)+' auf TikTok</button>';
+  if(!socHtml)socHtml='<div style="padding:12px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);font-size:13px;color:var(--t3);text-align:center">Keine Social-Profile hinterlegt</div>';
+  document.getElementById('celeSocials').innerHTML=socHtml;
   spawnP();document.getElementById('cele').classList.add('show');
-  sendLocalNotification('🔥 It\'s a Match!',{body:'Du und '+p.name+' matchen sich!'});
+  sendLocalNotification('🔥 It\'s a Match!',{body:'Du und '+p.name+' matchen sich! Connectet euch auf Social Media.'});
   if(navigator.vibrate)navigator.vibrate([50,30,50,30,100]);
   sb.rpc('add_points',{p_user_id:ME.user_id,p_points:50});ME.points+=50;updateProfile();
 }
@@ -3432,15 +3441,23 @@ window.openCrewProfile=function(uid){
     } else {
       sheetHtml+='<div class="cps-minimap"><div class="cps-minimap-placeholder">📍 Standort nicht geteilt</div></div>';
     }
-    // Socials
-    if(socials)sheetHtml+='<div class="cps-socials">'+socials+'</div>';
+    // Social Connect — prominent buttons
+    if(p.insta||p.snapchat||p.tiktok){
+      sheetHtml+='<div style="margin:12px 0 4px"><div style="font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;text-align:center">📲 Jetzt connecten</div>';
+      if(p.insta)sheetHtml+='<a href="https://instagram.com/'+esc(p.insta)+'" target="_blank" rel="noopener" style="display:block;padding:14px;border-radius:14px;background:linear-gradient(135deg,rgba(131,58,180,.15),rgba(225,48,108,.15),rgba(247,119,55,.15));border:1px solid rgba(225,48,108,.2);color:#E1306C;text-decoration:none;font-size:14px;font-weight:800;text-align:center;margin-bottom:8px">📸 @'+esc(p.insta)+' auf Instagram</a>';
+      if(p.snapchat)sheetHtml+='<a href="https://snapchat.com/add/'+esc(p.snapchat)+'" target="_blank" rel="noopener" style="display:block;padding:14px;border-radius:14px;background:rgba(255,252,0,.08);border:1px solid rgba(255,252,0,.2);color:#FFFC00;text-decoration:none;font-size:14px;font-weight:800;text-align:center;margin-bottom:8px">👻 '+esc(p.snapchat)+' auf Snapchat</a>';
+      if(p.tiktok)sheetHtml+='<a href="https://tiktok.com/@'+esc(p.tiktok)+'" target="_blank" rel="noopener" style="display:block;padding:14px;border-radius:14px;background:rgba(255,0,80,.06);border:1px solid rgba(255,0,80,.15);color:#FF0050;text-decoration:none;font-size:14px;font-weight:800;text-align:center;margin-bottom:8px">🎵 @'+esc(p.tiktok)+' auf TikTok</a>';
+      sheetHtml+='</div>';
+    } else {
+      sheetHtml+='<div style="margin:12px 0;padding:14px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);font-size:12px;color:var(--t3);text-align:center">Keine Social-Profile hinterlegt</div>';
+    }
     // Actions
     sheetHtml+='<div class="cps-actions">';
-    // Chat button — if in same crew
+    // Chat button — only if in same crew (crew feature, not individual)
     if(sharedCrewId){
-      sheetHtml+='<button class="cps-btn primary" onclick="closeBS();openCrewChat(\''+sharedCrewId+'\',\''+esc(sharedCrewName)+'\')">💬 Chat mit '+esc(sharedCrewName)+'</button>';
+      sheetHtml+='<button class="cps-btn primary" onclick="closeBS();openCrewChat(\''+sharedCrewId+'\',\''+esc(sharedCrewName)+'\')">💬 Crew-Chat ('+esc(sharedCrewName)+')</button>';
     }
-    sheetHtml+='<button class="cps-btn '+(sharedCrewId?'ghost':'primary')+'" onclick="pokeCrewMember(\''+uid+'\',\''+esc(p.name)+'\');closeBS()">👋 '+esc(p.name)+' anpingen</button>';
+    sheetHtml+='<button class="cps-btn ghost" onclick="pokeCrewMember(\''+uid+'\',\''+esc(p.name)+'\');closeBS()">👋 '+esc(p.name)+' anpingen</button>';
     if(hasLoc)sheetHtml+='<button class="cps-btn ghost" onclick="navigateToCrewMember('+p.lat+','+p.lng+',\''+esc(p.name)+'\');closeBS()">🗺️ Route anzeigen</button>';
     sheetHtml+='<button class="cps-btn ghost" onclick="shareText(\'Schau dir '+esc(p.name)+' auf crew. an! 🌴🔥 https://partycrew.app\');closeBS()">📤 Profil teilen</button>';
     sheetHtml+='<button class="cps-btn '+(_isBlocked?'primary':'danger')+'" onclick="toggleBlock(\''+uid+'\')">🚫 '+(_isBlocked?'Entblocken':'Blockieren')+'</button>';
@@ -5795,7 +5812,7 @@ window.go=function(n,b){
   if(b)b.classList.add('active');
   setTimeout(function(){if(n==='radar'&&rMap)rMap.invalidateSize();if(n==='crew'&&cMap)cMap.invalidateSize()},200);
   if(n==='match')buildCards();
-  if(n==='crew'){fetchAllCrews().then(function(){loadMyCrewMemberships().then(function(){updateCrewGate();buildCrewSwitcher();renderCrewBoard();updateCrewIdentityCard()})});buildCrewStatus();buildCrewList().then(buildCrewActivityFeed);buildMatchList();buildCrewLocations();buildCrewWall();buildStoryPreview();buildDailyVoting();buildLeaderboard();buildTonightPlanner();buildChallenges();buildCrewTips();updateChallengeTimer()}
+  if(n==='crew'){fetchAllCrews().then(function(){loadMyCrewMemberships().then(function(){updateCrewGate();buildCrewSwitcher();renderCrewBoard();updateCrewIdentityCard()})});buildCrewStatus();buildCrewList().then(buildCrewActivityFeed);buildCrewLocations();buildCrewWall();buildStoryPreview();buildDailyVoting();buildLeaderboard();buildTonightPlanner();buildChallenges();buildCrewTips();updateChallengeTimer()}
 };
 
 // ============================================
