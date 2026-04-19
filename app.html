@@ -2498,6 +2498,152 @@ nav{padding-bottom:max(6px,env(safe-area-inset-bottom)) !important}
   .hss-title{font-size:17px}
   .hss-field-row{grid-template-columns:1fr}
 }
+
+/* ====== PRIVACY MODE ONBOARDING v72 ====== */
+.pmo-ov{
+  position:fixed;inset:0;z-index:100000;
+  background:radial-gradient(ellipse at top,rgba(38,18,44,.96),rgba(5,5,7,.98));
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  backdrop-filter:blur(24px) saturate(180%);
+  padding:max(20px,env(safe-area-inset-top)) 16px max(20px,env(safe-area-inset-bottom));
+  overflow-y:auto;-webkit-overflow-scrolling:touch;
+  animation:pmoFadeIn .28s var(--spring,ease-out);
+}
+@keyframes pmoFadeIn{from{opacity:0}to{opacity:1}}
+.pmo-inner{
+  width:100%;max-width:440px;margin:0 auto;
+  display:flex;flex-direction:column;gap:12px;
+}
+.pmo-back{
+  position:absolute;top:max(16px,env(safe-area-inset-top));left:16px;
+  width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,.06);color:var(--t1);font-size:18px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;z-index:2;
+}
+.pmo-badge{
+  align-self:center;padding:6px 12px;border-radius:999px;
+  background:linear-gradient(90deg,rgba(255,109,46,.18),rgba(254,60,114,.18));
+  border:1px solid rgba(255,109,46,.35);color:#FFB58A;font-size:11px;font-weight:800;letter-spacing:.3px;
+  margin-top:8px;
+}
+.pmo-title{
+  font-size:26px;font-weight:900;letter-spacing:-.5px;color:#fff;
+  text-align:center;line-height:1.1;margin-top:6px;
+}
+.pmo-sub{
+  font-size:13px;color:var(--t2,#b8b8c0);text-align:center;line-height:1.5;
+  padding:0 8px;margin-bottom:8px;
+}
+.pmo-card{
+  padding:16px;border-radius:20px;
+  background:linear-gradient(160deg,rgba(30,24,34,.85),rgba(18,14,22,.72));
+  border:1px solid rgba(255,255,255,.08);
+  cursor:pointer;transition:all .25s var(--spring,ease);
+  position:relative;overflow:hidden;
+}
+.pmo-card::before{
+  content:"";position:absolute;inset:0;border-radius:20px;padding:1px;
+  background:linear-gradient(135deg,rgba(255,109,46,.0),rgba(254,60,114,.0));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  pointer-events:none;opacity:0;transition:opacity .3s;
+}
+.pmo-card:hover,.pmo-card:active{
+  transform:translateY(-2px);
+  border-color:rgba(255,255,255,.18);
+  background:linear-gradient(160deg,rgba(36,28,40,.92),rgba(22,16,26,.82));
+  box-shadow:0 14px 40px -12px rgba(0,0,0,.6);
+}
+.pmo-card:hover::before,.pmo-card:active::before{
+  opacity:1;
+  background:linear-gradient(135deg,rgba(255,109,46,.5),rgba(254,60,114,.5));
+}
+.pmo-card-head{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.pmo-ico{
+  width:46px;height:46px;border-radius:14px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;
+  box-shadow:0 8px 22px -6px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.15);
+}
+.pmo-card-title-wrap{flex:1;min-width:0}
+.pmo-card-title{font-size:17px;font-weight:900;color:#fff;letter-spacing:-.2px;line-height:1.1}
+.pmo-card-tag{font-size:11px;color:var(--t3,#9a9aa3);font-weight:600;margin-top:2px}
+.pmo-card-desc{font-size:12.5px;color:var(--t2,#b8b8c0);line-height:1.5}
+.pmo-card-feats{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.pmo-feat{font-size:10.5px;font-weight:700;padding:4px 8px;border-radius:10px;letter-spacing:.2px}
+.pmo-feat.yes{background:rgba(48,209,88,.12);color:#6EE7A1;border:1px solid rgba(48,209,88,.25)}
+.pmo-feat.no{background:rgba(142,142,147,.1);color:var(--t3,#9a9aa3);border:1px solid rgba(255,255,255,.06)}
+.pmo-legal{
+  font-size:10.5px;color:var(--t3,#8a8a92);line-height:1.55;text-align:center;
+  padding:10px 4px 0;
+}
+.pmo-field{display:flex;flex-direction:column;gap:6px;position:relative}
+.pmo-field-row{display:flex;gap:10px}
+.pmo-field-label{font-size:11px;font-weight:700;color:var(--t3,#9a9aa3);letter-spacing:.3px;text-transform:uppercase;padding-left:4px}
+.pmo-field input{
+  width:100%;padding:14px 14px;border-radius:14px;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
+  color:var(--t1,#fff);font-size:15px;font-weight:600;font-family:inherit;outline:none;
+  transition:border-color .2s,background .2s;
+}
+.pmo-field input:focus{
+  background:rgba(255,255,255,.08);
+  border-color:rgba(255,109,46,.5);
+}
+.pmo-sugg{
+  display:none;flex-direction:column;gap:4px;margin-top:6px;
+  max-height:260px;overflow-y:auto;
+  background:rgba(20,16,24,.92);border:1px solid rgba(255,255,255,.08);
+  border-radius:12px;padding:6px;
+}
+.pmo-sugg.show{display:flex}
+.pmo-sugg-item{
+  padding:10px 12px;border-radius:10px;cursor:pointer;
+  color:var(--t1,#fff);font-size:13px;font-weight:600;
+  transition:background .15s;
+}
+.pmo-sugg-item:hover,.pmo-sugg-item:active{background:rgba(255,255,255,.06)}
+.pmo-sugg-item .psi-sub{font-size:11px;color:var(--t3,#9a9aa3);font-weight:500;margin-top:1px}
+.pmo-btn-primary{
+  width:100%;padding:15px;border-radius:14px;border:none;
+  background:linear-gradient(135deg,#FF6D2E,#FE3C72);color:#fff;
+  font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;
+  letter-spacing:.3px;transition:transform .15s,opacity .2s;
+  box-shadow:0 10px 26px -8px rgba(254,60,114,.55);
+}
+.pmo-btn-primary:active{transform:scale(.98)}
+.pmo-btn-primary:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}
+
+/* Mini privacy-mode badge in header */
+.pm-mode-badge{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:3px 8px;border-radius:999px;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);
+  font-size:10.5px;font-weight:800;color:var(--t2,#b8b8c0);
+  cursor:pointer;transition:background .2s;
+}
+.pm-mode-badge:hover{background:rgba(255,255,255,.08)}
+.pm-mode-badge.travel{background:rgba(254,60,114,.14);border-color:rgba(254,60,114,.28);color:#FFB2C6}
+.pm-mode-badge.home{background:rgba(10,132,255,.14);border-color:rgba(10,132,255,.28);color:#8FC3FF}
+.pm-mode-badge.private{background:rgba(142,142,147,.14);border-color:rgba(255,255,255,.1);color:var(--t2,#b8b8c0)}
+
+/* Privacy settings card in profile */
+.ps-card{
+  background:linear-gradient(160deg,rgba(28,22,32,.85),rgba(18,14,22,.72));
+  border:1px solid rgba(255,255,255,.08);border-radius:20px;
+  padding:16px;margin-bottom:14px;
+}
+.ps-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.ps-head-ico{width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,#FF6D2E,#FE3C72);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.ps-head-title{font-size:15px;font-weight:900;color:#fff;letter-spacing:-.2px}
+.ps-head-sub{font-size:11px;color:var(--t3,#9a9aa3);margin-top:1px}
+.ps-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-top:1px solid rgba(255,255,255,.05)}
+.ps-row-label{font-size:12px;color:var(--t2,#b8b8c0);font-weight:600}
+.ps-row-val{font-size:12px;color:var(--t1,#fff);font-weight:800}
+.ps-btn{margin-top:10px;width:100%;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:var(--t1,#fff);font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s}
+.ps-btn:hover{background:rgba(255,255,255,.09)}
+.ps-btn.danger{color:#FF6B6B;border-color:rgba(255,107,107,.2)}
+.ps-btn.danger:hover{background:rgba(255,107,107,.08)}
 </style>
 </head>
 <body>
@@ -3167,6 +3313,91 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
       <button onclick="acceptLocationConsent('session')" style="width:100%;padding:15px;border-radius:14px;border:none;background:rgba(255,255,255,.06);color:var(--t2);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;border:1px solid rgba(255,255,255,.1)">Nur für diese Sitzung</button>
       <button onclick="acceptLocationConsent('denied')" style="width:100%;padding:12px;border-radius:14px;border:none;background:none;color:var(--t3);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit">Nicht freigeben</button>
     </div>
+  </div>
+</div>
+
+<!-- PRIVACY ONBOARDING v72 -->
+<div id="privacyOnboardOv" class="pmo-ov" style="display:none">
+  <div class="pmo-inner">
+    <div class="pmo-badge">🛡️ Dein Privatsphäre-Modus</div>
+    <div class="pmo-title">Wie willst du crew. nutzen?</div>
+    <div class="pmo-sub">Du entscheidest, was wir über dich wissen. Jederzeit änderbar in deinem Profil.</div>
+
+    <div class="pmo-card" onclick="selectPrivacyMode('travel')">
+      <div class="pmo-card-head">
+        <div class="pmo-ico" style="background:linear-gradient(135deg,#FF6D2E,#FE3C72)">🌍</div>
+        <div class="pmo-card-title-wrap">
+          <div class="pmo-card-title">Reisemodus</div>
+          <div class="pmo-card-tag">Für Urlaub & unterwegs</div>
+        </div>
+      </div>
+      <div class="pmo-card-desc">Live-Standort, Crew-Finder, Radar & Deals vor Ort. Perfekt für Malle & Co.</div>
+      <div class="pmo-card-feats">
+        <span class="pmo-feat yes">✓ Live GPS</span>
+        <span class="pmo-feat yes">✓ Crew in der Nähe</span>
+        <span class="pmo-feat yes">✓ Lokale Deals</span>
+      </div>
+    </div>
+
+    <div class="pmo-card" onclick="selectPrivacyMode('home')">
+      <div class="pmo-card-head">
+        <div class="pmo-ico" style="background:linear-gradient(135deg,#0A84FF,#34C759)">🏠</div>
+        <div class="pmo-card-title-wrap">
+          <div class="pmo-card-title">Heimatort</div>
+          <div class="pmo-card-tag">Für Daheim</div>
+        </div>
+      </div>
+      <div class="pmo-card-desc">Sag uns nur deine Stadt — du bekommst persönliche Angebote aus deiner Region, kein Live-GPS.</div>
+      <div class="pmo-card-feats">
+        <span class="pmo-feat yes">✓ Angebote in deiner Stadt</span>
+        <span class="pmo-feat no">· Kein Live-Tracking</span>
+      </div>
+    </div>
+
+    <div class="pmo-card" onclick="selectPrivacyMode('private')">
+      <div class="pmo-card-head">
+        <div class="pmo-ico" style="background:linear-gradient(135deg,#8E8E93,#3A3A3C)">🔒</div>
+        <div class="pmo-card-title-wrap">
+          <div class="pmo-card-title">Privat</div>
+          <div class="pmo-card-tag">Max. Datenschutz</div>
+        </div>
+      </div>
+      <div class="pmo-card-desc">Keine Standortdaten, keine Werbung. Nur Basis-Features.</div>
+      <div class="pmo-card-feats">
+        <span class="pmo-feat no">· Keine Ortsdaten</span>
+        <span class="pmo-feat no">· Keine Angebote</span>
+      </div>
+    </div>
+
+    <div class="pmo-legal">
+      Du kannst jederzeit wechseln. Wir speichern deine Auswahl lokal & auf unseren EU-Servern (Supabase Frankfurt). Basierend auf Art. 6 Abs. 1 a DSGVO (freiwillige Einwilligung).
+    </div>
+  </div>
+</div>
+
+<!-- HEIMATORT-PICKER v72 -->
+<div id="homeCityPickerOv" class="pmo-ov" style="display:none">
+  <div class="pmo-inner">
+    <button class="pmo-back" onclick="closeHomeCityPicker()">←</button>
+    <div class="pmo-title">Wo ist dein Heimatort?</div>
+    <div class="pmo-sub">Wir zeigen dir Angebote aus deiner Region. Live-GPS ist <b>nicht</b> aktiv.</div>
+
+    <div class="pmo-field">
+      <div class="pmo-field-label">Stadt</div>
+      <input type="text" id="hcpCityInput" placeholder="z.B. Berlin" autocomplete="off" oninput="hcpSearch()">
+      <div class="pmo-sugg" id="hcpSugg"></div>
+    </div>
+
+    <div class="pmo-field-row" id="hcpManualBlock" style="display:none">
+      <div class="pmo-field" style="flex:1">
+        <div class="pmo-field-label">Land</div>
+        <input type="text" id="hcpCountryInput" placeholder="z.B. Deutschland">
+      </div>
+    </div>
+
+    <div style="height:10px"></div>
+    <button class="pmo-btn-primary" id="hcpSaveBtn" onclick="saveHomeCity()" disabled>Heimatort speichern</button>
+    <div class="pmo-legal">Wir verwenden Nominatim (OpenStreetMap) zur Städtesuche. Es werden nur die Koordinaten deiner Stadt (ca. 10 km genau) gespeichert — nicht deine Adresse.</div>
   </div>
 </div>
 
@@ -4166,7 +4397,7 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 71;
+  var APP_VERSION = 72;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     // Force-clear old non-UUID crew IDs
@@ -4230,6 +4461,217 @@ function getGpsStatusText(){
   return '📍 Standort wird ermittelt...';
 }
 // ============================================
+// PRIVACY MODE SYSTEM v72 (DSGVO Art. 6 Abs. 1 a)
+//   'travel'  → Reisemodus: Live-Standort, Radar, Crew, Deals weltweit
+//   'home'    → Heimatort: fester Ort, personalisierte Angebote in der Nähe
+//   'private' → Privat: kein Standort, keine Angebote, nur Basis-Features
+// ============================================
+var PRIVACY_MODE_KEY = 'privacy_mode_v1';
+function getPrivacyState(){
+  try{
+    var raw = localStorage.getItem(PRIVACY_MODE_KEY);
+    if(!raw) return null;
+    var s = JSON.parse(raw);
+    if(!s || !s.mode) return null;
+    return s;
+  }catch(e){ return null; }
+}
+function hasSelectedMode(){
+  var s = getPrivacyState();
+  return !!(s && (s.mode==='travel'||s.mode==='home'||s.mode==='private'));
+}
+function getPrivacyMode(){
+  var s = getPrivacyState();
+  return s ? s.mode : null;
+}
+function isTravelMode(){ return getPrivacyMode()==='travel'; }
+function isHomeMode(){ return getPrivacyMode()==='home'; }
+function isPrivateMode(){ return getPrivacyMode()==='private'; }
+function setPrivacyMode(mode, opts){
+  opts = opts || {};
+  var cur = getPrivacyState() || {};
+  var next = {
+    mode: mode,
+    home_city: mode==='home' ? (opts.home_city || cur.home_city || null) : (cur.home_city || null),
+    consent: {
+      mode_chosen_at: new Date().toISOString(),
+      tracking_consent: !!(opts.tracking_consent ?? (mode==='travel')),
+      deals_consent: !!(opts.deals_consent ?? (mode!=='private')),
+      version: 1
+    }
+  };
+  try{ localStorage.setItem(PRIVACY_MODE_KEY, JSON.stringify(next)); }catch(e){}
+  try{ sessionStorage.removeItem('privacy_reminder_dismissed'); }catch(e){}
+  return next;
+}
+function clearPrivacyData(){
+  try{ localStorage.removeItem(PRIVACY_MODE_KEY); }catch(e){}
+  try{ localStorage.removeItem('location_consent'); }catch(e){}
+  try{ sessionStorage.removeItem('location_consent_session'); }catch(e){}
+  try{ sessionStorage.removeItem('privacy_reminder_dismissed'); }catch(e){}
+  // Clear location from DB
+  if(typeof ME!=='undefined' && ME && ME.user_id && typeof sb!=='undefined'){
+    try{
+      ME.lat=null; ME.lng=null;
+      sb.from('profiles').update({lat:null,lng:null,location_updated_at:new Date().toISOString()}).eq('user_id',ME.user_id);
+    }catch(e){}
+  }
+}
+function getEffectiveLocation(){
+  var s = getPrivacyState();
+  if(!s) return null;
+  if(s.mode==='travel'){
+    if(typeof ME!=='undefined' && ME && ME.lat && ME.lng) return {lat:ME.lat, lng:ME.lng, source:'gps'};
+    return null;
+  }
+  if(s.mode==='home' && s.home_city && s.home_city.lat && s.home_city.lng){
+    return {lat:s.home_city.lat, lng:s.home_city.lng, source:'home', city:s.home_city.name, country:s.home_city.country};
+  }
+  return null;
+}
+
+// ─── ONBOARDING FLOW ───────────────────────────────
+function openPrivacyOnboarding(){
+  var ov = document.getElementById('privacyOnboardOv');
+  if(ov){ ov.style.display = 'block'; }
+}
+function closePrivacyOnboarding(){
+  var ov = document.getElementById('privacyOnboardOv');
+  if(ov){ ov.style.display = 'none'; }
+}
+window.selectPrivacyMode = function(mode){
+  if(navigator.vibrate) navigator.vibrate(12);
+  if(mode === 'home'){
+    // Open city picker first, save mode after city is chosen
+    closePrivacyOnboarding();
+    openHomeCityPicker(true);
+    return;
+  }
+  setPrivacyMode(mode);
+  closePrivacyOnboarding();
+  if(mode === 'travel'){
+    toast('🌍 Reisemodus aktiv — gleich holen wir dein GPS');
+    setTimeout(function(){ try{ checkLocationConsent(); }catch(e){} }, 200);
+  } else {
+    toast('🔒 Privat-Modus aktiv — keine Ortsdaten');
+  }
+  try{ renderPrivacyBadge(); }catch(e){}
+};
+
+// ─── HEIMATORT PICKER ──────────────────────────────
+var _hcpSelectedCity = null;
+var _hcpFromOnboarding = false;
+var _hcpDebounce = null;
+function openHomeCityPicker(fromOnboarding){
+  _hcpFromOnboarding = !!fromOnboarding;
+  _hcpSelectedCity = null;
+  var ov = document.getElementById('homeCityPickerOv');
+  var input = document.getElementById('hcpCityInput');
+  var sugg = document.getElementById('hcpSugg');
+  var btn = document.getElementById('hcpSaveBtn');
+  if(input){ input.value = ''; }
+  if(sugg){ sugg.classList.remove('show'); sugg.innerHTML = ''; }
+  if(btn){ btn.disabled = true; }
+  if(ov){ ov.style.display = 'block'; }
+  setTimeout(function(){ if(input) input.focus(); }, 120);
+}
+window.closeHomeCityPicker = function(){
+  var ov = document.getElementById('homeCityPickerOv');
+  if(ov){ ov.style.display = 'none'; }
+  if(_hcpFromOnboarding){
+    _hcpFromOnboarding = false;
+    // User backed out of city picker during onboarding → reshow mode selection
+    if(!hasSelectedMode()){ openPrivacyOnboarding(); }
+  }
+};
+window.hcpSearch = function(){
+  if(_hcpDebounce){ clearTimeout(_hcpDebounce); }
+  var q = (document.getElementById('hcpCityInput').value||'').trim();
+  var sugg = document.getElementById('hcpSugg');
+  var btn = document.getElementById('hcpSaveBtn');
+  _hcpSelectedCity = null;
+  if(btn) btn.disabled = true;
+  if(q.length < 2){
+    if(sugg){ sugg.classList.remove('show'); sugg.innerHTML = ''; }
+    return;
+  }
+  _hcpDebounce = setTimeout(function(){
+    fetch('https://nominatim.openstreetmap.org/search?q='+encodeURIComponent(q)+'&format=json&addressdetails=1&limit=6&accept-language=de',{
+      headers:{'Accept':'application/json'}
+    }).then(function(r){ return r.json(); }).then(function(items){
+      if(!items || !items.length){
+        sugg.classList.add('show');
+        sugg.innerHTML = '<div style="padding:12px;color:var(--t3);font-size:12px;text-align:center">Keine Treffer</div>';
+        return;
+      }
+      sugg.innerHTML = '';
+      items.forEach(function(it){
+        var a = it.address || {};
+        var name = a.city || a.town || a.village || a.municipality || a.county || it.display_name.split(',')[0];
+        var country = a.country || '';
+        var div = document.createElement('div');
+        div.className = 'pmo-sugg-item';
+        div.innerHTML = '<div>'+escapeHtml(name)+'</div><div class="psi-sub">'+escapeHtml(country)+'</div>';
+        div.onclick = (function(n,c,lat,lng){
+          return function(){
+            _hcpSelectedCity = {name:n, country:c, lat:parseFloat(lat), lng:parseFloat(lng)};
+            document.getElementById('hcpCityInput').value = n + (c ? ', '+c : '');
+            sugg.classList.remove('show');
+            document.getElementById('hcpSaveBtn').disabled = false;
+            if(navigator.vibrate) navigator.vibrate(6);
+          };
+        })(name, country, it.lat, it.lon);
+        sugg.appendChild(div);
+      });
+      sugg.classList.add('show');
+    }).catch(function(){
+      sugg.classList.add('show');
+      sugg.innerHTML = '<div style="padding:12px;color:var(--t3);font-size:12px;text-align:center">Suche fehlgeschlagen. Versuch es nochmal.</div>';
+    });
+  }, 320);
+};
+window.saveHomeCity = function(){
+  if(!_hcpSelectedCity){ toast('Bitte wähle eine Stadt aus der Liste'); return; }
+  setPrivacyMode('home', {home_city:_hcpSelectedCity});
+  if(navigator.vibrate) navigator.vibrate([10,60,10]);
+  closeHomeCityPicker();
+  _hcpFromOnboarding = false;
+  toast('🏠 Heimatort gespeichert: '+_hcpSelectedCity.name);
+  try{ renderPrivacyBadge(); }catch(e){}
+  try{ if(typeof checkLocationConsent==='function') checkLocationConsent(); }catch(e){}
+};
+
+// ─── HELPERS ───────────────────────────────────────
+function privacyModeLabel(m){
+  if(m==='travel') return '🌍 Reisemodus';
+  if(m==='home') return '🏠 Heimatort';
+  if(m==='private') return '🔒 Privat';
+  return '– nicht gesetzt';
+}
+function renderPrivacyBadge(){
+  var host = document.getElementById('pmHeaderBadge');
+  if(!host) return;
+  var m = getPrivacyMode();
+  if(!m){ host.innerHTML = ''; return; }
+  host.innerHTML = '<span class="pm-mode-badge '+m+'" onclick="openPrivacySettings()">'+privacyModeLabel(m)+'</span>';
+}
+window.openPrivacySettings = function(){
+  // Re-open onboarding to allow switching mode
+  openPrivacyOnboarding();
+};
+window.resetPrivacyData = function(){
+  if(!confirm('Alle Privatsphäre-Daten löschen?\n\nDein Modus, Heimatort und Standortdaten werden gelöscht. Beim nächsten Start fragen wir dich erneut.')) return;
+  clearPrivacyData();
+  if(navigator.vibrate) navigator.vibrate([20,40,20]);
+  toast('Daten gelöscht — bitte neu auswählen');
+  setTimeout(function(){ location.reload(); }, 600);
+};
+// Small HTML escaper for picker suggestions
+function escapeHtml(s){
+  return String(s||'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});
+}
+
+// ============================================
 // LOCATION CONSENT SYSTEM
 // ============================================
 var _locationConsent = 'unknown'; // 'permanent','session','denied','unknown'
@@ -4268,15 +4710,34 @@ function acceptLocationConsent(choice){
   updateGpsBanner();
 }
 function checkLocationConsent(){
+  // v72: Gate by privacy mode — no mode selected yet = no GPS prompt
+  if(!hasSelectedMode()){
+    _gpsStatus = 'idle';
+    return;
+  }
+  // Home-Mode: use saved city, no live GPS
+  if(isHomeMode()){
+    _gpsStatus = 'home';
+    var s = getPrivacyState();
+    if(s && s.home_city && s.home_city.lat && s.home_city.lng){
+      userLat = s.home_city.lat; userLng = s.home_city.lng;
+      if(typeof ME!=='undefined' && ME){ ME.lat = s.home_city.lat; ME.lng = s.home_city.lng; }
+    }
+    return;
+  }
+  // Private-Mode: never ask for location
+  if(isPrivateMode()){
+    _gpsStatus = 'private';
+    return;
+  }
+  // Travel-Mode from here on
   var consent = getLocationConsent();
   _locationConsent = consent;
   if(consent === 'permanent' || consent === 'session'){
-    // Already consented, start GPS
     startGpsTracking();
     return;
   }
   if(consent === 'denied'){
-    // Explicitly denied — don't show dialog again this session, but don't start GPS
     _gpsStatus = 'denied';
     return;
   }
@@ -5139,8 +5600,14 @@ async function loadUser(authUser){
     document.getElementById('agegate').classList.add('gone');
     document.getElementById('app').style.display = 'flex';
     buildApp();
-    // Check location consent after app is visible
-    checkLocationConsent();
+    // v72: First-run privacy mode selection → shown before GPS prompt
+    if(!hasSelectedMode()){
+      setTimeout(function(){ try{ openPrivacyOnboarding(); }catch(e){ console.warn('[PM] onboarding err',e); } }, 400);
+    } else {
+      // Check location consent after app is visible (only in travel mode)
+      checkLocationConsent();
+    }
+    try{ renderPrivacyBadge(); }catch(e){}
     // Handle pending crew QR join
     handlePendingCrewJoin();
     // Handle pending partner QR
@@ -8061,6 +8528,27 @@ window.openBlockList=async function(){
   await loadMyBlocks();
   var html='<div style="padding:60px 16px 20px">';
   html+='<div style="font-size:22px;font-weight:900;letter-spacing:-.5px;margin-bottom:16px">🛡️ Sicherheit & Datenschutz</div>';
+
+  // v72: Privatsphäre-Modus Karte
+  try{
+    var _pmState = getPrivacyState();
+    var _pmMode = _pmState ? _pmState.mode : null;
+    var _pmHome = (_pmState && _pmState.home_city) ? _pmState.home_city : null;
+    var _pmSince = _pmState && _pmState.consent && _pmState.consent.mode_chosen_at ? new Date(_pmState.consent.mode_chosen_at).toLocaleDateString('de-DE') : '–';
+    html+='<div class="ps-card">';
+    html+='<div class="ps-head"><div class="ps-head-ico">🛡️</div><div><div class="ps-head-title">Privatsphäre-Modus</div><div class="ps-head-sub">Was wir über dich wissen dürfen</div></div></div>';
+    html+='<div class="ps-row"><div class="ps-row-label">Aktiver Modus</div><div class="ps-row-val">'+privacyModeLabel(_pmMode)+'</div></div>';
+    if(_pmMode==='home' && _pmHome){
+      html+='<div class="ps-row"><div class="ps-row-label">Heimatort</div><div class="ps-row-val">'+escapeHtml(_pmHome.name)+(_pmHome.country?', '+escapeHtml(_pmHome.country):'')+'</div></div>';
+    }
+    html+='<div class="ps-row"><div class="ps-row-label">Ausgewählt am</div><div class="ps-row-val">'+_pmSince+'</div></div>';
+    html+='<div class="ps-row"><div class="ps-row-label">Live-Tracking</div><div class="ps-row-val">'+(_pmMode==='travel'?'✓ aktiv':'– aus')+'</div></div>';
+    html+='<div class="ps-row"><div class="ps-row-label">Personalisierte Angebote</div><div class="ps-row-val">'+((_pmMode==='travel'||_pmMode==='home')?'✓ aktiv':'– aus')+'</div></div>';
+    html+='<button class="ps-btn" onclick="openPrivacySettings()">Modus wechseln</button>';
+    html+='<button class="ps-btn danger" onclick="resetPrivacyData()">Alle Privatsphäre-Daten löschen</button>';
+    html+='<div style="font-size:10.5px;color:var(--t3);line-height:1.55;padding-top:10px;text-align:center">Rechtsgrundlage: Art. 6 Abs. 1 a DSGVO (freiwillige Einwilligung). Widerruf jederzeit möglich.</div>';
+    html+='</div>';
+  }catch(_e){ console.warn('[PM] settings card err', _e); }
 
   // Trust Score
   html+='<div style="padding:16px;border-radius:var(--r2);background:linear-gradient(135deg,rgba(52,199,89,.08),rgba(52,199,89,.02));border:1px solid rgba(52,199,89,.15);margin-bottom:12px">';
