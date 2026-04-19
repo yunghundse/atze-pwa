@@ -1579,7 +1579,7 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 42;
+  var APP_VERSION = 43;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     localStorage.setItem('crew_app_v', APP_VERSION);
@@ -3691,14 +3691,26 @@ var CREW_ICONS=['🏴‍☠️','👑','🔥','🍺','🎉','🏖️','🌴','�
 
 function getCrewSettings(){
   var s=JSON.parse(localStorage.getItem('crew_settings')||'null');
+  if(!s) return null;
+  return s;
+}
+function getOrCreateCrewSettings(){
+  var s=getCrewSettings();
   if(!s){s=Object.assign({},CREW_SETTINGS_DEFAULTS);s.founded=new Date().toISOString().split('T')[0];localStorage.setItem('crew_settings',JSON.stringify(s))}
   return s;
 }
+function hasActiveCrew(){return !!localStorage.getItem('crew_settings')}
 
 function saveCrewSettings(s){localStorage.setItem('crew_settings',JSON.stringify(s))}
 
 function updateCrewIdentityCard(){
   var s=getCrewSettings();
+  if(!s){
+    var el1=document.getElementById('myCrewIcon');if(el1)el1.textContent='➕';
+    var el2=document.getElementById('myCrewName');if(el2)el2.textContent='Crew gründen';
+    var el3=document.getElementById('myCrewMotto');if(el3)el3.textContent='Tippe um loszulegen';
+    return;
+  }
   var el1=document.getElementById('myCrewIcon');if(el1)el1.textContent=s.icon;
   var el2=document.getElementById('myCrewName');if(el2)el2.textContent=s.name;
   var el3=document.getElementById('myCrewMotto');if(el3)el3.textContent=s.motto;
@@ -3707,6 +3719,7 @@ function updateCrewIdentityCard(){
 window.openMyCrewProfile=function(){
   var ov=document.getElementById('crewProfileOv');if(!ov)return;
   var s=getCrewSettings();
+  if(!s){openCrewCreate();return;}
   var crewSize=(_crewProfiles&&_crewProfiles.length)||0;
   var totalAura=0;var topStreak=0;
   if(_crewProfiles)_crewProfiles.forEach(function(p){totalAura+=(p.points||0);if((p.streak||0)>topStreak)topStreak=p.streak||0});
@@ -3824,10 +3837,17 @@ window.openMyCrewProfile=function(){
   html+='</div></div>';
   html+='</div>';
 
-  // Delete crew — only admin
-  var isAdmin=localStorage.getItem('crew_is_admin')==='true';
-  if(isAdmin){
+  // Delete crew — admin or app-admin
+  var isCrewAdmin=localStorage.getItem('crew_is_admin')==='true';
+  var isAppAdmin=ME&&ME.is_admin;
+  if(isCrewAdmin||isAppAdmin){
     html+='<div class="cp-section"><div class="cp-section-title" style="color:#FF3B30">⚠️ Gefahrenzone</div>';
+    if(isAppAdmin){
+      html+='<div style="padding:14px;border-radius:var(--r);background:rgba(255,59,48,.06);border:1px solid rgba(255,59,48,.12);cursor:pointer;margin-bottom:8px" onclick="adminDeleteOwnCrew()">';
+      html+='<div style="font-size:14px;font-weight:800;color:#FF3B30">🗑 Crew sofort löschen (Admin)</div>';
+      html+='<div style="font-size:11px;color:var(--t3);margin-top:2px">Als App-Admin kannst du die Crew direkt löschen</div>';
+      html+='</div>';
+    }
     html+='<div style="padding:14px;border-radius:var(--r);background:rgba(255,59,48,.06);border:1px solid rgba(255,59,48,.12);cursor:pointer" onclick="openCrewDelete()">';
     html+='<div style="font-size:14px;font-weight:800;color:#FF3B30">Crew auflösen</div>';
     html+='<div style="font-size:11px;color:var(--t3);margin-top:2px">'+(crewSize<=2?'Kann sofort aufgelöst werden (≤2 Mitglieder)':'Benötigt 3 Abstimmungen von Crew-Mitgliedern')+'</div>';
@@ -3842,12 +3862,12 @@ window.openMyCrewProfile=function(){
 window.closeCrewProfile=function(){document.getElementById('crewProfileOv').classList.remove('show')};
 
 window.updateCrewSetting=function(key,val){
-  var s=getCrewSettings();s[key]=val;saveCrewSettings(s);updateCrewIdentityCard();
+  var s=getCrewSettings();if(!s)return;s[key]=val;saveCrewSettings(s);updateCrewIdentityCard();
   toast('Gespeichert ✓');
 };
 
 window.toggleCrewVisibility=function(){
-  var s=getCrewSettings();
+  var s=getCrewSettings();if(!s)return;
   s.visibility=s.visibility==='public'?'private':'public';
   saveCrewSettings(s);
   openMyCrewProfile(); // refresh
@@ -3861,7 +3881,7 @@ window.changeGroupPhoto=function(){
     if(!input.files||!input.files[0])return;
     var reader=new FileReader();
     reader.onload=function(e){
-      var s=getCrewSettings();s.group_photo=e.target.result;saveCrewSettings(s);registerMyCrew();
+      var s=getCrewSettings();if(!s)return;s.group_photo=e.target.result;saveCrewSettings(s);registerMyCrew();
       toast('Gruppenbild aktualisiert! 📸');openMyCrewProfile();
     };
     reader.readAsDataURL(input.files[0]);
@@ -3870,7 +3890,7 @@ window.changeGroupPhoto=function(){
 };
 
 window.toggleCrewTag=function(tag){
-  var s=getCrewSettings();
+  var s=getCrewSettings();if(!s)return;
   if(!s.tags)s.tags=[];
   var idx=s.tags.indexOf(tag);
   if(idx>=0)s.tags.splice(idx,1);
@@ -3988,6 +4008,7 @@ function saveAllCrews(list){localStorage.setItem('crew_board_list',JSON.stringif
 
 function registerMyCrew(){
   var s=getCrewSettings();
+  if(!s)return;
   if(!s.id){s.id='crew_'+ME.user_id+'_'+Date.now();saveCrewSettings(s)}
   var list=getAllCrews();
   var idx=list.findIndex(function(c){return c.id===s.id});
@@ -4241,7 +4262,7 @@ window.changeCrewPhoto=function(){
     if(!input.files||!input.files[0])return;
     var reader=new FileReader();
     reader.onload=function(e){
-      var s=getCrewSettings();
+      var s=getCrewSettings();if(!s)return;
       s.photo_url=e.target.result;
       saveCrewSettings(s);
       registerMyCrew();
@@ -4340,6 +4361,27 @@ window.adminDeleteCrew=function(crewId,name){
   openAdminPanel(); // refresh admin
 };
 
+// Admin delete own crew directly from crew profile
+window.adminDeleteOwnCrew=function(){
+  if(!ME||!ME.is_admin)return;
+  var s=getCrewSettings();
+  if(!s){toast('Keine aktive Crew.');return;}
+  if(!confirm('Deine Crew „'+s.name+'" wirklich löschen? Das kann nicht rückgängig gemacht werden.'))return;
+  // Remove from board
+  var list=getAllCrews().filter(function(c){return c.id!==s.id});
+  saveAllCrews(list);
+  // Clear own crew
+  localStorage.removeItem('crew_settings');
+  localStorage.removeItem('crew_delete_votes');
+  localStorage.removeItem('crew_wall_posts');
+  localStorage.removeItem('crew_story_slides');
+  localStorage.removeItem('crew_achievements');
+  updateCrewIdentityCard();
+  closeCrewProfile();
+  toast('Crew aufgelöst ✓');
+  if(navigator.vibrate)navigator.vibrate([100,50,100]);
+};
+
 // ============================================
 // CREW LEADERBOARD — Global ranking
 // ============================================
@@ -4424,7 +4466,7 @@ function buildCrewLeaderboard(){
 
   // My crew position
   var myCrew=getCrewSettings();
-  if(myCrew.id){
+  if(myCrew&&myCrew.id){
     var myIdx=crews.findIndex(function(c){return c.id===myCrew.id});
     if(myIdx>=0){
       html+='<div style="margin:0 14px 14px;padding:12px;border-radius:var(--r);background:linear-gradient(135deg,rgba(255,109,46,.08),rgba(255,109,46,.03));border:1px solid rgba(255,109,46,.15);text-align:center">';
