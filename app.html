@@ -613,6 +613,55 @@ select.ri{appearance:none;-webkit-appearance:none}
 .cb-battle-status{font-size:10px;font-weight:700;padding:4px 10px;border-radius:8px}
 .cb-battle-status.live{background:rgba(52,199,89,.12);color:var(--green);border:1px solid rgba(52,199,89,.2)}
 .cb-battle-status.upcoming{background:rgba(90,200,250,.12);color:#5AC8FA;border:1px solid rgba(90,200,250,.2)}
+/* Crew Create Modal */
+.crew-create-ov{position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:none;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+.crew-create-ov.show{display:flex}
+.crew-create{width:100%;max-width:360px;border-radius:var(--r2);background:linear-gradient(135deg,rgba(28,28,32,.95),rgba(22,22,24,.95));border:1px solid rgba(255,255,255,.12);padding:24px;box-shadow:0 24px 80px rgba(0,0,0,.6);max-height:85vh;overflow-y:auto}
+.cc-form-title{font-size:20px;font-weight:900;text-align:center;margin-bottom:20px}
+.cc-photo-pick{width:88px;height:88px;border-radius:24px;margin:0 auto 16px;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.03));border:2px dashed rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:32px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.cc-photo-pick:active{transform:scale(.95)}
+.cc-photo-pick img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.cc-photo-pick .cc-photo-edit{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.6);font-size:10px;font-weight:700;text-align:center;padding:3px;color:#fff}
+.cc-field{margin-bottom:14px}
+.cc-field-label{font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.cc-field input,.cc-field textarea,.cc-field select{width:100%;padding:12px 14px;border-radius:14px;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.1);color:#fff;font-size:14px;font-weight:600;font-family:inherit;outline:none;transition:border-color .2s;box-sizing:border-box}
+.cc-field textarea{resize:none;height:80px}
+.cc-field input:focus,.cc-field textarea:focus{border-color:rgba(255,109,46,.4)}
+.cc-field input::placeholder,.cc-field textarea::placeholder{color:rgba(255,255,255,.25)}
+.cc-icon-grid{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.cc-icon-opt{width:42px;height:42px;border-radius:12px;background:rgba(255,255,255,.04);border:2px solid transparent;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;transition:all .15s}
+.cc-icon-opt:active{transform:scale(.9)}
+.cc-icon-opt.sel{border-color:var(--o);background:rgba(255,109,46,.1);box-shadow:0 0 12px rgba(255,109,46,.15)}
+.cc-btns{display:flex;gap:8px;margin-top:18px}
+.cc-btn{flex:1;padding:14px;border-radius:14px;font-size:14px;font-weight:800;cursor:pointer;text-align:center;border:none;font-family:inherit;transition:transform .15s}
+.cc-btn.cancel{background:rgba(255,255,255,.06);color:var(--t2);border:1px solid rgba(255,255,255,.1)}
+.cc-btn.create{background:linear-gradient(135deg,var(--o),#FF6B6B);color:#fff}
+.cc-btn:active{transform:scale(.96)}
+/* Crew Delete Confirm */
+.crew-delete-ov{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:none;align-items:center;justify-content:center;padding:20px}
+.crew-delete-ov.show{display:flex}
+.crew-delete-box{width:100%;max-width:320px;border-radius:var(--r2);background:linear-gradient(135deg,rgba(28,28,32,.95),rgba(22,22,24,.95));border:1px solid rgba(255,59,48,.2);padding:24px;text-align:center;box-shadow:0 24px 80px rgba(0,0,0,.6)}
+.cd-icon{font-size:48px;margin-bottom:10px}
+.cd-title{font-size:18px;font-weight:900;margin-bottom:6px}
+.cd-desc{font-size:13px;color:var(--t2);line-height:1.5;margin-bottom:16px}
+.cd-votes{display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:16px}
+.cd-vote-count{font-size:24px;font-weight:900;color:#FF3B30}
+.cd-vote-label{font-size:12px;color:var(--t3)}
+.cd-btns{display:flex;gap:8px}
+.cd-btn{flex:1;padding:12px;border-radius:14px;font-size:13px;font-weight:800;cursor:pointer;text-align:center;border:none;font-family:inherit}
+.cd-btn.cancel{background:rgba(255,255,255,.06);color:var(--t2);border:1px solid rgba(255,255,255,.1)}
+.cd-btn.delete{background:linear-gradient(135deg,#FF3B30,#FF6B6B);color:#fff}
+.cd-btn:active{transform:scale(.96)}
+/* Crew profile photo in header */
+.cp-crew-photo{width:88px;height:88px;border-radius:24px;margin:0 auto 12px;overflow:hidden;box-shadow:0 8px 32px rgba(255,109,46,.25);border:3px solid rgba(255,255,255,.15);position:relative;cursor:pointer}
+.cp-crew-photo img{width:100%;height:100%;object-fit:cover}
+.cp-crew-photo .cp-photo-edit{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.6);font-size:10px;font-weight:700;text-align:center;padding:4px;color:#fff}
+.cp-bio{font-size:13px;color:var(--t2);line-height:1.5;margin-top:6px;max-width:280px;margin-left:auto;margin-right:auto}
+/* Empty board state */
+.cb-empty{padding:40px 20px;text-align:center}
+.cb-empty-icon{font-size:48px;margin-bottom:10px}
+.cb-empty-title{font-size:18px;font-weight:900;margin-bottom:6px}
+.cb-empty-desc{font-size:13px;color:var(--t3);line-height:1.5;margin-bottom:16px}
 
 /* CREW LOCATION CARDS */
 .crew-loc-card{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid rgba(255,255,255,.04);transition:all .2s var(--ease)}
@@ -1039,6 +1088,32 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
   </div>
   <div class="cb-filter-row" id="cbFilters"></div>
   <div id="crewBoardContent"></div>
+</div>
+
+<!-- CREW CREATE MODAL -->
+<div class="crew-create-ov" id="crewCreateOv">
+  <div class="crew-create">
+    <div class="cc-form-title">🏴‍☠️ Crew gründen</div>
+    <div class="cc-photo-pick" id="ccPhotoPick" onclick="document.getElementById('ccPhotoFile').click()">📷<input type="file" id="ccPhotoFile" accept="image/*" style="display:none" onchange="previewCrewPhoto(this)"></div>
+    <div class="cc-field"><div class="cc-field-label">Crew-Name</div><input type="text" id="ccName" placeholder="z.B. Die Bierkönige" maxlength="30"></div>
+    <div class="cc-field"><div class="cc-field-label">Bio / Beschreibung</div><textarea id="ccBio" placeholder="Erzähl was über eure Crew..." maxlength="200"></textarea></div>
+    <div class="cc-field"><div class="cc-field-label">Motto</div><input type="text" id="ccMotto" placeholder="z.B. Jeden Tag ein neuer Rekord" maxlength="60"></div>
+    <div class="cc-field"><div class="cc-field-label">Herkunft</div><input type="text" id="ccHometown" placeholder="z.B. Düsseldorf" maxlength="30"></div>
+    <div class="cc-field"><div class="cc-field-label">Crew-Icon</div><div class="cc-icon-grid" id="ccIconGrid"></div></div>
+    <div class="cc-field"><div class="cc-field-label">Sichtbarkeit</div><select id="ccVisibility"><option value="public">🌍 Öffentlich — Alle können euch finden</option><option value="private">🔒 Privat — Nur per Einladung</option></select></div>
+    <div class="cc-btns"><button class="cc-btn cancel" onclick="closeCrewCreate()">Abbrechen</button><button class="cc-btn create" onclick="submitCrewCreate()">Crew gründen</button></div>
+  </div>
+</div>
+
+<!-- CREW DELETE CONFIRM -->
+<div class="crew-delete-ov" id="crewDeleteOv">
+  <div class="crew-delete-box">
+    <div class="cd-icon">⚠️</div>
+    <div class="cd-title">Crew auflösen?</div>
+    <div class="cd-desc" id="cdDesc">Das kann nicht rückgängig gemacht werden. Alle Daten gehen verloren.</div>
+    <div class="cd-votes"><div class="cd-vote-count" id="cdVoteCount">0/3</div><div class="cd-vote-label">Stimmen für Auflösung</div></div>
+    <div class="cd-btns"><button class="cd-btn cancel" onclick="closeCrewDelete()">Abbrechen</button><button class="cd-btn delete" id="cdDeleteBtn" onclick="confirmDeleteCrew()">Abstimmen</button></div>
+  </div>
 </div>
 
 <!-- MALLE STATS OVERLAY -->
@@ -1501,7 +1576,7 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 40;
+  var APP_VERSION = 41;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     localStorage.setItem('crew_app_v', APP_VERSION);
@@ -3608,7 +3683,8 @@ var CREW_ACHIEVEMENTS = [
   {id:'social',icon:'🤝',name:'Networker',desc:'Mit 5 anderen Crews connected'}
 ];
 
-var CREW_SETTINGS_DEFAULTS={name:'Meine Crew',motto:'Auf geht\'s nach Malle!',icon:'🏴‍☠️',visibility:'public',leader:null,malle_visits:1,founded:null,hometown:''};
+var CREW_SETTINGS_DEFAULTS={name:'Meine Crew',motto:'Auf geht\'s nach Malle!',icon:'🏴‍☠️',visibility:'public',leader:null,malle_visits:1,founded:null,hometown:'',bio:'',photo_url:''};
+var CREW_ICONS=['🏴‍☠️','👑','🔥','🍺','🎉','🏖️','🌴','⚡','🦈','🐊','💎','🎯','🚀','🌅','🍖','🎸','🤙','🦁','🐺','🎪'];
 
 function getCrewSettings(){
   var s=JSON.parse(localStorage.getItem('crew_settings')||'null');
@@ -3642,9 +3718,14 @@ window.openMyCrewProfile=function(){
   if(!leaderProfile){leaderProfile={name:ME.name||'Du',photo_url:ME.photo_url||'',user_id:ME.user_id}}
 
   var html='<div class="cp-hero">';
-  html+='<div class="cp-crew-ava">'+s.icon+'</div>';
+  if(s.photo_url){
+    html+='<div class="cp-crew-photo" onclick="changeCrewPhoto()"><img src="'+s.photo_url+'" loading="lazy"><div class="cp-photo-edit">📷 Ändern</div></div>';
+  }else{
+    html+='<div class="cp-crew-ava" onclick="changeCrewPhoto()" style="cursor:pointer" title="Foto hinzufügen">'+s.icon+'</div>';
+  }
   html+='<div class="cp-crew-name">'+esc(s.name)+'</div>';
   html+='<div class="cp-crew-motto">„'+esc(s.motto)+'"</div>';
+  if(s.bio)html+='<div class="cp-bio">'+esc(s.bio)+'</div>';
   html+='<div class="cp-visibility '+s.visibility+'">'+(s.visibility==='public'?'🌍 Öffentlich':'🔒 Privat')+'</div>';
   html+='</div>';
 
@@ -3697,9 +3778,20 @@ window.openMyCrewProfile=function(){
   html+='<div class="cp-toggle-row"><span class="cp-toggle-label">Crew-Name</span><input type="text" value="'+esc(s.name)+'" onchange="updateCrewSetting(\'name\',this.value)" style="background:none;border:none;color:var(--t1);font-size:13px;font-weight:700;text-align:right;font-family:inherit;outline:none;max-width:150px"></div>';
   html+='<div class="cp-toggle-row"><span class="cp-toggle-label">Motto</span><input type="text" value="'+esc(s.motto)+'" onchange="updateCrewSetting(\'motto\',this.value)" style="background:none;border:none;color:var(--t1);font-size:13px;font-weight:700;text-align:right;font-family:inherit;outline:none;max-width:180px"></div>';
   html+='<div class="cp-toggle-row"><span class="cp-toggle-label">Herkunft</span><input type="text" value="'+esc(s.hometown||'')+'" placeholder="z.B. Düsseldorf" onchange="updateCrewSetting(\'hometown\',this.value)" style="background:none;border:none;color:var(--t1);font-size:13px;font-weight:700;text-align:right;font-family:inherit;outline:none;max-width:150px"></div>';
+  html+='<div class="cp-toggle-row"><span class="cp-toggle-label">Bio</span><input type="text" value="'+esc(s.bio||'')+'" placeholder="Über eure Crew..." onchange="updateCrewSetting(\'bio\',this.value)" style="background:none;border:none;color:var(--t1);font-size:12px;font-weight:600;text-align:right;font-family:inherit;outline:none;max-width:180px"></div>';
   html+='<div class="cp-toggle-row"><span class="cp-toggle-label">Malle-Besuche</span><input type="number" value="'+(s.malle_visits||1)+'" min="1" max="99" onchange="updateCrewSetting(\'malle_visits\',parseInt(this.value)||1)" style="background:none;border:none;color:var(--o);font-size:15px;font-weight:900;text-align:right;font-family:inherit;outline:none;width:50px"></div>';
   html+='<div class="cp-toggle-row"><span class="cp-toggle-label">Öffentlich sichtbar</span><div class="cp-toggle '+(s.visibility==='public'?'on':'')+'" onclick="toggleCrewVisibility()"></div></div>';
   html+='</div></div>';
+
+  // Delete crew — only admin
+  var isAdmin=localStorage.getItem('crew_is_admin')==='true';
+  if(isAdmin){
+    html+='<div class="cp-section"><div class="cp-section-title" style="color:#FF3B30">⚠️ Gefahrenzone</div>';
+    html+='<div style="padding:14px;border-radius:var(--r);background:rgba(255,59,48,.06);border:1px solid rgba(255,59,48,.12);cursor:pointer" onclick="openCrewDelete()">';
+    html+='<div style="font-size:14px;font-weight:800;color:#FF3B30">Crew auflösen</div>';
+    html+='<div style="font-size:11px;color:var(--t3);margin-top:2px">'+(crewSize<=2?'Kann sofort aufgelöst werden (≤2 Mitglieder)':'Benötigt 3 Abstimmungen von Crew-Mitgliedern')+'</div>';
+    html+='</div></div>';
+  }
 
   html+='<div style="height:40px"></div>';
   document.getElementById('crewProfileContent').innerHTML=html;
@@ -3824,18 +3916,28 @@ window.updateMalleStat=function(key,val){
 };
 
 // ============================================
-// CREW BOARD — Discover other crews
+// CREW BOARD — Real crews from localStorage
 // ============================================
-var SAMPLE_CREWS=[
-  {id:'c1',name:'Die Bierkönige',motto:'Jeden Tag ein neuer Rekord',icon:'👑',visibility:'public',members:6,aura:2450,hometown:'Düsseldorf',malle_visits:5,vibe:'party'},
-  {id:'c2',name:'Schinkenstraße Gang',motto:'Von der Straße auf die Insel',icon:'🍖',visibility:'public',members:8,aura:3100,hometown:'Berlin',malle_visits:3,vibe:'party'},
-  {id:'c3',name:'Sunset Chasers',motto:'Für die goldene Stunde',icon:'🌅',visibility:'public',members:4,aura:890,hometown:'Hamburg',malle_visits:2,vibe:'chill'},
-  {id:'c4',name:'Mega Crew',motto:'Megapark ist unser Zuhause',icon:'🎉',visibility:'public',members:7,aura:4200,hometown:'München',malle_visits:8,vibe:'party'},
-  {id:'c5',name:'Beach Boys',motto:'Strand, Sonne, Sangria',icon:'🏖️',visibility:'public',members:5,aura:1560,hometown:'Köln',malle_visits:4,vibe:'chill'},
-  {id:'c6',name:'Private Legends',motto:'Was auf Malle passiert...',icon:'🔒',visibility:'private',members:4,aura:0,hometown:'???',malle_visits:0,vibe:'party'},
-  {id:'c7',name:'Ballermann Brüder',motto:'Bruderschaft seit 2019',icon:'🍺',visibility:'public',members:6,aura:2890,hometown:'Frankfurt',malle_visits:6,vibe:'party'},
-  {id:'c8',name:'Palma Vibes',motto:'Die Altstadt gehört uns',icon:'🌴',visibility:'public',members:3,aura:670,hometown:'Stuttgart',malle_visits:1,vibe:'chill'}
-];
+function getAllCrews(){return JSON.parse(localStorage.getItem('crew_board_list')||'[]')}
+function saveAllCrews(list){localStorage.setItem('crew_board_list',JSON.stringify(list))}
+
+function registerMyCrew(){
+  var s=getCrewSettings();
+  if(!s.id){s.id='crew_'+ME.user_id+'_'+Date.now();saveCrewSettings(s)}
+  var list=getAllCrews();
+  var idx=list.findIndex(function(c){return c.id===s.id});
+  var crewSize=(_crewProfiles&&_crewProfiles.length||0)+1;
+  var totalAura=parseInt(localStorage.getItem('crew_user_points')||'0');
+  if(_crewProfiles)_crewProfiles.forEach(function(p){totalAura+=(p.points||0)});
+  var entry={
+    id:s.id,owner:ME.user_id,name:s.name,motto:s.motto,bio:s.bio||'',icon:s.icon,
+    photo_url:s.photo_url||'',visibility:s.visibility,members:crewSize,
+    aura:totalAura,hometown:s.hometown||'',malle_visits:s.malle_visits||1,
+    founded:s.founded||new Date().toISOString().split('T')[0]
+  };
+  if(idx>=0)list[idx]=entry;else list.push(entry);
+  saveAllCrews(list);
+}
 
 var _cbFilter='all';
 var _crewOfTheDay=null;
@@ -3844,26 +3946,24 @@ function pickCrewOfTheDay(){
   var today=new Date().toISOString().split('T')[0];
   var stored=JSON.parse(localStorage.getItem('crew_of_the_day')||'null');
   if(stored&&stored.date===today){_crewOfTheDay=stored;return}
-  // Pick random public crew
-  var pub=SAMPLE_CREWS.filter(function(c){return c.visibility==='public'});
-  var pick=pub[Math.floor(Math.random()*pub.length)];
-  _crewOfTheDay={date:today,crew:pick,votes:Math.floor(Math.random()*50)+10};
+  var list=getAllCrews().filter(function(c){return c.visibility==='public'});
+  if(list.length===0){_crewOfTheDay=null;return}
+  var pick=list[Math.floor(Math.random()*list.length)];
+  _crewOfTheDay={date:today,crew:pick,votes:0};
   localStorage.setItem('crew_of_the_day',JSON.stringify(_crewOfTheDay));
 }
 
 window.openCrewBoard=function(){
   var ov=document.getElementById('crewBoardOv');if(!ov)return;
+  registerMyCrew(); // sync own crew to board
   pickCrewOfTheDay();
-
-  // Filters
   var filterEl=document.getElementById('cbFilters');
   if(filterEl){
-    var filters=[{id:'all',label:'Alle'},{id:'party',label:'🎉 Party'},{id:'chill',label:'🏖️ Chill'},{id:'top',label:'🏆 Top Crews'}];
+    var filters=[{id:'all',label:'Alle'},{id:'top',label:'🏆 Top Crews'},{id:'new',label:'🆕 Neueste'}];
     filterEl.innerHTML=filters.map(function(f){
       return '<div class="cb-filter'+(_cbFilter===f.id?' sel':'')+'" onclick="filterCrewBoard(\''+f.id+'\')">'+f.label+'</div>';
     }).join('');
   }
-
   renderCrewBoard();
   ov.classList.add('show');
 };
@@ -3880,6 +3980,7 @@ window.filterCrewBoard=function(f){
 function renderCrewBoard(){
   var el=document.getElementById('crewBoardContent');if(!el)return;
   var html='';
+  var crews=getAllCrews();
 
   // Crew of the Day
   if(_crewOfTheDay&&_crewOfTheDay.crew){
@@ -3888,56 +3989,72 @@ function renderCrewBoard(){
     html+='<div class="cb-cotd-label">🏆 Crew des Tages</div>';
     html+='<div class="cb-cotd-name">'+c.icon+' '+esc(c.name)+'</div>';
     html+='<div class="cb-cotd-motto">'+esc(c.motto)+'</div>';
-    html+='<div class="cb-cotd-votes">'+_crewOfTheDay.votes+' Votes heute · '+c.members+' Mitglieder · '+c.aura+' Aura</div>';
+    html+='<div class="cb-cotd-votes">'+_crewOfTheDay.votes+' Votes · '+c.members+' Mitglieder · '+c.aura+' Aura</div>';
     html+='</div>';
   }
 
-  // Active Battles
-  html+='<div style="padding:12px 16px 4px;font-size:13px;font-weight:800">⚔️ Aktive Crew-Battles</div>';
-  html+='<div class="cb-battle-card"><div class="cb-battle-vs">VS</div><div class="cb-battle-info">Die Bierkönige vs Mega Crew — Wer sammelt mehr Aura?</div><div class="cb-battle-status live">LIVE</div></div>';
-  html+='<div class="cb-battle-card"><div class="cb-battle-vs">VS</div><div class="cb-battle-info">Beach Boys vs Sunset Chasers — Strand-Challenge</div><div class="cb-battle-status upcoming">BALD</div></div>';
+  // Create crew CTA
+  html+='<div style="padding:12px 16px"><div class="cb-cc-btn primary" onclick="openCrewCreate()" style="width:100%;padding:14px;font-size:14px;text-align:center">🏴‍☠️ Neue Crew gründen</div></div>';
 
-  // Crew List
-  html+='<div style="padding:12px 16px 4px;font-size:13px;font-weight:800">🌍 Crews entdecken</div>';
-  var crews=SAMPLE_CREWS.slice();
-  if(_cbFilter==='party')crews=crews.filter(function(c){return c.vibe==='party'});
-  else if(_cbFilter==='chill')crews=crews.filter(function(c){return c.vibe==='chill'});
-  else if(_cbFilter==='top')crews.sort(function(a,b){return b.aura-a.aura});
+  // Filter + sort
+  if(_cbFilter==='top')crews.sort(function(a,b){return b.aura-a.aura});
+  else if(_cbFilter==='new')crews.sort(function(a,b){return(b.founded||'').localeCompare(a.founded||'')});
 
-  html+='<div class="cb-crews">';
-  crews.forEach(function(c){
-    var isPrivate=c.visibility==='private';
-    html+='<div class="cb-crew-card">';
-    html+='<div class="cb-cc-header">';
-    html+='<div class="cb-cc-ava">'+c.icon+'</div>';
-    html+='<div class="cb-cc-info"><div class="cb-cc-name">'+esc(c.name)+'</div><div class="cb-cc-motto">'+esc(isPrivate?'Private Crew':c.motto)+'</div></div>';
-    html+='<div class="cb-cc-vis" style="'+(isPrivate?'background:rgba(255,59,48,.12);color:#FF3B30;border:1px solid rgba(255,59,48,.2)':'background:rgba(52,199,89,.12);color:var(--green);border:1px solid rgba(52,199,89,.2)')+'">'+(isPrivate?'🔒':'🌍')+'</div>';
+  // Only show public crews (or own crew)
+  var visible=crews.filter(function(c){return c.visibility==='public'||c.owner===ME.user_id});
+
+  if(visible.length===0){
+    html+='<div class="cb-empty"><div class="cb-empty-icon">🌍</div>';
+    html+='<div class="cb-empty-title">Noch keine Crews</div>';
+    html+='<div class="cb-empty-desc">Sei der Erste! Gründe eine Crew und lade deine Leute ein.</div>';
     html+='</div>';
-    if(!isPrivate){
-      html+='<div class="cb-cc-stats">';
-      html+='<div class="cb-cc-stat"><strong>'+c.members+'</strong> Mitglieder</div>';
-      html+='<div class="cb-cc-stat"><strong>'+c.aura+'</strong> Aura</div>';
-      html+='<div class="cb-cc-stat">'+esc(c.hometown)+'</div>';
-      html+='<div class="cb-cc-stat">'+c.malle_visits+'x Malle</div>';
+  }else{
+    html+='<div style="padding:12px 16px 4px;font-size:13px;font-weight:800">🌍 '+visible.length+' Crew'+(visible.length!==1?'s':'')+' auf dem Board</div>';
+    html+='<div class="cb-crews">';
+    visible.forEach(function(c){
+      var isPrivate=c.visibility==='private';
+      var isMine=c.owner===ME.user_id;
+      html+='<div class="cb-crew-card"'+(isMine?' style="border-color:rgba(255,109,46,.2)"':'')+'>';
+      html+='<div class="cb-cc-header">';
+      if(c.photo_url){
+        html+='<div class="cb-cc-ava" style="overflow:hidden;border:none"><img src="'+c.photo_url+'" style="width:100%;height:100%;object-fit:cover;border-radius:16px"></div>';
+      }else{
+        html+='<div class="cb-cc-ava">'+c.icon+'</div>';
+      }
+      html+='<div class="cb-cc-info"><div class="cb-cc-name">'+esc(c.name)+(isMine?' <span style="font-size:10px;color:var(--o)">(Deine)</span>':'')+'</div>';
+      html+='<div class="cb-cc-motto">'+esc(isPrivate&&!isMine?'Private Crew':(c.bio||c.motto))+'</div></div>';
+      html+='<div class="cb-cc-vis" style="'+(isPrivate?'background:rgba(255,59,48,.12);color:#FF3B30;border:1px solid rgba(255,59,48,.2)':'background:rgba(52,199,89,.12);color:var(--green);border:1px solid rgba(52,199,89,.2)')+'">'+(isPrivate?'🔒':'🌍')+'</div>';
       html+='</div>';
-    }
-    html+='<div class="cb-cc-actions">';
-    html+='<div class="cb-cc-btn primary" onclick="requestCrewConnect(\''+c.id+'\',\''+esc(c.name)+'\')">🤝 Connecten</div>';
-    if(!isPrivate)html+='<div class="cb-cc-btn secondary" onclick="challengeCrew(\''+c.id+'\',\''+esc(c.name)+'\')">⚔️ Battle</div>';
+      if(!isPrivate||isMine){
+        html+='<div class="cb-cc-stats">';
+        html+='<div class="cb-cc-stat"><strong>'+c.members+'</strong> Mitglieder</div>';
+        html+='<div class="cb-cc-stat"><strong>'+c.aura+'</strong> Aura</div>';
+        if(c.hometown)html+='<div class="cb-cc-stat">📍 '+esc(c.hometown)+'</div>';
+        html+='<div class="cb-cc-stat">'+c.malle_visits+'x Malle</div>';
+        html+='</div>';
+      }
+      if(!isMine){
+        html+='<div class="cb-cc-actions">';
+        html+='<div class="cb-cc-btn primary" onclick="requestCrewConnect(\''+c.id+'\',\''+esc(c.name)+'\')">🤝 Connecten</div>';
+        if(!isPrivate)html+='<div class="cb-cc-btn secondary" onclick="challengeCrew(\''+c.id+'\',\''+esc(c.name)+'\')">⚔️ Battle</div>';
+        html+='</div>';
+      }
+      html+='</div>';
+    });
     html+='</div>';
-    html+='</div>';
-  });
-  html+='</div>';
 
-  // Vote for Crew des Tages
-  html+='<div style="padding:16px;text-align:center">';
-  html+='<div style="font-size:13px;font-weight:800;margin-bottom:8px">🗳️ Vote für Crew des Tages</div>';
-  html+='<div style="font-size:11px;color:var(--t3);margin-bottom:12px">Stimme täglich für deine Lieblings-Crew ab!</div>';
-  html+='<div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center">';
-  SAMPLE_CREWS.filter(function(c){return c.visibility==='public'}).forEach(function(c){
-    html+='<div style="padding:8px 14px;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);font-size:12px;font-weight:700;cursor:pointer" onclick="voteCotd(\''+c.id+'\',\''+esc(c.name)+'\')">'+c.icon+' '+esc(c.name)+'</div>';
-  });
-  html+='</div></div>';
+    // Vote CotD
+    var pubCrews=crews.filter(function(c){return c.visibility==='public'});
+    if(pubCrews.length>1){
+      html+='<div style="padding:16px;text-align:center">';
+      html+='<div style="font-size:13px;font-weight:800;margin-bottom:8px">🗳️ Vote für Crew des Tages</div>';
+      html+='<div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center">';
+      pubCrews.forEach(function(c){
+        html+='<div style="padding:8px 14px;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);font-size:12px;font-weight:700;cursor:pointer" onclick="voteCotd(\''+c.id+'\',\''+esc(c.name)+'\')">'+c.icon+' '+esc(c.name)+'</div>';
+      });
+      html+='</div></div>';
+    }
+  }
 
   html+='<div style="height:40px"></div>';
   el.innerHTML=html;
@@ -3959,9 +4076,170 @@ window.voteCotd=function(crewId,name){
   if(localStorage.getItem(voteKey)){toast('Du hast heute schon gevotet!');return}
   localStorage.setItem(voteKey,crewId);
   if(_crewOfTheDay)_crewOfTheDay.votes++;
+  localStorage.setItem('crew_of_the_day',JSON.stringify(_crewOfTheDay));
   toast('Vote für '+name+'! 🏆');
   if(navigator.vibrate)navigator.vibrate(15);
   renderCrewBoard();
+};
+
+// ============================================
+// CREW CREATE — Fresh crew from scratch
+// ============================================
+var _ccSelectedIcon='🏴‍☠️';
+var _ccPhotoData='';
+
+window.openCrewCreate=function(){
+  var ov=document.getElementById('crewCreateOv');if(!ov)return;
+  _ccSelectedIcon='🏴‍☠️';_ccPhotoData='';
+  // Reset form
+  var nameEl=document.getElementById('ccName');if(nameEl)nameEl.value='';
+  var bioEl=document.getElementById('ccBio');if(bioEl)bioEl.value='';
+  var mottoEl=document.getElementById('ccMotto');if(mottoEl)mottoEl.value='';
+  var htEl=document.getElementById('ccHometown');if(htEl)htEl.value='';
+  var visEl=document.getElementById('ccVisibility');if(visEl)visEl.value='public';
+  var photoEl=document.getElementById('ccPhotoPick');
+  if(photoEl)photoEl.innerHTML='📷<input type="file" id="ccPhotoFile" accept="image/*" style="display:none" onchange="previewCrewPhoto(this)">';
+  // Icon grid
+  var iconGrid=document.getElementById('ccIconGrid');
+  if(iconGrid){
+    iconGrid.innerHTML=CREW_ICONS.map(function(ic){
+      return '<div class="cc-icon-opt'+(ic===_ccSelectedIcon?' sel':'')+'" onclick="selectCrewIcon(this,\''+ic+'\')">'+ic+'</div>';
+    }).join('');
+  }
+  ov.classList.add('show');
+};
+
+window.closeCrewCreate=function(){document.getElementById('crewCreateOv').classList.remove('show')};
+
+window.selectCrewIcon=function(el,icon){
+  _ccSelectedIcon=icon;
+  document.querySelectorAll('.cc-icon-opt').forEach(function(e){e.classList.remove('sel')});
+  el.classList.add('sel');
+};
+
+window.previewCrewPhoto=function(input){
+  if(!input.files||!input.files[0])return;
+  var reader=new FileReader();
+  reader.onload=function(e){
+    _ccPhotoData=e.target.result;
+    var pick=document.getElementById('ccPhotoPick');
+    if(pick)pick.innerHTML='<img src="'+_ccPhotoData+'"><div class="cc-photo-edit">📷 Ändern</div><input type="file" id="ccPhotoFile" accept="image/*" style="display:none" onchange="previewCrewPhoto(this)">';
+  };
+  reader.readAsDataURL(input.files[0]);
+};
+
+window.submitCrewCreate=function(){
+  var name=(document.getElementById('ccName').value||'').trim();
+  if(!name){toast('Gib deiner Crew einen Namen!');return}
+  if(name.length<2){toast('Mindestens 2 Zeichen!');return}
+  var bio=(document.getElementById('ccBio').value||'').trim();
+  var motto=(document.getElementById('ccMotto').value||'').trim()||'Auf nach Malle!';
+  var hometown=(document.getElementById('ccHometown').value||'').trim();
+  var visibility=document.getElementById('ccVisibility').value||'public';
+
+  var s={
+    id:'crew_'+ME.user_id+'_'+Date.now(),
+    name:name,bio:bio,motto:motto,icon:_ccSelectedIcon,
+    photo_url:_ccPhotoData,visibility:visibility,
+    leader:ME.user_id,malle_visits:1,founded:new Date().toISOString().split('T')[0],
+    hometown:hometown
+  };
+  saveCrewSettings(s);
+  registerMyCrew();
+  updateCrewIdentityCard();
+  closeCrewCreate();
+  toast('Crew „'+name+'" gegründet! 🏴‍☠️');
+  if(navigator.vibrate)navigator.vibrate([10,80,10,80,10]);
+  renderCrewBoard();
+};
+
+// Change crew photo from profile
+window.changeCrewPhoto=function(){
+  var input=document.createElement('input');
+  input.type='file';input.accept='image/*';
+  input.onchange=function(){
+    if(!input.files||!input.files[0])return;
+    var reader=new FileReader();
+    reader.onload=function(e){
+      var s=getCrewSettings();
+      s.photo_url=e.target.result;
+      saveCrewSettings(s);
+      registerMyCrew();
+      toast('Crew-Foto aktualisiert! 📷');
+      openMyCrewProfile(); // refresh
+    };
+    reader.readAsDataURL(input.files[0]);
+  };
+  input.click();
+};
+
+// ============================================
+// CREW DELETE — Admin only, voting required
+// ============================================
+window.openCrewDelete=function(){
+  var ov=document.getElementById('crewDeleteOv');if(!ov)return;
+  var crewSize=(_crewProfiles&&_crewProfiles.length||0)+1;
+  var deleteVotes=JSON.parse(localStorage.getItem('crew_delete_votes')||'[]');
+  var needed=crewSize<=2?1:3;
+  var descEl=document.getElementById('cdDesc');
+  var countEl=document.getElementById('cdVoteCount');
+  var btnEl=document.getElementById('cdDeleteBtn');
+  if(descEl){
+    if(crewSize<=2){
+      descEl.textContent='Bei ≤2 Mitgliedern kann der Admin die Crew sofort auflösen. Alle Daten gehen verloren.';
+    }else{
+      descEl.textContent='Mindestens 3 Crew-Mitglieder müssen für die Auflösung stimmen. Erst dann kann der Admin die Crew löschen.';
+    }
+  }
+  if(countEl)countEl.textContent=deleteVotes.length+'/'+needed;
+  if(btnEl){
+    var alreadyVoted=deleteVotes.indexOf(ME.user_id)!==-1;
+    if(deleteVotes.length>=needed){
+      btnEl.textContent='Endgültig löschen';
+      btnEl.className='cd-btn delete';
+    }else if(alreadyVoted){
+      btnEl.textContent='Bereits abgestimmt';
+      btnEl.className='cd-btn cancel';
+      btnEl.style.pointerEvents='none';
+    }else{
+      btnEl.textContent='Für Auflösung stimmen';
+      btnEl.className='cd-btn delete';
+      btnEl.style.pointerEvents='';
+    }
+  }
+  ov.classList.add('show');
+};
+
+window.closeCrewDelete=function(){document.getElementById('crewDeleteOv').classList.remove('show')};
+
+window.confirmDeleteCrew=function(){
+  var crewSize=(_crewProfiles&&_crewProfiles.length||0)+1;
+  var deleteVotes=JSON.parse(localStorage.getItem('crew_delete_votes')||'[]');
+  var needed=crewSize<=2?1:3;
+
+  if(deleteVotes.length>=needed){
+    // Actually delete
+    var s=getCrewSettings();
+    var list=getAllCrews().filter(function(c){return c.id!==s.id});
+    saveAllCrews(list);
+    localStorage.removeItem('crew_settings');
+    localStorage.removeItem('crew_delete_votes');
+    closeCrewDelete();
+    closeCrewProfile();
+    updateCrewIdentityCard();
+    toast('Crew wurde aufgelöst. 💨');
+    if(navigator.vibrate)navigator.vibrate([100,50,100]);
+    return;
+  }
+
+  // Cast vote
+  if(deleteVotes.indexOf(ME.user_id)===-1){
+    deleteVotes.push(ME.user_id);
+    localStorage.setItem('crew_delete_votes',JSON.stringify(deleteVotes));
+    toast('Stimme registriert ('+deleteVotes.length+'/'+needed+')');
+    if(navigator.vibrate)navigator.vibrate(15);
+  }
+  openCrewDelete(); // refresh
 };
 
 // ============================================
