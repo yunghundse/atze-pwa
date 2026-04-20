@@ -407,8 +407,9 @@ nav button.active::before{opacity:1}
 .crew-hub-footer .cb-cc-btn{flex:1;padding:14px;font-size:13px;min-height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;gap:6px}
 .crew-hub-limit{font-size:11px;color:var(--t3);text-align:center;margin-top:10px;letter-spacing:.1px}
 
-/* v81/v82: Crew Detail Header — hoch oben, sicher ÜBER der Karte */
-.crew-detail-hdr{position:absolute;top:calc(env(safe-area-inset-top,0) + 58px);left:12px;right:12px;z-index:1200;display:flex;align-items:center;gap:8px;padding:8px 10px 8px 8px;border-radius:16px;background:linear-gradient(160deg,rgba(20,16,24,.9),rgba(14,10,18,.76));border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(26px) saturate(1.3);-webkit-backdrop-filter:blur(26px) saturate(1.3);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 12px 28px -10px rgba(0,0,0,.75);animation:ctxFadeIn .5s var(--spring,ease) both;pointer-events:auto}
+/* v83: Crew Detail Header — außerhalb vom Screen, als Geschwister des Main (wie .app-header), sitzt ÜBER der Karte und scrollt nicht mit */
+.crew-detail-hdr{display:none;position:absolute;top:calc(env(safe-area-inset-top,0) + 58px);left:12px;right:12px;z-index:200;align-items:center;gap:8px;padding:8px 10px 8px 8px;border-radius:16px;background:linear-gradient(160deg,rgba(20,16,24,.92),rgba(14,10,18,.8));border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(26px) saturate(1.3);-webkit-backdrop-filter:blur(26px) saturate(1.3);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 14px 32px -12px rgba(0,0,0,.85);animation:ctxFadeIn .4s var(--spring,ease) both;pointer-events:auto}
+.crew-detail-hdr.show{display:flex}
 .crew-detail-hdr button{pointer-events:auto;position:relative;z-index:2}
 .crew-detail-hdr *{pointer-events:auto}
 .cdh-back{width:36px;height:36px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.09);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--t,#fff);flex-shrink:0;transition:background .2s,transform .15s}
@@ -426,8 +427,8 @@ nav button.active::before{opacity:1}
   .cdh-ava{width:28px;height:28px;font-size:14px}
   .cdh-name{font-size:13px}
 }
-/* v82: Detail-Header sitzt hoch oben, Karte rutscht genug runter damit NICHTS überlappt */
-#crewsub-active .crew-map-full{margin-top:calc(env(safe-area-inset-top,0) + 128px);position:relative;z-index:1}
+/* v83: Detail-Header ist jetzt außerhalb vom Screen, Karte braucht nur Platz für app-header + Detail-Header */
+#crewsub-active .crew-map-full{margin-top:calc(env(safe-area-inset-top,0) + 118px);position:relative;z-index:1}
 /* v82: Leaflet-Container muss unter dem Detail-Header bleiben */
 #crewsub-active .crew-map-full .leaflet-container{z-index:1}
 /* On active sub the ctx-switcher is below the detail-hdr, not at top */
@@ -3930,6 +3931,20 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
       <button class="hdr-btn" onclick="openNoti()" aria-label="Benachrichtigungen"><svg class="icn" style="width:17px;height:17px" viewBox="0 0 24 24"><use href="#i-bell"/></svg><span class="notif-dot"></span></button>
     </div>
   </div>
+  <!-- v83: CREW DETAIL HEADER — außerhalb vom Screen, sitzt ÜBER der Karte und scrollt NICHT mit -->
+  <div class="crew-detail-hdr" id="crewDetailHdr">
+    <button class="cdh-back" onclick="crewGo('hub')" aria-label="Zurück zur Übersicht">
+      <svg viewBox="0 0 24 24"><use href="#i-arrow-left"/></svg>
+    </button>
+    <div class="cdh-ttl">
+      <div class="cdh-ava" id="cdhAva">🏴‍☠️</div>
+      <div class="cdh-txt">
+        <div class="cdh-name" id="cdhName">Deine Crew</div>
+        <div class="cdh-motto" id="cdhMotto">—</div>
+      </div>
+    </div>
+    <button class="cdh-switch" onclick="crewGo('hub')" aria-label="Crew wechseln" title="Andere Crew wählen">Wechseln</button>
+  </div>
   <main>
     <div class="scr active" id="screen-radar">
       <div class="map-full"><div id="radarMap"></div><div class="map-fade"></div></div>
@@ -4051,20 +4066,7 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
       <!-- v81: CREW DETAIL — Aktive Crew -->
       <!-- ═══════════════════════════════════════ -->
       <div class="crew-sub" id="crewsub-active">
-      <!-- Detail Header: Back + Crew Name + Switch -->
-      <div class="crew-detail-hdr" id="crewDetailHdr">
-        <button class="cdh-back" onclick="crewGo('hub')" aria-label="Zurück zur Übersicht">
-          <svg viewBox="0 0 24 24"><use href="#i-arrow-left"/></svg>
-        </button>
-        <div class="cdh-ttl">
-          <div class="cdh-ava" id="cdhAva">🏴‍☠️</div>
-          <div class="cdh-txt">
-            <div class="cdh-name" id="cdhName">Deine Crew</div>
-            <div class="cdh-motto" id="cdhMotto">—</div>
-          </div>
-        </div>
-        <button class="cdh-switch" onclick="crewGo('hub')" aria-label="Crew wechseln" title="Andere Crew wählen">Wechseln</button>
-      </div>
+      <!-- v83: Detail Header wurde nach #app/Geschwister-Ebene verschoben (siehe direkt unter .app-header). Sitzt jetzt ÜBER der Karte und scrollt nicht mit. -->
       <!-- v78: CONTEXT MODE SWITCHER auch auf Crew-Screen (oben über der Karte) -->
       <div class="ctx-switcher" id="ctxSwitcherCrew" role="tablist" aria-label="Modus wechseln">
         <button class="ctx-chip" data-ctx="urlaub" onclick="setContextMode('urlaub')" role="tab">
@@ -4609,7 +4611,7 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 82;
+  var APP_VERSION = 83;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     // Force-clear old non-UUID crew IDs
@@ -4737,7 +4739,7 @@ async function logPrivacyConsent(mode, previousMode, state){
       deals_consent: !!(state.consent && state.consent.deals_consent),
       consent_version: 1,
       user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-      app_version: 82,
+      app_version: 83,
       // v73: tag source so we can see who was newly prompted vs. picked from settings
       source: (!previousMode && ME && ME.created_at && (Date.now()-new Date(ME.created_at).getTime())>3600000) ? 'existing_user_v72_prompt' : (!previousMode ? 'first_run' : 'settings_change')
     };
@@ -4785,7 +4787,7 @@ function clearPrivacyData(){
         deals_consent: false,
         consent_version: 1,
         user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-        app_version: 82,
+        app_version: 83,
         source: 'user_reset'
       };
       sb.from('privacy_consent_log').insert(clearRow).then(function(r){ if(r&&r.error) console.warn('[PM] clear log err', r.error.message); });
@@ -10475,6 +10477,11 @@ window.go=function(n,b){
   try{ if(navigator.vibrate) navigator.vibrate(10); }catch(e){}
   var target=document.getElementById('screen-'+n);
   if(!target) return;
+  // v83: Detail-Header nur auf Crew-Screen sichtbar — beim Wechsel IMMER ausblenden
+  try{
+    var _cdh = document.getElementById('crewDetailHdr');
+    if(_cdh && n !== 'crew') _cdh.classList.remove('show');
+  }catch(e){}
   document.querySelectorAll('.scr').forEach(function(s){s.classList.remove('active')});
   target.classList.add('active');
   document.querySelectorAll('#navBar button').forEach(function(x){x.classList.remove('active')});
@@ -11093,6 +11100,11 @@ window.crewGo = function(section){
     if(el) el.classList.toggle('active', s === section);
   });
   try{ var scr = document.getElementById('screen-crew'); if(scr) scr.scrollTop = 0; }catch(e){}
+  // v83: Detail-Header ist jetzt außerhalb vom Screen — toggeln per .show Class
+  try{
+    var hdr = document.getElementById('crewDetailHdr');
+    if(hdr) hdr.classList.toggle('show', section === 'active');
+  }catch(e){}
   if(section === 'hub'){
     try{ if(typeof buildCrewHubCards==='function') buildCrewHubCards(); }catch(e){ console.warn('[CREW-HUB] build err',e); }
   }
