@@ -407,8 +407,8 @@ nav button.active::before{opacity:1}
 .crew-hub-footer .cb-cc-btn{flex:1;padding:14px;font-size:13px;min-height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;gap:6px}
 .crew-hub-limit{font-size:11px;color:var(--t3);text-align:center;margin-top:10px;letter-spacing:.1px}
 
-/* v88: Crew-Bar — zwei getrennte Buttons nebeneinander zwischen Header und Karte */
-.crew-bar{
+/* v89: Crew-Top-Bar — nutzt die gleiche cb-crew-card wie im Schnellzugriff (PROVEN working), nur oben platziert mit Back-Button */
+.crew-top-bar{
   display:none;
   position:absolute;
   top:calc(env(safe-area-inset-top,0) + 64px);
@@ -419,71 +419,45 @@ nav button.active::before{opacity:1}
   gap:8px;
   pointer-events:auto;
 }
-.crew-bar.show{display:flex;animation:cbarFade .4s var(--spring,ease) both}
+.crew-top-bar.show{display:flex;animation:cbarFade .4s var(--spring,ease) both}
 @keyframes cbarFade{0%{opacity:0;transform:translateY(-6px)}100%{opacity:1;transform:translateY(0)}}
-/* Linker Back-Button — eigener Glass-Kreis */
-.crewbar-back{
-  width:48px;height:48px;flex-shrink:0;
-  border-radius:16px;
-  background:linear-gradient(135deg,rgba(22,18,26,.92),rgba(14,10,18,.78));
-  border:1px solid rgba(255,109,46,.35);
-  backdrop-filter:blur(24px) saturate(200%);
-  -webkit-backdrop-filter:blur(24px) saturate(200%);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 6px 18px rgba(0,0,0,.4);
+/* Back-Button links im hdr-btn-Stil, 48x48, zuverlässig klickbar */
+.crew-top-back{
+  width:56px;height:56px;flex-shrink:0;
+  border-radius:18px;
+  background:linear-gradient(135deg,rgba(22,22,24,.78),rgba(28,28,32,.56));
+  backdrop-filter:blur(50px) saturate(180%);
+  -webkit-backdrop-filter:blur(50px) saturate(180%);
+  border:1px solid rgba(255,255,255,.1);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 6px 18px rgba(0,0,0,.35);
   display:flex;align-items:center;justify-content:center;
   cursor:pointer;color:#FFB493;
   font-family:inherit;padding:0;
   transition:transform .15s var(--spring,ease),background .2s,border-color .2s;
 }
-.crewbar-back:hover{background:linear-gradient(135deg,rgba(30,24,34,.95),rgba(18,14,22,.84));border-color:rgba(255,109,46,.55)}
-.crewbar-back:active{transform:scale(.92)}
-.crewbar-back svg{width:18px;height:18px;display:block}
-/* Rechte Crew-Zentrale-Card — Hauptzone, öffnet openMyCrewProfile() */
-.crewbar-card{
+.crew-top-back:hover{background:linear-gradient(135deg,rgba(255,109,46,.16),rgba(254,60,114,.06));border-color:rgba(255,109,46,.4)}
+.crew-top-back:active{transform:scale(.92)}
+.crew-top-back svg{width:20px;height:20px;display:block}
+/* Crew-Card: übernimmt das proven cb-crew-card Design, nur flex-anpasst für die Bar */
+.crew-top-card{
   flex:1;min-width:0;
-  display:flex;align-items:center;gap:10px;
-  padding:7px 14px 7px 7px;
-  border-radius:16px;
-  background:linear-gradient(135deg,rgba(255,109,46,.18) 0%,rgba(254,60,114,.08) 100%);
-  border:1px solid rgba(255,109,46,.32);
-  backdrop-filter:blur(24px) saturate(200%);
-  -webkit-backdrop-filter:blur(24px) saturate(200%);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 6px 18px rgba(0,0,0,.38),0 4px 14px rgba(255,109,46,.22);
-  cursor:pointer;
-  min-height:48px;
-  transition:transform .15s var(--spring,ease),background .2s,box-shadow .2s;
-  user-select:none;-webkit-user-select:none;
-  -webkit-tap-highlight-color:transparent;
+  margin-bottom:0 !important;
+  padding:11px 14px !important;
+  display:flex;
+  align-items:center;
 }
-.crewbar-card:hover{background:linear-gradient(135deg,rgba(255,109,46,.26) 0%,rgba(254,60,114,.14) 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 8px 22px rgba(0,0,0,.45),0 6px 18px rgba(255,109,46,.32)}
-.crewbar-card:active{transform:scale(.98)}
-.crewbar-ava{
-  width:34px;height:34px;border-radius:11px;
-  background:linear-gradient(135deg,var(--o,#FF6D2E),#FF6B6B);
-  display:flex;align-items:center;justify-content:center;
-  font-size:17px;flex-shrink:0;
-  border:1.5px solid rgba(255,255,255,.2);
-  box-shadow:0 2px 8px rgba(255,109,46,.38);
-  pointer-events:none;
-}
-.crewbar-info{
-  flex:1;min-width:0;
-  display:flex;flex-direction:column;
-  gap:2px;line-height:1.15;
-  pointer-events:none;
-}
-.crewbar-name{font-size:13.5px;font-weight:900;letter-spacing:-.2px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.crewbar-motto{font-size:10.5px;font-weight:700;color:#FFB493;letter-spacing:.15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.95}
+.crew-top-card .cb-cc-header{margin:0 !important;width:100%}
+.crew-top-card .cb-cc-ava{width:34px;height:34px;font-size:17px;border-radius:11px}
+.crew-top-card .cb-cc-name{font-size:14px}
+.crew-top-card .cb-cc-motto{font-size:11px;color:#FFB493;margin-top:2px}
 @media (max-width:390px){
-  .crew-bar{left:12px;right:12px;gap:7px}
-  .crewbar-back{width:46px;height:46px;border-radius:14px}
-  .crewbar-card{padding:6px 12px 6px 6px;min-height:46px;border-radius:14px}
-  .crewbar-ava{width:32px;height:32px;font-size:16px;border-radius:10px}
-  .crewbar-name{font-size:13px}
-  .crewbar-motto{font-size:10px}
+  .crew-top-bar{left:12px;right:12px;gap:7px}
+  .crew-top-back{width:52px;height:52px;border-radius:16px}
+  .crew-top-card{padding:9px 12px !important}
+  .crew-top-card .cb-cc-ava{width:32px;height:32px;font-size:16px;border-radius:10px}
 }
-/* v88: Karte braucht Platz für App-Header (~58px) + Bar (~56px) */
-#crewsub-active .crew-map-full{margin-top:calc(env(safe-area-inset-top,0) + 122px);position:relative;z-index:1}
+/* v89: Karte braucht Platz für App-Header (~58px) + Top-Bar (~64px) */
+#crewsub-active .crew-map-full{margin-top:calc(env(safe-area-inset-top,0) + 130px);position:relative;z-index:1}
 #crewsub-active .crew-map-full .leaflet-container{z-index:1}
 #crewsub-active .ctx-switcher{display:none}
 
@@ -3984,16 +3958,18 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
       <button class="hdr-btn" onclick="openNoti()" aria-label="Benachrichtigungen"><svg class="icn" style="width:17px;height:17px" viewBox="0 0 24 24"><use href="#i-bell"/></svg><span class="notif-dot"></span></button>
     </div>
   </div>
-  <!-- v88: Crew-Bar — Back-Button + Crew-Zentrale-Card (direkt aus der unteren Section hoch gezogen) -->
-  <div class="crew-bar" id="crewIdPill">
-    <button type="button" class="crewbar-back" onclick="crewGo('hub')" aria-label="Zurück zur Crew-Übersicht" title="Zurück zur Crew-Übersicht">
+  <!-- v89: Crew-Top-Bar — EXAKT die gleiche Card wie im Schnellzugriff (cb-crew-card), nur oben platziert -->
+  <div class="crew-top-bar" id="crewIdPill">
+    <button type="button" class="crew-top-back" onclick="crewGo('hub')" aria-label="Zurück zur Crew-Übersicht" title="Zurück zur Crew-Übersicht">
       <svg viewBox="0 0 24 24"><use href="#i-arrow-left"/></svg>
     </button>
-    <div class="crewbar-card" onclick="openMyCrewProfile()" role="button" tabindex="0" aria-label="Crew-Zentrale öffnen">
-      <div class="crewbar-ava" id="cdhAva">🏴‍☠️</div>
-      <div class="crewbar-info">
-        <div class="crewbar-name" id="cdhName">Deine Crew</div>
-        <div class="crewbar-motto" id="cdhMotto">Crew-Zentrale öffnen →</div>
+    <div class="cb-crew-card crew-top-card" onclick="openMyCrewProfile()">
+      <div class="cb-cc-header" style="margin:0">
+        <div class="cb-cc-ava" id="cdhAva">🏴‍☠️</div>
+        <div class="cb-cc-info">
+          <div class="cb-cc-name" id="cdhName">Deine Crew</div>
+          <div class="cb-cc-motto" id="cdhMotto">Crew-Zentrale öffnen →</div>
+        </div>
       </div>
     </div>
   </div>
@@ -4658,7 +4634,7 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 88;
+  var APP_VERSION = 89;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     // Force-clear old non-UUID crew IDs
@@ -4786,7 +4762,7 @@ async function logPrivacyConsent(mode, previousMode, state){
       deals_consent: !!(state.consent && state.consent.deals_consent),
       consent_version: 1,
       user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-      app_version: 88,
+      app_version: 89,
       // v73: tag source so we can see who was newly prompted vs. picked from settings
       source: (!previousMode && ME && ME.created_at && (Date.now()-new Date(ME.created_at).getTime())>3600000) ? 'existing_user_v72_prompt' : (!previousMode ? 'first_run' : 'settings_change')
     };
@@ -4834,7 +4810,7 @@ function clearPrivacyData(){
         deals_consent: false,
         consent_version: 1,
         user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-        app_version: 88,
+        app_version: 89,
         source: 'user_reset'
       };
       sb.from('privacy_consent_log').insert(clearRow).then(function(r){ if(r&&r.error) console.warn('[PM] clear log err', r.error.message); });
