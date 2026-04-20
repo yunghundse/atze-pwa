@@ -3420,13 +3420,24 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
     <div style="font-size:13px;color:var(--t3);margin-bottom:24px">Gib den 6-stelligen Einladungscode deiner Crew ein</div>
     <input type="text" id="joinCodeInput" maxlength="6" placeholder="CODE" style="width:200px;text-align:center;font-size:28px;font-weight:900;letter-spacing:8px;padding:16px;border-radius:16px;border:2px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:var(--t1);font-family:inherit;outline:none;text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
     <div style="margin-top:20px">
-      <button onclick="submitJoinByCode()" style="padding:14px 40px;border-radius:14px;border:none;background:var(--o);color:#fff;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit">Beitreten</button>
+      <button onclick="submitJoinByCode()" style="padding:14px 40px;border-radius:14px;border:none;background:var(--o);color:#fff;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit">Weiter</button>
     </div>
     <div style="margin-top:24px;padding:16px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06)">
       <div style="font-size:12px;font-weight:700;color:var(--t2);margin-bottom:4px">Oder Crew anfragen</div>
       <div style="font-size:11px;color:var(--t3)">Ohne Code? Finde Crews auf dem Board und sende eine Beitrittsanfrage.</div>
       <div class="cb-cc-btn secondary" onclick="closeJoinByCode();openCrewBoard()" style="margin-top:8px;padding:10px 16px;font-size:12px">🌍 Crew Board öffnen</div>
     </div>
+  </div>
+</div>
+
+<!-- v91: CREW PREVIEW — vor Join sieht man Name/Motto/Members/Punkte/QR -->
+<div class="crew-profile-ov" id="crewPreviewOv">
+  <button class="cp-back" onclick="closeCrewPreview()">←</button>
+  <div id="crewPreviewContent" style="padding:72px 0 120px"></div>
+  <!-- Sticky Action-Bar am unteren Rand -->
+  <div id="crewPreviewActions" style="position:fixed;left:0;right:0;bottom:0;max-width:430px;margin:0 auto;padding:14px 16px calc(14px + env(safe-area-inset-bottom,0));background:linear-gradient(to top,rgba(10,10,12,.98) 70%,rgba(10,10,12,0));backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);z-index:10;display:flex;gap:8px">
+    <button onclick="closeCrewPreview()" style="flex:1;padding:14px;border-radius:14px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.06);color:var(--t2);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;min-height:48px">Abbrechen</button>
+    <button id="crewPreviewJoinBtn" style="flex:2;padding:14px;border-radius:14px;border:none;background:var(--o);color:#fff;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;min-height:48px">🏴‍☠️ Beitreten</button>
   </div>
 </div>
 
@@ -4062,12 +4073,13 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
           <div id="crewHubEmpty" class="crew-hub-empty" style="display:none">
             <div class="crew-hub-empty-emoji">🏴‍☠️</div>
             <div class="crew-hub-empty-title">Noch keine Crew</div>
-            <div class="crew-hub-empty-sub">Gründe deine eigene Crew oder tritt mit einem Code bei.</div>
+            <div class="crew-hub-empty-sub">Gründe deine eigene Crew, tritt mit einem Code bei oder entdecke öffentliche Crews.</div>
           </div>
-          <!-- Footer CTAs -->
+          <!-- v91: Footer CTAs — drei Wege in eine Crew -->
           <div class="crew-hub-footer">
-            <button class="cb-cc-btn primary" onclick="openCrewCreate()">🏴‍☠️ Crew gründen</button>
-            <button class="cb-cc-btn secondary" onclick="openJoinByCode()">🔑 Code eingeben</button>
+            <button class="cb-cc-btn primary" onclick="openCrewCreate()">🏴‍☠️ Gründen</button>
+            <button class="cb-cc-btn secondary" onclick="openJoinByCode()">🔑 Code</button>
+            <button class="cb-cc-btn secondary" onclick="openCrewBoard()">🌍 Entdecken</button>
           </div>
           <div class="crew-hub-limit" id="crewHubLimit">Free: max 2 Crews · Premium: max 5 Crews 👑</div>
         </div>
@@ -4616,7 +4628,7 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 90;
+  var APP_VERSION = 91;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     // Force-clear old non-UUID crew IDs
@@ -4744,7 +4756,7 @@ async function logPrivacyConsent(mode, previousMode, state){
       deals_consent: !!(state.consent && state.consent.deals_consent),
       consent_version: 1,
       user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-      app_version: 90,
+      app_version: 91,
       // v73: tag source so we can see who was newly prompted vs. picked from settings
       source: (!previousMode && ME && ME.created_at && (Date.now()-new Date(ME.created_at).getTime())>3600000) ? 'existing_user_v72_prompt' : (!previousMode ? 'first_run' : 'settings_change')
     };
@@ -4792,7 +4804,7 @@ function clearPrivacyData(){
         deals_consent: false,
         consent_version: 1,
         user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-        app_version: 90,
+        app_version: 91,
         source: 'user_reset'
       };
       sb.from('privacy_consent_log').insert(clearRow).then(function(r){ if(r&&r.error) console.warn('[PM] clear log err', r.error.message); });
@@ -8915,10 +8927,196 @@ window.openJoinByCode=function(){
 
 window.closeJoinByCode=function(){document.getElementById('joinByCodeOv').classList.remove('show')};
 
+// ============================================
+// v91: CREW PREVIEW MODAL — Vor dem Join die Crew ansehen
+// ============================================
+window._crewPreviewCtx = null; // {crew, mode}
+
+window.openCrewPreview = async function(crewObj, mode){
+  // mode: 'invite' = direkter Join via Code, 'request' = Anfrage an Owner
+  if(!crewObj || !crewObj.id){toast('Crew nicht gefunden.');return}
+  window._crewPreviewCtx = {crew: crewObj, mode: mode || 'request'};
+  var ov = document.getElementById('crewPreviewOv');
+  var content = document.getElementById('crewPreviewContent');
+  if(!ov || !content) return;
+
+  // Mitglieder laden (Profile + Punkte)
+  var members = [];
+  var totalPoints = 0;
+  try{
+    var {data:memRows} = await sb.from('crew_members').select('user_id,role').eq('crew_id', crewObj.id);
+    if(memRows && memRows.length){
+      var ids = memRows.map(function(m){return m.user_id});
+      var {data:profs} = await sb.from('profiles').select('user_id,name,photo_url,points').in('user_id', ids);
+      if(profs){
+        // Merge mit Rollen
+        var roleMap = {};
+        memRows.forEach(function(m){roleMap[m.user_id]=m.role});
+        members = profs.map(function(p){
+          return {user_id:p.user_id, name:p.name||'Anonym', photo_url:p.photo_url||'', points:p.points||0, role:roleMap[p.user_id]||'member'};
+        });
+        members.sort(function(a,b){return (b.points||0)-(a.points||0)});
+        members.forEach(function(m){totalPoints += (m.points||0)});
+      }
+    }
+  }catch(e){ console.warn('[PREVIEW] members fetch err', e); }
+
+  var amIn = isInCrew(crewObj.id);
+  var isPrivate = crewObj.visibility === 'private';
+  var qrLink = 'https://partycrew.app/app.html?joincrew=' + encodeURIComponent(crewObj.invite_code||'');
+  var qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&color=FF6D2E&bgcolor=0A0A0A&data=' + encodeURIComponent(qrLink);
+
+  var html = '';
+  // HERO
+  html += '<div class="cp-hero" style="padding-top:0">';
+  if(crewObj.photo_url){
+    html += '<div class="cp-crew-photo"><img src="'+crewObj.photo_url+'" loading="lazy"></div>';
+  }else{
+    html += '<div class="cp-crew-ava">'+(crewObj.icon||'🏴‍☠️')+'</div>';
+  }
+  html += '<div class="cp-crew-name">'+esc(crewObj.name||'Crew')+'</div>';
+  if(crewObj.motto) html += '<div class="cp-crew-motto">„'+esc(crewObj.motto)+'"</div>';
+  if(crewObj.bio) html += '<div class="cp-bio">'+esc(crewObj.bio)+'</div>';
+  html += '<div class="cp-visibility '+(crewObj.visibility||'public')+'">'+(isPrivate?'🔒 Privat':'🌍 Öffentlich')+'</div>';
+  html += '</div>';
+
+  // STATS
+  html += '<div class="cp-stats-row">';
+  html += '<div class="cp-stat"><div class="cp-stat-num">'+(members.length||crewObj.members||0)+'</div><div class="cp-stat-label">Mitglieder</div></div>';
+  html += '<div class="cp-stat"><div class="cp-stat-num">'+totalPoints+'</div><div class="cp-stat-label">Crew-Punkte</div></div>';
+  html += '<div class="cp-stat"><div class="cp-stat-num">'+(crewObj.aura||0)+'</div><div class="cp-stat-label">Aura</div></div>';
+  html += '<div class="cp-stat"><div class="cp-stat-num">'+(crewObj.malle_visits||0)+'x</div><div class="cp-stat-label">Malle</div></div>';
+  html += '</div>';
+
+  // TOP-MITGLIEDER
+  if(members.length){
+    html += '<div class="cp-section"><div class="cp-section-title">🏆 Top-Mitglieder</div>';
+    html += '<div class="cp-members-grid">';
+    members.slice(0,6).forEach(function(m,i){
+      var crown = (i===0)?'👑 ':'';
+      html += '<div class="cp-member">';
+      html += '<div class="cp-member-ava"><img src="'+(m.photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80')+'" loading="lazy"></div>';
+      html += '<div class="cp-member-name">'+crown+esc(m.name)+'</div>';
+      html += '<div class="cp-member-role">'+(m.points||0)+' Pkt</div>';
+      html += '</div>';
+    });
+    html += '</div></div>';
+  }
+
+  // QR-CODE der Crew
+  if(crewObj.invite_code){
+    html += '<div class="cp-section" style="text-align:center">';
+    html += '<div class="cp-section-title">📲 QR-Code der Crew</div>';
+    html += '<img src="'+qrUrl+'" style="width:180px;height:180px;border-radius:12px;image-rendering:pixelated;margin:4px auto;display:block" alt="Crew QR">';
+    html += '<div style="font-size:11px;color:var(--t3);margin-top:6px">Code: <strong style="color:var(--o);letter-spacing:2px">'+crewObj.invite_code+'</strong></div>';
+    html += '</div>';
+  }
+
+  // Status-Hinweis
+  if(amIn){
+    html += '<div style="margin:12px 16px;padding:14px;border-radius:14px;background:rgba(52,199,89,.08);border:1px solid rgba(52,199,89,.2);text-align:center;font-size:13px;font-weight:700;color:var(--green)">✓ Du bist bereits Mitglied</div>';
+  }else if(mode==='invite'){
+    html += '<div style="margin:12px 16px;padding:14px;border-radius:14px;background:rgba(255,109,46,.06);border:1px solid rgba(255,109,46,.15);text-align:center;font-size:12px;color:var(--t2);line-height:1.5">🔑 Du hast den Einladungscode — du kannst dieser Crew direkt beitreten.</div>';
+  }else if(isPrivate){
+    html += '<div style="margin:12px 16px;padding:14px;border-radius:14px;background:rgba(255,59,48,.06);border:1px solid rgba(255,59,48,.15);text-align:center;font-size:12px;color:var(--t2);line-height:1.5">🔒 Diese Crew ist privat — du brauchst einen Einladungscode.</div>';
+  }else{
+    html += '<div style="margin:12px 16px;padding:14px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);text-align:center;font-size:12px;color:var(--t2);line-height:1.5">📩 Der Crew-Owner muss deine Beitrittsanfrage bestätigen.</div>';
+  }
+
+  content.innerHTML = html;
+
+  // Action-Button anpassen
+  var btn = document.getElementById('crewPreviewJoinBtn');
+  if(btn){
+    if(amIn){
+      btn.textContent = '✓ Bereits Mitglied';
+      btn.disabled = true;
+      btn.style.opacity = '.5';
+      btn.style.cursor = 'default';
+      btn.onclick = null;
+    }else if(mode==='invite'){
+      btn.textContent = '🏴‍☠️ Crew beitreten';
+      btn.disabled = false;
+      btn.style.opacity = '1';
+      btn.style.cursor = 'pointer';
+      btn.onclick = function(){ confirmCrewPreviewJoin(); };
+    }else if(isPrivate){
+      btn.textContent = '🔒 Nur per Code';
+      btn.disabled = true;
+      btn.style.opacity = '.5';
+      btn.style.cursor = 'default';
+      btn.onclick = null;
+    }else{
+      btn.textContent = '📩 Beitrittsanfrage senden';
+      btn.disabled = false;
+      btn.style.opacity = '1';
+      btn.style.cursor = 'pointer';
+      btn.onclick = function(){ confirmCrewPreviewJoin(); };
+    }
+  }
+
+  ov.classList.add('show');
+};
+
+window.closeCrewPreview = function(){
+  var ov = document.getElementById('crewPreviewOv');
+  if(ov) ov.classList.remove('show');
+  window._crewPreviewCtx = null;
+};
+
+window.confirmCrewPreviewJoin = async function(){
+  var ctx = window._crewPreviewCtx;
+  if(!ctx || !ctx.crew){toast('Fehler: Keine Crew ausgewählt.');return}
+  var crew = ctx.crew;
+  var mode = ctx.mode;
+  if(!canJoinMoreCrews()){
+    var isPremium = localStorage.getItem('is_premium')==='true';
+    toast(isPremium?'Max '+CREW_LIMITS.premium+' Crews erreicht!':'Upgrade auf Premium für mehr Crews! 👑');
+    return;
+  }
+  if(mode==='invite'){
+    // Direkter Join
+    try{
+      var ok = await joinCrew(crew.id);
+      if(!ok){toast('Beitreten fehlgeschlagen. Crew ist vielleicht voll.');return}
+      closeCrewPreview();
+      try{ closeJoinByCode(); }catch(e){}
+      toast('Willkommen bei „'+crew.name+'"! 🎉');
+      if(navigator.vibrate)navigator.vibrate([10,80,10,80,10]);
+      updateCrewGate();
+      buildCrewSwitcher();
+      updateCrewIdentityCard();
+      // Zum Crew-Screen springen
+      try{ go('crew'); }catch(e){}
+      try{ setTimeout(function(){crewGo('active')}, 120); }catch(e){}
+    }catch(e){
+      console.error('[PREVIEW] direct join failed:', e);
+      toast('Fehler beim Beitreten.');
+    }
+  }else{
+    // Request-Modus
+    try{
+      var {error} = await sb.from('crew_join_requests').upsert({
+        crew_id: crew.id,
+        user_id: ME.user_id,
+        name: ME.name||'Anonym',
+        photo_url: ME.photo_url||''
+      },{onConflict:'crew_id,user_id'});
+      if(error){toast('Fehler: '+error.message);return}
+      closeCrewPreview();
+      toast('Beitrittsanfrage an „'+crew.name+'" gesendet! 📩');
+      if(navigator.vibrate)navigator.vibrate(15);
+    }catch(e){
+      console.error('[PREVIEW] request failed:', e);
+      toast('Fehler beim Senden.');
+    }
+  }
+};
+
 window.submitJoinByCode=async function(){
   var code=(document.getElementById('joinCodeInput').value||'').trim().toUpperCase();
   if(!code||code.length<4){toast('Bitte Einladungscode eingeben!');return}
-  // Look up code in Supabase (works across all users!)
+  // v91: Code → Preview zeigen (nicht mehr direkt joinen)
   try{
     var {data:found}=await sb.from('crews').select('*').eq('invite_code',code).maybeSingle();
     if(!found){
@@ -8926,17 +9124,11 @@ window.submitJoinByCode=async function(){
       return;
     }
     if(isInCrew(found.id)){toast('Du bist bereits in „'+found.name+'"!');return}
-    var ok=await joinCrew(found.id);
-    if(!ok)return;
     closeJoinByCode();
-    toast('Willkommen bei „'+found.name+'"! 🎉');
-    if(navigator.vibrate)navigator.vibrate([10,80,10,80,10]);
-    updateCrewGate();
-    buildCrewSwitcher();
-    updateCrewIdentityCard();
+    openCrewPreview(found, 'invite');
   }catch(e){
-    console.error('[CREW] join by code failed:',e);
-    toast('Fehler beim Beitreten. Versuche es nochmal.');
+    console.error('[CREW] join by code preview failed:',e);
+    toast('Fehler. Versuche es nochmal.');
   }
 };
 
@@ -8947,14 +9139,18 @@ window.requestJoinCrew=async function(crewId,crewName){
     toast(isPremium?'Max '+CREW_LIMITS.premium+' Crews erreicht!':'Upgrade auf Premium für mehr Crews! 👑');
     return;
   }
-  try{
-    var {error}=await sb.from('crew_join_requests').upsert({
-      crew_id:crewId,user_id:ME.user_id,name:ME.name||'Anonym',photo_url:ME.photo_url||''
-    },{onConflict:'crew_id,user_id'});
-    if(error){toast('Fehler: '+error.message);return}
-    toast('Beitrittsanfrage an „'+crewName+'" gesendet! 📩');
-    if(navigator.vibrate)navigator.vibrate(15);
-  }catch(e){toast('Fehler beim Senden.')}
+  // v91: Preview zeigen statt direkter Anfrage
+  var crewObj = getAllCrews().find(function(c){return c.id===crewId});
+  if(!crewObj){
+    // Fallback: von Supabase fetchen
+    try{
+      var {data:fresh} = await sb.from('crews').select('*').eq('id',crewId).maybeSingle();
+      if(fresh) crewObj = fresh;
+    }catch(e){}
+  }
+  if(!crewObj){toast('Crew nicht gefunden.');return}
+  try{ closeCrewBoard(); }catch(e){}
+  openCrewPreview(crewObj, 'request');
 };
 
 window.approveJoinRequest=async function(crewId,userId){
@@ -11617,13 +11813,10 @@ async function joinCrewByQR(invCode){
     var {data:found}=await sb.from('crews').select('*').eq('invite_code',invCode.toUpperCase()).maybeSingle();
     if(!found){toast('Crew mit Code „'+invCode+'" nicht gefunden! ❌');return}
     if(isInCrew(found.id)){toast('Du bist bereits in „'+found.name+'"! ✅');return}
-    var ok=await joinCrew(found.id);
-    if(!ok){toast('Beitreten fehlgeschlagen. Crew ist vielleicht voll.');return}
-    toast('Willkommen bei „'+found.name+'"! 🎉');
-    if(navigator.vibrate)navigator.vibrate([10,80,10,80,10]);
-    updateCrewGate();buildCrewSwitcher();updateCrewIdentityCard();
-    // Switch to crew tab
+    // v91: QR-Code → Preview zeigen (nicht direkt joinen)
+    try{ closeQRScanner(); }catch(e){}
     go('crew');
+    setTimeout(function(){ openCrewPreview(found, 'invite'); }, 200);
   }catch(e){
     console.error('[QR] joinCrewByQR error:',e);
     toast('Fehler beim Beitreten per QR. Versuche es nochmal.');
