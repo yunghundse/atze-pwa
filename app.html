@@ -407,21 +407,18 @@ nav button.active::before{opacity:1}
 .crew-hub-footer .cb-cc-btn{flex:1;padding:14px;font-size:13px;min-height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;gap:6px}
 .crew-hub-limit{font-size:11px;color:var(--t3);text-align:center;margin-top:10px;letter-spacing:.1px}
 
-/* v89: Crew-Top-Bar — nutzt die gleiche cb-crew-card wie im Schnellzugriff (PROVEN working), nur oben platziert mit Back-Button */
+/* v90: Crew-Top-Bar — sitzt jetzt IM #crewsub-active als normaler Flow-Block (nicht mehr absolute/schwebend). Nutzt proven cb-crew-card + Back-Button. */
 .crew-top-bar{
-  display:none;
-  position:absolute;
-  top:calc(env(safe-area-inset-top,0) + 64px);
-  left:14px;
-  right:14px;
-  z-index:210;
+  display:flex;
+  position:relative;
+  margin:12px 14px 10px;
+  z-index:5;
   align-items:stretch;
   gap:8px;
-  pointer-events:auto;
+  animation:cbarFade .45s var(--spring,ease) both;
 }
-.crew-top-bar.show{display:flex;animation:cbarFade .4s var(--spring,ease) both}
 @keyframes cbarFade{0%{opacity:0;transform:translateY(-6px)}100%{opacity:1;transform:translateY(0)}}
-/* Back-Button links im hdr-btn-Stil, 48x48, zuverlässig klickbar */
+/* Back-Button links im hdr-btn-Stil, zuverlässig klickbar */
 .crew-top-back{
   width:56px;height:56px;flex-shrink:0;
   border-radius:18px;
@@ -447,17 +444,17 @@ nav button.active::before{opacity:1}
   align-items:center;
 }
 .crew-top-card .cb-cc-header{margin:0 !important;width:100%}
-.crew-top-card .cb-cc-ava{width:34px;height:34px;font-size:17px;border-radius:11px}
+.crew-top-card .cb-cc-ava{width:40px;height:40px;font-size:19px;border-radius:13px}
 .crew-top-card .cb-cc-name{font-size:14px}
 .crew-top-card .cb-cc-motto{font-size:11px;color:#FFB493;margin-top:2px}
 @media (max-width:390px){
-  .crew-top-bar{left:12px;right:12px;gap:7px}
+  .crew-top-bar{margin:10px 12px 8px;gap:7px}
   .crew-top-back{width:52px;height:52px;border-radius:16px}
   .crew-top-card{padding:9px 12px !important}
-  .crew-top-card .cb-cc-ava{width:32px;height:32px;font-size:16px;border-radius:10px}
+  .crew-top-card .cb-cc-ava{width:36px;height:36px;font-size:17px;border-radius:12px}
 }
-/* v89: Karte braucht Platz für App-Header (~58px) + Top-Bar (~64px) */
-#crewsub-active .crew-map-full{margin-top:calc(env(safe-area-inset-top,0) + 130px);position:relative;z-index:1}
+/* v90: Map braucht KEINEN Top-Margin mehr — die Top-Bar sitzt natürlich davor im Flow */
+#crewsub-active .crew-map-full{margin:0 12px 10px;position:relative;z-index:1;height:240px}
 #crewsub-active .crew-map-full .leaflet-container{z-index:1}
 #crewsub-active .ctx-switcher{display:none}
 
@@ -3958,21 +3955,7 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
       <button class="hdr-btn" onclick="openNoti()" aria-label="Benachrichtigungen"><svg class="icn" style="width:17px;height:17px" viewBox="0 0 24 24"><use href="#i-bell"/></svg><span class="notif-dot"></span></button>
     </div>
   </div>
-  <!-- v89: Crew-Top-Bar — EXAKT die gleiche Card wie im Schnellzugriff (cb-crew-card), nur oben platziert -->
-  <div class="crew-top-bar" id="crewIdPill">
-    <button type="button" class="crew-top-back" onclick="crewGo('hub')" aria-label="Zurück zur Crew-Übersicht" title="Zurück zur Crew-Übersicht">
-      <svg viewBox="0 0 24 24"><use href="#i-arrow-left"/></svg>
-    </button>
-    <div class="cb-crew-card crew-top-card" onclick="openMyCrewProfile()">
-      <div class="cb-cc-header" style="margin:0">
-        <div class="cb-cc-ava" id="cdhAva">🏴‍☠️</div>
-        <div class="cb-cc-info">
-          <div class="cb-cc-name" id="cdhName">Deine Crew</div>
-          <div class="cb-cc-motto" id="cdhMotto">Crew-Zentrale öffnen →</div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <!-- v90: Crew-Top-Bar wurde in #crewsub-active verschoben (sitzt jetzt als normaler Flow-Block unter dem Header, direkt vor der Karte) -->
   <main>
     <div class="scr active" id="screen-radar">
       <div class="map-full"><div id="radarMap"></div><div class="map-fade"></div></div>
@@ -4094,7 +4077,21 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
       <!-- v81: CREW DETAIL — Aktive Crew -->
       <!-- ═══════════════════════════════════════ -->
       <div class="crew-sub" id="crewsub-active">
-      <!-- v83: Detail Header wurde nach #app/Geschwister-Ebene verschoben (siehe direkt unter .app-header). Sitzt jetzt ÜBER der Karte und scrollt nicht mit. -->
+      <!-- v90: Crew-Top-Bar — sitzt als ERSTES Element im Crew-Screen, direkt unter dem App-Header und VOR der Karte. Nicht mehr absolute/schwebend. -->
+      <div class="crew-top-bar" id="crewIdPill">
+        <button type="button" class="crew-top-back" onclick="crewGo('hub')" aria-label="Zurück zur Crew-Übersicht" title="Zurück zur Crew-Übersicht">
+          <svg viewBox="0 0 24 24"><use href="#i-arrow-left"/></svg>
+        </button>
+        <div class="cb-crew-card crew-top-card" onclick="openMyCrewProfile()">
+          <div class="cb-cc-header" style="margin:0">
+            <div class="cb-cc-ava" id="cdhAva">🏴‍☠️</div>
+            <div class="cb-cc-info">
+              <div class="cb-cc-name" id="cdhName">Deine Crew</div>
+              <div class="cb-cc-motto" id="cdhMotto">Crew-Zentrale öffnen →</div>
+            </div>
+          </div>
+        </div>
+      </div>
       <!-- v78: CONTEXT MODE SWITCHER auch auf Crew-Screen (oben über der Karte) -->
       <div class="ctx-switcher" id="ctxSwitcherCrew" role="tablist" aria-label="Modus wechseln">
         <button class="ctx-chip" data-ctx="urlaub" onclick="setContextMode('urlaub')" role="tab">
@@ -4300,22 +4297,7 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
           </div>
         </div>
 
-        <div class="crew-section">
-          <div class="crew-section-header">
-            <div class="csh-left"><span class="csh-emoji">🛡️</span><span class="csh-title">Schnellzugriff</span></div>
-          </div>
-          <!-- v88: Crew-Card-Duplikat entfernt — die Crew-Zentrale wird jetzt oben in der Bar geöffnet. Hier bleiben nur noch die Action-Buttons. -->
-          <div style="display:flex;flex-direction:column;gap:8px;padding:0 14px 14px">
-            <div style="display:flex;gap:8px">
-              <div class="cb-cc-btn primary" onclick="openCrewBoard()" style="flex:1;padding:14px;font-size:13px;min-height:48px">🌍 Crew Board</div>
-              <div class="cb-cc-btn secondary" onclick="openMyMalleStats()" style="flex:1;padding:14px;font-size:13px;min-height:48px">📊 Meine Stats</div>
-            </div>
-            <div style="display:flex;gap:8px">
-              <div class="cb-cc-btn secondary" onclick="openBlockList()" style="flex:1;padding:14px;font-size:13px;min-height:48px">🛡️ Sicherheit</div>
-              <div class="cb-cc-btn secondary" onclick="openCrewChat()" style="flex:1;padding:14px;font-size:13px;min-height:48px">💬 Crew Chat</div>
-            </div>
-          </div>
-        </div>
+        <!-- v90: Schnellzugriff-Section komplett entfernt — die Crew-Zentrale sitzt jetzt oben in der Top-Bar, damit es nur EINEN Zugriffspunkt gibt. -->
         </div><!-- /crewFeatures -->
       </div>
       </div><!-- /crewsub-active -->
@@ -4634,7 +4616,7 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 89;
+  var APP_VERSION = 90;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     // Force-clear old non-UUID crew IDs
@@ -4762,7 +4744,7 @@ async function logPrivacyConsent(mode, previousMode, state){
       deals_consent: !!(state.consent && state.consent.deals_consent),
       consent_version: 1,
       user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-      app_version: 89,
+      app_version: 90,
       // v73: tag source so we can see who was newly prompted vs. picked from settings
       source: (!previousMode && ME && ME.created_at && (Date.now()-new Date(ME.created_at).getTime())>3600000) ? 'existing_user_v72_prompt' : (!previousMode ? 'first_run' : 'settings_change')
     };
@@ -4810,7 +4792,7 @@ function clearPrivacyData(){
         deals_consent: false,
         consent_version: 1,
         user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-        app_version: 89,
+        app_version: 90,
         source: 'user_reset'
       };
       sb.from('privacy_consent_log').insert(clearRow).then(function(r){ if(r&&r.error) console.warn('[PM] clear log err', r.error.message); });
@@ -10500,13 +10482,7 @@ window.go=function(n,b){
   try{ if(navigator.vibrate) navigator.vibrate(10); }catch(e){}
   var target=document.getElementById('screen-'+n);
   if(!target) return;
-  // v86: Crew-Identity-Pill nur auf Crew-Screen sichtbar — beim Wechsel IMMER ausblenden
-  try{
-    if(n !== 'crew'){
-      var _pill = document.getElementById('crewIdPill');
-      if(_pill) _pill.classList.remove('show');
-    }
-  }catch(e){}
+  // v90: Crew-Top-Bar sitzt jetzt IM #crewsub-active — wird automatisch mit dem Screen ein-/ausgeblendet, kein Toggle nötig
   document.querySelectorAll('.scr').forEach(function(s){s.classList.remove('active')});
   target.classList.add('active');
   document.querySelectorAll('#navBar button').forEach(function(x){x.classList.remove('active')});
@@ -11125,11 +11101,8 @@ window.crewGo = function(section){
     if(el) el.classList.toggle('active', s === section);
   });
   try{ var scr = document.getElementById('screen-crew'); if(scr) scr.scrollTop = 0; }catch(e){}
-  // v86: Crew-Identity-Pill toggeln (sitzt jetzt zwischen Header und Karte, nicht IM Header)
-  try{
-    var pill = document.getElementById('crewIdPill');
-    if(pill) pill.classList.toggle('show', section === 'active');
-  }catch(e){}
+  // v90: Crew-Top-Bar sitzt jetzt IM #crewsub-active als normaler Flow-Block — kein show-Toggle mehr nötig,
+  // da die Bar automatisch mit dem Screen ein-/ausgeblendet wird.
   if(section === 'hub'){
     try{ if(typeof buildCrewHubCards==='function') buildCrewHubCards(); }catch(e){ console.warn('[CREW-HUB] build err',e); }
   }
