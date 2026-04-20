@@ -4164,8 +4164,8 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
           <div id="crewSwitcherInner" style="display:flex;gap:8px;min-width:min-content"></div>
         </div>
 
-        <!-- CREW STATUS BAR — Points & Rank -->
-        <div class="crew-status-bar" id="crewStatusBar">
+        <!-- CREW STATUS BAR — Points & Rank — v93: klickbar → eigenes Profil -->
+        <div class="crew-status-bar" id="crewStatusBar" onclick="openMyProfileFromStatusBar()" style="cursor:pointer" role="button" aria-label="Mein Profil öffnen">
           <div class="csb-ava"><img id="csbPhoto" src="" alt=""></div>
           <div class="csb-info">
             <div class="csb-name" id="csbName">—</div>
@@ -4192,15 +4192,8 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
         </div>
 
 
-        <!-- FLOATING MINI BUTTONS — Chat + Location always accessible -->
-        <div class="crew-float-btns">
-          <div class="crew-float-btn cfb-loc" onclick="shareCrewLocation()" title="Standort teilen">
-            <span>📍</span>
-          </div>
-          <div class="crew-float-btn cfb-chat" onclick="openCrewChat()" title="Crew Chat">
-            <span>💬</span>
-          </div>
-        </div>
+        <!-- v93: Float-Buttons entfernt (Doppelung zur Action-Bar + verbuggt).
+             Standort + Chat sind über die Safety-Gruppe / Action-Bar erreichbar. -->
 
         <!-- ═══════════════════════════════════════ -->
         <!-- ZONE 1: QUICK ACTIONS — Sofort-Zugriff -->
@@ -4649,7 +4642,7 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 92;
+  var APP_VERSION = 93;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     // Force-clear old non-UUID crew IDs
@@ -4777,7 +4770,7 @@ async function logPrivacyConsent(mode, previousMode, state){
       deals_consent: !!(state.consent && state.consent.deals_consent),
       consent_version: 1,
       user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-      app_version: 92,
+      app_version: 93,
       // v73: tag source so we can see who was newly prompted vs. picked from settings
       source: (!previousMode && ME && ME.created_at && (Date.now()-new Date(ME.created_at).getTime())>3600000) ? 'existing_user_v72_prompt' : (!previousMode ? 'first_run' : 'settings_change')
     };
@@ -4825,7 +4818,7 @@ function clearPrivacyData(){
         deals_consent: false,
         consent_version: 1,
         user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-        app_version: 92,
+        app_version: 93,
         source: 'user_reset'
       };
       sb.from('privacy_consent_log').insert(clearRow).then(function(r){ if(r&&r.error) console.warn('[PM] clear log err', r.error.message); });
@@ -6891,11 +6884,22 @@ async function _loadCommunityUsers(){
   if(!sb){ return []; }
   try{
     var cutoff = new Date(now - COMMUNITY_STALE_MS).toISOString();
+    // v93: Select mit Fallback falls location_hidden_from noch nicht migriert
+    var baseCols = 'user_id,name,username,photo_url,mood,lat,lng,last_active,location_updated_at';
+    var withPrivacy = baseCols + ',location_hidden_from';
     var resp = await sb.from('profiles')
-      .select('user_id,name,username,photo_url,mood,lat,lng,last_active,location_updated_at,location_hidden_from')
+      .select(withPrivacy)
       .not('lat','is',null).not('lng','is',null)
       .gte('location_updated_at', cutoff)
       .limit(120);
+    if(resp && resp.error){
+      // Spalte existiert nicht — nochmal ohne privacy abfragen
+      resp = await sb.from('profiles')
+        .select(baseCols)
+        .not('lat','is',null).not('lng','is',null)
+        .gte('location_updated_at', cutoff)
+        .limit(120);
+    }
     var rows = (resp && resp.data) || [];
     // filter blocked + self + per-person privacy
     rows = rows.filter(function(p){
@@ -8068,6 +8072,15 @@ function updateCrewIdentityCard(){
   var el2=document.getElementById('myCrewName');if(el2)el2.textContent=s.name||'Meine Crew';
   var el3=document.getElementById('myCrewMotto');if(el3)el3.textContent=s.motto||'';
 }
+
+// v93: Status-Bar unter der Karte → eigenes User-Profil öffnen
+window.openMyProfileFromStatusBar=function(){
+  if(ME && ME.user_id && typeof openCrewProfile==='function'){
+    try{ openCrewProfile(ME.user_id); return; }catch(e){}
+  }
+  // Fallback: Profil-Tab
+  try{ go('me'); }catch(e){}
+};
 
 window.openMyCrewProfile=function(){
   var ov=document.getElementById('crewProfileOv');if(!ov)return;
@@ -9705,6 +9718,8 @@ window.sendUnsafeCheckIn=async function(){
 // ============================================
 window._locationHiddenFrom = []; // cache der eigenen hidden-liste
 
+window._safetyPrivacySupported = true; // wird false wenn Supabase-Spalte fehlt
+
 window.openSafetyHub = async function(){
   var ov = document.getElementById('safetyHubOv');
   var content = document.getElementById('safetyHubContent');
@@ -9713,23 +9728,63 @@ window.openSafetyHub = async function(){
   ov.classList.add('show');
   document.body.style.overflow = 'hidden';
 
-  // 1) hidden-Liste des eigenen Profils laden
+  // 1) hidden-Liste laden — robust gegen fehlende Spalte
   var hidden = [];
+  var privacyOk = true;
   try{
     if(sb && ME){
       var r = await sb.from('profiles').select('location_hidden_from').eq('user_id',ME.user_id).maybeSingle();
-      if(r && r.data && Array.isArray(r.data.location_hidden_from)) hidden = r.data.location_hidden_from.slice();
+      if(r && r.error){
+        // Spalte existiert vielleicht noch nicht (Migration fehlt)
+        privacyOk = false;
+        console.warn('[SAFETY] privacy query error:', r.error.message||r.error);
+      } else if(r && r.data && Array.isArray(r.data.location_hidden_from)){
+        hidden = r.data.location_hidden_from.slice();
+      }
     }
-  }catch(e){ console.warn('[SAFETY] load hidden failed',e && e.message); }
+  }catch(e){
+    privacyOk = false;
+    console.warn('[SAFETY] load hidden failed',e && e.message);
+  }
   window._locationHiddenFrom = hidden;
+  window._safetyPrivacySupported = privacyOk;
 
-  // 2) GPS-Status
-  var gpsText = (typeof getGpsStatusText==='function') ? getGpsStatusText() : (_gpsStatus==='active'?'📍 Standort aktiv':'⚠️ Standort nicht aktiv');
-  var gpsOk = (_gpsStatus==='active');
-  var myCoords = (userLat && userLng) ? (userLat.toFixed(5)+', '+userLng.toFixed(5)) : '—';
-  var accuracy = (typeof _gpsAccuracy!=='undefined' && _gpsAccuracy) ? ('±'+Math.round(_gpsAccuracy)+' m') : '';
+  // 2) GPS-Status in 3 Klassen: ok / pending / blocked
+  var state = 'pending';
+  if(_gpsStatus==='active') state = 'ok';
+  else if(_gpsStatus==='denied' || _gpsStatus==='unavailable') state = 'blocked';
+  else state = 'pending'; // unknown, timeout, idle, home, private
 
-  // 3) Crew-Mitglieder (ohne mich) aus _crewProfiles
+  var gpsText;
+  if(state==='ok'){
+    gpsText = (typeof _gpsAccuracy!=='undefined' && _gpsAccuracy) ? ('📍 GPS aktiv · ±'+Math.round(_gpsAccuracy)+' m') : '📍 GPS aktiv';
+  } else if(state==='blocked'){
+    gpsText = _gpsStatus==='denied' ? '🔴 Standort blockiert — in den Einstellungen freigeben' : '⚠️ GPS nicht verfügbar';
+  } else {
+    gpsText = '⏳ Standort wird ermittelt…';
+  }
+
+  var stateColors = {
+    ok:     {bg1:'rgba(52,199,89,.12)',  bg2:'rgba(48,209,88,.04)',  border:'rgba(52,199,89,.28)',  ic:'rgba(52,199,89,.18)',  hint:'#9fe5b0', hintBg:'rgba(52,199,89,.08)'},
+    pending:{bg1:'rgba(10,132,255,.12)', bg2:'rgba(10,132,255,.04)', border:'rgba(10,132,255,.28)', ic:'rgba(10,132,255,.18)', hint:'#9ec5ff', hintBg:'rgba(10,132,255,.08)'},
+    blocked:{bg1:'rgba(255,159,10,.12)', bg2:'rgba(255,159,10,.04)', border:'rgba(255,159,10,.28)', ic:'rgba(255,159,10,.18)', hint:'#ffc37a', hintBg:'rgba(255,159,10,.10)'}
+  };
+  var c = stateColors[state];
+  var myCoords = (userLat && userLng) ? (Number(userLat).toFixed(5)+', '+Number(userLng).toFixed(5)) : '—';
+
+  // Hint + CTA pro State
+  var hintText, ctaHtml='';
+  if(state==='ok'){
+    hintText = '✓ Dein Standort wird live an deine Crew übertragen. Mitglieder sehen dich auf der Karte.';
+  } else if(state==='blocked'){
+    hintText = 'Deine Crew kann dich gerade nicht auf der Karte sehen. Aktiviere die Standortfreigabe in den Browser- bzw. Handy-Einstellungen.';
+    ctaHtml = '<button onclick="safetyRetryLocation()" style="margin-top:10px;width:100%;padding:11px;border-radius:12px;border:none;background:rgba(255,159,10,.18);color:#ffc37a;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit">🔄 Erneut versuchen</button>';
+  } else {
+    hintText = 'Standort wird gerade geholt. Sobald dein GPS einen Fix hat, sieht dich deine Crew live auf der Karte.';
+    ctaHtml = '<button onclick="safetyRetryLocation()" style="margin-top:10px;width:100%;padding:11px;border-radius:12px;border:none;background:rgba(10,132,255,.18);color:#9ec5ff;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit">🔄 Standort aktualisieren</button>';
+  }
+
+  // 3) Crew-Mitglieder (ohne mich)
   var members = (Array.isArray(_crewProfiles) ? _crewProfiles : []).filter(function(p){ return p && p.user_id && (!ME || p.user_id!==ME.user_id); });
 
   var html = ''
@@ -9740,16 +9795,17 @@ window.openSafetyHub = async function(){
     +     '<div style="font-size:12px;color:var(--t3);margin-top:4px">Standort &amp; Privatsphäre für deine Crew</div>'
     +   '</div>'
     // Mein Standort Card
-    +   '<div style="border-radius:18px;padding:16px;background:linear-gradient(135deg,'+(gpsOk?'rgba(52,199,89,.12),rgba(48,209,88,.04)':'rgba(255,69,58,.12),rgba(255,59,48,.04)')+');border:1.5px solid '+(gpsOk?'rgba(52,199,89,.28)':'rgba(255,69,58,.28)')+';margin-bottom:14px">'
+    +   '<div style="border-radius:18px;padding:16px;background:linear-gradient(135deg,'+c.bg1+','+c.bg2+');border:1.5px solid '+c.border+';margin-bottom:14px">'
     +     '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">'
-    +       '<div style="width:42px;height:42px;border-radius:12px;background:'+(gpsOk?'rgba(52,199,89,.18)':'rgba(255,69,58,.18)')+';display:flex;align-items:center;justify-content:center;font-size:20px;position:relative">📍'+(gpsOk?'<span style="position:absolute;top:6px;right:6px;width:8px;height:8px;border-radius:50%;background:#30D158;box-shadow:0 0 8px #30D158;animation:livePulse 1.8s ease-in-out infinite"></span>':'')+'</div>'
+    +       '<div style="width:42px;height:42px;border-radius:12px;background:'+c.ic+';display:flex;align-items:center;justify-content:center;font-size:20px;position:relative">📍'+(state==='ok'?'<span style="position:absolute;top:6px;right:6px;width:8px;height:8px;border-radius:50%;background:#30D158;box-shadow:0 0 8px #30D158;animation:livePulse 1.8s ease-in-out infinite"></span>':'')+'</div>'
     +       '<div style="flex:1;min-width:0">'
     +         '<div style="font-size:14px;font-weight:800">Mein Standort</div>'
     +         '<div style="font-size:11px;color:var(--t3);margin-top:2px">'+esc(gpsText)+'</div>'
     +       '</div>'
     +     '</div>'
-    +     '<div style="font-size:11px;color:var(--t3);font-family:ui-monospace,monospace;padding:8px 10px;background:rgba(0,0,0,.18);border-radius:10px">'+esc(myCoords)+(accuracy?' · '+esc(accuracy):'')+'</div>'
-    +     (gpsOk?'<div style="margin-top:10px;font-size:11px;color:var(--t2);line-height:1.4">✓ Dein Standort wird live an deine Crew übertragen. Mitglieder sehen dich auf der Karte.</div>':'<div style="margin-top:10px;font-size:11px;color:#ff6b6b;line-height:1.4">⚠️ Kein GPS-Signal — deine Crew kann dich gerade nicht auf der Karte sehen.</div>')
+    +     '<div style="font-size:11px;color:var(--t3);font-family:ui-monospace,monospace;padding:8px 10px;background:rgba(0,0,0,.18);border-radius:10px">'+esc(myCoords)+'</div>'
+    +     '<div style="margin-top:10px;font-size:11px;color:'+c.hint+';line-height:1.45;padding:8px 10px;background:'+c.hintBg+';border-radius:10px">'+esc(hintText)+'</div>'
+    +     ctaHtml
     +   '</div>';
 
   // Privacy-Liste
@@ -9760,14 +9816,20 @@ window.openSafetyHub = async function(){
       + '<div style="margin:18px 0 10px 4px;display:flex;align-items:center;justify-content:space-between">'
       +   '<div style="font-size:12px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.8px">Wer darf dich sehen?</div>'
       +   '<div style="font-size:10px;color:var(--t3)">'+members.length+' Mitglied'+(members.length===1?'':'er')+'</div>'
-      + '</div>'
-      + '<div style="border-radius:16px;overflow:hidden;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06)">';
+      + '</div>';
+
+    if(!privacyOk){
+      html += '<div style="padding:12px 14px;border-radius:14px;background:rgba(255,159,10,.10);border:1px solid rgba(255,159,10,.22);color:#ffc37a;font-size:11px;line-height:1.5;margin-bottom:10px">⚠️ Privacy-Feature noch nicht aktiv. Bitte einmal in Supabase diese SQL laufen lassen:<br><code style="display:block;margin-top:6px;padding:6px 8px;background:rgba(0,0,0,.3);border-radius:6px;font-size:10px;color:#fff">alter table public.profiles add column if not exists location_hidden_from uuid[] default \'{}\';</code></div>';
+    }
+
+    html += '<div style="border-radius:16px;overflow:hidden;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06)">';
     members.forEach(function(p, idx){
       var isHidden = hidden.indexOf(p.user_id) >= 0;
       var photo = p.photo_url ? ('<img src="'+esc(p.photo_url)+'" alt="" style="width:100%;height:100%;object-fit:cover">') : '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#fff;background:linear-gradient(135deg,#FF6D2E,#C93A7A)">'+esc((p.name||'?')[0]||'?').toUpperCase()+'</div>';
       var name = esc(p.name||'Mitglied');
+      var disabledStyle = privacyOk ? '' : 'opacity:.55;pointer-events:none';
       html += ''
-        + '<div onclick="toggleLocationPrivacy(\''+esc(p.user_id)+'\')" style="display:flex;align-items:center;gap:12px;padding:12px 14px;cursor:pointer;border-bottom:'+(idx<members.length-1?'1px solid rgba(255,255,255,.05)':'none')+';transition:background .15s">'
+        + '<div onclick="toggleLocationPrivacy(\''+esc(p.user_id)+'\')" style="display:flex;align-items:center;gap:12px;padding:12px 14px;cursor:pointer;border-bottom:'+(idx<members.length-1?'1px solid rgba(255,255,255,.05)':'none')+';transition:background .15s;'+disabledStyle+'">'
         +   '<div style="width:40px;height:40px;border-radius:12px;overflow:hidden;flex-shrink:0;background:rgba(255,255,255,.08)">'+photo+'</div>'
         +   '<div style="flex:1;min-width:0">'
         +     '<div style="font-size:14px;font-weight:700">'+name+'</div>'
@@ -9786,6 +9848,23 @@ window.openSafetyHub = async function(){
   content.innerHTML = html;
 };
 
+// v93: GPS manuell neu anstoßen
+window.safetyRetryLocation = function(){
+  toast('🔄 Standort wird aktualisiert…');
+  try{
+    if(typeof startGpsTracking==='function') startGpsTracking();
+    if(navigator.geolocation){
+      navigator.geolocation.getCurrentPosition(function(pos){
+        if(typeof _onGpsFix==='function') _onGpsFix(pos);
+        if(typeof openSafetyHub==='function') setTimeout(openSafetyHub, 400);
+      }, function(err){
+        if(typeof _onGpsError==='function') _onGpsError(err);
+        if(typeof openSafetyHub==='function') setTimeout(openSafetyHub, 400);
+      }, {enableHighAccuracy:true, timeout:10000, maximumAge:0});
+    }
+  }catch(e){ console.warn('[SAFETY] retry failed',e && e.message); }
+};
+
 window.closeSafetyHub = function(){
   var ov = document.getElementById('safetyHubOv');
   if(ov) ov.classList.remove('show');
@@ -9794,19 +9873,33 @@ window.closeSafetyHub = function(){
 
 window.toggleLocationPrivacy = async function(otherUserId){
   if(!otherUserId || !ME || !sb) return;
+  if(window._safetyPrivacySupported===false){
+    toast('Privacy-Feature noch nicht aktiv — bitte SQL-Migration ausführen.');
+    return;
+  }
   var list = Array.isArray(window._locationHiddenFrom) ? window._locationHiddenFrom.slice() : [];
   var idx = list.indexOf(otherUserId);
   if(idx >= 0){ list.splice(idx,1); }
   else { list.push(otherUserId); }
   window._locationHiddenFrom = list;
   try{
-    await sb.from('profiles').update({location_hidden_from:list}).eq('user_id',ME.user_id);
+    var res = await sb.from('profiles').update({location_hidden_from:list}).eq('user_id',ME.user_id);
+    if(res && res.error){
+      // Spalte existiert nicht — Feature deaktivieren
+      window._safetyPrivacySupported = false;
+      toast('⚠️ DB-Spalte fehlt. SQL-Migration in Supabase nötig.');
+      console.warn('[SAFETY] update error:', res.error.message||res.error);
+      // revert local
+      window._locationHiddenFrom = idx>=0 ? list.concat([otherUserId]) : list.filter(function(x){return x!==otherUserId});
+      if(typeof openSafetyHub==='function') openSafetyHub();
+      return;
+    }
     toast(idx>=0 ? 'Standort wieder sichtbar ✓' : '🔒 Standort versteckt');
     if(navigator.vibrate)navigator.vibrate(10);
-    // UI refreshen
-    if(typeof openSafetyHub==='function') openSafetyHub();
     // Community-Layer cache invalidieren damit andere sofort wirken
     try{ _communityLastFetch = 0; }catch(e){}
+    // UI refreshen
+    if(typeof openSafetyHub==='function') openSafetyHub();
   }catch(e){
     toast('Fehler beim Speichern.');
     console.warn('[SAFETY] privacy save failed', e && e.message);
