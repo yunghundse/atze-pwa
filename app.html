@@ -1001,8 +1001,7 @@ nav button.active::before{opacity:1}
 .pstat:nth-child(2) .pn{color:var(--green)}
 .pstat:nth-child(3) .pn{color:var(--yellow)}
 .pstat .pl{font-size:9px;color:var(--t3);font-weight:600;text-transform:uppercase;margin-top:2px}
-.premium-cta{margin:0 14px 14px;padding:18px;border-radius:var(--r);position:relative;overflow:hidden;cursor:pointer;background:linear-gradient(135deg,rgba(255,109,46,.18),rgba(255,214,10,.12));backdrop-filter:blur(40px);border:1px solid rgba(255,214,10,.25);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 0 40px rgba(255,214,10,.25),0 0 60px rgba(255,109,46,.15);animation:premiumGlow 2s ease-in-out infinite}
-@keyframes premiumGlow{0%,100%{box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 0 40px rgba(255,214,10,.25),0 0 60px rgba(255,109,46,.15)}50%{box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 0 50px rgba(255,214,10,.4),0 0 80px rgba(255,109,46,.25)}}
+.premium-cta{margin:0 14px 14px;padding:18px;border-radius:var(--r);position:relative;overflow:hidden;cursor:pointer;background:linear-gradient(135deg,rgba(255,109,46,.14),rgba(255,214,10,.09));backdrop-filter:blur(40px);border:1px solid rgba(255,214,10,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 4px 18px rgba(0,0,0,.18)}
 .premium-cta::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,109,46,.05),rgba(255,214,10,.03));pointer-events:none}
 .premium-cta>*{position:relative}
 .premium-cta h3{font-size:16px;font-weight:800}
@@ -1513,35 +1512,32 @@ nav .crew-center-btn:hover .ni{
   box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 8px 22px rgba(0,0,0,.3),0 0 24px rgba(254,60,114,.08);
 }
 
-/* — Premium CTA — elevated — */
+/* — Premium CTA — v100: entschärft (kein Glow/Shine, dezenter) — */
 .premium-cta{
   position:relative;overflow:hidden;
-  background:linear-gradient(135deg,#FE3C72 0%,#FF5864 45%,#FF7854 100%) !important;
-  border:1px solid rgba(255,255,255,.22) !important;
+  background:linear-gradient(135deg,rgba(254,60,114,.78) 0%,rgba(255,88,100,.72) 45%,rgba(255,120,84,.7) 100%) !important;
+  border:1px solid rgba(255,255,255,.14) !important;
   box-shadow:
-    0 16px 44px rgba(254,60,114,.45),
-    0 0 60px rgba(255,88,100,.2),
-    inset 0 1px 0 rgba(255,255,255,.35),
-    inset 0 -2px 0 rgba(0,0,0,.15) !important;
+    0 8px 24px rgba(254,60,114,.22),
+    inset 0 1px 0 rgba(255,255,255,.22),
+    inset 0 -1px 0 rgba(0,0,0,.1) !important;
+  transition:transform .22s var(--ease-spring-soft,ease),box-shadow .25s ease,filter .2s ease;
 }
+.premium-cta:hover{filter:brightness(1.04);box-shadow:0 10px 28px rgba(254,60,114,.3),inset 0 1px 0 rgba(255,255,255,.25)!important;}
+.premium-cta:active{transform:scale(.985)}
 .premium-cta::before{
   content:'';position:absolute;inset:0;
-  background:radial-gradient(ellipse at 30% 20%,rgba(255,255,255,.25),transparent 55%);
+  background:radial-gradient(ellipse at 30% 20%,rgba(255,255,255,.14),transparent 55%);
   pointer-events:none;
 }
-.premium-cta::after{
-  content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;
-  background:linear-gradient(115deg,transparent 40%,rgba(255,255,255,.16) 50%,transparent 60%);
-  animation:shine 4.5s ease-in-out infinite;pointer-events:none;
-}
-@keyframes shine{0%,100%{transform:translateX(-40%)}50%{transform:translateX(40%)}}
+/* v100: shine-Animation entfernt — wirkte wie "locked features" */
 .premium-cta h3{font-size:18px;font-weight:900;letter-spacing:-.3px;color:#fff;margin-bottom:4px}
-.premium-cta .pc-sub{color:rgba(255,255,255,.88);font-size:12.5px}
+.premium-cta .pc-sub{color:rgba(255,255,255,.85);font-size:12.5px}
 .premium-cta .pc-btn{
-  background:rgba(255,255,255,.22) !important;color:#fff !important;
-  border:1px solid rgba(255,255,255,.3);
+  background:rgba(255,255,255,.2) !important;color:#fff !important;
+  border:1px solid rgba(255,255,255,.26);
   backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.3);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22);
 }
 
 /* — Profile ava refined — */
@@ -4345,11 +4341,11 @@ nav button.active .ni{animation:vNineCountPop .38s var(--ease-spring-soft) 1}
             <div class="cnh-ic">📍</div>
             <div class="cnh-body">
               <div class="cnh-title">Crew in der Nähe</div>
-              <div class="cnh-sub" id="crewNearbySub">wird geladen …</div>
+              <div class="cnh-sub" id="crewNearbySub">sucht in deiner Nähe …</div>
             </div>
             <button class="cnh-refresh" onclick="refreshNearbyCrew()" aria-label="Aktualisieren" title="Aktualisieren">↻</button>
           </div>
-          <div id="crewNearbyListCrewScreen" class="crew-nearby-list"><p style="color:var(--t3);font-size:12px;padding:6px 4px">Standort wird geladen …</p></div>
+          <div id="crewNearbyListCrewScreen" class="crew-nearby-list"><p style="color:var(--t3);font-size:12px;padding:6px 4px">Schau auf der Karte nach Crews in deiner Nähe 🗺️</p></div>
         </div>
 
 
@@ -4419,14 +4415,14 @@ nav button.active .ni{animation:vNineCountPop .38s var(--ease-spring-soft) 1}
             <div class="csh-left"><span class="csh-emoji">🗳️</span><span class="csh-title">Crew Votes</span></div>
             <div class="csh-badge vote-badge">TÄGLICH NEU</div>
           </div>
-          <div id="dailyVoting"><p class="crew-empty">Wird geladen...</p></div>
+          <div id="dailyVoting"><p class="crew-empty">Heute noch keine Votes – sei die/der Erste ✨</p></div>
         </div>
 
         <div class="crew-section">
           <div class="crew-section-header">
             <div class="csh-left"><span class="csh-emoji">🏆</span><span class="csh-title">Leaderboard</span></div>
           </div>
-          <div id="leaderboardList" style="padding:0 14px 14px"><p class="crew-empty">Wird geladen...</p></div>
+          <div id="leaderboardList" style="padding:0 14px 14px"><p class="crew-empty">Leaderboard füllt sich, sobald die Crew Aura sammelt 🏆</p></div>
         </div>
 
         <!-- v95: Crew-Challenge aus dem Crew-Menü entfernt — lebt jetzt im Game Center (Deals-Tab → Game Center). -->
@@ -4642,7 +4638,7 @@ nav button.active .ni{animation:vNineCountPop .38s var(--ease-spring-soft) 1}
           <span>🎯 Crew-Challenge</span>
           <span class="csh-badge challenge-time-badge" id="challengeTimer" style="font-size:10px"></span>
         </div>
-        <div id="challengeList" style="margin-bottom:16px"><p class="crew-empty" style="color:var(--t3);font-size:13px;padding:6px 4px">Wird geladen...</p></div>
+        <div id="challengeList" style="margin-bottom:16px"><p class="crew-empty" style="color:var(--t3);font-size:13px;padding:6px 4px">Noch keine Challenges aktiv – bald gehts los 💪</p></div>
 
         <div class="gc-section-ttl">Deine Crew-Verbindungen</div>
         <div id="gcCrewConnections"><div class="ach-empty">Lade Crews…</div></div>
@@ -4933,7 +4929,7 @@ async function logPrivacyConsent(mode, previousMode, state){
       deals_consent: !!(state.consent && state.consent.deals_consent),
       consent_version: 1,
       user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-      app_version: 99,
+      app_version: 100,
       // v73: tag source so we can see who was newly prompted vs. picked from settings
       source: (!previousMode && ME && ME.created_at && (Date.now()-new Date(ME.created_at).getTime())>3600000) ? 'existing_user_v72_prompt' : (!previousMode ? 'first_run' : 'settings_change')
     };
@@ -4981,7 +4977,7 @@ function clearPrivacyData(){
         deals_consent: false,
         consent_version: 1,
         user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-        app_version: 99,
+        app_version: 100,
         source: 'user_reset'
       };
       sb.from('privacy_consent_log').insert(clearRow).then(function(r){ if(r&&r.error) console.warn('[PM] clear log err', r.error.message); });
@@ -7321,6 +7317,27 @@ window.checkinVenue = async function(venueId, name){
 // MATCHING
 // ============================================
 var FILTERED_PROFILES = [];
+// v100: Match-Filter-Persistenz via localStorage
+var MF_KEY = 'match_filters_v1';
+function _v100SaveFilters(){
+  try{
+    var f = {
+      g: (document.getElementById('mfGender')||{}).value||'',
+      a: (document.getElementById('mfAge')||{}).value||'',
+      c: (document.getElementById('mfCity')||{}).value||'',
+      cl: (document.getElementById('mfClub')||{}).value||''
+    };
+    localStorage.setItem(MF_KEY, JSON.stringify(f));
+  }catch(e){}
+}
+function _v100RestoreFilters(){
+  try{
+    var raw = localStorage.getItem(MF_KEY); if(!raw) return;
+    var f = JSON.parse(raw); if(!f) return;
+    var sel=function(id,v){var el=document.getElementById(id); if(!el||v==null) return; var has=false; for(var i=0;i<el.options.length;i++){if(el.options[i].value===v){has=true;break;}} if(has){el.value=v;}};
+    sel('mfGender', f.g); sel('mfAge', f.a); sel('mfCity', f.c); sel('mfClub', f.cl);
+  }catch(e){}
+}
 function populateFilterOptions(){
   var cities={},clubs={};
   PROFILES.forEach(function(p){
@@ -7331,12 +7348,19 @@ function populateFilterOptions(){
   if(cs){Object.keys(cities).sort().forEach(function(c){var o=document.createElement('option');o.value=c;o.textContent=c;cs.appendChild(o)})}
   var cl=document.getElementById('mfClub');
   if(cl){Object.keys(clubs).sort().forEach(function(c){var o=document.createElement('option');o.value=c;o.textContent=c;cl.appendChild(o)})}
+  // v100: Filter-Werte nach Populate wiederherstellen + buildCards mit aktiven Filtern
+  _v100RestoreFilters();
+  try{ if(typeof applyFilters==='function'){ /* FILTERED_PROFILES sofort aktualisieren */
+    var hasAny=['mfGender','mfAge','mfCity','mfClub'].some(function(id){var el=document.getElementById(id);return el&&el.value;});
+    if(hasAny) applyFilters();
+  }}catch(e){}
 }
 window.applyFilters=function(){
   var g=document.getElementById('mfGender').value;
   var a=document.getElementById('mfAge').value;
   var c=document.getElementById('mfCity').value;
   var cl=document.getElementById('mfClub').value;
+  _v100SaveFilters();  // v100: Filter-State merken
   FILTERED_PROFILES=PROFILES.filter(function(p){
     if(g&&p.gender!==g)return false;
     if(a){var parts=a.split('-');if(a==='40+'){if(p.age<40)return false}else{if(p.age<+parts[0]||p.age>+parts[1])return false}}
