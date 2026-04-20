@@ -170,10 +170,40 @@ select.ri{appearance:none;-webkit-appearance:none}
 .map-fade{position:absolute;bottom:-1px;left:0;right:0;height:120px;background:linear-gradient(transparent 0%,rgba(5,5,7,.25) 30%,rgba(5,5,7,.75) 60%,var(--bg) 100%);z-index:5;pointer-events:none}
 .map-fade::after{content:'';position:absolute;bottom:100%;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,109,46,.25),rgba(254,60,114,.25),transparent)}
 .radar-content{position:relative;z-index:10;margin-top:calc(48% - 32px);padding-bottom:90px}
-/* Heim-Topbar über der Karte (absolut im screen, direkt unter Header) */
-.heim-topbar{display:flex;gap:8px;align-items:stretch;pointer-events:none;animation:heimTopSlide .45s var(--spring) both}
-#screen-radar .heim-topbar,#screen-crew .heim-topbar{position:absolute;top:calc(env(safe-area-inset-top,0) + 72px);left:10px;right:10px;z-index:420}
-@keyframes heimTopSlide{0%{opacity:0;transform:translateY(-14px)}100%{opacity:1;transform:translateY(0)}}
+/* v80: Goldene Heim-Setup-Card (inline in radar-content, nur wenn Urlaub+Setup fehlt) */
+.heim-setup-card{
+  position:relative;margin:0 14px 12px;padding:14px 16px 14px 14px;border-radius:18px;
+  background:linear-gradient(135deg,rgba(255,214,10,.22),rgba(255,149,0,.28) 45%,rgba(255,109,46,.18));
+  border:1.5px solid rgba(255,214,10,.55);
+  display:flex;align-items:center;gap:12px;cursor:pointer;overflow:hidden;
+  box-shadow:0 10px 30px rgba(255,149,0,.28),inset 0 1px 0 rgba(255,255,255,.22),0 0 0 1px rgba(255,214,10,.18);
+  animation:hscArrive .55s var(--spring) both,hscPulse 3s ease-in-out infinite;
+  -webkit-tap-highlight-color:transparent;
+}
+.heim-setup-card:active{transform:scale(.98)}
+.heim-setup-card .hsc-glow{position:absolute;inset:-2px;border-radius:inherit;background:radial-gradient(ellipse at 20% 10%,rgba(255,214,10,.28),transparent 60%);pointer-events:none;z-index:0}
+.heim-setup-card .hsc-sweep{position:absolute;top:0;left:-50%;width:40%;height:100%;background:linear-gradient(110deg,transparent 0%,rgba(255,255,255,.28) 50%,transparent 100%);transform:skewX(-16deg);pointer-events:none;z-index:1;animation:hscSweep 4.2s ease-in-out infinite}
+.heim-setup-card .hsc-ic{flex-shrink:0;width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#FFD60A,#FF9500 50%,#FF6D2E);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(255,149,0,.6),inset 0 1px 0 rgba(255,255,255,.45);z-index:2;position:relative}
+.heim-setup-card .hsc-ic svg{width:22px;height:22px;stroke:#1a1207;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.heim-setup-card .hsc-body{flex:1;min-width:0;z-index:2;position:relative}
+.heim-setup-card .hsc-title{font-size:15px;font-weight:900;letter-spacing:-.1px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.35);line-height:1.2}
+.heim-setup-card .hsc-sub{font-size:11.5px;font-weight:500;color:rgba(255,245,220,.88);margin-top:4px;line-height:1.4}
+.heim-setup-card .hsc-cta{display:flex;align-items:center;gap:6px;margin-top:8px;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);width:fit-content;font-size:11px;font-weight:900;color:#FFF5CC;letter-spacing:.2px;text-transform:uppercase}
+.heim-setup-card .hsc-cta svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.heim-setup-card .hsc-dismiss{position:absolute;top:8px;right:10px;width:26px;height:26px;border-radius:50%;background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:rgba(255,255,255,.7);cursor:pointer;z-index:3;padding:0;transition:transform .18s var(--spring),background .18s}
+.heim-setup-card .hsc-dismiss:active{transform:scale(.88);background:rgba(0,0,0,.7);color:#fff}
+@keyframes hscArrive{0%{opacity:0;transform:translateY(-10px) scale(.96)}100%{opacity:1;transform:none}}
+@keyframes hscPulse{0%,100%{box-shadow:0 10px 30px rgba(255,149,0,.28),inset 0 1px 0 rgba(255,255,255,.22),0 0 0 1px rgba(255,214,10,.18)}50%{box-shadow:0 14px 38px rgba(255,149,0,.45),inset 0 1px 0 rgba(255,255,255,.3),0 0 0 2px rgba(255,214,10,.32)}}
+@keyframes hscSweep{0%{left:-50%}55%{left:120%}100%{left:120%}}
+@media (prefers-reduced-motion:reduce){.heim-setup-card{animation:hscArrive .55s var(--spring) both}.heim-setup-card .hsc-sweep{display:none}}
+/* v80: Kompakt-Variante wenn weniger Platz */
+@media (max-width:360px){
+  .heim-setup-card{padding:12px 12px 12px 10px;gap:10px}
+  .heim-setup-card .hsc-ic{width:38px;height:38px;border-radius:12px}
+  .heim-setup-card .hsc-ic svg{width:19px;height:19px}
+  .heim-setup-card .hsc-title{font-size:14px}
+  .heim-setup-card .hsc-sub{font-size:11px}
+}
 /* Globale Micro-Interactions */
 @media (prefers-reduced-motion: no-preference){
   .scr.active .radar-content > *{animation:scrFadeUp .5s var(--spring) both}
@@ -215,71 +245,11 @@ nav button.active::before{opacity:1}
   @keyframes cardArrive{0%{opacity:0;transform:translateY(14px) scale(.98)}100%{opacity:1;transform:none}}
   /* Hover-Lift-Fallback für Touch */
   .vcard:active,.ex-tile:active{filter:brightness(1.05)}
-  /* Heim-Button orange Shimmer (v78) */
-  .heim-btn-big:not(.needs-setup){animation:heimOrangeGlow 2.8s ease-in-out infinite,heimAmbient 9s ease-in-out infinite}
-  @keyframes heimAmbient{0%,100%{filter:brightness(1)}50%{filter:brightness(1.12) saturate(1.15)}}
-  @keyframes heimOrangeGlow{
-    0%,100%{box-shadow:0 10px 28px rgba(0,0,0,.45),0 0 0 1px rgba(255,255,255,.05),inset 0 1px 0 rgba(255,255,255,.2),0 0 20px rgba(255,149,0,.35),0 0 40px rgba(255,109,46,.18)}
-    50%{box-shadow:0 12px 32px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.08),inset 0 1px 0 rgba(255,255,255,.28),0 0 34px rgba(255,149,0,.65),0 0 68px rgba(255,109,46,.4)}
-  }
-  /* Shimmer-Sweep über den Button */
-  .heim-btn-big:not(.needs-setup)::after{
-    content:'';position:absolute;top:0;left:-60%;width:40%;height:100%;z-index:1;pointer-events:none;
-    background:linear-gradient(100deg,transparent 0%,rgba(255,255,255,.22) 45%,rgba(255,214,10,.28) 55%,transparent 100%);
-    transform:skewX(-18deg);animation:heimSweep 3.6s ease-in-out infinite;
-  }
-  @keyframes heimSweep{
-    0%{left:-60%}60%{left:120%}100%{left:120%}
-  }
   /* Nav-Icon Active: leichter Wobble beim Tap */
   nav button.active .ni{animation:navBob 2.6s ease-in-out infinite}
   @keyframes navBob{0%,100%{transform:scale(1.2) translateY(-1px)}50%{transform:scale(1.24) translateY(-2px)}}
 }
-.heim-topbar > *{pointer-events:auto}
-.heim-btn-big{flex:1;min-height:56px;display:flex;align-items:center;gap:11px;padding:10px 16px;border-radius:18px;background:linear-gradient(135deg,rgba(255,149,0,.52),rgba(255,109,46,.38) 55%,rgba(254,60,114,.25));border:1.5px solid rgba(255,149,0,.72);color:#FFF5E1;font-size:14px;font-weight:900;font-family:Inter,sans-serif;cursor:pointer;box-shadow:0 10px 28px rgba(0,0,0,.45),0 0 0 1px rgba(255,255,255,.05),inset 0 1px 0 rgba(255,255,255,.2),0 0 20px rgba(255,149,0,.35);backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);transition:transform .2s var(--spring),box-shadow .2s var(--spring);text-align:left}
-.heim-btn-big:active{transform:scale(.96)}
-.heim-btn-big::before{content:'';position:absolute;inset:0;border-radius:inherit;background:radial-gradient(circle at var(--rx,50%) var(--ry,50%),rgba(255,255,255,.25),transparent 55%);opacity:0;transition:opacity .35s ease;pointer-events:none}
-.heim-btn-big:active::before{opacity:1;transition:opacity 0s}
-.heim-btn-big{position:relative;overflow:hidden}
-.heim-btn-big .hbig-ic{width:34px;height:34px;flex-shrink:0;border-radius:11px;background:linear-gradient(135deg,#FFD60A,#FF9500 55%,#FF6D2E);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(255,149,0,.6),inset 0 1px 0 rgba(255,255,255,.4)}
-.heim-btn-big .hbig-ic svg{width:18px;height:18px;stroke:#1a1207;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
-.heim-btn-big .hbig-txt{display:flex;flex-direction:column;line-height:1.18;min-width:0;flex:1}
-.heim-btn-big .hbig-title{font-size:14.5px;font-weight:900;letter-spacing:.15px;color:#fff;white-space:nowrap;text-shadow:0 1px 2px rgba(0,0,0,.3)}
-.heim-btn-big .hbig-sub{font-size:10.5px;font-weight:700;color:rgba(255,237,204,.82);text-transform:uppercase;letter-spacing:.65px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.heim-btn-big .hbig-arrow{flex-shrink:0;color:rgba(255,255,255,.75);margin-left:4px}
-.heim-btn-big .hbig-arrow svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
-.heim-btn-big.needs-setup{background:linear-gradient(135deg,rgba(255,159,10,.38),rgba(255,69,58,.25));border-color:rgba(255,159,10,.6);color:#FFE8CC;animation:heimWarn 2.8s ease-in-out infinite}
-.heim-btn-big.needs-setup .hbig-ic{background:linear-gradient(135deg,#FF9F0A,#FF453A);box-shadow:0 4px 14px rgba(255,159,10,.55)}
-/* Dismiss-X — nur sichtbar wenn needs-setup */
-.heim-btn-big .hbig-dismiss{position:absolute;top:4px;right:6px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.35);display:none;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:rgba(255,255,255,.65);border:1px solid rgba(255,255,255,.12);cursor:pointer;line-height:1;z-index:2;transition:transform .18s var(--spring),background .18s}
-.heim-btn-big .hbig-dismiss:active{transform:scale(.88);background:rgba(0,0,0,.55);color:#fff}
-.heim-btn-big.needs-setup .hbig-dismiss{display:flex;animation:dismissFadeIn .4s .2s both}
-@keyframes dismissFadeIn{0%{opacity:0;transform:scale(.5)}100%{opacity:1;transform:scale(1)}}
-/* Mini-Reminder (Pill wenn dismissed) */
-.heim-mini-reminder{display:none;align-items:center;gap:6px;padding:6px 12px 6px 10px;border-radius:999px;background:linear-gradient(135deg,rgba(255,159,10,.22),rgba(255,159,10,.12));border:1px solid rgba(255,159,10,.35);color:#FFDAA0;font-size:11.5px;font-weight:800;font-family:Inter,sans-serif;cursor:pointer;box-shadow:0 8px 20px rgba(0,0,0,.35);backdrop-filter:blur(28px) saturate(160%);-webkit-backdrop-filter:blur(28px) saturate(160%);pointer-events:auto;animation:heimMrSlide .45s var(--spring) both;transition:transform .2s var(--spring)}
-.heim-mini-reminder:active{transform:scale(.94)}
-.heim-mini-reminder .hmr-icon{font-size:13px}
-.heim-mini-reminder .hmr-arrow{color:rgba(255,218,160,.7);font-weight:900;margin-left:2px}
-#screen-radar .heim-mini-reminder{position:absolute;top:calc(env(safe-area-inset-top,0) + 72px);right:10px;z-index:420}
-#screen-crew .heim-mini-reminder.crew-mini-reminder{position:absolute;top:calc(env(safe-area-inset-top,0) + 72px);right:10px;z-index:420}
-.heim-mini-reminder.show{display:inline-flex}
-@keyframes heimMrSlide{0%{opacity:0;transform:translateY(-8px) scale(.9)}100%{opacity:1;transform:none}}
-@keyframes heimGlow{0%,100%{box-shadow:0 10px 28px rgba(0,0,0,.45),0 0 0 1px rgba(255,255,255,.05),inset 0 1px 0 rgba(255,255,255,.15),0 0 0 2px rgba(48,209,88,.0)}50%{box-shadow:0 10px 30px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.05),inset 0 1px 0 rgba(255,255,255,.18),0 0 0 3px rgba(48,209,88,.2)}}
-@keyframes heimWarn{0%,100%{box-shadow:0 10px 28px rgba(0,0,0,.5),0 0 0 1px rgba(255,159,10,.08),inset 0 1px 0 rgba(255,255,255,.15)}50%{box-shadow:0 10px 30px rgba(0,0,0,.55),0 0 0 3px rgba(255,159,10,.25),inset 0 1px 0 rgba(255,255,255,.18)}}
-.heim-loc-pill{display:flex;align-items:center;gap:7px;padding:0 14px;height:52px;border-radius:16px;background:linear-gradient(135deg,rgba(22,22,28,.85),rgba(12,10,14,.75));backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);border:1px solid rgba(255,255,255,.12);color:#fff;font-size:12px;font-weight:900;cursor:pointer;box-shadow:0 10px 28px rgba(0,0,0,.45);white-space:nowrap;max-width:44%;overflow:hidden;position:relative;transition:transform .25s var(--spring),border-color .25s}
-.heim-loc-pill:active{transform:scale(.96)}
-.heim-loc-pill svg{width:14px;height:14px;stroke:#30D158;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
-.heim-loc-pill .hlp-dot{width:7px;height:7px;border-radius:50%;background:#30D158;box-shadow:0 0 0 4px rgba(48,209,88,.18);flex-shrink:0;animation:locDotPulse 2.4s ease-in-out infinite}
-@keyframes locDotPulse{0%,100%{box-shadow:0 0 0 4px rgba(48,209,88,.18)}50%{box-shadow:0 0 0 7px rgba(48,209,88,.05)}}
-.heim-loc-pill .hlp-city{font-size:12.5px;font-weight:900;color:#fff;letter-spacing:.1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
-.heim-loc-pill.loading .hlp-dot{background:#FF9F0A;animation:locDotLoad 1s ease-in-out infinite}
-@keyframes locDotLoad{0%,100%{opacity:.4}50%{opacity:1}}
-@media (max-width:380px){
-  .heim-btn-big .hbig-sub{display:none}
-  .heim-btn-big{min-height:46px;padding:6px 10px}
-  .heim-btn-big .hbig-ic{width:28px;height:28px}
-  .heim-loc-pill{padding:6px 10px;min-height:46px;max-width:38%}
-}
+/* v80: heim-btn-big + mini-reminder + heim-loc-pill Altlasten aus v78 komplett entfernt */
 .pin{border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;color:#fff;border:2px solid #fff;box-shadow:0 4px 12px rgba(0,0,0,.3);cursor:pointer}
 .pin-hot{width:44px;height:44px;background:var(--fire);animation:pg 2s infinite}
 .pin-busy{width:40px;height:40px;background:var(--o)}
@@ -861,6 +831,20 @@ nav button.active::before{opacity:1}
 .clc-dist{font-size:11px;font-weight:700;color:var(--o);white-space:nowrap}
 .clc-navigate{padding:5px 10px;border-radius:14px;background:rgba(52,199,89,.1);border:1px solid rgba(52,199,89,.2);color:var(--green);font-size:10px;font-weight:700;cursor:pointer;white-space:nowrap}
 .clc-navigate:active{transform:scale(.9)}
+
+/* v80: Crew in der Nähe — kompakt-Card auf Crew-Screen */
+.crew-nearby-section{margin:8px 14px 10px;padding:12px 14px;border-radius:18px;background:linear-gradient(135deg,rgba(48,209,88,.09),rgba(10,132,255,.06));border:1px solid rgba(48,209,88,.22);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 4px 18px rgba(0,0,0,.18)}
+.crew-nearby-header{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.crew-nearby-header .cnh-ic{width:28px;height:28px;border-radius:10px;background:linear-gradient(135deg,#34C759,#0A84FF);display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 2px 8px rgba(48,209,88,.3)}
+.crew-nearby-header .cnh-body{flex:1;min-width:0}
+.crew-nearby-header .cnh-title{font-size:13.5px;font-weight:900;color:#fff;letter-spacing:-.1px}
+.crew-nearby-header .cnh-sub{font-size:11px;color:var(--t3);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.crew-nearby-header .cnh-refresh{width:30px;height:30px;border-radius:50%;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.06);color:#fff;font-size:14px;font-weight:900;cursor:pointer;transition:transform .2s var(--spring)}
+.crew-nearby-header .cnh-refresh:active{transform:scale(.88) rotate(160deg);background:rgba(48,209,88,.18)}
+.crew-nearby-list{display:flex;flex-direction:column}
+.crew-nearby-list .nearby-card,.crew-nearby-list > div{border-bottom:1px solid rgba(255,255,255,.04)}
+.crew-nearby-list .nearby-card:last-child{border-bottom:none}
+.crew-nearby-list p{margin:0}
 
 /* DAILY VOTING CARDS */
 .daily-vote-question{padding:4px 14px 10px;font-size:13px;color:var(--t2);line-height:1.5}
@@ -3895,24 +3879,23 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
           <span class="ctx-ico">🎉</span><span class="ctx-lbl">Event</span>
         </button>
       </div>
-      <div class="heim-topbar" id="heimTopbarRadar">
-        <button class="heim-btn-big" id="heimTopbarBtn" onclick="openHomeSafe()" aria-label="Bring mich nach Hause">
-          <div class="hbig-ic"><svg viewBox="0 0 24 24"><use href="#i-home-safe"/></svg></div>
-          <div class="hbig-txt">
-            <span class="hbig-title" id="heimBigTitle">🏠 Bring mich nach Hause</span>
-            <span class="hbig-sub" id="heimBigSub">Einrichten &amp; Crew informieren</span>
-          </div>
-          <span class="hbig-arrow"><svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg></span>
-          <span class="hbig-dismiss" onclick="event.stopPropagation();dismissHeimSetup();" aria-label="Später erinnern">✕</span>
-        </button>
-      </div>
-      <!-- Mini-Reminder wenn dismissed -->
-      <button class="heim-mini-reminder" id="heimMiniReminder" onclick="undismissHeimSetup()">
-        <span class="hmr-icon">🏠</span>
-        <span class="hmr-txt">Heim-Setup</span>
-        <span class="hmr-arrow">›</span>
-      </button>
+      <!-- v80: Big heim-topbar entfernt — Header-Button reicht. Setup-Card ist jetzt inline unten. -->
       <div class="radar-content">
+        <!-- v80: Goldene Heim-Setup-Card — erscheint wenn Urlaub-Mode + Setup fehlt -->
+        <div class="heim-setup-card" id="heimSetupCard" onclick="openHomeSafe()" style="display:none" role="button" aria-label="Heim-Setup einrichten">
+          <div class="hsc-glow"></div>
+          <div class="hsc-sweep"></div>
+          <button class="hsc-dismiss" onclick="event.stopPropagation();dismissHeimSetup();" aria-label="Später erinnern">✕</button>
+          <div class="hsc-ic"><svg viewBox="0 0 24 24"><use href="#i-home-safe"/></svg></div>
+          <div class="hsc-body">
+            <div class="hsc-title" id="heimSetupCardTitle">🛠️ Mallorca-Setup einrichten</div>
+            <div class="hsc-sub" id="heimSetupCardSub">Hotel &amp; Buddy hinterlegen — damit deine Crew dich im Notfall sicher nach Hause bringt.</div>
+            <div class="hsc-cta">
+              <span class="hsc-cta-label">Jetzt in 60 Sek einrichten</span>
+              <svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
+            </div>
+          </div>
+        </div>
         <div class="active-counter anim" id="activeCounter" style="margin:0 14px 8px;display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;background:rgba(52,199,89,.06);border:1px solid rgba(52,199,89,.12)">
           <div class="active-dot" style="width:8px;height:8px;border-radius:50%;background:var(--green);animation:activePulse 2s ease infinite"></div>
           <span style="font-size:13px;font-weight:700"><span id="activeCount">0</span> Leute online</span>
@@ -3971,23 +3954,7 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
           <span class="ctx-ico">🎉</span><span class="ctx-lbl">Event</span>
         </button>
       </div>
-      <!-- HEIM-TOPBAR (absolute overlay above crew map) -->
-      <div class="heim-topbar crew-heim-topbar" id="heimTopbarCrewWrap">
-        <button class="heim-btn-big" id="heimTopbarBtnCrew" onclick="openHomeSafe()" aria-label="Bring mich nach Hause">
-          <div class="hbig-ic"><svg viewBox="0 0 24 24"><use href="#i-home-safe"/></svg></div>
-          <div class="hbig-txt">
-            <span class="hbig-title" id="heimBigTitleCrew">🏠 Bring mich nach Hause</span>
-            <span class="hbig-sub" id="heimBigSubCrew">Crew informieren &amp; Route</span>
-          </div>
-          <span class="hbig-arrow"><svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg></span>
-          <span class="hbig-dismiss" onclick="event.stopPropagation();dismissHeimSetup();" aria-label="Später erinnern">✕</span>
-        </button>
-      </div>
-      <button class="heim-mini-reminder crew-mini-reminder" id="heimMiniReminderCrew" onclick="undismissHeimSetup()">
-        <span class="hmr-icon">🏠</span>
-        <span class="hmr-txt">Heim-Setup</span>
-        <span class="hmr-arrow">›</span>
-      </button>
+      <!-- v80: Big heim-topbar entfernt — Header-Button reicht. -->
       <!-- CREW MAP — Where is everyone? -->
       <div class="crew-map-full"><div id="crewMap"></div>
         <div class="crew-map-overlay">
@@ -4031,7 +3998,18 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
           </div>
         </div>
 
-        <!-- HOME-SAFE moved to overlay above crew map -->
+        <!-- v80: Crew in der Nähe — direkt oben im Crew-Screen -->
+        <div class="crew-nearby-section" id="crewNearbySection">
+          <div class="crew-nearby-header">
+            <div class="cnh-ic">📍</div>
+            <div class="cnh-body">
+              <div class="cnh-title">Crew in der Nähe</div>
+              <div class="cnh-sub" id="crewNearbySub">wird geladen …</div>
+            </div>
+            <button class="cnh-refresh" onclick="refreshNearbyCrew()" aria-label="Aktualisieren" title="Aktualisieren">↻</button>
+          </div>
+          <div id="crewNearbyListCrewScreen" class="crew-nearby-list"><p style="color:var(--t3);font-size:12px;padding:6px 4px">Standort wird geladen …</p></div>
+        </div>
 
 
         <!-- FLOATING MINI BUTTONS — Chat + Location always accessible -->
@@ -4507,7 +4485,7 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 79;
+  var APP_VERSION = 80;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     // Force-clear old non-UUID crew IDs
@@ -4635,7 +4613,7 @@ async function logPrivacyConsent(mode, previousMode, state){
       deals_consent: !!(state.consent && state.consent.deals_consent),
       consent_version: 1,
       user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-      app_version: 79,
+      app_version: 80,
       // v73: tag source so we can see who was newly prompted vs. picked from settings
       source: (!previousMode && ME && ME.created_at && (Date.now()-new Date(ME.created_at).getTime())>3600000) ? 'existing_user_v72_prompt' : (!previousMode ? 'first_run' : 'settings_change')
     };
@@ -4683,7 +4661,7 @@ function clearPrivacyData(){
         deals_consent: false,
         consent_version: 1,
         user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-        app_version: 79,
+        app_version: 80,
         source: 'user_reset'
       };
       sb.from('privacy_consent_log').insert(clearRow).then(function(r){ if(r&&r.error) console.warn('[PM] clear log err', r.error.message); });
@@ -4988,10 +4966,28 @@ window.setContextMode = function(ctx){
              event:'🎉 Event-Modus — kein Tracking'}[ctx];
   if(msg && typeof toast==='function') toast(msg);
 
-  // If we just turned on Urlaub → request GPS
+  // If we just turned on Urlaub → request GPS + trigger heim-setup if missing
   if(ctx === 'urlaub'){
     setTimeout(function(){ try{ checkLocationConsent(); }catch(e){} }, 180);
+    // v80: Goldene Setup-Card automatisch einblenden wenn noch kein Hotel/Buddy gesetzt
+    setTimeout(function(){
+      try{
+        var s = (typeof hsGetSetup==='function') ? hsGetSetup() : null;
+        var info = (typeof hsSetupCompleteness==='function') ? hsSetupCompleteness(s) : {ready:false};
+        if(!info.ready){
+          // reset dismiss-timer so card shows NOW (user actively switched to Urlaub)
+          try{ localStorage.removeItem('heim_setup_dismissed_until_v1'); }catch(e){}
+          try{ localStorage.removeItem('heim_setup_dismissed_count_v1'); }catch(e){}
+          if(typeof hsUpdateHeaderDot==='function') hsUpdateHeaderDot();
+          // auto-open setup after short grace period
+          var grace = 450;
+          setTimeout(function(){ try{ openHomeSafe(); }catch(e){} }, grace);
+        }
+      }catch(e){ console.warn('[CTX] urlaub heim-setup check err',e); }
+    }, 260);
   }
+  // v80: bei jedem Wechsel nachschauen ob Setup-Card angezeigt werden muss
+  try{ if(typeof hsUpdateHeaderDot==='function') hsUpdateHeaderDot(); }catch(e){}
 };
 
 function adaptUIForContext(ctx){
@@ -6443,27 +6439,58 @@ function haversine(lat1,lng1,lat2,lng2){
   return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
 }
 async function buildNearby(){
-  var el=document.getElementById('nearbyCrewList');if(!el)return;
-  if(!ME||!ME.user_id){return}
-  if(!userLat||!userLng){el.innerHTML='<p style="color:var(--t3);font-size:13px">Aktiviere deinen Standort um Crew in der Nähe zu sehen.</p>';return}
-  // Get active crew members
-  var ids=await getActiveCrewMemberIds();
-  if(!ids||ids.length===0){el.innerHTML='<p style="color:var(--t3);font-size:13px">Tritt einer Crew bei um Mitglieder hier zu sehen!</p>';return}
-  var {data:profiles}=await sb.from('profiles').select('user_id,name,photo_url,lat,lng,mood,location_updated_at').in('user_id',ids).not('lat','is',null);
-  if(!profiles||profiles.length===0){el.innerHTML='<p style="color:var(--t3);font-size:13px">Keine Crew-Mitglieder mit Standort in der Nähe.</p>';return}
-  // Calc distances
-  var nearby=profiles.map(function(p){
-    p._dist=haversine(userLat,userLng,p.lat,p.lng);return p;
-  }).filter(function(p){return p._dist<=10}).sort(function(a,b){return a._dist-b._dist});
-  if(nearby.length===0){el.innerHTML='<p style="color:var(--t3);font-size:13px">Gerade keine Crew in der Nähe.</p>';return}
-  var poked=JSON.parse(localStorage.getItem('crew_poked')||'{}');
-  el.innerHTML=nearby.map(function(p){
-    var distTxt=p._dist<1?(Math.round(p._dist*1000)+'m'):(p._dist.toFixed(1)+'km');
-    var canPoke=p._dist<=2;
-    var wasPoked=poked[p.user_id]&&(Date.now()-poked[p.user_id]<3600000);
+  // v80: fill both radar and crew-screen nearby lists
+  var radarEl = document.getElementById('nearbyCrewList');
+  var crewEl  = document.getElementById('crewNearbyListCrewScreen');
+  var crewSub = document.getElementById('crewNearbySub');
+  var targets = [radarEl, crewEl].filter(Boolean);
+  if(targets.length===0) return;
+  function setAll(html, subTxt){
+    targets.forEach(function(t){ t.innerHTML = html; });
+    if(crewSub && typeof subTxt==='string') crewSub.textContent = subTxt;
+  }
+  if(!ME||!ME.user_id){ return; }
+  if(!userLat||!userLng){
+    setAll('<p style="color:var(--t3);font-size:13px;padding:6px 4px">Aktiviere deinen Standort um Crew in der Nähe zu sehen.</p>','Standort fehlt');
+    return;
+  }
+  var ids = await getActiveCrewMemberIds();
+  if(!ids || ids.length===0){
+    setAll('<p style="color:var(--t3);font-size:13px;padding:6px 4px">Tritt einer Crew bei um Mitglieder hier zu sehen!</p>','Keine Crew');
+    return;
+  }
+  var res;
+  try{
+    res = await sb.from('profiles').select('user_id,name,photo_url,lat,lng,mood,location_updated_at').in('user_id',ids).not('lat','is',null);
+  }catch(e){ console.warn('[NEARBY] query err',e); }
+  var profiles = (res && res.data) ? res.data : [];
+  if(!profiles || profiles.length===0){
+    setAll('<p style="color:var(--t3);font-size:13px;padding:6px 4px">Keine Crew-Mitglieder mit geteiltem Standort.</p>','Niemand teilt Standort');
+    return;
+  }
+  var nearby = profiles.map(function(p){
+    p._dist = haversine(userLat,userLng,p.lat,p.lng);
+    return p;
+  }).filter(function(p){ return p._dist <= 10; }).sort(function(a,b){ return a._dist - b._dist; });
+  if(nearby.length===0){
+    setAll('<p style="color:var(--t3);font-size:13px;padding:6px 4px">Gerade keine Crew in der Nähe (&lt;10 km).</p>','0 in der Nähe');
+    return;
+  }
+  var poked = JSON.parse(localStorage.getItem('crew_poked')||'{}');
+  var html = nearby.map(function(p){
+    var distTxt = p._dist<1 ? (Math.round(p._dist*1000)+'m') : (p._dist.toFixed(1)+'km');
+    var canPoke = p._dist<=2;
+    var wasPoked = poked[p.user_id] && (Date.now()-poked[p.user_id] < 3600000);
     return '<div class="nearby-card" onclick="openUserProfile(\''+p.user_id+'\')"><div class="nc-ava"><img src="'+(p.photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80')+'" loading="lazy"></div><div class="nc-info"><div class="nc-name">'+esc(p.name)+(p.mood?' '+p.mood:'')+'</div><div class="nc-dist">📍 '+distTxt+' entfernt</div></div>'+(canPoke?'<button class="nc-poke'+(wasPoked?' poked':'')+'" onclick="event.stopPropagation();pokeUser(\''+p.user_id+'\',\''+esc(p.name)+'\')">'+(wasPoked?'Angestupst ✓':'Anstupsen 👋')+'</button>':'')+'</div>';
   }).join('');
+  setAll(html, nearby.length + ' Mitglied' + (nearby.length===1?'':'er') + ' in der Nähe');
 }
+window.refreshNearbyCrew = function(){
+  try{ if(navigator.vibrate) navigator.vibrate(12); }catch(e){}
+  var sub = document.getElementById('crewNearbySub');
+  if(sub) sub.textContent = 'Aktualisiere …';
+  buildNearby().catch(function(e){ console.warn('[NEARBY] refresh err',e); });
+};
 window.pokeUser=async function(uid,name){
   var poked=JSON.parse(localStorage.getItem('crew_poked')||'{}');
   if(poked[uid]&&(Date.now()-poked[uid]<3600000)){toast('Schon angestupst! Warte eine Stunde.');return}
@@ -10008,46 +10035,25 @@ function hsUpdateHeaderDot(){
   var dismissed = _heimIsDismissed();
   var needsSetup = !info.ready;
 
-  // v78: Crew-Topbar bleibt IMMER sichtbar (Heim-Button direkt anwählbar).
-  // Nur auf Radar wird bei needsSetup+dismissed ausgeblendet und Mini-Reminder gezeigt.
-  var radarWrap = document.getElementById('heimTopbarRadar');
-  if(radarWrap){
-    if(needsSetup && dismissed){ radarWrap.style.display='none'; }
-    else { radarWrap.style.display=''; }
-  }
-  var crewWrap = document.getElementById('heimTopbarCrewWrap');
-  if(crewWrap){ crewWrap.style.display=''; }
-  var rMini = document.getElementById('heimMiniReminder');
-  if(rMini){
-    if(needsSetup && dismissed){ rMini.classList.add('show'); }
-    else { rMini.classList.remove('show'); }
-  }
-  // Crew-Mini-Reminder wird nie mehr gebraucht, da Topbar immer sichtbar
-  var cMini = document.getElementById('heimMiniReminderCrew');
-  if(cMini){ cMini.classList.remove('show'); }
-
-  ['heimTopbarBtn','heimTopbarBtnCrew'].forEach(function(btnId, idx){
-    var big = document.getElementById(btnId);
-    if(!big) return;
-    var suffix = idx===1 ? 'Crew' : '';
-    var title = document.getElementById('heimBigTitle'+suffix);
-    var sub = document.getElementById('heimBigSub'+suffix);
-    if(needsSetup){
-      big.classList.add('needs-setup');
-      if(title) title.textContent = '⚠️ Heim-Setup einrichten';
-      if(sub) sub.textContent = 'Tippe — Hotel & Buddy festlegen';
-    } else {
-      big.classList.remove('needs-setup');
-      if(title) title.textContent = '🏠 Bring mich nach Hause';
-      if(sub){
-        if(hotelName){
-          sub.textContent = '→ '+String(hotelName).split(',')[0].slice(0,28);
-        } else {
-          sub.textContent = 'Crew informieren · Route starten';
-        }
+  // v80: Goldene Setup-Card auf Radar — nur wenn Urlaub-Mode + Setup fehlt + nicht dismissed
+  var setupCard = document.getElementById('heimSetupCard');
+  if(setupCard){
+    var curCtx = (typeof getContextMode==='function') ? getContextMode() : null;
+    var showCard = needsSetup && !dismissed && curCtx === 'urlaub';
+    setupCard.style.display = showCard ? '' : 'none';
+    // Title/Sub je nach Setup-Fortschritt feintunen
+    var t = document.getElementById('heimSetupCardTitle');
+    var s = document.getElementById('heimSetupCardSub');
+    if(t && s){
+      if(hotelName){
+        t.textContent = '🛠️ Setup vervollständigen';
+        s.textContent = 'Hotel steht — jetzt Buddy & Notfall-Kontakt ergänzen.';
+      } else {
+        t.textContent = '🛠️ Mallorca-Setup einrichten';
+        s.textContent = 'Hotel & Buddy hinterlegen — damit deine Crew dich im Notfall sicher nach Hause bringt.';
       }
     }
-  });
+  }
 }
 
 // ============================================
@@ -10345,7 +10351,7 @@ window.go=function(n,b){
   },450);
   if(n==='match')buildCards();
   if(n==='deals'){ try{ exploreGo('hub'); }catch(e){} }
-  if(n==='crew'){fetchAllCrews().then(function(){return loadMyCrewMemberships()}).then(function(){updateCrewGate();buildCrewSwitcher();renderCrewBoard();updateCrewIdentityCard();buildCrewStatus();buildCrewList().then(buildCrewActivityFeed);buildCrewLocations();buildMiniChat();buildDailyVoting();buildLeaderboard();buildChallenges();updateChallengeTimer()}).catch(function(e){console.error('Crew load error:',e);updateCrewGate()})}
+  if(n==='crew'){fetchAllCrews().then(function(){return loadMyCrewMemberships()}).then(function(){updateCrewGate();buildCrewSwitcher();renderCrewBoard();updateCrewIdentityCard();buildCrewStatus();buildCrewList().then(buildCrewActivityFeed);buildCrewLocations();buildMiniChat();buildDailyVoting();buildLeaderboard();buildChallenges();updateChallengeTimer();try{buildNearby()}catch(e){console.warn('[CREW] buildNearby failed:',e)}}).catch(function(e){console.error('Crew load error:',e);updateCrewGate()})}
 };
 
 // ============================================
