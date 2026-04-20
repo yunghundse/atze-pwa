@@ -2804,6 +2804,7 @@ nav{padding-bottom:max(6px,env(safe-area-inset-bottom)) !important}
   box-shadow:0 6px 14px -4px rgba(254,60,114,.35),inset 0 1px 0 rgba(255,255,255,.12);
 }
 .ctx-chip.active[data-ctx="zuhause"]{background:linear-gradient(135deg,rgba(10,132,255,.38),rgba(52,199,89,.28))}
+/* v98: Event-Chip vorerst entfernt, Style bleibt für späteres Re-Enable */
 .ctx-chip.active[data-ctx="event"]{background:linear-gradient(135deg,rgba(191,90,242,.4),rgba(255,109,46,.28))}
 @media (max-width:374px){
   .ctx-chip{padding:8px 6px;font-size:11.5px}
@@ -3997,9 +3998,10 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
         <button class="ctx-chip" data-ctx="zuhause" onclick="setContextMode('zuhause')" role="tab">
           <span class="ctx-ico">🏠</span><span class="ctx-lbl">Zuhause</span>
         </button>
-        <button class="ctx-chip" data-ctx="event" onclick="setContextMode('event')" role="tab">
+        <!-- v98: Event-Chip vorerst entfernt — kommt in einem späteren Update wieder -->
+        <!--<button class="ctx-chip" data-ctx="event" onclick="setContextMode('event')" role="tab">
           <span class="ctx-ico">🎉</span><span class="ctx-lbl">Event</span>
-        </button>
+        </button>-->
       </div>
       <!-- v80: Big heim-topbar entfernt — Header-Button reicht. Setup-Card ist jetzt inline unten. -->
       <div class="radar-content">
@@ -4055,10 +4057,11 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
             <div id="weatherHumid" style="font-size:11px;color:var(--t3);margin-top:3px;display:flex;align-items:center;gap:4px;justify-content:flex-end"><svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:currentColor;fill-opacity:.2;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><use href="#i-drop"/></svg><span>–</span></div>
           </div>
         </div>
-        <div class="sec-label anim">🔥 Live auf der Insel</div>
-        <div class="hscroll anim" id="venueScroll"></div>
-        <div class="sec-label anim d1">👥 Crew in der Nähe</div>
-        <div id="nearbyCrewList" class="anim d1" style="padding:0 14px 14px"><p style="color:var(--t3);font-size:13px">Standort wird geladen...</p></div>
+        <!-- v98: "Live auf der Insel", "Crew in der Nähe" und "Malle-Countdown" vorerst entfernt — kommen später wieder -->
+        <!-- Platzhalter für Daten, damit Code nicht bricht: -->
+        <div id="venueScroll" style="display:none"></div>
+        <div id="nearbyCrewList" style="display:none"></div>
+        <div id="countdownCard" style="display:none"></div>
 
         <!-- v95: Neue Leute entdecken — hier auf Radar, nicht mehr im Crew-Menü -->
         <div class="anim d1" style="padding:0 14px 14px">
@@ -4069,8 +4072,6 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
             <button onclick="go('match',document.querySelectorAll('#navBar button')[3])" style="padding:14px 28px;border:none;border-radius:14px;background:var(--gold);color:#000;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;min-height:48px">🔥 Entdecken</button>
           </div>
         </div>
-
-        <div class="countdown-card anim d1" onclick="setTripDate()" id="countdownCard" style="margin:10px 14px"><h3>✈️ Malle-Countdown</h3><p>Tippe um dein Abreisedatum zu setzen</p></div>
       </div>
     </div>
     <div class="scr" id="screen-match"><div class="match-area"><div class="match-filter-bar"><select class="mf-select" id="mfGender" onchange="applyFilters()"><option value="">Alle</option><option value="Mann">Mann</option><option value="Frau">Frau</option><option value="Divers">Divers</option></select><select class="mf-select" id="mfAge" onchange="applyFilters()"><option value="">Alter</option><option value="18-21">18-21</option><option value="22-25">22-25</option><option value="26-30">26-30</option><option value="31-40">31-40</option><option value="40+">40+</option></select><select class="mf-select" id="mfCity" onchange="applyFilters()"><option value="">Wohnort</option></select><select class="mf-select" id="mfClub" onchange="applyFilters()"><option value="">Verein</option></select></div><div class="match-stack" id="matchStack"></div><div class="mactions"><button class="ma sm" onclick="rewind()" aria-label="Zurück"><svg class="icn" style="width:20px;height:20px" viewBox="0 0 24 24"><use href="#i-rewind"/></svg></button><button class="ma nope" onclick="doSwipe('left')" aria-label="Nope"><svg class="icn" style="width:28px;height:28px" viewBox="0 0 24 24"><use href="#i-x"/></svg></button><button class="ma super" onclick="superLike()" aria-label="Superlike"><svg class="icn icn-fill" style="width:24px;height:24px;color:#fff" viewBox="0 0 24 24"><use href="#i-star"/></svg></button><button class="ma like" onclick="doSwipe('right')" aria-label="Like"><svg class="icn icn-fill" style="width:32px;height:32px;color:#fff" viewBox="0 0 24 24"><use href="#i-heart"/></svg></button><button class="ma sm" onclick="toast('Matche & connecte auf Social!')" aria-label="Chat"><svg class="icn" style="width:20px;height:20px" viewBox="0 0 24 24"><use href="#i-chat"/></svg></button></div></div></div>
@@ -4093,9 +4094,10 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
             <button class="ctx-chip" data-ctx="zuhause" onclick="setContextMode('zuhause')" role="tab">
               <span class="ctx-ico">🏠</span><span class="ctx-lbl">Zuhause</span>
             </button>
-            <button class="ctx-chip" data-ctx="event" onclick="setContextMode('event')" role="tab">
+            <!-- v98: Event-Chip vorerst entfernt — kommt später wieder -->
+            <!--<button class="ctx-chip" data-ctx="event" onclick="setContextMode('event')" role="tab">
               <span class="ctx-ico">🎉</span><span class="ctx-lbl">Event</span>
-            </button>
+            </button>-->
           </div>
           <!-- Crew Cards List (dynamic) -->
           <div id="crewHubCards" class="crew-hub-cards"></div>
@@ -4142,9 +4144,10 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
         <button class="ctx-chip" data-ctx="zuhause" onclick="setContextMode('zuhause')" role="tab">
           <span class="ctx-ico">🏠</span><span class="ctx-lbl">Zuhause</span>
         </button>
-        <button class="ctx-chip" data-ctx="event" onclick="setContextMode('event')" role="tab">
+        <!-- v98: Event-Chip vorerst entfernt — kommt in einem späteren Update wieder -->
+        <!--<button class="ctx-chip" data-ctx="event" onclick="setContextMode('event')" role="tab">
           <span class="ctx-ico">🎉</span><span class="ctx-lbl">Event</span>
-        </button>
+        </button>-->
       </div>
       <!-- v80: Big heim-topbar entfernt — Header-Button reicht. -->
       <!-- CREW MAP — Where is everyone? -->
@@ -4784,7 +4787,7 @@ async function logPrivacyConsent(mode, previousMode, state){
       deals_consent: !!(state.consent && state.consent.deals_consent),
       consent_version: 1,
       user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-      app_version: 97,
+      app_version: 98,
       // v73: tag source so we can see who was newly prompted vs. picked from settings
       source: (!previousMode && ME && ME.created_at && (Date.now()-new Date(ME.created_at).getTime())>3600000) ? 'existing_user_v72_prompt' : (!previousMode ? 'first_run' : 'settings_change')
     };
@@ -4832,7 +4835,7 @@ function clearPrivacyData(){
         deals_consent: false,
         consent_version: 1,
         user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-        app_version: 97,
+        app_version: 98,
         source: 'user_reset'
       };
       sb.from('privacy_consent_log').insert(clearRow).then(function(r){ if(r&&r.error) console.warn('[PM] clear log err', r.error.message); });
@@ -8076,6 +8079,7 @@ async function joinCrew(crewId){
     await fetchAllCrews();
     // Set as active if first crew
     if(_myCrewMemberships.length===1)setActiveCrewId(crewId);
+    try{ if(typeof updateQuickStats==='function') updateQuickStats(); }catch(e){}
     return true;
   }catch(e){console.error('[CREW] join failed:',e);toast('Fehler beim Beitreten.');return false}
 }
@@ -8090,6 +8094,7 @@ async function leaveCrew(crewId){
     if(getActiveCrewId()===crewId){
       setActiveCrewId(_myCrewMemberships.length>0?_myCrewMemberships[0].crew_id:null);
     }
+    try{ if(typeof updateQuickStats==='function') updateQuickStats(); }catch(e){}
   }catch(e){console.error('[CREW] leave failed:',e)}
 }
 
@@ -11242,6 +11247,8 @@ window.go=function(n,b){
   },450);
   if(n==='match')buildCards();
   if(n==='deals'){ try{ exploreGo('hub'); }catch(e){} }
+  // v98: QuickStats bei Radar-Wechsel frisch ziehen
+  if(n==='radar'){ try{ updateQuickStats(); }catch(e){} }
   if(n==='crew'){
     // v81: always land in the hub overview first
     try{ crewGo('hub'); }catch(e){}
@@ -12762,19 +12769,55 @@ function updateActiveCounter(){
   }).catch(function(e){ console.warn('Active count failed:', e); });
 }
 
-function updateQuickStats(){
+// v98: QuickStats — echte Werte statt 0
+// - Connects: Matches (is_match=true) → ME._matchCount oder live fetch
+// - Crew: Mitglieder in meinen Crews (alle zusammen, exkl. mich selbst)
+// - Aura: ME.points (frisch aus profiles)
+async function updateQuickStats(){
   var matchEl = document.getElementById('qsMatches');
   var crewEl = document.getElementById('qsCrew');
   var auraEl = document.getElementById('qsAura');
-  if(matchEl) matchEl.textContent = ME._matchCount || 0;
-  if(auraEl) auraEl.textContent = ME.points || 0;
-  // Get crew count from matches where is_match=true
-  sb.from('matches').select('*', {count:'exact', head:true})
-    .eq('from_user', ME.user_id).eq('is_match', true)
-    .then(function(res){
-      if(crewEl) crewEl.textContent = res.count || 0;
-    }).catch(function(e){ console.warn('Crew count failed:', e); });
+  if(!ME || !ME.user_id) return;
+
+  // Aura sofort setzen (wir haben Wert)
+  if(auraEl) auraEl.textContent = (ME.points || 0);
+
+  // Connects — Matches live nachziehen (falls ME._matchCount noch nicht da)
+  try{
+    if(typeof ME._matchCount !== 'number'){
+      var r = await sb.from('matches').select('*',{count:'exact',head:true})
+        .eq('from_user', ME.user_id).eq('is_match', true);
+      ME._matchCount = r.count || 0;
+    }
+    if(matchEl) matchEl.textContent = ME._matchCount || 0;
+  }catch(e){ if(matchEl) matchEl.textContent = ME._matchCount || 0; }
+
+  // Crew-Count — alle Mitglieder in meinen Crews zusammen (exkl. mich)
+  try{
+    // Memberships sicherstellen
+    if(!_myCrewMemberships || !_myCrewMemberships.length){
+      try{ await loadMyCrewMemberships(); }catch(e){}
+    }
+    var crewIds = (_myCrewMemberships||[]).map(function(m){ return m.crew_id; });
+    if(!crewIds.length){
+      if(crewEl) crewEl.textContent = 0;
+    } else {
+      var rc = await sb.from('crew_members').select('user_id',{count:'exact',head:true}).in('crew_id', crewIds);
+      var total = rc.count || 0;
+      // Mich selbst pro Crew rausrechnen (in jeder Crew bin ich 1x gezählt)
+      var myCount = crewIds.length;
+      var others = Math.max(0, total - myCount);
+      if(crewEl) crewEl.textContent = others;
+    }
+  }catch(e){ console.warn('[v98] Crew-Count fehlgeschlagen:', e); if(crewEl) crewEl.textContent = 0; }
+
+  // Aura frisch aus profiles holen (falls sich was geändert hat)
+  try{
+    var p = await sb.from('profiles').select('points').eq('user_id', ME.user_id).single();
+    if(p && p.data){ ME.points = p.data.points || 0; if(auraEl) auraEl.textContent = ME.points; }
+  }catch(e){}
 }
+window.updateQuickStats = updateQuickStats;
 
 function updateIslandMood(){
   sb.rpc('get_mood_stats').then(function(res){
