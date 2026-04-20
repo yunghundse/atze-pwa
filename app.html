@@ -172,7 +172,7 @@ select.ri{appearance:none;-webkit-appearance:none}
 .radar-content{position:relative;z-index:10;margin-top:calc(48% - 32px);padding-bottom:90px}
 /* Heim-Topbar über der Karte (absolut im screen, direkt unter Header) */
 .heim-topbar{display:flex;gap:8px;align-items:stretch;pointer-events:none;animation:heimTopSlide .45s var(--spring) both}
-#screen-radar .heim-topbar,#screen-crew .heim-topbar{position:absolute;top:calc(env(safe-area-inset-top,0) + 64px);left:10px;right:10px;z-index:420}
+#screen-radar .heim-topbar,#screen-crew .heim-topbar{position:absolute;top:calc(env(safe-area-inset-top,0) + 72px);left:10px;right:10px;z-index:420}
 @keyframes heimTopSlide{0%{opacity:0;transform:translateY(-14px)}100%{opacity:1;transform:translateY(0)}}
 /* Globale Micro-Interactions */
 @media (prefers-reduced-motion: no-preference){
@@ -247,7 +247,7 @@ nav button.active::before{opacity:1}
 .heim-mini-reminder:active{transform:scale(.94)}
 .heim-mini-reminder .hmr-icon{font-size:13px}
 .heim-mini-reminder .hmr-arrow{color:rgba(255,218,160,.7);font-weight:900;margin-left:2px}
-#screen-radar .heim-mini-reminder{position:absolute;top:calc(env(safe-area-inset-top,0) + 64px);right:10px;z-index:420}
+#screen-radar .heim-mini-reminder{position:absolute;top:calc(env(safe-area-inset-top,0) + 72px);right:10px;z-index:420}
 #screen-crew .heim-mini-reminder.crew-mini-reminder{position:absolute;top:calc(env(safe-area-inset-top,0) + 64px);right:10px;z-index:420}
 .heim-mini-reminder.show{display:inline-flex}
 @keyframes heimMrSlide{0%{opacity:0;transform:translateY(-8px) scale(.9)}100%{opacity:1;transform:none}}
@@ -2660,16 +2660,21 @@ nav{padding-bottom:max(6px,env(safe-area-inset-bottom)) !important}
 .ps-btn.danger{color:#FF6B6B;border-color:rgba(255,107,107,.2)}
 .ps-btn.danger:hover{background:rgba(255,107,107,.08)}
 
-/* ====== CONTEXT MODE SWITCHER v75 ====== */
+/* ====== CONTEXT MODE SWITCHER v76 ====== */
 .ctx-switcher{
-  display:flex;gap:6px;margin:10px 14px 8px;
-  padding:4px;border-radius:16px;
-  background:linear-gradient(160deg,rgba(20,16,24,.7),rgba(14,10,18,.55));
-  border:1px solid rgba(255,255,255,.07);
-  backdrop-filter:blur(14px);
-  -webkit-backdrop-filter:blur(14px);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 6px 20px -12px rgba(0,0,0,.6);
+  display:flex;gap:6px;padding:4px;border-radius:16px;
+  background:linear-gradient(160deg,rgba(20,16,24,.78),rgba(14,10,18,.62));
+  border:1px solid rgba(255,255,255,.09);
+  backdrop-filter:blur(18px) saturate(1.2);
+  -webkit-backdrop-filter:blur(18px) saturate(1.2);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 8px 24px -10px rgba(0,0,0,.7);
 }
+/* Radar: absolut am oberen Rand über der Karte platzieren, damit immer sichtbar */
+#screen-radar .ctx-switcher,#screen-crew .ctx-switcher{
+  position:absolute;top:calc(env(safe-area-inset-top,0) + 8px);left:10px;right:10px;z-index:430;margin:0;
+  animation:ctxFadeIn .5s var(--spring,ease) both;
+}
+@keyframes ctxFadeIn{0%{opacity:0;transform:translateY(-10px)}100%{opacity:1;transform:translateY(0)}}
 .ctx-chip{
   flex:1;display:flex;align-items:center;justify-content:center;gap:6px;
   padding:9px 10px;border-radius:12px;
@@ -4474,7 +4479,7 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 75;
+  var APP_VERSION = 76;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     // Force-clear old non-UUID crew IDs
@@ -4602,7 +4607,7 @@ async function logPrivacyConsent(mode, previousMode, state){
       deals_consent: !!(state.consent && state.consent.deals_consent),
       consent_version: 1,
       user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-      app_version: 75,
+      app_version: 76,
       // v73: tag source so we can see who was newly prompted vs. picked from settings
       source: (!previousMode && ME && ME.created_at && (Date.now()-new Date(ME.created_at).getTime())>3600000) ? 'existing_user_v72_prompt' : (!previousMode ? 'first_run' : 'settings_change')
     };
@@ -4650,7 +4655,7 @@ function clearPrivacyData(){
         deals_consent: false,
         consent_version: 1,
         user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-        app_version: 75,
+        app_version: 76,
         source: 'user_reset'
       };
       sb.from('privacy_consent_log').insert(clearRow).then(function(r){ if(r&&r.error) console.warn('[PM] clear log err', r.error.message); });
@@ -4733,6 +4738,13 @@ function openHomeCityPicker(fromOnboarding){
 window.closeHomeCityPicker = function(){
   var ov = document.getElementById('homeCityPickerOv');
   if(ov){ ov.style.display = 'none'; }
+  // v76: if the picker was triggered by the Zuhause chip and user backed out →
+  // drop the pending switch and re-render the switcher to reflect the actual state.
+  if(window._pendingCtxSwitch){
+    window._pendingCtxSwitch = null;
+    try{ renderContextSwitcher(); }catch(e){}
+    if(typeof toast==='function') toast('Abgebrochen — Modus nicht geändert');
+  }
   if(_hcpFromOnboarding){
     _hcpFromOnboarding = false;
     // User backed out of city picker during onboarding → reshow mode selection
@@ -4787,12 +4799,25 @@ window.hcpSearch = function(){
 };
 window.saveHomeCity = function(){
   if(!_hcpSelectedCity){ toast('Bitte wähle eine Stadt aus der Liste'); return; }
-  setPrivacyMode('home', {home_city:_hcpSelectedCity});
+  var city = _hcpSelectedCity;
+  setPrivacyMode('home', {home_city:city});
   if(navigator.vibrate) navigator.vibrate([10,60,10]);
-  closeHomeCityPicker();
+  // v76: complete pending context-switch (if chip triggered the picker)
+  var pending = window._pendingCtxSwitch;
+  window._pendingCtxSwitch = null;
+  // close overlay WITHOUT triggering the cancel-path above
+  var ov = document.getElementById('homeCityPickerOv');
+  if(ov){ ov.style.display = 'none'; }
   _hcpFromOnboarding = false;
-  toast('🏠 Heimatort gespeichert: '+_hcpSelectedCity.name);
+  toast('🏠 Heimatort gespeichert: '+city.name);
   try{ renderPrivacyBadge(); }catch(e){}
+  if(pending === 'zuhause'){
+    try{ localStorage.setItem(CONTEXT_KEY, 'zuhause'); }catch(e){}
+    try{ renderContextSwitcher(); }catch(e){}
+    try{ adaptUIForContext('zuhause'); }catch(e){}
+  } else {
+    try{ renderContextSwitcher(); }catch(e){}
+  }
   try{ if(typeof checkLocationConsent==='function') checkLocationConsent(); }catch(e){}
 };
 
@@ -4905,19 +4930,21 @@ window.setContextMode = function(ctx){
   if(!CONTEXT_TO_PRIVACY[ctx]){ console.warn('[CTX] invalid ctx',ctx); return; }
   var prev = getContextMode();
   if(prev === ctx){ return; } // no-op
-  try{ localStorage.setItem(CONTEXT_KEY, ctx); }catch(e){}
   if(navigator.vibrate) navigator.vibrate(10);
 
-  // For "zuhause" without saved home city → open picker first
+  // v76: For "zuhause" without saved home city → open picker FIRST,
+  // and only commit the ctx switch once the user actually saves a city.
   if(ctx === 'zuhause'){
     var st = getPrivacyState();
     if(!st || !st.home_city || !st.home_city.lat){
+      window._pendingCtxSwitch = 'zuhause';
       try{ openHomeCityPicker(false); }catch(e){}
-      // Keep ctx stored so picker knows where to return to, render current
-      renderContextSwitcher();
+      // do NOT flip state yet — saveHomeCity completes the switch
       return;
     }
   }
+  // Commit the switch
+  try{ localStorage.setItem(CONTEXT_KEY, ctx); }catch(e){}
 
   // Sync to privacy-mode backend
   var privacy = CONTEXT_TO_PRIVACY[ctx];
