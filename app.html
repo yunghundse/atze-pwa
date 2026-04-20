@@ -407,31 +407,93 @@ nav button.active::before{opacity:1}
 .crew-hub-footer .cb-cc-btn{flex:1;padding:14px;font-size:13px;min-height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;gap:6px}
 .crew-hub-limit{font-size:11px;color:var(--t3);text-align:center;margin-top:10px;letter-spacing:.1px}
 
-/* v83: Crew Detail Header — außerhalb vom Screen, als Geschwister des Main (wie .app-header), sitzt ÜBER der Karte und scrollt nicht mit */
-.crew-detail-hdr{display:none;position:absolute;top:calc(env(safe-area-inset-top,0) + 58px);left:12px;right:12px;z-index:200;align-items:center;gap:8px;padding:8px 10px 8px 8px;border-radius:16px;background:linear-gradient(160deg,rgba(20,16,24,.92),rgba(14,10,18,.8));border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(26px) saturate(1.3);-webkit-backdrop-filter:blur(26px) saturate(1.3);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 14px 32px -12px rgba(0,0,0,.85);animation:ctxFadeIn .4s var(--spring,ease) both;pointer-events:auto}
-.crew-detail-hdr.show{display:flex}
-.crew-detail-hdr button{pointer-events:auto;position:relative;z-index:2}
-.crew-detail-hdr *{pointer-events:auto}
-.cdh-back{width:36px;height:36px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.09);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--t,#fff);flex-shrink:0;transition:background .2s,transform .15s}
-.cdh-back:active{background:rgba(255,255,255,.12);transform:scale(.93)}
-.cdh-back svg{width:17px;height:17px}
-.cdh-ttl{display:flex;align-items:center;gap:9px;flex:1;min-width:0}
-.cdh-ava{width:32px;height:32px;border-radius:11px;background:linear-gradient(135deg,var(--o,#FF6D2E),#FF6B6B);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;border:1.5px solid rgba(255,255,255,.12)}
-.cdh-txt{min-width:0;flex:1}
-.cdh-name{font-size:14px;font-weight:900;letter-spacing:-.2px;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:1.15}
-.cdh-motto{font-size:10.5px;color:var(--t3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:1.2;margin-top:1px}
-.cdh-switch{font-size:11px;font-weight:800;padding:8px 10px;border-radius:10px;background:rgba(255,109,46,.12);border:1px solid rgba(255,109,46,.22);color:#FFB493;cursor:pointer;white-space:nowrap;flex-shrink:0;font-family:inherit;transition:background .2s,transform .15s}
-.cdh-switch:active{background:rgba(255,109,46,.22);transform:scale(.96)}
-@media (max-width:374px){
-  .cdh-switch{padding:6px 8px;font-size:10.5px}
-  .cdh-ava{width:28px;height:28px;font-size:14px}
-  .cdh-name{font-size:13px}
+/* v83: Crew Detail Header — integriert mit App-Header Stil, sitzt direkt darunter, volle Breite, scrollt NICHT mit */
+.crew-detail-hdr{
+  display:none;
+  position:absolute;
+  top:calc(env(safe-area-inset-top,0) + 58px);
+  left:0;right:0;
+  z-index:220;
+  align-items:center;justify-content:space-between;
+  gap:10px;
+  padding:10px 16px 12px;
+  background:linear-gradient(180deg,rgba(7,6,10,.9) 0%,rgba(7,6,10,.62) 100%);
+  backdrop-filter:blur(60px) saturate(220%);
+  -webkit-backdrop-filter:blur(60px) saturate(220%);
+  border-bottom:.5px solid rgba(255,255,255,.08);
+  box-shadow:0 6px 24px rgba(0,0,0,.4);
+  pointer-events:auto;
 }
-/* v83: Detail-Header ist jetzt außerhalb vom Screen, Karte braucht nur Platz für app-header + Detail-Header */
-#crewsub-active .crew-map-full{margin-top:calc(env(safe-area-inset-top,0) + 118px);position:relative;z-index:1}
-/* v82: Leaflet-Container muss unter dem Detail-Header bleiben */
+.crew-detail-hdr.show{
+  display:flex;
+  animation:cdhSlideDown .35s var(--spring,ease) both;
+}
+@keyframes cdhSlideDown{
+  0%{opacity:0;transform:translateY(-6px)}
+  100%{opacity:1;transform:translateY(0)}
+}
+.crew-detail-hdr *{pointer-events:auto}
+.cdh-back{
+  width:38px;height:38px;border-radius:50%;
+  border:1px solid rgba(255,255,255,.09);
+  background:linear-gradient(135deg,rgba(255,255,255,.07),rgba(255,255,255,.03));
+  backdrop-filter:blur(24px) saturate(200%);
+  -webkit-backdrop-filter:blur(24px) saturate(200%);
+  color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;flex-shrink:0;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.14),inset 0 -1px 0 rgba(0,0,0,.15),0 2px 10px rgba(0,0,0,.2);
+  transition:transform .18s var(--spring,ease),background .25s;
+  padding:0;font-family:inherit;
+}
+.cdh-back:hover{background:linear-gradient(135deg,rgba(255,109,46,.18),rgba(255,109,46,.06));border-color:rgba(255,109,46,.35)}
+.cdh-back:active{transform:scale(.88);background:linear-gradient(135deg,rgba(255,109,46,.28),rgba(255,109,46,.1))}
+.cdh-back svg{width:18px;height:18px;display:block}
+.cdh-ttl{
+  display:flex;align-items:center;gap:10px;
+  flex:1;min-width:0;
+  padding:4px 8px;border-radius:12px;
+  background:transparent;
+  cursor:default;
+}
+.cdh-ava{
+  width:36px;height:36px;border-radius:12px;
+  background:linear-gradient(135deg,var(--o,#FF6D2E),#FF6B6B);
+  display:flex;align-items:center;justify-content:center;
+  font-size:17px;flex-shrink:0;
+  border:1.5px solid rgba(255,255,255,.15);
+  box-shadow:0 4px 12px rgba(255,109,46,.28),inset 0 1px 0 rgba(255,255,255,.18);
+}
+.cdh-txt{min-width:0;flex:1}
+.cdh-name{font-size:15px;font-weight:900;letter-spacing:-.3px;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:1.2}
+.cdh-motto{font-size:11px;color:var(--t3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:1.2;margin-top:1px}
+.cdh-switch{
+  font-size:12px;font-weight:800;letter-spacing:.1px;
+  padding:9px 12px;border-radius:12px;
+  background:linear-gradient(135deg,rgba(255,109,46,.18),rgba(254,60,114,.1));
+  border:1px solid rgba(255,109,46,.32);
+  color:#FFB493;
+  cursor:pointer;white-space:nowrap;flex-shrink:0;
+  font-family:inherit;
+  display:flex;align-items:center;gap:5px;
+  transition:transform .15s var(--spring,ease),background .25s;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 2px 10px rgba(255,109,46,.14);
+}
+.cdh-switch:hover{background:linear-gradient(135deg,rgba(255,109,46,.26),rgba(254,60,114,.14))}
+.cdh-switch:active{transform:scale(.94);background:linear-gradient(135deg,rgba(255,109,46,.32),rgba(254,60,114,.18))}
+.cdh-switch svg{width:12px;height:12px;display:block}
+@media (max-width:374px){
+  .crew-detail-hdr{padding:9px 12px 11px;gap:8px}
+  .cdh-switch{padding:7px 10px;font-size:11.5px}
+  .cdh-ava{width:32px;height:32px;font-size:15px;border-radius:10px}
+  .cdh-name{font-size:14px}
+  .cdh-motto{font-size:10.5px}
+  .cdh-back{width:36px;height:36px}
+  .cdh-back svg{width:17px;height:17px}
+}
+/* v83: Detail-Header ist außerhalb vom Screen — Karte braucht Platz für App-Header (56px) + Detail-Header (~62px) */
+#crewsub-active .crew-map-full{margin-top:calc(env(safe-area-inset-top,0) + 124px);position:relative;z-index:1}
 #crewsub-active .crew-map-full .leaflet-container{z-index:1}
-/* On active sub the ctx-switcher is below the detail-hdr, not at top */
 #crewsub-active .ctx-switcher{display:none}
 
 .crew-map-full{height:280px;margin:132px 12px 10px;border-radius:var(--r2);overflow:hidden;position:relative;z-index:1;border:1px solid rgba(255,255,255,.12);box-shadow:0 12px 40px rgba(0,0,0,.5),inset 0 2px 8px rgba(255,255,255,.1),0 0 40px rgba(255,109,46,.08)}
@@ -3933,7 +3995,7 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
   </div>
   <!-- v83: CREW DETAIL HEADER — außerhalb vom Screen, sitzt ÜBER der Karte und scrollt NICHT mit -->
   <div class="crew-detail-hdr" id="crewDetailHdr">
-    <button class="cdh-back" onclick="crewGo('hub')" aria-label="Zurück zur Übersicht">
+    <button type="button" class="cdh-back" data-cdh-action="back" aria-label="Zurück zur Crew-Übersicht">
       <svg viewBox="0 0 24 24"><use href="#i-arrow-left"/></svg>
     </button>
     <div class="cdh-ttl">
@@ -3943,7 +4005,10 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
         <div class="cdh-motto" id="cdhMotto">—</div>
       </div>
     </div>
-    <button class="cdh-switch" onclick="crewGo('hub')" aria-label="Crew wechseln" title="Andere Crew wählen">Wechseln</button>
+    <button type="button" class="cdh-switch" data-cdh-action="switch" aria-label="Zwischen Crews wechseln" title="Andere Crew wählen">
+      <svg viewBox="0 0 24 24"><use href="#i-users"/></svg>
+      <span>Übersicht</span>
+    </button>
   </div>
   <main>
     <div class="scr active" id="screen-radar">
@@ -4611,7 +4676,7 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 83;
+  var APP_VERSION = 84;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     // Force-clear old non-UUID crew IDs
@@ -4739,7 +4804,7 @@ async function logPrivacyConsent(mode, previousMode, state){
       deals_consent: !!(state.consent && state.consent.deals_consent),
       consent_version: 1,
       user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-      app_version: 83,
+      app_version: 84,
       // v73: tag source so we can see who was newly prompted vs. picked from settings
       source: (!previousMode && ME && ME.created_at && (Date.now()-new Date(ME.created_at).getTime())>3600000) ? 'existing_user_v72_prompt' : (!previousMode ? 'first_run' : 'settings_change')
     };
@@ -4787,7 +4852,7 @@ function clearPrivacyData(){
         deals_consent: false,
         consent_version: 1,
         user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-        app_version: 83,
+        app_version: 84,
         source: 'user_reset'
       };
       sb.from('privacy_consent_log').insert(clearRow).then(function(r){ if(r&&r.error) console.warn('[PM] clear log err', r.error.message); });
@@ -11116,6 +11181,36 @@ window.crewGo = function(section){
     setTimeout(function(){ try{ if(window.cMap) cMap.invalidateSize(); }catch(e){} }, 450);
   }
 };
+
+// v84: Bulletproof Event-Delegation für Detail-Header — auch wenn onclick/crewGo mal asynchron geladen wird
+(function(){
+  function _cdhHandler(e){
+    var btn = e.target && e.target.closest ? e.target.closest('[data-cdh-action]') : null;
+    if(!btn) return;
+    var act = btn.getAttribute('data-cdh-action');
+    e.preventDefault();
+    e.stopPropagation();
+    try{ if(navigator.vibrate) navigator.vibrate(10); }catch(_e){}
+    // Beide Aktionen führen ins Hub — Back geht zurück, Switch öffnet die Crew-Wahl
+    if(act === 'back' || act === 'switch'){
+      if(typeof window.crewGo === 'function'){
+        window.crewGo('hub');
+      } else {
+        // Fallback: direkter DOM-Toggle falls crewGo noch nicht da
+        try{
+          var hub = document.getElementById('crewsub-hub');
+          var active = document.getElementById('crewsub-active');
+          var hdr = document.getElementById('crewDetailHdr');
+          if(hub) hub.classList.add('active');
+          if(active) active.classList.remove('active');
+          if(hdr) hdr.classList.remove('show');
+        }catch(_e){}
+      }
+    }
+  }
+  // Capture-Phase — damit KEINE andere Stelle den Click vorher fängt
+  document.addEventListener('click', _cdhHandler, true);
+})();
 
 // Build crew hub cards (one card per crew user is in)
 window.buildCrewHubCards = function(){
