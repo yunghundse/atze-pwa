@@ -4312,6 +4312,20 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
         <!-- v94: Party-Spiele hier entfernt — laufen in Zukunft über das Game Center (Deals-Tab).
              Keine freischwebende Section mehr im Crew-Menü. -->
 
+        <!-- ═══════════════════════════════════════ -->
+        <!-- v96: PRIVATE-CREW MINISPIELE — nur sichtbar wenn Crew privat -->
+        <!-- ═══════════════════════════════════════ -->
+        <div class="crew-section" id="crewPrivateGamesSection" style="display:none">
+          <div class="crew-section-header">
+            <div class="csh-left"><span class="csh-emoji">🎮</span><span class="csh-title">Crew-Minispiele</span></div>
+            <div class="csh-badge" style="background:rgba(255,149,0,.12);color:#FF9500;font-size:9px;padding:3px 8px;border-radius:6px;font-weight:900;letter-spacing:.5px">🔒 PRIVAT</div>
+          </div>
+          <div style="padding:0 14px 6px">
+            <div style="font-size:11px;color:var(--t3);line-height:1.45;margin-bottom:8px">Nur für eure Crew — keine Crew-Battles, dafür interne Partyspiele am Handy:</div>
+          </div>
+          <div id="crewPrivateGamesList"></div>
+        </div>
+
         <!-- v95: "Neue Leute entdecken" aus dem Crew-Menü raus — das ist eine Personen-Funktion, keine Crew-Funktion.
              CTA sitzt jetzt auf der Radar-Seite. Crew-vs-Crew-Matching (Admin) läuft über das Game Center. -->
 
@@ -4769,7 +4783,7 @@ async function logPrivacyConsent(mode, previousMode, state){
       deals_consent: !!(state.consent && state.consent.deals_consent),
       consent_version: 1,
       user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-      app_version: 95,
+      app_version: 96,
       // v73: tag source so we can see who was newly prompted vs. picked from settings
       source: (!previousMode && ME && ME.created_at && (Date.now()-new Date(ME.created_at).getTime())>3600000) ? 'existing_user_v72_prompt' : (!previousMode ? 'first_run' : 'settings_change')
     };
@@ -4817,7 +4831,7 @@ function clearPrivacyData(){
         deals_consent: false,
         consent_version: 1,
         user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-        app_version: 95,
+        app_version: 96,
         source: 'user_reset'
       };
       sb.from('privacy_consent_log').insert(clearRow).then(function(r){ if(r&&r.error) console.warn('[PM] clear log err', r.error.message); });
@@ -7378,6 +7392,27 @@ function buildGames(){
   var l=document.getElementById('gameList');if(!l)return;
   l.innerHTML=GAMES.map(function(g,i){return '<div class="game-card" onclick="startGame('+i+')"><div class="game-icon">'+g.icon+'</div><div><h4>'+g.name+'</h4><p>'+g.desc+'</p><div class="game-players">👥 '+g.players+' Spieler</div></div></div>'}).join('');
 }
+
+// ============================================
+// v96: Private-Crew Minispiele
+// Nur sichtbar wenn aktive Crew auf visibility='private' steht.
+// Nutzt dasselbe GAMES-Array + gameOv-Overlay wie das alte Party-Games-System.
+// ============================================
+window.buildCrewPrivateGames=function(){
+  var section=document.getElementById('crewPrivateGamesSection');
+  var list=document.getElementById('crewPrivateGamesList');
+  if(!section||!list)return;
+  try{
+    var s = (typeof getCrewSettings==='function') ? getCrewSettings() : null;
+    var isPrivate = !!(s && s.visibility==='private');
+    section.style.display = isPrivate ? 'block' : 'none';
+    if(!isPrivate){ list.innerHTML=''; return; }
+    if(!window.GAMES || !GAMES.length){ list.innerHTML='<p class="crew-empty" style="padding:10px 14px">Keine Spiele verfügbar.</p>'; return; }
+    list.innerHTML = GAMES.map(function(g,i){
+      return '<div class="game-card" onclick="startGame('+i+')"><div class="game-icon">'+g.icon+'</div><div><h4>'+g.name+'</h4><p>'+g.desc+'</p><div class="game-players">👥 '+g.players+' Spieler</div></div></div>';
+    }).join('');
+  }catch(e){ console.warn('[v96] buildCrewPrivateGames failed:', e); }
+};
 window.startGame=function(i){curGame=GAMES[i];gameIdx=0;document.getElementById('gameTitle').textContent=curGame.name;nextGameCard();document.getElementById('gameOv').classList.add('show')};
 window.nextGameCard=function(){if(!curGame)return;gameIdx=(gameIdx+1)%curGame.cards.length;document.getElementById('gcdEm').textContent=curGame.icon;document.getElementById('gcdText').textContent=curGame.cards[gameIdx];document.getElementById('gcdCat').textContent=curGame.name;if(navigator.vibrate)navigator.vibrate(15)};
 window.closeGame=function(){document.getElementById('gameOv').classList.remove('show')};
@@ -8188,6 +8223,9 @@ window.openMyCrewProfile=function(){
   html+='<div class="cp-crew-motto">„'+esc(s.motto)+'"</div>';
   if(s.bio)html+='<div class="cp-bio">'+esc(s.bio)+'</div>';
   html+='<div class="cp-visibility '+s.visibility+'">'+(s.visibility==='public'?'🌍 Öffentlich':'🔒 Privat')+'</div>';
+  // v96: Leader-Status für Gating bestimmen
+  var _isLeader = isCrewLeader(s);
+  var _canShareQR = _isLeader || s.allow_member_qr_share === true;
   // Invite code display — prominent card
   var boardEntry=getAllCrews().find(function(c){return c.id===s.id});
   if(boardEntry&&boardEntry.invite_code){
@@ -8196,11 +8234,18 @@ window.openMyCrewProfile=function(){
     html+='<div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:10px">';
     html+='<div style="font-family:monospace;font-size:28px;font-weight:900;letter-spacing:6px;color:var(--o);background:rgba(0,0,0,.2);padding:10px 20px;border-radius:12px;border:1px solid rgba(255,109,46,.2)">'+boardEntry.invite_code+'</div>';
     html+='</div>';
-    html+='<div style="display:flex;gap:8px;justify-content:center">';
+    html+='<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">';
+    // v96: Kopieren bleibt für alle verfügbar (Code ist intern sichtbar), Teilen gated
     html+='<div style="padding:8px 16px;border-radius:10px;background:var(--o);color:#fff;font-size:12px;font-weight:700;cursor:pointer" onclick="copyInviteCode(\''+boardEntry.invite_code+'\')">📋 Code kopieren</div>';
-    html+='<div style="padding:8px 16px;border-radius:10px;background:rgba(255,255,255,.06);color:var(--t2);font-size:12px;font-weight:700;cursor:pointer" onclick="shareInviteCode(\''+esc(s.name)+'\',\''+boardEntry.invite_code+'\')">📤 Teilen</div>';
+    if(_canShareQR){
+      html+='<div style="padding:8px 16px;border-radius:10px;background:rgba(255,255,255,.06);color:var(--t2);font-size:12px;font-weight:700;cursor:pointer" onclick="shareInviteCode(\''+esc(s.name)+'\',\''+boardEntry.invite_code+'\')">📤 Teilen</div>';
+    }
     html+='</div>';
-    html+='<div style="font-size:10px;color:var(--t3);text-align:center;margin-top:8px;line-height:1.4">Teile diesen Code mit Freunden. Sie können ihn unter<br>Crew → 🔑 Code eingeben manuell eingeben.</div>';
+    if(_canShareQR){
+      html+='<div style="font-size:10px;color:var(--t3);text-align:center;margin-top:8px;line-height:1.4">Teile diesen Code mit Freunden. Sie können ihn unter<br>Crew → 🔑 Code eingeben manuell eingeben.</div>';
+    }else{
+      html+='<div style="font-size:10px;color:var(--t3);text-align:center;margin-top:8px;line-height:1.4">🔒 Nur der Crew-Leader darf aktuell den Einladungscode teilen.</div>';
+    }
     html+='</div>';
     // Crew QR code
     var crewQrData='https://partycrew.app/app.html?joincrew='+encodeURIComponent(boardEntry.invite_code);
@@ -8209,10 +8254,15 @@ window.openMyCrewProfile=function(){
     html+='<div style="font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">📲 Crew QR-Code</div>';
     html+='<img src="'+crewQrUrl+'" style="width:160px;height:160px;border-radius:12px;image-rendering:pixelated" alt="Crew QR">';
     html+='<div style="font-size:11px;color:var(--t3);margin-top:8px">Freunde scannen diesen Code um direkt beizutreten</div>';
-    html+='<div style="display:flex;gap:8px;justify-content:center;margin-top:10px">';
-    html+='<div style="padding:8px 14px;border-radius:10px;background:var(--o);color:#fff;font-size:11px;font-weight:700;cursor:pointer" onclick="shareCrewQR(\''+esc(s.name)+'\',\''+boardEntry.invite_code+'\')">📤 Teilen</div>';
-    html+='<div style="padding:8px 14px;border-radius:10px;background:rgba(255,255,255,.06);color:var(--t2);font-size:11px;font-weight:700;cursor:pointer" onclick="downloadCrewQR(\''+esc(s.name)+'\',\''+boardEntry.invite_code+'\')">💾 Speichern</div>';
-    html+='</div></div>';
+    if(_canShareQR){
+      html+='<div style="display:flex;gap:8px;justify-content:center;margin-top:10px">';
+      html+='<div style="padding:8px 14px;border-radius:10px;background:var(--o);color:#fff;font-size:11px;font-weight:700;cursor:pointer" onclick="shareCrewQR(\''+esc(s.name)+'\',\''+boardEntry.invite_code+'\')">📤 Teilen</div>';
+      html+='<div style="padding:8px 14px;border-radius:10px;background:rgba(255,255,255,.06);color:var(--t2);font-size:11px;font-weight:700;cursor:pointer" onclick="downloadCrewQR(\''+esc(s.name)+'\',\''+boardEntry.invite_code+'\')">💾 Speichern</div>';
+      html+='</div>';
+    }else{
+      html+='<div style="margin-top:10px;padding:8px 12px;border-radius:10px;background:rgba(255,149,0,.08);border:1px solid rgba(255,149,0,.15);display:inline-block"><div style="font-size:10px;color:#FF9500;font-weight:700">🔒 QR-Teilen ist vom Leader deaktiviert</div></div>';
+    }
+    html+='</div>';
   }
   // Pending status warning
   if(boardEntry&&boardEntry.status==='pending'){
@@ -8234,8 +8284,8 @@ window.openMyCrewProfile=function(){
     });
     html+='</div></div>';
   }
-  // Join requests — loaded from Supabase in background
-  if(boardEntry&&boardEntry.created_by===ME.user_id){
+  // Join requests — loaded from Supabase in background (v96: Leader-only)
+  if(boardEntry&&isCrewLeader(boardEntry)){
     html+='<div id="cpJoinRequests"></div>';
     // Load async
     setTimeout(async function(){
@@ -8332,28 +8382,43 @@ window.openMyCrewProfile=function(){
   });
   html+='</div></div>';
 
-  // Settings
-  html+='<div class="cp-section"><div class="cp-section-title">⚙️ Crew-Einstellungen</div>';
-  html+='<div class="cp-settings">';
-  html+='<div class="cp-toggle-row"><span class="cp-toggle-label">Crew-Name</span><input type="text" value="'+esc(s.name)+'" onchange="updateCrewSetting(\'name\',this.value)" style="background:none;border:none;color:var(--t1);font-size:13px;font-weight:700;text-align:right;font-family:inherit;outline:none;max-width:150px"></div>';
-  html+='<div class="cp-toggle-row"><span class="cp-toggle-label">Motto</span><input type="text" value="'+esc(s.motto)+'" onchange="updateCrewSetting(\'motto\',this.value)" style="background:none;border:none;color:var(--t1);font-size:13px;font-weight:700;text-align:right;font-family:inherit;outline:none;max-width:180px"></div>';
-  html+='<div class="cp-toggle-row"><span class="cp-toggle-label">Herkunft</span><input type="text" value="'+esc(s.hometown||'')+'" placeholder="z.B. Düsseldorf" onchange="updateCrewSetting(\'hometown\',this.value)" style="background:none;border:none;color:var(--t1);font-size:13px;font-weight:700;text-align:right;font-family:inherit;outline:none;max-width:150px"></div>';
-  html+='<div class="cp-toggle-row"><span class="cp-toggle-label">Bio</span><input type="text" value="'+esc(s.bio||'')+'" placeholder="Über eure Crew..." onchange="updateCrewSetting(\'bio\',this.value)" style="background:none;border:none;color:var(--t1);font-size:12px;font-weight:600;text-align:right;font-family:inherit;outline:none;max-width:180px"></div>';
-  html+='<div class="cp-toggle-row"><span class="cp-toggle-label">Was wir machen</span><input type="text" value="'+esc(s.what_we_do||'')+'" placeholder="z.B. Bierkönig-Dauerparty" onchange="updateCrewSetting(\'what_we_do\',this.value)" style="background:none;border:none;color:var(--t1);font-size:12px;font-weight:600;text-align:right;font-family:inherit;outline:none;max-width:180px"></div>';
-  html+='<div class="cp-toggle-row"><span class="cp-toggle-label">Was uns ausmacht</span><input type="text" value="'+esc(s.what_makes_us||'')+'" placeholder="z.B. Beste Stimmung garantiert" onchange="updateCrewSetting(\'what_makes_us\',this.value)" style="background:none;border:none;color:var(--t1);font-size:12px;font-weight:600;text-align:right;font-family:inherit;outline:none;max-width:180px"></div>';
-  html+='<div class="cp-toggle-row"><span class="cp-toggle-label">Malle-Besuche</span><input type="number" value="'+(s.malle_visits||1)+'" min="1" max="99" onchange="updateCrewSetting(\'malle_visits\',parseInt(this.value)||1)" style="background:none;border:none;color:var(--o);font-size:15px;font-weight:900;text-align:right;font-family:inherit;outline:none;width:50px"></div>';
-  html+='<div class="cp-toggle-row"><span class="cp-toggle-label">Öffentlich sichtbar</span><div class="cp-toggle '+(s.visibility==='public'?'on':'')+'" onclick="toggleCrewVisibility()"></div></div>';
-  html+='</div>';
-  // Tags selection
-  html+='<div style="margin-top:12px"><div style="font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Crew-Tags</div>';
-  html+='<div style="display:flex;flex-wrap:wrap;gap:6px">';
-  var currentTags=s.tags||[];
-  CREW_TAGS.forEach(function(tag){
-    var isSel=currentTags.indexOf(tag)!==-1;
-    html+='<div style="padding:5px 12px;border-radius:10px;font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;'+(isSel?'background:rgba(255,109,46,.15);border:1px solid rgba(255,109,46,.3);color:var(--o)':'background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);color:var(--t2)')+'" onclick="toggleCrewTag(\''+tag+'\')">'+tag+'</div>';
-  });
-  html+='</div></div>';
-  html+='</div>';
+  // Settings — v96: Leader-gated
+  if(_isLeader){
+    html+='<div class="cp-section"><div class="cp-section-title">⚙️ Crew-Einstellungen <span style="font-size:10px;font-weight:700;color:var(--o);margin-left:6px">👑 LEADER</span></div>';
+    html+='<div class="cp-settings">';
+    html+='<div class="cp-toggle-row"><span class="cp-toggle-label">Crew-Name</span><input type="text" value="'+esc(s.name)+'" onchange="updateCrewSetting(\'name\',this.value)" style="background:none;border:none;color:var(--t1);font-size:13px;font-weight:700;text-align:right;font-family:inherit;outline:none;max-width:150px"></div>';
+    html+='<div class="cp-toggle-row"><span class="cp-toggle-label">Motto</span><input type="text" value="'+esc(s.motto)+'" onchange="updateCrewSetting(\'motto\',this.value)" style="background:none;border:none;color:var(--t1);font-size:13px;font-weight:700;text-align:right;font-family:inherit;outline:none;max-width:180px"></div>';
+    html+='<div class="cp-toggle-row"><span class="cp-toggle-label">Herkunft</span><input type="text" value="'+esc(s.hometown||'')+'" placeholder="z.B. Düsseldorf" onchange="updateCrewSetting(\'hometown\',this.value)" style="background:none;border:none;color:var(--t1);font-size:13px;font-weight:700;text-align:right;font-family:inherit;outline:none;max-width:150px"></div>';
+    html+='<div class="cp-toggle-row"><span class="cp-toggle-label">Bio</span><input type="text" value="'+esc(s.bio||'')+'" placeholder="Über eure Crew..." onchange="updateCrewSetting(\'bio\',this.value)" style="background:none;border:none;color:var(--t1);font-size:12px;font-weight:600;text-align:right;font-family:inherit;outline:none;max-width:180px"></div>';
+    html+='<div class="cp-toggle-row"><span class="cp-toggle-label">Was wir machen</span><input type="text" value="'+esc(s.what_we_do||'')+'" placeholder="z.B. Bierkönig-Dauerparty" onchange="updateCrewSetting(\'what_we_do\',this.value)" style="background:none;border:none;color:var(--t1);font-size:12px;font-weight:600;text-align:right;font-family:inherit;outline:none;max-width:180px"></div>';
+    html+='<div class="cp-toggle-row"><span class="cp-toggle-label">Was uns ausmacht</span><input type="text" value="'+esc(s.what_makes_us||'')+'" placeholder="z.B. Beste Stimmung garantiert" onchange="updateCrewSetting(\'what_makes_us\',this.value)" style="background:none;border:none;color:var(--t1);font-size:12px;font-weight:600;text-align:right;font-family:inherit;outline:none;max-width:180px"></div>';
+    html+='<div class="cp-toggle-row"><span class="cp-toggle-label">Malle-Besuche</span><input type="number" value="'+(s.malle_visits||1)+'" min="1" max="99" onchange="updateCrewSetting(\'malle_visits\',parseInt(this.value)||1)" style="background:none;border:none;color:var(--o);font-size:15px;font-weight:900;text-align:right;font-family:inherit;outline:none;width:50px"></div>';
+    // Öffentlich sichtbar + Erklärung
+    html+='<div class="cp-toggle-row"><span class="cp-toggle-label">Öffentlich sichtbar</span><div class="cp-toggle '+(s.visibility==='public'?'on':'')+'" onclick="toggleCrewVisibility()"></div></div>';
+    html+='<div style="font-size:10px;color:var(--t3);line-height:1.4;padding:4px 14px 8px;margin-top:-4px">'+(s.visibility==='public'?'🌍 Eure Crew erscheint in der Community und kann an Crew-Battles teilnehmen.':'🔒 Privat: nicht in der Community gelistet, keine Crew-Battles — dafür interne Minispiele.')+'</div>';
+    // v96: Neuer Toggle — Mitglieder dürfen QR teilen
+    html+='<div class="cp-toggle-row"><span class="cp-toggle-label">Mitglieder dürfen QR teilen</span><div class="cp-toggle '+(s.allow_member_qr_share?'on':'')+'" onclick="toggleQrShareAllowed()"></div></div>';
+    html+='<div style="font-size:10px;color:var(--t3);line-height:1.4;padding:4px 14px 8px;margin-top:-4px">'+(s.allow_member_qr_share?'📤 Alle Mitglieder dürfen den Crew-QR-Code und Einladungscode weitergeben.':'🔒 Nur du als Leader kannst QR-Code und Einladungslink teilen.')+'</div>';
+    html+='</div>';
+    // Tags selection
+    html+='<div style="margin-top:12px"><div style="font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Crew-Tags</div>';
+    html+='<div style="display:flex;flex-wrap:wrap;gap:6px">';
+    var currentTags=s.tags||[];
+    CREW_TAGS.forEach(function(tag){
+      var isSel=currentTags.indexOf(tag)!==-1;
+      html+='<div style="padding:5px 12px;border-radius:10px;font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;'+(isSel?'background:rgba(255,109,46,.15);border:1px solid rgba(255,109,46,.3);color:var(--o)':'background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);color:var(--t2)')+'" onclick="toggleCrewTag(\''+tag+'\')">'+tag+'</div>';
+    });
+    html+='</div></div>';
+    html+='</div>';
+  }else{
+    // v96: Read-only Info für Nicht-Leader
+    html+='<div class="cp-section"><div class="cp-section-title">ℹ️ Crew-Status</div>';
+    html+='<div style="padding:12px 14px;border-radius:var(--r);background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06)">';
+    html+='<div style="font-size:13px;font-weight:700;color:var(--t1);margin-bottom:8px">'+(s.visibility==='public'?'🌍 Öffentliche Crew':'🔒 Private Crew')+'</div>';
+    html+='<div style="font-size:11px;color:var(--t3);line-height:1.5">'+(s.visibility==='public'?'Eure Crew ist in der Community sichtbar und nimmt an Crew-Battles teil.':'Eure Crew ist privat — nur per Einladung erreichbar, keine Crew-Battles, dafür interne Minispiele.')+'</div>';
+    html+='<div style="font-size:11px;color:var(--t3);line-height:1.5;margin-top:8px">Nur der Crew-Leader kann Crew-Einstellungen, Sichtbarkeit und QR-Freigabe ändern.</div>';
+    html+='</div></div>';
+  }
 
   // Actions section — leave crew (members) or delete crew (owner/admin)
   var isCrewOwner=s&&s.created_by===ME.user_id;
@@ -8388,7 +8453,7 @@ window.openMyCrewProfile=function(){
 window.closeCrewProfile=function(){document.getElementById('crewProfileOv').classList.remove('show')};
 
 window.updateCrewSetting=async function(key,val){
-  var s=getCrewSettings();if(!s||s.created_by!==ME.user_id){toast('Nur der Crew-Ersteller kann das ändern.');return}
+  var s=getCrewSettings();if(!s||!isCrewLeader(s)){toast('Nur der Crew-Leader kann das ändern.');return}
   var obj={};obj[key]=val;
   try{
     await sb.from('crews').update(obj).eq('id',s.id);
@@ -8398,19 +8463,49 @@ window.updateCrewSetting=async function(key,val){
   }catch(e){toast('Fehler.')}
 };
 
+// ============================================
+// v96: Leader-Helpers
+// created_by = Ersteller, leader = aktueller Leader (kann durch Abstimmung wechseln)
+// Schreib-Operationen sind nur dem Leader erlaubt.
+// ============================================
+window.isCrewLeader=function(s){
+  if(!s||!ME||!ME.user_id)return false;
+  return s.created_by===ME.user_id || s.leader===ME.user_id;
+};
+
 window.toggleCrewVisibility=async function(){
-  var s=getCrewSettings();if(!s||s.created_by!==ME.user_id)return;
+  var s=getCrewSettings();if(!s||!isCrewLeader(s)){toast('Nur der Crew-Leader kann das ändern.');return}
   var newVis=s.visibility==='public'?'private':'public';
   try{
     await sb.from('crews').update({visibility:newVis}).eq('id',s.id);
     await fetchAllCrews();await loadMyCrewMemberships();
     openMyCrewProfile();
-    toast(newVis==='public'?'Crew ist jetzt öffentlich 🌍':'Crew ist jetzt privat 🔒');
+    toast(newVis==='public'?'Crew ist jetzt öffentlich 🌍':'Crew ist jetzt privat 🔒 — ihr bekommt interne Minispiele statt Crew-Battles.');
+    // v96: Private-Games-Panel refresh + Battle-Gating
+    try{ buildCrewPrivateGames(); }catch(e){}
+    try{ buildCrewLeaderboard(); }catch(e){}
+  }catch(e){toast('Fehler.')}
+};
+
+// v96: QR-Share-Berechtigung togglen (Leader-only)
+window.toggleQrShareAllowed=async function(){
+  var s=getCrewSettings();if(!s||!isCrewLeader(s)){toast('Nur der Crew-Leader kann das ändern.');return}
+  var newVal = !s.allow_member_qr_share;
+  try{
+    var res = await sb.from('crews').update({allow_member_qr_share:newVal}).eq('id',s.id);
+    if(res && res.error){
+      console.warn('[v96] allow_member_qr_share update failed — column missing?', res.error);
+      toast('⚠️ DB-Spalte fehlt. SQL-Migration in Supabase nötig: ALTER TABLE crews ADD COLUMN allow_member_qr_share BOOLEAN DEFAULT false;');
+      return;
+    }
+    await fetchAllCrews();await loadMyCrewMemberships();
+    openMyCrewProfile();
+    toast(newVal?'Mitglieder dürfen jetzt den QR-Code teilen 📤':'Nur noch du darfst den QR-Code teilen 🔒');
   }catch(e){toast('Fehler.')}
 };
 
 window.changeGroupPhoto=function(){
-  var s=getCrewSettings();if(!s||s.created_by!==ME.user_id){toast('Nur der Ersteller kann das Bild ändern.');return}
+  var s=getCrewSettings();if(!s||!isCrewLeader(s)){toast('Nur der Crew-Leader kann das Bild ändern.');return}
   var input=document.createElement('input');
   input.type='file';input.accept='image/*';
   input.onchange=async function(){
@@ -8429,7 +8524,7 @@ window.changeGroupPhoto=function(){
 };
 
 window.toggleCrewTag=async function(tag){
-  var s=getCrewSettings();if(!s||s.created_by!==ME.user_id)return;
+  var s=getCrewSettings();if(!s||!isCrewLeader(s)){toast('Nur der Crew-Leader kann Tags ändern.');return}
   var tags=s.tags||[];
   var idx=tags.indexOf(tag);
   if(idx>=0)tags.splice(idx,1);
@@ -8879,7 +8974,7 @@ window.submitCrewCreate=async function(){
 
 // Change crew photo from profile
 window.changeCrewPhoto=function(){
-  var s=getCrewSettings();if(!s||s.created_by!==ME.user_id){toast('Nur der Ersteller kann das Foto ändern.');return}
+  var s=getCrewSettings();if(!s||!isCrewLeader(s)){toast('Nur der Crew-Leader kann das Foto ändern.');return}
   var input=document.createElement('input');
   input.type='file';input.accept='image/*';
   input.onchange=function(){
@@ -9262,6 +9357,9 @@ window.requestJoinCrew=async function(crewId,crewName){
 };
 
 window.approveJoinRequest=async function(crewId,userId){
+  // v96: Leader-Gate — nur der Leader der Ziel-Crew darf annehmen
+  var crewObj = getAllCrews().find(function(c){return c.id===crewId});
+  if(!crewObj || !isCrewLeader(crewObj)){ toast('Nur der Crew-Leader kann Anfragen annehmen.'); return; }
   try{
     // Add as member
     await sb.from('crew_members').upsert({crew_id:crewId,user_id:userId,role:'member'},{onConflict:'crew_id,user_id'});
@@ -9277,6 +9375,9 @@ window.approveJoinRequest=async function(crewId,userId){
 };
 
 window.rejectJoinRequest=async function(crewId,userId){
+  // v96: Leader-Gate
+  var crewObj = getAllCrews().find(function(c){return c.id===crewId});
+  if(!crewObj || !isCrewLeader(crewObj)){ toast('Nur der Crew-Leader kann Anfragen ablehnen.'); return; }
   try{
     await sb.from('crew_join_requests').delete().eq('crew_id',crewId).eq('user_id',userId);
     toast('Anfrage abgelehnt.');
@@ -10151,15 +10252,24 @@ function buildCrewLeaderboard(){
   });
   html+='</div>';
 
-  // My crew position
+  // My crew position — v96: Private Crews nehmen nicht teil
   var myCrew=getCrewSettings();
   if(myCrew&&myCrew.id){
-    var myIdx=crews.findIndex(function(c){return c.id===myCrew.id});
-    if(myIdx>=0){
-      html+='<div style="margin:0 14px 14px;padding:12px;border-radius:var(--r);background:linear-gradient(135deg,rgba(255,109,46,.08),rgba(255,109,46,.03));border:1px solid rgba(255,109,46,.15);text-align:center">';
-      html+='<div style="font-size:10px;font-weight:700;color:var(--o);text-transform:uppercase;letter-spacing:.5px">Deine Crew</div>';
-      html+='<div style="font-size:18px;font-weight:900;margin-top:2px">Platz #'+(myIdx+1)+' von '+crews.length+'</div>';
+    if(myCrew.visibility==='private'){
+      // Private Crew — kein Battle-Platz, klarer Hinweis
+      html+='<div style="margin:0 14px 14px;padding:14px;border-radius:var(--r);background:linear-gradient(135deg,rgba(255,149,0,.08),rgba(255,149,0,.03));border:1px solid rgba(255,149,0,.15);text-align:center">';
+      html+='<div style="font-size:10px;font-weight:700;color:#FF9500;text-transform:uppercase;letter-spacing:.5px">🔒 Deine Crew ist privat</div>';
+      html+='<div style="font-size:14px;font-weight:900;margin-top:4px;line-height:1.35">Private Crews nehmen nicht an Crew-Battles teil.</div>';
+      html+='<div style="font-size:11px;color:var(--t3);margin-top:4px;line-height:1.4">Stattdessen gibt es interne Minispiele nur für euch.'+(isCrewLeader(myCrew)?' In den Crew-Einstellungen kannst du auf öffentlich wechseln.':'')+'</div>';
       html+='</div>';
+    }else{
+      var myIdx=crews.findIndex(function(c){return c.id===myCrew.id});
+      if(myIdx>=0){
+        html+='<div style="margin:0 14px 14px;padding:12px;border-radius:var(--r);background:linear-gradient(135deg,rgba(255,109,46,.08),rgba(255,109,46,.03));border:1px solid rgba(255,109,46,.15);text-align:center">';
+        html+='<div style="font-size:10px;font-weight:700;color:var(--o);text-transform:uppercase;letter-spacing:.5px">Deine Crew</div>';
+        html+='<div style="font-size:18px;font-weight:900;margin-top:2px">Platz #'+(myIdx+1)+' von '+crews.length+'</div>';
+        html+='</div>';
+      }
     }
   }
 
@@ -11763,6 +11873,24 @@ window.gcOpenLeaderboard = function(){
   exploreGo('trophy');
 };
 window.gcOpenGame = function(id){
+  // v96: Private Crews können nicht an Crew-vs-Crew-Battles teilnehmen
+  var _myCrew = (typeof getCrewSettings==='function') ? getCrewSettings() : null;
+  if(_myCrew && _myCrew.visibility==='private'){
+    var _isMyLead = (typeof isCrewLeader==='function') && isCrewLeader(_myCrew);
+    var c2 = '<div style="text-align:center;padding:6px 0">';
+    c2 += '<div style="font-size:56px;margin-bottom:10px">🔒</div>';
+    c2 += '<h2 style="font-size:20px;font-weight:900;letter-spacing:-.3px;line-height:1.25">Crew-Battles nur für<br>öffentliche Crews</h2>';
+    c2 += '<p style="font-size:13px;color:var(--t2);line-height:1.6;margin-top:12px;padding:0 8px">Eure Crew ist privat — ihr nehmt nicht an Crew-vs-Crew-Battles teil. Dafür habt ihr interne Minispiele nur für eure Crew.</p>';
+    c2 += '<div class="bs-actions" style="margin-top:18px">';
+    if(_isMyLead){
+      c2 += '<button class="bs-btn orange" onclick="closeBS();go(\'crew\')">⚙️ Zu den Crew-Einstellungen</button>';
+    }
+    c2 += '<button class="bs-btn" style="background:rgba(255,255,255,.04);color:var(--t2);border:1px solid var(--glass-border)" onclick="closeBS()">Schließen</button>';
+    c2 += '</div></div>';
+    try{ document.getElementById('bsImg').src='https://images.unsplash.com/photo-1511512578047-dfb367046420?w=800&q=60'; }catch(e){}
+    try{ document.getElementById('bsContent').innerHTML=c2; document.getElementById('bsheet').classList.add('show'); }catch(e){}
+    return;
+  }
   var games = {
     foto:    {emoji:'📸', title:'Foto-Battle', desc:'Lade diese Woche euer bestes Crew-Foto hoch. Die Community voted. Gewinner-Crew bekommt +500 Crew-Punkte.', live:true},
     quiz:    {emoji:'🧠', title:'Crew-Quiz', desc:'10 Fragen über deine Crew-Mitglieder. Schnellste richtige Antworten gewinnen. Startet in Kürze.', live:true},
@@ -12876,6 +13004,8 @@ function buildCrewStatus(){
     var pct=Math.min(100,Math.round((pts-rank.min)/(next.min-rank.min)*100));
     prog.style.width=pct+'%';
   } else if(prog){prog.style.width='100%'}
+  // v96: Private-Crew Minispiele nachladen — Status & Sichtbarkeit abhängig von aktiver Crew
+  try{ if(typeof buildCrewPrivateGames==='function') buildCrewPrivateGames(); }catch(e){}
 }
 async function buildLeaderboard(){
   try{
