@@ -3879,11 +3879,6 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
           <span class="hbig-arrow"><svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg></span>
           <span class="hbig-dismiss" onclick="event.stopPropagation();dismissHeimSetup();" aria-label="Später erinnern">✕</span>
         </button>
-        <div class="heim-loc-pill" id="heimLocPill" onclick="refreshUserLocation()" aria-label="Aktueller Standort">
-          <span class="hlp-dot"></span>
-          <svg viewBox="0 0 24 24"><path d="M12 22s-8-9-8-13a8 8 0 0 1 16 0c0 4-8 13-8 13z"/><circle cx="12" cy="9" r="2.5"/></svg>
-          <span class="hlp-city" id="heimLocCity">Standort…</span>
-        </div>
       </div>
       <!-- Mini-Reminder wenn dismissed -->
       <button class="heim-mini-reminder" id="heimMiniReminder" onclick="undismissHeimSetup()">
@@ -3918,10 +3913,10 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
           <div id="islandMoodContent" style="font-size:14px;font-weight:700"></div>
           <div id="islandMoodBar" style="display:flex;gap:3px;margin-top:8px;height:6px"></div>
         </div>
-        <div class="weather-card glass anim" id="weatherCard" data-state="idle" style="margin:0 14px 10px;padding:14px 16px;display:flex;align-items:center;gap:14px;cursor:pointer" onclick="refreshWeather()">
+        <div class="weather-card glass anim" id="weatherCard" data-state="idle" style="margin:0 14px 10px;padding:14px 16px;display:flex;align-items:center;gap:14px;cursor:pointer" onclick="refreshUserLocation()" title="Standort &amp; Wetter aktualisieren">
           <div id="weatherIcon" class="wx-ico"><svg viewBox="0 0 24 24"><use href="#i-refresh"/></svg></div>
           <div style="flex:1;min-width:0">
-            <div style="font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px" id="weatherLoc">Wetter jetzt</div>
+            <div style="font-size:11px;font-weight:800;color:var(--t2);text-transform:uppercase;letter-spacing:.8px;display:flex;align-items:center;gap:4px" id="weatherLoc"><svg viewBox="0 0 24 24" style="width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0"><path d="M12 22s-8-9-8-13a8 8 0 0 1 16 0c0 4-8 13-8 13z"/><circle cx="12" cy="9" r="2.5"/></svg><span id="weatherLocTxt">Standort &amp; Wetter</span></div>
             <div style="display:flex;align-items:baseline;gap:6px"><span id="weatherTemp" style="font-size:22px;font-weight:900;letter-spacing:-.5px">Tippen</span><span id="weatherDesc" style="font-size:12px;color:var(--t2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">zum Aktualisieren</span></div>
           </div>
           <div class="wx-meta" style="text-align:right;flex-shrink:0">
@@ -3949,11 +3944,6 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
           <span class="hbig-arrow"><svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg></span>
           <span class="hbig-dismiss" onclick="event.stopPropagation();dismissHeimSetup();" aria-label="Später erinnern">✕</span>
         </button>
-        <div class="heim-loc-pill" onclick="refreshUserLocation()" aria-label="Aktueller Standort">
-          <span class="hlp-dot"></span>
-          <svg viewBox="0 0 24 24"><path d="M12 22s-8-9-8-13a8 8 0 0 1 16 0c0 4-8 13-8 13z"/><circle cx="12" cy="9" r="2.5"/></svg>
-          <span class="hlp-city" id="heimLocCityCrew">Standort…</span>
-        </div>
       </div>
       <button class="heim-mini-reminder crew-mini-reminder" id="heimMiniReminderCrew" onclick="undismissHeimSetup()">
         <span class="hmr-icon">🏠</span>
@@ -4479,7 +4469,7 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 76;
+  var APP_VERSION = 77;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     // Force-clear old non-UUID crew IDs
@@ -4607,7 +4597,7 @@ async function logPrivacyConsent(mode, previousMode, state){
       deals_consent: !!(state.consent && state.consent.deals_consent),
       consent_version: 1,
       user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-      app_version: 76,
+      app_version: 77,
       // v73: tag source so we can see who was newly prompted vs. picked from settings
       source: (!previousMode && ME && ME.created_at && (Date.now()-new Date(ME.created_at).getTime())>3600000) ? 'existing_user_v72_prompt' : (!previousMode ? 'first_run' : 'settings_change')
     };
@@ -4655,7 +4645,7 @@ function clearPrivacyData(){
         deals_consent: false,
         consent_version: 1,
         user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-        app_version: 76,
+        app_version: 77,
         source: 'user_reset'
       };
       sb.from('privacy_consent_log').insert(clearRow).then(function(r){ if(r&&r.error) console.warn('[PM] clear log err', r.error.message); });
@@ -6529,24 +6519,15 @@ function _renderLocationLabels(){
   var c = window._userCity;
   var label = _cityLabelShort(c);
 
-  // Heim-Topbar-Pills (Radar + Crew) — v71: nur Stadt, ohne "Du bist in"
-  ['heimLocCity','heimLocCityCrew'].forEach(function(id){
-    var el = document.getElementById(id);
-    if(el) el.textContent = label || (userLat ? 'Unbekannt' : 'Standort…');
-  });
-  // Loading-state auf die Pill setzen (orange Dot wenn noch kein Fix)
-  document.querySelectorAll('.heim-loc-pill').forEach(function(p){
-    if(label && userLat) p.classList.remove('loading');
-    else p.classList.add('loading');
-  });
+  // v77: heim-loc-pill entfernt — Standort jetzt nur noch via Weather-Card
 
   // Active counter
   var acl = document.getElementById('activeCountLoc');
   if(acl) acl.textContent = label ? ('in '+label) : 'in deiner Nähe';
 
-  // Weather card header
-  var wl = document.getElementById('weatherLoc');
-  if(wl) wl.textContent = label ? (label+' jetzt') : 'Wetter jetzt';
+  // Weather card header — v77: show location prominently (pin icon is SVG in markup)
+  var wl = document.getElementById('weatherLocTxt');
+  if(wl) wl.textContent = label ? label : 'Standort & Wetter';
 
   // Deals-Header
   var dh = document.getElementById('dealsHeaderLoc');
@@ -8900,6 +8881,31 @@ window.openBlockList=async function(){
     html+='</div>';
   }catch(_e){ console.warn('[PM] settings card err', _e); }
 
+  // v77: Heim-Setup Verwaltung (zentral im Profil)
+  try{
+    var _hsS = (typeof hsGetSetup==='function') ? hsGetSetup() : null;
+    var _hsInfo = (typeof hsSetupCompleteness==='function') ? hsSetupCompleteness(_hsS) : {ready:false};
+    var _hsDismissed = (typeof _heimIsDismissed==='function') ? _heimIsDismissed() : false;
+    var _hsRemain = (typeof _heimDismissRemainingLabel==='function') ? _heimDismissRemainingLabel() : '';
+    var _hsHotel = '';
+    if(_hsS){ _hsHotel = _hsS.hotel_name || _hsS.hotel_addr || ''; }
+    html+='<div class="ps-card">';
+    html+='<div class="ps-head"><div class="ps-head-ico" style="background:linear-gradient(135deg,#0A84FF,#BF5AF2)">🏠</div><div><div class="ps-head-title">Heim-Setup</div><div class="ps-head-sub">"Bring mich nach Hause" — dein Sicherheitsnetz</div></div></div>';
+    html+='<div class="ps-row"><div class="ps-row-label">Status</div><div class="ps-row-val">'+(_hsInfo.ready?'✓ Fertig eingerichtet':'⚠️ Noch nicht komplett')+'</div></div>';
+    if(_hsHotel){
+      html+='<div class="ps-row"><div class="ps-row-label">Ziel-Adresse</div><div class="ps-row-val" style="max-width:60%;text-align:right;font-size:11.5px">'+escapeHtml(String(_hsHotel).split(',')[0].slice(0,40))+'</div></div>';
+    }
+    html+='<div class="ps-row"><div class="ps-row-label">Erinnerung am Radar</div><div class="ps-row-val">'+(_hsDismissed?('⏸ Pausiert ('+(_hsRemain||'')+')'):'🔔 Aktiv')+'</div></div>';
+    html+='<button class="ps-btn" onclick="openHomeSafe()">🛠️ Setup öffnen / bearbeiten</button>';
+    if(_hsDismissed){
+      html+='<button class="ps-btn" onclick="undismissHeimSetup();setTimeout(function(){openBlockList()},300)">🔔 Erinnerung wieder aktivieren</button>';
+    } else if(_hsInfo.ready){
+      html+='<button class="ps-btn" onclick="dismissHeimSetup();setTimeout(function(){openBlockList()},300)">⏸ Erinnerung pausieren</button>';
+    }
+    html+='<div style="font-size:10.5px;color:var(--t3);line-height:1.55;padding-top:10px;text-align:center">Die Erinnerung pausiert stufenweise (24h → 3 Tage → 1 Woche) — hier kannst du sie jederzeit neu starten.</div>';
+    html+='</div>';
+  }catch(_hsErr){ console.warn('[HS] profile card err', _hsErr); }
+
   // Trust Score
   html+='<div style="padding:16px;border-radius:var(--r2);background:linear-gradient(135deg,rgba(52,199,89,.08),rgba(52,199,89,.02));border:1px solid rgba(52,199,89,.15);margin-bottom:12px">';
   html+='<div style="display:flex;align-items:center;gap:12px">';
@@ -9863,8 +9869,16 @@ function hsRefreshSetupBanner(){
 // HEIM-SETUP Dismissible (v71)
 // ============================================
 var HEIM_DISMISS_KEY = 'heim_setup_dismissed_until_v1';
-var HEIM_DISMISS_HOURS = 8; // nach 8h wieder prompten
+var HEIM_DISMISS_COUNT_KEY = 'heim_setup_dismiss_count_v1';
+// v77: stufenweise Pausen — je öfter weggeklickt, desto länger Ruhe
+//   1. Wegklick → 24h
+//   2. Wegklick → 72h (3 Tage)
+//   3. Wegklick → 168h (1 Woche)  — danach bleibt bei 1 Woche
+var HEIM_DISMISS_STEPS = [24, 72, 168];
 
+function _heimDismissCount(){
+  try{ return parseInt(localStorage.getItem(HEIM_DISMISS_COUNT_KEY)||'0',10)||0; }catch(e){ return 0; }
+}
 function _heimIsDismissed(){
   try{
     var raw = localStorage.getItem(HEIM_DISMISS_KEY);
@@ -9873,17 +9887,36 @@ function _heimIsDismissed(){
     return Date.now() < until;
   }catch(e){ return false; }
 }
+function _heimDismissRemainingLabel(){
+  try{
+    var raw = localStorage.getItem(HEIM_DISMISS_KEY);
+    if(!raw) return '';
+    var until = parseInt(raw,10)||0;
+    var ms = until - Date.now();
+    if(ms<=0) return '';
+    var h = Math.round(ms/3600000);
+    if(h<24) return h+'h';
+    var d = Math.round(h/24);
+    return d+' Tag'+(d===1?'':'e');
+  }catch(e){ return ''; }
+}
 
 window.dismissHeimSetup = function(){
-  var until = Date.now() + HEIM_DISMISS_HOURS*60*60*1000;
+  var cnt = _heimDismissCount();
+  var step = HEIM_DISMISS_STEPS[Math.min(cnt, HEIM_DISMISS_STEPS.length-1)];
+  var until = Date.now() + step*60*60*1000;
   try { localStorage.setItem(HEIM_DISMISS_KEY, String(until)); } catch(e){}
+  try { localStorage.setItem(HEIM_DISMISS_COUNT_KEY, String(cnt+1)); } catch(e){}
   if(navigator.vibrate) navigator.vibrate(8);
-  try{ toast('OK — wir erinnern dich in ein paar Stunden 🏠'); }catch(e){}
+  var human = step<24 ? step+'h' : (step===24?'morgen':Math.round(step/24)+' Tagen');
+  try{ toast('OK — wir erinnern dich in '+human+' 🏠 (Änderbar im Profil)'); }catch(e){}
   hsUpdateHeaderDot();
 };
 
 window.undismissHeimSetup = function(){
   try { localStorage.removeItem(HEIM_DISMISS_KEY); } catch(e){}
+  // v77: reset counter bei bewusster Re-Aktivierung → nächstes Dismiss ist wieder 24h
+  try { localStorage.removeItem(HEIM_DISMISS_COUNT_KEY); } catch(e){}
   if(navigator.vibrate) navigator.vibrate(10);
   hsUpdateHeaderDot();
   // direkt Setup öffnen damit der User gleich los kann
