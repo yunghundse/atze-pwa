@@ -215,24 +215,37 @@ nav button.active::before{opacity:1}
   @keyframes cardArrive{0%{opacity:0;transform:translateY(14px) scale(.98)}100%{opacity:1;transform:none}}
   /* Hover-Lift-Fallback für Touch */
   .vcard:active,.ex-tile:active{filter:brightness(1.05)}
-  /* Heim-Button ambiente Glow */
-  .heim-btn-big:not(.needs-setup){animation:heimGlow 4s ease-in-out infinite,heimAmbient 9s ease-in-out infinite}
-  @keyframes heimAmbient{0%,100%{filter:brightness(1)}50%{filter:brightness(1.08) saturate(1.1)}}
+  /* Heim-Button orange Shimmer (v78) */
+  .heim-btn-big:not(.needs-setup){animation:heimOrangeGlow 2.8s ease-in-out infinite,heimAmbient 9s ease-in-out infinite}
+  @keyframes heimAmbient{0%,100%{filter:brightness(1)}50%{filter:brightness(1.12) saturate(1.15)}}
+  @keyframes heimOrangeGlow{
+    0%,100%{box-shadow:0 10px 28px rgba(0,0,0,.45),0 0 0 1px rgba(255,255,255,.05),inset 0 1px 0 rgba(255,255,255,.2),0 0 20px rgba(255,149,0,.35),0 0 40px rgba(255,109,46,.18)}
+    50%{box-shadow:0 12px 32px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.08),inset 0 1px 0 rgba(255,255,255,.28),0 0 34px rgba(255,149,0,.65),0 0 68px rgba(255,109,46,.4)}
+  }
+  /* Shimmer-Sweep über den Button */
+  .heim-btn-big:not(.needs-setup)::after{
+    content:'';position:absolute;top:0;left:-60%;width:40%;height:100%;z-index:1;pointer-events:none;
+    background:linear-gradient(100deg,transparent 0%,rgba(255,255,255,.22) 45%,rgba(255,214,10,.28) 55%,transparent 100%);
+    transform:skewX(-18deg);animation:heimSweep 3.6s ease-in-out infinite;
+  }
+  @keyframes heimSweep{
+    0%{left:-60%}60%{left:120%}100%{left:120%}
+  }
   /* Nav-Icon Active: leichter Wobble beim Tap */
   nav button.active .ni{animation:navBob 2.6s ease-in-out infinite}
   @keyframes navBob{0%,100%{transform:scale(1.2) translateY(-1px)}50%{transform:scale(1.24) translateY(-2px)}}
 }
 .heim-topbar > *{pointer-events:auto}
-.heim-btn-big{flex:1;min-height:52px;display:flex;align-items:center;gap:10px;padding:8px 14px;border-radius:16px;background:linear-gradient(135deg,rgba(48,209,88,.38),rgba(10,132,255,.22));border:1.5px solid rgba(48,209,88,.55);color:#DFFBEA;font-size:13px;font-weight:800;font-family:Inter,sans-serif;cursor:pointer;box-shadow:0 10px 28px rgba(0,0,0,.45),0 0 0 1px rgba(255,255,255,.05),inset 0 1px 0 rgba(255,255,255,.15);backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);transition:transform .2s var(--spring),box-shadow .2s var(--spring);animation:heimGlow 4s ease-in-out infinite;text-align:left}
+.heim-btn-big{flex:1;min-height:56px;display:flex;align-items:center;gap:11px;padding:10px 16px;border-radius:18px;background:linear-gradient(135deg,rgba(255,149,0,.52),rgba(255,109,46,.38) 55%,rgba(254,60,114,.25));border:1.5px solid rgba(255,149,0,.72);color:#FFF5E1;font-size:14px;font-weight:900;font-family:Inter,sans-serif;cursor:pointer;box-shadow:0 10px 28px rgba(0,0,0,.45),0 0 0 1px rgba(255,255,255,.05),inset 0 1px 0 rgba(255,255,255,.2),0 0 20px rgba(255,149,0,.35);backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);transition:transform .2s var(--spring),box-shadow .2s var(--spring);text-align:left}
 .heim-btn-big:active{transform:scale(.96)}
 .heim-btn-big::before{content:'';position:absolute;inset:0;border-radius:inherit;background:radial-gradient(circle at var(--rx,50%) var(--ry,50%),rgba(255,255,255,.25),transparent 55%);opacity:0;transition:opacity .35s ease;pointer-events:none}
 .heim-btn-big:active::before{opacity:1;transition:opacity 0s}
 .heim-btn-big{position:relative;overflow:hidden}
-.heim-btn-big .hbig-ic{width:32px;height:32px;flex-shrink:0;border-radius:10px;background:linear-gradient(135deg,#30D158,#0A84FF);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(48,209,88,.5)}
-.heim-btn-big .hbig-ic svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
-.heim-btn-big .hbig-txt{display:flex;flex-direction:column;line-height:1.15;min-width:0;flex:1}
-.heim-btn-big .hbig-title{font-size:14px;font-weight:900;letter-spacing:.2px;color:#fff;white-space:nowrap}
-.heim-btn-big .hbig-sub{font-size:10.5px;font-weight:700;color:rgba(223,251,234,.75);text-transform:uppercase;letter-spacing:.6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.heim-btn-big .hbig-ic{width:34px;height:34px;flex-shrink:0;border-radius:11px;background:linear-gradient(135deg,#FFD60A,#FF9500 55%,#FF6D2E);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(255,149,0,.6),inset 0 1px 0 rgba(255,255,255,.4)}
+.heim-btn-big .hbig-ic svg{width:18px;height:18px;stroke:#1a1207;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.heim-btn-big .hbig-txt{display:flex;flex-direction:column;line-height:1.18;min-width:0;flex:1}
+.heim-btn-big .hbig-title{font-size:14.5px;font-weight:900;letter-spacing:.15px;color:#fff;white-space:nowrap;text-shadow:0 1px 2px rgba(0,0,0,.3)}
+.heim-btn-big .hbig-sub{font-size:10.5px;font-weight:700;color:rgba(255,237,204,.82);text-transform:uppercase;letter-spacing:.65px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .heim-btn-big .hbig-arrow{flex-shrink:0;color:rgba(255,255,255,.75);margin-left:4px}
 .heim-btn-big .hbig-arrow svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
 .heim-btn-big.needs-setup{background:linear-gradient(135deg,rgba(255,159,10,.38),rgba(255,69,58,.25));border-color:rgba(255,159,10,.6);color:#FFE8CC;animation:heimWarn 2.8s ease-in-out infinite}
@@ -248,7 +261,7 @@ nav button.active::before{opacity:1}
 .heim-mini-reminder .hmr-icon{font-size:13px}
 .heim-mini-reminder .hmr-arrow{color:rgba(255,218,160,.7);font-weight:900;margin-left:2px}
 #screen-radar .heim-mini-reminder{position:absolute;top:calc(env(safe-area-inset-top,0) + 72px);right:10px;z-index:420}
-#screen-crew .heim-mini-reminder.crew-mini-reminder{position:absolute;top:calc(env(safe-area-inset-top,0) + 64px);right:10px;z-index:420}
+#screen-crew .heim-mini-reminder.crew-mini-reminder{position:absolute;top:calc(env(safe-area-inset-top,0) + 72px);right:10px;z-index:420}
 .heim-mini-reminder.show{display:inline-flex}
 @keyframes heimMrSlide{0%{opacity:0;transform:translateY(-8px) scale(.9)}100%{opacity:1;transform:none}}
 @keyframes heimGlow{0%,100%{box-shadow:0 10px 28px rgba(0,0,0,.45),0 0 0 1px rgba(255,255,255,.05),inset 0 1px 0 rgba(255,255,255,.15),0 0 0 2px rgba(48,209,88,.0)}50%{box-shadow:0 10px 30px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.05),inset 0 1px 0 rgba(255,255,255,.18),0 0 0 3px rgba(48,209,88,.2)}}
@@ -3873,7 +3886,7 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
         <button class="heim-btn-big" id="heimTopbarBtn" onclick="openHomeSafe()" aria-label="Bring mich nach Hause">
           <div class="hbig-ic"><svg viewBox="0 0 24 24"><use href="#i-home-safe"/></svg></div>
           <div class="hbig-txt">
-            <span class="hbig-title" id="heimBigTitle">🏠 Bring mich heim</span>
+            <span class="hbig-title" id="heimBigTitle">🏠 Bring mich nach Hause</span>
             <span class="hbig-sub" id="heimBigSub">Einrichten &amp; Crew informieren</span>
           </div>
           <span class="hbig-arrow"><svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg></span>
@@ -3933,12 +3946,24 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
     </div>
     <div class="scr" id="screen-match"><div class="match-area"><div class="match-filter-bar"><select class="mf-select" id="mfGender" onchange="applyFilters()"><option value="">Alle</option><option value="Mann">Mann</option><option value="Frau">Frau</option><option value="Divers">Divers</option></select><select class="mf-select" id="mfAge" onchange="applyFilters()"><option value="">Alter</option><option value="18-21">18-21</option><option value="22-25">22-25</option><option value="26-30">26-30</option><option value="31-40">31-40</option><option value="40+">40+</option></select><select class="mf-select" id="mfCity" onchange="applyFilters()"><option value="">Wohnort</option></select><select class="mf-select" id="mfClub" onchange="applyFilters()"><option value="">Verein</option></select></div><div class="match-stack" id="matchStack"></div><div class="mactions"><button class="ma sm" onclick="rewind()" aria-label="Zurück"><svg class="icn" style="width:20px;height:20px" viewBox="0 0 24 24"><use href="#i-rewind"/></svg></button><button class="ma nope" onclick="doSwipe('left')" aria-label="Nope"><svg class="icn" style="width:28px;height:28px" viewBox="0 0 24 24"><use href="#i-x"/></svg></button><button class="ma super" onclick="superLike()" aria-label="Superlike"><svg class="icn icn-fill" style="width:24px;height:24px;color:#fff" viewBox="0 0 24 24"><use href="#i-star"/></svg></button><button class="ma like" onclick="doSwipe('right')" aria-label="Like"><svg class="icn icn-fill" style="width:32px;height:32px;color:#fff" viewBox="0 0 24 24"><use href="#i-heart"/></svg></button><button class="ma sm" onclick="toast('Matche & connecte auf Social!')" aria-label="Chat"><svg class="icn" style="width:20px;height:20px" viewBox="0 0 24 24"><use href="#i-chat"/></svg></button></div></div></div>
     <div class="scr" id="screen-crew">
+      <!-- v78: CONTEXT MODE SWITCHER auch auf Crew-Screen (oben über der Karte) -->
+      <div class="ctx-switcher" id="ctxSwitcherCrew" role="tablist" aria-label="Modus wechseln">
+        <button class="ctx-chip" data-ctx="urlaub" onclick="setContextMode('urlaub')" role="tab">
+          <span class="ctx-ico">🌴</span><span class="ctx-lbl">Urlaub</span>
+        </button>
+        <button class="ctx-chip" data-ctx="zuhause" onclick="setContextMode('zuhause')" role="tab">
+          <span class="ctx-ico">🏠</span><span class="ctx-lbl">Zuhause</span>
+        </button>
+        <button class="ctx-chip" data-ctx="event" onclick="setContextMode('event')" role="tab">
+          <span class="ctx-ico">🎉</span><span class="ctx-lbl">Event</span>
+        </button>
+      </div>
       <!-- HEIM-TOPBAR (absolute overlay above crew map) -->
       <div class="heim-topbar crew-heim-topbar" id="heimTopbarCrewWrap">
         <button class="heim-btn-big" id="heimTopbarBtnCrew" onclick="openHomeSafe()" aria-label="Bring mich nach Hause">
           <div class="hbig-ic"><svg viewBox="0 0 24 24"><use href="#i-home-safe"/></svg></div>
           <div class="hbig-txt">
-            <span class="hbig-title" id="heimBigTitleCrew">🏠 Bring mich heim</span>
+            <span class="hbig-title" id="heimBigTitleCrew">🏠 Bring mich nach Hause</span>
             <span class="hbig-sub" id="heimBigSubCrew">Crew informieren &amp; Route</span>
           </div>
           <span class="hbig-arrow"><svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg></span>
@@ -4469,7 +4494,7 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 77;
+  var APP_VERSION = 78;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     // Force-clear old non-UUID crew IDs
@@ -4597,7 +4622,7 @@ async function logPrivacyConsent(mode, previousMode, state){
       deals_consent: !!(state.consent && state.consent.deals_consent),
       consent_version: 1,
       user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-      app_version: 77,
+      app_version: 78,
       // v73: tag source so we can see who was newly prompted vs. picked from settings
       source: (!previousMode && ME && ME.created_at && (Date.now()-new Date(ME.created_at).getTime())>3600000) ? 'existing_user_v72_prompt' : (!previousMode ? 'first_run' : 'settings_change')
     };
@@ -4645,7 +4670,7 @@ function clearPrivacyData(){
         deals_consent: false,
         consent_version: 1,
         user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-        app_version: 77,
+        app_version: 78,
         source: 'user_reset'
       };
       sb.from('privacy_consent_log').insert(clearRow).then(function(r){ if(r&&r.error) console.warn('[PM] clear log err', r.error.message); });
@@ -4957,20 +4982,46 @@ window.setContextMode = function(ctx){
 };
 
 function adaptUIForContext(ctx){
-  // Hide/show pieces based on mode
+  // v78: App-weite Anpassung basierend auf Kontext-Modus
   try{
-    var heimBar = document.getElementById('heimTopbarRadar');
-    var locPill = document.getElementById('heimLocPill');
     var gpsBanner = document.getElementById('gpsStatusBanner');
+    var weatherCard = document.getElementById('weatherCard');
+    var wlt = document.getElementById('weatherLocTxt');
+
     if(ctx === 'event'){
-      // No GPS → hide location pill and any GPS warnings
-      if(locPill) locPill.style.display = 'none';
+      // Event-Mode: kein GPS, aber Crew-Funktionen bleiben aktiv
       if(gpsBanner) gpsBanner.style.display = 'none';
-    } else {
-      if(locPill) locPill.style.display = '';
+      if(wlt) wlt.textContent = 'Event-Modus · kein Standort';
+      if(weatherCard) weatherCard.setAttribute('data-state','idle');
+      try{ document.body.setAttribute('data-ctx','event'); }catch(e){}
+    } else if(ctx === 'zuhause'){
+      try{ document.body.setAttribute('data-ctx','zuhause'); }catch(e){}
+      if(gpsBanner) gpsBanner.style.display = '';
+    } else { // urlaub
+      try{ document.body.setAttribute('data-ctx','urlaub'); }catch(e){}
+      if(gpsBanner) gpsBanner.style.display = '';
     }
-    // Heim-setup banner is only meaningful in urlaub mode
-    // (already handled by existing hsUpdateHeaderDot logic via privacy mode)
+
+    // Privacy-System synchen (setzt userLat/userLng je nach Mode)
+    try{ if(typeof checkLocationConsent==='function') checkLocationConsent(); }catch(e){}
+
+    // Labels neu rendern (Stadt/Wetter/Deals-Header etc.)
+    setTimeout(function(){
+      try{ if(typeof _renderLocationLabels==='function') _renderLocationLabels(); }catch(e){}
+      // Wetter aktualisieren (nicht im Event-Modus)
+      if(ctx !== 'event'){
+        try{ if(typeof fetchWeather==='function') fetchWeather(); }catch(e){}
+      }
+      // Maps re-center wenn wir neue Koords haben
+      try{
+        if(typeof userLat==='number' && typeof userLng==='number' && userLat && userLng){
+          if(typeof rMap !== 'undefined' && rMap){ try{ rMap.flyTo([userLat,userLng], 15, {duration:.6}); }catch(e){} }
+          if(typeof cMap !== 'undefined' && cMap){ try{ cMap.flyTo([userLat,userLng], 14, {duration:.6}); }catch(e){} }
+        }
+      }catch(e){}
+    }, 260);
+
+    // Heim-Button State updaten
     if(typeof hsUpdateHeaderDot === 'function'){ try{ hsUpdateHeaderDot(); }catch(e){} }
   }catch(e){ console.warn('[CTX] adapt err',e); }
 }
@@ -9944,19 +9995,23 @@ function hsUpdateHeaderDot(){
   var dismissed = _heimIsDismissed();
   var needsSetup = !info.ready;
 
-  // Topbar-Container sichtbarkeit (wenn dismissed + needsSetup → mini-reminder)
-  ['heimTopbarRadar','heimTopbarCrewWrap'].forEach(function(wrapId){
-    var wrap = document.getElementById(wrapId);
-    if(!wrap) return;
-    if(needsSetup && dismissed){ wrap.style.display='none'; }
-    else { wrap.style.display=''; }
-  });
-  ['heimMiniReminder','heimMiniReminderCrew'].forEach(function(rid){
-    var r = document.getElementById(rid);
-    if(!r) return;
-    if(needsSetup && dismissed){ r.classList.add('show'); }
-    else { r.classList.remove('show'); }
-  });
+  // v78: Crew-Topbar bleibt IMMER sichtbar (Heim-Button direkt anwählbar).
+  // Nur auf Radar wird bei needsSetup+dismissed ausgeblendet und Mini-Reminder gezeigt.
+  var radarWrap = document.getElementById('heimTopbarRadar');
+  if(radarWrap){
+    if(needsSetup && dismissed){ radarWrap.style.display='none'; }
+    else { radarWrap.style.display=''; }
+  }
+  var crewWrap = document.getElementById('heimTopbarCrewWrap');
+  if(crewWrap){ crewWrap.style.display=''; }
+  var rMini = document.getElementById('heimMiniReminder');
+  if(rMini){
+    if(needsSetup && dismissed){ rMini.classList.add('show'); }
+    else { rMini.classList.remove('show'); }
+  }
+  // Crew-Mini-Reminder wird nie mehr gebraucht, da Topbar immer sichtbar
+  var cMini = document.getElementById('heimMiniReminderCrew');
+  if(cMini){ cMini.classList.remove('show'); }
 
   ['heimTopbarBtn','heimTopbarBtnCrew'].forEach(function(btnId, idx){
     var big = document.getElementById(btnId);
@@ -9970,7 +10025,7 @@ function hsUpdateHeaderDot(){
       if(sub) sub.textContent = 'Tippe — Hotel & Buddy festlegen';
     } else {
       big.classList.remove('needs-setup');
-      if(title) title.textContent = '🏠 Bring mich heim';
+      if(title) title.textContent = '🏠 Bring mich nach Hause';
       if(sub){
         if(hotelName){
           sub.textContent = '→ '+String(hotelName).split(',')[0].slice(0,28);
@@ -10243,7 +10298,7 @@ window.hsShareToCrew = async function(msg){
 
 window.hsShareLink = function(msg){
   if(navigator.share){
-    navigator.share({title:'crew. · Bring mich heim', text:msg}).catch(function(){});
+    navigator.share({title:'crew. · Bring mich nach Hause', text:msg}).catch(function(){});
   } else if(navigator.clipboard){
     navigator.clipboard.writeText(msg).catch(function(){});
     toast('Link kopiert');
