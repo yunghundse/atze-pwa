@@ -43,7 +43,8 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;color:var(-
 .hdr-actions{display:flex;gap:8px;align-items:center}
 .hdr-btn{width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.06);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);color:#fff;font-size:15px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;transition:transform .15s var(--ease),background .2s;box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 2px 8px rgba(0,0,0,.15)}
 .hdr-btn:active{transform:scale(.9)}
-.notif-dot{position:absolute;top:6px;right:6px;width:7px;height:7px;border-radius:50%;background:var(--fire);border:2px solid var(--bg)}
+.notif-dot{position:absolute;top:6px;right:6px;width:7px;height:7px;border-radius:50%;background:var(--fire);border:2px solid var(--bg);display:none}
+.notif-dot.show{display:block}
 .streak-badge{display:none !important}
 @keyframes streakPulse{0%,100%{box-shadow:0 0 20px rgba(255,214,10,.15)}50%{box-shadow:0 0 30px rgba(255,214,10,.3)}}
 .sos-float{position:absolute;bottom:88px;right:14px;z-index:190;width:48px;height:48px;border-radius:50%;background:var(--fire);border:2px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#fff;cursor:pointer;box-shadow:0 4px 16px rgba(255,59,48,.5);letter-spacing:.5px;animation:sosPulse 1.5s ease-in-out infinite}
@@ -4783,7 +4784,7 @@ async function logPrivacyConsent(mode, previousMode, state){
       deals_consent: !!(state.consent && state.consent.deals_consent),
       consent_version: 1,
       user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-      app_version: 96,
+      app_version: 97,
       // v73: tag source so we can see who was newly prompted vs. picked from settings
       source: (!previousMode && ME && ME.created_at && (Date.now()-new Date(ME.created_at).getTime())>3600000) ? 'existing_user_v72_prompt' : (!previousMode ? 'first_run' : 'settings_change')
     };
@@ -4831,7 +4832,7 @@ function clearPrivacyData(){
         deals_consent: false,
         consent_version: 1,
         user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-        app_version: 96,
+        app_version: 97,
         source: 'user_reset'
       };
       sb.from('privacy_consent_log').insert(clearRow).then(function(r){ if(r&&r.error) console.warn('[PM] clear log err', r.error.message); });
@@ -5136,24 +5137,20 @@ window.setContextMode = function(ctx){
              event:'🎉 Event-Modus — kein Tracking'}[ctx];
   if(msg && typeof toast==='function') toast(msg);
 
-  // If we just turned on Urlaub → request GPS + trigger heim-setup if missing
+  // v97: If we just turned on Urlaub → request GPS + open Vacation-Setup ONLY ONCE (if not saved yet)
   if(ctx === 'urlaub'){
     setTimeout(function(){ try{ checkLocationConsent(); }catch(e){} }, 180);
-    // v80: Goldene Setup-Card automatisch einblenden wenn noch kein Hotel/Buddy gesetzt
+    // v97: Urlaubs-Setup nur beim ersten Aktivieren abfragen, dann persistent.
+    // KEIN dauerndes "openHomeSafe" mehr — Heim-Setup bleibt dismissible Card.
     setTimeout(function(){
       try{
-        var s = (typeof hsGetSetup==='function') ? hsGetSetup() : null;
-        var info = (typeof hsSetupCompleteness==='function') ? hsSetupCompleteness(s) : {ready:false};
-        if(!info.ready){
-          // reset dismiss-timer so card shows NOW (user actively switched to Urlaub)
-          try{ localStorage.removeItem('heim_setup_dismissed_until_v1'); }catch(e){}
-          try{ localStorage.removeItem('heim_setup_dismissed_count_v1'); }catch(e){}
-          if(typeof hsUpdateHeaderDot==='function') hsUpdateHeaderDot();
-          // auto-open setup after short grace period
+        var vs = (typeof vsGetSetup==='function') ? vsGetSetup() : null;
+        if(!vs || !vs.active){
+          // erste Aktivierung von Urlaub → Setup-Modal öffnen
           var grace = 450;
-          setTimeout(function(){ try{ openHomeSafe(); }catch(e){} }, grace);
+          setTimeout(function(){ try{ if(typeof openVacationSetup==='function') openVacationSetup(true); }catch(e){} }, grace);
         }
-      }catch(e){ console.warn('[CTX] urlaub heim-setup check err',e); }
+      }catch(e){ console.warn('[CTX] urlaub vacation-setup check err',e); }
     }, 260);
   }
   // v80: bei jedem Wechsel nachschauen ob Setup-Card angezeigt werden muss
@@ -9508,6 +9505,8 @@ window.openBlockList=async function(){
     html+='<div class="ps-row"><div class="ps-row-label">Live-Tracking</div><div class="ps-row-val">'+(_pmMode==='travel'?'✓ aktiv':'– aus')+'</div></div>';
     html+='<div class="ps-row"><div class="ps-row-label">Personalisierte Angebote</div><div class="ps-row-val">'+((_pmMode==='travel'||_pmMode==='home')?'✓ aktiv':'– aus')+'</div></div>';
     html+='<button class="ps-btn" onclick="openPrivacySettings()">Modus wechseln</button>';
+    html+='<button class="ps-btn" onclick="openHomeCityPicker(false)">🏠 Heimatort ändern</button>';
+    html+='<button class="ps-btn" onclick="openVacationSetup()">🌴 Urlaub / Reise-Daten</button>';
     html+='<button class="ps-btn" onclick="openConsentHistory()">📜 Einwilligungs-Historie anzeigen</button>';
     html+='<button class="ps-btn danger" onclick="resetPrivacyData()">Alle Privatsphäre-Daten löschen</button>';
     html+='<div style="font-size:10.5px;color:var(--t3);line-height:1.55;padding-top:10px;text-align:center">Rechtsgrundlage: Art. 6 Abs. 1 a DSGVO (freiwillige Einwilligung). Widerruf jederzeit möglich.</div>';
@@ -10481,6 +10480,142 @@ function updateChallengeTimer(){
   var h=23-now.getHours();var m=59-now.getMinutes();
   el.textContent=h+'h '+m+'m';
 }
+
+// ============================================
+// v97: VACATION SETUP — Urlaubsdaten, persistent
+// Nur einmal fragen beim ersten Urlaubsmodus
+// ============================================
+var VS_SETUP_KEY = 'vacation_setup_v1';
+function vsGetSetup(){
+  try{ var raw=localStorage.getItem(VS_SETUP_KEY); return raw?JSON.parse(raw):null; }catch(e){ return null; }
+}
+function vsSaveSetup(obj){
+  try{ localStorage.setItem(VS_SETUP_KEY, JSON.stringify(obj)); }catch(e){}
+}
+function vsClearSetup(){
+  try{ localStorage.removeItem(VS_SETUP_KEY); }catch(e){}
+}
+function _vsFmtDate(iso){
+  if(!iso) return '–';
+  try{ var d=new Date(iso); return d.toLocaleDateString('de-DE',{day:'2-digit',month:'short',year:'numeric'}); }catch(e){ return iso; }
+}
+function _vsDaysBetween(aIso,bIso){
+  try{
+    var a=new Date(aIso), b=new Date(bIso);
+    var ms=b-a; if(isNaN(ms)) return null;
+    return Math.max(1, Math.round(ms/(1000*60*60*24)));
+  }catch(e){ return null; }
+}
+window.openVacationSetup = function(firstTime){
+  var existing = vsGetSetup() || {};
+  var destDefault = existing.dest || '';
+  if(!destDefault){
+    var uc = window._userCity;
+    if(uc && (uc.city||uc.region||uc.country)){
+      destDefault = [uc.city||uc.region, uc.country].filter(Boolean).join(', ');
+    }
+  }
+  var fromDefault = existing.from || new Date().toISOString().slice(0,10);
+  var toDefault = existing.to || (function(){
+    var d=new Date(); d.setDate(d.getDate()+7);
+    return d.toISOString().slice(0,10);
+  })();
+
+  var ov = document.getElementById('vacationSetupOv');
+  if(!ov){
+    ov = document.createElement('div');
+    ov.id = 'vacationSetupOv';
+    ov.style.cssText = 'position:fixed;inset:0;z-index:9998;background:rgba(7,6,10,.88);backdrop-filter:blur(14px);display:none;overflow-y:auto';
+    ov.innerHTML = ''+
+      '<div style="max-width:520px;margin:0 auto;padding:64px 16px 40px">'+
+        '<div style="background:linear-gradient(180deg,rgba(24,22,30,.96),rgba(12,10,16,.98));border:1px solid rgba(255,255,255,.08);border-radius:26px;padding:22px 20px 20px;box-shadow:0 24px 60px rgba(0,0,0,.6)">'+
+          '<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">'+
+            '<div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#FF9500,#FF5864);display:flex;align-items:center;justify-content:center;font-size:22px">🌴</div>'+
+            '<div>'+
+              '<div id="vsTitle" style="font-size:19px;font-weight:900;letter-spacing:-.3px">Urlaubs-Setup</div>'+
+              '<div style="font-size:12px;color:var(--t3);margin-top:2px">Einmal eintragen, bleibt dann verankert.</div>'+
+            '</div>'+
+          '</div>'+
+          '<label style="display:block;font-size:11px;font-weight:700;color:var(--t3);margin:14px 0 6px;letter-spacing:.3px">WO?</label>'+
+          '<input id="vsDest" type="text" placeholder="z.B. Mallorca, Spanien" style="width:100%;padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:var(--t1);font-size:14px;font-family:inherit;outline:none;box-sizing:border-box">'+
+          '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px">'+
+            '<div>'+
+              '<label style="display:block;font-size:11px;font-weight:700;color:var(--t3);margin:0 0 6px;letter-spacing:.3px">VON</label>'+
+              '<input id="vsFrom" type="date" style="width:100%;padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:var(--t1);font-size:14px;font-family:inherit;outline:none;box-sizing:border-box;color-scheme:dark">'+
+            '</div>'+
+            '<div>'+
+              '<label style="display:block;font-size:11px;font-weight:700;color:var(--t3);margin:0 0 6px;letter-spacing:.3px">BIS</label>'+
+              '<input id="vsTo" type="date" style="width:100%;padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:var(--t1);font-size:14px;font-family:inherit;outline:none;box-sizing:border-box;color-scheme:dark">'+
+            '</div>'+
+          '</div>'+
+          '<div id="vsDuration" style="font-size:12px;color:var(--t3);margin-top:8px"></div>'+
+          '<div style="display:flex;gap:8px;margin-top:18px">'+
+            '<button onclick="closeVacationSetup()" style="flex:1;padding:13px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:var(--t1);font-size:13px;font-weight:700;font-family:inherit;cursor:pointer">Abbrechen</button>'+
+            '<button onclick="saveVacationSetup()" style="flex:1.5;padding:13px;border-radius:12px;border:0;background:linear-gradient(135deg,#FF9500,#FF5864);color:#fff;font-size:13px;font-weight:800;font-family:inherit;cursor:pointer">🌴 Speichern</button>'+
+          '</div>'+
+          '<div id="vsExtraRow" style="margin-top:12px;display:none">'+
+            '<button onclick="clearVacationSetup()" style="width:100%;padding:11px;border-radius:12px;border:1px solid rgba(255,59,48,.3);background:rgba(255,59,48,.08);color:#FF453A;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer">Urlaubsdaten löschen</button>'+
+          '</div>'+
+        '</div>'+
+      '</div>';
+    document.body.appendChild(ov);
+
+    // Live duration updater
+    var updateDur = function(){
+      var f=document.getElementById('vsFrom').value;
+      var t=document.getElementById('vsTo').value;
+      var el=document.getElementById('vsDuration');
+      if(!el) return;
+      if(f && t){
+        var days=_vsDaysBetween(f,t);
+        if(days){ el.textContent = '⏱ '+days+' Tag'+(days===1?'':'e')+' Urlaub'; return; }
+      }
+      el.textContent = '';
+    };
+    ov.querySelector('#vsFrom').addEventListener('change',updateDur);
+    ov.querySelector('#vsTo').addEventListener('change',updateDur);
+  }
+
+  // Prefill
+  document.getElementById('vsDest').value = destDefault;
+  document.getElementById('vsFrom').value = fromDefault;
+  document.getElementById('vsTo').value = toDefault;
+  document.getElementById('vsTitle').textContent = firstTime ? '🌴 Urlaub-Modus — Setup' : '🌴 Urlaubsdaten bearbeiten';
+  document.getElementById('vsExtraRow').style.display = (existing && existing.active) ? 'block' : 'none';
+  // trigger duration render
+  try{
+    var f=document.getElementById('vsFrom').value, t=document.getElementById('vsTo').value;
+    var days=_vsDaysBetween(f,t);
+    var el=document.getElementById('vsDuration');
+    if(el) el.textContent = days ? ('⏱ '+days+' Tag'+(days===1?'':'e')+' Urlaub') : '';
+  }catch(e){}
+
+  ov.style.display = 'block';
+};
+window.closeVacationSetup = function(){
+  var ov = document.getElementById('vacationSetupOv');
+  if(ov) ov.style.display = 'none';
+};
+window.saveVacationSetup = function(){
+  var dest = (document.getElementById('vsDest').value||'').trim();
+  var from = document.getElementById('vsFrom').value;
+  var to   = document.getElementById('vsTo').value;
+  if(!dest){ toast('Wohin geht die Reise?'); return; }
+  if(!from || !to){ toast('Bitte Von- und Bis-Datum wählen'); return; }
+  if(new Date(to) < new Date(from)){ toast('Bis-Datum liegt vor Von-Datum 🤔'); return; }
+  var days = _vsDaysBetween(from,to);
+  var obj = {active:true, dest:dest, from:from, to:to, days:days, saved_at:new Date().toISOString()};
+  vsSaveSetup(obj);
+  if(navigator.vibrate) navigator.vibrate([8,40,8]);
+  toast('🌴 Urlaub gespeichert: '+dest+' ('+days+' Tag'+(days===1?'':'e')+')');
+  closeVacationSetup();
+};
+window.clearVacationSetup = function(){
+  if(!confirm('Urlaubsdaten wirklich löschen?')) return;
+  vsClearSetup();
+  toast('Urlaubsdaten gelöscht');
+  closeVacationSetup();
+};
 
 // ============================================
 // HOME-SAFE SETUP — Pre-Trip Personalisierung
