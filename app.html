@@ -407,8 +407,8 @@ nav button.active::before{opacity:1}
 .crew-hub-footer .cb-cc-btn{flex:1;padding:14px;font-size:13px;min-height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;gap:6px}
 .crew-hub-limit{font-size:11px;color:var(--t3);text-align:center;margin-top:10px;letter-spacing:.1px}
 
-/* v87: Crew-Identity-Pill — zwei Tap-Zonen verbunden (Back + Crew-Zentrale öffnen) */
-.crew-id-pill{
+/* v88: Crew-Bar — zwei getrennte Buttons nebeneinander zwischen Header und Karte */
+.crew-bar{
   display:none;
   position:absolute;
   top:calc(env(safe-area-inset-top,0) + 64px);
@@ -416,96 +416,74 @@ nav button.active::before{opacity:1}
   right:14px;
   z-index:210;
   align-items:stretch;
-  gap:0;
-  padding:4px;
-  border-radius:22px;
-  background:linear-gradient(135deg,rgba(22,18,26,.92),rgba(14,10,18,.78));
-  border:1px solid rgba(255,109,46,.38);
-  color:#fff;
-  font-family:inherit;
-  max-width:calc(100% - 28px);
-  backdrop-filter:blur(28px) saturate(200%);
-  -webkit-backdrop-filter:blur(28px) saturate(200%);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 8px 24px rgba(0,0,0,.4),0 4px 14px rgba(255,109,46,.22);
-  transition:box-shadow .25s;
-  height:48px;
+  gap:8px;
   pointer-events:auto;
-  overflow:hidden;
 }
-.crew-id-pill.show{display:inline-flex;animation:cipFade .4s var(--spring,ease) both}
-@keyframes cipFade{0%{opacity:0;transform:translateY(-6px) scale(.96)}100%{opacity:1;transform:translateY(0) scale(1)}}
-.crew-id-pill *{pointer-events:auto}
-/* Gemeinsamer Button-Reset für beide Tap-Zonen */
-.cip-back-btn,.cip-main-btn{
-  background:transparent;border:0;
-  cursor:pointer;color:inherit;font-family:inherit;
-  display:flex;align-items:center;
-  transition:background .2s,transform .15s var(--spring,ease);
-  padding:0;
-}
-/* Linke Zone: runder Back-Kreis */
-.cip-back-btn{
-  flex-shrink:0;
-  padding:0 2px 0 0;
-}
-.cip-back-btn:hover .cip-back{background:linear-gradient(135deg,rgba(255,109,46,.4),rgba(254,60,114,.22));border-color:rgba(255,109,46,.6)}
-.cip-back-btn:active{transform:scale(.92)}
-.cip-back{
-  width:36px;height:36px;border-radius:50%;
-  background:linear-gradient(135deg,rgba(255,109,46,.28),rgba(254,60,114,.14));
+.crew-bar.show{display:flex;animation:cbarFade .4s var(--spring,ease) both}
+@keyframes cbarFade{0%{opacity:0;transform:translateY(-6px)}100%{opacity:1;transform:translateY(0)}}
+/* Linker Back-Button — eigener Glass-Kreis */
+.crewbar-back{
+  width:48px;height:48px;flex-shrink:0;
+  border-radius:16px;
+  background:linear-gradient(135deg,rgba(22,18,26,.92),rgba(14,10,18,.78));
+  border:1px solid rgba(255,109,46,.35);
+  backdrop-filter:blur(24px) saturate(200%);
+  -webkit-backdrop-filter:blur(24px) saturate(200%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 6px 18px rgba(0,0,0,.4);
   display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;
-  border:1px solid rgba(255,109,46,.4);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 2px 8px rgba(255,109,46,.25);
-  transition:background .2s,border-color .2s;
+  cursor:pointer;color:#FFB493;
+  font-family:inherit;padding:0;
+  transition:transform .15s var(--spring,ease),background .2s,border-color .2s;
 }
-.cip-back svg{width:16px;height:16px;color:#FFB493}
-/* Trenner zwischen den beiden Zonen */
-.cip-main-btn{
+.crewbar-back:hover{background:linear-gradient(135deg,rgba(30,24,34,.95),rgba(18,14,22,.84));border-color:rgba(255,109,46,.55)}
+.crewbar-back:active{transform:scale(.92)}
+.crewbar-back svg{width:18px;height:18px;display:block}
+/* Rechte Crew-Zentrale-Card — Hauptzone, öffnet openMyCrewProfile() */
+.crewbar-card{
   flex:1;min-width:0;
-  padding:0 10px 0 10px;
-  gap:9px;
-  border-left:1px solid rgba(255,255,255,.08);
-  margin-left:4px;
-  border-radius:0 18px 18px 0;
-  background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.02) 100%);
+  display:flex;align-items:center;gap:10px;
+  padding:7px 14px 7px 7px;
+  border-radius:16px;
+  background:linear-gradient(135deg,rgba(255,109,46,.18) 0%,rgba(254,60,114,.08) 100%);
+  border:1px solid rgba(255,109,46,.32);
+  backdrop-filter:blur(24px) saturate(200%);
+  -webkit-backdrop-filter:blur(24px) saturate(200%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 6px 18px rgba(0,0,0,.38),0 4px 14px rgba(255,109,46,.22);
+  cursor:pointer;
+  min-height:48px;
+  transition:transform .15s var(--spring,ease),background .2s,box-shadow .2s;
+  user-select:none;-webkit-user-select:none;
+  -webkit-tap-highlight-color:transparent;
 }
-.cip-main-btn:hover{background:linear-gradient(90deg,rgba(255,109,46,.06) 0%,rgba(255,109,46,.12) 100%)}
-.cip-main-btn:active{background:linear-gradient(90deg,rgba(255,109,46,.12) 0%,rgba(255,109,46,.18) 100%);transform:scale(.98)}
-.cip-ava{
-  width:32px;height:32px;border-radius:10px;
+.crewbar-card:hover{background:linear-gradient(135deg,rgba(255,109,46,.26) 0%,rgba(254,60,114,.14) 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 8px 22px rgba(0,0,0,.45),0 6px 18px rgba(255,109,46,.32)}
+.crewbar-card:active{transform:scale(.98)}
+.crewbar-ava{
+  width:34px;height:34px;border-radius:11px;
   background:linear-gradient(135deg,var(--o,#FF6D2E),#FF6B6B);
   display:flex;align-items:center;justify-content:center;
-  font-size:16px;flex-shrink:0;
-  border:1.5px solid rgba(255,255,255,.18);
-  box-shadow:0 2px 8px rgba(255,109,46,.35);
+  font-size:17px;flex-shrink:0;
+  border:1.5px solid rgba(255,255,255,.2);
+  box-shadow:0 2px 8px rgba(255,109,46,.38);
+  pointer-events:none;
 }
-.cip-txt{display:flex;flex-direction:column;min-width:0;line-height:1.1;gap:2px;flex:1;text-align:left}
-.cip-name{font-size:13.5px;font-weight:900;letter-spacing:-.2px;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.cip-motto{font-size:9.5px;font-weight:700;color:#FFB493;letter-spacing:.3px;text-transform:uppercase;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;opacity:.9}
-.cip-arrow{
-  width:20px;height:20px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;
-  color:#FFB493;
-  background:rgba(255,109,46,.1);
-  transition:transform .2s,background .2s;
+.crewbar-info{
+  flex:1;min-width:0;
+  display:flex;flex-direction:column;
+  gap:2px;line-height:1.15;
+  pointer-events:none;
 }
-.cip-main-btn:hover .cip-arrow{transform:translateX(2px);background:rgba(255,109,46,.2)}
-.cip-arrow svg{width:12px;height:12px;display:block}
+.crewbar-name{font-size:13.5px;font-weight:900;letter-spacing:-.2px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.crewbar-motto{font-size:10.5px;font-weight:700;color:#FFB493;letter-spacing:.15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.95}
 @media (max-width:390px){
-  .crew-id-pill{left:12px;right:12px;height:46px}
-  .cip-ava{width:30px;height:30px;font-size:15px;border-radius:9px}
-  .cip-back{width:34px;height:34px}
-  .cip-name{font-size:12.5px}
-  .cip-motto{font-size:9px}
-  .cip-main-btn{padding:0 8px;gap:8px}
+  .crew-bar{left:12px;right:12px;gap:7px}
+  .crewbar-back{width:46px;height:46px;border-radius:14px}
+  .crewbar-card{padding:6px 12px 6px 6px;min-height:46px;border-radius:14px}
+  .crewbar-ava{width:32px;height:32px;font-size:16px;border-radius:10px}
+  .crewbar-name{font-size:13px}
+  .crewbar-motto{font-size:10px}
 }
-@media (max-width:340px){
-  .cip-motto{display:none}
-}
-/* v86: Karte braucht Platz für App-Header (56px) + Pill-Zeile (~56px) */
-#crewsub-active .crew-map-full{margin-top:calc(env(safe-area-inset-top,0) + 120px);position:relative;z-index:1}
+/* v88: Karte braucht Platz für App-Header (~58px) + Bar (~56px) */
+#crewsub-active .crew-map-full{margin-top:calc(env(safe-area-inset-top,0) + 122px);position:relative;z-index:1}
 #crewsub-active .crew-map-full .leaflet-container{z-index:1}
 #crewsub-active .ctx-switcher{display:none}
 
@@ -4006,19 +3984,18 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
       <button class="hdr-btn" onclick="openNoti()" aria-label="Benachrichtigungen"><svg class="icn" style="width:17px;height:17px" viewBox="0 0 24 24"><use href="#i-bell"/></svg><span class="notif-dot"></span></button>
     </div>
   </div>
-  <!-- v87: Crew-Identity-Pill — zwei Tap-Zonen: Back zur Übersicht (links) + Crew-Zentrale öffnen (rechts) -->
-  <div class="crew-id-pill" id="crewIdPill" role="group" aria-label="Crew-Steuerung">
-    <button type="button" class="cip-back-btn" data-cdh-action="back" aria-label="Zurück zur Crew-Übersicht" title="Zurück zur Crew-Übersicht">
-      <span class="cip-back"><svg viewBox="0 0 24 24"><use href="#i-arrow-left"/></svg></span>
+  <!-- v88: Crew-Bar — Back-Button + Crew-Zentrale-Card (direkt aus der unteren Section hoch gezogen) -->
+  <div class="crew-bar" id="crewIdPill">
+    <button type="button" class="crewbar-back" onclick="crewGo('hub')" aria-label="Zurück zur Crew-Übersicht" title="Zurück zur Crew-Übersicht">
+      <svg viewBox="0 0 24 24"><use href="#i-arrow-left"/></svg>
     </button>
-    <button type="button" class="cip-main-btn" data-cdh-action="profile" aria-label="Crew-Zentrale öffnen" title="Crew-Zentrale öffnen">
-      <span class="cip-ava" id="cdhAva">🏴‍☠️</span>
-      <span class="cip-txt">
-        <span class="cip-name" id="cdhName">Crew</span>
-        <span class="cip-motto" id="cdhMotto">Zentrale öffnen</span>
-      </span>
-      <span class="cip-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
-    </button>
+    <div class="crewbar-card" onclick="openMyCrewProfile()" role="button" tabindex="0" aria-label="Crew-Zentrale öffnen">
+      <div class="crewbar-ava" id="cdhAva">🏴‍☠️</div>
+      <div class="crewbar-info">
+        <div class="crewbar-name" id="cdhName">Deine Crew</div>
+        <div class="crewbar-motto" id="cdhMotto">Crew-Zentrale öffnen →</div>
+      </div>
+    </div>
   </div>
   <main>
     <div class="scr active" id="screen-radar">
@@ -4349,15 +4326,10 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
 
         <div class="crew-section">
           <div class="crew-section-header">
-            <div class="csh-left"><span class="csh-emoji">🛡️</span><span class="csh-title">Crew-Zentrale</span></div>
+            <div class="csh-left"><span class="csh-emoji">🛡️</span><span class="csh-title">Schnellzugriff</span></div>
           </div>
+          <!-- v88: Crew-Card-Duplikat entfernt — die Crew-Zentrale wird jetzt oben in der Bar geöffnet. Hier bleiben nur noch die Action-Buttons. -->
           <div style="display:flex;flex-direction:column;gap:8px;padding:0 14px 14px">
-            <div class="cb-crew-card" onclick="openMyCrewProfile()" style="margin:0">
-              <div class="cb-cc-header" style="margin:0">
-                <div class="cb-cc-ava" id="myCrewIcon">🏴‍☠️</div>
-                <div class="cb-cc-info"><div class="cb-cc-name" id="myCrewName">Deine Crew</div><div class="cb-cc-motto" id="myCrewMotto">Crew-Profil öffnen →</div></div>
-              </div>
-            </div>
             <div style="display:flex;gap:8px">
               <div class="cb-cc-btn primary" onclick="openCrewBoard()" style="flex:1;padding:14px;font-size:13px;min-height:48px">🌍 Crew Board</div>
               <div class="cb-cc-btn secondary" onclick="openMyMalleStats()" style="flex:1;padding:14px;font-size:13px;min-height:48px">📊 Meine Stats</div>
@@ -4686,7 +4658,7 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 87;
+  var APP_VERSION = 88;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     // Force-clear old non-UUID crew IDs
@@ -4814,7 +4786,7 @@ async function logPrivacyConsent(mode, previousMode, state){
       deals_consent: !!(state.consent && state.consent.deals_consent),
       consent_version: 1,
       user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-      app_version: 87,
+      app_version: 88,
       // v73: tag source so we can see who was newly prompted vs. picked from settings
       source: (!previousMode && ME && ME.created_at && (Date.now()-new Date(ME.created_at).getTime())>3600000) ? 'existing_user_v72_prompt' : (!previousMode ? 'first_run' : 'settings_change')
     };
@@ -4862,7 +4834,7 @@ function clearPrivacyData(){
         deals_consent: false,
         consent_version: 1,
         user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-        app_version: 87,
+        app_version: 88,
         source: 'user_reset'
       };
       sb.from('privacy_consent_log').insert(clearRow).then(function(r){ if(r&&r.error) console.warn('[PM] clear log err', r.error.message); });
@@ -11194,42 +11166,7 @@ window.crewGo = function(section){
   }
 };
 
-// v84/v87: Bulletproof Event-Delegation für Crew-Pill — drei Aktionen: back / switch / profile
-(function(){
-  function _cdhHandler(e){
-    var btn = e.target && e.target.closest ? e.target.closest('[data-cdh-action]') : null;
-    if(!btn) return;
-    var act = btn.getAttribute('data-cdh-action');
-    e.preventDefault();
-    e.stopPropagation();
-    try{ if(navigator.vibrate) navigator.vibrate(10); }catch(_e){}
-    // Back/Switch → Übersicht, Profile → Crew-Zentrale öffnen
-    if(act === 'back' || act === 'switch'){
-      if(typeof window.crewGo === 'function'){
-        window.crewGo('hub');
-      } else {
-        // Fallback: direkter DOM-Toggle falls crewGo noch nicht da
-        try{
-          var hub = document.getElementById('crewsub-hub');
-          var active = document.getElementById('crewsub-active');
-          var pill = document.getElementById('crewIdPill');
-          if(hub) hub.classList.add('active');
-          if(active) active.classList.remove('active');
-          if(pill) pill.classList.remove('show');
-        }catch(_e){}
-      }
-      return;
-    }
-    if(act === 'profile'){
-      if(typeof window.openMyCrewProfile === 'function'){
-        window.openMyCrewProfile();
-      }
-      return;
-    }
-  }
-  // Capture-Phase — damit KEINE andere Stelle den Click vorher fängt
-  document.addEventListener('click', _cdhHandler, true);
-})();
+// v88: Event-Delegation für die Crew-Bar nicht mehr nötig — direkte onclick-Handler sind stabiler (siehe .crewbar-back / .crewbar-card).
 
 // Build crew hub cards (one card per crew user is in)
 window.buildCrewHubCards = function(){
@@ -11315,13 +11252,13 @@ window.updateCrewDetailHdr = function(){
   if(!s){
     if(ava) ava.textContent = '🏴‍☠️';
     if(nm)  nm.textContent  = 'Keine aktive Crew';
-    if(mt)  mt.textContent  = 'Zentrale öffnen';
+    if(mt)  mt.textContent  = 'Crew-Zentrale öffnen →';
     return;
   }
   if(ava) ava.textContent = s.icon || '🏴‍☠️';
   if(nm)  nm.textContent  = s.name || 'Crew';
-  // v87: Pill zeigt CTA für den rechten Tap-Bereich (öffnet Crew-Zentrale/Profil)
-  if(mt)  mt.textContent  = 'Zentrale öffnen';
+  // v88: Bar-Motto zeigt, dass die Card die Crew-Zentrale öffnet
+  if(mt)  mt.textContent  = 'Crew-Zentrale öffnen →';
 };
 
 // v82: Mini-Chat + offener Chat live aktuell halten
