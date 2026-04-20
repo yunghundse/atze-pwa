@@ -407,38 +407,42 @@ nav button.active::before{opacity:1}
 .crew-hub-footer .cb-cc-btn{flex:1;padding:14px;font-size:13px;min-height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;gap:6px}
 .crew-hub-limit{font-size:11px;color:var(--t3);text-align:center;margin-top:10px;letter-spacing:.1px}
 
-/* v85: Crew-Identity-Pill — sitzt IM App-Header und ersetzt das Logo wenn Crew-Detail aktiv */
+/* v86: Crew-Identity-Pill — eigenständiges Element ZWISCHEN App-Header und Karte (nicht mehr im Header) */
 .crew-id-pill{
   display:none;
+  position:absolute;
+  top:calc(env(safe-area-inset-top,0) + 64px);
+  left:14px;
+  z-index:210;
   align-items:center;
   gap:9px;
   padding:4px 14px 4px 4px;
   border-radius:22px;
-  background:linear-gradient(135deg,rgba(255,109,46,.18),rgba(254,60,114,.08));
-  border:1px solid rgba(255,109,46,.32);
+  background:linear-gradient(135deg,rgba(22,18,26,.92),rgba(14,10,18,.78));
+  border:1px solid rgba(255,109,46,.38);
   color:#fff;
   cursor:pointer;
   font-family:inherit;
-  flex-shrink:1;
-  min-width:0;
-  max-width:62%;
-  backdrop-filter:blur(20px) saturate(200%);
-  -webkit-backdrop-filter:blur(20px) saturate(200%);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 4px 14px rgba(255,109,46,.18);
+  max-width:calc(100% - 28px);
+  backdrop-filter:blur(28px) saturate(200%);
+  -webkit-backdrop-filter:blur(28px) saturate(200%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 8px 24px rgba(0,0,0,.4),0 4px 14px rgba(255,109,46,.22);
   transition:transform .18s var(--spring,ease),background .25s,box-shadow .25s;
-  padding-left:4px;
-  height:42px;
+  height:44px;
+  pointer-events:auto;
 }
 .crew-id-pill.show{display:inline-flex;animation:cipFade .4s var(--spring,ease) both}
-@keyframes cipFade{0%{opacity:0;transform:translateX(-8px) scale(.9)}100%{opacity:1;transform:translateX(0) scale(1)}}
-.crew-id-pill:hover{background:linear-gradient(135deg,rgba(255,109,46,.26),rgba(254,60,114,.14));box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 6px 18px rgba(255,109,46,.28)}
-.crew-id-pill:active{transform:scale(.95)}
+@keyframes cipFade{0%{opacity:0;transform:translateY(-6px) scale(.94)}100%{opacity:1;transform:translateY(0) scale(1)}}
+.crew-id-pill:hover{background:linear-gradient(135deg,rgba(30,24,34,.95),rgba(18,14,22,.84));border-color:rgba(255,109,46,.5);box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 10px 28px rgba(0,0,0,.5),0 6px 18px rgba(255,109,46,.32)}
+.crew-id-pill:active{transform:scale(.96)}
+.crew-id-pill *{pointer-events:auto}
 .cip-back{
-  width:34px;height:34px;border-radius:50%;
-  background:rgba(0,0,0,.35);
+  width:36px;height:36px;border-radius:50%;
+  background:linear-gradient(135deg,rgba(255,109,46,.28),rgba(254,60,114,.14));
   display:flex;align-items:center;justify-content:center;
   flex-shrink:0;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.14);
+  border:1px solid rgba(255,109,46,.4);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 2px 8px rgba(255,109,46,.25);
 }
 .cip-back svg{width:16px;height:16px;color:#FFB493}
 .cip-ava{
@@ -450,24 +454,21 @@ nav button.active::before{opacity:1}
   box-shadow:0 2px 8px rgba(255,109,46,.35);
 }
 .cip-txt{display:flex;flex-direction:column;min-width:0;line-height:1.1;gap:1px}
-.cip-name{font-size:13px;font-weight:900;letter-spacing:-.2px;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.cip-motto{font-size:9.5px;font-weight:700;color:#FFB493;letter-spacing:.3px;text-transform:uppercase;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;opacity:.85}
-/* Wenn die Pill aktiv ist: Logo ausblenden damit Platz ist */
-.app-header.crew-mode .logo,
-#appHeader.crew-mode #appLogo{display:none}
+.cip-name{font-size:13px;font-weight:900;letter-spacing:-.2px;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:160px}
+.cip-motto{font-size:9.5px;font-weight:700;color:#FFB493;letter-spacing:.3px;text-transform:uppercase;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;opacity:.9}
 @media (max-width:390px){
-  .crew-id-pill{padding-right:10px;max-width:58%;height:40px}
+  .crew-id-pill{left:12px;height:42px;padding-right:12px}
   .cip-ava{width:28px;height:28px;font-size:14px;border-radius:9px}
-  .cip-back{width:32px;height:32px}
-  .cip-name{font-size:12.5px}
+  .cip-back{width:34px;height:34px}
+  .cip-name{font-size:12.5px;max-width:130px}
   .cip-motto{font-size:9px}
 }
 @media (max-width:340px){
-  .crew-id-pill{max-width:52%}
+  .cip-name{max-width:100px}
   .cip-motto{display:none}
 }
-/* v85: Karte auf Crew-Detail braucht nur normalen App-Header Platz (kein extra Detail-Header mehr) */
-#crewsub-active .crew-map-full{margin-top:calc(env(safe-area-inset-top,0) + 70px);position:relative;z-index:1}
+/* v86: Karte braucht Platz für App-Header (56px) + Pill-Zeile (~52px) */
+#crewsub-active .crew-map-full{margin-top:calc(env(safe-area-inset-top,0) + 116px);position:relative;z-index:1}
 #crewsub-active .crew-map-full .leaflet-container{z-index:1}
 #crewsub-active .ctx-switcher{display:none}
 
@@ -3961,15 +3962,6 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
 <div id="app" style="display:none">
   <div class="app-header" id="appHeader">
     <div class="logo" id="appLogo">crew<span>.</span></div>
-    <!-- v85: Crew-Identity-Pill ersetzt das Logo wenn man in der Crew-Detailansicht ist — EIN Button für Zurück zur Übersicht -->
-    <button type="button" class="crew-id-pill" id="crewIdPill" data-cdh-action="back" aria-label="Zurück zur Crew-Übersicht" title="Zurück zur Crew-Übersicht">
-      <span class="cip-back"><svg viewBox="0 0 24 24"><use href="#i-arrow-left"/></svg></span>
-      <span class="cip-ava" id="cdhAva">🏴‍☠️</span>
-      <span class="cip-txt">
-        <span class="cip-name" id="cdhName">Crew</span>
-        <span class="cip-motto" id="cdhMotto">zur Übersicht</span>
-      </span>
-    </button>
     <div class="hdr-actions">
       <div class="streak-badge" id="sBadge"><svg class="icn icn-fill" style="color:#FFD60A;width:11px;height:11px" viewBox="0 0 24 24"><use href="#i-flame"/></svg> <span id="sNum">0</span></div>
       <button class="hdr-btn hdr-home" onclick="openHomeSafe()" aria-label="Bring mich nach Hause"><svg class="icn" viewBox="0 0 24 24"><use href="#i-home-safe"/></svg><span class="hhl hhl-full">Bring mich nach Hause</span><span class="hhl hhl-mid">Nach Hause</span><span class="hhl hhl-short">Heim</span><span class="hdr-home-dot" id="hdrHomeDot"></span></button>
@@ -3977,6 +3969,15 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
       <button class="hdr-btn" onclick="openNoti()" aria-label="Benachrichtigungen"><svg class="icn" style="width:17px;height:17px" viewBox="0 0 24 24"><use href="#i-bell"/></svg><span class="notif-dot"></span></button>
     </div>
   </div>
+  <!-- v86: Crew-Identity-Pill — sitzt ZWISCHEN App-Header und Karte, nur im Crew-Detail sichtbar -->
+  <button type="button" class="crew-id-pill" id="crewIdPill" data-cdh-action="back" aria-label="Zurück zur Crew-Übersicht" title="Zurück zur Crew-Übersicht">
+    <span class="cip-back"><svg viewBox="0 0 24 24"><use href="#i-arrow-left"/></svg></span>
+    <span class="cip-ava" id="cdhAva">🏴‍☠️</span>
+    <span class="cip-txt">
+      <span class="cip-name" id="cdhName">Crew</span>
+      <span class="cip-motto" id="cdhMotto">Übersicht</span>
+    </span>
+  </button>
   <main>
     <div class="scr active" id="screen-radar">
       <div class="map-full"><div id="radarMap"></div><div class="map-fade"></div></div>
@@ -4643,7 +4644,7 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 85;
+  var APP_VERSION = 86;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     // Force-clear old non-UUID crew IDs
@@ -4771,7 +4772,7 @@ async function logPrivacyConsent(mode, previousMode, state){
       deals_consent: !!(state.consent && state.consent.deals_consent),
       consent_version: 1,
       user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-      app_version: 85,
+      app_version: 86,
       // v73: tag source so we can see who was newly prompted vs. picked from settings
       source: (!previousMode && ME && ME.created_at && (Date.now()-new Date(ME.created_at).getTime())>3600000) ? 'existing_user_v72_prompt' : (!previousMode ? 'first_run' : 'settings_change')
     };
@@ -4819,7 +4820,7 @@ function clearPrivacyData(){
         deals_consent: false,
         consent_version: 1,
         user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-        app_version: 85,
+        app_version: 86,
         source: 'user_reset'
       };
       sb.from('privacy_consent_log').insert(clearRow).then(function(r){ if(r&&r.error) console.warn('[PM] clear log err', r.error.message); });
@@ -10509,13 +10510,11 @@ window.go=function(n,b){
   try{ if(navigator.vibrate) navigator.vibrate(10); }catch(e){}
   var target=document.getElementById('screen-'+n);
   if(!target) return;
-  // v85: Crew-Identity-Pill nur auf Crew-Screen sichtbar — beim Wechsel IMMER ausblenden
+  // v86: Crew-Identity-Pill nur auf Crew-Screen sichtbar — beim Wechsel IMMER ausblenden
   try{
     if(n !== 'crew'){
       var _pill = document.getElementById('crewIdPill');
-      var _hdr  = document.getElementById('appHeader');
       if(_pill) _pill.classList.remove('show');
-      if(_hdr)  _hdr.classList.remove('crew-mode');
     }
   }catch(e){}
   document.querySelectorAll('.scr').forEach(function(s){s.classList.remove('active')});
@@ -11136,12 +11135,10 @@ window.crewGo = function(section){
     if(el) el.classList.toggle('active', s === section);
   });
   try{ var scr = document.getElementById('screen-crew'); if(scr) scr.scrollTop = 0; }catch(e){}
-  // v85: Crew-Identity-Pill im App-Header toggeln + Logo ausblenden
+  // v86: Crew-Identity-Pill toggeln (sitzt jetzt zwischen Header und Karte, nicht IM Header)
   try{
     var pill = document.getElementById('crewIdPill');
-    var hdr  = document.getElementById('appHeader');
     if(pill) pill.classList.toggle('show', section === 'active');
-    if(hdr)  hdr.classList.toggle('crew-mode', section === 'active');
   }catch(e){}
   if(section === 'hub'){
     try{ if(typeof buildCrewHubCards==='function') buildCrewHubCards(); }catch(e){ console.warn('[CREW-HUB] build err',e); }
