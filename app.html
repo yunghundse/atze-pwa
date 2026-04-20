@@ -367,6 +367,68 @@ nav button.active::before{opacity:1}
 @keyframes scanLine{0%,100%{top:20%}50%{top:70%}}
 
 /* CREW */
+/* v81: Crew Sub-Screens (Hub + Detail) */
+.crew-sub{display:none}
+.crew-sub.active{display:block;animation:crewSubFade .45s var(--spring,ease) both}
+@keyframes crewSubFade{0%{opacity:0;transform:translateY(6px)}100%{opacity:1;transform:none}}
+
+/* v81: Crew Hub — Overview */
+.crew-hub-wrap{padding:calc(env(safe-area-inset-top,0) + 72px) 16px 110px;max-width:480px;margin:0 auto}
+.crew-hub-hero{text-align:center;padding:10px 0 14px}
+.crew-hub-hero .eyebrow{font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;background:var(--flame,linear-gradient(135deg,#FF6D2E,#FE3C72));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px}
+.crew-hub-hero h1{font-size:28px;font-weight:900;letter-spacing:-1px;margin:0}
+.crew-hub-hero p{font-size:13px;color:var(--t3);margin:6px auto 0;line-height:1.5;max-width:360px}
+.crew-hub-ctx{position:relative !important;top:auto !important;left:auto !important;right:auto !important;margin:14px 0 18px !important;animation:none !important}
+.crew-hub-cards{display:flex;flex-direction:column;gap:12px;margin-top:4px}
+.crew-hub-card{position:relative;padding:14px;border-radius:20px;background:linear-gradient(135deg,rgba(22,22,24,.74),rgba(28,28,32,.52));backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);border:1px solid rgba(255,255,255,.08);cursor:pointer;transition:transform .15s var(--spring,ease),border-color .22s ease,box-shadow .22s ease,background .22s ease;overflow:hidden;display:flex;align-items:center;gap:12px}
+.crew-hub-card:active{transform:scale(.98)}
+.crew-hub-card:hover{border-color:rgba(255,109,46,.28);box-shadow:0 14px 34px rgba(0,0,0,.45)}
+.crew-hub-card.is-active{border-color:rgba(255,109,46,.48);background:linear-gradient(135deg,rgba(255,109,46,.14),rgba(28,28,32,.5));box-shadow:0 14px 32px rgba(255,109,46,.22),inset 0 1px 0 rgba(255,255,255,.08)}
+.crew-hub-card::after{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,transparent,rgba(255,109,46,.65),transparent);opacity:0;transition:opacity .22s}
+.crew-hub-card.is-active::after{opacity:1}
+.chc-ava{width:56px;height:56px;border-radius:18px;background:linear-gradient(135deg,var(--o,#FF6D2E),#FF6B6B);display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;border:2px solid rgba(255,255,255,.12);box-shadow:0 6px 16px rgba(255,109,46,.22)}
+.chc-body{flex:1;min-width:0}
+.chc-top{display:flex;align-items:center;gap:8px;margin-bottom:3px}
+.chc-name{font-size:16px;font-weight:900;letter-spacing:-.3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0}
+.chc-badge-active{font-size:9px;font-weight:900;padding:3px 7px;border-radius:8px;background:linear-gradient(135deg,rgba(255,109,46,.32),rgba(254,60,114,.22));color:#FFD3BD;letter-spacing:.6px;text-transform:uppercase;flex-shrink:0}
+.chc-motto{font-size:12px;color:var(--t3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical}
+.chc-meta{display:flex;gap:10px;margin-top:6px;font-size:11px;color:var(--t2,#aeb0b6);flex-wrap:wrap}
+.chc-meta span{display:inline-flex;align-items:center;gap:4px;font-weight:700}
+.chc-meta .chc-role{color:#FFB493}
+.chc-go{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--t2);transition:background .2s,color .2s}
+.crew-hub-card:hover .chc-go{background:rgba(255,109,46,.15);color:#FF9070}
+.crew-hub-card.is-active .chc-go{background:linear-gradient(135deg,var(--o,#FF6D2E),#FF6B6B);color:#fff;box-shadow:0 4px 12px rgba(255,109,46,.3)}
+.chc-go svg{width:16px;height:16px}
+.crew-hub-empty{padding:28px 18px;text-align:center;border-radius:20px;background:linear-gradient(135deg,rgba(22,22,24,.6),rgba(28,28,32,.4));border:1px dashed rgba(255,255,255,.1);margin:10px 0}
+.crew-hub-empty-emoji{font-size:40px;margin-bottom:8px}
+.crew-hub-empty-title{font-size:16px;font-weight:900;letter-spacing:-.3px;margin-bottom:4px}
+.crew-hub-empty-sub{font-size:12px;color:var(--t3);line-height:1.5;margin-bottom:14px}
+.crew-hub-footer{display:flex;gap:8px;margin-top:18px}
+.crew-hub-footer .cb-cc-btn{flex:1;padding:14px;font-size:13px;min-height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;gap:6px}
+.crew-hub-limit{font-size:11px;color:var(--t3);text-align:center;margin-top:10px;letter-spacing:.1px}
+
+/* v81: Crew Detail Header */
+.crew-detail-hdr{position:absolute;top:calc(env(safe-area-inset-top,0) + 62px);left:12px;right:12px;z-index:440;display:flex;align-items:center;gap:8px;padding:8px 10px 8px 8px;border-radius:16px;background:linear-gradient(160deg,rgba(20,16,24,.82),rgba(14,10,18,.68));border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(22px) saturate(1.2);-webkit-backdrop-filter:blur(22px) saturate(1.2);box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 10px 24px -10px rgba(0,0,0,.65);animation:ctxFadeIn .5s var(--spring,ease) both}
+.cdh-back{width:36px;height:36px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.09);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--t,#fff);flex-shrink:0;transition:background .2s,transform .15s}
+.cdh-back:active{background:rgba(255,255,255,.12);transform:scale(.93)}
+.cdh-back svg{width:17px;height:17px}
+.cdh-ttl{display:flex;align-items:center;gap:9px;flex:1;min-width:0}
+.cdh-ava{width:32px;height:32px;border-radius:11px;background:linear-gradient(135deg,var(--o,#FF6D2E),#FF6B6B);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;border:1.5px solid rgba(255,255,255,.12)}
+.cdh-txt{min-width:0;flex:1}
+.cdh-name{font-size:14px;font-weight:900;letter-spacing:-.2px;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:1.15}
+.cdh-motto{font-size:10.5px;color:var(--t3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:1.2;margin-top:1px}
+.cdh-switch{font-size:11px;font-weight:800;padding:8px 10px;border-radius:10px;background:rgba(255,109,46,.12);border:1px solid rgba(255,109,46,.22);color:#FFB493;cursor:pointer;white-space:nowrap;flex-shrink:0;font-family:inherit;transition:background .2s,transform .15s}
+.cdh-switch:active{background:rgba(255,109,46,.22);transform:scale(.96)}
+@media (max-width:374px){
+  .cdh-switch{padding:6px 8px;font-size:10.5px}
+  .cdh-ava{width:28px;height:28px;font-size:14px}
+  .cdh-name{font-size:13px}
+}
+/* When crew detail header is visible, map moves down to make room */
+#crewsub-active .crew-map-full{margin-top:138px}
+/* On active sub the ctx-switcher is below the detail-hdr, not at top */
+#crewsub-active .ctx-switcher{display:none}
+
 .crew-map-full{height:280px;margin:132px 12px 10px;border-radius:var(--r2);overflow:hidden;position:relative;z-index:1;border:1px solid rgba(255,255,255,.12);box-shadow:0 12px 40px rgba(0,0,0,.5),inset 0 2px 8px rgba(255,255,255,.1),0 0 40px rgba(255,109,46,.08)}
 .crew-map-full .leaflet-container{height:100%;width:100%;border-radius:var(--r2)}
 .crew-content{padding:0 0 90px}
@@ -3942,6 +4004,63 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
     </div>
     <div class="scr" id="screen-match"><div class="match-area"><div class="match-filter-bar"><select class="mf-select" id="mfGender" onchange="applyFilters()"><option value="">Alle</option><option value="Mann">Mann</option><option value="Frau">Frau</option><option value="Divers">Divers</option></select><select class="mf-select" id="mfAge" onchange="applyFilters()"><option value="">Alter</option><option value="18-21">18-21</option><option value="22-25">22-25</option><option value="26-30">26-30</option><option value="31-40">31-40</option><option value="40+">40+</option></select><select class="mf-select" id="mfCity" onchange="applyFilters()"><option value="">Wohnort</option></select><select class="mf-select" id="mfClub" onchange="applyFilters()"><option value="">Verein</option></select></div><div class="match-stack" id="matchStack"></div><div class="mactions"><button class="ma sm" onclick="rewind()" aria-label="Zurück"><svg class="icn" style="width:20px;height:20px" viewBox="0 0 24 24"><use href="#i-rewind"/></svg></button><button class="ma nope" onclick="doSwipe('left')" aria-label="Nope"><svg class="icn" style="width:28px;height:28px" viewBox="0 0 24 24"><use href="#i-x"/></svg></button><button class="ma super" onclick="superLike()" aria-label="Superlike"><svg class="icn icn-fill" style="width:24px;height:24px;color:#fff" viewBox="0 0 24 24"><use href="#i-star"/></svg></button><button class="ma like" onclick="doSwipe('right')" aria-label="Like"><svg class="icn icn-fill" style="width:32px;height:32px;color:#fff" viewBox="0 0 24 24"><use href="#i-heart"/></svg></button><button class="ma sm" onclick="toast('Matche & connecte auf Social!')" aria-label="Chat"><svg class="icn" style="width:20px;height:20px" viewBox="0 0 24 24"><use href="#i-chat"/></svg></button></div></div></div>
     <div class="scr" id="screen-crew">
+      <!-- ═══════════════════════════════════════ -->
+      <!-- v81: CREW HUB — Übersicht + Crew-Picker -->
+      <!-- ═══════════════════════════════════════ -->
+      <div class="crew-sub active" id="crewsub-hub">
+        <div class="crew-hub-wrap">
+          <div class="crew-hub-hero">
+            <div class="eyebrow">deine · crews</div>
+            <h1>Crews</h1>
+            <p>Wähle eine Crew oder wechsle zwischen ihnen — alle auf einen Blick.</p>
+          </div>
+          <!-- Context Switcher: Wo bin ich gerade? -->
+          <div class="ctx-switcher crew-hub-ctx" id="ctxSwitcherCrewHub" role="tablist" aria-label="Modus wechseln">
+            <button class="ctx-chip" data-ctx="urlaub" onclick="setContextMode('urlaub')" role="tab">
+              <span class="ctx-ico">🌴</span><span class="ctx-lbl">Urlaub</span>
+            </button>
+            <button class="ctx-chip" data-ctx="zuhause" onclick="setContextMode('zuhause')" role="tab">
+              <span class="ctx-ico">🏠</span><span class="ctx-lbl">Zuhause</span>
+            </button>
+            <button class="ctx-chip" data-ctx="event" onclick="setContextMode('event')" role="tab">
+              <span class="ctx-ico">🎉</span><span class="ctx-lbl">Event</span>
+            </button>
+          </div>
+          <!-- Crew Cards List (dynamic) -->
+          <div id="crewHubCards" class="crew-hub-cards"></div>
+          <!-- Empty state -->
+          <div id="crewHubEmpty" class="crew-hub-empty" style="display:none">
+            <div class="crew-hub-empty-emoji">🏴‍☠️</div>
+            <div class="crew-hub-empty-title">Noch keine Crew</div>
+            <div class="crew-hub-empty-sub">Gründe deine eigene Crew oder tritt mit einem Code bei.</div>
+          </div>
+          <!-- Footer CTAs -->
+          <div class="crew-hub-footer">
+            <button class="cb-cc-btn primary" onclick="openCrewCreate()">🏴‍☠️ Crew gründen</button>
+            <button class="cb-cc-btn secondary" onclick="openJoinByCode()">🔑 Code eingeben</button>
+          </div>
+          <div class="crew-hub-limit" id="crewHubLimit">Free: max 2 Crews · Premium: max 5 Crews 👑</div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════ -->
+      <!-- v81: CREW DETAIL — Aktive Crew -->
+      <!-- ═══════════════════════════════════════ -->
+      <div class="crew-sub" id="crewsub-active">
+      <!-- Detail Header: Back + Crew Name + Switch -->
+      <div class="crew-detail-hdr" id="crewDetailHdr">
+        <button class="cdh-back" onclick="crewGo('hub')" aria-label="Zurück zur Übersicht">
+          <svg viewBox="0 0 24 24"><use href="#i-arrow-left"/></svg>
+        </button>
+        <div class="cdh-ttl">
+          <div class="cdh-ava" id="cdhAva">🏴‍☠️</div>
+          <div class="cdh-txt">
+            <div class="cdh-name" id="cdhName">Deine Crew</div>
+            <div class="cdh-motto" id="cdhMotto">—</div>
+          </div>
+        </div>
+        <button class="cdh-switch" onclick="crewGo('hub')" aria-label="Crew wechseln" title="Andere Crew wählen">Wechseln</button>
+      </div>
       <!-- v78: CONTEXT MODE SWITCHER auch auf Crew-Screen (oben über der Karte) -->
       <div class="ctx-switcher" id="ctxSwitcherCrew" role="tablist" aria-label="Modus wechseln">
         <button class="ctx-chip" data-ctx="urlaub" onclick="setContextMode('urlaub')" role="tab">
@@ -4170,6 +4289,7 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
         </div>
         </div><!-- /crewFeatures -->
       </div>
+      </div><!-- /crewsub-active -->
     </div>
     <div class="scr" id="screen-deals">
     <!-- ═══════════ EXPLORE HUB (Default) ═══════════ -->
@@ -4485,7 +4605,7 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 80;
+  var APP_VERSION = 81;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     // Force-clear old non-UUID crew IDs
@@ -4613,7 +4733,7 @@ async function logPrivacyConsent(mode, previousMode, state){
       deals_consent: !!(state.consent && state.consent.deals_consent),
       consent_version: 1,
       user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-      app_version: 80,
+      app_version: 81,
       // v73: tag source so we can see who was newly prompted vs. picked from settings
       source: (!previousMode && ME && ME.created_at && (Date.now()-new Date(ME.created_at).getTime())>3600000) ? 'existing_user_v72_prompt' : (!previousMode ? 'first_run' : 'settings_change')
     };
@@ -4661,7 +4781,7 @@ function clearPrivacyData(){
         deals_consent: false,
         consent_version: 1,
         user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-        app_version: 80,
+        app_version: 81,
         source: 'user_reset'
       };
       sb.from('privacy_consent_log').insert(clearRow).then(function(r){ if(r&&r.error) console.warn('[PM] clear log err', r.error.message); });
@@ -8885,6 +9005,12 @@ function buildCrewSwitcher(){
 window.switchActiveCrew=function(crewId){
   setActiveCrewId(crewId);
   buildCrewSwitcher();
+  try{ if(typeof buildCrewHubCards==='function') buildCrewHubCards(); }catch(e){}
+  try{ if(typeof updateCrewDetailHdr==='function') updateCrewDetailHdr(); }catch(e){}
+  try{ if(typeof updateCrewIdentityCard==='function') updateCrewIdentityCard(); }catch(e){}
+  try{ if(typeof buildCrewStatus==='function') buildCrewStatus(); }catch(e){}
+  try{ if(typeof buildCrewList==='function') buildCrewList(); }catch(e){}
+  try{ if(typeof buildMiniChat==='function') buildMiniChat(); }catch(e){}
   toast('Crew gewechselt ✓');
   if(navigator.vibrate)navigator.vibrate(10);
 };
@@ -10351,7 +10477,27 @@ window.go=function(n,b){
   },450);
   if(n==='match')buildCards();
   if(n==='deals'){ try{ exploreGo('hub'); }catch(e){} }
-  if(n==='crew'){fetchAllCrews().then(function(){return loadMyCrewMemberships()}).then(function(){updateCrewGate();buildCrewSwitcher();renderCrewBoard();updateCrewIdentityCard();buildCrewStatus();buildCrewList().then(buildCrewActivityFeed);buildCrewLocations();buildMiniChat();buildDailyVoting();buildLeaderboard();buildChallenges();updateChallengeTimer();try{buildNearby()}catch(e){console.warn('[CREW] buildNearby failed:',e)}}).catch(function(e){console.error('Crew load error:',e);updateCrewGate()})}
+  if(n==='crew'){
+    // v81: always land in the hub overview first
+    try{ crewGo('hub'); }catch(e){}
+    fetchAllCrews().then(function(){return loadMyCrewMemberships()}).then(function(){
+      updateCrewGate();
+      buildCrewSwitcher();
+      renderCrewBoard();
+      updateCrewIdentityCard();
+      buildCrewStatus();
+      buildCrewList().then(buildCrewActivityFeed);
+      buildCrewLocations();
+      buildMiniChat();
+      buildDailyVoting();
+      buildLeaderboard();
+      buildChallenges();
+      updateChallengeTimer();
+      try{ buildCrewHubCards(); }catch(e){ console.warn('[CREW] buildCrewHubCards failed:',e) }
+      try{ updateCrewDetailHdr(); }catch(e){}
+      try{ buildNearby() }catch(e){ console.warn('[CREW] buildNearby failed:',e) }
+    }).catch(function(e){console.error('Crew load error:',e);updateCrewGate()})
+  }
 };
 
 // ============================================
@@ -10922,6 +11068,120 @@ window.exploreGo = function(section){
   if(section === 'achieve') loadAchievementsPanel();
   if(section === 'trophy') loadTrophyPanel();
   if(section === 'games') loadGameCenterCrews();
+};
+
+// ============================================
+// v81: CREW HUB — Navigation zwischen Übersicht und aktiver Crew
+// ============================================
+window.crewGo = function(section){
+  var subs = ['hub','active'];
+  subs.forEach(function(s){
+    var el = document.getElementById('crewsub-'+s);
+    if(el) el.classList.toggle('active', s === section);
+  });
+  try{ var scr = document.getElementById('screen-crew'); if(scr) scr.scrollTop = 0; }catch(e){}
+  if(section === 'hub'){
+    try{ if(typeof buildCrewHubCards==='function') buildCrewHubCards(); }catch(e){ console.warn('[CREW-HUB] build err',e); }
+  }
+  if(section === 'active'){
+    // Make sure the detail header reflects the active crew
+    try{ if(typeof updateCrewDetailHdr==='function') updateCrewDetailHdr(); }catch(e){}
+    // Ensure map tiles are fresh
+    setTimeout(function(){ try{ if(window.cMap) cMap.invalidateSize(); }catch(e){} }, 160);
+    setTimeout(function(){ try{ if(window.cMap) cMap.invalidateSize(); }catch(e){} }, 450);
+  }
+};
+
+// Build crew hub cards (one card per crew user is in)
+window.buildCrewHubCards = function(){
+  var host = document.getElementById('crewHubCards');
+  var empty = document.getElementById('crewHubEmpty');
+  var limitEl = document.getElementById('crewHubLimit');
+  if(!host) return;
+  var crews = (typeof getAllMyCrews==='function') ? (getAllMyCrews()||[]) : [];
+  var activeId = (typeof getActiveCrewId==='function') ? getActiveCrewId() : null;
+  if(crews.length === 0){
+    host.innerHTML = '';
+    if(empty) empty.style.display = '';
+  } else {
+    if(empty) empty.style.display = 'none';
+    var html = '';
+    crews.forEach(function(c){
+      var id = c.id;
+      var isActive = (id === activeId);
+      var icon = c.icon || '🏴‍☠️';
+      var name = (typeof esc==='function') ? esc(c.name || 'Crew') : (c.name || 'Crew');
+      var motto = (typeof esc==='function') ? esc(c.motto || 'Keine Motto gesetzt') : (c.motto || 'Keine Motto gesetzt');
+      var role = c._myRole || 'member';
+      var roleLabel = role === 'leader' ? '👑 Leader' : (role === 'admin' ? '⭐ Admin' : '🙌 Mitglied');
+      var memberCount = (c.member_count || c.members_count || null);
+      var metaHtml = '<span class="chc-role">'+roleLabel+'</span>';
+      if(memberCount) metaHtml += '<span>👥 '+memberCount+'</span>';
+      if(c.invite_code) metaHtml += '<span>🔑 '+(typeof esc==='function'?esc(c.invite_code):c.invite_code)+'</span>';
+      html += '<div class="crew-hub-card'+(isActive?' is-active':'')+'" onclick="openCrewFromHub(\''+id+'\')" role="button" tabindex="0" aria-label="'+name+' öffnen">';
+      html += '<div class="chc-ava">'+icon+'</div>';
+      html += '<div class="chc-body">';
+      html += '<div class="chc-top"><div class="chc-name">'+name+'</div>';
+      if(isActive) html += '<span class="chc-badge-active">Aktiv</span>';
+      html += '</div>';
+      html += '<div class="chc-motto">'+motto+'</div>';
+      html += '<div class="chc-meta">'+metaHtml+'</div>';
+      html += '</div>';
+      html += '<div class="chc-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></div>';
+      html += '</div>';
+    });
+    host.innerHTML = html;
+  }
+  // Update limit text
+  if(limitEl && typeof getCrewLimit==='function'){
+    try{
+      var limit = getCrewLimit();
+      var isPremium = localStorage.getItem('is_premium')==='true';
+      limitEl.textContent = (crews.length+'/'+limit+' Crews · '+(isPremium?'Premium 👑':'Free · Upgrade auf '+5+' Crews 👑'));
+    }catch(e){}
+  }
+};
+
+// Open a specific crew from the hub
+window.openCrewFromHub = function(crewId){
+  if(!crewId) return;
+  try{ if(navigator.vibrate) navigator.vibrate(12); }catch(e){}
+  // Switch active crew if different
+  var curActive = (typeof getActiveCrewId==='function') ? getActiveCrewId() : null;
+  if(crewId !== curActive){
+    if(typeof setActiveCrewId==='function') setActiveCrewId(crewId);
+    // Reload all crew-scoped data for the new active crew
+    try{
+      if(typeof buildCrewSwitcher==='function') buildCrewSwitcher();
+      if(typeof updateCrewIdentityCard==='function') updateCrewIdentityCard();
+      if(typeof buildCrewStatus==='function') buildCrewStatus();
+      if(typeof buildCrewList==='function') buildCrewList().then(function(){ if(typeof buildCrewActivityFeed==='function') buildCrewActivityFeed(); });
+      if(typeof buildCrewLocations==='function') buildCrewLocations();
+      if(typeof buildMiniChat==='function') buildMiniChat();
+      if(typeof buildDailyVoting==='function') buildDailyVoting();
+      if(typeof buildLeaderboard==='function') buildLeaderboard();
+      if(typeof buildChallenges==='function') buildChallenges();
+      if(typeof updateChallengeTimer==='function') updateChallengeTimer();
+    }catch(e){ console.warn('[CREW-HUB] refresh err',e); }
+  }
+  crewGo('active');
+};
+
+// Update detail header with active crew info
+window.updateCrewDetailHdr = function(){
+  var s = (typeof getCrewSettings==='function') ? getCrewSettings() : null;
+  var ava = document.getElementById('cdhAva');
+  var nm  = document.getElementById('cdhName');
+  var mt  = document.getElementById('cdhMotto');
+  if(!s){
+    if(ava) ava.textContent = '🏴‍☠️';
+    if(nm)  nm.textContent  = 'Keine aktive Crew';
+    if(mt)  mt.textContent  = 'Wähle eine Crew aus der Übersicht';
+    return;
+  }
+  if(ava) ava.textContent = s.icon || '🏴‍☠️';
+  if(nm)  nm.textContent  = s.name || 'Crew';
+  if(mt)  mt.textContent  = s.motto || '—';
 };
 
 // ============================================
