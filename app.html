@@ -4304,12 +4304,8 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
           <div id="drunkList" style="padding:0 14px 14px;display:flex;gap:10px;overflow-x:auto"></div>
         </div>
 
-        <div class="crew-section">
-          <div class="crew-section-header">
-            <div class="csh-left"><span class="csh-emoji">🎲</span><span class="csh-title">Party-Spiele</span></div>
-          </div>
-          <div id="gameList"></div>
-        </div>
+        <!-- v94: Party-Spiele hier entfernt — laufen in Zukunft über das Game Center (Deals-Tab).
+             Keine freischwebende Section mehr im Crew-Menü. -->
 
         <!-- ═══════════════════════════════════════ -->
         <!-- ZONE 7: ENTDECKEN + CREW-ZENTRALE -->
@@ -4642,7 +4638,7 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 93;
+  var APP_VERSION = 94;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     // Force-clear old non-UUID crew IDs
@@ -4770,7 +4766,7 @@ async function logPrivacyConsent(mode, previousMode, state){
       deals_consent: !!(state.consent && state.consent.deals_consent),
       consent_version: 1,
       user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-      app_version: 93,
+      app_version: 94,
       // v73: tag source so we can see who was newly prompted vs. picked from settings
       source: (!previousMode && ME && ME.created_at && (Date.now()-new Date(ME.created_at).getTime())>3600000) ? 'existing_user_v72_prompt' : (!previousMode ? 'first_run' : 'settings_change')
     };
@@ -4818,7 +4814,7 @@ function clearPrivacyData(){
         deals_consent: false,
         consent_version: 1,
         user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-        app_version: 93,
+        app_version: 94,
         source: 'user_reset'
       };
       sb.from('privacy_consent_log').insert(clearRow).then(function(r){ if(r&&r.error) console.warn('[PM] clear log err', r.error.message); });
@@ -6597,6 +6593,7 @@ function haversine(lat1,lng1,lat2,lng2){
 }
 async function buildNearby(){
   // v80: fill both radar and crew-screen nearby lists
+  // v94: Crew-Badges pro Person + Community-Fallback wenn aktive Crew leer
   var radarEl = document.getElementById('nearbyCrewList');
   var crewEl  = document.getElementById('crewNearbyListCrewScreen');
   var crewSub = document.getElementById('crewNearbySub');
@@ -6611,36 +6608,108 @@ async function buildNearby(){
     setAll('<p style="color:var(--t3);font-size:13px;padding:6px 4px">Aktiviere deinen Standort um Crew in der Nähe zu sehen.</p>','Standort fehlt');
     return;
   }
+
+  // PHASE 1: Members der aktiven Crew
   var ids = await getActiveCrewMemberIds();
-  if(!ids || ids.length===0){
-    setAll('<p style="color:var(--t3);font-size:13px;padding:6px 4px">Tritt einer Crew bei um Mitglieder hier zu sehen!</p>','Keine Crew');
-    return;
+  var profiles = [];
+  var source = 'crew'; // 'crew' oder 'community'
+  if(ids && ids.length > 0){
+    try{
+      var res = await sb.from('profiles').select('user_id,name,photo_url,lat,lng,mood,location_updated_at').in('user_id',ids).not('lat','is',null);
+      profiles = (res && res.data) ? res.data : [];
+    }catch(e){ console.warn('[NEARBY] crew-members query err',e); }
   }
-  var res;
-  try{
-    res = await sb.from('profiles').select('user_id,name,photo_url,lat,lng,mood,location_updated_at').in('user_id',ids).not('lat','is',null);
-  }catch(e){ console.warn('[NEARBY] query err',e); }
-  var profiles = (res && res.data) ? res.data : [];
-  if(!profiles || profiles.length===0){
-    setAll('<p style="color:var(--t3);font-size:13px;padding:6px 4px">Keine Crew-Mitglieder mit geteiltem Standort.</p>','Niemand teilt Standort');
-    return;
-  }
+
+  // Distanzen rechnen + <10 km filtern
   var nearby = profiles.map(function(p){
     p._dist = haversine(userLat,userLng,p.lat,p.lng);
     return p;
-  }).filter(function(p){ return p._dist <= 10; }).sort(function(a,b){ return a._dist - b._dist; });
-  if(nearby.length===0){
-    setAll('<p style="color:var(--t3);font-size:13px;padding:6px 4px">Gerade keine Crew in der Nähe (&lt;10 km).</p>','0 in der Nähe');
+  }).filter(function(p){ return p._dist <= 10; });
+
+  // PHASE 2: Fallback — Community-Users in der Nähe (wenn Crew leer oder niemand aus der Crew in der Nähe)
+  if(nearby.length === 0){
+    source = 'community';
+    try{
+      var cutoff = new Date(Date.now() - 72*60*60*1000).toISOString(); // 72h aktiv
+      var cRes = await sb.from('profiles')
+        .select('user_id,name,photo_url,lat,lng,mood,location_updated_at')
+        .not('lat','is',null).not('lng','is',null)
+        .gte('location_updated_at', cutoff)
+        .limit(120);
+      var cProfiles = (cRes && cRes.data) ? cRes.data : [];
+      nearby = cProfiles
+        .filter(function(p){ return p.user_id !== ME.user_id; })
+        .map(function(p){ p._dist = haversine(userLat,userLng,p.lat,p.lng); return p; })
+        .filter(function(p){ return p._dist <= 10; })
+        .slice(0, 30);
+    }catch(e){ console.warn('[NEARBY] community fallback err',e); }
+  }
+
+  if(nearby.length === 0){
+    var emptyMsg = (ids && ids.length>0)
+      ? 'Gerade niemand in der Nähe (&lt;10 km) — weder aus deiner Crew noch Community.'
+      : 'Keine Leute in der Nähe. Teile deinen Standort, um dich live zu vernetzen!';
+    setAll('<p style="color:var(--t3);font-size:13px;padding:6px 4px">'+emptyMsg+'</p>','0 in der Nähe');
     return;
   }
+
+  nearby.sort(function(a,b){ return a._dist - b._dist; });
+
+  // PHASE 3: Crew-Memberships für alle nearby-Users laden (Name + Icon)
+  var userIds = nearby.map(function(p){ return p.user_id; });
+  var crewMap = {}; // user_id -> { crewId, crewName, crewIcon }
+  try{
+    var cm = await sb.from('crew_members').select('user_id,crew_id').in('user_id', userIds);
+    var memberships = (cm && cm.data) ? cm.data : [];
+    var crewIdsSet = {};
+    memberships.forEach(function(m){ if(m.crew_id) crewIdsSet[m.crew_id]=1; });
+    var crewIds = Object.keys(crewIdsSet);
+    var crewsMap = {};
+    if(crewIds.length > 0){
+      var crRes = await sb.from('crews').select('id,name,icon').in('id', crewIds);
+      var crewRows = (crRes && crRes.data) ? crRes.data : [];
+      crewRows.forEach(function(c){ crewsMap[c.id] = c; });
+    }
+    memberships.forEach(function(m){
+      if(!crewMap[m.user_id]){
+        var c = crewsMap[m.crew_id];
+        if(c) crewMap[m.user_id] = { id:c.id, name:c.name, icon:c.icon||'🏴‍☠️' };
+      }
+    });
+  }catch(e){ console.warn('[NEARBY] crew-info query err',e); }
+
+  var myActiveCrewId = (typeof getActiveCrewId==='function') ? getActiveCrewId() : null;
   var poked = JSON.parse(localStorage.getItem('crew_poked')||'{}');
   var html = nearby.map(function(p){
     var distTxt = p._dist<1 ? (Math.round(p._dist*1000)+'m') : (p._dist.toFixed(1)+'km');
     var canPoke = p._dist<=2;
     var wasPoked = poked[p.user_id] && (Date.now()-poked[p.user_id] < 3600000);
-    return '<div class="nearby-card" onclick="openUserProfile(\''+p.user_id+'\')"><div class="nc-ava"><img src="'+(p.photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80')+'" loading="lazy"></div><div class="nc-info"><div class="nc-name">'+esc(p.name)+(p.mood?' '+p.mood:'')+'</div><div class="nc-dist">📍 '+distTxt+' entfernt</div></div>'+(canPoke?'<button class="nc-poke'+(wasPoked?' poked':'')+'" onclick="event.stopPropagation();pokeUser(\''+p.user_id+'\',\''+esc(p.name)+'\')">'+(wasPoked?'Angestupst ✓':'Anstupsen 👋')+'</button>':'')+'</div>';
+    var crewBadge = '';
+    var info = crewMap[p.user_id];
+    if(info){
+      var isMyCrew = myActiveCrewId && info.id===myActiveCrewId;
+      var badgeBg = isMyCrew ? 'linear-gradient(135deg,rgba(255,109,46,.22),rgba(255,109,46,.10))' : 'rgba(255,255,255,.07)';
+      var badgeBorder = isMyCrew ? '1px solid rgba(255,109,46,.35)' : '1px solid rgba(255,255,255,.08)';
+      var badgeColor = isMyCrew ? '#FFB591' : 'var(--t2)';
+      crewBadge = '<div style="display:inline-flex;align-items:center;gap:5px;margin-top:4px;padding:3px 8px;border-radius:999px;background:'+badgeBg+';border:'+badgeBorder+';font-size:10px;font-weight:700;color:'+badgeColor+';max-width:100%"><span>'+esc(info.icon)+'</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(info.name||'Crew')+'</span>'+(isMyCrew?'<span style="opacity:.8">· deine</span>':'')+'</div>';
+    } else {
+      crewBadge = '<div style="display:inline-flex;align-items:center;gap:5px;margin-top:4px;padding:3px 8px;border-radius:999px;background:rgba(255,255,255,.04);border:1px dashed rgba(255,255,255,.12);font-size:10px;font-weight:700;color:var(--t3)">🔎 Solo</div>';
+    }
+    return '<div class="nearby-card" onclick="openUserProfile(\''+p.user_id+'\')">'
+      + '<div class="nc-ava"><img src="'+(p.photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80')+'" loading="lazy"></div>'
+      + '<div class="nc-info">'
+      +   '<div class="nc-name">'+esc(p.name||'')+(p.mood?' '+p.mood:'')+'</div>'
+      +   '<div class="nc-dist">📍 '+distTxt+' entfernt</div>'
+      +   crewBadge
+      + '</div>'
+      + (canPoke?'<button class="nc-poke'+(wasPoked?' poked':'')+'" onclick="event.stopPropagation();pokeUser(\''+p.user_id+'\',\''+esc(p.name||'')+'\')">'+(wasPoked?'Angestupst ✓':'Anstupsen 👋')+'</button>':'')
+      + '</div>';
   }).join('');
-  setAll(html, nearby.length + ' Mitglied' + (nearby.length===1?'':'er') + ' in der Nähe');
+
+  var subLabel = (source==='crew')
+    ? (nearby.length + ' Crew-Mitglied' + (nearby.length===1?'':'er') + ' in der Nähe')
+    : (nearby.length + ' in der Nähe · Community');
+  setAll(html, subLabel);
 }
 window.refreshNearbyCrew = function(){
   try{ if(navigator.vibrate) navigator.vibrate(12); }catch(e){}
