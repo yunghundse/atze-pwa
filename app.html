@@ -651,6 +651,14 @@ nav button.active::before{opacity:1}
 .cab-chat{background:linear-gradient(135deg,rgba(191,90,242,.2),rgba(191,90,242,.08))!important;border-color:rgba(191,90,242,.15)!important;box-shadow:0 0 20px rgba(191,90,242,.15)!important}
 .cab-qr{background:linear-gradient(135deg,rgba(0,199,190,.2),rgba(0,199,190,.08))!important;border-color:rgba(0,199,190,.15)!important;box-shadow:0 0 20px rgba(0,199,190,.15)!important}
 .cab-safe{background:linear-gradient(135deg,rgba(52,199,89,.2),rgba(52,199,89,.08))!important;border-color:rgba(52,199,89,.15)!important;box-shadow:0 0 20px rgba(52,199,89,.15)!important}
+/* v92: Safety-Gruppe — Standort + Safe visuell verbunden als eine Einheit */
+.crew-safety-group{display:flex;gap:0;flex-shrink:0;border-radius:var(--r);background:linear-gradient(135deg,rgba(52,199,89,.12),rgba(48,209,88,.04));border:1.5px solid rgba(52,199,89,.28);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 6px 20px rgba(52,199,89,.15),0 0 30px rgba(52,199,89,.1);padding:6px;position:relative;overflow:hidden}
+.crew-safety-group::before{content:"🛡️ Safety";position:absolute;top:-8px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#0A0A0C,#12120E);color:#30D158;font-size:9px;font-weight:900;letter-spacing:1px;padding:2px 10px;border-radius:10px;border:1px solid rgba(52,199,89,.3);text-transform:uppercase;z-index:2}
+.crew-safety-group .crew-action-btn{background:transparent;border:none;box-shadow:none;min-width:64px;padding:14px 6px 8px}
+.crew-safety-group .crew-action-btn+.crew-action-btn{border-left:1px dashed rgba(52,199,89,.18)}
+.crew-safety-group .crew-action-btn:active{transform:scale(.95)}
+.cab-live-dot{position:absolute;top:8px;right:8px;width:8px;height:8px;border-radius:50%;background:#30D158;box-shadow:0 0 8px #30D158,0 0 0 2px rgba(52,199,89,.2);animation:livePulse 1.8s ease-in-out infinite}
+@keyframes livePulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.3);opacity:.6}}
 
 /* CREW SECTIONS */
 @keyframes crewSectionIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
@@ -3441,6 +3449,16 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
   </div>
 </div>
 
+<!-- v92: SAFETY HUB — Standort-Privacy + Safe-Tools für die Crew -->
+<div class="crew-profile-ov" id="safetyHubOv">
+  <button class="cp-back" onclick="closeSafetyHub()">←</button>
+  <div id="safetyHubContent" style="padding:72px 0 120px"></div>
+  <div style="position:fixed;left:0;right:0;bottom:0;max-width:430px;margin:0 auto;padding:14px 16px calc(14px + env(safe-area-inset-bottom,0));background:linear-gradient(to top,rgba(10,10,12,.98) 70%,rgba(10,10,12,0));backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);z-index:10;display:flex;gap:8px">
+    <button onclick="sendSafeCheckIn();closeSafetyHub()" style="flex:1;padding:14px;border-radius:14px;border:none;background:linear-gradient(135deg,#30D158,#25A344);color:#fff;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;min-height:48px">✅ Safe Check-In</button>
+    <button onclick="sendUnsafeCheckIn();closeSafetyHub()" style="flex:1;padding:14px;border-radius:14px;border:none;background:linear-gradient(135deg,#FF3B30,#CC2020);color:#fff;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;min-height:48px">🆘 Hilfe holen</button>
+  </div>
+</div>
+
 <!-- QR SCANNER OVERLAY -->
 <div class="crew-profile-ov" id="qrScannerOv">
   <button class="cp-back" onclick="closeQRScanner()">←</button>
@@ -4188,13 +4206,20 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
         <!-- ZONE 1: QUICK ACTIONS — Sofort-Zugriff -->
         <!-- ═══════════════════════════════════════ -->
         <div class="crew-actions">
+          <!-- v92: Safety-Block FIRST — Standort + Safe verbunden als eine Einheit -->
+          <div class="crew-safety-group" role="group" aria-label="Sicherheit">
+            <div class="crew-action-btn" onclick="openSafetyHub()" title="Standort & Privatsphäre">
+              <div class="cab-icon cab-location" style="position:relative">📍<span class="cab-live-dot" id="locLiveDot"></span></div>
+              <span>Standort</span>
+            </div>
+            <div class="crew-action-btn" onclick="sendSafeCheckIn()" title="Safe Check-In senden">
+              <div class="cab-icon cab-safe">✅</div>
+              <span>Safe</span>
+            </div>
+          </div>
           <div class="crew-action-btn" onclick="openCrewChat()">
             <div class="cab-icon cab-chat">💬</div>
             <span>Chat</span>
-          </div>
-          <div class="crew-action-btn" onclick="shareCrewLocation()">
-            <div class="cab-icon cab-location">📍</div>
-            <span>Standort</span>
           </div>
           <div class="crew-action-btn" onclick="openAlcoholTracker()">
             <div class="cab-icon cab-drinks">🍺</div>
@@ -4207,10 +4232,6 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
           <div class="crew-action-btn" onclick="inviteCrew()">
             <div class="cab-icon cab-invite">📲</div>
             <span>Einladen</span>
-          </div>
-          <div class="crew-action-btn" onclick="sendSafeCheckIn()">
-            <div class="cab-icon cab-safe">✅</div>
-            <span>Safe</span>
           </div>
         </div>
 
@@ -4628,7 +4649,7 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 91;
+  var APP_VERSION = 92;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     // Force-clear old non-UUID crew IDs
@@ -4756,7 +4777,7 @@ async function logPrivacyConsent(mode, previousMode, state){
       deals_consent: !!(state.consent && state.consent.deals_consent),
       consent_version: 1,
       user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-      app_version: 91,
+      app_version: 92,
       // v73: tag source so we can see who was newly prompted vs. picked from settings
       source: (!previousMode && ME && ME.created_at && (Date.now()-new Date(ME.created_at).getTime())>3600000) ? 'existing_user_v72_prompt' : (!previousMode ? 'first_run' : 'settings_change')
     };
@@ -4804,7 +4825,7 @@ function clearPrivacyData(){
         deals_consent: false,
         consent_version: 1,
         user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-        app_version: 91,
+        app_version: 92,
         source: 'user_reset'
       };
       sb.from('privacy_consent_log').insert(clearRow).then(function(r){ if(r&&r.error) console.warn('[PM] clear log err', r.error.message); });
@@ -6871,15 +6892,17 @@ async function _loadCommunityUsers(){
   try{
     var cutoff = new Date(now - COMMUNITY_STALE_MS).toISOString();
     var resp = await sb.from('profiles')
-      .select('user_id,name,username,photo_url,mood,lat,lng,last_active,location_updated_at')
+      .select('user_id,name,username,photo_url,mood,lat,lng,last_active,location_updated_at,location_hidden_from')
       .not('lat','is',null).not('lng','is',null)
       .gte('location_updated_at', cutoff)
       .limit(120);
     var rows = (resp && resp.data) || [];
-    // filter blocked + self
+    // filter blocked + self + per-person privacy
     rows = rows.filter(function(p){
       if(ME && p.user_id===ME.user_id) return false;
       if(typeof isBlocked==='function' && isBlocked(p.user_id)) return false;
+      // v92: per-person location privacy — Nutzer hat MICH vor seinem Standort versteckt
+      if(p.location_hidden_from && Array.isArray(p.location_hidden_from) && ME && p.location_hidden_from.indexOf(ME.user_id) >= 0) return false;
       return !!(p.lat && p.lng);
     });
     // Meta annotation
@@ -9678,6 +9701,121 @@ window.sendUnsafeCheckIn=async function(){
 };
 
 // ============================================
+// v92: SAFETY HUB — Standort-Privacy pro Person + Live-Status
+// ============================================
+window._locationHiddenFrom = []; // cache der eigenen hidden-liste
+
+window.openSafetyHub = async function(){
+  var ov = document.getElementById('safetyHubOv');
+  var content = document.getElementById('safetyHubContent');
+  if(!ov || !content){ toast('Safety Hub nicht verfügbar.'); return; }
+  content.innerHTML = '<div style="padding:32px;text-align:center;color:var(--t3);font-size:13px">Lade Safety Hub…</div>';
+  ov.classList.add('show');
+  document.body.style.overflow = 'hidden';
+
+  // 1) hidden-Liste des eigenen Profils laden
+  var hidden = [];
+  try{
+    if(sb && ME){
+      var r = await sb.from('profiles').select('location_hidden_from').eq('user_id',ME.user_id).maybeSingle();
+      if(r && r.data && Array.isArray(r.data.location_hidden_from)) hidden = r.data.location_hidden_from.slice();
+    }
+  }catch(e){ console.warn('[SAFETY] load hidden failed',e && e.message); }
+  window._locationHiddenFrom = hidden;
+
+  // 2) GPS-Status
+  var gpsText = (typeof getGpsStatusText==='function') ? getGpsStatusText() : (_gpsStatus==='active'?'📍 Standort aktiv':'⚠️ Standort nicht aktiv');
+  var gpsOk = (_gpsStatus==='active');
+  var myCoords = (userLat && userLng) ? (userLat.toFixed(5)+', '+userLng.toFixed(5)) : '—';
+  var accuracy = (typeof _gpsAccuracy!=='undefined' && _gpsAccuracy) ? ('±'+Math.round(_gpsAccuracy)+' m') : '';
+
+  // 3) Crew-Mitglieder (ohne mich) aus _crewProfiles
+  var members = (Array.isArray(_crewProfiles) ? _crewProfiles : []).filter(function(p){ return p && p.user_id && (!ME || p.user_id!==ME.user_id); });
+
+  var html = ''
+    + '<div style="padding:0 18px">'
+    +   '<div style="text-align:center;margin-bottom:18px">'
+    +     '<div style="font-size:32px;margin-bottom:6px">🛡️</div>'
+    +     '<div style="font-size:22px;font-weight:900;letter-spacing:-.5px">Safety Hub</div>'
+    +     '<div style="font-size:12px;color:var(--t3);margin-top:4px">Standort &amp; Privatsphäre für deine Crew</div>'
+    +   '</div>'
+    // Mein Standort Card
+    +   '<div style="border-radius:18px;padding:16px;background:linear-gradient(135deg,'+(gpsOk?'rgba(52,199,89,.12),rgba(48,209,88,.04)':'rgba(255,69,58,.12),rgba(255,59,48,.04)')+');border:1.5px solid '+(gpsOk?'rgba(52,199,89,.28)':'rgba(255,69,58,.28)')+';margin-bottom:14px">'
+    +     '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">'
+    +       '<div style="width:42px;height:42px;border-radius:12px;background:'+(gpsOk?'rgba(52,199,89,.18)':'rgba(255,69,58,.18)')+';display:flex;align-items:center;justify-content:center;font-size:20px;position:relative">📍'+(gpsOk?'<span style="position:absolute;top:6px;right:6px;width:8px;height:8px;border-radius:50%;background:#30D158;box-shadow:0 0 8px #30D158;animation:livePulse 1.8s ease-in-out infinite"></span>':'')+'</div>'
+    +       '<div style="flex:1;min-width:0">'
+    +         '<div style="font-size:14px;font-weight:800">Mein Standort</div>'
+    +         '<div style="font-size:11px;color:var(--t3);margin-top:2px">'+esc(gpsText)+'</div>'
+    +       '</div>'
+    +     '</div>'
+    +     '<div style="font-size:11px;color:var(--t3);font-family:ui-monospace,monospace;padding:8px 10px;background:rgba(0,0,0,.18);border-radius:10px">'+esc(myCoords)+(accuracy?' · '+esc(accuracy):'')+'</div>'
+    +     (gpsOk?'<div style="margin-top:10px;font-size:11px;color:var(--t2);line-height:1.4">✓ Dein Standort wird live an deine Crew übertragen. Mitglieder sehen dich auf der Karte.</div>':'<div style="margin-top:10px;font-size:11px;color:#ff6b6b;line-height:1.4">⚠️ Kein GPS-Signal — deine Crew kann dich gerade nicht auf der Karte sehen.</div>')
+    +   '</div>';
+
+  // Privacy-Liste
+  if(members.length === 0){
+    html += '<div style="text-align:center;padding:24px;color:var(--t3);font-size:12px;background:rgba(255,255,255,.04);border-radius:16px">Keine weiteren Crew-Mitglieder.</div>';
+  } else {
+    html += ''
+      + '<div style="margin:18px 0 10px 4px;display:flex;align-items:center;justify-content:space-between">'
+      +   '<div style="font-size:12px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.8px">Wer darf dich sehen?</div>'
+      +   '<div style="font-size:10px;color:var(--t3)">'+members.length+' Mitglied'+(members.length===1?'':'er')+'</div>'
+      + '</div>'
+      + '<div style="border-radius:16px;overflow:hidden;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06)">';
+    members.forEach(function(p, idx){
+      var isHidden = hidden.indexOf(p.user_id) >= 0;
+      var photo = p.photo_url ? ('<img src="'+esc(p.photo_url)+'" alt="" style="width:100%;height:100%;object-fit:cover">') : '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#fff;background:linear-gradient(135deg,#FF6D2E,#C93A7A)">'+esc((p.name||'?')[0]||'?').toUpperCase()+'</div>';
+      var name = esc(p.name||'Mitglied');
+      html += ''
+        + '<div onclick="toggleLocationPrivacy(\''+esc(p.user_id)+'\')" style="display:flex;align-items:center;gap:12px;padding:12px 14px;cursor:pointer;border-bottom:'+(idx<members.length-1?'1px solid rgba(255,255,255,.05)':'none')+';transition:background .15s">'
+        +   '<div style="width:40px;height:40px;border-radius:12px;overflow:hidden;flex-shrink:0;background:rgba(255,255,255,.08)">'+photo+'</div>'
+        +   '<div style="flex:1;min-width:0">'
+        +     '<div style="font-size:14px;font-weight:700">'+name+'</div>'
+        +     '<div style="font-size:11px;color:'+(isHidden?'#ff6b6b':'#30D158')+';margin-top:2px;font-weight:600">'+(isHidden?'🔒 Versteckt':'👁️ Sieht deinen Standort')+'</div>'
+        +   '</div>'
+        +   '<div style="width:44px;height:26px;border-radius:13px;background:'+(isHidden?'rgba(255,255,255,.12)':'linear-gradient(135deg,#30D158,#25A344)')+';position:relative;flex-shrink:0;transition:background .2s">'
+        +     '<div style="position:absolute;top:2px;left:'+(isHidden?'2px':'20px')+';width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.3);transition:left .2s"></div>'
+        +   '</div>'
+        + '</div>';
+    });
+    html += '</div>';
+    html += '<div style="margin-top:10px;padding:10px 14px;font-size:11px;color:var(--t3);line-height:1.5">💡 Tippe auf ein Mitglied um deinen Standort vor ihm zu verstecken. Die Person sieht dich dann nicht mehr auf der Karte.</div>';
+  }
+
+  html += '</div>';
+  content.innerHTML = html;
+};
+
+window.closeSafetyHub = function(){
+  var ov = document.getElementById('safetyHubOv');
+  if(ov) ov.classList.remove('show');
+  document.body.style.overflow = '';
+};
+
+window.toggleLocationPrivacy = async function(otherUserId){
+  if(!otherUserId || !ME || !sb) return;
+  var list = Array.isArray(window._locationHiddenFrom) ? window._locationHiddenFrom.slice() : [];
+  var idx = list.indexOf(otherUserId);
+  if(idx >= 0){ list.splice(idx,1); }
+  else { list.push(otherUserId); }
+  window._locationHiddenFrom = list;
+  try{
+    await sb.from('profiles').update({location_hidden_from:list}).eq('user_id',ME.user_id);
+    toast(idx>=0 ? 'Standort wieder sichtbar ✓' : '🔒 Standort versteckt');
+    if(navigator.vibrate)navigator.vibrate(10);
+    // UI refreshen
+    if(typeof openSafetyHub==='function') openSafetyHub();
+    // Community-Layer cache invalidieren damit andere sofort wirken
+    try{ _communityLastFetch = 0; }catch(e){}
+  }catch(e){
+    toast('Fehler beim Speichern.');
+    console.warn('[SAFETY] privacy save failed', e && e.message);
+    // revert
+    window._locationHiddenFrom = idx>=0 ? list.concat([otherUserId]) : list.filter(function(x){return x!==otherUserId});
+  }
+};
+
+// ============================================
 // CHAT SETTINGS (for crew leader)
 // ============================================
 window.openChatSettings=async function(){
@@ -12141,6 +12279,21 @@ window.refreshWeather = function(){
 // ACTIVE COUNTER, QUICK STATS, ISLAND MOOD
 // ============================================
 function updateGpsBanner(){
+  // v92: Live-Dot auf Safety-Button synchronisieren
+  try{
+    var dot=document.getElementById('locLiveDot');
+    if(dot){
+      if(_gpsStatus==='active'){
+        dot.style.display='block';
+        dot.style.background='#30D158';
+        dot.style.boxShadow='0 0 8px #30D158';
+      } else {
+        dot.style.display='block';
+        dot.style.background='#FF9F0A';
+        dot.style.boxShadow='0 0 8px #FF9F0A';
+      }
+    }
+  }catch(e){}
   var el=document.getElementById('gpsStatusBanner');if(!el)return;
   var locMode=localStorage.getItem('location_sharing_mode')||'crew';
   var consent=getLocationConsent();
