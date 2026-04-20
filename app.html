@@ -4058,6 +4058,17 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
         <div class="hscroll anim" id="venueScroll"></div>
         <div class="sec-label anim d1">👥 Crew in der Nähe</div>
         <div id="nearbyCrewList" class="anim d1" style="padding:0 14px 14px"><p style="color:var(--t3);font-size:13px">Standort wird geladen...</p></div>
+
+        <!-- v95: Neue Leute entdecken — hier auf Radar, nicht mehr im Crew-Menü -->
+        <div class="anim d1" style="padding:0 14px 14px">
+          <div style="padding:16px;border-radius:16px;background:linear-gradient(135deg,rgba(255,109,46,.10),rgba(201,58,122,.08));border:1px solid rgba(255,109,46,.22);text-align:center">
+            <div style="font-size:28px;margin-bottom:6px">🔥</div>
+            <div style="font-size:15px;font-weight:900;letter-spacing:-.3px">Neue Leute entdecken</div>
+            <div style="font-size:12px;color:var(--t3);margin:4px 0 12px;line-height:1.5">Swipe dich durch Reisende in deiner Nähe — connecte dich direkt über Instagram, Snapchat oder TikTok.</div>
+            <button onclick="go('match',document.querySelectorAll('#navBar button')[3])" style="padding:14px 28px;border:none;border-radius:14px;background:var(--gold);color:#000;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;min-height:48px">🔥 Entdecken</button>
+          </div>
+        </div>
+
         <div class="countdown-card anim d1" onclick="setTripDate()" id="countdownCard" style="margin:10px 14px"><h3>✈️ Malle-Countdown</h3><p>Tippe um dein Abreisedatum zu setzen</p></div>
       </div>
     </div>
@@ -4268,13 +4279,7 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
           <div id="leaderboardList" style="padding:0 14px 14px"><p class="crew-empty">Wird geladen...</p></div>
         </div>
 
-        <div class="crew-section">
-          <div class="crew-section-header">
-            <div class="csh-left"><span class="csh-emoji">🎯</span><span class="csh-title">Crew-Challenge</span></div>
-            <div class="csh-badge challenge-time-badge" id="challengeTimer"></div>
-          </div>
-          <div id="challengeList" style="padding:0 14px 14px"><p class="crew-empty">Wird geladen...</p></div>
-        </div>
+        <!-- v95: Crew-Challenge aus dem Crew-Menü entfernt — lebt jetzt im Game Center (Deals-Tab → Game Center). -->
 
         <!-- ═══════════════════════════════════════ -->
         <!-- ZONE 5: LIVE — Was passiert gerade? -->
@@ -4307,17 +4312,8 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
         <!-- v94: Party-Spiele hier entfernt — laufen in Zukunft über das Game Center (Deals-Tab).
              Keine freischwebende Section mehr im Crew-Menü. -->
 
-        <!-- ═══════════════════════════════════════ -->
-        <!-- ZONE 7: ENTDECKEN + CREW-ZENTRALE -->
-        <!-- ═══════════════════════════════════════ -->
-        <div class="crew-section">
-          <div style="padding:16px;border-radius:16px;background:linear-gradient(135deg,rgba(255,109,46,.06),rgba(255,109,46,.02));border:1px solid rgba(255,109,46,.12);text-align:center">
-            <div style="font-size:28px;margin-bottom:8px">🔥</div>
-            <div style="font-size:14px;font-weight:800;margin-bottom:4px">Neue Leute entdecken?</div>
-            <div style="font-size:12px;color:var(--t3);margin-bottom:12px;line-height:1.5">Connecte dich direkt über Instagram, Snapchat oder TikTok!</div>
-            <button onclick="go('match',document.querySelectorAll('#navBar button')[3])" style="padding:14px 28px;border:none;border-radius:14px;background:var(--gold);color:#000;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;min-height:48px">🔥 Entdecken</button>
-          </div>
-        </div>
+        <!-- v95: "Neue Leute entdecken" aus dem Crew-Menü raus — das ist eine Personen-Funktion, keine Crew-Funktion.
+             CTA sitzt jetzt auf der Radar-Seite. Crew-vs-Crew-Matching (Admin) läuft über das Game Center. -->
 
         <!-- v90: Schnellzugriff-Section komplett entfernt — die Crew-Zentrale sitzt jetzt oben in der Top-Bar, damit es nur EINEN Zugriffspunkt gibt. -->
         </div><!-- /crewFeatures -->
@@ -4476,6 +4472,13 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
             <button class="gc-connect-btn ghost" onclick="gcOpenLeaderboard()"><svg viewBox="0 0 24 24" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px"><use href="#i-trophy"/></svg> Ranking</button>
           </div>
         </div>
+
+        <!-- v95: Crew-Challenge — migriert aus dem Crew-Menü -->
+        <div class="gc-section-ttl" style="display:flex;align-items:center;justify-content:space-between">
+          <span>🎯 Crew-Challenge</span>
+          <span class="csh-badge challenge-time-badge" id="challengeTimer" style="font-size:10px"></span>
+        </div>
+        <div id="challengeList" style="margin-bottom:16px"><p class="crew-empty" style="color:var(--t3);font-size:13px;padding:6px 4px">Wird geladen...</p></div>
 
         <div class="gc-section-ttl">Deine Crew-Verbindungen</div>
         <div id="gcCrewConnections"><div class="ach-empty">Lade Crews…</div></div>
@@ -4638,7 +4641,7 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
 
 // FORCE UPDATE: Kill old service workers and caches
 (function(){
-  var APP_VERSION = 94;
+  var APP_VERSION = 95;
   var lastV = parseInt(localStorage.getItem('crew_app_v') || '0');
   if(lastV < APP_VERSION){
     // Force-clear old non-UUID crew IDs
@@ -4766,7 +4769,7 @@ async function logPrivacyConsent(mode, previousMode, state){
       deals_consent: !!(state.consent && state.consent.deals_consent),
       consent_version: 1,
       user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-      app_version: 94,
+      app_version: 95,
       // v73: tag source so we can see who was newly prompted vs. picked from settings
       source: (!previousMode && ME && ME.created_at && (Date.now()-new Date(ME.created_at).getTime())>3600000) ? 'existing_user_v72_prompt' : (!previousMode ? 'first_run' : 'settings_change')
     };
@@ -4814,7 +4817,7 @@ function clearPrivacyData(){
         deals_consent: false,
         consent_version: 1,
         user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-        app_version: 94,
+        app_version: 95,
         source: 'user_reset'
       };
       sb.from('privacy_consent_log').insert(clearRow).then(function(r){ if(r&&r.error) console.warn('[PM] clear log err', r.error.message); });
@@ -11584,7 +11587,11 @@ window.exploreGo = function(section){
   // Load lazy content
   if(section === 'achieve') loadAchievementsPanel();
   if(section === 'trophy') loadTrophyPanel();
-  if(section === 'games') loadGameCenterCrews();
+  if(section === 'games'){
+    loadGameCenterCrews();
+    // v95: Crew-Challenge läuft jetzt hier im Game Center
+    try{ if(typeof buildChallenges==='function') buildChallenges(); }catch(e){}
+  }
 };
 
 // ============================================
