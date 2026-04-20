@@ -3261,6 +3261,152 @@ nav{padding-bottom:max(6px,env(safe-area-inset-bottom)) !important}
 .icn{width:1em;height:1em;display:inline-block;vertical-align:-.14em;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .icn-fill{fill:currentColor;stroke:none}
 nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
+
+/* ════════════════════════════════════════════════════════════
+   v99 DESIGN POLISH — Motion Tokens, Kontrast, Micro-Animations
+   Additive Layer: überschreibt selektiv, bricht nichts
+   ════════════════════════════════════════════════════════════ */
+:root{
+  /* SPACING-SKALA (erstmals zentral) */
+  --sp-xs:6px; --sp-sm:10px; --sp-md:14px; --sp-lg:18px; --sp-xl:24px; --sp-2xl:32px;
+
+  /* MOTION-TOKENS */
+  --dur-micro:.15s;   /* icons, presses */
+  --dur-short:.22s;   /* tabs, chips, toggles */
+  --dur-base:.32s;    /* modals, screens */
+  --dur-long:.52s;    /* entrance, card-arrive */
+  --dur-pulse:2.4s;   /* ambient breathing */
+
+  /* EASINGS (tight + natural) */
+  --ease-out:cubic-bezier(.165,.84,.44,1);
+  --ease-in:cubic-bezier(.42,0,.58,1);
+  --ease-bounce:cubic-bezier(.34,1.56,.64,1);
+  --ease-spring-soft:cubic-bezier(.175,.885,.32,1.1);
+
+  /* KONTRAST-FIX: --t3 war .34 (unleserlich auf dark-grey) */
+  --t3:rgba(248,246,243,.48);
+
+  /* UNIFIED FOCUS RING */
+  --ring:0 0 0 3px rgba(255,88,100,.22);
+  --ring-soft:0 0 0 2px rgba(255,255,255,.08), 0 0 0 5px rgba(255,88,100,.14);
+}
+
+/* ─── MOTION-KONSISTENZ: globales `button` Basis-Feedback ─── */
+button,.ma,.chip,.hdr-btn,.ps-btn,.ctx-chip{
+  -webkit-tap-highlight-color:transparent;
+}
+
+/* Smootherer Screen-Wechsel (nicht zu knackig) */
+.scr{transition:opacity var(--dur-base) var(--ease-out),transform var(--dur-base) var(--ease-out)}
+
+/* Toast: weicher Enter, frischer Exit */
+.toast-v2,#toast,.toast{transition:opacity var(--dur-short) var(--ease-out),transform var(--dur-long) var(--ease-spring-soft)!important}
+
+/* ─── STAGGERED LIST-ENTRY — .stagger Kinder tropfen nacheinander ein ─── */
+@keyframes vNineDropIn{0%{opacity:0;transform:translateY(14px) scale(.985)}100%{opacity:1;transform:translateY(0) scale(1)}}
+.stagger>*{opacity:0;animation:vNineDropIn .52s var(--ease-spring-soft) both}
+.stagger>*:nth-child(1){animation-delay:.04s}
+.stagger>*:nth-child(2){animation-delay:.10s}
+.stagger>*:nth-child(3){animation-delay:.16s}
+.stagger>*:nth-child(4){animation-delay:.22s}
+.stagger>*:nth-child(5){animation-delay:.28s}
+.stagger>*:nth-child(6){animation-delay:.34s}
+.stagger>*:nth-child(7){animation-delay:.40s}
+.stagger>*:nth-child(n+8){animation-delay:.46s}
+
+/* ─── NEW KEYFRAMES ─── */
+@keyframes vNineWiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-3.5deg)}75%{transform:rotate(3.5deg)}}
+@keyframes vNineCountPop{0%{transform:translateY(4px);opacity:.6}60%{transform:translateY(-2px) scale(1.08);opacity:1}100%{transform:translateY(0) scale(1);opacity:1}}
+@keyframes vNineSoftShimmer{0%{background-position:-160% 0}100%{background-position:160% 0}}
+@keyframes vNineFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-2.5px)}}
+@keyframes vNineRipple{0%{opacity:.32;transform:scale(.4)}100%{opacity:0;transform:scale(2.4)}}
+
+.success-wiggle{animation:vNineWiggle .45s var(--ease-out) 1}
+.count-pop{animation:vNineCountPop .38s var(--ease-spring-soft) 1}
+.float-soft{animation:vNineFloat 3.8s ease-in-out infinite}
+
+/* Skeleton-Shimmer (universell anwendbar via .sk) */
+.sk{
+  background:linear-gradient(90deg,rgba(255,255,255,.04) 0%,rgba(255,255,255,.10) 50%,rgba(255,255,255,.04) 100%);
+  background-size:220% 100%;
+  animation:vNineSoftShimmer 1.8s linear infinite;
+  border-radius:12px;
+}
+
+/* ─── BUTTON-MICRO: konsistentes Press-Feedback überall ─── */
+.btn-micro,.ps-btn,.ma,.hdr-btn,.rb-btn,.chip,.ctx-chip,.ltab,.hbtn,
+.crew-empty-btn,.cp-btn,.cnh-btn,.ex-tile,.gc-game,.hsc,.pmo-card{
+  transition:transform var(--dur-short) var(--ease-spring-soft),
+             box-shadow var(--dur-short) var(--ease-out),
+             background var(--dur-short) var(--ease-out),
+             filter var(--dur-short) var(--ease-out);
+}
+.btn-micro:active,.ps-btn:active,.ma:active:not(.sm),.hdr-btn:active,.rb-btn:active,
+.chip:active,.ctx-chip:active,.ltab:active,.hbtn:active,
+.crew-empty-btn:active,.cp-btn:active,.cnh-btn:active,.ex-tile:active,.gc-game:active{
+  transform:scale(.965);
+  filter:brightness(1.04);
+}
+
+/* Hover (Desktop / Stylus): sanfter Lift */
+@media (hover:hover) and (pointer:fine){
+  .ltab:hover,.ex-tile:hover,.gc-game:hover,.pmo-card:hover,.crew-hub-cards>*:hover{
+    transform:translateY(-2px);
+    filter:brightness(1.06);
+  }
+}
+
+/* ─── FOCUS: unified, barrierefrei ─── */
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,.ltab:focus-visible,.ctx-chip:focus-visible{
+  outline:none;
+  box-shadow:var(--ring-soft);
+}
+
+/* ─── QUICK-STATS: Number-Pop smarter ─── */
+#qsMatches,#qsCrew,#qsAura{
+  display:inline-block;
+  transition:transform var(--dur-short) var(--ease-bounce);
+}
+
+/* ─── Chip-Wechsel: smoother Gradient-Transition beim Context ─── */
+.ctx-chip{transition:background var(--dur-short) var(--ease-out),color var(--dur-short) var(--ease-out),transform var(--dur-micro) var(--ease-spring-soft),box-shadow var(--dur-short) var(--ease-out)!important}
+.ctx-chip.active{animation:vNineCountPop .4s var(--ease-spring-soft) 1}
+
+/* ─── Header-Buttons: softer Haptik ─── */
+.hdr-btn{transition:transform var(--dur-micro) var(--ease-spring-soft),background var(--dur-short) var(--ease-out),box-shadow var(--dur-short) var(--ease-out)}
+.hdr-btn:active{transform:scale(.88) rotate(-1deg)}
+
+/* ─── Modal/Overlay: weiche Einblendung ─── */
+.overlay,[id$="Ov"]{transition:opacity var(--dur-base) var(--ease-out)}
+.overlay.show,[id$="Ov"].show{animation:vNineDropIn .45s var(--ease-spring-soft) both}
+
+/* ─── Cards: konsistente, weiche Schatten ─── */
+.ps-card,.crew-card,.deal-card,.cp-card,.crew-hub-card,.crew-section{
+  transition:transform var(--dur-short) var(--ease-out),box-shadow var(--dur-short) var(--ease-out);
+}
+
+/* ─── List-Items hover-lift: nearby, crew-member, game-row ─── */
+.cp-member,.cnh-row,.crew-hub-cards>*,.ex-list>*{
+  transition:background var(--dur-short) var(--ease-out),transform var(--dur-short) var(--ease-out);
+}
+
+/* ─── Toast-Ersatz (falls showToast das Element `.toast` nutzt) ─── */
+.toast.show{animation:vNineDropIn .4s var(--ease-spring-soft) 1!important}
+
+/* ─── Loader: organischer Spin ─── */
+.loader,.spinner{animation-timing-function:cubic-bezier(.42,0,.58,1)!important}
+
+/* ─── Radio/Input: smoother ─── */
+input,select,textarea{transition:border-color var(--dur-short) var(--ease-out),background var(--dur-short) var(--ease-out),box-shadow var(--dur-short) var(--ease-out)}
+
+/* ─── Nav-Button: aktiv-Animation weicher ─── */
+nav button.active .ni{animation:vNineCountPop .38s var(--ease-spring-soft) 1}
+
+/* ─── reduzierte Motion: Respekt für User-Präferenz ─── */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.1ms!important;scroll-behavior:auto!important}
+  .stagger>*{opacity:1!important;transform:none!important}
+}
 </style>
 
 <!-- LOADING -->
@@ -4026,7 +4172,7 @@ nav button .ni svg, .hdr-btn svg{width:1em;height:1em;display:block}
           <span style="font-size:11px;color:var(--t3);margin-left:auto" id="activeCountLoc">in deiner Nähe</span>
         </div>
         <div id="gpsStatusBanner" style="margin:0 14px 8px;padding:8px 14px;border-radius:12px;font-size:12px;font-weight:700;display:none;align-items:center;gap:8px"></div>
-        <div class="quick-stats anim" id="quickStats" style="margin:0 14px 8px;display:flex;gap:8px">
+        <div class="quick-stats anim stagger" id="quickStats" style="margin:0 14px 8px;display:flex;gap:8px">
           <div onclick="go('match',document.querySelectorAll('#navBar button')[3])" style="flex:1;padding:10px;border-radius:12px;background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--glass-border);text-align:center;cursor:pointer">
             <div style="font-size:18px;font-weight:900;color:#FF6B6B" id="qsMatches">0</div>
             <div style="font-size:9px;font-weight:700;color:var(--t3);text-transform:uppercase">Connects</div>
@@ -4787,7 +4933,7 @@ async function logPrivacyConsent(mode, previousMode, state){
       deals_consent: !!(state.consent && state.consent.deals_consent),
       consent_version: 1,
       user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-      app_version: 98,
+      app_version: 99,
       // v73: tag source so we can see who was newly prompted vs. picked from settings
       source: (!previousMode && ME && ME.created_at && (Date.now()-new Date(ME.created_at).getTime())>3600000) ? 'existing_user_v72_prompt' : (!previousMode ? 'first_run' : 'settings_change')
     };
@@ -4835,7 +4981,7 @@ function clearPrivacyData(){
         deals_consent: false,
         consent_version: 1,
         user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-        app_version: 98,
+        app_version: 99,
         source: 'user_reset'
       };
       sb.from('privacy_consent_log').insert(clearRow).then(function(r){ if(r&&r.error) console.warn('[PM] clear log err', r.error.message); });
@@ -12770,9 +12916,18 @@ function updateActiveCounter(){
 }
 
 // v98: QuickStats — echte Werte statt 0
-// - Connects: Matches (is_match=true) → ME._matchCount oder live fetch
-// - Crew: Mitglieder in meinen Crews (alle zusammen, exkl. mich selbst)
-// - Aura: ME.points (frisch aus profiles)
+// v99: Mit weicher Count-Pop-Animation bei Value-Change
+function _v99SetStat(el, val){
+  if(!el) return;
+  var cur = parseInt(el.textContent||'0',10);
+  var nxt = parseInt(val||0,10);
+  if(cur === nxt){ el.textContent = nxt; return; }
+  el.textContent = nxt;
+  el.classList.remove('count-pop');
+  // trigger reflow → restart animation
+  void el.offsetWidth;
+  el.classList.add('count-pop');
+}
 async function updateQuickStats(){
   var matchEl = document.getElementById('qsMatches');
   var crewEl = document.getElementById('qsCrew');
@@ -12780,7 +12935,7 @@ async function updateQuickStats(){
   if(!ME || !ME.user_id) return;
 
   // Aura sofort setzen (wir haben Wert)
-  if(auraEl) auraEl.textContent = (ME.points || 0);
+  _v99SetStat(auraEl, ME.points || 0);
 
   // Connects — Matches live nachziehen (falls ME._matchCount noch nicht da)
   try{
@@ -12789,32 +12944,30 @@ async function updateQuickStats(){
         .eq('from_user', ME.user_id).eq('is_match', true);
       ME._matchCount = r.count || 0;
     }
-    if(matchEl) matchEl.textContent = ME._matchCount || 0;
-  }catch(e){ if(matchEl) matchEl.textContent = ME._matchCount || 0; }
+    _v99SetStat(matchEl, ME._matchCount || 0);
+  }catch(e){ _v99SetStat(matchEl, ME._matchCount || 0); }
 
   // Crew-Count — alle Mitglieder in meinen Crews zusammen (exkl. mich)
   try{
-    // Memberships sicherstellen
     if(!_myCrewMemberships || !_myCrewMemberships.length){
       try{ await loadMyCrewMemberships(); }catch(e){}
     }
     var crewIds = (_myCrewMemberships||[]).map(function(m){ return m.crew_id; });
     if(!crewIds.length){
-      if(crewEl) crewEl.textContent = 0;
+      _v99SetStat(crewEl, 0);
     } else {
       var rc = await sb.from('crew_members').select('user_id',{count:'exact',head:true}).in('crew_id', crewIds);
       var total = rc.count || 0;
-      // Mich selbst pro Crew rausrechnen (in jeder Crew bin ich 1x gezählt)
       var myCount = crewIds.length;
       var others = Math.max(0, total - myCount);
-      if(crewEl) crewEl.textContent = others;
+      _v99SetStat(crewEl, others);
     }
-  }catch(e){ console.warn('[v98] Crew-Count fehlgeschlagen:', e); if(crewEl) crewEl.textContent = 0; }
+  }catch(e){ console.warn('[v98] Crew-Count fehlgeschlagen:', e); _v99SetStat(crewEl, 0); }
 
   // Aura frisch aus profiles holen (falls sich was geändert hat)
   try{
     var p = await sb.from('profiles').select('points').eq('user_id', ME.user_id).single();
-    if(p && p.data){ ME.points = p.data.points || 0; if(auraEl) auraEl.textContent = ME.points; }
+    if(p && p.data){ ME.points = p.data.points || 0; _v99SetStat(auraEl, ME.points); }
   }catch(e){}
 }
 window.updateQuickStats = updateQuickStats;
