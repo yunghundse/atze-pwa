@@ -454,6 +454,32 @@ nav button.active::before{opacity:1}
   .crew-top-card{padding:9px 12px !important}
   .crew-top-card .cb-cc-ava{width:36px;height:36px;font-size:17px;border-radius:12px}
 }
+/* v106: Compact Crew-Level-Pill sitzt neben der Crew-Zentrale-Card */
+.crew-top-lvl{
+  width:56px;height:56px;flex-shrink:0;
+  border-radius:18px;
+  background:
+    radial-gradient(circle at 50% 0%,rgba(255,214,10,.18),transparent 60%),
+    linear-gradient(140deg,rgba(38,24,16,.96),rgba(22,14,18,.98));
+  border:1px solid rgba(255,214,10,.34);
+  box-shadow:0 8px 22px rgba(0,0,0,.45),0 0 0 1px rgba(255,214,10,.06) inset;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:0;cursor:pointer;position:relative;overflow:hidden;
+  font-family:inherit;color:#fff;padding:6px 4px 8px;
+  transition:transform .15s var(--spring,ease),border-color .2s,box-shadow .2s;
+}
+.crew-top-lvl:hover{transform:translateY(-1px);border-color:rgba(255,214,10,.55);box-shadow:0 10px 26px rgba(0,0,0,.5),0 0 0 1px rgba(255,214,10,.1) inset}
+.crew-top-lvl:active{transform:scale(.93)}
+.crew-top-lvl .ctl-em{font-size:17px;line-height:1;margin-bottom:2px}
+.crew-top-lvl .ctl-num{font-size:17px;font-weight:900;letter-spacing:-.5px;color:#fff;line-height:1;text-shadow:0 2px 8px rgba(255,214,10,.35)}
+.crew-top-lvl .ctl-tag{font-size:7px;font-weight:900;letter-spacing:1.3px;color:#FFD60A;margin-top:2px;line-height:1}
+.crew-top-lvl .ctl-bar{position:absolute;left:6px;right:6px;bottom:4px;height:3px;border-radius:2px;background:rgba(255,255,255,.08);overflow:hidden}
+.crew-top-lvl .ctl-bar > i{display:block;height:100%;background:linear-gradient(90deg,var(--o,#FF6D2E),#FFD60A);border-radius:2px;box-shadow:0 0 6px rgba(255,214,10,.5);transition:width .8s var(--ease-spring-soft,cubic-bezier(.32,1.5,.64,1))}
+@media (max-width:390px){
+  .crew-top-lvl{width:52px;height:52px;border-radius:16px;padding:5px 3px 7px}
+  .crew-top-lvl .ctl-em{font-size:15px}
+  .crew-top-lvl .ctl-num{font-size:15px}
+}
 /* v90: Map braucht KEINEN Top-Margin mehr — die Top-Bar sitzt natürlich davor im Flow */
 #crewsub-active .crew-map-full{margin:0 12px 10px;position:relative;z-index:1;height:240px}
 #crewsub-active .crew-map-full .leaflet-container{z-index:1}
@@ -5283,6 +5309,7 @@ nav button.active .ni{animation:vNineCountPop .38s var(--ease-spring-soft) 1}
       <!-- ═══════════════════════════════════════ -->
       <div class="crew-sub" id="crewsub-active">
       <!-- v90: Crew-Top-Bar — sitzt als ERSTES Element im Crew-Screen, direkt unter dem App-Header und VOR der Karte. Nicht mehr absolute/schwebend. -->
+      <!-- v106: Crew-Level-Pill sitzt jetzt NEBEN der Crew-Zentrale-Card (ersetzt den großen Hero unter der Karte). -->
       <div class="crew-top-bar" id="crewIdPill">
         <button type="button" class="crew-top-back" onclick="crewGo('hub')" aria-label="Zurück zur Crew-Übersicht" title="Zurück zur Crew-Übersicht">
           <svg viewBox="0 0 24 24"><use href="#i-arrow-left"/></svg>
@@ -5296,6 +5323,13 @@ nav button.active .ni{animation:vNineCountPop .38s var(--ease-spring-soft) 1}
             </div>
           </div>
         </div>
+        <!-- v106: Compact Crew-Level-Pill — tap → Crew-Level-Sheet -->
+        <button type="button" class="crew-top-lvl" id="crewTopLvl" onclick="window.openCrewLevelSheet&&window.openCrewLevelSheet()" aria-label="Crew-Level öffnen" title="Crew-Level">
+          <span class="ctl-em" id="crewTopLvlEm" aria-hidden="true">🌱</span>
+          <span class="ctl-num" id="crewTopLvlNum">1</span>
+          <span class="ctl-tag">LVL</span>
+          <span class="ctl-bar"><i id="crewTopLvlBar" style="width:0%"></i></span>
+        </button>
       </div>
       <!-- v78: CONTEXT MODE SWITCHER auch auf Crew-Screen (oben über der Karte) -->
       <div class="ctx-switcher" id="ctxSwitcherCrew" role="tablist" aria-label="Modus wechseln">
@@ -5340,49 +5374,17 @@ nav button.active .ni{animation:vNineCountPop .38s var(--ease-spring-soft) 1}
           <div id="crewSwitcherInner" style="display:flex;gap:8px;min-width:min-content"></div>
         </div>
 
-        <!-- CREW STATUS BAR — Points & Rank — v93: klickbar → eigenes Profil -->
-        <div class="crew-status-bar" id="crewStatusBar" onclick="openMyProfileFromStatusBar()" style="cursor:pointer" role="button" aria-label="Mein Profil öffnen">
-          <div class="csb-ava"><img id="csbPhoto" src="" alt=""></div>
-          <div class="csb-info">
-            <div class="csb-name" id="csbName">—</div>
-            <div class="csb-rank" id="csbRank">—</div>
-            <div class="csb-progress"><div class="csb-progress-fill" id="csbProgress" style="width:0%"></div></div>
-          </div>
-          <div class="csb-pts">
-            <div class="csb-pts-num" id="csbPoints">0</div>
-            <div class="csb-pts-label">Aura ✨</div>
-          </div>
-        </div>
+        <!-- v106: #crewStatusBar (individueller Aura-Level) entfernt — das steht schon im aktiven Profil mit besserem Button.
+             v106: Großer #crewLevelHero entfernt — kompakter Level-Pill sitzt jetzt neben der Crew-Zentrale oben in der Top-Bar.
+             Details (Rang-Ladder, Quests, Contributors, XP-Feed) bleiben weiter unten + im Level-Sheet (Tap auf Pill). -->
 
-        <!-- ═══════════════════════════════════════ -->
-        <!-- v105: CREW-LEVEL-HERO — Interaktives Crew-Level-System -->
-        <!-- ═══════════════════════════════════════ -->
-        <div class="v105-crew-lvl-hero" id="crewLevelHero" onclick="window.openCrewLevelSheet&&window.openCrewLevelSheet()" role="button" aria-label="Crew-Level Details öffnen">
-          <div class="v105-cl-shine"></div>
-          <div class="v105-cl-top">
-            <div class="v105-cl-ring">
-              <svg viewBox="0 0 100 100" aria-hidden="true">
-                <circle cx="50" cy="50" r="42" class="v105-cl-ring-bg"/>
-                <circle cx="50" cy="50" r="42" class="v105-cl-ring-fg" id="crewLvlRingFg" stroke-dasharray="0 264"/>
-              </svg>
-              <div class="v105-cl-ring-lbl">
-                <span class="v105-cl-ring-lvl" id="crewLvlNum">1</span>
-                <span class="v105-cl-ring-tag">LVL</span>
-              </div>
-            </div>
-            <div class="v105-cl-meta">
-              <div class="v105-cl-eyebrow">Crew-Level</div>
-              <div class="v105-cl-rank" id="crewLvlRank"><span class="v105-cl-rank-em">🌱</span><span id="crewLvlRankTxt">Neue Crew</span></div>
-              <div class="v105-cl-xp-wrap">
-                <div class="v105-cl-bar"><i id="crewLvlBar" style="width:0%"></i></div>
-                <div class="v105-cl-xp-row">
-                  <span class="v105-cl-xp-cur"><b id="crewLvlXP">0</b> XP</span>
-                  <span class="v105-cl-xp-next">→ <span id="crewLvlNext">200</span></span>
-                </div>
-                <div class="v105-cl-tonext" id="crewLvlToNext">Sammelt 200 XP für den nächsten Rang</div>
-              </div>
-            </div>
+        <!-- v106: MINI-CHAT — direkt unter der Karte (hochgezogen) -->
+        <div class="crew-section" id="miniChatSection" style="display:none">
+          <div class="crew-section-header" onclick="openCrewChat()" style="cursor:pointer">
+            <div class="csh-left"><span class="csh-emoji">💬</span><span class="csh-title">Crew Chat</span></div>
+            <div class="csh-badge live-badge">LIVE</div>
           </div>
+          <div id="miniChatPreview" onclick="openCrewChat()" style="padding:0 14px 14px;cursor:pointer"></div>
         </div>
 
         <!-- v105: WEEKLY CREW-QUESTS — ersetzen die alten Daily-Challenges -->
@@ -5463,16 +5465,7 @@ nav button.active .ni{animation:vNineCountPop .38s var(--ease-spring-soft) 1}
           </div>
         </div>
 
-        <!-- ═══════════════════════════════════════ -->
-        <!-- MINI-CHAT PREVIEW — Live-Ausschnitt -->
-        <!-- ═══════════════════════════════════════ -->
-        <div class="crew-section" id="miniChatSection" style="display:none">
-          <div class="crew-section-header" onclick="openCrewChat()" style="cursor:pointer">
-            <div class="csh-left"><span class="csh-emoji">💬</span><span class="csh-title">Crew Chat</span></div>
-            <div class="csh-badge live-badge">LIVE</div>
-          </div>
-          <div id="miniChatPreview" onclick="openCrewChat()" style="padding:0 14px 14px;cursor:pointer"></div>
-        </div>
+        <!-- v106: MINI-CHAT sitzt jetzt direkt unter der Karte (weiter oben). -->
 
         <!-- ═══════════════════════════════════════ -->
         <!-- ZONE 2: DEINE CREW — Wer ist da? -->
@@ -6019,7 +6012,7 @@ async function logPrivacyConsent(mode, previousMode, state){
       deals_consent: !!(state.consent && state.consent.deals_consent),
       consent_version: 1,
       user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-      app_version: 105,
+      app_version: 106,
       // v73: tag source so we can see who was newly prompted vs. picked from settings
       source: (!previousMode && ME && ME.created_at && (Date.now()-new Date(ME.created_at).getTime())>3600000) ? 'existing_user_v72_prompt' : (!previousMode ? 'first_run' : 'settings_change')
     };
@@ -6067,7 +6060,7 @@ function clearPrivacyData(){
         deals_consent: false,
         consent_version: 1,
         user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-        app_version: 105,
+        app_version: 106,
         source: 'user_reset'
       };
       sb.from('privacy_consent_log').insert(clearRow).then(function(r){ if(r&&r.error) console.warn('[PM] clear log err', r.error.message); });
@@ -17524,6 +17517,7 @@ window.playCrewJoinCinema = async function(crew, opts){
   function paintCrewLevelHero(xp){
     try{
       var info = getCrewLevelInfo(xp);
+      // v105 Hero (falls noch vorhanden)
       var numEl = document.getElementById('crewLvlNum');  if(numEl) numEl.textContent = info.level;
       var emEl  = document.querySelector('#crewLvlRank .v105-cl-rank-em'); if(emEl) emEl.textContent = info.emoji;
       var rtEl  = document.getElementById('crewLvlRankTxt'); if(rtEl) rtEl.textContent = info.title;
@@ -17543,6 +17537,18 @@ window.playCrewJoinCinema = async function(crew, opts){
         var C = 2*Math.PI*42; // r=42 → ~263.9
         var dash = (info.progress * C).toFixed(2);
         ringEl.setAttribute('stroke-dasharray', dash+' '+(C-dash).toFixed(2));
+      }
+      // v106 Compact Pill in der Crew-Top-Bar (neben Crew-Zentrale)
+      var pillNum = document.getElementById('crewTopLvlNum'); if(pillNum) pillNum.textContent = info.level;
+      var pillEm  = document.getElementById('crewTopLvlEm');  if(pillEm)  pillEm.textContent  = info.emoji;
+      var pillBar = document.getElementById('crewTopLvlBar'); if(pillBar) pillBar.style.width = (info.progress*100).toFixed(1)+'%';
+      var pillBtn = document.getElementById('crewTopLvl');
+      if(pillBtn){
+        var lbl = info.next
+          ? ('Crew-Level '+info.level+' · '+info.emoji+' '+info.title+' · '+info.xp.toLocaleString('de-DE')+' XP · noch '+info.toNext.toLocaleString('de-DE')+' bis '+info.next.title)
+          : ('Crew-Level '+info.level+' · '+info.emoji+' '+info.title+' · Max-Rang erreicht');
+        pillBtn.setAttribute('aria-label', lbl);
+        pillBtn.setAttribute('title', lbl);
       }
     }catch(e){ console.warn('[v105] paintHero err', e); }
   }
@@ -18028,7 +18034,7 @@ window.playCrewJoinCinema = async function(crew, opts){
   console.log('[v105] Crew-Level-System loaded — Ranks:'+CREW_RANKS.length+', Quests:'+QUEST_DEFS.length);
 })();
 
-if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js?v=17').catch(function(){});
+if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js?v=18').catch(function(){});
 </script>
 </body>
 </html>
