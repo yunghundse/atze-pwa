@@ -3451,6 +3451,161 @@ nav button.active .ni{animation:vNineCountPop .38s var(--ease-spring-soft) 1}
   .cj-card,.cj-logo,.cj-title,.cj-name,.cj-motto,.cj-counter,.cj-plus,.cj-members,.cj-actions,.cj-me{animation:none!important;transition:opacity .2s!important;transform:none!important;opacity:1!important}
   .ptr-ring{animation:none!important}
 }
+
+/* ============================================
+   v102 — Level up & Streak
+   Streak-Badge sichtbar machen, Level-System,
+   Button-Ripple, Input-Validation, Mystery-Burst
+   ============================================ */
+.streak-badge.v102-on{
+  display:inline-flex!important;
+  align-items:center;
+  gap:4px;
+  padding:5px 10px 5px 8px;
+  border-radius:999px;
+  background:linear-gradient(135deg,rgba(255,214,10,.16),rgba(255,109,46,.12));
+  border:1px solid rgba(255,214,10,.28);
+  font-size:11px;font-weight:900;color:#FFD60A;letter-spacing:.2px;
+  box-shadow:0 0 18px rgba(255,214,10,.18),inset 0 1px 0 rgba(255,255,255,.08);
+  animation:streakPulse 2.6s ease-in-out infinite;
+  cursor:pointer;transition:transform .18s var(--ease-out);
+}
+.streak-badge.v102-on:active{transform:scale(.94)}
+.streak-badge.v102-hot{
+  background:linear-gradient(135deg,rgba(255,59,48,.22),rgba(255,109,46,.18));
+  border-color:rgba(255,109,46,.45);
+  color:#FF8C3A;
+  animation:streakPulseHot 1.3s ease-in-out infinite;
+}
+@keyframes streakPulseHot{
+  0%,100%{box-shadow:0 0 20px rgba(255,109,46,.35),inset 0 1px 0 rgba(255,255,255,.08);transform:scale(1)}
+  50%{box-shadow:0 0 32px rgba(255,109,46,.55),inset 0 1px 0 rgba(255,255,255,.08);transform:scale(1.04)}
+}
+
+/* Level-Indikator im Quick-Stats (Profil-Tab) */
+.v102-lvl-chip{
+  position:absolute;top:4px;right:6px;
+  font-size:8.5px;font-weight:900;color:#fff;
+  padding:2px 6px;border-radius:999px;
+  background:linear-gradient(135deg,var(--o,#FF6D2E),#C93A7A);
+  letter-spacing:.4px;
+  box-shadow:0 2px 8px rgba(255,109,46,.4);
+  pointer-events:none;
+}
+.v102-lvl-bar{
+  position:absolute;bottom:3px;left:8px;right:8px;height:3px;
+  border-radius:2px;background:rgba(255,255,255,.08);overflow:hidden;
+  pointer-events:none;
+}
+.v102-lvl-bar>i{
+  display:block;height:100%;width:0%;
+  background:linear-gradient(90deg,var(--o,#FF6D2E),#FFD60A);
+  border-radius:2px;
+  transition:width .6s var(--ease-spring-soft);
+  box-shadow:0 0 8px rgba(255,214,10,.5);
+}
+#qsAura{position:relative}
+#quickStats > div{position:relative;overflow:hidden}
+
+/* Level-Up-Celebration Overlay */
+.lvl-ov{position:fixed;inset:0;z-index:99985;display:none;align-items:center;justify-content:center;
+  background:radial-gradient(circle at 50% 50%,rgba(255,214,10,.18),rgba(5,5,7,.82) 60%);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  animation:lvlFadeIn .3s var(--ease-out)}
+.lvl-ov.show{display:flex}
+@keyframes lvlFadeIn{from{opacity:0}to{opacity:1}}
+.lvl-card{
+  padding:28px 32px;border-radius:24px;text-align:center;
+  background:linear-gradient(135deg,rgba(255,109,46,.18),rgba(255,214,10,.10));
+  border:1px solid rgba(255,214,10,.32);
+  box-shadow:0 24px 80px rgba(0,0,0,.65),0 0 60px rgba(255,214,10,.35);
+  max-width:300px;
+  animation:lvlCardIn .55s var(--ease-bounce);
+}
+@keyframes lvlCardIn{
+  0%{opacity:0;transform:scale(.6) translateY(28px)}
+  60%{opacity:1;transform:scale(1.04) translateY(-4px)}
+  100%{opacity:1;transform:scale(1) translateY(0)}
+}
+.lvl-star{font-size:64px;margin-bottom:6px;animation:lvlStarSpin .9s var(--ease-bounce);display:inline-block}
+@keyframes lvlStarSpin{
+  0%{transform:rotate(-140deg) scale(.3);opacity:0}
+  60%{transform:rotate(10deg) scale(1.2);opacity:1}
+  100%{transform:rotate(0) scale(1);opacity:1}
+}
+.lvl-title{font-size:11px;font-weight:900;color:var(--o,#FF6D2E);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:2px}
+.lvl-num{font-size:56px;font-weight:900;background:linear-gradient(135deg,var(--o,#FF6D2E),#FFD60A);-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:-2px;line-height:1;margin:2px 0 8px}
+.lvl-sub{font-size:14px;font-weight:700;color:var(--t2);margin-bottom:20px}
+.lvl-btn{width:100%;padding:14px;border:none;border-radius:14px;background:linear-gradient(135deg,var(--o,#FF6D2E),#C93A7A);color:#fff;font-size:14px;font-weight:900;cursor:pointer;font-family:inherit;letter-spacing:.3px;box-shadow:0 8px 24px rgba(255,109,46,.4)}
+.lvl-btn:active{transform:scale(.97)}
+
+/* Ripple-FX — universal */
+.v102-ripple{
+  position:absolute;border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle,rgba(255,255,255,.42),rgba(255,255,255,0) 70%);
+  transform:translate(-50%,-50%) scale(0);
+  width:180px;height:180px;
+  animation:v102Ripple .58s cubic-bezier(.2,.7,.3,1) forwards;
+  mix-blend-mode:overlay;
+}
+@keyframes v102Ripple{
+  0%{transform:translate(-50%,-50%) scale(0);opacity:.85}
+  100%{transform:translate(-50%,-50%) scale(1.4);opacity:0}
+}
+
+/* Input-Validation Cascade */
+.ri.v102-invalid{
+  border-color:rgba(255,59,48,.65)!important;
+  box-shadow:0 0 0 3px rgba(255,59,48,.12),inset 0 0 0 1px rgba(255,59,48,.35)!important;
+  animation:v102InputShake .36s cubic-bezier(.36,.07,.19,.97);
+}
+.ri.v102-valid{
+  border-color:rgba(52,199,89,.55)!important;
+  box-shadow:0 0 0 3px rgba(52,199,89,.12)!important;
+  animation:v102InputBounce .46s var(--ease-spring-soft);
+}
+@keyframes v102InputShake{
+  0%,100%{transform:translateX(0)}
+  20%,60%{transform:translateX(-5px)}
+  40%,80%{transform:translateX(5px)}
+}
+@keyframes v102InputBounce{
+  0%,100%{transform:scale(1)}
+  40%{transform:scale(1.015)}
+}
+
+/* Mystery-Burst (Gold-Text kurz groß) */
+.v102-lucky-burst{
+  position:fixed;top:38%;left:50%;transform:translate(-50%,-50%);
+  font-size:44px;font-weight:900;color:#FFD60A;letter-spacing:-1px;
+  text-shadow:0 6px 28px rgba(255,214,10,.7),0 0 40px rgba(255,109,46,.5);
+  z-index:99990;pointer-events:none;
+  animation:v102Lucky 1.8s cubic-bezier(.2,.8,.3,1) forwards;
+  white-space:nowrap;
+}
+@keyframes v102Lucky{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.4)}
+  12%{opacity:1;transform:translate(-50%,-50%) scale(1.15)}
+  22%{transform:translate(-50%,-50%) scale(1)}
+  75%{opacity:1;transform:translate(-50%,-55%) scale(1)}
+  100%{opacity:0;transform:translate(-50%,-80%) scale(.92)}
+}
+
+/* Stagger-Assist — Kinder mit --i bekommen je 60ms Delay */
+.v102-stagger > *{
+  opacity:0;
+  animation:v102StaggerIn .5s var(--ease-spring-soft) forwards;
+  animation-delay:calc(var(--i,0) * 55ms);
+}
+@keyframes v102StaggerIn{
+  0%{opacity:0;transform:translateY(10px) scale(.97)}
+  100%{opacity:1;transform:translateY(0) scale(1)}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .lvl-card,.lvl-star,.v102-ripple,.v102-lucky-burst,.streak-badge.v102-on{animation:none!important;transform:none!important;opacity:1!important}
+  .v102-stagger > *{animation:none!important;opacity:1!important;transform:none!important}
+}
 </style>
 
 <!-- LOADING -->
@@ -14508,7 +14663,458 @@ window.playCrewJoinCinema = async function(crew, opts){
   window.PTR = PTR;
 })();
 
-if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js?v=13').catch(function(){});
+// ============================================
+// v102 — Level up & Streak
+// Aura-Level, Streak, Mystery-Bonus, Ripple, Input-Validation, Stagger
+// Alles ist additiv – keine Funktion wird ersetzt, nur erweitert.
+// ============================================
+;(function(){
+  'use strict';
+
+  // ── 1) Aura-Level-System ─────────────────────
+  // Level-Kurve: 0-99 = Lvl 1, 100-249 = Lvl 2, 250-499 = Lvl 3 …
+  // Jedes Level braucht 50 Aura mehr als das vorherige.
+  function _lvlFloor(level){
+    // kumulierte Punkte, um Level zu erreichen
+    if(level <= 1) return 0;
+    // arithmetische Reihe: 100 + 150 + 200 + ... = 50*(n-1) + sum(100,150,...)
+    // Vereinfacht: floor(level) = 50 * (L-1) * L / 2 + 50*(L-1)  => 25L² + 25L - 50
+    var L = level;
+    return Math.max(0, 25*L*L + 25*L - 50);
+  }
+  function getLevelInfo(points){
+    points = Math.max(0, parseInt(points||0, 10));
+    var L = 1;
+    while(_lvlFloor(L+1) <= points && L < 100){ L++; }
+    var cur = _lvlFloor(L);
+    var next = _lvlFloor(L+1);
+    var span = Math.max(1, next - cur);
+    var progress = Math.min(1, Math.max(0, (points - cur) / span));
+    return { level:L, cur:cur, next:next, progress:progress, toNext:Math.max(0, next - points) };
+  }
+  window.getLevelInfo = getLevelInfo;
+
+  // Level-Up Overlay rendern
+  function ensureLvlOverlay(){
+    var ov = document.getElementById('lvlOv');
+    if(ov) return ov;
+    ov = document.createElement('div');
+    ov.id = 'lvlOv';
+    ov.className = 'lvl-ov';
+    ov.innerHTML =
+      '<div class="lvl-card">'+
+        '<div class="lvl-star">⭐</div>'+
+        '<div class="lvl-title">Level Up!</div>'+
+        '<div class="lvl-num" id="lvlNumTxt">2</div>'+
+        '<div class="lvl-sub" id="lvlSubTxt">Du bist jetzt auf Level 2 — deine Aura strahlt heller.</div>'+
+        '<button class="lvl-btn" onclick="window._lvlDismiss()">Weiter feiern ✨</button>'+
+      '</div>';
+    document.body.appendChild(ov);
+    return ov;
+  }
+  window._lvlDismiss = function(){
+    var ov = document.getElementById('lvlOv');
+    if(ov){ ov.classList.remove('show'); setTimeout(function(){ try{ ov.style.display='none'; }catch(e){} }, 320); }
+  };
+  function showLevelUp(newLevel){
+    try{
+      var ov = ensureLvlOverlay();
+      var t = document.getElementById('lvlNumTxt'); if(t) t.textContent = newLevel;
+      var s = document.getElementById('lvlSubTxt');
+      if(s){
+        var msgs = [
+          'Du bist jetzt auf Level '+newLevel+' — deine Aura strahlt heller. ✨',
+          'Level '+newLevel+' erreicht! Die Crew spürt das. 🔥',
+          'Boom. Level '+newLevel+'. Du bist heute unaufhaltsam. 🌴',
+          'Neue Stufe freigeschaltet — Level '+newLevel+'. Weiter so. 💫'
+        ];
+        s.textContent = msgs[Math.floor(Math.random()*msgs.length)];
+      }
+      ov.style.display='flex';
+      // Reflow für Animation
+      void ov.offsetWidth;
+      ov.classList.add('show');
+      // Double-Confetti
+      try{
+        if(typeof window.fireConfetti === 'function'){
+          window.fireConfetti({count:130, spread:1.0, duration:2200, colors:['#FF6D2E','#FFD60A','#FF3B30','#C93A7A','#34C759']});
+          setTimeout(function(){ window.fireConfetti({count:60, spread:.6, duration:1600, colors:['#FFD60A','#FF8C3A']}); }, 320);
+        }
+      }catch(e){}
+      // Haptic
+      try{ if(navigator.vibrate) navigator.vibrate([18,14,32,14,60]); }catch(e){}
+      // Auto-dismiss-Fallback nach 6s, falls Button übersehen wird
+      setTimeout(function(){ try{ window._lvlDismiss(); }catch(e){} }, 7500);
+    }catch(e){ console.warn('[v102] level-up show failed', e); }
+  }
+  window.showLevelUp = showLevelUp;
+
+  // Level-Display in Quick-Stats (Profile-Kachel auf Home)
+  function paintLevelInQuickStats(){
+    try{
+      var parent = document.getElementById('qsAura');
+      if(!parent) return;
+      var tile = parent.parentElement;
+      if(!tile) return;
+      var pts = (typeof ME!=='undefined' && ME.points) || 0;
+      var info = getLevelInfo(pts);
+      // Chip
+      var chip = tile.querySelector('.v102-lvl-chip');
+      if(!chip){
+        chip = document.createElement('div');
+        chip.className = 'v102-lvl-chip';
+        tile.appendChild(chip);
+      }
+      chip.textContent = 'LVL '+info.level;
+      // Progress-Bar
+      var bar = tile.querySelector('.v102-lvl-bar');
+      if(!bar){
+        bar = document.createElement('div');
+        bar.className = 'v102-lvl-bar';
+        bar.innerHTML = '<i></i>';
+        tile.appendChild(bar);
+      }
+      var fill = bar.querySelector('i');
+      if(fill){ fill.style.width = (info.progress*100).toFixed(1)+'%'; }
+      tile.setAttribute('title','Level '+info.level+' • noch '+info.toNext+' Aura bis Level '+(info.level+1));
+    }catch(e){}
+  }
+  window.paintLevelInQuickStats = paintLevelInQuickStats;
+
+  // Wrap updateQuickStats: nach jedem Update Level + Streak neu zeichnen
+  try{
+    var _origUQS = window.updateQuickStats;
+    if(typeof _origUQS === 'function'){
+      window.updateQuickStats = function(){
+        var r = _origUQS.apply(this, arguments);
+        Promise.resolve(r).then(function(){
+          try{ paintLevelInQuickStats(); }catch(e){}
+          try{ paintStreakBadge(); }catch(e){}
+        });
+        return r;
+      };
+    }
+  }catch(e){}
+
+  // Watch ME.points change → detect level-up
+  var _lastSeenPoints = null;
+  function checkLevelUp(newPts){
+    try{
+      var n = parseInt(newPts||0, 10);
+      if(_lastSeenPoints === null){ _lastSeenPoints = n; return; }
+      if(n <= _lastSeenPoints){ _lastSeenPoints = n; return; }
+      var oldInfo = getLevelInfo(_lastSeenPoints);
+      var newInfo = getLevelInfo(n);
+      _lastSeenPoints = n;
+      if(newInfo.level > oldInfo.level){
+        // Haptic + Overlay (erst nach 400ms, damit Celebration vom Match erst durchläuft)
+        setTimeout(function(){ showLevelUp(newInfo.level); }, 420);
+      }
+      // UI in jedem Fall neu
+      paintLevelInQuickStats();
+    }catch(e){}
+  }
+  window._v102CheckLevelUp = checkLevelUp;
+
+  // Poll ME.points alle 1.2s sanft – billig & stabil ohne Proxy
+  setInterval(function(){
+    try{
+      if(typeof ME === 'undefined' || !ME) return;
+      checkLevelUp(ME.points || 0);
+    }catch(e){}
+  }, 1200);
+
+  // ── 2) Streak-System (localStorage) ──────────
+  var STREAK_KEY = 'crew_streak_v1';
+  function _todayYmd(){
+    var d = new Date();
+    return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  }
+  function _daysBetween(a, b){
+    // a, b = "YYYY-MM-DD"
+    var da = new Date(a+'T00:00:00'); var db = new Date(b+'T00:00:00');
+    return Math.round((db - da) / 86400000);
+  }
+  function getStreak(){
+    try{
+      var raw = localStorage.getItem(STREAK_KEY);
+      if(!raw) return {count:0, last:null};
+      var o = JSON.parse(raw);
+      return {count:parseInt(o.count||0,10), last:o.last||null};
+    }catch(e){ return {count:0, last:null}; }
+  }
+  function setStreak(s){
+    try{ localStorage.setItem(STREAK_KEY, JSON.stringify({count:s.count, last:s.last})); }catch(e){}
+  }
+  function touchStreak(){
+    // Wird einmal pro App-Open gerufen; kümmert sich um inc/reset/hold
+    var today = _todayYmd();
+    var s = getStreak();
+    var leveledUp = false;
+    var broken = false;
+    if(!s.last){
+      s = {count:1, last:today}; leveledUp = true;
+    } else if(s.last === today){
+      // heute schon getouched – nichts tun
+    } else {
+      var diff = _daysBetween(s.last, today);
+      if(diff === 1){ s = {count:s.count+1, last:today}; leveledUp = true; }
+      else if(diff > 1){ broken = (s.count >= 3); s = {count:1, last:today}; }
+      else { /* Zukunft oder Systemzeit-Rollback — nichts tun */ }
+    }
+    setStreak(s);
+    try{ if(typeof ME !== 'undefined' && ME){ ME.streak = s.count; } }catch(e){}
+    paintStreakBadge();
+    // Milestone-Celebration
+    if(leveledUp){
+      var milestones = [3, 7, 14, 21, 30, 50, 100];
+      if(milestones.indexOf(s.count) !== -1){
+        setTimeout(function(){ showStreakMilestone(s.count); }, 800);
+      }
+    }
+    if(broken){
+      // Dezent — kein Modal, nur Toast
+      try{ if(typeof toast==='function') toast('🔥 Streak resettet – fang heute neu an.'); }catch(e){}
+    }
+    return s;
+  }
+  window._v102TouchStreak = touchStreak;
+  window._v102GetStreak = getStreak;
+
+  function paintStreakBadge(){
+    try{
+      var badge = document.getElementById('sBadge');
+      if(!badge) return;
+      var s = getStreak();
+      var num = document.getElementById('sNum');
+      if(num) num.textContent = s.count;
+      if(s.count >= 1){
+        badge.classList.add('v102-on');
+        if(s.count >= 7) badge.classList.add('v102-hot'); else badge.classList.remove('v102-hot');
+      } else {
+        badge.classList.remove('v102-on','v102-hot');
+      }
+      // Make clickable – shows quick info
+      if(!badge._v102Bound){
+        badge.addEventListener('click', function(){
+          var st = getStreak();
+          if(!st.count){ if(typeof toast==='function') toast('🔥 Komm jeden Tag kurz rein – und dein Streak wächst.'); return; }
+          var m = st.count === 1 ? 'Streak gestartet! 🔥' : 'Du bist '+st.count+' Tage am Stück aktiv 🔥';
+          var nextMs = [3,7,14,21,30,50,100].find(function(x){ return x > st.count; });
+          if(nextMs) m += ' · noch '+(nextMs-st.count)+' bis '+nextMs;
+          if(typeof toast==='function') toast(m);
+        });
+        badge._v102Bound = true;
+      }
+    }catch(e){}
+  }
+  window.paintStreakBadge = paintStreakBadge;
+
+  function showStreakMilestone(count){
+    try{
+      var labels = {3:'3-Tage-Streak!',7:'Eine ganze Woche!',14:'Zwei Wochen — Maschine!',21:'21 Tage — pures Commitment',30:'30 Tage — Crew-Legende',50:'50 Tage — Hall of Fame',100:'100 Tage — unglaublich'};
+      var label = labels[count] || (count+' Tage Streak!');
+      if(typeof toast === 'function') toast('🔥 '+label);
+      if(typeof window.fireConfetti === 'function'){
+        window.fireConfetti({count:100, spread:.85, duration:2000, colors:['#FFD60A','#FF6D2E','#FF3B30']});
+      }
+      if(navigator.vibrate) navigator.vibrate([10,20,10,20,30]);
+      // Plus: +Aura als "Stamm-Belohnung" (optional, nur client-side – synct nicht zurück zum Server, bleibt dezent)
+      // Hier bewusst NICHT an DB schreiben, damit wir keine Abhängigkeit schaffen.
+    }catch(e){}
+  }
+
+  // Streak beim App-Start und bei jedem Home-Besuch touchen
+  function tryInitialStreakTouch(){
+    if(typeof ME !== 'undefined' && ME && ME.user_id){
+      try{ touchStreak(); }catch(e){}
+      return true;
+    }
+    return false;
+  }
+  // Polling bis ME geladen ist, max 30s
+  (function(){
+    var tries = 0;
+    var t = setInterval(function(){
+      tries++;
+      if(tryInitialStreakTouch() || tries > 60){ clearInterval(t); }
+    }, 500);
+  })();
+
+  // ── 3) Mystery Aura Bonus bei Match ──────────
+  // Monkey-patch showCele, falls vorhanden, um Doppel-Reward-Chance einzubauen.
+  try{
+    var _origShowCele = window.showCele;
+    if(typeof _origShowCele === 'function'){
+      window.showCele = function(){
+        var r = _origShowCele.apply(this, arguments);
+        // 10% Chance auf +50 Bonus-Aura
+        if(Math.random() < 0.10){
+          setTimeout(function(){
+            try{
+              if(typeof ME !== 'undefined' && ME){
+                ME.points = (ME.points||0) + 50;
+                try{ if(typeof sb !== 'undefined' && sb.rpc){ sb.rpc('add_points',{p_user_id:ME.user_id, p_points:50}); } }catch(e){}
+                try{ if(typeof updateProfile === 'function') updateProfile(); }catch(e){}
+                try{ if(typeof updateQuickStats === 'function') updateQuickStats(); }catch(e){}
+              }
+              showLuckyBurst('🎁 LUCKY! +50 ✨');
+              if(typeof window.fireConfetti === 'function'){
+                window.fireConfetti({count:70, spread:.7, duration:1800, colors:['#FFD60A','#FF8C3A','#FFE47A']});
+              }
+              if(navigator.vibrate) navigator.vibrate([10,10,30,10,50]);
+            }catch(e){}
+          }, 900);
+        }
+        return r;
+      };
+    }
+  }catch(e){}
+  function showLuckyBurst(text){
+    var el = document.createElement('div');
+    el.className = 'v102-lucky-burst';
+    el.textContent = text;
+    document.body.appendChild(el);
+    setTimeout(function(){ try{ el.parentNode && el.parentNode.removeChild(el); }catch(e){} }, 2000);
+  }
+  window.showLuckyBurst = showLuckyBurst;
+
+  // ── 4) Crew-Join Cinema auch bei direktem join ──
+  // Wenn User Crew via Code/QR beitritt (nicht über Preview-Invite-Flow),
+  // wollen wir auch das Cinema spielen.
+  try{
+    var _origJoinCrew = window.joinCrew;
+    if(typeof _origJoinCrew === 'function'){
+      window.joinCrew = async function(crewId){
+        var result = await _origJoinCrew.apply(this, arguments);
+        if(result === true){
+          try{
+            // Nur Cinema spielen, wenn Preview-Flow NICHT gerade aktiv ist (dort hat's schon gespielt)
+            if(!window._crewPreviewCtx){
+              var crewData = null;
+              try{
+                var r = await sb.from('crews').select('id,name,motto,emoji,photo_url').eq('id', crewId).single();
+                if(r && r.data) crewData = r.data;
+              }catch(e){}
+              var topMembers = [];
+              try{
+                var mr = await sb.from('crew_members').select('user_id, profiles:profiles(name, photo_url)').eq('crew_id', crewId).limit(4);
+                if(mr && mr.data){ topMembers = mr.data.map(function(x){ return {name:(x.profiles&&x.profiles.name)||'', photo_url:(x.profiles&&x.profiles.photo_url)||''}; }); }
+              }catch(e){}
+              if(crewData && typeof window.playCrewJoinCinema === 'function'){
+                window.playCrewJoinCinema(crewData, {topMembers:topMembers});
+              }
+            }
+          }catch(e){ console.warn('[v102] join cinema wrap err', e); }
+        }
+        return result;
+      };
+    }
+  }catch(e){}
+
+  // ── 5) Button Ripple-FX ──────────────────────
+  var RIPPLE_SEL = '.btn, .tc-btn, .dtab, .deal-cta, .cj-btn-primary, .cj-btn-secondary, .hsc-cta, .lvl-btn, .fab-primary, button.primary';
+  document.addEventListener('pointerdown', function(ev){
+    try{
+      var el = ev.target && ev.target.closest && ev.target.closest(RIPPLE_SEL);
+      if(!el) return;
+      // kleine Guard: nicht disabled
+      if(el.disabled || el.getAttribute('aria-disabled') === 'true') return;
+      var cs = getComputedStyle(el);
+      if(cs.position === 'static') el.style.position = 'relative';
+      if(cs.overflow === 'visible') el.style.overflow = 'hidden';
+      var rect = el.getBoundingClientRect();
+      var x = (ev.clientX || (rect.left + rect.width/2)) - rect.left;
+      var y = (ev.clientY || (rect.top + rect.height/2)) - rect.top;
+      var r = document.createElement('span');
+      r.className = 'v102-ripple';
+      r.style.left = x+'px';
+      r.style.top = y+'px';
+      el.appendChild(r);
+      setTimeout(function(){ try{ r.parentNode && r.parentNode.removeChild(r); }catch(e){} }, 620);
+    }catch(e){}
+  }, {passive:true});
+
+  // ── 6) Staggered Lists ───────────────────────
+  // MutationObserver auf Listen-Containern: wenn Kinder neu befüllt werden,
+  // setzen wir .v102-stagger + --i auf die Kinder.
+  var STAGGER_IDS = ['crewsub-active', 'leaderList', 'cardStack', 'crewsTrending', 'crewsNew'];
+  function staggerize(container){
+    try{
+      if(!container) return;
+      // Nur direkte Element-Kinder
+      var kids = Array.prototype.filter.call(container.children || [], function(el){ return el.nodeType === 1; });
+      if(kids.length === 0 || kids.length > 20) return; // nicht bei Riesenlisten
+      container.classList.add('v102-stagger');
+      kids.forEach(function(el, i){ el.style.setProperty('--i', i); });
+      // Nach Animation wieder entfernen, damit zukünftige Hover etc. nicht gestört sind
+      setTimeout(function(){ try{ container.classList.remove('v102-stagger'); kids.forEach(function(el){ el.style.removeProperty('--i'); }); }catch(e){} }, kids.length*60 + 700);
+    }catch(e){}
+  }
+  function tryStaggerAll(){
+    STAGGER_IDS.forEach(function(id){
+      var c = document.getElementById(id);
+      if(c) staggerize(c);
+    });
+  }
+  // Beim Screen-Wechsel triggern
+  try{
+    var _origGo = window.go;
+    if(typeof _origGo === 'function'){
+      window.go = function(screen){
+        var r = _origGo.apply(this, arguments);
+        setTimeout(tryStaggerAll, 120);
+        return r;
+      };
+    }
+  }catch(e){}
+
+  // ── 7) Input-Validation Cascade ──────────────
+  function bindInputValidation(){
+    try{
+      var inputs = document.querySelectorAll('.ri');
+      inputs.forEach(function(inp){
+        if(inp._v102Bound) return;
+        inp._v102Bound = true;
+        inp.addEventListener('blur', function(){
+          try{
+            var val = (inp.value || '').trim();
+            // nur validieren, wenn Feld nicht leer (sonst ist Leere ≠ Fehler)
+            if(!val){ inp.classList.remove('v102-invalid','v102-valid'); return; }
+            var type = (inp.type || '').toLowerCase();
+            var min = inp.getAttribute('minlength');
+            var max = inp.getAttribute('maxlength');
+            var pat = inp.getAttribute('pattern');
+            var valid = true;
+            if(type === 'email'){ valid = /.+@.+\..+/.test(val); }
+            if(valid && min){ valid = val.length >= parseInt(min,10); }
+            if(valid && max){ valid = val.length <= parseInt(max,10); }
+            if(valid && pat){ try{ valid = new RegExp('^(?:'+pat+')$').test(val); }catch(e){} }
+            // Native checkValidity als letzter Check (falls required etc.)
+            if(valid && typeof inp.checkValidity === 'function'){ valid = inp.checkValidity(); }
+            inp.classList.remove('v102-invalid','v102-valid');
+            inp.classList.add(valid ? 'v102-valid' : 'v102-invalid');
+            // Haptic bei Fehler (dezent)
+            if(!valid && navigator.vibrate){ try{ navigator.vibrate(12); }catch(e){} }
+          }catch(e){}
+        });
+        inp.addEventListener('input', function(){
+          // Beim Tippen: Fehler entfernen, damit User nicht bestraft wird
+          if(inp.classList.contains('v102-invalid')) inp.classList.remove('v102-invalid');
+        });
+      });
+    }catch(e){}
+  }
+  // Beim Öffnen neuer Screens/Modals neu binden
+  setInterval(bindInputValidation, 1500);
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', bindInputValidation);
+  } else { bindInputValidation(); }
+
+  console.log('[v102] Level up & Streak loaded');
+})();
+
+if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js?v=14').catch(function(){});
 </script>
 </body>
 </html>
