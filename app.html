@@ -4624,6 +4624,68 @@ nav button.active .ni{animation:vNineCountPop .38s var(--ease-spring-soft) 1}
   .v107-ol-ava::after{animation:none!important}
 }
 
+/* ============================================
+   v108 — Crew-Menü-Rework
+   Chat-first, Vote-Tab, Self-Card, schlanke Actions
+   ============================================ */
+.v108-actions-slim{
+  justify-content:center;
+  gap:10px;
+}
+.v108-actions-slim > *{
+  flex:1 1 0;
+  max-width:180px;
+}
+
+.v108-tab-cta{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  margin:10px auto 4px;padding:12px 22px;
+  border-radius:14px;border:none;cursor:pointer;
+  background:linear-gradient(135deg,#FF6D2E,#FFD60A);
+  color:#0A0A0A;font-weight:800;font-size:14px;letter-spacing:-.1px;
+  font-family:inherit;
+  box-shadow:0 6px 18px rgba(255,109,46,.28);
+  transition:transform .15s ease,box-shadow .22s ease;
+  width:auto;
+}
+.v108-tab-cta:active{transform:scale(.97)}
+.v108-tab-cta:hover{box-shadow:0 8px 22px rgba(255,109,46,.38)}
+
+.v108-self-card{
+  position:relative;
+  background:linear-gradient(180deg,rgba(255,214,10,.08),rgba(255,109,46,.04))!important;
+  border:1px solid rgba(255,214,10,.28)!important;
+  box-shadow:0 0 0 1px rgba(255,214,10,.05) inset;
+}
+.v108-self-card::before{
+  content:'';position:absolute;left:0;top:12px;bottom:12px;width:3px;
+  background:linear-gradient(180deg,#FFD60A,#FF6D2E);border-radius:0 2px 2px 0;
+}
+.v108-self-pill{
+  display:inline-block;margin-left:6px;padding:2px 8px;
+  border-radius:999px;
+  background:linear-gradient(135deg,#FFD60A,#FF6D2E);
+  color:#0A0A0A;font-size:9.5px;font-weight:900;letter-spacing:.6px;
+  vertical-align:middle;
+}
+.v108-self-hint{
+  font-size:10.5px!important;font-weight:700!important;
+  letter-spacing:.2px;
+}
+
+/* Quests: Auto-Mode-Hinweis */
+.v108-auto-hint{
+  margin:10px 0 4px;padding:10px 14px;
+  border-radius:12px;
+  background:rgba(52,199,89,.07);
+  border:1px dashed rgba(52,199,89,.22);
+  color:var(--t2);font-size:11.5px;font-weight:600;line-height:1.5;
+  display:flex;align-items:center;gap:10px;
+}
+.v108-auto-hint-ic{
+  font-size:15px;flex-shrink:0;
+}
+
 </style>
 
 <!-- LOADING -->
@@ -5560,14 +5622,8 @@ nav button.active .ni{animation:vNineCountPop .38s var(--ease-spring-soft) 1}
              v106: Großer #crewLevelHero entfernt — kompakter Level-Pill sitzt jetzt neben der Crew-Zentrale oben in der Top-Bar.
              Details (Rang-Ladder, Quests, Contributors, XP-Feed) bleiben weiter unten + im Level-Sheet (Tap auf Pill). -->
 
-        <!-- v106: MINI-CHAT — direkt unter der Karte (hochgezogen) -->
-        <div class="crew-section" id="miniChatSection" style="display:none">
-          <div class="crew-section-header" onclick="openCrewChat()" style="cursor:pointer">
-            <div class="csh-left"><span class="csh-emoji">💬</span><span class="csh-title">Crew Chat</span></div>
-            <div class="csh-badge live-badge">LIVE</div>
-          </div>
-          <div id="miniChatPreview" onclick="openCrewChat()" style="padding:0 14px 14px;cursor:pointer"></div>
-        </div>
+        <!-- v108: Mini-Chat-Section entfernt — Chat ist jetzt erster Tab im Crew-Menü. -->
+        <div id="miniChatSection" style="display:none"></div>
 
         <!-- v107: CREW-MENÜ — Quests / Contributors / XP-Feed / Leaderboard in Tabs.
              Ersetzt die 4 separaten Sections darunter. Kollabierbar über Header-Tap. -->
@@ -5580,14 +5636,28 @@ nav button.active .ni{animation:vNineCountPop .38s var(--ease-spring-soft) 1}
             </div>
           </div>
           <div class="v107-menu-body" id="v107MenuBody">
+            <!-- v108: Chat + Vote als erste Tabs. Quests danach. -->
             <div class="v107-tabs" role="tablist" aria-label="Crew-Menü-Tabs">
-              <button class="v107-tab active" role="tab" aria-selected="true" data-tab="quests" onclick="window.v107SwitchTab&&window.v107SwitchTab('quests')">🎯 Quests</button>
+              <button class="v107-tab active" role="tab" aria-selected="true" data-tab="chat" onclick="window.v107SwitchTab&&window.v107SwitchTab('chat')">💬 Chat</button>
+              <button class="v107-tab" role="tab" aria-selected="false" data-tab="vote" onclick="window.v107SwitchTab&&window.v107SwitchTab('vote')">🗳️ Vote</button>
+              <button class="v107-tab" role="tab" aria-selected="false" data-tab="quests" onclick="window.v107SwitchTab&&window.v107SwitchTab('quests')">🎯 Quests</button>
               <button class="v107-tab" role="tab" aria-selected="false" data-tab="contribs" onclick="window.v107SwitchTab&&window.v107SwitchTab('contribs')">💪 Top</button>
               <button class="v107-tab" role="tab" aria-selected="false" data-tab="feed" onclick="window.v107SwitchTab&&window.v107SwitchTab('feed')">✨ Feed</button>
               <button class="v107-tab" role="tab" aria-selected="false" data-tab="leader" onclick="window.v107SwitchTab&&window.v107SwitchTab('leader')">🏆 Board</button>
             </div>
             <div class="v107-panels">
-              <div class="v107-panel active" role="tabpanel" data-panel="quests">
+              <!-- v108: Chat-Panel — zeigt Mini-Preview + Button zum Öffnen -->
+              <div class="v107-panel active" role="tabpanel" data-panel="chat">
+                <div style="padding:0 14px 14px">
+                  <div id="miniChatPreview" style="min-height:36px"></div>
+                  <button class="v108-tab-cta" type="button" onclick="openCrewChat()" aria-label="Crew Chat öffnen">💬 Chat öffnen</button>
+                </div>
+              </div>
+              <!-- v108: Vote-Panel — tägliches Crew-Voting -->
+              <div class="v107-panel" role="tabpanel" data-panel="vote">
+                <div id="dailyVoting" style="padding:0 14px 14px"><p class="crew-empty">Heute noch kein Vote – sei die/der Erste ✨</p></div>
+              </div>
+              <div class="v107-panel" role="tabpanel" data-panel="quests">
                 <div id="crewQuestsList" style="padding:0 14px 14px"><p class="crew-empty">Quests laden …</p></div>
               </div>
               <div class="v107-panel" role="tabpanel" data-panel="contribs">
@@ -5635,27 +5705,12 @@ nav button.active .ni{animation:vNineCountPop .38s var(--ease-spring-soft) 1}
 
         <!-- ═══════════════════════════════════════ -->
         <!-- ZONE 1: QUICK ACTIONS — Sofort-Zugriff -->
+        <!-- v108: Standort/Safe + Chat + Drinks raus.
+                  Standort/Safe-Status sichtbar im Safety-Hub (QR-Glass-Button im Header).
+                  Chat lebt jetzt im Crew-Menü als erster Tab.
+                  Drinks ist über Profil-Features / spätere Season-Pass-Slots erreichbar. -->
         <!-- ═══════════════════════════════════════ -->
-        <div class="crew-actions">
-          <!-- v92: Safety-Block FIRST — Standort + Safe verbunden als eine Einheit -->
-          <div class="crew-safety-group" role="group" aria-label="Sicherheit">
-            <div class="crew-action-btn" onclick="openSafetyHub()" title="Standort & Privatsphäre">
-              <div class="cab-icon cab-location" style="position:relative">📍<span class="cab-live-dot" id="locLiveDot"></span></div>
-              <span>Standort</span>
-            </div>
-            <div class="crew-action-btn" onclick="sendSafeCheckIn()" title="Safe Check-In senden">
-              <div class="cab-icon cab-safe">✅</div>
-              <span>Safe</span>
-            </div>
-          </div>
-          <div class="crew-action-btn" onclick="openCrewChat()">
-            <div class="cab-icon cab-chat">💬</div>
-            <span>Chat</span>
-          </div>
-          <div class="crew-action-btn" onclick="openAlcoholTracker()">
-            <div class="cab-icon cab-drinks">🍺</div>
-            <span>Drinks</span>
-          </div>
+        <div class="crew-actions v108-actions-slim">
           <div class="crew-action-btn" onclick="openTaxiSplitter()">
             <div class="cab-icon cab-taxi">🚕</div>
             <span>Taxi</span>
@@ -5679,19 +5734,9 @@ nav button.active .ni{animation:vNineCountPop .38s var(--ease-spring-soft) 1}
           <div id="crewList"></div>
         </div>
 
-        <!-- ═══════════════════════════════════════ -->
-        <!-- v107: CREW VOTES — nur noch 1 Vote pro Tag, kollabierbar -->
-        <!-- ═══════════════════════════════════════ -->
-        <div class="crew-section highlight-section v107-votes" id="v107VoteSection">
-          <div class="crew-section-header v107-votes-hd" onclick="window.v107ToggleVotes&&window.v107ToggleVotes()" role="button" aria-expanded="true" aria-controls="dailyVoting">
-            <div class="csh-left"><span class="csh-emoji">🗳️</span><span class="csh-title">Crew Vote des Tages</span></div>
-            <div class="v107-menu-right">
-              <span class="csh-badge vote-badge">TÄGLICH</span>
-              <span class="v107-chev" id="v107VotesChev" aria-hidden="true">▾</span>
-            </div>
-          </div>
-          <div id="dailyVoting"><p class="crew-empty">Heute noch kein Vote – sei die/der Erste ✨</p></div>
-        </div>
+        <!-- v108: Standalone Vote-Section entfernt — Vote ist jetzt zweiter Tab im Crew-Menü.
+             Wrapper bleibt als verstecktes Fallback-Element, falls älterer Code darauf zugreift. -->
+        <div id="v107VoteSection" style="display:none"></div>
 
         <!-- v107: Leaderboard ist jetzt Teil des Crew-Menü-Tabs "Board" (weiter oben). -->
         <!-- v105: Crew-Challenges sind jetzt Weekly-Quests und Teil des neuen Crew-Level-Systems (siehe crewLevelHero weiter oben). -->
@@ -8444,6 +8489,15 @@ async function _loadCommunityUsers(){
 
 async function _renderCommunityLayer(map, storeKey){
   if(!map) return;
+  // v108: Community-Layer nicht mehr auf Crew-Map —
+  // auf der Crew-Karte dürfen nur Crew-Mitglieder erscheinen.
+  if(storeKey === 'crew'){
+    if(_crewCommunityLayer){
+      try{ map.removeLayer(_crewCommunityLayer); }catch(e){}
+      _crewCommunityLayer = null;
+    }
+    return 0;
+  }
   var users = await _loadCommunityUsers();
   var layer = L.layerGroup();
   users.forEach(function(u){
@@ -8875,7 +8929,8 @@ var _crewProfiles = []; // cached crew profiles for reuse
 async function buildCrewList(){
   var el=document.getElementById('crewList');if(!el)return;
   try{
-    var ids=await getActiveCrewMemberIds();
+    // v108: Self einschließen — du siehst dich in "Deine Crew" selbst auch.
+    var ids=await getActiveCrewMemberIdsWithSelf();
     if(!ids||ids.length===0){
       el.innerHTML='<div class="crew-empty-state"><div class="crew-empty-icon">👯‍♂️</div><div class="crew-empty-title">Deine Crew wartet!</div><div class="crew-empty-desc">Lade deine Freunde ein oder teile den Invite-Code — zusammen macht Malle mehr Spaß!</div><button class="crew-empty-btn" onclick="inviteCrew()">📲 Crew einladen</button></div>';
       document.getElementById('crewCount').textContent='0/'+CREW_MAX;
@@ -8913,12 +8968,15 @@ async function buildCrewList(){
         dist=d<1?Math.round(d*1000)+'m':d.toFixed(1)+'km';
       }
       var isPoked=pokedToday[p.user_id];
-      html+='<div class="crew-card" onclick="openCrewProfile(\''+p.user_id+'\')">';
+      // v108: Self-Card — markieren und Ping-Button ersetzen durch "Du"-Badge.
+      var isSelf = (ME && ME.user_id && p.user_id === ME.user_id);
+      var cardClick = isSelf ? 'go(\'profile\')' : ('openCrewProfile(\''+p.user_id+'\')');
+      html+='<div class="crew-card'+(isSelf?' v108-self-card':'')+'" onclick="'+cardClick+'">';
       // Avatar with status dot
       html+='<div class="cc-ava-wrap"><div class="cc-ava"><img src="'+(p.photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&q=80')+'" loading="lazy"></div><div class="cc-status '+status+'"></div></div>';
       // Info block
       html+='<div class="cc-info">';
-      html+='<div class="cc-name">'+(p.mood?'<span class="cc-mood">'+p.mood+'</span>':'')+esc(p.name)+(p.age?', '+p.age:'')+'</div>';
+      html+='<div class="cc-name">'+(p.mood?'<span class="cc-mood">'+p.mood+'</span>':'')+esc(p.name)+(p.age?', '+p.age:'')+(isSelf?' <span class="v108-self-pill">DU</span>':'')+'</div>';
       html+='<div class="cc-meta">';
       html+='<span class="cc-rank-tag" style="background:rgba(255,255,255,.06);color:'+rank.color+'">'+rank.emoji+' '+rank.title+'</span>';
       if(p.streak&&p.streak>0)html+='<span class="cc-streak">🔥 '+p.streak+'</span>';
@@ -8927,10 +8985,14 @@ async function buildCrewList(){
       if(hasLoc||p.club)html+='<div class="cc-loc-mini">'+(dist?'📍 '+dist+(p.club?' · ':''):'')+(p.club?'⚽ '+esc(p.club):'')+'</div>';
       if(p.lat&&p.lng&&isLocationStale(p.location_updated_at))html+='<div class="cc-loc-mini" style="color:var(--yellow);font-size:10px">⚠️ Standort veraltet</div>';
       html+='</div>';
-      // Right side — points + poke
+      // Right side — points + poke (oder Self-Label)
       html+='<div class="cc-right">';
       html+='<div class="cc-pts">'+(p.points||0)+'</div><div class="cc-pts-label">✨ Aura</div>';
-      html+='<button class="cc-poke'+(isPoked?' poked':'')+'" onclick="event.stopPropagation();pokeCrewMember(\''+p.user_id+'\',\''+esc(p.name)+'\')">'+(isPoked?'✓ Gepingt':'👋 Ping')+'</button>';
+      if(isSelf){
+        html+='<div class="cc-poke v108-self-hint" style="background:rgba(255,214,10,.12);color:#FFD60A;cursor:default" onclick="event.stopPropagation()">Das bist du</div>';
+      } else {
+        html+='<button class="cc-poke'+(isPoked?' poked':'')+'" onclick="event.stopPropagation();pokeCrewMember(\''+p.user_id+'\',\''+esc(p.name)+'\')">'+(isPoked?'✓ Gepingt':'👋 Ping')+'</button>';
+      }
       html+='</div></div>';
     });
     html+='</div>';
@@ -9494,6 +9556,17 @@ function getMyCrewCount(){return _myCrewMemberships.length}
 
 // Helper: Get all member user_ids of the active crew (excluding self)
 var _activeCrewMemberIds=[];
+// v108: Variante, die die eigene user_id mit einschließt.
+// Für "Deine Crew"-Liste im Crew-Tab — User möchte sich selbst auch sehen.
+async function getActiveCrewMemberIdsWithSelf(){
+  var crewId=getActiveCrewId();
+  if(!crewId) return [];
+  try{
+    var {data}=await sb.from('crew_members').select('user_id').eq('crew_id',crewId);
+    if(!data) return [];
+    return data.map(function(m){return m.user_id});
+  }catch(e){console.error('getActiveCrewMemberIdsWithSelf error:',e);return []}
+}
 async function getActiveCrewMemberIds(){
   var crewId=getActiveCrewId();
   if(!crewId){_activeCrewMemberIds=[];return []}
@@ -9531,6 +9604,8 @@ async function joinCrew(crewId){
     // Set as active if first crew
     if(_myCrewMemberships.length===1)setActiveCrewId(crewId);
     try{ if(typeof updateQuickStats==='function') updateQuickStats(); }catch(e){}
+    // v108: Auto-Quest-Hook — echte Einladung angenommen
+    try{ if(typeof window.crewEvent === 'function') window.crewEvent('invite_accepted', {crew_id:crewId}); }catch(e){}
     return true;
   }catch(e){console.error('[CREW] join failed:',e);toast('Fehler beim Beitreten.');return false}
 }
@@ -11270,15 +11345,18 @@ async function loadChatMessages(crewId){
 }
 
 async function buildMiniChat(){
-  var sec=document.getElementById('miniChatSection');
+  // v108: miniChatSection ist nur noch legacy (hidden).
+  // Die eigentliche Preview lebt im Chat-Tab des v107-Crew-Menüs (#miniChatPreview).
   var el=document.getElementById('miniChatPreview');
-  if(!sec||!el)return;
+  if(!el)return;
   var crewId=getActiveCrewId();
-  if(!crewId){sec.style.display='none';return}
+  if(!crewId){ el.innerHTML=''; return; }
   try{
     var {data:msgs,error:msgErr}=await sb.from('crew_chat_messages').select('user_id,user_name,user_photo,message,created_at').eq('crew_id',crewId).order('created_at',{ascending:false}).limit(3);
-    if(msgErr||!msgs||msgs.length===0){sec.style.display='none';return}
-    sec.style.display='block';
+    if(msgErr||!msgs||msgs.length===0){
+      el.innerHTML='<div style="padding:8px 4px;font-size:12px;color:var(--t3);font-weight:600">Noch keine Nachrichten — schreib deiner Crew ✨</div>';
+      return;
+    }
     var html='';
     msgs.reverse().forEach(function(m){
       if(isBlocked(m.user_id))return;
@@ -11297,10 +11375,9 @@ async function buildMiniChat(){
       html+='<div class="mini-chat-time">'+time+'</div>';
       html+='</div>';
     });
-    html+='<div class="mini-chat-more">Chat öffnen →</div>';
     el.innerHTML=html;
   }catch(e){
-    sec.style.display='none';
+    el.innerHTML='';
   }
 }
 
@@ -17876,9 +17953,11 @@ window.playCrewJoinCinema = async function(crew, opts){
       var pct = Math.min(100, Math.round((cur/q.target)*100));
       var done = !!p.completed_at || cur >= q.target;
       var cls = done ? 'v105-quest done' : 'v105-quest';
+      // v108: Kein manueller „+1"-Button mehr. Fortschritt zählt automatisch
+      // bei echten Events (Match, Invite, Vote, Chat, Safe, ...).
       var cta = done
         ? '<button class="v105-quest-cta" disabled>✅ Geschafft — +'+q.reward+' XP</button>'
-        : '<button class="v105-quest-cta" onclick="window.v105ProgressQuest(\''+q.id+'\',1)">+1 Fortschritt eintragen</button>';
+        : '';
       return '<div class="'+cls+'">'+
         '<div class="v105-quest-hd">'+
           '<div class="v105-quest-ic">'+q.icon+'</div>'+
@@ -17895,7 +17974,8 @@ window.playCrewJoinCinema = async function(crew, opts){
         cta+
       '</div>';
     }).join('');
-    el.innerHTML = html || '<p class="crew-empty">Keine Quests für diese Woche.</p>';
+    var autoHint = '<div class="v108-auto-hint"><span class="v108-auto-hint-ic">⚡</span><span>Quests laufen automatisch — jede echte Aktion (Match, Einladung, Vote, Chat, Safe) zählt in Echtzeit.</span></div>';
+    el.innerHTML = (html || '<p class="crew-empty">Keine Quests für diese Woche.</p>') + autoHint;
   }
   window.loadCrewQuests = loadCrewQuests;
 
@@ -18253,7 +18333,7 @@ window.playCrewJoinCinema = async function(crew, opts){
 (function(){
   'use strict';
 
-  // --- Crew-Menü (Quests / Contribs / Feed / Leader) Tabs ------------------
+  // --- Crew-Menü (Chat / Vote / Quests / Top / Feed / Board) Tabs ----------
   window.v107SwitchTab = function(tab){
     try{
       var menu = document.getElementById('v107CrewMenu'); if(!menu) return;
@@ -18267,9 +18347,15 @@ window.playCrewJoinCinema = async function(crew, opts){
       for(var j=0;j<panels.length;j++){
         panels[j].classList.toggle('active', panels[j].getAttribute('data-panel') === tab);
       }
-      // Leaderboard erst bei Bedarf laden (war vorher eine separate Section)
+      // v108: Lazy-Load pro Tab — jeder Tab frischt seine Daten beim Aktivieren
       if(tab === 'leader' && typeof window.loadLeaderboard === 'function'){
         try{ window.loadLeaderboard(); }catch(e){}
+      } else if(tab === 'chat' && typeof buildMiniChat === 'function'){
+        try{ buildMiniChat(); }catch(e){}
+      } else if(tab === 'vote' && typeof buildDailyVoting === 'function'){
+        try{ buildDailyVoting(); }catch(e){}
+      } else if(tab === 'quests' && typeof window.loadCrewQuests === 'function'){
+        try{ window.loadCrewQuests(); }catch(e){}
       }
     }catch(e){ console.warn('[v107] switchTab', e); }
   };
@@ -18398,7 +18484,7 @@ window.playCrewJoinCinema = async function(crew, opts){
   console.log('[v107] UI-Handler geladen — Tabs, Votes-Collapse, Own-Loc aktiv');
 })();
 
-if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js?v=19').catch(function(){});
+if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js?v=20').catch(function(){});
 </script>
 </body>
 </html>
