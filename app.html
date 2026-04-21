@@ -3856,7 +3856,7 @@ nav button.active .ni{animation:vNineCountPop .38s var(--ease-spring-soft) 1}
     <div class="cc-field"><div class="cc-field-label">Gruppenbild (optional)</div><div style="padding:16px;border-radius:14px;border:2px dashed rgba(255,255,255,.1);text-align:center;cursor:pointer" id="ccGroupPhotoPick" onclick="document.getElementById('ccGroupPhotoFile').click()"><div style="font-size:22px;margin-bottom:2px">📸</div><div style="font-size:11px;color:var(--t3)">Gruppenbild hochladen</div><input type="file" id="ccGroupPhotoFile" accept="image/*" style="display:none" onchange="previewGroupPhoto(this)"></div></div>
     <div class="cc-field"><div class="cc-field-label">Crew-Icon</div><div class="cc-icon-grid" id="ccIconGrid"></div></div>
     <div class="cc-field"><div class="cc-field-label">Sichtbarkeit</div><select id="ccVisibility"><option value="public">🌍 Öffentlich — Alle können euch finden</option><option value="private">🔒 Privat — Nur per Einladung</option></select></div>
-    <div class="cc-btns"><button class="cc-btn cancel" onclick="closeCrewCreate()">Abbrechen</button><button class="cc-btn create" onclick="submitCrewCreate()">Crew gründen</button></div>
+    <div class="cc-btns"><button class="cc-btn cancel" onclick="closeCrewCreate()">Abbrechen</button><button class="cc-btn create" id="ccSubmitBtn" onclick="submitCrewCreate()">Crew gründen</button></div>
   </div>
 </div>
 
@@ -9109,6 +9109,15 @@ window.openCrewCreate=function(){
       return '<div class="cc-icon-opt'+(ic===_ccSelectedIcon?' sel':'')+'" onclick="selectCrewIcon(this,\''+ic+'\')">'+ic+'</div>';
     }).join('');
   }
+  // v101: Submit-Button-State defensiv resetten (falls vorheriger Submit hängen blieb)
+  window._crewCreateBusy = false;
+  var _submitBtn = document.getElementById('ccSubmitBtn');
+  if(_submitBtn){
+    _submitBtn.disabled = false;
+    _submitBtn.style.opacity = '';
+    _submitBtn.style.pointerEvents = '';
+    _submitBtn.textContent = 'Crew gründen';
+  }
   ov.classList.add('show');
 };
 
@@ -9144,51 +9153,140 @@ window.previewGroupPhoto=function(input){
   reader.readAsDataURL(input.files[0]);
 };
 
+// v101: Helper — echte UUID statt 'crew_xxx_timestamp' (DB-Spalte ist UUID!)
+function _newUuid(){
+  try{ if(typeof crypto!=='undefined' && crypto.randomUUID) return crypto.randomUUID(); }catch(e){}
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,function(c){
+    var r=(Math.random()*16)|0, v=c==='x'?r:((r&0x3)|0x8);
+    return v.toString(16);
+  });
+}
+
+// v101: Anti-Spam — globaler Lock verhindert Mehrfach-Submit beim Gründen
+window._crewCreateBusy = false;
+
 window.submitCrewCreate=async function(){
-  var name=(document.getElementById('ccName').value||'').trim();
-  if(!name){toast('Gib deiner Crew einen Namen!');return}
-  if(name.length<2){toast('Mindestens 2 Zeichen!');return}
-  if(!canJoinMoreCrews()){
-    var isPremium=localStorage.getItem('is_premium')==='true';
-    toast(isPremium?'Max '+CREW_LIMITS.premium+' Crews erreicht!':'Upgrade auf Premium für mehr Crews! 👑');
-    return;
+  // v101: Guard gegen Mehrfach-Klicks (Bug-Fix: hängt sich kurz auf → User klickt mehrfach → mehrere Crews)
+  if(window._crewCreateBusy){ return; }
+  window._crewCreateBusy = true;
+  var submitBtn = document.getElementById('ccSubmitBtn');
+  var origBtnTxt = submitBtn ? submitBtn.textContent : '';
+  if(submitBtn){
+    submitBtn.disabled = true;
+    submitBtn.style.opacity = '.6';
+    submitBtn.style.pointerEvents = 'none';
+    submitBtn.textContent = '⏳ Wird gegründet…';
   }
-  var bio=(document.getElementById('ccBio').value||'').trim();
-  var motto=(document.getElementById('ccMotto').value||'').trim()||'Auf nach Malle!';
-  var hometown=(document.getElementById('ccHometown').value||'').trim();
-  var visibility=document.getElementById('ccVisibility').value||'public';
-  var whatWeDo=(document.getElementById('ccWhatWeDo').value||'').trim();
-  var whatMakesUs=(document.getElementById('ccWhatMakesUs').value||'').trim();
 
-  var invCode=generateInviteCode();
-  var crewId='crew_'+ME.user_id+'_'+Date.now();
+  var unlock = function(){
+    window._crewCreateBusy = false;
+    if(submitBtn){
+      submitBtn.disabled = false;
+      submitBtn.style.opacity = '';
+      submitBtn.style.pointerEvents = '';
+      submitBtn.textContent = origBtnTxt || 'Crew gründen';
+    }
+  };
 
-  // Save crew directly to Supabase
   try{
-    await saveCrewToDb({
+    var name=(document.getElementById('ccName').value||'').trim();
+    if(!name){toast('Gib deiner Crew einen Namen!');unlock();return}
+    if(name.length<2){toast('Mindestens 2 Zeichen!');unlock();return}
+    if(!canJoinMoreCrews()){
+      var isPremium=localStorage.getItem('is_premium')==='true';
+      toast(isPremium?'Max '+CREW_LIMITS.premium+' Crews erreicht!':'Upgrade auf Premium für mehr Crews! 👑');
+      unlock();return;
+    }
+    var bio=(document.getElementById('ccBio').value||'').trim();
+    var motto=(document.getElementById('ccMotto').value||'').trim()||'Auf nach Malle!';
+    var hometown=(document.getElementById('ccHometown').value||'').trim();
+    var visibility=document.getElementById('ccVisibility').value||'public';
+    var whatWeDo=(document.getElementById('ccWhatWeDo').value||'').trim();
+    var whatMakesUs=(document.getElementById('ccWhatMakesUs').value||'').trim();
+
+    var invCode=generateInviteCode();
+    // v101 FIX: echte UUID (DB-Spalte crews.id ist UUID!) statt 'crew_xxx_ts' — sonst wird
+    // das Insert still abgelehnt, setActiveCrewId rejectet die Nicht-UUID und die App zeigt
+    // die erste Crew aus Memberships (= falsche Zentrale).
+    var crewId = _newUuid();
+
+    var payload = {
       id:crewId,created_by:ME.user_id,name:name,bio:bio,motto:motto,icon:_ccSelectedIcon,
       photo_url:_ccPhotoData||'',group_photo:_ccGroupPhotoData||'',visibility:visibility,
       members:1,aura:0,hometown:hometown,malle_visits:1,
       founded:new Date().toISOString().split('T')[0],
       what_we_do:whatWeDo,what_makes_us:whatMakesUs,tags:[],
       status:'pending',invite_code:invCode
-    });
-    // Add creator as owner in crew_members
-    await sb.from('crew_members').upsert({crew_id:crewId,user_id:ME.user_id,role:'owner'},{onConflict:'crew_id,user_id'});
-    // Refresh data
+    };
+
+    // Insert crew — wenn es fehlschlägt, abbrechen (nicht so tun als wärs gut gegangen)
+    var ins = null;
+    try{
+      ins = await sb.from('crews').insert(payload).select().single();
+    }catch(e){ ins = {error:e}; }
+    if(ins && ins.error){
+      console.error('[CREW] create failed:',ins.error);
+      toast('Fehler beim Erstellen: '+(ins.error.message||'unbekannt'));
+      unlock();return;
+    }
+    // Falls DB eine andere UUID generiert hat (z. B. aus irgendeinem Grund), die offizielle ID nehmen
+    if(ins && ins.data && ins.data.id){ crewId = ins.data.id; }
+
+    // Owner-Membership anlegen
+    var memRes = await sb.from('crew_members').upsert(
+      {crew_id:crewId,user_id:ME.user_id,role:'owner'},
+      {onConflict:'crew_id,user_id'}
+    );
+    if(memRes && memRes.error){
+      console.error('[CREW] member insert failed:',memRes.error);
+      toast('Crew erstellt, aber Mitgliedschaft hakt: '+(memRes.error.message||''));
+    }
+
+    // Vollständiger State-Refresh auf die neue Crew
     await fetchAllCrews();
     await loadMyCrewMemberships();
     setActiveCrewId(crewId);
-    updateCrewIdentityCard();
-    updateCrewGate();
-    buildCrewSwitcher();
+
+    // WICHTIG für die richtige Zentrale: ALLE Crew-Views refreshen, nicht nur identity
+    try{ updateCrewIdentityCard(); }catch(e){}
+    try{ if(typeof updateCrewDetailHdr==='function') updateCrewDetailHdr(); }catch(e){}
+    try{ updateCrewGate(); }catch(e){}
+    try{ buildCrewSwitcher(); }catch(e){}
+    try{ if(typeof buildCrewStatus==='function') buildCrewStatus(); }catch(e){}
+    try{ if(typeof buildCrewList==='function') buildCrewList().then(function(){ try{ if(typeof buildCrewActivityFeed==='function') buildCrewActivityFeed(); }catch(e){} }); }catch(e){}
+    try{ if(typeof buildCrewLocations==='function') buildCrewLocations(); }catch(e){}
+    try{ if(typeof buildMiniChat==='function') buildMiniChat(); }catch(e){}
+    try{ if(typeof buildDailyVoting==='function') buildDailyVoting(); }catch(e){}
+    try{ if(typeof buildLeaderboard==='function') buildLeaderboard(); }catch(e){}
+    try{ if(typeof buildChallenges==='function') buildChallenges(); }catch(e){}
+    try{ renderCrewBoard(); }catch(e){}
+
     closeCrewCreate();
-    toast('Crew „'+name+'" gegründet! Code: '+invCode+' ⏳');
     if(navigator.vibrate)navigator.vibrate([10,80,10,80,10]);
-    renderCrewBoard();
+
+    // Cinema statt stummem Toast — zeigt die frisch gegründete Crew mit Confetti
+    try{
+      if(typeof playCrewJoinCinema === 'function'){
+        playCrewJoinCinema(payload, {
+          memberCount: 1,
+          topMembers: [],
+          onContinue: function(){
+            try{ go('crew'); }catch(e){}
+            try{ setTimeout(function(){ if(typeof crewGo==='function') crewGo('active'); },140); }catch(e){}
+          }
+        });
+      } else {
+        toast('Crew „'+name+'" gegründet! Code: '+invCode+' 🏴‍☠️');
+      }
+    }catch(e){
+      toast('Crew „'+name+'" gegründet! Code: '+invCode+' 🏴‍☠️');
+    }
+
   }catch(e){
     console.error('[CREW] create failed:',e);
     toast('Fehler beim Erstellen der Crew.');
+  } finally {
+    unlock();
   }
 };
 
@@ -14410,7 +14508,7 @@ window.playCrewJoinCinema = async function(crew, opts){
   window.PTR = PTR;
 })();
 
-if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js?v=12').catch(function(){});
+if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js?v=13').catch(function(){});
 </script>
 </body>
 </html>
