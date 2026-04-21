@@ -2896,6 +2896,17 @@ nav{padding-bottom:max(6px,env(safe-area-inset-bottom)) !important}
     <rect x="3" y="14" width="7" height="7" rx="1"/>
     <path d="M14 14h3v3h-3zM20 14h1M14 20h1M20 17h1v4h-4v-1"/>
   </symbol>
+  <symbol id="i-qr-glass" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Glas-Kästchen (Rahmen) -->
+    <rect x="3" y="3" width="18" height="18" rx="3.5"/>
+    <!-- Leichter Glas-Glanz oben -->
+    <path d="M5.5 5.5 L8 5.5" stroke-width="1.2" opacity="0.6"/>
+    <!-- QR-Muster innen (Finder-Patterns + Datenblocks) -->
+    <rect x="6" y="6" width="3" height="3" rx="0.6" stroke-width="1.4"/>
+    <rect x="15" y="6" width="3" height="3" rx="0.6" stroke-width="1.4"/>
+    <rect x="6" y="15" width="3" height="3" rx="0.6" stroke-width="1.4"/>
+    <path d="M11 6h1v1h-1zM13 7h1v1h-1zM12 10h1v1h-1zM15 11h1v1h-1zM17 13h1v1h-1zM11 14h1v1h-1zM13 16h1v1h-1zM15 18h1v1h-1z" stroke-width="0" fill="currentColor"/>
+  </symbol>
   <symbol id="i-trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
     <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
@@ -3605,6 +3616,213 @@ nav button.active .ni{animation:vNineCountPop .38s var(--ease-spring-soft) 1}
 @media (prefers-reduced-motion:reduce){
   .lvl-card,.lvl-star,.v102-ripple,.v102-lucky-burst,.streak-badge.v102-on{animation:none!important;transform:none!important;opacity:1!important}
   .v102-stagger > *{animation:none!important;opacity:1!important;transform:none!important}
+}
+
+/* ============================================
+   v103 — UI-Rework: Level-Button, Streak-dezent,
+   QR-Hub (Glas-Kästchen), Safety-readable,
+   Success-Checkmark, Daily Quest, Return-Welcome
+   ============================================ */
+
+/* Streak dezenter — kleiner, weniger glow, bei <3 Tagen gedämpft */
+.streak-badge.v102-on{
+  padding:3px 8px 3px 6px!important;
+  gap:3px!important;
+  font-size:10px!important;
+  background:linear-gradient(135deg,rgba(255,214,10,.10),rgba(255,109,46,.06))!important;
+  border:1px solid rgba(255,214,10,.18)!important;
+  box-shadow:0 0 0 0 transparent!important;
+  animation:none!important;
+  opacity:.78;
+}
+.streak-badge.v102-on svg{width:10px!important;height:10px!important}
+.streak-badge.v102-on:hover,.streak-badge.v102-on:active{opacity:1}
+.streak-badge.v102-hot{
+  background:linear-gradient(135deg,rgba(255,109,46,.18),rgba(255,59,48,.10))!important;
+  border-color:rgba(255,109,46,.34)!important;
+  box-shadow:0 0 10px rgba(255,109,46,.22)!important;
+  opacity:1!important;
+  animation:streakPulseSoft 2.4s ease-in-out infinite!important;
+}
+@keyframes streakPulseSoft{
+  0%,100%{box-shadow:0 0 8px rgba(255,109,46,.22)}
+  50%{box-shadow:0 0 14px rgba(255,109,46,.34)}
+}
+
+/* Level-Button (im Profil-Menü) */
+.v103-lvl-btn{
+  display:flex;align-items:center;gap:12px;
+  width:100%;padding:14px 16px;margin-bottom:8px;
+  border:none;background:linear-gradient(135deg,rgba(255,109,46,.14),rgba(255,214,10,.06));
+  border:1px solid rgba(255,109,46,.26);
+  border-radius:16px;cursor:pointer;color:#fff;font-family:inherit;text-align:left;
+  transition:transform .18s var(--ease-out), box-shadow .2s;
+  box-shadow:0 4px 16px rgba(255,109,46,.10);
+}
+.v103-lvl-btn:active{transform:scale(.98)}
+.v103-lvl-btn:hover{box-shadow:0 6px 22px rgba(255,109,46,.18)}
+.v103-lvl-star{
+  width:44px;height:44px;border-radius:12px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:22px;
+  background:linear-gradient(135deg,var(--o,#FF6D2E),#C93A7A);
+  color:#fff;font-weight:900;letter-spacing:-1px;
+  box-shadow:0 4px 14px rgba(255,109,46,.4),inset 0 1px 0 rgba(255,255,255,.2);
+}
+.v103-lvl-info{flex:1;min-width:0}
+.v103-lvl-label{font-size:10px;font-weight:800;color:var(--o,#FF6D2E);text-transform:uppercase;letter-spacing:1px;margin-bottom:2px}
+.v103-lvl-bignum{font-size:18px;font-weight:900;color:#fff;letter-spacing:-.3px;line-height:1}
+.v103-lvl-progress{margin-top:8px;height:4px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden}
+.v103-lvl-progress > i{display:block;height:100%;background:linear-gradient(90deg,var(--o,#FF6D2E),#FFD60A);border-radius:3px;transition:width .6s var(--ease-spring-soft);box-shadow:0 0 8px rgba(255,214,10,.4)}
+.v103-lvl-next{font-size:11px;color:var(--t3);margin-top:4px;font-weight:600}
+.v103-lvl-arrow{color:var(--o,#FF6D2E);font-size:20px;font-weight:900;flex-shrink:0}
+
+/* Level-Badge auf fremden Profilen */
+.v103-lvl-chip-big{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:5px 11px;border-radius:999px;
+  background:linear-gradient(135deg,var(--o,#FF6D2E),#C93A7A);
+  color:#fff;font-size:10px;font-weight:900;letter-spacing:.6px;
+  box-shadow:0 3px 10px rgba(255,109,46,.35),inset 0 1px 0 rgba(255,255,255,.15);
+  text-transform:uppercase;
+}
+
+/* Level-Detail-Modal */
+.v103-lvl-modal{
+  position:fixed;inset:0;z-index:99986;display:none;align-items:center;justify-content:center;
+  background:rgba(5,5,7,.72);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  padding:20px;
+}
+.v103-lvl-modal.show{display:flex;animation:lvlFadeIn .25s var(--ease-out)}
+.v103-lvl-modal-card{
+  width:100%;max-width:340px;padding:28px 24px 20px;
+  background:linear-gradient(180deg,rgba(30,22,18,.95),rgba(14,10,12,.98));
+  border:1px solid rgba(255,109,46,.24);
+  border-radius:24px;
+  box-shadow:0 24px 80px rgba(0,0,0,.7);
+  text-align:center;
+}
+.v103-lvl-modal-star{font-size:56px;margin-bottom:4px;display:inline-block;
+  filter:drop-shadow(0 6px 24px rgba(255,214,10,.35))}
+.v103-lvl-modal-title{font-size:11px;font-weight:900;color:var(--o);text-transform:uppercase;letter-spacing:2px}
+.v103-lvl-modal-num{font-size:72px;font-weight:900;background:linear-gradient(135deg,var(--o,#FF6D2E),#FFD60A);-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:-3px;line-height:1;margin:4px 0 12px}
+.v103-lvl-modal-sub{font-size:13px;color:var(--t2);margin-bottom:18px;line-height:1.5}
+.v103-lvl-modal-bar-wrap{height:8px;border-radius:5px;background:rgba(255,255,255,.08);overflow:hidden;margin-bottom:8px}
+.v103-lvl-modal-bar{height:100%;background:linear-gradient(90deg,var(--o),#FFD60A);border-radius:5px;transition:width .7s var(--ease-spring-soft);box-shadow:0 0 10px rgba(255,214,10,.4)}
+.v103-lvl-modal-hint{font-size:11px;color:var(--t3);font-weight:700}
+.v103-lvl-modal-close{width:100%;padding:14px;margin-top:20px;border:none;border-radius:14px;background:linear-gradient(135deg,var(--o,#FF6D2E),#C93A7A);color:#fff;font-size:14px;font-weight:900;cursor:pointer;font-family:inherit;box-shadow:0 6px 20px rgba(255,109,46,.35)}
+.v103-lvl-modal-close:active{transform:scale(.97)}
+
+/* QR-Safety-Hub Overlay */
+.v103-hub-ov{
+  position:fixed;inset:0;z-index:99984;display:none;align-items:flex-end;
+  background:rgba(5,5,7,.68);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+}
+.v103-hub-ov.show{display:flex;animation:lvlFadeIn .22s var(--ease-out)}
+.v103-hub-sheet{
+  width:100%;border-radius:24px 24px 0 0;
+  background:linear-gradient(180deg,rgba(22,18,16,.98),rgba(8,6,10,.99));
+  border-top:1px solid rgba(255,255,255,.10);
+  padding:16px 16px 24px;
+  max-height:86vh;overflow-y:auto;
+  animation:v103SheetUp .42s var(--ease-spring-soft);
+  box-shadow:0 -20px 60px rgba(0,0,0,.7);
+}
+@keyframes v103SheetUp{
+  0%{transform:translateY(100%);opacity:0}
+  100%{transform:translateY(0);opacity:1}
+}
+.v103-hub-handle{width:40px;height:4px;border-radius:2px;background:rgba(255,255,255,.22);margin:0 auto 14px}
+.v103-hub-title{font-size:17px;font-weight:900;letter-spacing:-.2px;margin-bottom:4px;text-align:center}
+.v103-hub-sub{font-size:12px;color:var(--t3);text-align:center;margin-bottom:18px}
+.v103-hub-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.v103-hub-tile{
+  padding:18px 14px;border-radius:16px;cursor:pointer;
+  background:var(--glass);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  border:1px solid var(--glass-border);
+  text-align:center;position:relative;
+  transition:transform .18s var(--ease-out);
+  min-height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+}
+.v103-hub-tile:active{transform:scale(.96)}
+.v103-hub-tile[data-k="qr-me"]{background:linear-gradient(135deg,rgba(255,214,10,.10),rgba(255,214,10,.02));border-color:rgba(255,214,10,.26)}
+.v103-hub-tile[data-k="qr-crew"]{background:linear-gradient(135deg,rgba(255,109,46,.12),rgba(255,109,46,.02));border-color:rgba(255,109,46,.28)}
+.v103-hub-tile[data-k="safety"]{background:linear-gradient(135deg,rgba(52,199,89,.10),rgba(52,199,89,.02));border-color:rgba(52,199,89,.26)}
+.v103-hub-tile[data-k="settings"]{background:linear-gradient(135deg,rgba(191,90,242,.10),rgba(191,90,242,.02));border-color:rgba(191,90,242,.26)}
+.v103-hub-ic{width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:22px}
+.v103-hub-ic svg{width:28px;height:28px}
+.v103-hub-lbl{font-size:13px;font-weight:800;color:var(--t);letter-spacing:-.1px}
+.v103-hub-desc{font-size:10px;font-weight:600;color:var(--t3);line-height:1.3}
+.v103-hub-close{width:100%;padding:13px;margin-top:14px;border:none;border-radius:14px;background:rgba(255,255,255,.06);color:var(--t2);font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;border:1px solid var(--glass-border)}
+.v103-hub-close:active{transform:scale(.97)}
+
+/* Success-Checkmark (Spinner → Check morph) */
+.v103-check-morph{
+  width:52px;height:52px;border-radius:50%;margin:0 auto 10px;
+  background:linear-gradient(135deg,var(--green,#34C759),#30D158);
+  display:flex;align-items:center;justify-content:center;
+  animation:v103CheckIn .55s var(--ease-bounce);
+  box-shadow:0 6px 20px rgba(52,199,89,.4);
+}
+@keyframes v103CheckIn{
+  0%{transform:scale(.3) rotate(-60deg);opacity:0}
+  60%{transform:scale(1.1) rotate(8deg);opacity:1}
+  100%{transform:scale(1) rotate(0);opacity:1}
+}
+.v103-check-morph svg{width:30px;height:30px;color:#fff;stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.v103-check-morph svg polyline{stroke-dasharray:30;stroke-dashoffset:30;animation:v103CheckDraw .4s .18s var(--ease-out) forwards}
+@keyframes v103CheckDraw{to{stroke-dashoffset:0}}
+
+/* Daily Quest Card */
+.v103-quest-card{
+  margin:0 14px 10px;padding:14px 16px;border-radius:16px;
+  background:linear-gradient(135deg,rgba(191,90,242,.14),rgba(255,109,46,.06));
+  border:1px solid rgba(191,90,242,.28);
+  display:flex;align-items:center;gap:12px;cursor:pointer;
+  position:relative;overflow:hidden;
+  transition:transform .18s var(--ease-out);
+}
+.v103-quest-card:active{transform:scale(.99)}
+.v103-quest-card.done{
+  background:linear-gradient(135deg,rgba(52,199,89,.14),rgba(52,199,89,.04));
+  border-color:rgba(52,199,89,.34);
+}
+.v103-quest-ic{font-size:28px;flex-shrink:0;width:46px;height:46px;display:flex;align-items:center;justify-content:center;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08)}
+.v103-quest-body{flex:1;min-width:0}
+.v103-quest-label{font-size:10px;font-weight:800;color:#BF5AF2;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px}
+.v103-quest-card.done .v103-quest-label{color:var(--green,#34C759)}
+.v103-quest-title{font-size:14px;font-weight:800;color:#fff;line-height:1.3}
+.v103-quest-prog{margin-top:7px;display:flex;align-items:center;gap:8px}
+.v103-quest-bar{flex:1;height:5px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden}
+.v103-quest-bar > i{display:block;height:100%;background:linear-gradient(90deg,#BF5AF2,#FF6D2E);border-radius:3px;transition:width .55s var(--ease-spring-soft)}
+.v103-quest-card.done .v103-quest-bar > i{background:linear-gradient(90deg,var(--green),#30D158)}
+.v103-quest-pct{font-size:11px;font-weight:800;color:var(--t2);flex-shrink:0}
+.v103-quest-reward{font-size:10px;font-weight:800;color:#FFD60A;margin-top:3px}
+
+/* Return-Welcome-Modal */
+.v103-rb-ov{position:fixed;inset:0;z-index:99987;display:none;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 40%,rgba(255,109,46,.22),rgba(5,5,7,.88) 65%);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);padding:20px}
+.v103-rb-ov.show{display:flex;animation:lvlFadeIn .3s var(--ease-out)}
+.v103-rb-card{max-width:340px;width:100%;padding:32px 24px 22px;border-radius:24px;text-align:center;
+  background:linear-gradient(180deg,rgba(30,22,18,.95),rgba(14,10,12,.98));
+  border:1px solid rgba(255,109,46,.3);
+  box-shadow:0 24px 80px rgba(0,0,0,.7),0 0 50px rgba(255,109,46,.18);
+  animation:lvlCardIn .6s var(--ease-bounce);
+}
+.v103-rb-emoji{font-size:68px;margin-bottom:4px;display:inline-block;animation:v103Wave 2s ease-in-out infinite}
+@keyframes v103Wave{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
+.v103-rb-title{font-size:22px;font-weight:900;margin:4px 0;letter-spacing:-.3px}
+.v103-rb-sub{font-size:13px;color:var(--t2);margin-bottom:20px;line-height:1.5}
+.v103-rb-stats{display:flex;gap:8px;margin-bottom:20px}
+.v103-rb-stat{flex:1;padding:12px 8px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08)}
+.v103-rb-stat-num{font-size:22px;font-weight:900;color:var(--o)}
+.v103-rb-stat-lbl{font-size:9px;font-weight:800;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+.v103-rb-bonus{padding:14px;border-radius:14px;background:linear-gradient(135deg,rgba(255,214,10,.15),rgba(255,109,46,.08));border:1px solid rgba(255,214,10,.3);margin-bottom:20px;font-size:13px;font-weight:800;color:#FFD60A}
+.v103-rb-btn{width:100%;padding:15px;border:none;border-radius:14px;background:linear-gradient(135deg,var(--o,#FF6D2E),#C93A7A);color:#fff;font-size:14px;font-weight:900;cursor:pointer;font-family:inherit;box-shadow:0 8px 24px rgba(255,109,46,.4)}
+.v103-rb-btn:active{transform:scale(.97)}
+
+@media (prefers-reduced-motion:reduce){
+  .v103-lvl-btn,.v103-hub-sheet,.v103-check-morph,.v103-rb-card,.v103-rb-emoji,.v103-quest-card{animation:none!important;transform:none!important}
+  .v103-check-morph svg polyline{animation:none!important;stroke-dashoffset:0!important}
+  .streak-badge.v102-hot{animation:none!important}
 }
 </style>
 
@@ -4327,7 +4545,7 @@ nav button.active .ni{animation:vNineCountPop .38s var(--ease-spring-soft) 1}
     <div class="hdr-actions">
       <div class="streak-badge" id="sBadge"><svg class="icn icn-fill" style="color:#FFD60A;width:11px;height:11px" viewBox="0 0 24 24"><use href="#i-flame"/></svg> <span id="sNum">0</span></div>
       <button class="hdr-btn hdr-home" onclick="openHomeSafe()" aria-label="Bring mich nach Hause"><svg class="icn" viewBox="0 0 24 24"><use href="#i-home-safe"/></svg><span class="hhl hhl-full">Bring mich nach Hause</span><span class="hhl hhl-mid">Nach Hause</span><span class="hhl hhl-short">Heim</span><span class="hdr-home-dot" id="hdrHomeDot"></span></button>
-      <button class="hdr-btn" onclick="openAlcoholTracker()" aria-label="Drinks"><svg class="icn" style="width:18px;height:18px" viewBox="0 0 24 24"><use href="#i-beer"/></svg></button>
+      <button class="hdr-btn v103-qr-btn" onclick="openQrSafetyHub()" aria-label="QR-Code &amp; Safety"><svg class="icn" style="width:19px;height:19px" viewBox="0 0 24 24"><use href="#i-qr-glass"/></svg></button>
       <button class="hdr-btn" onclick="openNoti()" aria-label="Benachrichtigungen"><svg class="icn" style="width:17px;height:17px" viewBox="0 0 24 24"><use href="#i-bell"/></svg><span class="notif-dot"></span></button>
     </div>
   </div>
@@ -15114,7 +15332,651 @@ window.playCrewJoinCinema = async function(crew, opts){
   console.log('[v102] Level up & Streak loaded');
 })();
 
-if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js?v=14').catch(function(){});
+// ============================================
+// v103 — UI-Rework: Level-Button, QR-Hub, Success-Check,
+// Daily Quests, Return-Detection, Notification-Batch,
+// Safety-Hub human-friendly Koordinaten
+// Alles ist additiv — keine v102-Funktion wird ersetzt, nur erweitert/neu platziert.
+// ============================================
+;(function(){
+  'use strict';
+
+  // ── Helpers ────────────────────────────────
+  function _esc(s){
+    try{ if(typeof esc === 'function') return esc(s); }catch(e){}
+    return String(s==null?'':s).replace(/[&<>"']/g, function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});
+  }
+  function _me(){ try{ return (typeof ME!=='undefined' && ME) ? ME : null; }catch(e){ return null; } }
+
+  // ── 1) Level-Chip aus Quick-Stats entfernen ──
+  // User-Feedback: "das lvl jetzt bei aura steht find ich zu viel"
+  try{
+    window.paintLevelInQuickStats = function(){
+      try{
+        var parent = document.getElementById('qsAura');
+        if(!parent) return;
+        var tile = parent.parentElement;
+        if(!tile) return;
+        var chip = tile.querySelector('.v102-lvl-chip');
+        if(chip && chip.parentNode){ chip.parentNode.removeChild(chip); }
+        var bar = tile.querySelector('.v102-lvl-bar');
+        if(bar && bar.parentNode){ bar.parentNode.removeChild(bar); }
+      }catch(e){}
+    };
+    window.paintLevelInQuickStats();
+  }catch(e){}
+
+  // ── 2) Level-Button im Profil-Menü ─────────
+  function paintLevelButtonInProfile(){
+    try{
+      var pmenu = document.querySelector('.pmenu');
+      if(!pmenu) return;
+      var me = _me();
+      var pts = (me && me.points) || 0;
+      var info = (typeof window.getLevelInfo==='function')
+        ? window.getLevelInfo(pts)
+        : {level:1,cur:0,next:50,progress:0,toNext:50};
+      var btn = pmenu.querySelector('.v103-lvl-btn');
+      if(!btn){
+        btn = document.createElement('div');
+        btn.className = 'v103-lvl-btn';
+        btn.setAttribute('role','button');
+        btn.setAttribute('tabindex','0');
+        btn.addEventListener('click', function(){ window.showLevelDetail((_me()&&_me().points)||0); });
+        btn.addEventListener('keydown', function(ev){
+          if(ev.key==='Enter' || ev.key===' '){ ev.preventDefault(); window.showLevelDetail((_me()&&_me().points)||0); }
+        });
+        pmenu.insertBefore(btn, pmenu.firstChild);
+      }
+      btn.innerHTML =
+        '<div class="v103-lvl-star">'+
+          '<svg viewBox="0 0 24 24" width="24" height="24" fill="#fff" stroke="none">'+
+            '<path d="M12 2l2.9 6.6 7.1.7-5.4 4.9 1.6 7L12 17.7 5.8 21.2l1.6-7L2 9.3l7.1-.7z"/>'+
+          '</svg>'+
+        '</div>'+
+        '<div class="v103-lvl-body">'+
+          '<div class="v103-lvl-top">'+
+            '<span class="v103-lvl-label">Dein Level</span>'+
+            '<span class="v103-lvl-num">LVL '+info.level+'</span>'+
+          '</div>'+
+          '<div class="v103-lvl-bar2"><i style="width:'+(info.progress*100).toFixed(1)+'%"></i></div>'+
+          '<div class="v103-lvl-hint">noch '+info.toNext+' Aura bis Level '+(info.level+1)+'</div>'+
+        '</div>'+
+        '<div class="v103-lvl-arr">›</div>';
+    }catch(e){}
+  }
+  window._v103PaintLevelBtn = paintLevelButtonInProfile;
+
+  // ── 3) Level-Detail-Modal ──────────────────
+  window.showLevelDetail = function(points){
+    try{
+      if(points==null){ var me = _me(); points = (me && me.points) || 0; }
+      var info = (typeof window.getLevelInfo==='function')
+        ? window.getLevelInfo(points)
+        : {level:1,progress:0,toNext:50};
+      var ov = document.getElementById('v103LvlOv');
+      if(!ov){
+        ov = document.createElement('div');
+        ov.id = 'v103LvlOv';
+        ov.className = 'v103-lvl-modal';
+        ov.addEventListener('click', function(ev){ if(ev.target===ov) window._v103CloseLvl(); });
+        document.body.appendChild(ov);
+      }
+      var msgs = {
+        1:'Dein Anfang. Jede Crew-Session zählt.',
+        2:'Die Crew erkennt dich. Weiter so.',
+        3:'Stamm-Vibe. Du bist sichtbar.',
+        4:'Respekt wächst. Die Crew feiert dich.',
+        5:'Maschinen-Modus. Du bist unterwegs.',
+        6:'Crew-Stammgast. Alle kennen dich.',
+        7:'Crew-Veteran. Du hältst den Vibe.',
+        8:'Legendäre Stufe. Kaum zu halten.',
+        9:'Fast unantastbar.',
+        10:'Ikone. Dein Gesicht kennt man.'
+      };
+      var msg = msgs[info.level] || ('Level '+info.level+' — deine Aura strahlt hell.');
+      ov.innerHTML =
+        '<div class="v103-lvl-card">'+
+          '<button class="v103-lvl-x" onclick="window._v103CloseLvl()" aria-label="Schließen">×</button>'+
+          '<div class="v103-lvl-big">⭐</div>'+
+          '<div class="v103-lvl-big-num">LVL '+info.level+'</div>'+
+          '<div class="v103-lvl-big-sub">'+_esc(msg)+'</div>'+
+          '<div class="v103-lvl-big-bar"><i style="width:'+(info.progress*100).toFixed(1)+'%"></i></div>'+
+          '<div class="v103-lvl-big-stats">'+
+            '<div><b>'+points+'</b><span>✨ Aura</span></div>'+
+            '<div><b>'+info.toNext+'</b><span>bis LVL '+(info.level+1)+'</span></div>'+
+          '</div>'+
+        '</div>';
+      requestAnimationFrame(function(){ ov.classList.add('show'); });
+    }catch(e){ console.warn('[v103] lvl detail err', e); }
+  };
+  window._v103CloseLvl = function(){
+    var ov = document.getElementById('v103LvlOv');
+    if(ov) ov.classList.remove('show');
+  };
+
+  // ── 4) Level-Badge in openCrewProfile (andere Menschen) ──
+  try{
+    var _origOcp = window.openCrewProfile;
+    if(typeof _origOcp === 'function'){
+      window.openCrewProfile = function(uid){
+        var r = _origOcp.apply(this, arguments);
+        setTimeout(function(){
+          try{
+            var badges = document.querySelectorAll('.cps-badges');
+            if(!badges || badges.length===0) return;
+            var host = badges[badges.length-1];
+            if(!host || host._v103Done) return;
+            if(typeof sb === 'undefined' || !uid) return;
+            sb.from('profiles').select('points').eq('user_id',uid).maybeSingle().then(function(res){
+              try{
+                if(host._v103Done) return;
+                var p = (res && res.data && res.data.points) || 0;
+                var info = (typeof window.getLevelInfo==='function') ? window.getLevelInfo(p) : {level:1};
+                var badge = document.createElement('span');
+                badge.className = 'v103-lvl-chip-big';
+                badge.innerHTML = '⭐ LVL '+info.level;
+                badge.style.cursor = 'pointer';
+                badge.addEventListener('click', function(ev){
+                  ev.stopPropagation();
+                  window.showLevelDetail(p);
+                });
+                host.appendChild(badge);
+                host._v103Done = true;
+              }catch(e){}
+            });
+          }catch(e){}
+        }, 140);
+        return r;
+      };
+    }
+  }catch(e){}
+
+  // ── 5) QR-Safety-Hub (ersetzt Bier-Button) ──
+  window.openQrSafetyHub = function(){
+    var ov = document.getElementById('v103HubOv');
+    if(!ov){
+      ov = document.createElement('div');
+      ov.id = 'v103HubOv';
+      ov.className = 'v103-hub-ov';
+      ov.addEventListener('click', function(ev){ if(ev.target===ov) window._v103CloseHub(); });
+      document.body.appendChild(ov);
+    }
+    var crewSettings = null;
+    try{ if(typeof getCrewSettings==='function') crewSettings = getCrewSettings(); }catch(e){}
+    var hasCrew = !!(crewSettings && crewSettings.invite_code);
+    ov.innerHTML =
+      '<div class="v103-hub-sheet">'+
+        '<div class="v103-hub-grab"></div>'+
+        '<div class="v103-hub-head">'+
+          '<div class="v103-hub-ttl">QR &amp; Safety</div>'+
+          '<div class="v103-hub-sub">Alles auf einen Blick</div>'+
+          '<button class="v103-hub-x" onclick="window._v103CloseHub()" aria-label="Schließen">×</button>'+
+        '</div>'+
+        '<div class="v103-hub-grid">'+
+          '<div class="v103-hub-tile v103-tile-qrme" onclick="window._v103HubMyQR()" role="button" tabindex="0">'+
+            '<div class="v103-tile-ic">'+
+              '<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+
+                '<rect x="3" y="3" width="7" height="7" rx="1"/>'+
+                '<rect x="14" y="3" width="7" height="7" rx="1"/>'+
+                '<rect x="3" y="14" width="7" height="7" rx="1"/>'+
+                '<path d="M14 14h2M18 14h3M14 18h3M20 18v3M14 21h4"/>'+
+              '</svg>'+
+            '</div>'+
+            '<div class="v103-tile-ttl">Mein QR</div>'+
+            '<div class="v103-tile-sub">Direkt bei Partnern zeigen</div>'+
+          '</div>'+
+          '<div class="v103-hub-tile v103-tile-qrcrew'+(hasCrew?'':' v103-tile-off')+'" onclick="window._v103HubCrewQR()" role="button" tabindex="0">'+
+            '<div class="v103-tile-ic">'+
+              '<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+
+                '<circle cx="9" cy="8" r="3.2"/>'+
+                '<circle cx="16" cy="10" r="2.4"/>'+
+                '<path d="M3.5 19c0-3 2.5-5 5.5-5s5.5 2 5.5 5"/>'+
+                '<path d="M14.5 19c0-2 1.8-3.6 4-3.6 1.4 0 2.5.6 3.2 1.6"/>'+
+              '</svg>'+
+            '</div>'+
+            '<div class="v103-tile-ttl">Crew-QR</div>'+
+            '<div class="v103-tile-sub">'+(hasCrew ? _esc((crewSettings&&crewSettings.name)||'Crew')+' teilen' : 'Noch keine Crew')+'</div>'+
+          '</div>'+
+          '<div class="v103-hub-tile v103-tile-safety" onclick="window._v103HubSafety()" role="button" tabindex="0">'+
+            '<div class="v103-tile-ic">'+
+              '<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+
+                '<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/>'+
+                '<path d="M9 12l2 2 4-4"/>'+
+              '</svg>'+
+            '</div>'+
+            '<div class="v103-tile-ttl">Safety</div>'+
+            '<div class="v103-tile-sub">Standort &amp; Privatsphäre</div>'+
+          '</div>'+
+          '<div class="v103-hub-tile v103-tile-settings" onclick="window._v103HubSettings()" role="button" tabindex="0">'+
+            '<div class="v103-tile-ic">'+
+              '<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+
+                '<circle cx="12" cy="12" r="3"/>'+
+                '<path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>'+
+              '</svg>'+
+            '</div>'+
+            '<div class="v103-tile-ttl">Einstellungen</div>'+
+            '<div class="v103-tile-sub">Profil &amp; Konto</div>'+
+          '</div>'+
+        '</div>'+
+      '</div>';
+    requestAnimationFrame(function(){ ov.classList.add('show'); });
+  };
+  window._v103CloseHub = function(){
+    var ov = document.getElementById('v103HubOv');
+    if(ov) ov.classList.remove('show');
+  };
+  window._v103HubMyQR = function(){
+    window._v103CloseHub();
+    setTimeout(function(){ try{ if(typeof window.showMyQR==='function') window.showMyQR(); }catch(e){} }, 240);
+  };
+  window._v103HubCrewQR = function(){
+    var crew = null;
+    try{ if(typeof getCrewSettings==='function') crew = getCrewSettings(); }catch(e){}
+    if(!crew || !crew.invite_code){
+      if(typeof toast==='function') toast('Tritt erst einer Crew bei, um den Crew-QR zu teilen.');
+      return;
+    }
+    window._v103CloseHub();
+    setTimeout(function(){
+      try{
+        var invCode = crew.invite_code;
+        var crewName = crew.name || 'Crew';
+        var link = 'https://partycrew.app/app.html?joincrew='+encodeURIComponent(invCode);
+        var qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=280x280&color=FF6D2E&bgcolor=0A0A0A&data='+encodeURIComponent(link);
+        var safeName = String(crewName).replace(/'/g, "\\'");
+        var safeCode = String(invCode).replace(/'/g, "\\'");
+        var c = '<div style="text-align:center;padding:10px 0">';
+        c += '<h2 style="font-size:20px;font-weight:900;margin-bottom:4px">Crew-QR</h2>';
+        c += '<p style="font-size:12px;color:var(--t3);margin-bottom:20px;line-height:1.5">Scanne &amp; tritt „'+_esc(crewName)+'" bei.</p>';
+        c += '<div style="background:rgba(10,10,10,.9);border-radius:24px;padding:24px;display:inline-block;border:2px solid rgba(255,109,46,.2);box-shadow:0 0 40px rgba(255,109,46,.1)">';
+        c += '<img src="'+qrUrl+'" style="width:220px;height:220px;border-radius:12px;image-rendering:pixelated" alt="Crew QR Code">';
+        c += '<div style="margin-top:12px;font-size:15px;font-weight:800;color:var(--o)">'+(crew.emoji||'👥')+' '+_esc(crewName)+'</div>';
+        c += '<div style="font-size:12px;color:var(--t3)">Code '+_esc(invCode)+'</div>';
+        c += '</div>';
+        c += '<div style="margin-top:20px;display:flex;gap:10px;justify-content:center">';
+        c += '<button class="bs-btn" style="background:rgba(255,255,255,.06);color:var(--t);border:1px solid var(--glass-border);flex:1" onclick="shareCrewQR(\''+_esc(safeName)+'\',\''+_esc(safeCode)+'\')">📤 Teilen</button>';
+        c += '<button class="bs-btn" style="background:rgba(255,255,255,.06);color:var(--t);border:1px solid var(--glass-border);flex:1" onclick="downloadCrewQR(\''+_esc(safeName)+'\',\''+_esc(safeCode)+'\')">💾 Speichern</button>';
+        c += '</div></div>';
+        var bs = document.getElementById('bsheet');
+        var bsImg = document.getElementById('bsImg');
+        var bsContent = document.getElementById('bsContent');
+        if(bsImg) bsImg.src = 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&q=60';
+        if(bsContent) bsContent.innerHTML = c;
+        if(bs) bs.classList.add('show');
+      }catch(e){ console.warn('[v103] crewQR err', e); }
+    }, 240);
+  };
+  window._v103HubSafety = function(){
+    window._v103CloseHub();
+    setTimeout(function(){ try{ if(typeof window.openSafetyHub==='function') window.openSafetyHub(); }catch(e){} }, 240);
+  };
+  window._v103HubSettings = function(){
+    window._v103CloseHub();
+    setTimeout(function(){
+      try{
+        if(typeof go==='function'){
+          var navBtns = document.querySelectorAll('#navBar button');
+          go('profile', navBtns[4] || null);
+        }
+      }catch(e){}
+    }, 240);
+  };
+
+  // ── 6) Success-Checkmark-Morph Utility ─────
+  window.showSuccessCheck = function(host, msg){
+    try{
+      var container = (typeof host === 'string') ? document.querySelector(host) : host;
+      if(!container || !container.appendChild) container = document.body;
+      var wrap = document.createElement('div');
+      wrap.className = 'v103-check-morph';
+      wrap.innerHTML =
+        '<svg viewBox="0 0 52 52" width="88" height="88" aria-hidden="true">'+
+          '<circle cx="26" cy="26" r="24" fill="none" stroke="#34C759" stroke-width="3" class="v103-check-circle"/>'+
+          '<polyline points="14,27 23,36 38,18" fill="none" stroke="#34C759" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="v103-check-path"/>'+
+        '</svg>'+
+        (msg ? '<div class="v103-check-msg">'+_esc(msg)+'</div>' : '');
+      container.appendChild(wrap);
+      try{ if(navigator.vibrate) navigator.vibrate([10,20,40]); }catch(e){}
+      setTimeout(function(){
+        try{ wrap.classList.add('v103-fade'); }catch(e){}
+        setTimeout(function(){ try{ if(wrap.parentNode) wrap.parentNode.removeChild(wrap); }catch(e){} }, 320);
+      }, 1500);
+    }catch(e){}
+  };
+
+  // ── 7) Safety-Hub: human-friendly Koordinaten ──
+  var _MALLORCA_POI = [
+    {name:'Palma',        lat:39.5696, lng:2.6502, r:6000},
+    {name:'Arenal',       lat:39.5050, lng:2.7500, r:3000},
+    {name:'Magaluf',      lat:39.5085, lng:2.5337, r:3000},
+    {name:'Palmanova',    lat:39.5227, lng:2.5340, r:2500},
+    {name:'Cala Ratjada', lat:39.7028, lng:3.4633, r:3500},
+    {name:'Alcúdia',      lat:39.8521, lng:3.1218, r:3500},
+    {name:'Can Picafort', lat:39.7654, lng:3.1572, r:3000},
+    {name:'Santa Ponça',  lat:39.5128, lng:2.4817, r:2500},
+    {name:'Peguera',      lat:39.5358, lng:2.4478, r:2500},
+    {name:'Sóller',       lat:39.7661, lng:2.7136, r:2500},
+    {name:'Valldemossa',  lat:39.7102, lng:2.6228, r:2000},
+    {name:'Pollença',     lat:39.8786, lng:3.0164, r:2500},
+    {name:'Cala Millor',  lat:39.5961, lng:3.3817, r:2500},
+    {name:'Manacor',      lat:39.5707, lng:3.2094, r:3000},
+    {name:'Inca',         lat:39.7203, lng:2.9110, r:2500},
+    {name:'Ses Salines',  lat:39.3351, lng:3.0540, r:2500},
+    {name:'Felanitx',     lat:39.4700, lng:3.1480, r:2500},
+    {name:'Andratx',      lat:39.5750, lng:2.4230, r:2500}
+  ];
+  function _hav(la1,lo1,la2,lo2){
+    var R=6371000;
+    var dLa=(la2-la1)*Math.PI/180, dLo=(lo2-lo1)*Math.PI/180;
+    var a=Math.sin(dLa/2)*Math.sin(dLa/2)+Math.cos(la1*Math.PI/180)*Math.cos(la2*Math.PI/180)*Math.sin(dLo/2)*Math.sin(dLo/2);
+    return 2*R*Math.asin(Math.sqrt(a));
+  }
+  window.coordsToReadable = function(lat, lng){
+    if(lat==null || lng==null) return '—';
+    lat=Number(lat); lng=Number(lng);
+    if(isNaN(lat)||isNaN(lng)) return '—';
+    var best=null, bestD=Infinity;
+    for(var i=0;i<_MALLORCA_POI.length;i++){
+      var p=_MALLORCA_POI[i];
+      var d=_hav(lat,lng,p.lat,p.lng);
+      if(d<bestD){ bestD=d; best=p; }
+    }
+    if(best){
+      if(bestD <= best.r) return '📍 '+best.name;
+      if(bestD <= best.r*1.8) return '📍 Nähe '+best.name;
+      if(bestD < 9000) return '📍 bei '+best.name+' (~'+Math.round(bestD/1000)+' km)';
+    }
+    return '📍 auf Mallorca';
+  };
+  try{
+    var _origOSH = window.openSafetyHub;
+    if(typeof _origOSH === 'function'){
+      window.openSafetyHub = async function(){
+        var r = await _origOSH.apply(this, arguments);
+        setTimeout(function(){
+          try{
+            var content = document.getElementById('safetyHubContent');
+            if(!content) return;
+            var mono = content.querySelector('[style*="ui-monospace"]');
+            if(!mono || mono._v103Done) return;
+            var coordText = (mono.textContent || '').trim();
+            if(!coordText || coordText === '—') return;
+            var parts = coordText.split(',').map(function(x){ return parseFloat((x||'').trim()); });
+            if(parts.length < 2 || isNaN(parts[0]) || isNaN(parts[1])) return;
+            var readable = window.coordsToReadable(parts[0], parts[1]);
+            var lbl = document.createElement('div');
+            lbl.style.cssText = 'font-size:13px;font-weight:800;color:#fff;padding:10px 12px;background:rgba(255,109,46,.10);border:1px solid rgba(255,109,46,.18);border-radius:10px;margin-bottom:6px';
+            lbl.textContent = readable;
+            var det = document.createElement('details');
+            det.style.cssText = 'font-size:10px;color:var(--t3);margin-bottom:4px';
+            det.innerHTML = '<summary style="cursor:pointer;padding:4px 6px;user-select:none;color:var(--t3)">Rohkoordinaten anzeigen</summary><div style="padding:6px 10px;font-family:ui-monospace,monospace;color:var(--t3);background:rgba(0,0,0,.18);border-radius:8px;margin-top:4px">'+_esc(coordText)+'</div>';
+            mono.parentNode.insertBefore(lbl, mono);
+            mono.parentNode.insertBefore(det, mono);
+            mono.style.display = 'none';
+            mono._v103Done = true;
+          }catch(e){}
+        }, 120);
+        return r;
+      };
+    }
+  }catch(e){}
+
+  // ── 8) Daily Quest System ──────────────────
+  var QUEST_KEY = 'crew_quest_v1';
+  var QUEST_POOL = [
+    {id:'match3',    label:'Mache 3 neue Matches',    goal:3, icon:'👥', reward:30, counter:'match'},
+    {id:'checkin2',  label:'Checke an 2 Orten ein',   goal:2, icon:'📍', reward:25, counter:'checkin'},
+    {id:'vibe1',     label:'Setze deinen Vibe',       goal:1, icon:'🎨', reward:15, counter:'vibe'},
+    {id:'react5',    label:'Reagiere auf 5 Posts',    goal:5, icon:'💬', reward:20, counter:'react'},
+    {id:'crewmap1',  label:'Öffne deine Crew-Karte',  goal:1, icon:'🗺️', reward:10, counter:'crewmap'}
+  ];
+  function _ymd(){
+    var d=new Date();
+    return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  }
+  function _qLoad(){
+    try{ var raw=localStorage.getItem(QUEST_KEY); if(!raw) return null; return JSON.parse(raw); }catch(e){ return null; }
+  }
+  function _qSave(q){ try{ localStorage.setItem(QUEST_KEY, JSON.stringify(q)); }catch(e){} }
+  function _qSeed(seed){
+    var h = 2166136261;
+    for(var i=0;i<seed.length;i++){ h = Math.imul(h ^ seed.charCodeAt(i), 16777619); }
+    return Math.abs(h) % QUEST_POOL.length;
+  }
+  function getTodayQuest(){
+    var today = _ymd();
+    var me = _me();
+    var uid = (me && me.user_id) ? me.user_id : 'anon';
+    var q = _qLoad();
+    if(!q || q.date !== today){
+      var idx = _qSeed(uid+'|'+today);
+      var def = QUEST_POOL[idx];
+      q = {date:today, id:def.id, progress:0, goal:def.goal, done:false, claimed:false};
+      _qSave(q);
+    }
+    return q;
+  }
+  function getQuestDef(id){
+    for(var i=0;i<QUEST_POOL.length;i++){ if(QUEST_POOL[i].id===id) return QUEST_POOL[i]; }
+    return QUEST_POOL[0];
+  }
+  window.questProgress = function(counter, delta){
+    try{
+      var q = getTodayQuest();
+      if(q.done) return;
+      var def = getQuestDef(q.id);
+      if(def.counter !== counter) return;
+      q.progress = Math.min(def.goal, q.progress + (delta||1));
+      if(q.progress >= def.goal && !q.done){
+        q.done = true;
+        _qSave(q);
+        _celebrateQuest(def);
+      } else {
+        _qSave(q);
+      }
+      _paintQuestCard();
+    }catch(e){}
+  };
+  function _celebrateQuest(def){
+    try{
+      if(typeof toast==='function') toast('🎯 Tages-Quest erfüllt! +'+def.reward+' Aura');
+      if(typeof window.fireConfetti==='function'){
+        window.fireConfetti({count:60, spread:.7, duration:1600, colors:['#34C759','#FFD60A','#FF6D2E']});
+      }
+      if(navigator.vibrate) navigator.vibrate([14,18,32]);
+      var me = _me();
+      if(me){
+        me.points = (me.points||0) + def.reward;
+        try{ if(typeof sb!=='undefined' && sb.rpc){ sb.rpc('add_points',{p_user_id:me.user_id, p_points:def.reward}); } }catch(e){}
+        try{ if(typeof updateQuickStats==='function') updateQuickStats(); }catch(e){}
+      }
+    }catch(e){}
+  }
+  function _paintQuestCard(){
+    try{
+      var moodBarEl = document.getElementById('moodBar');
+      if(!moodBarEl) return;
+      var mbHost = moodBarEl.closest ? moodBarEl.closest('.mood-bar') : null;
+      if(!mbHost || !mbHost.parentNode) return;
+      var q = getTodayQuest();
+      var def = getQuestDef(q.id);
+      var card = document.getElementById('v103QuestCard');
+      if(!card){
+        card = document.createElement('div');
+        card.id = 'v103QuestCard';
+        card.className = 'v103-quest-card';
+        mbHost.parentNode.insertBefore(card, mbHost);
+      }
+      var pct = Math.min(100, (q.progress/def.goal)*100);
+      card.className = 'v103-quest-card' + (q.done ? ' done' : '');
+      card.innerHTML =
+        '<div class="v103-quest-ic">'+def.icon+'</div>'+
+        '<div class="v103-quest-body">'+
+          '<div class="v103-quest-ttl">'+(q.done?'✅ Tages-Quest erfüllt!':'🎯 Tages-Quest')+'</div>'+
+          '<div class="v103-quest-lbl">'+_esc(def.label)+'</div>'+
+          '<div class="v103-quest-bar"><i style="width:'+pct.toFixed(0)+'%"></i></div>'+
+          '<div class="v103-quest-meta"><span>'+q.progress+' / '+def.goal+'</span><span>+'+def.reward+' ✨</span></div>'+
+        '</div>';
+    }catch(e){}
+  }
+  window._v103PaintQuest = _paintQuestCard;
+  setTimeout(_paintQuestCard, 1400);
+  setInterval(_paintQuestCard, 3000);
+
+  // Progress-Hooks (Match → Quest + Batch)
+  try{
+    var _oSC_quest = window.showCele;
+    if(typeof _oSC_quest === 'function'){
+      window.showCele = function(){
+        var r = _oSC_quest.apply(this, arguments);
+        try{
+          var arg = arguments[0];
+          var label = (arg && (arg.name || arg.title || arg.label)) || 'Match';
+          window.batchMatchNotif(label);
+        }catch(e){}
+        setTimeout(function(){ try{ window.questProgress('match', 1); }catch(e){} }, 150);
+        return r;
+      };
+    }
+  }catch(e){}
+  // Vibe/mood hooks
+  try{
+    ['setMood','pickMood','setMyMood','selectMood','chooseMood'].forEach(function(fn){
+      if(typeof window[fn] === 'function' && !window[fn]._v103Wrapped){
+        var orig = window[fn];
+        window[fn] = function(){
+          var r = orig.apply(this, arguments);
+          try{ window.questProgress('vibe', 1); }catch(e){}
+          return r;
+        };
+        window[fn]._v103Wrapped = true;
+      }
+    });
+  }catch(e){}
+
+  // ── 9) Return-Detection ────────────────────
+  var SESS_KEY = 'crew_last_session_v1';
+  function _detectReturn(){
+    try{
+      var last = localStorage.getItem(SESS_KEY);
+      var now = Date.now();
+      localStorage.setItem(SESS_KEY, String(now));
+      if(!last) return;
+      var lastNum = parseInt(last, 10);
+      if(isNaN(lastNum)) return;
+      var days = Math.floor((now - lastNum) / 86400000);
+      if(days >= 7) _showReturnBack(days);
+    }catch(e){}
+  }
+  function _showReturnBack(days){
+    try{
+      var ov = document.getElementById('v103RbOv');
+      if(!ov){
+        ov = document.createElement('div');
+        ov.id = 'v103RbOv';
+        ov.className = 'v103-rb-ov';
+        document.body.appendChild(ov);
+      }
+      var bonus = Math.min(100, 20 + days*5);
+      ov.innerHTML =
+        '<div class="v103-rb-card">'+
+          '<div class="v103-rb-emoji">👋</div>'+
+          '<div class="v103-rb-ttl">Willkommen zurück!</div>'+
+          '<div class="v103-rb-sub">Du warst '+days+' Tage weg. Die Crew hat dich vermisst.</div>'+
+          '<div class="v103-rb-bonus">+'+bonus+' ✨ Rückkehr-Bonus</div>'+
+          '<button class="v103-rb-cta" onclick="window._v103RbClose('+bonus+')">Let\'s go 🌴</button>'+
+        '</div>';
+      setTimeout(function(){ ov.classList.add('show'); }, 700);
+    }catch(e){}
+  }
+  window._v103RbClose = function(bonus){
+    try{
+      var ov = document.getElementById('v103RbOv');
+      if(ov) ov.classList.remove('show');
+      var me = _me();
+      if(bonus && me){
+        me.points = (me.points||0) + bonus;
+        try{ if(typeof sb!=='undefined' && sb.rpc){ sb.rpc('add_points',{p_user_id:me.user_id, p_points:bonus}); } }catch(e){}
+        try{ if(typeof updateQuickStats==='function') updateQuickStats(); }catch(e){}
+      }
+      if(typeof window.fireConfetti === 'function'){
+        window.fireConfetti({count:80, spread:.8, duration:1800, colors:['#FF6D2E','#FFD60A','#34C759']});
+      }
+    }catch(e){}
+  };
+  (function(){
+    var tries = 0;
+    var t = setInterval(function(){
+      tries++;
+      var me = _me();
+      if((me && me.user_id) || tries > 60){
+        clearInterval(t);
+        if(me && me.user_id) _detectReturn();
+      }
+    }, 500);
+  })();
+
+  // ── 10) Notification-Batching ──────────────
+  var NB_KEY = 'crew_notif_batch_v1';
+  var NB_WINDOW = 5*60*1000;
+  var _nbTimer = null;
+  function _nbLoad(){
+    try{ var raw=localStorage.getItem(NB_KEY); if(!raw) return {items:[], firstAt:0}; return JSON.parse(raw); }
+    catch(e){ return {items:[], firstAt:0}; }
+  }
+  function _nbSave(b){ try{ localStorage.setItem(NB_KEY, JSON.stringify(b)); }catch(e){} }
+  function _nbFlush(){
+    try{
+      var b = _nbLoad();
+      if(!b || !b.items || b.items.length===0) return;
+      if(b.items.length === 1){
+        if(typeof toast==='function') toast('💥 Neues Match: '+b.items[0].label);
+      } else {
+        if(typeof toast==='function') toast('💥 '+b.items.length+' neue Matches in den letzten 5 Min!');
+      }
+      _nbSave({items:[], firstAt:0});
+      _nbTimer = null;
+    }catch(e){}
+  }
+  window.batchMatchNotif = function(label){
+    try{
+      var b = _nbLoad();
+      var now = Date.now();
+      if(!b.firstAt || (now - b.firstAt) > NB_WINDOW){
+        b = {items:[{label:label||'Match', at:now}], firstAt:now};
+      } else {
+        b.items.push({label:label||'Match', at:now});
+      }
+      _nbSave(b);
+      var remaining = NB_WINDOW - (now - b.firstAt);
+      if(_nbTimer) clearTimeout(_nbTimer);
+      _nbTimer = setTimeout(_nbFlush, Math.max(1500, remaining));
+    }catch(e){}
+  };
+
+  // ── 11) Paint-Loops + Screen-Change Hook ───
+  function _v103Refresh(){
+    try{ paintLevelButtonInProfile(); }catch(e){}
+    try{ _paintQuestCard(); }catch(e){}
+  }
+  setTimeout(_v103Refresh, 900);
+  setInterval(_v103Refresh, 2000);
+  try{
+    var _oGo = window.go;
+    if(typeof _oGo === 'function'){
+      window.go = function(screen){
+        var r = _oGo.apply(this, arguments);
+        setTimeout(_v103Refresh, 180);
+        return r;
+      };
+    }
+  }catch(e){}
+
+  console.log('[v103] UI-Rework loaded: QR-Hub, Level-Btn, Quests, Return-Detection, Notif-Batch, Safety-Coords');
+})();
+
+if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js?v=15').catch(function(){});
 </script>
 </body>
 </html>
