@@ -4821,6 +4821,124 @@ nav button.active .ni{animation:vNineCountPop .38s var(--ease-spring-soft) 1}
   }
 }
 
+/* ============================================
+   v109 — Location + Presence Overhaul
+   ============================================ */
+/* Travel-Badge (rechts im Header neben dem Crew-Logo) */
+.v109-travel-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:11px;font-weight:800;letter-spacing:.2px;
+  padding:5px 10px;border-radius:11px;
+  background:linear-gradient(135deg,rgba(255,109,46,.18),rgba(255,214,10,.14));
+  border:1px solid rgba(255,109,46,.3);
+  color:#FFD7A8;
+  box-shadow:0 2px 10px rgba(255,109,46,.2);
+  cursor:pointer;
+  animation:v109Pulse 2.6s ease-in-out infinite;
+}
+.v109-travel-badge .v109-tb-em{font-size:13px;line-height:1}
+.v109-travel-badge:hover{filter:brightness(1.1)}
+@keyframes v109Pulse{
+  0%,100%{box-shadow:0 2px 10px rgba(255,109,46,.2)}
+  50%{box-shadow:0 2px 16px rgba(255,109,46,.4)}
+}
+/* Presence-Dot (🟢/🟡/⚫) vor Namen */
+.v109-presence-dot{
+  display:inline-block;width:8px;height:8px;border-radius:50%;
+  margin-right:6px;vertical-align:middle;
+}
+.v109-presence-dot.on{background:#34C759;box-shadow:0 0 8px rgba(52,199,89,.6)}
+.v109-presence-dot.aw{background:#FFD60A}
+.v109-presence-dot.off{background:#8E8E93}
+.v109-presence-dot.hid{background:#3A3A3C;border:1px dashed rgba(255,255,255,.15);box-shadow:none}
+/* Zuletzt-gesehen Pill im Crew-Profil */
+.v109-seen-pill{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:11px;font-weight:700;
+  padding:5px 11px;border-radius:12px;margin-top:8px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.08);
+  color:var(--t2,#b8b8c0);
+}
+.v109-seen-pill.on{background:rgba(52,199,89,.12);border-color:rgba(52,199,89,.25);color:#6EE7A1}
+.v109-seen-pill.hid{color:var(--t3,#9a9aa3);font-style:italic}
+/* "Auf Reisen" inline-Badge im Profil */
+.v109-trip-pill{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:11px;font-weight:800;
+  padding:5px 11px;border-radius:12px;margin:6px 4px 0;
+  background:linear-gradient(135deg,rgba(255,109,46,.14),rgba(254,60,114,.12));
+  border:1px solid rgba(255,109,46,.28);color:#FFB58A;
+}
+/* Hide-last-seen Sheet */
+.v109-hls{
+  display:none;position:fixed;inset:0;z-index:10040;
+  background:rgba(0,0,0,.66);backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  align-items:flex-end;justify-content:center;
+}
+.v109-hls.show{display:flex}
+.v109-hls-sheet{
+  width:100%;max-width:520px;max-height:85vh;
+  background:#111114;border-top-left-radius:22px;border-top-right-radius:22px;
+  border-top:1px solid rgba(255,255,255,.06);
+  padding:18px 16px 28px;overflow-y:auto;
+  animation:v109SlideUp .28s cubic-bezier(.22,1,.36,1);
+}
+@keyframes v109SlideUp{from{transform:translateY(26px);opacity:0}to{transform:translateY(0);opacity:1}}
+.v109-hls-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.v109-hls-title{font-size:17px;font-weight:900;color:#fff}
+.v109-hls-close{background:rgba(255,255,255,.06);border:none;color:#fff;width:30px;height:30px;border-radius:50%;font-size:13px;cursor:pointer}
+.v109-hls-sub{font-size:12px;color:var(--t3,#9a9aa3);line-height:1.5;margin-bottom:14px}
+.v109-hls-row{
+  display:flex;align-items:center;gap:10px;
+  padding:10px;border-radius:14px;
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.05);
+  margin-bottom:8px;
+}
+.v109-hls-ava{width:36px;height:36px;border-radius:50%;overflow:hidden;flex-shrink:0;background:rgba(255,255,255,.06)}
+.v109-hls-ava img{width:100%;height:100%;object-fit:cover;display:block}
+.v109-hls-name{flex:1;min-width:0;font-size:13px;font-weight:700;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.v109-hls-toggle{
+  position:relative;width:42px;height:24px;border-radius:12px;
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.08);
+  cursor:pointer;transition:all .22s;flex-shrink:0;
+}
+.v109-hls-toggle::after{
+  content:'';position:absolute;top:2px;left:2px;
+  width:18px;height:18px;border-radius:50%;background:#fff;
+  transition:transform .22s cubic-bezier(.22,1,.36,1);
+  box-shadow:0 1px 3px rgba(0,0,0,.4);
+}
+.v109-hls-toggle.on{background:linear-gradient(135deg,#FF6D2E,#FE3C72);border-color:rgba(255,109,46,.4)}
+.v109-hls-toggle.on::after{transform:translateX(18px)}
+.v109-hls-empty{padding:30px 14px;text-align:center;color:var(--t3,#9a9aa3);font-size:12px}
+.v109-hls-open-btn{
+  display:flex;align-items:center;gap:10px;
+  width:100%;padding:12px 14px;border-radius:14px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+  color:var(--t1,#fff);font-size:13px;font-weight:700;cursor:pointer;
+  margin-top:10px;font-family:inherit;
+}
+.v109-hls-open-btn:hover{background:rgba(255,255,255,.07)}
+/* Onboarding-Reminder (wenn home_city fehlt) */
+.v109-onb-card{
+  margin:14px 12px 0;padding:14px 16px;
+  background:linear-gradient(135deg,rgba(255,109,46,.14),rgba(10,132,255,.1));
+  border:1px solid rgba(255,109,46,.28);
+  border-radius:16px;
+}
+.v109-onb-title{font-size:14px;font-weight:900;color:#fff;margin-bottom:4px}
+.v109-onb-sub{font-size:12px;color:var(--t2,#b8b8c0);line-height:1.5;margin-bottom:10px}
+.v109-onb-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:9px 14px;border-radius:12px;
+  background:linear-gradient(135deg,#FF6D2E,#FE3C72);
+  color:#fff;font-size:12px;font-weight:800;border:none;cursor:pointer;
+  font-family:inherit;box-shadow:0 4px 14px rgba(254,60,114,.3);
+}
+
 </style>
 
 <!-- LOADING -->
@@ -6379,7 +6497,7 @@ async function logPrivacyConsent(mode, previousMode, state){
       deals_consent: !!(state.consent && state.consent.deals_consent),
       consent_version: 1,
       user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-      app_version: 108,
+      app_version: 109,
       // v73: tag source so we can see who was newly prompted vs. picked from settings
       source: (!previousMode && ME && ME.created_at && (Date.now()-new Date(ME.created_at).getTime())>3600000) ? 'existing_user_v72_prompt' : (!previousMode ? 'first_run' : 'settings_change')
     };
@@ -6427,7 +6545,7 @@ function clearPrivacyData(){
         deals_consent: false,
         consent_version: 1,
         user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-        app_version: 108,
+        app_version: 109,
         source: 'user_reset'
       };
       sb.from('privacy_consent_log').insert(clearRow).then(function(r){ if(r&&r.error) console.warn('[PM] clear log err', r.error.message); });
@@ -18934,8 +19052,534 @@ window.playCrewJoinCinema = async function(crew, opts){
   console.log('[v108] Daily-Bonus + Notification-Center aktiv');
 })();
 
-if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js?v=22').catch(function(){});
+// ============================================
+// v109 — Location + Presence Overhaul
+//   • Fest verankerter Heimatort + GPS-Consent
+//   • Travel-Detection (Home vs. Live > 50km = unterwegs)
+//   • Unified Online/Offline + "Zuletzt gesehen"
+//   • Per-User Hide-Last-Seen Privacy
+// ============================================
+(function v109(){
+  'use strict';
+
+  // ── Konfiguration ─────────────────────────
+  var ONLINE_THRESHOLD_MIN = 5;    // < 5min = online
+  var AWAY_THRESHOLD_MIN   = 30;   // < 30min = away
+  var TRAVEL_DISTANCE_KM   = 50;   // > 50km von home = auf Reisen
+  var TOUCH_MIN_GAP_MS     = 25*1000; // min. 25s zwischen touchActive
+  var _lastTouch = 0;
+
+  // ── Helpers ───────────────────────────────
+  function haversineKm(a,b,c,d){
+    if(typeof a!=='number'||typeof b!=='number'||typeof c!=='number'||typeof d!=='number') return 0;
+    var R=6371, toRad=function(x){return x*Math.PI/180};
+    var dLat=toRad(c-a), dLng=toRad(d-b);
+    var s=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(toRad(a))*Math.cos(toRad(c))*Math.sin(dLng/2)*Math.sin(dLng/2);
+    return 2*R*Math.asin(Math.min(1,Math.sqrt(s)));
+  }
+  function isOnline(lastActive){
+    if(!lastActive) return false;
+    var ts = (typeof lastActive==='string') ? new Date(lastActive).getTime() : lastActive;
+    if(!ts) return false;
+    return (Date.now()-ts) < ONLINE_THRESHOLD_MIN*60*1000;
+  }
+  function presenceStatus(lastActive){
+    if(!lastActive) return 'off';
+    var ts = (typeof lastActive==='string') ? new Date(lastActive).getTime() : lastActive;
+    if(!ts) return 'off';
+    var mins = (Date.now()-ts)/60000;
+    if(mins < ONLINE_THRESHOLD_MIN) return 'on';
+    if(mins < AWAY_THRESHOLD_MIN) return 'aw';
+    return 'off';
+  }
+  function formatLastSeen(lastActive, canView){
+    if(!canView) return 'Zuletzt gesehen verborgen';
+    if(!lastActive) return 'Noch nie online';
+    var ts = (typeof lastActive==='string') ? new Date(lastActive).getTime() : lastActive;
+    if(!ts) return 'Noch nie online';
+    var mins = (Date.now()-ts)/60000;
+    if(mins < ONLINE_THRESHOLD_MIN) return 'Jetzt online';
+    if(mins < 60) return 'Vor '+Math.round(mins)+' Min';
+    var d = new Date(ts);
+    var now = new Date();
+    var sameDay = d.toDateString() === now.toDateString();
+    if(sameDay){
+      var hh = String(d.getHours()).padStart(2,'0');
+      var mm = String(d.getMinutes()).padStart(2,'0');
+      return 'Heute '+hh+':'+mm;
+    }
+    var yesterday = new Date(now.getTime()-24*60*60*1000);
+    if(d.toDateString() === yesterday.toDateString()) return 'Gestern';
+    var dayDiff = Math.floor((now.getTime()-ts)/(24*60*60*1000));
+    if(dayDiff < 7) return 'Vor '+dayDiff+' Tagen';
+    return d.toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'2-digit'});
+  }
+  function canSeeLastSeen(ownerProfile, viewerId){
+    try{
+      var hidden = (ownerProfile && ownerProfile.hide_last_seen_from) || [];
+      if(!Array.isArray(hidden)) return true;
+      return hidden.indexOf(viewerId) === -1;
+    }catch(e){ return true; }
+  }
+  function getMyHome(){
+    try{
+      if(typeof ME!=='undefined' && ME && ME.home_city_lat && ME.home_city_lng){
+        return {
+          lat: ME.home_city_lat,
+          lng: ME.home_city_lng,
+          name: ME.home_city_name || '',
+          country: ME.home_city_country || '',
+          address: ME.home_address || ''
+        };
+      }
+    }catch(e){}
+    try{
+      if(typeof getPrivacyState==='function'){
+        var st = getPrivacyState();
+        if(st && st.home_city && st.home_city.lat && st.home_city.lng){
+          return {
+            lat: st.home_city.lat,
+            lng: st.home_city.lng,
+            name: st.home_city.name || '',
+            country: st.home_city.country || '',
+            address: ''
+          };
+        }
+      }
+    }catch(e){}
+    return null;
+  }
+  function getLiveCoords(){
+    try{
+      if(typeof ME!=='undefined' && ME && typeof ME.lat==='number' && typeof ME.lng==='number' && ME.lat && ME.lng){
+        return {lat:ME.lat, lng:ME.lng};
+      }
+    }catch(e){}
+    try{
+      if(typeof userLat==='number' && typeof userLng==='number' && userLat && userLng){
+        return {lat:userLat, lng:userLng};
+      }
+    }catch(e){}
+    return null;
+  }
+  function isTraveling(){
+    var home = getMyHome();
+    var live = getLiveCoords();
+    if(!home || !live) return false;
+    var km = haversineKm(home.lat, home.lng, live.lat, live.lng);
+    return km > TRAVEL_DISTANCE_KM;
+  }
+  function hasGpsConsent(){
+    try{
+      var c = (typeof getLocationConsent==='function') ? getLocationConsent() : null;
+      return c === 'permanent' || c === 'session';
+    }catch(e){ return false; }
+  }
+  function hasHomeAnchor(){
+    return !!getMyHome();
+  }
+
+  // Expose helpers global
+  window.v109 = {
+    haversineKm: haversineKm,
+    isOnline: isOnline,
+    presenceStatus: presenceStatus,
+    formatLastSeen: formatLastSeen,
+    canSeeLastSeen: canSeeLastSeen,
+    isTraveling: isTraveling,
+    hasGpsConsent: hasGpsConsent,
+    hasHomeAnchor: hasHomeAnchor,
+    getMyHome: getMyHome,
+    getLiveCoords: getLiveCoords
+  };
+
+  // ── Presence-Boost: touchActive bei jedem Interesse ──
+  function forceTouch(){
+    try{
+      var now = Date.now();
+      if(now - _lastTouch < TOUCH_MIN_GAP_MS) return;
+      _lastTouch = now;
+      if(typeof touchActive==='function'){ touchActive(); }
+    }catch(e){}
+  }
+  try{
+    // Sofort beim Start
+    setTimeout(forceTouch, 1200);
+    // Tab wieder aktiv
+    document.addEventListener('visibilitychange', function(){
+      if(!document.hidden) forceTouch();
+    });
+    // Fenster fokussiert
+    window.addEventListener('focus', forceTouch);
+    // Netzwerk wieder da
+    window.addEventListener('online', forceTouch);
+    // Alle 45 Sekunden (zusätzlich zu bestehendem 60s-Interval)
+    setInterval(forceTouch, 45*1000);
+    // Erste User-Interaktion zählt auch
+    var _oneShot = function(){ forceTouch(); };
+    document.addEventListener('click', _oneShot, {passive:true});
+    document.addEventListener('touchstart', _oneShot, {passive:true});
+  }catch(e){ console.warn('[v109] presence boost err', e); }
+
+  // ── Travel-Badge im Header rendern ──
+  function ensureTravelBadgeHost(){
+    var host = document.getElementById('v109TravelBadge');
+    if(host) return host;
+    // Versuche: in die Top-Nav oder neben dem App-Header einklinken
+    var anchor = document.querySelector('.app-header-right') ||
+                 document.querySelector('.header-right') ||
+                 document.querySelector('#homeHeader') ||
+                 document.querySelector('header');
+    if(!anchor){
+      // Fallback: an body anhängen als floating Badge
+      host = document.createElement('div');
+      host.id = 'v109TravelBadge';
+      host.style.cssText = 'position:fixed;top:max(env(safe-area-inset-top),10px);right:10px;z-index:10020;display:none';
+      document.body.appendChild(host);
+      return host;
+    }
+    host = document.createElement('div');
+    host.id = 'v109TravelBadge';
+    host.style.cssText = 'display:none;margin-left:6px';
+    anchor.appendChild(host);
+    return host;
+  }
+  function paintTravelBadge(){
+    try{
+      var host = ensureTravelBadgeHost();
+      if(!host) return;
+      if(!isTraveling()){ host.style.display='none'; host.innerHTML=''; return; }
+      var home = getMyHome();
+      var homeName = (home && home.name) ? home.name : 'Zuhause';
+      host.innerHTML = '<span class="v109-travel-badge" onclick="window.v109ShowTravelInfo&&window.v109ShowTravelInfo()" title="Du bist aktuell unterwegs">'+
+        '<span class="v109-tb-em">🧳</span><span>Auf Reisen</span></span>';
+      host.style.display = 'inline-flex';
+      try{ document.body.setAttribute('data-traveling','1'); }catch(e){}
+    }catch(e){ console.warn('[v109] travel badge err', e); }
+  }
+  window.v109PaintTravelBadge = paintTravelBadge;
+  window.v109ShowTravelInfo = function(){
+    try{
+      var home = getMyHome();
+      var live = getLiveCoords();
+      if(!home){ if(typeof toast==='function') toast('Setze zuerst deinen Heimatort'); return; }
+      if(!live){ if(typeof toast==='function') toast('Kein aktueller Standort'); return; }
+      var km = Math.round(haversineKm(home.lat,home.lng,live.lat,live.lng));
+      var msg = '🧳 Auf Reisen — '+km+' km von '+(home.name||'zuhause')+' entfernt';
+      if(typeof toast==='function') toast(msg);
+    }catch(e){}
+  };
+
+  // ── Onboarding-Reminder: Home + GPS fehlen ──
+  function paintOnboardReminder(){
+    try{
+      // Nur zeigen wenn User geladen + noch kein home gesetzt
+      if(typeof ME==='undefined' || !ME || !ME.user_id) return;
+      var hasHome = hasHomeAnchor();
+      var hasGps = hasGpsConsent();
+      if(hasHome && hasGps){
+        var old = document.getElementById('v109OnbCard');
+        if(old) old.remove();
+        return;
+      }
+      // Nur auf Home-Screen anzeigen
+      var homeScreen = document.getElementById('homeScreen') || document.querySelector('.screen.active') || document.querySelector('[data-screen]');
+      if(!homeScreen) return;
+      var card = document.getElementById('v109OnbCard');
+      if(!card){
+        card = document.createElement('div');
+        card.id = 'v109OnbCard';
+        card.className = 'v109-onb-card';
+        // Am Anfang des Home-Screens einfügen
+        if(homeScreen.firstChild){
+          homeScreen.insertBefore(card, homeScreen.firstChild);
+        } else {
+          homeScreen.appendChild(card);
+        }
+      }
+      var title, sub, btnLabel, btnAction;
+      if(!hasHome){
+        title = '🏠 Heimatort fehlt';
+        sub = 'Setze deinen Wohnort fest, damit wir wissen wann du auf Reisen bist und dir passende Angebote zeigen können.';
+        btnLabel = 'Heimatort festlegen';
+        btnAction = 'window.openHomeCityPicker&&openHomeCityPicker(true)';
+      } else if(!hasGps){
+        title = '📍 GPS blockiert';
+        sub = 'Ohne GPS siehst du keine Live-Angebote, kein Radar, und andere können dich nicht live finden. Bitte aktiviere den Standort.';
+        btnLabel = 'GPS aktivieren';
+        btnAction = 'window.v109RequestGps&&v109RequestGps()';
+      }
+      card.innerHTML = '<div class="v109-onb-title">'+title+'</div>'+
+        '<div class="v109-onb-sub">'+sub+'</div>'+
+        '<button class="v109-onb-btn" onclick="'+btnAction+'">'+btnLabel+'</button>';
+    }catch(e){ console.warn('[v109] onb reminder err', e); }
+  }
+  window.v109PaintOnboardReminder = paintOnboardReminder;
+  window.v109RequestGps = function(){
+    try{
+      // Falls noch kein privacy mode: öffne onboarding
+      if(typeof hasSelectedMode==='function' && !hasSelectedMode()){
+        if(typeof openPrivacyOnboarding==='function') openPrivacyOnboarding(false);
+        return;
+      }
+      // Falls travel-mode: trigger consent-dialog
+      var ov = document.getElementById('locationConsentOv');
+      if(ov){
+        ov.style.display = 'flex';
+        return;
+      }
+      if(typeof checkLocationConsent==='function') checkLocationConsent();
+    }catch(e){ console.warn('[v109] request gps err', e); }
+  };
+
+  // ── Zuletzt-Gesehen + Presence-Dot im Crew-Profil patchen ──
+  function patchCrewProfileDisplay(profile){
+    try{
+      var ov = document.getElementById('crewProfileOv');
+      if(!ov || !profile) return;
+      var sheet = ov.querySelector('.crew-profile-sheet');
+      if(!sheet) return;
+      // Alte pills entfernen
+      var olds = sheet.querySelectorAll('.v109-seen-pill,.v109-trip-pill');
+      olds.forEach(function(n){ n.remove(); });
+      // Zuletzt-gesehen Pill
+      var viewerId = (typeof ME!=='undefined' && ME && ME.user_id) ? ME.user_id : null;
+      var canView = (profile.user_id === viewerId) ? true : canSeeLastSeen(profile, viewerId);
+      var state = presenceStatus(profile.last_active);
+      var label = formatLastSeen(profile.last_active, canView);
+      var klass = 'v109-seen-pill' + (state==='on' ? ' on' : '') + (canView ? '' : ' hid');
+      var pill = document.createElement('div');
+      pill.className = klass;
+      pill.innerHTML = '<span class="v109-presence-dot '+(canView?state:'hid')+'"></span>'+label;
+      // Travel-Pill falls der User unterwegs ist
+      var tripPill = null;
+      if(profile.home_city_lat && profile.home_city_lng && profile.lat && profile.lng){
+        var km = haversineKm(profile.home_city_lat, profile.home_city_lng, profile.lat, profile.lng);
+        if(km > TRAVEL_DISTANCE_KM){
+          tripPill = document.createElement('div');
+          tripPill.className = 'v109-trip-pill';
+          var homeName = profile.home_city_name || 'Zuhause';
+          tripPill.innerHTML = '🧳 Auf Reisen — '+Math.round(km)+' km von '+escapeHtml(homeName);
+        }
+      }
+      // Nach dem .cps-handle einfügen
+      var handle = sheet.querySelector('.cps-handle');
+      if(handle && handle.parentNode){
+        handle.parentNode.insertBefore(pill, handle.nextSibling);
+        if(tripPill) handle.parentNode.insertBefore(tripPill, pill.nextSibling);
+      } else {
+        sheet.insertBefore(pill, sheet.firstChild);
+        if(tripPill) sheet.insertBefore(tripPill, pill.nextSibling);
+      }
+    }catch(e){ console.warn('[v109] crew profile patch err', e); }
+  }
+  // Wrap openCrewProfile
+  try{
+    var _origOpenCrewProfile = window.openCrewProfile;
+    if(typeof _origOpenCrewProfile === 'function'){
+      window.openCrewProfile = function(uid){
+        var r = _origOpenCrewProfile.apply(this, arguments);
+        // Nach kurzer Verzögerung patchen — die Original-Fn lädt async
+        setTimeout(function(){
+          try{
+            if(!uid || typeof sb==='undefined') return;
+            sb.from('profiles').select('user_id,name,last_active,hide_last_seen_from,lat,lng,home_city_lat,home_city_lng,home_city_name').eq('user_id',uid).single().then(function(res){
+              if(res && res.data) patchCrewProfileDisplay(res.data);
+            });
+          }catch(e){}
+        }, 320);
+        return r;
+      };
+    }
+  }catch(e){ console.warn('[v109] openCrewProfile wrap err', e); }
+
+  // ── Presence-Dot in Listen (.cc-status) überschreiben ──
+  function refreshPresenceDots(){
+    try{
+      // Alle bestehenden .cc-status mit data-last-active rerendern
+      var dots = document.querySelectorAll('[data-last-active]');
+      dots.forEach(function(el){
+        var la = el.getAttribute('data-last-active');
+        var ts = la ? parseInt(la,10) : 0;
+        el.classList.remove('online','away','offline');
+        var s = presenceStatus(ts);
+        if(s==='on') el.classList.add('online');
+        else if(s==='aw') el.classList.add('away');
+        else el.classList.add('offline');
+      });
+    }catch(e){}
+  }
+  window.v109RefreshPresenceDots = refreshPresenceDots;
+
+  // ── Hide-Last-Seen Privacy Sheet ──
+  function buildHlsList(){
+    try{
+      var list = document.getElementById('v109HlsList');
+      if(!list) return;
+      if(typeof sb==='undefined' || typeof ME==='undefined' || !ME || !ME.user_id){
+        list.innerHTML = '<div class="v109-hls-empty">Nicht angemeldet.</div>';
+        return;
+      }
+      list.innerHTML = '<div class="v109-hls-empty">Lade Crew-Mitglieder...</div>';
+      // Aktuelle Hide-Liste holen
+      sb.from('profiles').select('hide_last_seen_from').eq('user_id', ME.user_id).single().then(function(meRes){
+        var hidden = (meRes && meRes.data && Array.isArray(meRes.data.hide_last_seen_from)) ? meRes.data.hide_last_seen_from : [];
+        // Eigene Crews laden (inkl. member profiles)
+        var memberships = (typeof _myCrewMemberships!=='undefined' && _myCrewMemberships) ? _myCrewMemberships : [];
+        var crewIds = memberships.map(function(m){ return m.crew_id; }).filter(Boolean);
+        if(!crewIds.length){
+          list.innerHTML = '<div class="v109-hls-empty">Du bist in keiner Crew — keine Mitglieder zum Verbergen.</div>';
+          return;
+        }
+        sb.from('crew_members').select('user_id').in('crew_id', crewIds).then(function(cmRes){
+          var uids = {};
+          (cmRes.data||[]).forEach(function(r){ if(r.user_id && r.user_id !== ME.user_id) uids[r.user_id] = true; });
+          var ids = Object.keys(uids);
+          if(!ids.length){
+            list.innerHTML = '<div class="v109-hls-empty">Keine Crew-Mitglieder gefunden.</div>';
+            return;
+          }
+          sb.from('profiles').select('user_id,name,photo_url').in('user_id', ids).then(function(pRes){
+            var people = pRes.data || [];
+            if(!people.length){
+              list.innerHTML = '<div class="v109-hls-empty">Keine Crew-Mitglieder gefunden.</div>';
+              return;
+            }
+            var html = '';
+            people.forEach(function(p){
+              var isHidden = hidden.indexOf(p.user_id) !== -1;
+              var photo = p.photo_url || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80';
+              html += '<div class="v109-hls-row">'+
+                '<div class="v109-hls-ava"><img src="'+photo+'" loading="lazy"></div>'+
+                '<div class="v109-hls-name">'+escapeHtml(p.name||'Anonym')+'</div>'+
+                '<div class="v109-hls-toggle'+(isHidden?' on':'')+'" data-uid="'+p.user_id+'" onclick="window.v109ToggleHide(this)"></div>'+
+              '</div>';
+            });
+            list.innerHTML = html;
+          });
+        });
+      });
+    }catch(e){ console.warn('[v109] hls list err', e); }
+  }
+  window.v109ToggleHide = function(btn){
+    try{
+      if(!btn) return;
+      var uid = btn.getAttribute('data-uid');
+      if(!uid || typeof ME==='undefined' || !ME || !ME.user_id || typeof sb==='undefined') return;
+      var willHide = !btn.classList.contains('on');
+      // Optimistic UI
+      btn.classList.toggle('on', willHide);
+      if(navigator.vibrate) navigator.vibrate(10);
+      // Server-Update
+      sb.from('profiles').select('hide_last_seen_from').eq('user_id', ME.user_id).single().then(function(res){
+        var arr = (res && res.data && Array.isArray(res.data.hide_last_seen_from)) ? res.data.hide_last_seen_from.slice() : [];
+        var idx = arr.indexOf(uid);
+        if(willHide && idx === -1) arr.push(uid);
+        if(!willHide && idx !== -1) arr.splice(idx,1);
+        sb.from('profiles').update({hide_last_seen_from: arr}).eq('user_id', ME.user_id).then(function(r){
+          if(r && r.error){
+            // Revert
+            btn.classList.toggle('on', !willHide);
+            if(typeof toast==='function') toast('Fehler beim Speichern');
+            return;
+          }
+          if(typeof toast==='function') toast(willHide ? '👁️‍🗨️ Verborgen' : '👁️ Sichtbar');
+        });
+      });
+    }catch(e){ console.warn('[v109] toggle hide err', e); }
+  };
+  window.v109OpenHls = function(){
+    var ov = document.getElementById('v109Hls');
+    if(!ov) return;
+    ov.classList.add('show');
+    buildHlsList();
+  };
+  window.v109CloseHls = function(){
+    var ov = document.getElementById('v109Hls');
+    if(ov) ov.classList.remove('show');
+  };
+
+  // ── Profil-Screen: "Zuletzt gesehen verbergen"-Button einklinken ──
+  function injectHlsEntryPoint(){
+    try{
+      var profileScreen = document.getElementById('profileScreen') || document.getElementById('meScreen') || document.querySelector('[data-screen="profile"]');
+      if(!profileScreen) return;
+      if(document.getElementById('v109HlsEntryBtn')) return;
+      // Such Privacy-Bereich oder hänge hinten an
+      var anchor = profileScreen.querySelector('.privacy-section') ||
+                   profileScreen.querySelector('#privacySettingsBlock') ||
+                   profileScreen.querySelector('.scr') ||
+                   profileScreen;
+      var btn = document.createElement('button');
+      btn.id = 'v109HlsEntryBtn';
+      btn.className = 'v109-hls-open-btn';
+      btn.type = 'button';
+      btn.innerHTML = '<span>👁️</span><span style="flex:1;text-align:left">"Zuletzt gesehen" verbergen</span><span style="color:var(--t3);font-size:11px">Privatsphäre</span>';
+      btn.onclick = function(){ window.v109OpenHls(); };
+      anchor.appendChild(btn);
+    }catch(e){ console.warn('[v109] hls entry err', e); }
+  }
+
+  // ── Kontinuierliches Repainting ──
+  function tick(){
+    try{
+      paintTravelBadge();
+      paintOnboardReminder();
+      refreshPresenceDots();
+    }catch(e){}
+  }
+  // Initial
+  setTimeout(function(){
+    tick();
+    injectHlsEntryPoint();
+  }, 800);
+  // Alle 60s
+  setInterval(tick, 60*1000);
+
+  // Bei Screen-Wechsel
+  try{
+    var _origShow = window.showScreen;
+    if(typeof _origShow === 'function'){
+      window.showScreen = function(id){
+        var r = _origShow.apply(this, arguments);
+        setTimeout(function(){
+          tick();
+          if(id === 'profile' || id === 'profileScreen' || id === 'me') injectHlsEntryPoint();
+        }, 180);
+        return r;
+      };
+    }
+  }catch(e){}
+
+  // ESC schließt HLS
+  try{
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape'){
+        var ov = document.getElementById('v109Hls');
+        if(ov && ov.classList.contains('show')) window.v109CloseHls();
+      }
+    });
+  }catch(e){}
+
+  console.log('[v109] Location + Presence Overhaul aktiv');
+})();
+
+if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js?v=23').catch(function(){});
 </script>
+
+<!-- v109: Hide-Last-Seen Privacy Sheet -->
+<div class="v109-hls" id="v109Hls" role="dialog" aria-modal="true" aria-label="Zuletzt gesehen verbergen" onclick="if(event.target===this)window.v109CloseHls&&window.v109CloseHls()">
+  <div class="v109-hls-sheet">
+    <div class="v109-hls-hd">
+      <div class="v109-hls-title">👁️ Wer darf mich sehen?</div>
+      <button type="button" class="v109-hls-close" onclick="window.v109CloseHls&&window.v109CloseHls()" aria-label="Schließen">✕</button>
+    </div>
+    <div class="v109-hls-sub">Tippe jemanden an, um ihm deine <b>"zuletzt gesehen"</b>-Zeit zu verbergen. Er sieht dich dann nur noch wenn du aktiv bist.</div>
+    <div id="v109HlsList">
+      <div class="v109-hls-empty">Lade Crew-Mitglieder...</div>
+    </div>
+  </div>
+</div>
 
 <!-- v108: Notification-Center Sheet — Mich / Crew Tabs + optionaler Crew-Filter -->
 <div class="v108-noti" id="v108Noti" role="dialog" aria-modal="true" aria-label="Benachrichtigungen" onclick="if(event.target===this)window.v108CloseNoti&&window.v108CloseNoti()">
