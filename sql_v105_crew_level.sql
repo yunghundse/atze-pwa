@@ -19,9 +19,10 @@ update public.crews
   where aura is null;
 
 -- 3) Crew-XP-Log — Feed aller XP-Events für den Live-Ticker
+--    crew_id ist text, weil crews.id in diesem Schema text ist.
 create table if not exists public.crew_xp_log (
   id uuid primary key default gen_random_uuid(),
-  crew_id uuid not null references public.crews(id) on delete cascade,
+  crew_id text not null references public.crews(id) on delete cascade,
   user_id uuid references public.profiles(user_id) on delete set null,
   amount integer not null check (amount > 0),
   reason text not null,
@@ -58,8 +59,12 @@ create policy "crew_xp_log_insert"
   );
 
 -- 4) RPC add_crew_xp — atomisch: crews.aura hochzählen + Log schreiben
+--    p_crew_id ist text, passt zu crews.id (text).
+--    Alte uuid-Signatur droppen, damit der Client die neue sauber trifft.
+drop function if exists public.add_crew_xp(uuid,int,text,text);
+
 create or replace function public.add_crew_xp(
-  p_crew_id uuid,
+  p_crew_id text,
   p_amount int,
   p_reason text,
   p_icon text default null
@@ -95,11 +100,12 @@ begin
 end
 $$;
 
-grant execute on function public.add_crew_xp(uuid,int,text,text) to authenticated;
+grant execute on function public.add_crew_xp(text,int,text,text) to authenticated;
 
 -- 5) Weekly-Quest-Progress pro Crew (was gehört wem?)
+--    crew_id ist text, weil crews.id in diesem Schema text ist.
 create table if not exists public.crew_quest_progress (
-  crew_id uuid not null references public.crews(id) on delete cascade,
+  crew_id text not null references public.crews(id) on delete cascade,
   quest_id text not null,
   week_key text not null,   -- z.B. '2026-W17'
   progress int not null default 0,
