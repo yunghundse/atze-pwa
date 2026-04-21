@@ -4166,6 +4166,262 @@ nav button.active .ni{animation:vNineCountPop .38s var(--ease-spring-soft) 1}
   .v104-pass-card,.v104-pass-sheet,.v104-create-ov,.v104-edit-sheet,.v104-safety-sheet,.v104-pass-top::before{animation:none!important;transition:none!important;transform:none!important}
   .v104-ring-fg{transition:none!important}
 }
+
+/* ============================================ */
+/* v105 — Crew-Level-System                     */
+/* Interaktives Level mit XP-Pool, Quests,      */
+/* Contributors, Live-Feed                       */
+/* ============================================ */
+
+/* Crew-Level-Hero — große Karte oben auf dem Crew-Tab */
+.v105-crew-lvl-hero{
+  margin:10px 14px 14px;padding:18px 18px 16px;border-radius:22px;cursor:pointer;
+  position:relative;overflow:hidden;
+  background:
+    radial-gradient(circle at 20% 0%,rgba(255,214,10,.14),transparent 50%),
+    radial-gradient(circle at 90% 100%,rgba(191,90,242,.12),transparent 55%),
+    linear-gradient(140deg,rgba(38,24,16,.92),rgba(22,14,18,.96));
+  border:1px solid rgba(255,109,46,.28);
+  box-shadow:0 14px 40px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.02) inset;
+  transition:transform var(--dur-short,.18s) var(--ease-out,cubic-bezier(.22,.61,.36,1));
+}
+.v105-crew-lvl-hero:hover{transform:translateY(-2px)}
+.v105-crew-lvl-hero:active{transform:scale(.99)}
+.v105-cl-shine{
+  position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(115deg,transparent 45%,rgba(255,214,10,.10) 50%,transparent 55%);
+  background-size:220% 100%;background-position:-100% 0;
+  animation:v105ClShine 6s linear infinite;
+}
+@keyframes v105ClShine{
+  0%{background-position:-100% 0}
+  100%{background-position:200% 0}
+}
+.v105-cl-top{position:relative;z-index:1;display:flex;align-items:center;gap:16px}
+.v105-cl-ring{position:relative;width:82px;height:82px;flex-shrink:0}
+.v105-cl-ring svg{width:82px;height:82px;transform:rotate(-90deg)}
+.v105-cl-ring-bg{stroke:rgba(255,255,255,.08);stroke-width:7;fill:none}
+.v105-cl-ring-fg{
+  stroke:url(#v105RingGrad,currentColor);
+  stroke:#FFD60A;
+  stroke-width:7;fill:none;stroke-linecap:round;
+  transition:stroke-dasharray .8s var(--ease-spring-soft,cubic-bezier(.32,1.5,.64,1));
+  filter:drop-shadow(0 0 6px rgba(255,214,10,.5));
+}
+.v105-cl-ring-lbl{
+  position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  line-height:1;pointer-events:none;
+}
+.v105-cl-ring-lvl{font-size:28px;font-weight:900;letter-spacing:-1.5px;color:#fff;text-shadow:0 2px 10px rgba(255,214,10,.3)}
+.v105-cl-ring-tag{font-size:8px;font-weight:900;letter-spacing:1.5px;color:#FFD60A;margin-top:2px}
+.v105-cl-meta{flex:1;min-width:0}
+.v105-cl-eyebrow{font-size:10px;font-weight:800;color:var(--o,#FF6D2E);text-transform:uppercase;letter-spacing:1.4px;margin-bottom:3px}
+.v105-cl-rank{display:flex;align-items:center;gap:8px;font-size:17px;font-weight:900;letter-spacing:-.3px;color:#fff;margin-bottom:8px;line-height:1.15}
+.v105-cl-rank-em{font-size:22px;line-height:1}
+.v105-cl-xp-wrap{display:flex;flex-direction:column;gap:4px}
+.v105-cl-bar{height:6px;border-radius:4px;background:rgba(255,255,255,.08);overflow:hidden;position:relative}
+.v105-cl-bar > i{
+  display:block;height:100%;
+  background:linear-gradient(90deg,var(--o,#FF6D2E),#FFD60A);
+  border-radius:4px;
+  transition:width .8s var(--ease-spring-soft,cubic-bezier(.32,1.5,.64,1));
+  box-shadow:0 0 10px rgba(255,214,10,.55);
+}
+.v105-cl-xp-row{display:flex;align-items:center;justify-content:space-between;font-size:11px;font-weight:700;color:var(--t2);margin-top:2px}
+.v105-cl-xp-row b{color:#FFD60A;font-weight:900;font-size:13px;letter-spacing:-.2px}
+.v105-cl-xp-next{color:var(--t3)}
+.v105-cl-tonext{font-size:10.5px;font-weight:600;color:var(--t3);margin-top:2px;line-height:1.3}
+
+/* Quest-Cards (neue Weekly-Challenges) */
+.v105-quest{
+  margin:0 14px 8px;padding:14px 14px 12px;border-radius:16px;position:relative;
+  background:linear-gradient(135deg,rgba(191,90,242,.10),rgba(255,109,46,.04));
+  border:1px solid rgba(191,90,242,.22);
+  transition:transform var(--dur-short,.18s) var(--ease-out,cubic-bezier(.22,.61,.36,1));
+}
+.v105-quest:active{transform:scale(.99)}
+.v105-quest.done{
+  background:linear-gradient(135deg,rgba(52,199,89,.14),rgba(52,199,89,.02));
+  border-color:rgba(52,199,89,.35);
+}
+.v105-quest-hd{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.v105-quest-ic{
+  width:40px;height:40px;border-radius:12px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:22px;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.06);
+}
+.v105-quest.done .v105-quest-ic{background:rgba(52,199,89,.14);border-color:rgba(52,199,89,.28)}
+.v105-quest-body{flex:1;min-width:0}
+.v105-quest-ttl{font-size:13.5px;font-weight:800;color:#fff;letter-spacing:-.2px;line-height:1.25}
+.v105-quest-desc{font-size:11.5px;font-weight:600;color:var(--t3);margin-top:2px;line-height:1.35}
+.v105-quest-rwd{
+  align-self:flex-start;flex-shrink:0;
+  padding:4px 9px;border-radius:999px;font-size:10px;font-weight:900;
+  background:rgba(255,214,10,.14);color:#FFD60A;letter-spacing:.3px;
+  border:1px solid rgba(255,214,10,.22);
+}
+.v105-quest.done .v105-quest-rwd{background:rgba(52,199,89,.14);color:#30D158;border-color:rgba(52,199,89,.28)}
+.v105-quest-prog{display:flex;align-items:center;gap:10px;margin-top:2px}
+.v105-quest-bar{flex:1;height:5px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden}
+.v105-quest-bar > i{
+  display:block;height:100%;
+  background:linear-gradient(90deg,#BF5AF2,var(--o,#FF6D2E));
+  border-radius:3px;transition:width .55s var(--ease-spring-soft,cubic-bezier(.32,1.5,.64,1));
+}
+.v105-quest.done .v105-quest-bar > i{background:linear-gradient(90deg,var(--green,#34C759),#30D158)}
+.v105-quest-pct{font-size:11px;font-weight:800;color:var(--t2);flex-shrink:0;min-width:42px;text-align:right}
+.v105-quest-cta{
+  margin-top:10px;width:100%;padding:10px 14px;border:none;border-radius:12px;
+  background:linear-gradient(135deg,#BF5AF2,var(--o,#FF6D2E));color:#fff;
+  font-family:inherit;font-size:12px;font-weight:900;letter-spacing:.2px;cursor:pointer;
+  box-shadow:0 4px 14px rgba(191,90,242,.3);
+  transition:transform .12s ease,box-shadow .18s ease;
+}
+.v105-quest-cta:hover{box-shadow:0 6px 20px rgba(191,90,242,.4)}
+.v105-quest-cta:active{transform:scale(.97)}
+.v105-quest.done .v105-quest-cta{background:linear-gradient(135deg,var(--green,#34C759),#30D158);box-shadow:0 4px 14px rgba(52,199,89,.3);cursor:default}
+
+/* Contributors Row */
+.v105-contrib-row{
+  display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:12px;margin-bottom:6px;
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);
+  transition:background var(--dur-short,.18s) ease;
+}
+.v105-contrib-row:hover{background:rgba(255,255,255,.06)}
+.v105-contrib-rank{
+  width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:900;color:#fff;flex-shrink:0;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);
+}
+.v105-contrib-row:nth-child(1) .v105-contrib-rank{background:linear-gradient(135deg,#FFD60A,#FFAA00);color:#0A0A0A;border-color:transparent;box-shadow:0 2px 6px rgba(255,214,10,.4)}
+.v105-contrib-row:nth-child(2) .v105-contrib-rank{background:linear-gradient(135deg,#C0C0C0,#9FA6AD);color:#0A0A0A;border-color:transparent}
+.v105-contrib-row:nth-child(3) .v105-contrib-rank{background:linear-gradient(135deg,#CD7F32,#8B5A2B);color:#fff;border-color:transparent}
+.v105-contrib-ava{width:32px;height:32px;border-radius:10px;overflow:hidden;flex-shrink:0;background:rgba(255,255,255,.08)}
+.v105-contrib-ava img{width:100%;height:100%;object-fit:cover;display:block}
+.v105-contrib-ava-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:#fff;background:linear-gradient(135deg,#FF6D2E,#C93A7A)}
+.v105-contrib-name{flex:1;min-width:0;font-size:13px;font-weight:800;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.v105-contrib-xp{font-size:13px;font-weight:900;color:#FFD60A;letter-spacing:-.2px;flex-shrink:0}
+.v105-contrib-xp-lbl{font-size:9px;font-weight:800;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-left:3px}
+
+/* XP-Feed Rows */
+.v105-feed-row{
+  display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:10px;margin-bottom:4px;
+  background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.04);
+  animation:v105FeedIn .5s var(--ease-out,cubic-bezier(.22,.61,.36,1));
+}
+@keyframes v105FeedIn{
+  from{opacity:0;transform:translateX(-6px)}
+  to{opacity:1;transform:translateX(0)}
+}
+.v105-feed-ic{
+  width:28px;height:28px;border-radius:9px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:14px;
+  background:rgba(255,109,46,.10);border:1px solid rgba(255,109,46,.18);
+}
+.v105-feed-body{flex:1;min-width:0;font-size:12px;color:var(--t);line-height:1.3}
+.v105-feed-body b{color:#fff;font-weight:800}
+.v105-feed-time{font-size:10px;color:var(--t3);margin-top:2px}
+.v105-feed-xp{font-size:12px;font-weight:900;color:#FFD60A;letter-spacing:-.2px;flex-shrink:0}
+.v105-feed-xp::before{content:'+';margin-right:1px}
+
+/* Crew-Level-Up Celebration Overlay */
+.v105-clu-ov{
+  position:fixed;inset:0;z-index:99989;display:none;align-items:center;justify-content:center;
+  background:radial-gradient(circle at 50% 45%,rgba(255,109,46,.28),rgba(5,5,7,.88) 60%);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  padding:20px;animation:lvlFadeIn .3s var(--ease-out,cubic-bezier(.22,.61,.36,1));
+}
+.v105-clu-ov.show{display:flex}
+.v105-clu-card{
+  max-width:340px;width:100%;padding:32px 26px 22px;border-radius:24px;text-align:center;
+  background:linear-gradient(180deg,rgba(28,20,30,.96),rgba(14,10,18,.98));
+  border:1px solid rgba(255,109,46,.36);
+  box-shadow:0 24px 80px rgba(0,0,0,.7),0 0 70px rgba(255,109,46,.25);
+  animation:lvlCardIn .6s var(--ease-bounce,cubic-bezier(.175,.885,.32,1.275));
+  position:relative;overflow:hidden;
+}
+.v105-clu-card::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:conic-gradient(from 0deg,rgba(255,214,10,.10),rgba(255,109,46,.18),rgba(191,90,242,.12),rgba(255,214,10,.10));
+  animation:v105CluSpin 8s linear infinite;
+  opacity:.7;
+}
+@keyframes v105CluSpin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+.v105-clu-card > *{position:relative;z-index:1}
+.v105-clu-emoji{font-size:64px;margin-bottom:6px;display:inline-block;animation:lvlStarSpin .9s var(--ease-bounce,cubic-bezier(.175,.885,.32,1.275))}
+.v105-clu-label{font-size:11px;font-weight:900;color:#FFD60A;letter-spacing:2.4px;text-transform:uppercase;margin-bottom:4px}
+.v105-clu-title{font-size:24px;font-weight:900;letter-spacing:-.5px;line-height:1.1;margin-bottom:6px;color:#fff}
+.v105-clu-rank-new{
+  display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:999px;
+  background:linear-gradient(135deg,var(--o,#FF6D2E),#FFD60A);color:#0A0A0A;
+  font-size:14px;font-weight:900;letter-spacing:-.2px;margin:4px 0 14px;
+  box-shadow:0 6px 20px rgba(255,109,46,.4);
+}
+.v105-clu-sub{font-size:13px;color:var(--t2);line-height:1.5;margin-bottom:20px}
+.v105-clu-btn{
+  width:100%;padding:14px;border:none;border-radius:14px;
+  background:linear-gradient(135deg,var(--o,#FF6D2E),#C93A7A);color:#fff;
+  font-size:14px;font-weight:900;cursor:pointer;font-family:inherit;letter-spacing:.2px;
+  box-shadow:0 10px 28px rgba(255,109,46,.4);
+}
+.v105-clu-btn:active{transform:scale(.97)}
+
+/* Crew-Level Detail-Sheet (full crew rank ladder) */
+.v105-cls-ov{
+  position:fixed;inset:0;z-index:9870;
+  background:rgba(8,8,12,.88);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  display:flex;align-items:flex-end;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity var(--dur-base,.28s) var(--ease-out,cubic-bezier(.22,.61,.36,1));
+}
+.v105-cls-ov.show{opacity:1;pointer-events:auto}
+.v105-cls-sheet{
+  width:100%;max-width:440px;
+  border-radius:26px 26px 0 0;
+  background:linear-gradient(180deg,rgba(30,22,30,.98),rgba(14,10,18,.98));
+  border:1px solid rgba(255,109,46,.22);border-bottom:none;
+  padding:14px 18px max(24px,env(safe-area-inset-bottom));
+  max-height:90vh;overflow-y:auto;
+  transform:translateY(100%);transition:transform .34s var(--ease-spring-soft,cubic-bezier(.32,1.5,.64,1));
+}
+.v105-cls-ov.show .v105-cls-sheet{transform:translateY(0)}
+.v105-cls-grab{width:42px;height:4px;border-radius:2px;background:rgba(255,255,255,.22);margin:0 auto 12px}
+.v105-cls-hd{text-align:center;margin-bottom:18px}
+.v105-cls-ttl{font-size:18px;font-weight:900;letter-spacing:-.3px;color:#fff}
+.v105-cls-sub{font-size:12px;color:var(--t3);margin-top:2px}
+.v105-cls-rank-row{
+  display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;margin-bottom:6px;
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);
+  transition:background var(--dur-short,.18s) ease;
+}
+.v105-cls-rank-row.current{
+  background:linear-gradient(135deg,rgba(255,109,46,.14),rgba(255,214,10,.06));
+  border-color:rgba(255,109,46,.36);
+  box-shadow:0 0 0 1px rgba(255,109,46,.22),0 6px 18px rgba(255,109,46,.16);
+}
+.v105-cls-rank-row.locked{opacity:.45}
+.v105-cls-rank-em{font-size:24px;width:40px;text-align:center;flex-shrink:0}
+.v105-cls-rank-info{flex:1;min-width:0}
+.v105-cls-rank-ttl{font-size:14px;font-weight:800;color:#fff;letter-spacing:-.2px}
+.v105-cls-rank-xp{font-size:11px;color:var(--t3);margin-top:1px;font-weight:700}
+.v105-cls-rank-state{
+  font-size:9px;font-weight:900;letter-spacing:.8px;text-transform:uppercase;
+  padding:3px 8px;border-radius:6px;flex-shrink:0;
+}
+.v105-cls-rank-row.current .v105-cls-rank-state{background:#FFD60A;color:#0A0A0A}
+.v105-cls-rank-row.done .v105-cls-rank-state{background:rgba(52,199,89,.18);color:#30D158}
+.v105-cls-rank-row.locked .v105-cls-rank-state{background:rgba(255,255,255,.06);color:var(--t3)}
+.v105-cls-close{
+  width:100%;padding:13px;margin-top:14px;border:none;border-radius:14px;
+  background:rgba(255,255,255,.06);color:var(--t2);font-size:13px;font-weight:700;
+  cursor:pointer;font-family:inherit;border:1px solid var(--glass-border,rgba(255,255,255,.08));
+}
+.v105-cls-close:active{transform:scale(.97)}
+
+@media (prefers-reduced-motion: reduce){
+  .v105-crew-lvl-hero,.v105-cl-shine,.v105-clu-card,.v105-clu-card::before,.v105-feed-row,.v105-cls-sheet{animation:none!important;transition:none!important;transform:none!important}
+  .v105-cl-ring-fg,.v105-cl-bar > i{transition:none!important}
+}
+
 </style>
 
 <!-- LOADING -->
@@ -5098,6 +5354,65 @@ nav button.active .ni{animation:vNineCountPop .38s var(--ease-spring-soft) 1}
           </div>
         </div>
 
+        <!-- ═══════════════════════════════════════ -->
+        <!-- v105: CREW-LEVEL-HERO — Interaktives Crew-Level-System -->
+        <!-- ═══════════════════════════════════════ -->
+        <div class="v105-crew-lvl-hero" id="crewLevelHero" onclick="window.openCrewLevelSheet&&window.openCrewLevelSheet()" role="button" aria-label="Crew-Level Details öffnen">
+          <div class="v105-cl-shine"></div>
+          <div class="v105-cl-top">
+            <div class="v105-cl-ring">
+              <svg viewBox="0 0 100 100" aria-hidden="true">
+                <circle cx="50" cy="50" r="42" class="v105-cl-ring-bg"/>
+                <circle cx="50" cy="50" r="42" class="v105-cl-ring-fg" id="crewLvlRingFg" stroke-dasharray="0 264"/>
+              </svg>
+              <div class="v105-cl-ring-lbl">
+                <span class="v105-cl-ring-lvl" id="crewLvlNum">1</span>
+                <span class="v105-cl-ring-tag">LVL</span>
+              </div>
+            </div>
+            <div class="v105-cl-meta">
+              <div class="v105-cl-eyebrow">Crew-Level</div>
+              <div class="v105-cl-rank" id="crewLvlRank"><span class="v105-cl-rank-em">🌱</span><span id="crewLvlRankTxt">Neue Crew</span></div>
+              <div class="v105-cl-xp-wrap">
+                <div class="v105-cl-bar"><i id="crewLvlBar" style="width:0%"></i></div>
+                <div class="v105-cl-xp-row">
+                  <span class="v105-cl-xp-cur"><b id="crewLvlXP">0</b> XP</span>
+                  <span class="v105-cl-xp-next">→ <span id="crewLvlNext">200</span></span>
+                </div>
+                <div class="v105-cl-tonext" id="crewLvlToNext">Sammelt 200 XP für den nächsten Rang</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- v105: WEEKLY CREW-QUESTS — ersetzen die alten Daily-Challenges -->
+        <div class="crew-section" id="crewQuestsSection">
+          <div class="crew-section-header">
+            <div class="csh-left"><span class="csh-emoji">🎯</span><span class="csh-title">Crew-Quests der Woche</span></div>
+            <div class="csh-badge" id="crewQuestsWeekBadge" style="background:rgba(191,90,242,.12);color:#BF5AF2;font-size:10px">KW --</div>
+          </div>
+          <div id="crewQuestsList" style="padding:0 14px 14px"><p class="crew-empty">Quests laden …</p></div>
+        </div>
+
+        <!-- v105: TOP CONTRIBUTORS — wer hat diese Woche am meisten für die Crew geholt? -->
+        <div class="crew-section" id="crewContribSection">
+          <div class="crew-section-header">
+            <div class="csh-left"><span class="csh-emoji">💪</span><span class="csh-title">Top Contributors</span></div>
+            <div class="csh-badge" style="background:rgba(255,109,46,.12);color:var(--o);font-size:10px">WOCHE</div>
+          </div>
+          <div id="crewContribList" style="padding:0 14px 14px"><p class="crew-empty">Noch keine Contributions diese Woche.</p></div>
+        </div>
+
+        <!-- v105: LIVE XP-FEED — was hat gerade XP gebracht? -->
+        <div class="crew-section" id="crewXpFeedSection">
+          <div class="crew-section-header">
+            <div class="csh-left"><span class="csh-emoji">✨</span><span class="csh-title">XP-Feed</span></div>
+            <div class="csh-badge live-badge">LIVE</div>
+          </div>
+          <div id="crewXpFeedList" style="padding:0 14px 14px"><p class="crew-empty">Noch keine XP-Events. Checkt ein, ladet ein, feiert zusammen.</p></div>
+        </div>
+
+
         <!-- v80: Crew in der Nähe — direkt oben im Crew-Screen -->
         <div class="crew-nearby-section" id="crewNearbySection">
           <div class="crew-nearby-header">
@@ -5188,7 +5503,8 @@ nav button.active .ni{animation:vNineCountPop .38s var(--ease-spring-soft) 1}
           <div id="leaderboardList" style="padding:0 14px 14px"><p class="crew-empty">Leaderboard füllt sich, sobald die Crew Aura sammelt 🏆</p></div>
         </div>
 
-        <!-- v95: Crew-Challenge aus dem Crew-Menü entfernt — lebt jetzt im Game Center (Deals-Tab → Game Center). -->
+        <!-- v105: Crew-Challenges sind jetzt Weekly-Quests und Teil des neuen Crew-Level-Systems (siehe crewLevelHero weiter oben). -->
+
 
         <!-- ═══════════════════════════════════════ -->
         <!-- ZONE 5: LIVE — Was passiert gerade? -->
@@ -5396,12 +5712,7 @@ nav button.active .ni{animation:vNineCountPop .38s var(--ease-spring-soft) 1}
           </div>
         </div>
 
-        <!-- v95: Crew-Challenge — migriert aus dem Crew-Menü -->
-        <div class="gc-section-ttl" style="display:flex;align-items:center;justify-content:space-between">
-          <span>🎯 Crew-Challenge</span>
-          <span class="csh-badge challenge-time-badge" id="challengeTimer" style="font-size:10px"></span>
-        </div>
-        <div id="challengeList" style="margin-bottom:16px"><p class="crew-empty" style="color:var(--t3);font-size:13px;padding:6px 4px">Noch keine Challenges aktiv – bald gehts los 💪</p></div>
+        <!-- v105: Crew-Challenges sind aus dem Game Center RAUS — wandern ins neue Crew-Level-System auf dem Crew-Tab. -->
 
         <div class="gc-section-ttl">Deine Crew-Verbindungen</div>
         <div id="gcCrewConnections"><div class="ach-empty">Lade Crews…</div></div>
@@ -5708,7 +6019,7 @@ async function logPrivacyConsent(mode, previousMode, state){
       deals_consent: !!(state.consent && state.consent.deals_consent),
       consent_version: 1,
       user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-      app_version: 100,
+      app_version: 105,
       // v73: tag source so we can see who was newly prompted vs. picked from settings
       source: (!previousMode && ME && ME.created_at && (Date.now()-new Date(ME.created_at).getTime())>3600000) ? 'existing_user_v72_prompt' : (!previousMode ? 'first_run' : 'settings_change')
     };
@@ -5756,7 +6067,7 @@ function clearPrivacyData(){
         deals_consent: false,
         consent_version: 1,
         user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-        app_version: 100,
+        app_version: 105,
         source: 'user_reset'
       };
       sb.from('privacy_consent_log').insert(clearRow).then(function(r){ if(r&&r.error) console.warn('[PM] clear log err', r.error.message); });
@@ -12888,8 +13199,7 @@ window.exploreGo = function(section){
   if(section === 'trophy') loadTrophyPanel();
   if(section === 'games'){
     loadGameCenterCrews();
-    // v95: Crew-Challenge läuft jetzt hier im Game Center
-    try{ if(typeof buildChallenges==='function') buildChallenges(); }catch(e){}
+    // v105: Crew-Challenges sind raus. Laufen jetzt als Weekly-Quests im neuen Crew-Level-System auf dem Crew-Tab.
   }
 };
 
@@ -14440,55 +14750,11 @@ window.submitTonightSuggestion=async function(){
   }
 }
 
-// 3. CREW CHALLENGES — show 3 daily
-function buildChallenges(){
-  var el=document.getElementById('challengeList');if(!el)return;
-  var doy=Math.floor((new Date()-new Date(new Date().getFullYear(),0,0))/86400000);
-  var today=new Date().toISOString().split('T')[0];
-  var accepted=JSON.parse(localStorage.getItem('crew_challenges_accepted')||'{}');
-  var completed=JSON.parse(localStorage.getItem('crew_challenges_completed')||'{}');
-  var html='';
-  // Show 3 challenges rotated daily
-  for(var c=0;c<3;c++){
-    var challenge=CHALLENGES[(doy*3+c)%CHALLENGES.length];
-    if(!challenge)continue;
-    var ckey=today+'_'+challenge.title;
-    var isAccepted=accepted[ckey];
-    var isCompleted=completed[ckey];
-    var diffClass=c===0?'border-color:rgba(255,214,10,.25);box-shadow:0 0 20px rgba(255,214,10,.06),inset 0 1px 0 rgba(255,255,255,.1)':'';
-    html+='<div class="challenge-card" style="'+diffClass+'">';
-    if(c===0)html+='<div style="font-size:8px;font-weight:800;color:#FFD60A;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px">⭐ Tages-Highlight</div>';
-    html+='<div class="challenge-icon">'+challenge.icon+'</div><div class="challenge-title">'+challenge.title+'</div><div class="challenge-desc">'+challenge.desc+'</div><div class="challenge-pts">+'+challenge.pts+' Aura ✨</div>';
-    if(isCompleted){html+='<div style="margin-top:8px;padding:8px;border-radius:10px;background:rgba(52,199,89,.15);color:var(--green);font-size:11px;font-weight:700;text-align:center">✅ Erledigt!</div>'}
-    else if(isAccepted){html+='<button class="challenge-btn" onclick="completeChallengeNow(\''+esc(challenge.title)+'\','+challenge.pts+',\''+ckey+'\')">✓ Challenge erledigt</button>'}
-    else{html+='<button class="challenge-btn" onclick="acceptChallenge(\''+esc(challenge.title)+'\',\''+ckey+'\')">Challenge annehmen 💪</button>'}
-    html+='</div>';
-  }
-  // Daily completion counter
-  var completedToday=Object.keys(completed).filter(function(k){return k.startsWith(today)}).length;
-  if(completedToday>0){
-    html+='<div style="text-align:center;padding:8px;font-size:12px;color:var(--o);font-weight:700">'+completedToday+'/3 Challenges heute erledigt '+(completedToday>=3?'🔥 Alle geschafft!':'')+'</div>';
-  }
-  el.innerHTML=html;
-}
-window.acceptChallenge=function(title,ckey){
-  var accepted=JSON.parse(localStorage.getItem('crew_challenges_accepted')||'{}');
-  accepted[ckey]=true;
-  localStorage.setItem('crew_challenges_accepted',JSON.stringify(accepted));
-  buildChallenges();
-  toast('Challenge angenommen! 💪');
-  if(navigator.vibrate)navigator.vibrate(15);
-}
-window.completeChallengeNow=async function(title,pts,ckey){
-  var completed=JSON.parse(localStorage.getItem('crew_challenges_completed')||'{}');
-  completed[ckey]=true;
-  localStorage.setItem('crew_challenges_completed',JSON.stringify(completed));
-  try{await sb.rpc('add_points',{p_user_id:ME.user_id,p_points:pts})}catch(e){console.warn('add_points failed:',e)}
-  ME.points=(ME.points||0)+pts;updateProfile();buildCrewStatus();
-  buildChallenges();
-  toast('+'+pts+' Aura! ✨');
-  if(navigator.vibrate)navigator.vibrate([30,20,30]);
-}
+// v105: CREW-CHALLENGES entfernt — laufen jetzt als Weekly-Quests im neuen Crew-Level-System (v105-crew-level block).
+// Leere Stubs für Rückwärts-Kompatibilität, damit keine Referenz bricht:
+function buildChallenges(){ /* v105: deprecated — replaced by v105CrewQuests */ }
+window.acceptChallenge=function(){ /* v105: deprecated */ };
+window.completeChallengeNow=async function(){ /* v105: deprecated */ };
 
 // CREW TIPS — time-based suggestions
 function buildCrewTips(){
@@ -17116,7 +17382,653 @@ window.playCrewJoinCinema = async function(crew, opts){
   console.log('[v104] Crew-Pass system loaded — Ranks, Pass Modal, Creation Flow, Safety Share');
 })();
 
-if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js?v=16').catch(function(){});
+// ============================================
+// v105 — Crew-Level-System (interaktiv, Crew-XP-Pool)
+// Ersetzt die alten Daily-Crew-Challenges aus dem Game Center.
+// XP-Pool sitzt in crews.aura, RPC add_crew_xp, Log in crew_xp_log.
+// Weekly-Quests in crew_quest_progress.
+// ============================================
+;(function(){
+  'use strict';
+
+  // ── 1) Crew-Rank-Ladder ─────────────────────
+  var CREW_RANKS = [
+    {lvl:1, emoji:'🌱', title:'Neue Crew',             min:0},
+    {lvl:2, emoji:'🔥', title:'Aktive Crew',           min:200},
+    {lvl:3, emoji:'🌴', title:'Mallorca-Stammgäste',   min:500},
+    {lvl:4, emoji:'🏖️', title:'Playa-Veteranen',       min:1000},
+    {lvl:5, emoji:'🍾', title:'Party-Legenden',        min:2000},
+    {lvl:6, emoji:'👑', title:'Crew-Royalty',          min:4000},
+    {lvl:7, emoji:'🌅', title:'Sunset-Kings',          min:7000},
+    {lvl:8, emoji:'⭐', title:'Hall of Fame',          min:12000}
+  ];
+  window.CREW_RANKS = CREW_RANKS;
+
+  function getCrewLevelInfo(xp){
+    xp = Math.max(0, parseInt(xp||0, 10));
+    var cur = CREW_RANKS[0], nxt = CREW_RANKS[1];
+    for(var i=0;i<CREW_RANKS.length;i++){
+      if(xp >= CREW_RANKS[i].min){ cur = CREW_RANKS[i]; nxt = CREW_RANKS[i+1] || null; }
+    }
+    var span = nxt ? Math.max(1, nxt.min - cur.min) : 1;
+    var progress = nxt ? Math.min(1, Math.max(0, (xp - cur.min) / span)) : 1;
+    var toNext = nxt ? Math.max(0, nxt.min - xp) : 0;
+    return {
+      level:cur.lvl, emoji:cur.emoji, title:cur.title, min:cur.min,
+      next:nxt, progress:progress, toNext:toNext, xp:xp
+    };
+  }
+  window.getCrewLevelInfo = getCrewLevelInfo;
+
+  // ── 2) Weekly Quest Definitions ─────────────
+  // Pro Woche werden 3 Quests deterministisch aus diesem Pool gezogen (WeekKey).
+  var QUEST_DEFS = [
+    {id:'checkins_5',  icon:'📍', title:'5 Partner-Check-ins',    desc:'Mitglieder checken gemeinsam bei 5 Partnern ein.', target:5,  reward:200},
+    {id:'checkins_10', icon:'🍹', title:'10 Partner-Check-ins',   desc:'Eine echte Crew-Tour: 10 Check-ins zusammen.',      target:10, reward:400},
+    {id:'invites_3',   icon:'📲', title:'3 neue Leute einladen',  desc:'Jedes neue Crew-Mitglied zählt.',                  target:3,  reward:250},
+    {id:'votes_5',     icon:'🗳️', title:'5x Crew-Votes gevotet',  desc:'Stimmt zusammen über eure Tages-Topics ab.',       target:5,  reward:150},
+    {id:'matches_10',  icon:'💫', title:'10 Matches in der Crew', desc:'Crew-Mitglieder matchen gemeinsam 10 Leute.',      target:10, reward:200},
+    {id:'chat_20',     icon:'💬', title:'20 Chat-Messages',       desc:'Bleibt in Verbindung — Chat schreiben zählt.',     target:20, reward:120},
+    {id:'safe_5',      icon:'✅', title:'5 Safe-Check-ins',       desc:'Achtet aufeinander mit Safe-Pings.',               target:5,  reward:150},
+    {id:'bootstour_1', icon:'🚤', title:'Eine Bootstour planen',  desc:'Organisiert einen gemeinsamen Ausflug.',           target:1,  reward:300},
+    {id:'sunset_3',    icon:'🌅', title:'3x zusammen Sunset',     desc:'An 3 Tagen den Sonnenuntergang teilen.',           target:3,  reward:180},
+    {id:'nav_home_3',  icon:'🏠', title:'3x nach Hause navigiert',desc:'Alle kommen sicher heim — 3x nutzen.',             target:3,  reward:120}
+  ];
+
+  function _weekKey(d){
+    d = d || new Date();
+    // ISO-Week (approx): year + WW
+    var t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    var dayNum = (t.getUTCDay() + 6) % 7; // Mon=0
+    t.setUTCDate(t.getUTCDate() - dayNum + 3);
+    var firstThu = new Date(Date.UTC(t.getUTCFullYear(),0,4));
+    var firstThuDay = (firstThu.getUTCDay()+6)%7;
+    firstThu.setUTCDate(firstThu.getUTCDate() - firstThuDay + 3);
+    var week = 1 + Math.round((t - firstThu) / (7*86400000));
+    return t.getUTCFullYear() + '-W' + String(week).padStart(2,'0');
+  }
+  window._v105WeekKey = _weekKey;
+
+  function _hashStr(s){
+    var h = 2166136261;
+    for(var i=0;i<s.length;i++){ h ^= s.charCodeAt(i); h = (h * 16777619) >>> 0; }
+    return h >>> 0;
+  }
+  function pickWeeklyQuests(crewId, weekKey){
+    // Deterministic: pick 3 distinct quests from pool based on (crewId+weekKey) hash
+    var base = _hashStr((crewId||'x')+'|'+weekKey);
+    var pool = QUEST_DEFS.slice();
+    var picks = [];
+    for(var i=0;i<3 && pool.length;i++){
+      var idx = (base + i*2654435761) >>> 0;
+      idx = idx % pool.length;
+      picks.push(pool.splice(idx,1)[0]);
+    }
+    return picks;
+  }
+  window._v105PickQuests = pickWeeklyQuests;
+
+  // ── 3) XP-Hub: Kern-API ──────────────────────
+  var _activeCrewId = null;
+  var _lastCrewXp = 0;
+  var _questProgressCache = {}; // {questId: {progress,target,completed_at}}
+
+  function getActiveCrewId(){
+    try{
+      if(_activeCrewId) return _activeCrewId;
+      if(typeof window.CREW_CTX !== 'undefined' && window.CREW_CTX && window.CREW_CTX.active_crew_id){
+        _activeCrewId = window.CREW_CTX.active_crew_id;
+        return _activeCrewId;
+      }
+      if(typeof window.ACTIVE_CREW_ID !== 'undefined' && window.ACTIVE_CREW_ID){
+        _activeCrewId = window.ACTIVE_CREW_ID;
+        return _activeCrewId;
+      }
+      if(typeof window.myCrew !== 'undefined' && window.myCrew && window.myCrew.id){
+        _activeCrewId = window.myCrew.id;
+        return _activeCrewId;
+      }
+    }catch(e){}
+    return null;
+  }
+  function setActiveCrewId(id){ _activeCrewId = id; }
+  window._v105SetActiveCrewId = setActiveCrewId;
+
+  async function addCrewXp(amount, reason, icon){
+    amount = parseInt(amount||0, 10);
+    if(!amount || amount <= 0) return null;
+    var crewId = getActiveCrewId();
+    if(!crewId){ return null; }
+    if(typeof sb === 'undefined' || !sb.rpc) return null;
+    try{
+      var r = await sb.rpc('add_crew_xp', {p_crew_id:crewId, p_amount:amount, p_reason:reason||'xp', p_icon:icon||null});
+      var newTotal = (r && r.data != null) ? r.data : null;
+      // Optimistic UI update
+      if(newTotal != null){
+        checkCrewLevelUp(_lastCrewXp, newTotal);
+        _lastCrewXp = newTotal;
+        paintCrewLevelHero(newTotal);
+      }
+      // Re-render feed + contribs
+      try{ loadCrewXpFeed(); }catch(e){}
+      try{ loadCrewContribs(); }catch(e){}
+      return newTotal;
+    }catch(e){
+      console.warn('[v105] addCrewXp failed', e);
+      return null;
+    }
+  }
+  window.addCrewXp = addCrewXp;
+
+  // ── 4) Level-Hero Painting ───────────────────
+  function paintCrewLevelHero(xp){
+    try{
+      var info = getCrewLevelInfo(xp);
+      var numEl = document.getElementById('crewLvlNum');  if(numEl) numEl.textContent = info.level;
+      var emEl  = document.querySelector('#crewLvlRank .v105-cl-rank-em'); if(emEl) emEl.textContent = info.emoji;
+      var rtEl  = document.getElementById('crewLvlRankTxt'); if(rtEl) rtEl.textContent = info.title;
+      var xpEl  = document.getElementById('crewLvlXP');   if(xpEl) xpEl.textContent = info.xp.toLocaleString('de-DE');
+      var nxEl  = document.getElementById('crewLvlNext'); if(nxEl) nxEl.textContent = info.next ? info.next.min.toLocaleString('de-DE') : 'MAX';
+      var barEl = document.getElementById('crewLvlBar');  if(barEl) barEl.style.width = (info.progress*100).toFixed(1)+'%';
+      var tnEl  = document.getElementById('crewLvlToNext');
+      if(tnEl){
+        if(info.next){
+          tnEl.textContent = 'Noch '+info.toNext.toLocaleString('de-DE')+' XP bis '+info.next.emoji+' '+info.next.title;
+        } else {
+          tnEl.textContent = '🏆 Ihr habt den höchsten Rang erreicht!';
+        }
+      }
+      var ringEl = document.getElementById('crewLvlRingFg');
+      if(ringEl){
+        var C = 2*Math.PI*42; // r=42 → ~263.9
+        var dash = (info.progress * C).toFixed(2);
+        ringEl.setAttribute('stroke-dasharray', dash+' '+(C-dash).toFixed(2));
+      }
+    }catch(e){ console.warn('[v105] paintHero err', e); }
+  }
+  window.paintCrewLevelHero = paintCrewLevelHero;
+
+  async function loadCrewLevel(){
+    var crewId = getActiveCrewId();
+    if(!crewId){ paintCrewLevelHero(0); return; }
+    if(typeof sb === 'undefined') return;
+    try{
+      var r = await sb.from('crews').select('aura').eq('id', crewId).single();
+      var xp = (r && r.data && r.data.aura != null) ? r.data.aura : 0;
+      _lastCrewXp = xp;
+      paintCrewLevelHero(xp);
+    }catch(e){ console.warn('[v105] loadCrewLevel err', e); paintCrewLevelHero(0); }
+  }
+  window.loadCrewLevel = loadCrewLevel;
+
+  // ── 5) Level-Up Celebration ─────────────────
+  function ensureClu(){
+    var ov = document.getElementById('v105CluOv');
+    if(ov) return ov;
+    ov = document.createElement('div');
+    ov.id = 'v105CluOv';
+    ov.className = 'v105-clu-ov';
+    ov.innerHTML = ''+
+      '<div class="v105-clu-card">'+
+        '<div class="v105-clu-emoji" id="v105CluEm">⭐</div>'+
+        '<div class="v105-clu-label">Crew-Level-Up</div>'+
+        '<div class="v105-clu-title" id="v105CluTtl">Level 2!</div>'+
+        '<div class="v105-clu-rank-new" id="v105CluRank">🔥 Aktive Crew</div>'+
+        '<div class="v105-clu-sub" id="v105CluSub">Eure Crew hat einen neuen Rang erreicht — sammelt weiter!</div>'+
+        '<button class="v105-clu-btn" onclick="window._v105CluDismiss()">Weiter feiern ✨</button>'+
+      '</div>';
+    document.body.appendChild(ov);
+    return ov;
+  }
+  window._v105CluDismiss = function(){
+    var ov = document.getElementById('v105CluOv');
+    if(ov){ ov.classList.remove('show'); setTimeout(function(){ try{ ov.style.display='none'; }catch(e){} }, 320); }
+  };
+  function showCrewLevelUp(info){
+    try{
+      var ov = ensureClu();
+      var em = document.getElementById('v105CluEm');   if(em) em.textContent = info.emoji;
+      var tt = document.getElementById('v105CluTtl');  if(tt) tt.textContent = 'Level '+info.level+'!';
+      var rk = document.getElementById('v105CluRank'); if(rk) rk.textContent = info.emoji+' '+info.title;
+      var sb2= document.getElementById('v105CluSub');
+      if(sb2){
+        var msgs = [
+          'Eure Crew hat '+info.title+' erreicht — respekt!',
+          'Neuer Rang freigeschaltet: '+info.title+'. Die Crew flext jetzt härter.',
+          'Level '+info.level+'. Die anderen Crews sehen euch schon im Leaderboard.',
+          info.title+' — das ist kein Zufall. Ihr seid eingespielt.'
+        ];
+        sb2.textContent = msgs[Math.floor(Math.random()*msgs.length)];
+      }
+      ov.style.display='flex';
+      void ov.offsetWidth;
+      ov.classList.add('show');
+      try{
+        if(typeof window.fireConfetti === 'function'){
+          window.fireConfetti({count:160, spread:1.0, duration:2600, colors:['#FF6D2E','#FFD60A','#BF5AF2','#30D158','#FE3C72']});
+          setTimeout(function(){ window.fireConfetti({count:80, spread:.7, duration:1800, colors:['#FFD60A','#FF8C3A']}); }, 400);
+        }
+      }catch(e){}
+      try{ if(navigator.vibrate) navigator.vibrate([20,18,40,18,80]); }catch(e){}
+      setTimeout(function(){ try{ window._v105CluDismiss(); }catch(e){} }, 9000);
+    }catch(e){ console.warn('[v105] showCrewLevelUp err', e); }
+  }
+  function checkCrewLevelUp(oldXp, newXp){
+    if(newXp <= oldXp) return;
+    var oi = getCrewLevelInfo(oldXp);
+    var ni = getCrewLevelInfo(newXp);
+    if(ni.level > oi.level){
+      setTimeout(function(){ showCrewLevelUp(ni); }, 500);
+    }
+  }
+
+  // ── 6) Quest-UI + Progress ──────────────────
+  async function loadCrewQuests(){
+    var el = document.getElementById('crewQuestsList');
+    if(!el) return;
+    var crewId = getActiveCrewId();
+    var wk = _weekKey();
+    var wkBadge = document.getElementById('crewQuestsWeekBadge');
+    if(wkBadge) wkBadge.textContent = wk.replace(/^\d{4}-/,'KW ');
+    if(!crewId){
+      el.innerHTML = '<p class="crew-empty">Tritt einer Crew bei, um Quests freizuschalten.</p>';
+      return;
+    }
+    var quests = pickWeeklyQuests(crewId, wk);
+    // Load progress from DB
+    var progress = {};
+    if(typeof sb !== 'undefined'){
+      try{
+        var r = await sb.from('crew_quest_progress')
+          .select('quest_id,progress,target,completed_at')
+          .eq('crew_id', crewId).eq('week_key', wk);
+        if(r && r.data){
+          r.data.forEach(function(row){ progress[row.quest_id] = row; });
+        }
+      }catch(e){ console.warn('[v105] loadQuestProgress err', e); }
+    }
+    _questProgressCache = progress;
+    // Render
+    var html = quests.map(function(q){
+      var p = progress[q.id] || {progress:0, target:q.target, completed_at:null};
+      var cur = Math.min(p.progress||0, q.target);
+      var pct = Math.min(100, Math.round((cur/q.target)*100));
+      var done = !!p.completed_at || cur >= q.target;
+      var cls = done ? 'v105-quest done' : 'v105-quest';
+      var cta = done
+        ? '<button class="v105-quest-cta" disabled>✅ Geschafft — +'+q.reward+' XP</button>'
+        : '<button class="v105-quest-cta" onclick="window.v105ProgressQuest(\''+q.id+'\',1)">+1 Fortschritt eintragen</button>';
+      return '<div class="'+cls+'">'+
+        '<div class="v105-quest-hd">'+
+          '<div class="v105-quest-ic">'+q.icon+'</div>'+
+          '<div class="v105-quest-body">'+
+            '<div class="v105-quest-ttl">'+q.title+'</div>'+
+            '<div class="v105-quest-desc">'+q.desc+'</div>'+
+          '</div>'+
+          '<div class="v105-quest-rwd">+'+q.reward+' XP</div>'+
+        '</div>'+
+        '<div class="v105-quest-prog">'+
+          '<div class="v105-quest-bar"><i style="width:'+pct+'%"></i></div>'+
+          '<div class="v105-quest-pct">'+cur+' / '+q.target+'</div>'+
+        '</div>'+
+        cta+
+      '</div>';
+    }).join('');
+    el.innerHTML = html || '<p class="crew-empty">Keine Quests für diese Woche.</p>';
+  }
+  window.loadCrewQuests = loadCrewQuests;
+
+  window.v105ProgressQuest = async function(questId, inc){
+    var crewId = getActiveCrewId(); if(!crewId) return;
+    var wk = _weekKey();
+    var def = QUEST_DEFS.find(function(q){ return q.id === questId; });
+    if(!def) return;
+    inc = parseInt(inc||1, 10);
+    var prev = _questProgressCache[questId] || {progress:0, target:def.target, completed_at:null};
+    if(prev.completed_at) return; // already done
+    var newProg = Math.min(def.target, (prev.progress||0) + inc);
+    var justDone = newProg >= def.target && !prev.completed_at;
+    try{
+      await sb.from('crew_quest_progress').upsert({
+        crew_id:crewId,
+        quest_id:questId,
+        week_key:wk,
+        progress:newProg,
+        target:def.target,
+        completed_at: justDone ? new Date().toISOString() : null,
+        updated_at: new Date().toISOString()
+      }, {onConflict:'crew_id,quest_id,week_key'});
+      _questProgressCache[questId] = {progress:newProg, target:def.target, completed_at: justDone ? new Date().toISOString() : null};
+    }catch(e){ console.warn('[v105] progressQuest err', e); }
+    if(justDone){
+      try{ if(typeof toast==='function') toast('🎯 Quest geschafft! +'+def.reward+' XP für die Crew'); }catch(e){}
+      try{ await addCrewXp(def.reward, 'Quest: '+def.title, def.icon); }catch(e){}
+    } else {
+      try{ if(typeof toast==='function') toast('Fortschritt +'+inc+' · '+newProg+'/'+def.target); }catch(e){}
+    }
+    loadCrewQuests();
+  };
+
+  // ── 7) XP-Feed (Live-Ticker) ───────────────
+  function _timeAgo(iso){
+    try{
+      var t = new Date(iso).getTime(); var d = Date.now() - t;
+      if(d < 60000) return 'gerade eben';
+      if(d < 3600000) return Math.floor(d/60000)+'m';
+      if(d < 86400000) return Math.floor(d/3600000)+'h';
+      return Math.floor(d/86400000)+'d';
+    }catch(e){ return ''; }
+  }
+  async function loadCrewXpFeed(){
+    var el = document.getElementById('crewXpFeedList');
+    if(!el) return;
+    var crewId = getActiveCrewId();
+    if(!crewId){ el.innerHTML = '<p class="crew-empty">Tritt einer Crew bei, um den XP-Feed zu sehen.</p>'; return; }
+    if(typeof sb === 'undefined') return;
+    try{
+      var r = await sb.from('crew_xp_log')
+        .select('amount,reason,icon,created_at,user_id')
+        .eq('crew_id', crewId)
+        .order('created_at', {ascending:false})
+        .limit(20);
+      if(!r || !r.data || r.data.length === 0){
+        el.innerHTML = '<p class="crew-empty">Noch keine XP-Events. Checkt ein, ladet ein, feiert zusammen.</p>';
+        return;
+      }
+      var uids = Array.from(new Set(r.data.map(function(x){ return x.user_id; }).filter(Boolean)));
+      var names = {};
+      if(uids.length){
+        try{
+          var r2 = await sb.from('profiles').select('user_id,name').in('user_id', uids);
+          if(r2 && r2.data){ r2.data.forEach(function(p){ names[p.user_id] = p.name || 'Anonym'; }); }
+        }catch(e){}
+      }
+      var html = r.data.map(function(ev){
+        var who = ev.user_id ? (names[ev.user_id] || 'Crew-Mitglied') : 'Crew';
+        return '<div class="v105-feed-row">'+
+          '<div class="v105-feed-ic">'+(ev.icon||'✨')+'</div>'+
+          '<div class="v105-feed-body"><b>'+(typeof esc==='function'?esc(who):who)+'</b> · '+(typeof esc==='function'?esc(ev.reason||'XP'):(ev.reason||'XP'))+'<div class="v105-feed-time">'+_timeAgo(ev.created_at)+'</div></div>'+
+          '<div class="v105-feed-xp">'+ev.amount+'</div>'+
+        '</div>';
+      }).join('');
+      el.innerHTML = html;
+    }catch(e){
+      console.warn('[v105] loadXpFeed err', e);
+      el.innerHTML = '<p class="crew-empty">Feed konnte nicht geladen werden.</p>';
+    }
+  }
+  window.loadCrewXpFeed = loadCrewXpFeed;
+
+  // ── 8) Top Contributors (diese Woche) ──────
+  async function loadCrewContribs(){
+    var el = document.getElementById('crewContribList');
+    if(!el) return;
+    var crewId = getActiveCrewId();
+    if(!crewId){ el.innerHTML = '<p class="crew-empty">Tritt einer Crew bei, um Contributors zu sehen.</p>'; return; }
+    if(typeof sb === 'undefined') return;
+    try{
+      // Start of week (Monday, local)
+      var now = new Date();
+      var day = (now.getDay() + 6) % 7;
+      var monday = new Date(now); monday.setDate(now.getDate() - day); monday.setHours(0,0,0,0);
+      var r = await sb.from('crew_xp_log')
+        .select('user_id,amount')
+        .eq('crew_id', crewId)
+        .gte('created_at', monday.toISOString());
+      if(!r || !r.data || r.data.length === 0){
+        el.innerHTML = '<p class="crew-empty">Noch keine Contributions diese Woche. Legt los!</p>';
+        return;
+      }
+      var sums = {};
+      r.data.forEach(function(ev){
+        if(!ev.user_id) return;
+        sums[ev.user_id] = (sums[ev.user_id]||0) + (ev.amount||0);
+      });
+      var uids = Object.keys(sums);
+      if(uids.length === 0){ el.innerHTML = '<p class="crew-empty">Noch keine Contributions diese Woche.</p>'; return; }
+      var profs = {};
+      try{
+        var r2 = await sb.from('profiles').select('user_id,name,photo_url').in('user_id', uids);
+        if(r2 && r2.data){ r2.data.forEach(function(p){ profs[p.user_id] = p; }); }
+      }catch(e){}
+      var ranked = uids.map(function(u){ return {uid:u, xp:sums[u], prof:profs[u]}; })
+                       .sort(function(a,b){ return b.xp - a.xp; })
+                       .slice(0, 5);
+      var html = ranked.map(function(it, i){
+        var p = it.prof || {};
+        var ava = p.photo_url
+          ? '<div class="v105-contrib-ava"><img src="'+p.photo_url+'" alt=""></div>'
+          : '<div class="v105-contrib-ava"><div class="v105-contrib-ava-ph">'+((p.name||'?').charAt(0).toUpperCase())+'</div></div>';
+        return '<div class="v105-contrib-row">'+
+          '<div class="v105-contrib-rank">'+(i+1)+'</div>'+
+          ava+
+          '<div class="v105-contrib-name">'+(typeof esc==='function'?esc(p.name||'Anonym'):(p.name||'Anonym'))+'</div>'+
+          '<div class="v105-contrib-xp">'+it.xp+'<span class="v105-contrib-xp-lbl">XP</span></div>'+
+        '</div>';
+      }).join('');
+      el.innerHTML = html;
+    }catch(e){
+      console.warn('[v105] loadContribs err', e);
+      el.innerHTML = '<p class="crew-empty">Contributors konnten nicht geladen werden.</p>';
+    }
+  }
+  window.loadCrewContribs = loadCrewContribs;
+
+  // ── 9) Crew-Level-Sheet (Rank-Ladder) ──────
+  function ensureCls(){
+    var ov = document.getElementById('v105ClsOv');
+    if(ov) return ov;
+    ov = document.createElement('div');
+    ov.id = 'v105ClsOv';
+    ov.className = 'v105-cls-ov';
+    ov.innerHTML = ''+
+      '<div class="v105-cls-sheet" role="dialog" aria-label="Crew-Level Details">'+
+        '<div class="v105-cls-grab"></div>'+
+        '<div class="v105-cls-hd">'+
+          '<div class="v105-cls-ttl">Crew-Rang-Ladder</div>'+
+          '<div class="v105-cls-sub" id="v105ClsSub">Euer Weg zum Hall of Fame</div>'+
+        '</div>'+
+        '<div id="v105ClsList"></div>'+
+        '<button class="v105-cls-close" onclick="window._v105CloseCls()">Schließen</button>'+
+      '</div>';
+    ov.addEventListener('click', function(ev){ if(ev.target === ov) window._v105CloseCls(); });
+    document.body.appendChild(ov);
+    return ov;
+  }
+  window._v105CloseCls = function(){
+    var ov = document.getElementById('v105ClsOv');
+    if(ov) ov.classList.remove('show');
+  };
+  window.openCrewLevelSheet = function(){
+    var ov = ensureCls();
+    var info = getCrewLevelInfo(_lastCrewXp);
+    var sub = document.getElementById('v105ClsSub');
+    if(sub) sub.textContent = _lastCrewXp.toLocaleString('de-DE')+' XP · '+info.emoji+' '+info.title;
+    var list = document.getElementById('v105ClsList');
+    if(list){
+      list.innerHTML = CREW_RANKS.map(function(r){
+        var state = _lastCrewXp >= r.min ? (info.level === r.lvl ? 'current' : 'done') : 'locked';
+        var stateLbl = state === 'current' ? 'AKTUELL' : (state === 'done' ? 'GESCHAFFT' : '🔒 LOCKED');
+        var nxtHint = r.lvl < CREW_RANKS.length
+          ? ('ab '+r.min.toLocaleString('de-DE')+' XP')
+          : ('ab '+r.min.toLocaleString('de-DE')+' XP · MAX-Rang');
+        return '<div class="v105-cls-rank-row '+state+'">'+
+          '<div class="v105-cls-rank-em">'+r.emoji+'</div>'+
+          '<div class="v105-cls-rank-info">'+
+            '<div class="v105-cls-rank-ttl">Lvl '+r.lvl+' · '+r.title+'</div>'+
+            '<div class="v105-cls-rank-xp">'+nxtHint+'</div>'+
+          '</div>'+
+          '<div class="v105-cls-rank-state">'+stateLbl+'</div>'+
+        '</div>';
+      }).join('');
+    }
+    ov.classList.add('show');
+  };
+
+  // ── 10) Crew-Tab-Hook: alles neu laden ─────
+  function refreshCrewLevelUI(){
+    try{
+      loadCrewLevel();
+      loadCrewQuests();
+      loadCrewXpFeed();
+      loadCrewContribs();
+    }catch(e){}
+  }
+  window.refreshCrewLevelUI = refreshCrewLevelUI;
+
+  // Hook crewGo: beim Wechsel auf 'active' die Crew-Level UI laden
+  try{
+    var _v105OldCrewGo = window.crewGo;
+    if(typeof _v105OldCrewGo === 'function'){
+      window.crewGo = function(section){
+        var r = _v105OldCrewGo.apply(this, arguments);
+        if(section === 'active'){
+          setTimeout(refreshCrewLevelUI, 200);
+        }
+        return r;
+      };
+    }
+  }catch(e){}
+
+  // Hook screen 'crew' (generic go)
+  try{
+    var _v105OldGo = window.go;
+    if(typeof _v105OldGo === 'function'){
+      window.go = function(screen){
+        var r = _v105OldGo.apply(this, arguments);
+        if(screen === 'crew'){ setTimeout(refreshCrewLevelUI, 200); }
+        return r;
+      };
+    }
+  }catch(e){}
+
+  // ── 11) XP-Hooks in bestehende Actions ─────
+  // Partner-Checkin: +25 XP + Quest-Progress
+  try{
+    var _v105OldFrom = null;
+    // Wrap partner_checkins.insert after login. We monkey-patch nach ME-load.
+    function hookCheckinRpcs(){
+      // Monkey-patch add_points calls can't be intercepted directly,
+      // so we piggy-back auf das bestehende RPC. Besser: hook auf DOM-Ebene.
+      // Strategy: Dispatch auf custom Events, die der Checkin-Flow feuert.
+    }
+    // Passiver Hook: periodisch loadCrewXpFeed auf Crew-Tab alle 30s
+    setInterval(function(){
+      try{
+        var scr = document.getElementById('screen-crew');
+        if(scr && !scr.classList.contains('gone') && getActiveCrewId()){
+          loadCrewXpFeed();
+        }
+      }catch(e){}
+    }, 30000);
+  }catch(e){}
+
+  // Public XP-Hook: andere Teile der App können window.crewEvent() aufrufen
+  window.crewEvent = function(kind, meta){
+    try{
+      meta = meta || {};
+      if(kind === 'partner_checkin'){
+        addCrewXp(25, 'Partner-Check-in'+(meta.place?' · '+meta.place:''), '📍');
+        // Quest-Progress
+        var qid = _questProgressCache.hasOwnProperty('checkins_10') ? 'checkins_10'
+                : _questProgressCache.hasOwnProperty('checkins_5')  ? 'checkins_5'
+                : null;
+        if(qid) window.v105ProgressQuest(qid, 1);
+      } else if(kind === 'match'){
+        addCrewXp(10, 'Match gefeiert', '💫');
+        if(_questProgressCache.hasOwnProperty('matches_10')) window.v105ProgressQuest('matches_10', 1);
+      } else if(kind === 'invite_accepted'){
+        addCrewXp(50, 'Crew-Einladung angenommen', '📲');
+        if(_questProgressCache.hasOwnProperty('invites_3')) window.v105ProgressQuest('invites_3', 1);
+      } else if(kind === 'vote'){
+        addCrewXp(5, 'Crew-Vote abgegeben', '🗳️');
+        if(_questProgressCache.hasOwnProperty('votes_5')) window.v105ProgressQuest('votes_5', 1);
+      } else if(kind === 'chat_message'){
+        // sehr leicht, kein XP — nur Quest-Progress
+        if(_questProgressCache.hasOwnProperty('chat_20')) window.v105ProgressQuest('chat_20', 1);
+      } else if(kind === 'safe_checkin'){
+        addCrewXp(8, 'Safe-Check-in gesendet', '✅');
+        if(_questProgressCache.hasOwnProperty('safe_5')) window.v105ProgressQuest('safe_5', 1);
+      } else if(kind === 'nav_home'){
+        if(_questProgressCache.hasOwnProperty('nav_home_3')) window.v105ProgressQuest('nav_home_3', 1);
+      }
+    }catch(e){ console.warn('[v105] crewEvent err', e); }
+  };
+
+  // Auto-hook: Partner-Check-in via completeCheckin/sendSafeCheckIn/sendVote
+  try{
+    var _v105OrigSafe = window.sendSafeCheckIn;
+    if(typeof _v105OrigSafe === 'function'){
+      window.sendSafeCheckIn = function(){
+        var r = _v105OrigSafe.apply(this, arguments);
+        try{ window.crewEvent('safe_checkin'); }catch(e){}
+        return r;
+      };
+    }
+  }catch(e){}
+
+  // Hook auf den Partner-Checkin (partner_checkins.insert)
+  // Wir wrappen sb.from um den Insert abzufangen — lightweight
+  try{
+    if(typeof sb !== 'undefined' && sb && typeof sb.from === 'function'){
+      var _v105SbFrom = sb.from.bind(sb);
+      sb.from = function(table){
+        var b = _v105SbFrom(table);
+        if(table === 'partner_checkins' && b && typeof b.insert === 'function'){
+          var _origIns = b.insert.bind(b);
+          b.insert = function(row){
+            var res = _origIns.apply(this, arguments);
+            // piggy-back: XP abfeuern
+            try{
+              var place = null;
+              if(row && typeof row === 'object'){
+                place = row.partner_code || row.partner_id || null;
+              }
+              setTimeout(function(){
+                try{ window.crewEvent('partner_checkin', {place:place}); }catch(e){}
+              }, 200);
+            }catch(e){}
+            return res;
+          };
+        }
+        return b;
+      };
+    }
+  }catch(e){ console.warn('[v105] sb-hook err', e); }
+
+  // ── 12) Initial Load + Periodic ────────────
+  (function(){
+    var tries = 0;
+    var t = setInterval(function(){
+      tries++;
+      if(typeof ME !== 'undefined' && ME && ME.user_id){
+        clearInterval(t);
+        setTimeout(refreshCrewLevelUI, 700);
+      } else if(tries > 60){ clearInterval(t); }
+    }, 500);
+  })();
+
+  // ── 13) Reset ME.points Client-Side (Parity mit SQL-Reset) ──
+  //    SQL hat alle profiles.points auf 0 gesetzt. Beim nächsten Login lädt der Client eh frisch.
+  //    Falls im aktuellen Tab noch ein alter Wert lebt: beim App-Start kurz nachladen.
+  setTimeout(function(){
+    try{
+      if(typeof ME !== 'undefined' && ME && ME.user_id && typeof sb !== 'undefined'){
+        sb.from('profiles').select('points').eq('user_id', ME.user_id).single().then(function(r){
+          if(r && r.data && typeof ME !== 'undefined'){
+            ME.points = r.data.points || 0;
+            try{ if(typeof updateQuickStats === 'function') updateQuickStats(); }catch(e){}
+            try{ if(typeof paintLevelInQuickStats === 'function') paintLevelInQuickStats(); }catch(e){}
+          }
+        }).catch(function(){});
+      }
+    }catch(e){}
+  }, 2500);
+
+  console.log('[v105] Crew-Level-System loaded — Ranks:'+CREW_RANKS.length+', Quests:'+QUEST_DEFS.length);
+})();
+
+if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js?v=17').catch(function(){});
 </script>
 </body>
 </html>
