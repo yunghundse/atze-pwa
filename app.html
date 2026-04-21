@@ -3824,6 +3824,348 @@ nav button.active .ni{animation:vNineCountPop .38s var(--ease-spring-soft) 1}
   .v103-check-morph svg polyline{animation:none!important;stroke-dashoffset:0!important}
   .streak-badge.v102-hot{animation:none!important}
 }
+
+/* ============================================ */
+/* v104 — Crew-Pass, neues Level-System, Customization */
+/* ============================================ */
+
+/* Rank-Chips (auf Pass, Profil-Btn, in openCrewProfile badges) */
+.v104-rank-chip{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:4px 10px;border-radius:999px;
+  font-size:10px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+  color:var(--t);
+}
+.v104-rank-chip .rc-ic{font-size:11px;line-height:1}
+.v104-rank-chip.sz-big{padding:6px 14px;font-size:12px}
+
+/* Pass-Button im Profil-Screen (ersetzt v103 pmi-QR) */
+.v104-pass-card{
+  margin:0 14px 14px;padding:18px;border-radius:20px;cursor:pointer;
+  background:linear-gradient(135deg,#FF6D2E 0%,#FFD60A 60%,#FF6D2E 120%);
+  background-size:220% 220%;background-position:0% 50%;
+  position:relative;overflow:hidden;
+  box-shadow:0 14px 36px rgba(255,109,46,.28);
+  transition:transform var(--dur-short,.18s) var(--ease-out,cubic-bezier(.22,.61,.36,1)),box-shadow var(--dur-short,.18s) ease;
+  animation:v104PassShimmer 8s ease-in-out infinite;
+}
+@keyframes v104PassShimmer{
+  0%,100%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+}
+.v104-pass-card:hover{transform:translateY(-2px);box-shadow:0 18px 44px rgba(255,109,46,.35)}
+.v104-pass-card:active{transform:scale(.985)}
+.v104-pass-card::after{
+  content:'';position:absolute;inset:0;border-radius:20px;
+  background:
+    radial-gradient(circle at 20% 0%,rgba(255,255,255,.25),transparent 45%),
+    radial-gradient(circle at 80% 100%,rgba(255,255,255,.15),transparent 50%);
+  pointer-events:none;
+}
+.v104-pass-card-inner{position:relative;z-index:1;display:flex;align-items:center;gap:14px}
+.v104-pass-ico{
+  width:54px;height:54px;flex-shrink:0;border-radius:14px;
+  background:rgba(10,10,10,.88);display:flex;align-items:center;justify-content:center;
+  box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.25);
+  color:#FFD60A;
+}
+.v104-pass-lbl{flex:1;min-width:0;color:#0A0A0A;text-shadow:0 1px 0 rgba(255,255,255,.1)}
+.v104-pass-ttl{font-size:16px;font-weight:900;letter-spacing:-.3px;line-height:1.15;display:flex;align-items:center;gap:6px}
+.v104-pass-verify{font-size:14px;color:#0A84FF;filter:drop-shadow(0 0 2px rgba(10,132,255,.4))}
+.v104-pass-sub{font-size:12px;font-weight:700;opacity:.78;margin-top:3px;line-height:1.3}
+.v104-pass-arr{color:#0A0A0A;font-size:22px;font-weight:900;opacity:.7}
+
+/* Crew-Pass Fullscreen-Modal */
+.v104-pass-ov{
+  position:fixed;inset:0;z-index:9800;
+  background:rgba(8,8,12,.88);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  display:flex;align-items:flex-start;justify-content:center;
+  padding:max(20px,env(safe-area-inset-top)) 12px max(20px,env(safe-area-inset-bottom));
+  overflow-y:auto;
+  opacity:0;pointer-events:none;transition:opacity var(--dur-base,.28s) var(--ease-out,cubic-bezier(.22,.61,.36,1));
+}
+.v104-pass-ov.show{opacity:1;pointer-events:auto}
+
+.v104-pass-sheet{
+  width:100%;max-width:440px;margin:auto 0;
+  border-radius:26px;
+  background:linear-gradient(160deg,rgba(28,28,34,.98),rgba(18,18,24,.98));
+  border:1px solid rgba(255,255,255,.08);
+  box-shadow:0 24px 60px rgba(0,0,0,.5);
+  transform:translateY(24px) scale(.96);
+  transition:transform var(--dur-base,.28s) var(--ease-spring-soft,cubic-bezier(.32,1.5,.64,1));
+  overflow:hidden;position:relative;
+}
+.v104-pass-ov.show .v104-pass-sheet{transform:translateY(0) scale(1)}
+
+.v104-pass-x{
+  position:absolute;top:12px;right:12px;z-index:3;
+  width:34px;height:34px;border-radius:50%;border:none;
+  background:rgba(255,255,255,.08);color:var(--t);
+  font-size:20px;cursor:pointer;font-family:inherit;
+  display:flex;align-items:center;justify-content:center;
+  backdrop-filter:blur(10px);
+}
+.v104-pass-x:hover{background:rgba(255,255,255,.14)}
+
+/* Holographic-Stripe über dem Pass */
+.v104-pass-top{
+  position:relative;padding:26px 22px 18px;
+  background:linear-gradient(135deg,rgba(255,109,46,.22),rgba(255,214,10,.12) 50%,rgba(191,90,242,.18));
+  overflow:hidden;
+}
+.v104-pass-top::before{
+  content:'';position:absolute;inset:0;
+  background:
+    linear-gradient(115deg,transparent 42%,rgba(255,255,255,.12) 48%,transparent 54%),
+    linear-gradient(45deg,rgba(255,214,10,.06),transparent 60%);
+  pointer-events:none;
+  animation:v104HoloShine 6s linear infinite;
+}
+@keyframes v104HoloShine{
+  0%{background-position:-200px 0,0 0}
+  100%{background-position:400px 0,0 0}
+}
+
+.v104-pass-hero{position:relative;z-index:1;display:flex;align-items:center;gap:14px}
+.v104-pass-ava{
+  width:68px;height:68px;border-radius:18px;overflow:hidden;flex-shrink:0;
+  background:rgba(10,10,10,.6);
+  box-shadow:0 0 0 2px rgba(255,255,255,.18),0 10px 24px rgba(0,0,0,.4);
+}
+.v104-pass-ava img{width:100%;height:100%;object-fit:cover;display:block}
+.v104-pass-ava-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;color:#fff;background:linear-gradient(135deg,#FF6D2E,#C93A7A)}
+.v104-pass-who{flex:1;min-width:0}
+.v104-pass-name{font-size:20px;font-weight:900;letter-spacing:-.5px;display:flex;align-items:center;gap:6px;line-height:1.1}
+.v104-pass-verified{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:#0A84FF;color:#fff;font-size:11px;font-weight:900;flex-shrink:0;box-shadow:0 2px 6px rgba(10,132,255,.4)}
+.v104-pass-handle{font-size:12px;color:var(--t2);margin-top:2px;font-weight:700}
+.v104-pass-tag{font-size:12px;color:var(--t3);margin-top:4px;font-style:italic;line-height:1.35;max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+.v104-pass-stats{
+  position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:16px;
+}
+.v104-pass-stat{
+  padding:10px 8px;border-radius:12px;
+  background:rgba(10,10,10,.38);border:1px solid rgba(255,255,255,.08);
+  text-align:center;
+}
+.v104-pass-stat-num{font-size:17px;font-weight:900;letter-spacing:-.3px;line-height:1.1}
+.v104-pass-stat-lbl{font-size:9px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.6px;margin-top:3px}
+.v104-pass-stat .v104-rank-chip{margin-top:2px}
+
+/* Level-Ring (für den Pass oder als Standalone) */
+.v104-ring{position:relative;width:60px;height:60px;margin:0 auto}
+.v104-ring svg{width:60px;height:60px;transform:rotate(-90deg)}
+.v104-ring-bg{stroke:rgba(255,255,255,.08);stroke-width:5;fill:none}
+.v104-ring-fg{stroke:currentColor;stroke-width:5;fill:none;stroke-linecap:round;transition:stroke-dasharray .6s var(--ease-out,cubic-bezier(.22,.61,.36,1))}
+.v104-ring-lvl{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;letter-spacing:-.5px}
+
+/* Pass QR-Area */
+.v104-pass-body{padding:20px 22px 24px}
+.v104-pass-tabs{
+  display:flex;gap:6px;padding:4px;border-radius:12px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);
+  margin-bottom:16px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;
+}
+.v104-pass-tabs::-webkit-scrollbar{display:none}
+.v104-pass-tab{
+  flex:1;min-width:72px;padding:8px 10px;border-radius:9px;
+  border:none;background:transparent;color:var(--t2);cursor:pointer;font-family:inherit;
+  font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;
+  white-space:nowrap;transition:background var(--dur-short,.18s) ease,color var(--dur-short,.18s) ease;
+}
+.v104-pass-tab:hover{color:var(--t)}
+.v104-pass-tab.active{background:linear-gradient(135deg,var(--o),#FF8C3A);color:#fff;box-shadow:0 4px 12px rgba(255,109,46,.28)}
+.v104-pass-qr-wrap{
+  background:rgba(10,10,10,.55);border-radius:18px;padding:18px;
+  border:1.5px solid rgba(255,109,46,.18);
+  text-align:center;margin-bottom:14px;
+  box-shadow:inset 0 0 24px rgba(255,109,46,.05);
+}
+.v104-pass-qr-wrap img{width:100%;max-width:220px;aspect-ratio:1;image-rendering:pixelated;border-radius:10px;display:block;margin:0 auto}
+.v104-pass-qr-cap{margin-top:10px;font-size:13px;font-weight:800;color:var(--o)}
+.v104-pass-qr-sub{font-size:11px;color:var(--t3);margin-top:2px}
+
+.v104-pass-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
+.v104-pass-btn{
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.04);color:var(--t);font-family:inherit;
+  font-size:12px;font-weight:800;cursor:pointer;
+  transition:background var(--dur-short,.18s) ease,transform var(--dur-micro,.12s) ease;
+}
+.v104-pass-btn:hover{background:rgba(255,255,255,.08)}
+.v104-pass-btn:active{transform:scale(.97)}
+.v104-pass-btn.primary{background:linear-gradient(135deg,var(--o),#FF8C3A);border-color:transparent;color:#fff;box-shadow:0 6px 16px rgba(255,109,46,.25)}
+.v104-pass-btn.safety{background:linear-gradient(135deg,rgba(52,199,89,.2),rgba(48,209,88,.08));border-color:rgba(52,199,89,.22);color:#30D158}
+.v104-pass-btn svg{width:14px;height:14px}
+
+.v104-pass-meta{
+  margin-top:14px;padding:10px 14px;border-radius:12px;
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);
+  font-size:11px;color:var(--t3);display:flex;align-items:center;justify-content:space-between;gap:10px;
+}
+.v104-pass-meta b{color:var(--t2);font-weight:700}
+.v104-pass-interests{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
+.v104-pass-interest{font-size:10px;font-weight:700;padding:4px 9px;border-radius:8px;background:rgba(255,109,46,.08);color:var(--o);border:1px solid rgba(255,109,46,.14);text-transform:uppercase;letter-spacing:.3px}
+
+/* Pass-Creation Blocking Takeover */
+.v104-create-ov{
+  position:fixed;inset:0;z-index:9900;
+  background:radial-gradient(ellipse at 50% 20%,rgba(255,109,46,.18),transparent 55%),#0A0A0E;
+  display:flex;flex-direction:column;
+  padding:max(24px,env(safe-area-inset-top)) 18px max(24px,env(safe-area-inset-bottom));
+  opacity:0;pointer-events:none;transition:opacity .32s var(--ease-out,cubic-bezier(.22,.61,.36,1));
+}
+.v104-create-ov.show{opacity:1;pointer-events:auto}
+.v104-create-progress{
+  display:flex;gap:6px;margin-bottom:22px;
+}
+.v104-create-progress i{
+  flex:1;height:4px;border-radius:999px;background:rgba(255,255,255,.08);
+  transition:background .3s ease;
+}
+.v104-create-progress i.active{background:linear-gradient(90deg,var(--o),#FFD60A)}
+.v104-create-progress i.done{background:#34C759}
+.v104-create-body{flex:1;overflow-y:auto;padding:0 4px 16px;max-width:480px;width:100%;margin:0 auto}
+.v104-create-step{animation:v104CreateIn .4s var(--ease-out,cubic-bezier(.22,.61,.36,1))}
+@keyframes v104CreateIn{
+  from{opacity:0;transform:translateY(16px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.v104-create-emoji{font-size:52px;margin:12px 0 12px;text-align:center}
+.v104-create-ttl{font-size:26px;font-weight:900;letter-spacing:-.8px;line-height:1.1;text-align:center;margin-bottom:10px}
+.v104-create-sub{font-size:14px;color:var(--t2);text-align:center;line-height:1.55;margin-bottom:22px;padding:0 12px}
+
+.v104-create-field{margin-bottom:16px}
+.v104-create-label{font-size:11px;font-weight:800;color:var(--t2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between}
+.v104-create-label .v104-count{font-size:10px;color:var(--t3);font-weight:600}
+.v104-create-input{
+  width:100%;padding:14px 16px;border-radius:14px;
+  background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.08);
+  color:var(--t);font-family:inherit;font-size:15px;
+  transition:border-color .18s ease,background .18s ease;
+  resize:none;
+}
+.v104-create-input:focus{outline:none;border-color:var(--o);background:rgba(255,109,46,.06)}
+
+.v104-create-chips{display:flex;flex-wrap:wrap;gap:8px}
+.v104-create-chip{
+  padding:9px 14px;border-radius:999px;
+  background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.08);color:var(--t2);
+  font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;
+  transition:all .18s ease;user-select:none;
+  display:inline-flex;align-items:center;gap:5px;
+}
+.v104-create-chip:hover{background:rgba(255,255,255,.08);color:var(--t)}
+.v104-create-chip.on{background:linear-gradient(135deg,var(--o),#FF8C3A);border-color:transparent;color:#fff;box-shadow:0 4px 10px rgba(255,109,46,.25)}
+
+.v104-create-preview{
+  margin:20px auto 8px;padding:16px;border-radius:18px;max-width:360px;
+  background:linear-gradient(135deg,rgba(255,109,46,.12),rgba(255,214,10,.06));
+  border:1px solid rgba(255,109,46,.2);
+  display:flex;align-items:center;gap:12px;
+}
+.v104-create-pv-ava{width:50px;height:50px;border-radius:14px;overflow:hidden;background:rgba(10,10,10,.6);flex-shrink:0}
+.v104-create-pv-ava img{width:100%;height:100%;object-fit:cover}
+
+.v104-create-nav{
+  display:flex;gap:10px;padding:12px 4px 4px;max-width:480px;width:100%;margin:0 auto;
+}
+.v104-create-btn{
+  flex:1;padding:15px;border-radius:14px;border:none;
+  font-family:inherit;font-size:15px;font-weight:900;cursor:pointer;letter-spacing:-.2px;
+  transition:transform .12s ease,box-shadow .18s ease;
+}
+.v104-create-btn.primary{background:linear-gradient(135deg,var(--o),#FFD60A);color:#0A0A0A;box-shadow:0 10px 26px rgba(255,109,46,.35)}
+.v104-create-btn.primary:hover{box-shadow:0 14px 32px rgba(255,109,46,.45)}
+.v104-create-btn.primary:active{transform:scale(.98)}
+.v104-create-btn.ghost{background:rgba(255,255,255,.06);color:var(--t2);border:1px solid rgba(255,255,255,.08);flex:0 0 120px}
+.v104-create-btn:disabled{opacity:.4;cursor:not-allowed}
+.v104-create-skip{text-align:center;margin-top:10px}
+.v104-create-skip a{color:var(--t3);font-size:12px;font-weight:700;text-decoration:underline;cursor:pointer}
+
+/* Pass-Edit (Bio/Tagline/Interests) */
+.v104-edit-ov{
+  position:fixed;inset:0;z-index:9850;
+  background:rgba(8,8,12,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  display:flex;align-items:flex-end;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .28s var(--ease-out,cubic-bezier(.22,.61,.36,1));
+}
+.v104-edit-ov.show{opacity:1;pointer-events:auto}
+.v104-edit-sheet{
+  width:100%;max-width:440px;
+  border-radius:26px 26px 0 0;
+  background:linear-gradient(180deg,rgba(28,28,34,.98),rgba(14,14,20,.98));
+  border:1px solid rgba(255,255,255,.08);border-bottom:none;
+  padding:16px 20px max(24px,env(safe-area-inset-bottom));
+  max-height:88vh;overflow-y:auto;
+  transform:translateY(100%);transition:transform .3s var(--ease-spring-soft,cubic-bezier(.32,1.5,.64,1));
+}
+.v104-edit-ov.show .v104-edit-sheet{transform:translateY(0)}
+.v104-edit-grab{width:40px;height:4px;border-radius:2px;background:rgba(255,255,255,.18);margin:0 auto 14px}
+.v104-edit-ttl{font-size:18px;font-weight:900;margin-bottom:4px;letter-spacing:-.3px;text-align:center}
+.v104-edit-sub{font-size:12px;color:var(--t3);text-align:center;margin-bottom:18px}
+
+/* Safety-Share-Sheet */
+.v104-safety-ov{
+  position:fixed;inset:0;z-index:9860;
+  background:rgba(8,8,12,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  display:flex;align-items:flex-end;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .28s var(--ease-out,cubic-bezier(.22,.61,.36,1));
+}
+.v104-safety-ov.show{opacity:1;pointer-events:auto}
+.v104-safety-sheet{
+  width:100%;max-width:440px;
+  border-radius:24px 24px 0 0;
+  background:linear-gradient(180deg,rgba(28,28,34,.98),rgba(14,14,20,.98));
+  border:1px solid rgba(255,255,255,.08);border-bottom:none;
+  padding:16px 20px max(24px,env(safe-area-inset-bottom));
+  max-height:86vh;overflow-y:auto;
+  transform:translateY(100%);transition:transform .3s var(--ease-spring-soft,cubic-bezier(.32,1.5,.64,1));
+}
+.v104-safety-ov.show .v104-safety-sheet{transform:translateY(0)}
+.v104-safety-hd{
+  display:flex;align-items:center;gap:10px;margin-bottom:14px;
+}
+.v104-safety-ic{
+  width:44px;height:44px;border-radius:12px;flex-shrink:0;
+  background:linear-gradient(135deg,rgba(52,199,89,.18),rgba(48,209,88,.06));
+  border:1px solid rgba(52,199,89,.2);
+  display:flex;align-items:center;justify-content:center;color:#30D158;
+}
+.v104-safety-row{
+  display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:14px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);
+  margin-bottom:8px;cursor:pointer;
+  transition:background .15s ease;
+}
+.v104-safety-row:hover{background:rgba(255,255,255,.07)}
+.v104-safety-row-ava{width:36px;height:36px;border-radius:10px;overflow:hidden;flex-shrink:0;background:rgba(255,255,255,.08)}
+.v104-safety-row-ava img{width:100%;height:100%;object-fit:cover}
+.v104-safety-row-name{flex:1;font-size:13px;font-weight:700}
+.v104-safety-row-toggle{
+  width:44px;height:24px;border-radius:13px;background:rgba(255,255,255,.1);position:relative;flex-shrink:0;
+  transition:background .2s ease;
+}
+.v104-safety-row-toggle i{position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 2px 4px rgba(0,0,0,.3);transition:left .2s ease}
+.v104-safety-row.on .v104-safety-row-toggle{background:linear-gradient(135deg,#30D158,#25A344)}
+.v104-safety-row.on .v104-safety-row-toggle i{left:22px}
+
+/* Level-Ring auf dem Profil-Pass-Card (integriert im Pass-Card-Inner) */
+.v104-pass-ring-chip{
+  display:inline-flex;align-items:center;gap:6px;padding:3px 9px 3px 4px;
+  background:rgba(10,10,10,.6);border-radius:999px;margin-top:4px;
+  color:#FFD60A;font-size:11px;font-weight:800;
+}
+.v104-pass-ring-chip .rc-ic{width:20px;height:20px;border-radius:50%;background:rgba(255,214,10,.2);display:flex;align-items:center;justify-content:center;font-size:12px}
+
+/* Respect reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .v104-pass-card,.v104-pass-sheet,.v104-create-ov,.v104-edit-sheet,.v104-safety-sheet,.v104-pass-top::before{animation:none!important;transition:none!important;transform:none!important}
+  .v104-ring-fg{transition:none!important}
+}
 </style>
 
 <!-- LOADING -->
@@ -5181,7 +5523,23 @@ nav button.active .ni{animation:vNineCountPop .38s var(--ease-spring-soft) 1}
     </div>
     <div class="scr" id="screen-profile"><div class="prof-hero"><div class="prof-ava-wrap"><div class="prof-ava"><img id="profAvaImg" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80"></div><div class="prof-ava-edit" onclick="openPhotoUpload()">📷</div></div><h2><span id="profName">Laden...</span></h2><div class="handle" id="profHandle"></div><div class="prof-badges-row" id="profBadges"></div></div><div class="prof-vibe" id="profVibe"></div><div class="prof-socials" id="profSocials"></div><div class="prof-stats glass"><div class="pstat"><div class="pn" id="stM">0</div><div class="pl">Matches</div></div><div class="pstat"><div class="pn" id="stCrew">0</div><div class="pl">Crew</div></div><div class="pstat"><div class="pn" id="stPts">0</div><div class="pl">✨ Aura</div></div></div><div class="premium-cta" id="premCta" onclick="openPremium()"><h3 style="display:flex;align-items:center;gap:8px"><svg viewBox="0 0 24 24" style="width:18px;height:18px;color:#FFD60A"><use href="#i-sparkle"/></svg> crew Premium</h3><div class="pc-sub">Keine Werbung · Unlimited Swipes · VIP</div><div class="pc-btn">Ab 2,99€</div></div><div class="pmenu">
 <div class="pmi" id="adminMenuItem" style="display:none;background:linear-gradient(135deg,rgba(255,109,46,.08),rgba(255,109,46,.02));border:1px solid rgba(255,109,46,.2)" onclick="openAdminPanel()"><div class="pmi-icon o"><svg viewBox="0 0 24 24"><use href="#i-crown"/></svg></div><span class="pmi-label" style="color:var(--o);font-weight:700">Admin Dashboard</span><span class="pmi-arrow" style="color:var(--o)">›</span></div>
-<div class="pmi" style="background:linear-gradient(135deg,rgba(255,214,10,.08),rgba(255,214,10,.02));border:1px solid rgba(255,214,10,.15)" onclick="showMyQR()"><div class="pmi-icon o" style="background:rgba(255,214,10,.1);color:var(--yellow)"><svg viewBox="0 0 24 24"><use href="#i-qrcode"/></svg></div><span class="pmi-label" style="font-weight:700">Mein QR-Code</span><span class="pmi-arrow" style="color:var(--yellow)">›</span></div>
+<!-- v104: Crew-Pass ersetzt den alten QR-Menüpunkt -->
+<div class="v104-pass-card" id="profPassCard" onclick="openCrewPass()" role="button" tabindex="0" style="margin:0 0 14px">
+  <div class="v104-pass-card-inner">
+    <div class="v104-pass-ico">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="5" width="18" height="14" rx="2.5"/>
+        <path d="M7 10h3M7 13h3M7 16h2"/>
+        <rect x="13" y="9" width="6" height="6" rx="1"/>
+      </svg>
+    </div>
+    <div class="v104-pass-lbl">
+      <div class="v104-pass-ttl"><span id="profPassName">Dein Crew-Pass</span><span id="profPassVerify" class="v104-pass-verify" style="display:none">✓</span></div>
+      <div class="v104-pass-sub" id="profPassSub">QR · Level · Crews</div>
+    </div>
+    <div class="v104-pass-arr">›</div>
+  </div>
+</div>
 <div class="pmi" style="background:linear-gradient(135deg,rgba(48,209,88,.08),rgba(48,209,88,.02));border:1px solid rgba(48,209,88,.15)" onclick="openQRScanner()"><div class="pmi-icon o" style="background:rgba(48,209,88,.1);color:var(--mint)"><svg viewBox="0 0 24 24"><use href="#i-camera"/></svg></div><span class="pmi-label" style="font-weight:700">QR-Code scannen</span><span class="pmi-arrow" style="color:var(--mint)">›</span></div>
 <div class="pmi" style="background:linear-gradient(135deg,rgba(254,60,114,.12),rgba(255,120,84,.04));border:1px solid rgba(254,60,114,.25)" onclick="openTravelMap()"><div class="pmi-icon o" style="background:linear-gradient(135deg,rgba(254,60,114,.2),rgba(255,120,84,.08));color:#FF5864"><svg viewBox="0 0 24 24"><use href="#i-map"/></svg></div><span class="pmi-label" style="font-weight:800">Reise-Tracker <span style="font-size:10px;font-weight:700;color:#FF5864;margin-left:4px">NEU</span></span><span class="pmi-arrow" style="color:#FF5864">›</span></div>
 <div class="pe-section">Profil & Einstellungen</div>
@@ -15514,17 +15872,16 @@ window.playCrewJoinCinema = async function(crew, opts){
           '<button class="v103-hub-x" onclick="window._v103CloseHub()" aria-label="Schließen">×</button>'+
         '</div>'+
         '<div class="v103-hub-grid">'+
-          '<div class="v103-hub-tile v103-tile-qrme" onclick="window._v103HubMyQR()" role="button" tabindex="0">'+
+          '<div class="v103-hub-tile v103-tile-qrme" onclick="window._v104HubOpenPass()" role="button" tabindex="0">'+
             '<div class="v103-tile-ic">'+
               '<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+
-                '<rect x="3" y="3" width="7" height="7" rx="1"/>'+
-                '<rect x="14" y="3" width="7" height="7" rx="1"/>'+
-                '<rect x="3" y="14" width="7" height="7" rx="1"/>'+
-                '<path d="M14 14h2M18 14h3M14 18h3M20 18v3M14 21h4"/>'+
+                '<rect x="3" y="5" width="18" height="14" rx="2.5"/>'+
+                '<path d="M7 10h3M7 13h3M7 16h2"/>'+
+                '<rect x="13" y="9" width="6" height="6" rx="1"/>'+
               '</svg>'+
             '</div>'+
-            '<div class="v103-tile-ttl">Mein QR</div>'+
-            '<div class="v103-tile-sub">Direkt bei Partnern zeigen</div>'+
+            '<div class="v103-tile-ttl">Crew-Pass</div>'+
+            '<div class="v103-tile-sub">QR · Level · Crews</div>'+
           '</div>'+
           '<div class="v103-hub-tile v103-tile-qrcrew'+(hasCrew?'':' v103-tile-off')+'" onclick="window._v103HubCrewQR()" role="button" tabindex="0">'+
             '<div class="v103-tile-ic">'+
@@ -15976,7 +16333,790 @@ window.playCrewJoinCinema = async function(crew, opts){
   console.log('[v103] UI-Rework loaded: QR-Hub, Level-Btn, Quests, Return-Detection, Notif-Batch, Safety-Coords');
 })();
 
-if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js?v=15').catch(function(){});
+// ============================================
+// v104 — Crew-Pass, Ränge, Pass-Customization,
+//        Safety-Share, Blocking Pass-Creation
+// ============================================
+;(function(){
+  'use strict';
+
+  function _esc(s){
+    try{ if(typeof esc==='function') return esc(s); }catch(e){}
+    return String(s==null?'':s).replace(/[&<>"']/g, function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});
+  }
+  function _me(){ try{ return (typeof ME!=='undefined' && ME) ? ME : null; }catch(e){ return null; } }
+
+  // ── 1) Ränge ──────────────────────────────
+  // 8 Tiers. Zuordnung Level → Rang.
+  var RANKS = [
+    {min:1,   max:2,   name:'Einstieg',     color:'#8E8E93', ic:'🌱', grad:['rgba(142,142,147,.18)','rgba(142,142,147,.04)']},
+    {min:3,   max:5,   name:'Aktiv',        color:'#0A84FF', ic:'🔵', grad:['rgba(10,132,255,.22)','rgba(10,132,255,.05)']},
+    {min:6,   max:9,   name:'Stamm',        color:'#34C759', ic:'🟢', grad:['rgba(52,199,89,.22)','rgba(52,199,89,.05)']},
+    {min:10,  max:14,  name:'Crew-Kenner',  color:'#FFD60A', ic:'🟡', grad:['rgba(255,214,10,.24)','rgba(255,214,10,.05)']},
+    {min:15,  max:20,  name:'Veteran',      color:'#FF9F0A', ic:'🟠', grad:['rgba(255,159,10,.26)','rgba(255,159,10,.06)']},
+    {min:21,  max:30,  name:'Crew-Legende', color:'#BF5AF2', ic:'🟣', grad:['rgba(191,90,242,.26)','rgba(191,90,242,.05)']},
+    {min:31,  max:49,  name:'Ikone',        color:'#FF3B30', ic:'🔥', grad:['rgba(255,59,48,.28)','rgba(255,59,48,.06)']},
+    {min:50,  max:999, name:'Mythos',       color:'#FFD60A', ic:'⭐', grad:['rgba(255,214,10,.35)','rgba(255,109,46,.12)']}
+  ];
+  function getRankForLevel(lvl){
+    lvl = Math.max(1, parseInt(lvl||1, 10));
+    for(var i=0;i<RANKS.length;i++){
+      if(lvl >= RANKS[i].min && lvl <= RANKS[i].max) return RANKS[i];
+    }
+    return RANKS[RANKS.length-1];
+  }
+  window.getRankForLevel = getRankForLevel;
+  window.getAllRanks = function(){ return RANKS.slice(); };
+
+  // Rank-Chip HTML helper
+  window.renderRankChip = function(lvl, size){
+    var r = getRankForLevel(lvl);
+    var szc = (size==='big') ? ' sz-big' : '';
+    return '<span class="v104-rank-chip'+szc+'" style="background:linear-gradient(135deg,'+r.grad[0]+','+r.grad[1]+');border-color:'+r.color+'33;color:'+r.color+'">'+
+           '<span class="rc-ic">'+r.ic+'</span>LVL '+lvl+' · '+r.name+'</span>';
+  };
+
+  // Update v103 Level-Button to show rank
+  try{
+    var _origPaintLvl = window._v103PaintLevelBtn;
+    if(typeof _origPaintLvl === 'function'){
+      window._v103PaintLevelBtn = function(){
+        _origPaintLvl.apply(this, arguments);
+        // Dann rank anhängen
+        try{
+          var pmenu = document.querySelector('.pmenu');
+          if(!pmenu) return;
+          var btn = pmenu.querySelector('.v103-lvl-btn');
+          if(!btn) return;
+          var me = _me();
+          var pts = (me && me.points) || 0;
+          var info = (typeof window.getLevelInfo==='function') ? window.getLevelInfo(pts) : {level:1};
+          var rank = getRankForLevel(info.level);
+          // Star-Icon einfärben
+          var star = btn.querySelector('.v103-lvl-star');
+          if(star){ star.style.background = 'linear-gradient(135deg,'+rank.color+','+rank.color+'cc)'; }
+          // Label-Zeile erweitern (nur einmal)
+          var num = btn.querySelector('.v103-lvl-num');
+          if(num && !num._v104Done){
+            num.innerHTML = 'LVL '+info.level+' <span style="opacity:.7;font-weight:700;font-size:11px">· '+rank.name+'</span>';
+            num.style.color = rank.color;
+            num._v104Done = true;
+          }
+        }catch(e){}
+      };
+    }
+  }catch(e){}
+
+  // ── 2) Pass-Info aggregator ───────────────
+  function _calcMemberSince(me){
+    if(!me) return null;
+    var src = me.member_since || me.created_at || null;
+    if(!src) return null;
+    var ts = new Date(src).getTime();
+    if(isNaN(ts)) return null;
+    return ts;
+  }
+  function _formatSince(ts){
+    if(!ts) return 'unbekannt';
+    var now = Date.now();
+    var days = Math.floor((now - ts)/86400000);
+    if(days < 1) return 'seit heute';
+    if(days < 14) return days+' '+(days===1?'Tag':'Tage');
+    if(days < 60) return Math.round(days/7)+' Wochen';
+    if(days < 730) return Math.round(days/30)+' Monate';
+    return (days/365).toFixed(1).replace('.0','')+' Jahre';
+  }
+  window._v104FormatSince = _formatSince;
+
+  async function getMyCrewQrList(){
+    try{
+      var list = (Array.isArray(window._myCrewMemberships)) ? window._myCrewMemberships : (typeof _myCrewMemberships!=='undefined' ? _myCrewMemberships : []);
+      return list.filter(function(m){ return m && m.crew && m.crew.invite_code; }).map(function(m){
+        return {
+          crew_id: m.crew_id,
+          name: m.crew.name||'Crew',
+          emoji: m.crew.emoji||'👥',
+          photo_url: m.crew.photo_url||'',
+          invite_code: m.crew.invite_code,
+          role: m.role||'member'
+        };
+      });
+    }catch(e){ return []; }
+  }
+  window._v104GetMyCrewQrList = getMyCrewQrList;
+
+  // ── 3) Pass-Card im Profil-Screen aktualisieren ──
+  function paintProfilePassCard(){
+    try{
+      var card = document.getElementById('profPassCard');
+      if(!card) return;
+      var me = _me();
+      if(!me){ card.style.display='none'; return; }
+      card.style.display = '';
+      var nameEl = document.getElementById('profPassName');
+      var subEl = document.getElementById('profPassSub');
+      var verEl = document.getElementById('profPassVerify');
+      if(nameEl) nameEl.textContent = 'Crew-Pass';
+      if(verEl){
+        if(me.is_verified || me.verified){ verEl.style.display=''; }
+        else { verEl.style.display='none'; }
+      }
+      var pts = me.points||0;
+      var info = (typeof window.getLevelInfo==='function') ? window.getLevelInfo(pts) : {level:1};
+      var rank = getRankForLevel(info.level);
+      var since = _formatSince(_calcMemberSince(me));
+      if(subEl) subEl.innerHTML = rank.ic+' LVL '+info.level+' · '+_esc(rank.name)+' &nbsp;·&nbsp; '+since+' dabei';
+    }catch(e){}
+  }
+  window._v104PaintPassCard = paintProfilePassCard;
+
+  // ── 4) Crew-Pass Fullscreen-Modal ──────────
+  var _passTabIdx = 0;
+  var _passQrEntries = null; // cached
+  window.openCrewPass = async function(){
+    var me = _me();
+    if(!me){ if(typeof toast==='function') toast('Lade dein Profil…'); return; }
+    var ov = document.getElementById('v104PassOv');
+    if(!ov){
+      ov = document.createElement('div');
+      ov.id = 'v104PassOv';
+      ov.className = 'v104-pass-ov';
+      ov.addEventListener('click', function(ev){ if(ev.target===ov) window._v104ClosePass(); });
+      document.body.appendChild(ov);
+    }
+    _passTabIdx = 0;
+    var crews = await getMyCrewQrList();
+    _passQrEntries = [{type:'me'}].concat(crews.map(function(c){ return {type:'crew', crew:c}; }));
+    ov.innerHTML = _buildPassHtml(me, _passQrEntries);
+    requestAnimationFrame(function(){ ov.classList.add('show'); });
+    setTimeout(function(){ _renderPassQr(0); }, 100);
+  };
+  window._v104ClosePass = function(){
+    var ov = document.getElementById('v104PassOv');
+    if(ov) ov.classList.remove('show');
+  };
+  window._v104SetPassTab = function(idx){
+    _passTabIdx = idx;
+    var tabs = document.querySelectorAll('#v104PassOv .v104-pass-tab');
+    tabs.forEach(function(t,i){ t.classList.toggle('active', i===idx); });
+    _renderPassQr(idx);
+  };
+  function _renderPassQr(idx){
+    try{
+      var entries = _passQrEntries||[];
+      var entry = entries[idx];
+      var wrap = document.getElementById('v104PassQrWrap');
+      if(!wrap || !entry) return;
+      var me = _me();
+      var qrData, capMain, capSub;
+      if(entry.type === 'me'){
+        qrData = 'https://partycrew.app/scan.html?u='+me.user_id;
+        capMain = _esc(me.name||'Du');
+        capSub = '@'+_esc(me.username||'user')+' · dein persönlicher QR';
+      } else {
+        var c = entry.crew;
+        qrData = 'https://partycrew.app/app.html?joincrew='+encodeURIComponent(c.invite_code);
+        capMain = (c.emoji||'👥')+' '+_esc(c.name);
+        capSub = 'Scanne, um beizutreten · Code '+_esc(c.invite_code);
+      }
+      var qrColor = (entry.type==='me') ? 'FF6D2E' : 'FFD60A';
+      var qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=320x320&color='+qrColor+'&bgcolor=0A0A0A&data='+encodeURIComponent(qrData);
+      wrap.innerHTML =
+        '<img src="'+qrUrl+'" alt="QR-Code">'+
+        '<div class="v104-pass-qr-cap">'+capMain+'</div>'+
+        '<div class="v104-pass-qr-sub">'+capSub+'</div>';
+    }catch(e){}
+  }
+  function _buildPassHtml(me, entries){
+    var pts = me.points||0;
+    var info = (typeof window.getLevelInfo==='function') ? window.getLevelInfo(pts) : {level:1,progress:0,toNext:50};
+    var rank = getRankForLevel(info.level);
+    var circ = 2*Math.PI*26;
+    var dash = (info.progress*circ).toFixed(1)+' '+circ.toFixed(1);
+    var since = _formatSince(_calcMemberSince(me));
+    var streak = (me.streak||0);
+    var verified = !!(me.is_verified || me.verified);
+    var tagline = me.tagline ? String(me.tagline).slice(0,80) : '';
+    var interests = Array.isArray(me.interests) ? me.interests.slice(0,6) : [];
+    var avaSrc = me.photo_url || '';
+    var avaHtml = avaSrc
+      ? '<img src="'+_esc(avaSrc)+'" alt="">'
+      : '<div class="v104-pass-ava-ph">'+_esc((me.name||'?').charAt(0).toUpperCase())+'</div>';
+    var tabsHtml = entries.map(function(e,i){
+      var active = i===0 ? ' active' : '';
+      var lbl = e.type==='me' ? 'Mein QR' : ((e.crew.emoji||'👥')+' '+(e.crew.name||'Crew'));
+      return '<button class="v104-pass-tab'+active+'" onclick="window._v104SetPassTab('+i+')">'+_esc(lbl)+'</button>';
+    }).join('');
+    var interestsHtml = interests.length
+      ? ('<div class="v104-pass-interests">'+ interests.map(function(it){ return '<span class="v104-pass-interest">'+_esc(it)+'</span>'; }).join('') +'</div>')
+      : '';
+    return ''
+      + '<div class="v104-pass-sheet">'
+      +   '<button class="v104-pass-x" onclick="window._v104ClosePass()" aria-label="Schließen">×</button>'
+      +   '<div class="v104-pass-top">'
+      +     '<div class="v104-pass-hero">'
+      +       '<div class="v104-pass-ava">'+avaHtml+'</div>'
+      +       '<div class="v104-pass-who">'
+      +         '<div class="v104-pass-name">'+_esc(me.name||'Du')+(verified?'<span class="v104-pass-verified" title="Verifiziert">✓</span>':'')+'</div>'
+      +         '<div class="v104-pass-handle">@'+_esc(me.username||'user')+'</div>'
+      +         (tagline ? '<div class="v104-pass-tag">„'+_esc(tagline)+'"</div>' : '')
+      +       '</div>'
+      +     '</div>'
+      +     '<div class="v104-pass-stats">'
+      +       '<div class="v104-pass-stat">'
+      +         '<div class="v104-ring" style="color:'+rank.color+'">'
+      +           '<svg viewBox="0 0 60 60"><circle class="v104-ring-bg" cx="30" cy="30" r="26"/><circle class="v104-ring-fg" cx="30" cy="30" r="26" stroke-dasharray="'+dash+'"/></svg>'
+      +           '<div class="v104-ring-lvl" style="color:'+rank.color+'">'+info.level+'</div>'
+      +         '</div>'
+      +         '<div class="v104-pass-stat-lbl" style="margin-top:6px">'+rank.ic+' '+_esc(rank.name)+'</div>'
+      +       '</div>'
+      +       '<div class="v104-pass-stat">'
+      +         '<div class="v104-pass-stat-num" style="color:var(--o)">'+pts+'</div>'
+      +         '<div class="v104-pass-stat-lbl">✨ Aura</div>'
+      +       '</div>'
+      +       '<div class="v104-pass-stat">'
+      +         '<div class="v104-pass-stat-num" style="color:#FFD60A">'+streak+'</div>'
+      +         '<div class="v104-pass-stat-lbl">🔥 Streak</div>'
+      +       '</div>'
+      +     '</div>'
+      +   '</div>'
+      +   '<div class="v104-pass-body">'
+      +     '<div class="v104-pass-tabs">'+tabsHtml+'</div>'
+      +     '<div class="v104-pass-qr-wrap" id="v104PassQrWrap"><div style="padding:40px 20px;color:var(--t3);font-size:13px">Lade QR…</div></div>'
+      +     '<div class="v104-pass-actions">'
+      +       '<button class="v104-pass-btn safety" onclick="window.openPassSafetyShare()">'
+      +         '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></svg>'
+      +         'Sicherheit teilen'
+      +       '</button>'
+      +       '<button class="v104-pass-btn" onclick="window.openPassEdit()">'
+      +         '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>'
+      +         'Pass bearbeiten'
+      +       '</button>'
+      +     '</div>'
+      +     '<div class="v104-pass-meta">'
+      +       '<div>📅 <b>Dabei seit '+_esc(since)+'</b></div>'
+      +       '<div>'+(verified ? '<span style="color:#0A84FF;font-weight:800">✓ Verifiziert</span>' : '<span onclick="window._v104ClosePass();setTimeout(function(){if(typeof requestVerification===\'function\')requestVerification();},200)" style="color:var(--o);cursor:pointer;font-weight:800">Verifizieren →</span>')+'</div>'
+      +     '</div>'
+      +     interestsHtml
+      +   '</div>'
+      + '</div>';
+  }
+
+  // ── 5) Pass-Edit (Bio, Tagline, Interests, Emergency) ──
+  var INTEREST_POOL = ['Festival','Beach','Bar-Hopping','Club','Sport','Kultur','Natur','Food','Sunset','Chill','Partys','Boot','Wandern','Shopping','Wellness'];
+  window.openPassEdit = function(){
+    var me = _me(); if(!me) return;
+    var ov = document.getElementById('v104EditOv');
+    if(!ov){
+      ov = document.createElement('div');
+      ov.id = 'v104EditOv';
+      ov.className = 'v104-edit-ov';
+      ov.addEventListener('click', function(ev){ if(ev.target===ov) window._v104CloseEdit(); });
+      document.body.appendChild(ov);
+    }
+    var bio = me.bio || '';
+    var tag = me.tagline || '';
+    var intr = Array.isArray(me.interests) ? me.interests.slice() : [];
+    var ec = me.emergency_contact || '';
+    var chipsHtml = INTEREST_POOL.map(function(it){
+      var on = intr.indexOf(it) >= 0 ? ' on' : '';
+      return '<button type="button" class="v104-create-chip'+on+'" onclick="window._v104ToggleEditInterest(this,\''+_esc(it).replace(/'/g,"\\'")+'\')">'+_esc(it)+'</button>';
+    }).join('');
+    ov.innerHTML =
+      '<div class="v104-edit-sheet">'+
+        '<div class="v104-edit-grab"></div>'+
+        '<div class="v104-edit-ttl">Pass bearbeiten</div>'+
+        '<div class="v104-edit-sub">Zeig wer du bist und was dich ausmacht</div>'+
+        '<div class="v104-create-field">'+
+          '<div class="v104-create-label">Tagline <span class="v104-count"><span id="v104CntTag">'+tag.length+'</span>/60</span></div>'+
+          '<input class="v104-create-input" id="v104EditTag" type="text" maxlength="60" placeholder="Lebe. Liebe. Mallorca." value="'+_esc(tag)+'" oninput="document.getElementById(\'v104CntTag\').textContent=this.value.length">'+
+        '</div>'+
+        '<div class="v104-create-field">'+
+          '<div class="v104-create-label">Bio <span class="v104-count"><span id="v104CntBio">'+bio.length+'</span>/140</span></div>'+
+          '<textarea class="v104-create-input" id="v104EditBio" rows="3" maxlength="140" placeholder="Erzähl was über dich — was machst du, woher kommst du, worauf stehst du?" oninput="document.getElementById(\'v104CntBio\').textContent=this.value.length">'+_esc(bio)+'</textarea>'+
+        '</div>'+
+        '<div class="v104-create-field">'+
+          '<div class="v104-create-label">Interessen <span class="v104-count"><span id="v104CntInt">'+intr.length+'</span>/6</span></div>'+
+          '<div class="v104-create-chips" id="v104EditChips" data-sel="'+_esc(intr.join(','))+'">'+chipsHtml+'</div>'+
+        '</div>'+
+        '<div class="v104-create-field">'+
+          '<div class="v104-create-label">Notfall-Kontakt <span class="v104-count">optional</span></div>'+
+          '<input class="v104-create-input" id="v104EditEC" type="text" maxlength="120" placeholder="Name + Telefonnummer" value="'+_esc(ec)+'">'+
+        '</div>'+
+        '<div class="v104-create-nav" style="padding-top:4px">'+
+          '<button class="v104-create-btn ghost" onclick="window._v104CloseEdit()">Abbrechen</button>'+
+          '<button class="v104-create-btn primary" id="v104EditSave" onclick="window._v104SaveEdit()">Speichern ✨</button>'+
+        '</div>'+
+      '</div>';
+    requestAnimationFrame(function(){ ov.classList.add('show'); });
+  };
+  window._v104CloseEdit = function(){
+    var ov = document.getElementById('v104EditOv');
+    if(ov) ov.classList.remove('show');
+  };
+  window._v104ToggleEditInterest = function(btn, name){
+    try{
+      var host = document.getElementById('v104EditChips');
+      if(!host) return;
+      var sel = (host.getAttribute('data-sel')||'').split(',').filter(Boolean);
+      var idx = sel.indexOf(name);
+      if(idx >= 0){ sel.splice(idx,1); btn.classList.remove('on'); }
+      else {
+        if(sel.length >= 6){ if(typeof toast==='function') toast('Max. 6 Interessen'); return; }
+        sel.push(name); btn.classList.add('on');
+      }
+      host.setAttribute('data-sel', sel.join(','));
+      var cnt = document.getElementById('v104CntInt'); if(cnt) cnt.textContent = sel.length;
+    }catch(e){}
+  };
+  window._v104SaveEdit = async function(){
+    try{
+      var me = _me(); if(!me) return;
+      var btn = document.getElementById('v104EditSave');
+      if(btn){ btn.disabled = true; btn.textContent = 'Speichert…'; }
+      var tag = (document.getElementById('v104EditTag')||{}).value || '';
+      var bio = (document.getElementById('v104EditBio')||{}).value || '';
+      var host = document.getElementById('v104EditChips');
+      var sel = host ? (host.getAttribute('data-sel')||'').split(',').filter(Boolean) : [];
+      var ec = (document.getElementById('v104EditEC')||{}).value || '';
+      var patch = {tagline:tag.trim()||null, bio:bio.trim()||null, interests:sel, emergency_contact:ec.trim()||null};
+      if(typeof sb !== 'undefined' && sb){
+        var res = await sb.from('profiles').update(patch).eq('user_id', me.user_id);
+        if(res && res.error){
+          console.warn('[v104] saveEdit error', res.error);
+          if(typeof toast==='function') toast('⚠️ Speichern fehlgeschlagen — prüfe SQL-Migration.');
+          if(btn){ btn.disabled=false; btn.textContent='Nochmal versuchen'; }
+          return;
+        }
+      }
+      Object.assign(me, patch);
+      window._v104CloseEdit();
+      if(typeof window.showSuccessCheck === 'function'){
+        window.showSuccessCheck(document.body, 'Pass aktualisiert!');
+      } else if(typeof toast==='function'){ toast('✨ Pass aktualisiert'); }
+      paintProfilePassCard();
+      // Wenn Pass-Modal offen, neu rendern
+      if(document.getElementById('v104PassOv') && document.getElementById('v104PassOv').classList.contains('show')){
+        setTimeout(function(){ window.openCrewPass(); }, 500);
+      }
+    }catch(e){
+      console.warn('[v104] saveEdit err', e);
+      if(typeof toast==='function') toast('⚠️ Fehler beim Speichern');
+    }
+  };
+
+  // ── 6) Safety-Share ────────────────────────
+  window.openPassSafetyShare = async function(){
+    var me = _me(); if(!me) return;
+    var ov = document.getElementById('v104SafetyOv');
+    if(!ov){
+      ov = document.createElement('div');
+      ov.id = 'v104SafetyOv';
+      ov.className = 'v104-safety-ov';
+      ov.addEventListener('click', function(ev){ if(ev.target===ov) window._v104CloseSafety(); });
+      document.body.appendChild(ov);
+    }
+    var ec = me.emergency_contact || '';
+    var sharedWith = Array.isArray(me.emergency_shared_with) ? me.emergency_shared_with.slice() : [];
+    var members = [];
+    try{
+      var crewId = (typeof getActiveCrewId==='function') ? getActiveCrewId() : null;
+      if(crewId){
+        var r = await sb.from('crew_members').select('user_id, profiles:profiles(user_id,name,photo_url)').eq('crew_id', crewId);
+        if(r && r.data){
+          members = r.data.map(function(x){ return {user_id:(x.profiles&&x.profiles.user_id)||x.user_id, name:(x.profiles&&x.profiles.name)||'Mitglied', photo_url:(x.profiles&&x.profiles.photo_url)||''}; })
+            .filter(function(p){ return p.user_id && p.user_id !== me.user_id; });
+        }
+      }
+    }catch(e){ console.warn('[v104] safety members err', e); }
+    var memberRows = members.length ? members.map(function(p){
+      var on = sharedWith.indexOf(p.user_id) >= 0 ? ' on' : '';
+      var avaHtml = p.photo_url ? '<img src="'+_esc(p.photo_url)+'" alt="">' : '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#FF6D2E,#C93A7A);font-weight:900;color:#fff">'+_esc((p.name||'?').charAt(0).toUpperCase())+'</div>';
+      return '<div class="v104-safety-row'+on+'" data-uid="'+_esc(p.user_id)+'" onclick="window._v104ToggleSafetyShare(this)">'+
+        '<div class="v104-safety-row-ava">'+avaHtml+'</div>'+
+        '<div class="v104-safety-row-name">'+_esc(p.name)+'</div>'+
+        '<div class="v104-safety-row-toggle"><i></i></div>'+
+      '</div>';
+    }).join('') : '<div style="text-align:center;color:var(--t3);font-size:12px;padding:20px">Du bist in keiner Crew — noch niemand zum Teilen.</div>';
+    ov.innerHTML =
+      '<div class="v104-safety-sheet">'+
+        '<div class="v104-edit-grab"></div>'+
+        '<div class="v104-safety-hd">'+
+          '<div class="v104-safety-ic">'+
+            '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg>'+
+          '</div>'+
+          '<div style="flex:1"><div style="font-size:16px;font-weight:900">Sicherheit teilen</div><div style="font-size:12px;color:var(--t3)">Deine Crew passt auf dich auf</div></div>'+
+        '</div>'+
+        '<div class="v104-create-field">'+
+          '<div class="v104-create-label">Notfall-Kontakt (sichtbar für geteilt)</div>'+
+          '<input class="v104-create-input" id="v104SafetyEC" type="text" maxlength="120" placeholder="Name + Telefonnummer" value="'+_esc(ec)+'">'+
+        '</div>'+
+        '<div style="display:flex;gap:8px;margin-bottom:14px">'+
+          '<button class="v104-pass-btn" style="flex:1" onclick="window._v104CopySafety()">📋 Kopieren</button>'+
+          '<button class="v104-pass-btn" style="flex:1" onclick="window._v104ShareSafety()">📤 Teilen</button>'+
+        '</div>'+
+        '<div class="v104-create-label" style="margin-bottom:8px">An Crew-Mitglieder freigeben</div>'+
+        '<div id="v104SafetyMembers">'+memberRows+'</div>'+
+        '<div class="v104-create-nav" style="padding-top:16px">'+
+          '<button class="v104-create-btn ghost" onclick="window._v104CloseSafety()">Zurück</button>'+
+          '<button class="v104-create-btn primary" id="v104SafetySave" onclick="window._v104SaveSafety()">Sicher speichern 🛡️</button>'+
+        '</div>'+
+      '</div>';
+    requestAnimationFrame(function(){ ov.classList.add('show'); });
+  };
+  window._v104CloseSafety = function(){
+    var ov = document.getElementById('v104SafetyOv');
+    if(ov) ov.classList.remove('show');
+  };
+  window._v104ToggleSafetyShare = function(row){
+    try{ row.classList.toggle('on'); }catch(e){}
+  };
+  window._v104CopySafety = function(){
+    try{
+      var inp = document.getElementById('v104SafetyEC');
+      var t = inp ? inp.value : '';
+      if(!t){ if(typeof toast==='function') toast('Trage zuerst einen Notfall-Kontakt ein.'); return; }
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(t).then(function(){ if(typeof toast==='function') toast('📋 Kontakt kopiert'); });
+      } else {
+        var ta = document.createElement('textarea'); ta.value = t; document.body.appendChild(ta); ta.select();
+        try{ document.execCommand('copy'); }catch(e){}
+        document.body.removeChild(ta);
+        if(typeof toast==='function') toast('📋 Kontakt kopiert');
+      }
+    }catch(e){}
+  };
+  window._v104ShareSafety = function(){
+    try{
+      var me = _me();
+      var inp = document.getElementById('v104SafetyEC');
+      var t = inp ? inp.value : '';
+      if(!t){ if(typeof toast==='function') toast('Trage zuerst einen Notfall-Kontakt ein.'); return; }
+      var text = (me&&me.name?me.name+': ':'')+'Mein Notfall-Kontakt: '+t;
+      if(navigator.share){
+        navigator.share({title:'Notfall-Kontakt', text:text}).catch(function(){});
+      } else if(typeof shareText === 'function'){ shareText(text); }
+      else { window._v104CopySafety(); }
+    }catch(e){}
+  };
+  window._v104SaveSafety = async function(){
+    try{
+      var me = _me(); if(!me) return;
+      var btn = document.getElementById('v104SafetySave');
+      if(btn){ btn.disabled=true; btn.textContent='Speichert…'; }
+      var inp = document.getElementById('v104SafetyEC');
+      var ec = inp ? inp.value.trim() : '';
+      var rows = document.querySelectorAll('#v104SafetyMembers .v104-safety-row.on');
+      var sharedWith = [];
+      rows.forEach(function(r){ var u=r.getAttribute('data-uid'); if(u) sharedWith.push(u); });
+      var patch = {emergency_contact: ec||null, emergency_shared_with: sharedWith};
+      if(typeof sb !== 'undefined' && sb){
+        var res = await sb.from('profiles').update(patch).eq('user_id', me.user_id);
+        if(res && res.error){
+          console.warn('[v104] safety save err', res.error);
+          if(typeof toast==='function') toast('⚠️ Speichern fehlgeschlagen — prüfe SQL-Migration.');
+          if(btn){ btn.disabled=false; btn.textContent='Nochmal versuchen'; }
+          return;
+        }
+      }
+      Object.assign(me, patch);
+      window._v104CloseSafety();
+      if(typeof window.showSuccessCheck==='function') window.showSuccessCheck(document.body, 'Sicher gespeichert!');
+      else if(typeof toast==='function') toast('🛡️ Sicherheits-Daten gespeichert');
+    }catch(e){
+      console.warn('[v104] safety save err', e);
+      if(typeof toast==='function') toast('⚠️ Fehler beim Speichern');
+    }
+  };
+
+  // ── 7) Pass-Creation — Blocking Takeover ───
+  var _createState = {step:0, name:'', photo_url:'', tagline:'', bio:'', interests:[], ec:''};
+  function _passNotCreated(me){
+    return !!me && !me.pass_created_at;
+  }
+  window.checkPassCreationRequired = function(){
+    try{
+      var me = _me();
+      if(!me || !me.user_id) return false;
+      if(!_passNotCreated(me)) return false;
+      // Nur einmal zeigen pro App-Load
+      if(window._v104CreateShown) return false;
+      window._v104CreateShown = true;
+      _createState = {
+        step:0,
+        name: me.name||'',
+        photo_url: me.photo_url||'',
+        tagline: me.tagline||'',
+        bio: me.bio||'',
+        interests: Array.isArray(me.interests) ? me.interests.slice() : [],
+        ec: me.emergency_contact||''
+      };
+      _openCreateFlow();
+      return true;
+    }catch(e){ console.warn('[v104] check create err', e); return false; }
+  };
+  function _openCreateFlow(){
+    var ov = document.getElementById('v104CreateOv');
+    if(!ov){
+      ov = document.createElement('div');
+      ov.id = 'v104CreateOv';
+      ov.className = 'v104-create-ov';
+      document.body.appendChild(ov);
+    }
+    _renderCreateStep();
+    requestAnimationFrame(function(){ ov.classList.add('show'); });
+  }
+  function _closeCreateFlow(){
+    var ov = document.getElementById('v104CreateOv');
+    if(ov){ ov.classList.remove('show'); setTimeout(function(){ try{ ov.parentNode.removeChild(ov); }catch(e){} }, 400); }
+  }
+  function _renderCreateStep(){
+    var ov = document.getElementById('v104CreateOv');
+    if(!ov) return;
+    var total = 5;
+    var step = _createState.step;
+    var progressBars = '';
+    for(var i=0;i<total;i++){
+      var cls = (i<step?'done':(i===step?'active':''));
+      progressBars += '<i class="'+cls+'"></i>';
+    }
+    var body = '';
+    if(step === 0){
+      // Welcome
+      body =
+        '<div class="v104-create-step">'+
+          '<div class="v104-create-emoji">🎟️</div>'+
+          '<div class="v104-create-ttl">Willkommen zu deinem<br>Crew-Pass</div>'+
+          '<div class="v104-create-sub">Dein permanenter Mitgliederausweis. Zeigt deinen QR, deine Crews, dein Level und was dich ausmacht. Ein paar kurze Schritte — und los.</div>'+
+          '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:20px 0 12px">'+
+            '<div style="padding:14px 10px;border-radius:14px;background:rgba(255,109,46,.08);border:1px solid rgba(255,109,46,.15);text-align:center"><div style="font-size:22px">📱</div><div style="font-size:11px;font-weight:800;margin-top:6px;color:var(--o)">Eigener QR</div></div>'+
+            '<div style="padding:14px 10px;border-radius:14px;background:rgba(52,199,89,.08);border:1px solid rgba(52,199,89,.15);text-align:center"><div style="font-size:22px">👥</div><div style="font-size:11px;font-weight:800;margin-top:6px;color:#34C759">Crew-QRs</div></div>'+
+            '<div style="padding:14px 10px;border-radius:14px;background:rgba(255,214,10,.08);border:1px solid rgba(255,214,10,.15);text-align:center"><div style="font-size:22px">⭐</div><div style="font-size:11px;font-weight:800;margin-top:6px;color:#FFD60A">Level-Rang</div></div>'+
+          '</div>'+
+        '</div>';
+    } else if(step === 1){
+      // Review info
+      var avaHtml = _createState.photo_url
+        ? '<img src="'+_esc(_createState.photo_url)+'" alt="">'
+        : '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;background:linear-gradient(135deg,#FF6D2E,#C93A7A);color:#fff">'+_esc((_createState.name||'?').charAt(0).toUpperCase())+'</div>';
+      body =
+        '<div class="v104-create-step">'+
+          '<div class="v104-create-emoji">👤</div>'+
+          '<div class="v104-create-ttl">Das bist du</div>'+
+          '<div class="v104-create-sub">So taucht dein Pass in der Crew auf. Stimmt alles?</div>'+
+          '<div class="v104-create-preview">'+
+            '<div class="v104-create-pv-ava">'+avaHtml+'</div>'+
+            '<div style="flex:1;min-width:0"><div style="font-size:16px;font-weight:900">'+_esc(_createState.name||'Du')+'</div><div style="font-size:12px;color:var(--t3)">Dein Profilbild &amp; Name aus dem Onboarding</div></div>'+
+          '</div>'+
+          '<div style="font-size:11px;color:var(--t3);text-align:center;line-height:1.5;padding:0 12px">Änderungen am Foto oder Namen kannst du jederzeit im Profil unter „Profil bearbeiten" machen.</div>'+
+        '</div>';
+    } else if(step === 2){
+      // Tagline + Bio
+      body =
+        '<div class="v104-create-step">'+
+          '<div class="v104-create-emoji">💬</div>'+
+          '<div class="v104-create-ttl">Dein Vibe in Worten</div>'+
+          '<div class="v104-create-sub">Ein kurzer Spruch und ein paar Zeilen über dich. Optional — aber macht deinen Pass persönlicher.</div>'+
+          '<div class="v104-create-field">'+
+            '<div class="v104-create-label">Tagline <span class="v104-count"><span id="v104CntTag2">'+_createState.tagline.length+'</span>/60</span></div>'+
+            '<input class="v104-create-input" id="v104CrTag" type="text" maxlength="60" placeholder="z. B. „Sunrise-Crew seit 2022"" value="'+_esc(_createState.tagline)+'" oninput="document.getElementById(\'v104CntTag2\').textContent=this.value.length">'+
+          '</div>'+
+          '<div class="v104-create-field">'+
+            '<div class="v104-create-label">Kurze Bio <span class="v104-count"><span id="v104CntBio2">'+_createState.bio.length+'</span>/140</span></div>'+
+            '<textarea class="v104-create-input" id="v104CrBio" rows="3" maxlength="140" placeholder="Was machst du? Woher kommst du? Worauf stehst du?" oninput="document.getElementById(\'v104CntBio2\').textContent=this.value.length">'+_esc(_createState.bio)+'</textarea>'+
+          '</div>'+
+        '</div>';
+    } else if(step === 3){
+      // Interests
+      var chipsHtml = INTEREST_POOL.map(function(it){
+        var on = _createState.interests.indexOf(it) >= 0 ? ' on' : '';
+        return '<button type="button" class="v104-create-chip'+on+'" onclick="window._v104ToggleCrInterest(this,\''+_esc(it).replace(/'/g,"\\'")+'\')">'+_esc(it)+'</button>';
+      }).join('');
+      body =
+        '<div class="v104-create-step">'+
+          '<div class="v104-create-emoji">🏷️</div>'+
+          '<div class="v104-create-ttl">Worauf stehst du?</div>'+
+          '<div class="v104-create-sub">Wähle bis zu 6 Themen. Hilft deiner Crew zu sehen, was dich begeistert.</div>'+
+          '<div class="v104-create-chips" id="v104CrChips" data-sel="'+_esc(_createState.interests.join(','))+'">'+chipsHtml+'</div>'+
+          '<div style="font-size:10px;color:var(--t3);text-align:center;margin-top:16px">Alles optional — überspringen ist ok.</div>'+
+        '</div>';
+    } else if(step === 4){
+      // Emergency + travel hint
+      body =
+        '<div class="v104-create-step">'+
+          '<div class="v104-create-emoji">🛡️</div>'+
+          '<div class="v104-create-ttl">Sicherheit für dich</div>'+
+          '<div class="v104-create-sub">Ein Notfall-Kontakt, den du später gezielt mit Crew-Mitgliedern teilen kannst. Wird <b>nicht</b> öffentlich. Optional.</div>'+
+          '<div class="v104-create-field">'+
+            '<div class="v104-create-label">Notfall-Kontakt <span class="v104-count">optional</span></div>'+
+            '<input class="v104-create-input" id="v104CrEC" type="text" maxlength="120" placeholder="Name + Telefonnummer" value="'+_esc(_createState.ec)+'">'+
+          '</div>'+
+          '<div style="margin-top:22px;padding:14px 16px;border-radius:14px;background:rgba(255,214,10,.08);border:1px solid rgba(255,214,10,.14);font-size:12px;line-height:1.55;color:var(--t2)">'+
+            '<div style="font-weight:800;color:#FFD60A;margin-bottom:4px">✈️ Noch keinen Urlaub geplant?</div>'+
+            'Kein Stress — trag das später einfach im Profil unter „Reise-Tracker" ein. Dein Pass ist trotzdem aktiv.'+
+          '</div>'+
+        '</div>';
+    }
+
+    ov.innerHTML =
+      '<div class="v104-create-progress">'+progressBars+'</div>'+
+      '<div class="v104-create-body">'+body+'</div>'+
+      '<div class="v104-create-nav">'+
+        (step > 0 ? '<button class="v104-create-btn ghost" onclick="window._v104CreatePrev()">Zurück</button>' : '')+
+        (step < total-1
+          ? '<button class="v104-create-btn primary" onclick="window._v104CreateNext()">'+(step===0?'Los geht\'s ✨':'Weiter')+'</button>'
+          : '<button class="v104-create-btn primary" id="v104CrFinish" onclick="window._v104CreateFinish()">Pass erstellen 🎟️</button>')+
+      '</div>'+
+      (step >= 2 && step <= 4 ? '<div class="v104-create-skip"><a onclick="window._v104CreateSkip()">Diesen Schritt überspringen</a></div>' : '');
+  }
+  function _saveStepInputs(){
+    var step = _createState.step;
+    if(step === 2){
+      var t = (document.getElementById('v104CrTag')||{}).value || '';
+      var b = (document.getElementById('v104CrBio')||{}).value || '';
+      _createState.tagline = t;
+      _createState.bio = b;
+    } else if(step === 3){
+      var host = document.getElementById('v104CrChips');
+      if(host){ _createState.interests = (host.getAttribute('data-sel')||'').split(',').filter(Boolean); }
+    } else if(step === 4){
+      var ec = (document.getElementById('v104CrEC')||{}).value || '';
+      _createState.ec = ec;
+    }
+  }
+  window._v104ToggleCrInterest = function(btn, name){
+    try{
+      var host = document.getElementById('v104CrChips');
+      if(!host) return;
+      var sel = (host.getAttribute('data-sel')||'').split(',').filter(Boolean);
+      var idx = sel.indexOf(name);
+      if(idx >= 0){ sel.splice(idx,1); btn.classList.remove('on'); }
+      else {
+        if(sel.length >= 6){ if(typeof toast==='function') toast('Max. 6'); return; }
+        sel.push(name); btn.classList.add('on');
+      }
+      host.setAttribute('data-sel', sel.join(','));
+      _createState.interests = sel;
+    }catch(e){}
+  };
+  window._v104CreateNext = function(){ _saveStepInputs(); _createState.step++; _renderCreateStep(); };
+  window._v104CreatePrev = function(){ _saveStepInputs(); _createState.step = Math.max(0, _createState.step-1); _renderCreateStep(); };
+  window._v104CreateSkip = function(){ window._v104CreateNext(); };
+  window._v104CreateFinish = async function(){
+    try{
+      _saveStepInputs();
+      var btn = document.getElementById('v104CrFinish');
+      if(btn){ btn.disabled = true; btn.textContent = 'Erstellt…'; }
+      var me = _me(); if(!me){ _closeCreateFlow(); return; }
+      var now = new Date().toISOString();
+      var patch = {
+        pass_created_at: now,
+        tagline: (_createState.tagline||'').trim() || null,
+        bio: (_createState.bio||'').trim() || null,
+        interests: _createState.interests.slice(0,6),
+        emergency_contact: (_createState.ec||'').trim() || null
+      };
+      var sqlOk = true;
+      if(typeof sb !== 'undefined' && sb){
+        var res = await sb.from('profiles').update(patch).eq('user_id', me.user_id);
+        if(res && res.error){
+          console.warn('[v104] pass_create err', res.error);
+          // Spalte fehlt? Trotzdem client-side weiter — aber Hinweis
+          sqlOk = false;
+          if(typeof toast==='function') toast('⚠️ DB-Migration fehlt noch — Pass trotzdem erstellt.');
+        }
+      }
+      Object.assign(me, patch);
+      // Celebrate
+      _closeCreateFlow();
+      setTimeout(function(){
+        try{
+          if(typeof window.fireConfetti === 'function'){
+            window.fireConfetti({count:120, spread:.9, duration:2200, colors:['#FF6D2E','#FFD60A','#34C759','#BF5AF2']});
+          }
+          if(navigator.vibrate) navigator.vibrate([18,22,32,22,60]);
+          if(typeof toast === 'function') toast('🎟️ Dein Crew-Pass ist aktiv!');
+        }catch(e){}
+        // Pass direkt öffnen
+        setTimeout(function(){ try{ window.openCrewPass(); }catch(e){} }, 600);
+      }, 200);
+      paintProfilePassCard();
+    }catch(e){
+      console.warn('[v104] create finish err', e);
+      if(typeof toast==='function') toast('⚠️ Fehler beim Erstellen');
+    }
+  };
+
+  // ── 8) QR-Hub: erste Kachel öffnet jetzt den Pass ──
+  window._v104HubOpenPass = function(){
+    if(typeof window._v103CloseHub === 'function') window._v103CloseHub();
+    setTimeout(function(){ window.openCrewPass(); }, 240);
+  };
+
+  // ── 9) openCrewProfile: Rank-Chip statt plain Level-Chip ──
+  try{
+    var _origV103Ocp = window.openCrewProfile;
+    if(typeof _origV103Ocp === 'function'){
+      // Unser Wrapper läuft NACH v103 wrap, bekommt also den bereits modifizierten Call
+      // Den bestehenden v103-Badge-Inject ersetzen wir nicht, aber ergänzen mit Rank.
+      // (Die v103 Version fügt ein v103-lvl-chip-big hinzu — wir tauschen es aus.)
+    }
+  }catch(e){}
+  // Polling-Replace: wenn v103 ein lvl-chip-big malt, ersetzen wir es durch Rank-Chip
+  setInterval(function(){
+    try{
+      var chips = document.querySelectorAll('.v103-lvl-chip-big:not(.v104-done)');
+      chips.forEach(function(chip){
+        var txt = (chip.textContent||'').match(/LVL\s*(\d+)/);
+        if(!txt) return;
+        var lvl = parseInt(txt[1],10);
+        var rank = getRankForLevel(lvl);
+        chip.style.background = 'linear-gradient(135deg,'+rank.grad[0]+','+rank.grad[1]+')';
+        chip.style.color = rank.color;
+        chip.style.borderColor = rank.color+'33';
+        chip.innerHTML = rank.ic+' LVL '+lvl+' · '+rank.name;
+        chip.classList.add('v104-done');
+      });
+    }catch(e){}
+  }, 1500);
+
+  // ── 10) Hook für Pass-Creation-Check nach ME-Load ──
+  (function(){
+    var tries = 0;
+    var t = setInterval(function(){
+      tries++;
+      var me = _me();
+      if((me && me.user_id) || tries > 120){
+        clearInterval(t);
+        if(me && me.user_id){
+          // Nach kleinem Delay damit Home angezeigt wird
+          setTimeout(function(){
+            try{ paintProfilePassCard(); }catch(e){}
+            try{ window.checkPassCreationRequired(); }catch(e){}
+          }, 900);
+        }
+      }
+    }, 500);
+  })();
+
+  // ── 11) Periodic refresh für Pass-Card im Profil ──
+  setInterval(paintProfilePassCard, 2500);
+  setTimeout(paintProfilePassCard, 1400);
+  try{
+    var _v104OldGo = window.go;
+    if(typeof _v104OldGo === 'function'){
+      window.go = function(screen){
+        var r = _v104OldGo.apply(this, arguments);
+        if(screen === 'profile'){ setTimeout(paintProfilePassCard, 160); }
+        return r;
+      };
+    }
+  }catch(e){}
+
+  console.log('[v104] Crew-Pass system loaded — Ranks, Pass Modal, Creation Flow, Safety Share');
+})();
+
+if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js?v=16').catch(function(){});
 </script>
 </body>
 </html>
