@@ -3,6 +3,10 @@
 -- Einmal in Supabase SQL-Editor laufen lassen.
 -- Idempotent: kann mehrfach ausgeführt werden.
 -- ============================================
+-- Hinweis: Das Schema driftet zwischen uuid und text für crew_id.
+--          Diese Migration castet defensiv ::text an JEDER Vergleichsstelle,
+--          damit sie unabhängig von der tatsächlichen Spaltenart läuft.
+-- ============================================
 
 -- 1) ALLE User-Punkte zurück auf 0
 --    Solo-Level wird komplett neu aufgesetzt, daher Reset.
@@ -34,18 +38,20 @@ create index if not exists idx_crew_xp_log_crew_created
 create index if not exists idx_crew_xp_log_user
   on public.crew_xp_log (user_id, created_at desc);
 
--- RLS: Crew-Mitglieder dürfen ihren eigenen Log lesen
+-- RLS: Crew-Mitglieder dürfen ihren eigenen Log lesen.
+-- Wir benutzen EXISTS mit voll qualifizierten, beidseitig ::text-gecasteten
+-- Spalten — funktioniert unabhängig davon, ob crew_members.crew_id
+-- uuid oder text ist.
 alter table public.crew_xp_log enable row level security;
 
--- Hinweis: crew_members.crew_id kann in diesem Schema uuid sein,
--- deshalb überall ::text casten — funktioniert egal ob uuid oder text.
 drop policy if exists "crew_xp_log_read" on public.crew_xp_log;
 create policy "crew_xp_log_read"
   on public.crew_xp_log for select
   using (
-    crew_id in (
-      select crew_id::text from public.crew_members
-      where user_id = auth.uid()
+    exists (
+      select 1 from public.crew_members cm
+      where cm.crew_id::text = public.crew_xp_log.crew_id::text
+        and cm.user_id::text = auth.uid()::text
     )
   );
 
@@ -53,16 +59,17 @@ drop policy if exists "crew_xp_log_insert" on public.crew_xp_log;
 create policy "crew_xp_log_insert"
   on public.crew_xp_log for insert
   with check (
-    user_id = auth.uid()
-    and crew_id in (
-      select crew_id::text from public.crew_members
-      where user_id = auth.uid()
+    user_id::text = auth.uid()::text
+    and exists (
+      select 1 from public.crew_members cm
+      where cm.crew_id::text = public.crew_xp_log.crew_id::text
+        and cm.user_id::text = auth.uid()::text
     )
   );
 
 -- 4) RPC add_crew_xp — atomisch: crews.aura hochzählen + Log schreiben
---    p_crew_id ist text, passt zu crews.id (text).
---    Alte uuid-Signatur droppen, damit der Client die neue sauber trifft.
+--    p_crew_id ist text. Alte uuid-Signatur vorsorglich droppen,
+--    damit der Client die neue sauber trifft.
 drop function if exists public.add_crew_xp(uuid,int,text,text);
 
 create or replace function public.add_crew_xp(
@@ -83,17 +90,18 @@ begin
   end if;
 
   -- Nur Mitglieder dürfen ihrer Crew XP geben
-  -- ::text-Cast, falls crew_members.crew_id uuid ist
+  -- Beidseitiger ::text-Cast gegen uuid/text-Drift.
   if not exists (
-    select 1 from public.crew_members
-    where crew_id::text = p_crew_id and user_id = auth.uid()
+    select 1 from public.crew_members cm
+    where cm.crew_id::text = p_crew_id
+      and cm.user_id::text = auth.uid()::text
   ) then
     raise exception 'not_a_member';
   end if;
 
   update public.crews
     set aura = coalesce(aura,0) + p_amount
-    where id = p_crew_id
+    where id::text = p_crew_id
     returning aura into v_new_total;
 
   insert into public.crew_xp_log(crew_id, user_id, amount, reason, icon)
@@ -126,9 +134,10 @@ drop policy if exists "crew_quest_read" on public.crew_quest_progress;
 create policy "crew_quest_read"
   on public.crew_quest_progress for select
   using (
-    crew_id in (
-      select crew_id::text from public.crew_members
-      where user_id = auth.uid()
+    exists (
+      select 1 from public.crew_members cm
+      where cm.crew_id::text = public.crew_quest_progress.crew_id::text
+        and cm.user_id::text = auth.uid()::text
     )
   );
 
@@ -136,15 +145,17 @@ drop policy if exists "crew_quest_write" on public.crew_quest_progress;
 create policy "crew_quest_write"
   on public.crew_quest_progress for all
   using (
-    crew_id in (
-      select crew_id::text from public.crew_members
-      where user_id = auth.uid()
+    exists (
+      select 1 from public.crew_members cm
+      where cm.crew_id::text = public.crew_quest_progress.crew_id::text
+        and cm.user_id::text = auth.uid()::text
     )
   )
   with check (
-    crew_id in (
-      select crew_id::text from public.crew_members
-      where user_id = auth.uid()
+    exists (
+      select 1 from public.crew_members cm
+      where cm.crew_id::text = public.crew_quest_progress.crew_id::text
+        and cm.user_id::text = auth.uid()::text
     )
   );
 
