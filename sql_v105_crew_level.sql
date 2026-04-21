@@ -37,12 +37,14 @@ create index if not exists idx_crew_xp_log_user
 -- RLS: Crew-Mitglieder dürfen ihren eigenen Log lesen
 alter table public.crew_xp_log enable row level security;
 
+-- Hinweis: crew_members.crew_id kann in diesem Schema uuid sein,
+-- deshalb überall ::text casten — funktioniert egal ob uuid oder text.
 drop policy if exists "crew_xp_log_read" on public.crew_xp_log;
 create policy "crew_xp_log_read"
   on public.crew_xp_log for select
   using (
     crew_id in (
-      select crew_id from public.crew_members
+      select crew_id::text from public.crew_members
       where user_id = auth.uid()
     )
   );
@@ -53,7 +55,7 @@ create policy "crew_xp_log_insert"
   with check (
     user_id = auth.uid()
     and crew_id in (
-      select crew_id from public.crew_members
+      select crew_id::text from public.crew_members
       where user_id = auth.uid()
     )
   );
@@ -81,9 +83,10 @@ begin
   end if;
 
   -- Nur Mitglieder dürfen ihrer Crew XP geben
+  -- ::text-Cast, falls crew_members.crew_id uuid ist
   if not exists (
     select 1 from public.crew_members
-    where crew_id = p_crew_id and user_id = auth.uid()
+    where crew_id::text = p_crew_id and user_id = auth.uid()
   ) then
     raise exception 'not_a_member';
   end if;
@@ -124,7 +127,7 @@ create policy "crew_quest_read"
   on public.crew_quest_progress for select
   using (
     crew_id in (
-      select crew_id from public.crew_members
+      select crew_id::text from public.crew_members
       where user_id = auth.uid()
     )
   );
@@ -134,13 +137,13 @@ create policy "crew_quest_write"
   on public.crew_quest_progress for all
   using (
     crew_id in (
-      select crew_id from public.crew_members
+      select crew_id::text from public.crew_members
       where user_id = auth.uid()
     )
   )
   with check (
     crew_id in (
-      select crew_id from public.crew_members
+      select crew_id::text from public.crew_members
       where user_id = auth.uid()
     )
   );
