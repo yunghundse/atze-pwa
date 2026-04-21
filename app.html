@@ -4686,6 +4686,141 @@ nav button.active .ni{animation:vNineCountPop .38s var(--ease-spring-soft) 1}
   font-size:15px;flex-shrink:0;
 }
 
+/* ========== V108: Daily-Bonus-Card (täglicher Crew-Check-In ab 09:00) ========== */
+.v108-daily-bonus{
+  display:flex;align-items:center;gap:12px;
+  width:calc(100% - 32px);margin:6px 16px 14px;padding:14px 16px;
+  border-radius:18px;border:1px solid rgba(255,214,10,.35);
+  background:linear-gradient(135deg,rgba(255,214,10,.14),rgba(255,109,46,.09));
+  color:var(--t1);font-family:inherit;cursor:pointer;
+  box-shadow:0 8px 26px rgba(255,109,46,.16),0 0 0 1px rgba(255,214,10,.08) inset;
+  position:relative;overflow:hidden;
+  transition:transform .18s ease, box-shadow .22s ease;
+}
+.v108-daily-bonus::before{
+  content:'';position:absolute;inset:-40% -20% auto auto;width:120%;height:180%;
+  background:radial-gradient(circle at top right,rgba(255,214,10,.28),transparent 60%);
+  pointer-events:none;
+}
+.v108-daily-bonus:active{transform:scale(.98)}
+.v108-daily-bonus:hover{box-shadow:0 12px 32px rgba(255,109,46,.22)}
+.v108-daily-bonus.claimed{
+  background:linear-gradient(135deg,rgba(52,199,89,.1),rgba(48,209,88,.04));
+  border-color:rgba(52,199,89,.32);cursor:default;
+}
+.v108-daily-bonus.claimed:active{transform:none}
+.v108-daily-bonus.locked{
+  background:linear-gradient(135deg,rgba(255,255,255,.04),rgba(255,255,255,.015));
+  border-color:var(--glass-border,rgba(255,255,255,.08));cursor:default;opacity:.85;
+}
+.v108-daily-bonus.locked::before{display:none}
+.v108-db-ic{
+  width:44px;height:44px;border-radius:13px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:22px;
+  background:linear-gradient(135deg,#FF6D2E,#FFD60A);color:#0A0A0A;
+  box-shadow:0 6px 18px rgba(255,109,46,.35);
+}
+.v108-daily-bonus.claimed .v108-db-ic{background:linear-gradient(135deg,#34C759,#30D158);box-shadow:0 6px 18px rgba(52,199,89,.35)}
+.v108-daily-bonus.locked  .v108-db-ic{background:rgba(255,255,255,.08);color:var(--t2);box-shadow:none}
+.v108-db-body{flex:1;display:flex;flex-direction:column;min-width:0;text-align:left}
+.v108-db-title{font-size:14.5px;font-weight:800;letter-spacing:-.2px;color:var(--t1)}
+.v108-db-sub{font-size:11.5px;color:var(--t3);margin-top:2px;letter-spacing:.1px}
+.v108-db-cta{
+  flex-shrink:0;padding:8px 12px;border-radius:12px;
+  background:rgba(10,10,10,.28);color:#FFD60A;
+  font-size:12.5px;font-weight:900;letter-spacing:.4px;
+  border:1px solid rgba(255,214,10,.28);
+}
+.v108-daily-bonus.claimed .v108-db-cta{background:rgba(52,199,89,.12);color:#30D158;border-color:rgba(52,199,89,.28)}
+.v108-daily-bonus.locked  .v108-db-cta{background:rgba(255,255,255,.05);color:var(--t3);border-color:var(--glass-border,rgba(255,255,255,.08))}
+
+/* ========== V108: Notification-Center (Mich / Crew Tabs + Crew-Filter) ========== */
+.v108-noti{
+  position:fixed;inset:0;z-index:999100;display:none;
+  background:rgba(0,0,0,.55);backdrop-filter:blur(6px);
+  align-items:flex-end;justify-content:center;
+}
+.v108-noti.show{display:flex;animation:v108NotiFade .2s ease}
+@keyframes v108NotiFade{ from{opacity:0} to{opacity:1} }
+.v108-noti-sheet{
+  width:100%;max-width:520px;background:var(--bg);
+  border-top-left-radius:22px;border-top-right-radius:22px;
+  max-height:82vh;display:flex;flex-direction:column;
+  border:1px solid var(--glass-border,rgba(255,255,255,.08));
+  border-bottom:none;
+  animation:v108NotiSlide .28s cubic-bezier(.2,.8,.2,1);
+  overflow:hidden;
+}
+@keyframes v108NotiSlide{ from{transform:translateY(40px);opacity:0} to{transform:translateY(0);opacity:1} }
+.v108-noti-hd{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:16px 18px 12px;
+}
+.v108-noti-hd-title{font-size:16px;font-weight:900;letter-spacing:-.3px;display:flex;align-items:center;gap:8px}
+.v108-noti-hd-close{
+  width:30px;height:30px;border-radius:50%;border:none;
+  background:rgba(255,255,255,.08);color:var(--t2);
+  font-size:14px;cursor:pointer;font-family:inherit;
+}
+.v108-noti-hd-close:active{transform:scale(.92)}
+.v108-noti-tabs{
+  display:flex;gap:6px;padding:0 16px 10px;
+}
+.v108-noti-tab{
+  flex:1;padding:9px 12px;border-radius:12px;border:1px solid var(--glass-border,rgba(255,255,255,.08));
+  background:rgba(255,255,255,.03);color:var(--t2);
+  font-size:12.5px;font-weight:800;cursor:pointer;font-family:inherit;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  transition:all .18s ease;
+}
+.v108-noti-tab.active{
+  background:linear-gradient(135deg,#FF6D2E,#FFD60A);color:#0A0A0A;border-color:transparent;
+  box-shadow:0 4px 14px rgba(255,109,46,.28);
+}
+.v108-noti-tab .v108-noti-tab-dot{
+  width:7px;height:7px;border-radius:50%;background:#FE3C72;flex-shrink:0;
+  display:none;
+}
+.v108-noti-tab.has-unread .v108-noti-tab-dot{display:inline-block}
+.v108-noti-filter{
+  padding:0 16px 12px;display:none;
+}
+.v108-noti-filter.show{display:block}
+.v108-noti-filter select{
+  width:100%;padding:10px 12px;border-radius:12px;
+  background:rgba(255,255,255,.04);color:var(--t1);
+  border:1px solid var(--glass-border,rgba(255,255,255,.08));
+  font-size:12.5px;font-weight:700;font-family:inherit;
+}
+.v108-noti-body{
+  flex:1;overflow-y:auto;padding:4px 16px 18px;
+  -webkit-overflow-scrolling:touch;
+}
+.v108-noti-item{
+  display:flex;align-items:flex-start;gap:12px;padding:12px;
+  border-radius:14px;margin-bottom:8px;
+  background:rgba(255,255,255,.03);border:1px solid var(--glass-border,rgba(255,255,255,.06));
+}
+.v108-noti-item .vni-ava{
+  width:38px;height:38px;border-radius:50%;flex-shrink:0;overflow:hidden;
+  background:linear-gradient(135deg,#FF6D2E,#FFD60A);
+  display:flex;align-items:center;justify-content:center;
+  color:#0A0A0A;font-weight:900;font-size:15px;
+}
+.v108-noti-item .vni-ava img{width:100%;height:100%;object-fit:cover;display:block}
+.v108-noti-item .vni-body{flex:1;min-width:0}
+.v108-noti-item .vni-text{font-size:13px;line-height:1.45;color:var(--t1)}
+.v108-noti-item .vni-meta{font-size:10.5px;color:var(--t3);margin-top:3px;display:flex;gap:8px;flex-wrap:wrap}
+.v108-noti-item .vni-em{flex-shrink:0;font-size:18px;align-self:center}
+.v108-noti-empty{padding:40px 12px;text-align:center;color:var(--t3);font-size:13px}
+.v108-noti-empty-em{font-size:30px;margin-bottom:10px}
+
+@media (prefers-reduced-motion: reduce){
+  .v108-daily-bonus,.v108-noti-sheet,.v108-noti-tab{
+    animation:none!important;transition:none!important;
+  }
+}
+
 </style>
 
 <!-- LOADING -->
@@ -5622,6 +5757,16 @@ nav button.active .ni{animation:vNineCountPop .38s var(--ease-spring-soft) 1}
              v106: Großer #crewLevelHero entfernt — kompakter Level-Pill sitzt jetzt neben der Crew-Zentrale oben in der Top-Bar.
              Details (Rang-Ladder, Quests, Contributors, XP-Feed) bleiben weiter unten + im Level-Sheet (Tap auf Pill). -->
 
+        <!-- v108: Daily Crew Check-In Bonus — ab 09:00 einmal pro Tag +25 XP für die aktive Crew. -->
+        <button type="button" class="v108-daily-bonus" id="v108DailyBonus" style="display:none" onclick="window.v108ClaimDailyBonus&&window.v108ClaimDailyBonus()">
+          <span class="v108-db-ic" aria-hidden="true">☀️</span>
+          <span class="v108-db-body">
+            <span class="v108-db-title" id="v108DbTitle">Täglicher Crew-Bonus</span>
+            <span class="v108-db-sub" id="v108DbSub">+25 XP für deine Crew abholen</span>
+          </span>
+          <span class="v108-db-cta" id="v108DbCta">+25 XP</span>
+        </button>
+
         <!-- v108: Mini-Chat-Section entfernt — Chat ist jetzt erster Tab im Crew-Menü. -->
         <div id="miniChatSection" style="display:none"></div>
 
@@ -5742,33 +5887,12 @@ nav button.active .ni{animation:vNineCountPop .38s var(--ease-spring-soft) 1}
         <!-- v105: Crew-Challenges sind jetzt Weekly-Quests und Teil des neuen Crew-Level-Systems (siehe crewLevelHero weiter oben). -->
 
 
-        <!-- ═══════════════════════════════════════ -->
-        <!-- ZONE 5: LIVE — Was passiert gerade? -->
-        <!-- ═══════════════════════════════════════ -->
-        <div class="crew-section">
-          <div class="crew-section-header">
-            <div class="csh-left"><span class="csh-emoji">⚡</span><span class="csh-title">Crew-Aktivität</span></div>
-            <div class="csh-badge live-badge">LIVE</div>
-          </div>
-          <div id="crewActivityFeed"></div>
-        </div>
-
-        <div class="crew-section">
-          <div class="crew-section-header">
-            <div class="csh-left"><span class="csh-emoji">📍</span><span class="csh-title">Crew-Standorte</span></div>
-          </div>
-          <div id="crewLocationList" style="padding:0 14px 14px"></div>
-        </div>
-
-        <!-- ═══════════════════════════════════════ -->
-        <!-- ZONE 6: PARTY — Spiele & Extras -->
-        <!-- ═══════════════════════════════════════ -->
-        <div class="crew-section">
-          <div class="crew-section-header">
-            <div class="csh-left"><span class="csh-emoji">🍻</span><span class="csh-title">Tagesvollster</span></div>
-          </div>
-          <div id="drunkList" style="padding:0 14px 14px;display:flex;gap:10px;overflow-x:auto"></div>
-        </div>
+        <!-- v108: Crew-Aktivität → wanderte ins Notification-Center (Glocke oben rechts).
+             v108: Crew-Standorte → wegfallen, Standorte laufen über die Karte.
+             v108: Tagesvollster → aus der Section entfernt. -->
+        <div id="crewActivityFeed" style="display:none"></div>
+        <div id="crewLocationList" style="display:none"></div>
+        <div id="drunkList" style="display:none"></div>
 
         <!-- v94: Party-Spiele hier entfernt — laufen in Zukunft über das Game Center (Deals-Tab).
              Keine freischwebende Section mehr im Crew-Menü. -->
@@ -6255,7 +6379,7 @@ async function logPrivacyConsent(mode, previousMode, state){
       deals_consent: !!(state.consent && state.consent.deals_consent),
       consent_version: 1,
       user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-      app_version: 107,
+      app_version: 108,
       // v73: tag source so we can see who was newly prompted vs. picked from settings
       source: (!previousMode && ME && ME.created_at && (Date.now()-new Date(ME.created_at).getTime())>3600000) ? 'existing_user_v72_prompt' : (!previousMode ? 'first_run' : 'settings_change')
     };
@@ -6303,7 +6427,7 @@ function clearPrivacyData(){
         deals_consent: false,
         consent_version: 1,
         user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-        app_version: 107,
+        app_version: 108,
         source: 'user_reset'
       };
       sb.from('privacy_consent_log').insert(clearRow).then(function(r){ if(r&&r.error) console.warn('[PM] clear log err', r.error.message); });
@@ -9729,8 +9853,11 @@ window.openMyCrewProfile=function(){
     if(!s){openCrewCreate();return}
   }
   var crewSize=(_crewProfiles&&_crewProfiles.length)||0;
-  var totalAura=0;var topStreak=0;
-  if(_crewProfiles)_crewProfiles.forEach(function(p){totalAura+=(p.points||0);if((p.streak||0)>topStreak)topStreak=p.streak||0});
+  // v108: Crew-Aura = echter XP-Pool aus crews.aura (RPC add_crew_xp).
+  // Vorher fälschlicherweise Summe der User-Points — das war ein anderes System (Solo-Points).
+  var totalAura=(s && typeof s.aura==='number') ? s.aura : 0;
+  var topStreak=0;
+  if(_crewProfiles)_crewProfiles.forEach(function(p){if((p.streak||0)>topStreak)topStreak=p.streak||0});
 
   // Check achievements
   var earned=JSON.parse(localStorage.getItem('crew_achievements')||'[]');
@@ -18484,7 +18611,356 @@ window.playCrewJoinCinema = async function(crew, opts){
   console.log('[v107] UI-Handler geladen — Tabs, Votes-Collapse, Own-Loc aktiv');
 })();
 
-if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js?v=20').catch(function(){});
+/* ========== V108: Daily-Bonus + Notification-Center ========== */
+(function(){
+  'use strict';
+
+  // ── Daily Crew Check-In Bonus ──────────────────────────────
+  // Regeln: ab 09:00 Ortszeit verfügbar; 1× pro Tag pro aktive Crew.
+  // Persistenz: localStorage 'v108_daily_bonus_<crewId>_<YYYY-MM-DD>' = '1'
+  var DAILY_BONUS_AMOUNT = 25;
+  var DAILY_BONUS_HOUR = 9;
+
+  function todayKey(){
+    var d = new Date();
+    var y = d.getFullYear();
+    var m = String(d.getMonth()+1).padStart(2,'0');
+    var dd = String(d.getDate()).padStart(2,'0');
+    return y+'-'+m+'-'+dd;
+  }
+
+  function bonusStorageKey(crewId){
+    return 'v108_daily_bonus_' + crewId + '_' + todayKey();
+  }
+
+  function isBonusAvailable(){
+    var h = new Date().getHours();
+    return h >= DAILY_BONUS_HOUR;
+  }
+
+  function hasClaimedToday(crewId){
+    try{ return localStorage.getItem(bonusStorageKey(crewId)) === '1'; }catch(e){ return false; }
+  }
+
+  function markClaimed(crewId){
+    try{ localStorage.setItem(bonusStorageKey(crewId), '1'); }catch(e){}
+  }
+
+  window.v108PaintDailyBonus = function(){
+    try{
+      var card = document.getElementById('v108DailyBonus'); if(!card) return;
+      var title = document.getElementById('v108DbTitle');
+      var sub   = document.getElementById('v108DbSub');
+      var cta   = document.getElementById('v108DbCta');
+
+      // Aktive Crew ermitteln
+      var crewId = null;
+      try{ if(typeof window.getActiveCrewId === 'function') crewId = window.getActiveCrewId(); }catch(e){}
+      if(!crewId){
+        card.style.display = 'none';
+        return;
+      }
+
+      card.style.display = 'flex';
+      card.classList.remove('claimed','locked');
+
+      if(hasClaimedToday(crewId)){
+        card.classList.add('claimed');
+        if(title) title.textContent = 'Crew-Bonus abgeholt ✅';
+        if(sub)   sub.textContent   = 'Komm morgen ab 09:00 wieder — +'+DAILY_BONUS_AMOUNT+' XP warten.';
+        if(cta)   cta.textContent   = 'Fertig';
+        card.setAttribute('aria-disabled','true');
+      } else if(!isBonusAvailable()){
+        card.classList.add('locked');
+        if(title) title.textContent = 'Täglicher Crew-Bonus';
+        if(sub)   sub.textContent   = 'Kommt ab 09:00 — dann +'+DAILY_BONUS_AMOUNT+' XP für die Crew.';
+        if(cta)   cta.textContent   = 'Ab 09:00';
+        card.setAttribute('aria-disabled','true');
+      } else {
+        if(title) title.textContent = 'Täglicher Crew-Bonus';
+        if(sub)   sub.textContent   = 'Hol dir heute +'+DAILY_BONUS_AMOUNT+' XP für deine Crew.';
+        if(cta)   cta.textContent   = '+'+DAILY_BONUS_AMOUNT+' XP';
+        card.setAttribute('aria-disabled','false');
+      }
+    }catch(e){ console.warn('[v108] paintDailyBonus', e); }
+  };
+
+  window.v108ClaimDailyBonus = async function(){
+    try{
+      var crewId = null;
+      try{ if(typeof window.getActiveCrewId === 'function') crewId = window.getActiveCrewId(); }catch(e){}
+      if(!crewId){ return; }
+      if(!isBonusAvailable()){ return; }
+      if(hasClaimedToday(crewId)){ return; }
+
+      // Optimistisch markieren, damit Doppelklicks nicht doppelt zählen
+      markClaimed(crewId);
+      window.v108PaintDailyBonus();
+
+      // XP tatsächlich an die Crew geben
+      if(typeof window.addCrewXp === 'function'){
+        try{
+          await window.addCrewXp(DAILY_BONUS_AMOUNT, 'daily_checkin', '☀️');
+        }catch(e){ console.warn('[v108] addCrewXp Daily-Bonus', e); }
+      }
+
+      // Kleine Confetti als Belohnung (falls vorhanden)
+      try{
+        if(typeof window.fireConfetti === 'function'){
+          window.fireConfetti({count:70, spread:.8, duration:1600, colors:['#FFD60A','#FF6D2E','#34C759']});
+        }
+      }catch(e){}
+    }catch(e){ console.warn('[v108] claimDailyBonus', e); }
+  };
+
+  // ── Notification-Center: Mich / Crew + Crew-Filter ─────────
+  var _notiTab = 'me';        // 'me' | 'crew'
+  var _notiCrewFilter = '__all__';
+
+  function getMyCrewList(){
+    try{
+      var list = (typeof _myCrewMemberships !== 'undefined' && _myCrewMemberships) ? _myCrewMemberships : [];
+      return list.map(function(m){
+        return {
+          id: m.crew_id,
+          name: (m.crew && (m.crew.name || m.crew.icon)) ? (m.crew.name || '') : 'Crew',
+          icon: (m.crew && m.crew.icon) || '👯'
+        };
+      });
+    }catch(e){ return []; }
+  }
+
+  function getMeNotifications(){
+    // Persönliche Benachrichtigungen — heute bewusst leer-lazy gehalten.
+    // Hooks für später: matches, messages, mentions, sos_alerts.
+    var items = [];
+    try{
+      if(typeof window.__notiMeFeed === 'function'){
+        var extra = window.__notiMeFeed();
+        if(Array.isArray(extra)) items = items.concat(extra);
+      }
+    }catch(e){}
+    return items;
+  }
+
+  function getCrewNotifications(filterCrewId){
+    // Quellen: vorhandene buildCrewActivityFeed-Logik (live) + später crew_xp_log.
+    // Wir bauen hier eine leichte Variante direkt aus _crewProfiles.
+    var items = [];
+    var now = Date.now();
+    try{
+      if(typeof _crewProfiles !== 'undefined' && _crewProfiles && _crewProfiles.length){
+        _crewProfiles.forEach(function(p){
+          var lastActive = p.last_active ? new Date(p.last_active).getTime() : 0;
+          var minsAgo = Math.round((now-lastActive)/60000);
+          if(minsAgo < 5){
+            items.push({photo:p.photo_url, name:p.name, text:'<strong>'+escHtml(p.name)+'</strong> ist gerade online '+(p.mood||'🟢'), meta:'Jetzt', priority:3, crewId:null});
+          } else if(minsAgo < 60){
+            items.push({photo:p.photo_url, name:p.name, text:'<strong>'+escHtml(p.name)+'</strong> war vor '+minsAgo+' Min aktiv', meta:'Vor '+minsAgo+' Min', priority:2, crewId:null});
+          }
+          if(p.mood){
+            items.push({photo:p.photo_url, name:p.name, text:'<strong>'+escHtml(p.name)+'</strong> fühlt sich '+p.mood, meta:'Heute', em:p.mood, priority:1, crewId:null});
+          }
+          if(p.streak && p.streak >= 3){
+            items.push({photo:p.photo_url, name:p.name, text:'<strong>'+escHtml(p.name)+'</strong> hat einen 🔥 '+p.streak+'-Tage-Streak!', meta:'Streak', em:'🔥', priority:2, crewId:null});
+          }
+        });
+      }
+    }catch(e){}
+
+    // Optional: crew_xp_log Einträge (letzte 10) laden und einflechten — async, kommt über refresh.
+    try{
+      if(typeof window.__notiCrewXpFeed === 'function'){
+        var extra = window.__notiCrewXpFeed(filterCrewId);
+        if(Array.isArray(extra)) items = items.concat(extra);
+      }
+    }catch(e){}
+
+    items.sort(function(a,b){ return (b.priority||0) - (a.priority||0); });
+    return items.slice(0, 30);
+  }
+
+  function escHtml(s){
+    try{ return String(s==null?'':s).replace(/[&<>"']/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    }); }catch(e){ return ''; }
+  }
+
+  function paintNotiFilter(){
+    var wrap = document.getElementById('v108NotiFilter');
+    var sel  = document.getElementById('v108NotiCrewFilter');
+    if(!wrap || !sel) return;
+    var crews = getMyCrewList();
+    // Nur zeigen, wenn User in mehreren Crews ist UND Crew-Tab aktiv
+    var show = (_notiTab === 'crew') && crews.length > 1;
+    wrap.classList.toggle('show', show);
+    if(!show) return;
+    // Select neu befüllen
+    var cur = _notiCrewFilter;
+    var html = '<option value="__all__">Alle Crews</option>';
+    crews.forEach(function(c){
+      html += '<option value="'+escHtml(c.id)+'">'+escHtml(c.icon+' '+c.name)+'</option>';
+    });
+    sel.innerHTML = html;
+    try{ sel.value = cur; }catch(e){}
+  }
+
+  function paintNotiBody(){
+    var el = document.getElementById('v108NotiBody'); if(!el) return;
+    var items = (_notiTab === 'me') ? getMeNotifications() : getCrewNotifications(_notiCrewFilter === '__all__' ? null : _notiCrewFilter);
+
+    if(!items || items.length === 0){
+      var em = (_notiTab === 'me') ? '👤' : '⚡';
+      var txt = (_notiTab === 'me')
+        ? 'Noch keine persönlichen Benachrichtigungen.'
+        : 'Noch keine Crew-Aktivität. Wird aktiver sobald deine Crew online ist.';
+      el.innerHTML = '<div class="v108-noti-empty"><div class="v108-noti-empty-em">'+em+'</div>'+txt+'</div>';
+      return;
+    }
+
+    var html = '';
+    items.forEach(function(a){
+      var ava;
+      if(a.photo){
+        ava = '<div class="vni-ava"><img src="'+escHtml(a.photo)+'" loading="lazy" alt=""></div>';
+      } else if(a.icon){
+        ava = '<div class="vni-ava">'+escHtml(a.icon)+'</div>';
+      } else {
+        ava = '<div class="vni-ava">'+((a.name||'?').slice(0,1).toUpperCase())+'</div>';
+      }
+      html += '<div class="v108-noti-item">'+ava+
+              '<div class="vni-body">'+
+                '<div class="vni-text">'+(a.text||'')+'</div>'+
+                (a.meta ? '<div class="vni-meta"><span>'+escHtml(a.meta)+'</span></div>' : '')+
+              '</div>'+
+              (a.em ? '<div class="vni-em">'+escHtml(a.em)+'</div>' : '')+
+              '</div>';
+    });
+    el.innerHTML = html;
+  }
+
+  function updateTabDots(){
+    try{
+      // Einfache Regel: Wenn Items vorhanden sind, Dot anzeigen.
+      var meTab   = document.querySelector('.v108-noti-tab[data-nt="me"]');
+      var crewTab = document.querySelector('.v108-noti-tab[data-nt="crew"]');
+      if(meTab)   meTab.classList.toggle('has-unread', getMeNotifications().length > 0 && _notiTab !== 'me');
+      if(crewTab) crewTab.classList.toggle('has-unread', getCrewNotifications(null).length > 0 && _notiTab !== 'crew');
+    }catch(e){}
+  }
+
+  window.v108NotiSwitch = function(tab){
+    if(tab !== 'me' && tab !== 'crew') return;
+    _notiTab = tab;
+    var tabs = document.querySelectorAll('.v108-noti-tab');
+    tabs.forEach(function(t){
+      var active = (t.getAttribute('data-nt') === tab);
+      t.classList.toggle('active', active);
+      t.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+    paintNotiFilter();
+    paintNotiBody();
+    updateTabDots();
+  };
+
+  window.v108NotiSetCrewFilter = function(val){
+    _notiCrewFilter = val || '__all__';
+    paintNotiBody();
+  };
+
+  window.v108OpenNoti = function(){
+    var ov = document.getElementById('v108Noti'); if(!ov) return;
+    _notiTab = 'me';
+    _notiCrewFilter = '__all__';
+    paintNotiFilter();
+    paintNotiBody();
+    updateTabDots();
+    ov.classList.add('show');
+  };
+
+  window.v108CloseNoti = function(){
+    var ov = document.getElementById('v108Noti'); if(!ov) return;
+    ov.classList.remove('show');
+  };
+
+  // openNoti-Hook: alte bsheet-Variante durch das neue Sheet ersetzen.
+  // Original ggf. als Fallback behalten.
+  try{
+    var _origOpenNoti = window.openNoti;
+    window.openNoti = function(){
+      if(typeof window.v108OpenNoti === 'function'){
+        window.v108OpenNoti();
+        return;
+      }
+      if(typeof _origOpenNoti === 'function') return _origOpenNoti.apply(this, arguments);
+    };
+  }catch(e){}
+
+  // ESC schließt das Sheet
+  try{
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape'){
+        var ov = document.getElementById('v108Noti');
+        if(ov && ov.classList.contains('show')) window.v108CloseNoti();
+      }
+    });
+  }catch(e){}
+
+  // Beim Crew-Screen-Öffnen Daily-Bonus neu malen
+  function repaintOnCrew(){
+    try{ window.v108PaintDailyBonus(); }catch(e){}
+  }
+  if(document.readyState === 'complete' || document.readyState === 'interactive'){
+    setTimeout(repaintOnCrew, 500);
+  } else {
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(repaintOnCrew, 500); });
+  }
+  try{
+    var origShow2 = window.showScreen;
+    if(typeof origShow2 === 'function'){
+      window.showScreen = function(id){
+        var r = origShow2.apply(this, arguments);
+        if(id === 'crew' || id === 'crewScreen'){
+          setTimeout(repaintOnCrew, 140);
+        }
+        return r;
+      };
+    }
+  }catch(e){}
+
+  // Alle 5 Minuten neu prüfen (für 09:00-Übergang ohne Reload)
+  setInterval(repaintOnCrew, 5*60*1000);
+
+  console.log('[v108] Daily-Bonus + Notification-Center aktiv');
+})();
+
+if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js?v=22').catch(function(){});
 </script>
+
+<!-- v108: Notification-Center Sheet — Mich / Crew Tabs + optionaler Crew-Filter -->
+<div class="v108-noti" id="v108Noti" role="dialog" aria-modal="true" aria-label="Benachrichtigungen" onclick="if(event.target===this)window.v108CloseNoti&&window.v108CloseNoti()">
+  <div class="v108-noti-sheet">
+    <div class="v108-noti-hd">
+      <div class="v108-noti-hd-title"><span aria-hidden="true">🔔</span><span>Benachrichtigungen</span></div>
+      <button type="button" class="v108-noti-hd-close" onclick="window.v108CloseNoti&&window.v108CloseNoti()" aria-label="Schließen">✕</button>
+    </div>
+    <div class="v108-noti-tabs" role="tablist" aria-label="Notification-Tabs">
+      <button type="button" class="v108-noti-tab active" data-nt="me" onclick="window.v108NotiSwitch&&window.v108NotiSwitch('me')" role="tab" aria-selected="true">
+        <span>👤</span><span>Mich</span><span class="v108-noti-tab-dot" aria-hidden="true"></span>
+      </button>
+      <button type="button" class="v108-noti-tab" data-nt="crew" onclick="window.v108NotiSwitch&&window.v108NotiSwitch('crew')" role="tab" aria-selected="false">
+        <span>👯</span><span>Crew</span><span class="v108-noti-tab-dot" aria-hidden="true"></span>
+      </button>
+    </div>
+    <div class="v108-noti-filter" id="v108NotiFilter">
+      <select id="v108NotiCrewFilter" onchange="window.v108NotiSetCrewFilter&&window.v108NotiSetCrewFilter(this.value)" aria-label="Crew filtern">
+        <option value="__all__">Alle Crews</option>
+      </select>
+    </div>
+    <div class="v108-noti-body" id="v108NotiBody">
+      <div class="v108-noti-empty"><div class="v108-noti-empty-em">🔔</div>Noch keine Benachrichtigungen.</div>
+    </div>
+  </div>
+</div>
 </body>
 </html>
