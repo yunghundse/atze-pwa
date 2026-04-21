@@ -480,6 +480,33 @@ nav button.active::before{opacity:1}
   .crew-top-lvl .ctl-em{font-size:15px}
   .crew-top-lvl .ctl-num{font-size:15px}
 }
+/* v107: Safety-Pill in der Top-Bar, gleiche Höhe wie Back + Level + Card */
+.crew-top-safety{
+  width:56px;height:56px;flex-shrink:0;
+  border-radius:18px;
+  background:
+    radial-gradient(circle at 50% 0%,rgba(52,199,89,.20),transparent 60%),
+    linear-gradient(140deg,rgba(12,22,16,.96),rgba(14,18,22,.98));
+  border:1px solid rgba(52,199,89,.36);
+  box-shadow:0 8px 22px rgba(0,0,0,.45),0 0 0 1px rgba(52,199,89,.06) inset;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:2px;cursor:pointer;position:relative;overflow:hidden;
+  font-family:inherit;color:#fff;padding:6px 4px;
+  transition:transform .15s var(--spring,ease),border-color .2s,box-shadow .2s;
+}
+.crew-top-safety:hover{transform:translateY(-1px);border-color:rgba(52,199,89,.55);box-shadow:0 10px 26px rgba(0,0,0,.5),0 0 0 1px rgba(52,199,89,.12) inset}
+.crew-top-safety:active{transform:scale(.93)}
+.crew-top-safety .cts-em{font-size:22px;line-height:1}
+.crew-top-safety .cts-tag{font-size:8px;font-weight:900;letter-spacing:1.3px;color:#34C759;line-height:1;margin-top:1px}
+.crew-top-safety .cts-dot{position:absolute;top:7px;right:7px;width:8px;height:8px;border-radius:50%;background:#34C759;box-shadow:0 0 8px rgba(52,199,89,.75),0 0 0 1px rgba(14,18,22,.9);animation:ctsDotPulse 2.2s ease-in-out infinite}
+@keyframes ctsDotPulse{0%,100%{opacity:.85;transform:scale(1)}50%{opacity:.45;transform:scale(.85)}}
+@media (max-width:390px){
+  .crew-top-safety{width:52px;height:52px;border-radius:16px}
+  .crew-top-safety .cts-em{font-size:20px}
+}
+@media (prefers-reduced-motion:reduce){
+  .crew-top-safety .cts-dot{animation:none}
+}
 /* v90: Map braucht KEINEN Top-Margin mehr — die Top-Bar sitzt natürlich davor im Flow */
 #crewsub-active .crew-map-full{margin:0 12px 10px;position:relative;z-index:1;height:240px}
 #crewsub-active .crew-map-full .leaflet-container{z-index:1}
@@ -4448,6 +4475,155 @@ nav button.active .ni{animation:vNineCountPop .38s var(--ease-spring-soft) 1}
   .v105-cl-ring-fg,.v105-cl-bar > i{transition:none!important}
 }
 
+/* ========== V107: Tabbed Crew-Menü, Votes-Collapse, Eigene Location ========== */
+.v107-menu{
+  margin:0 16px 18px;border-radius:20px;
+  background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.015));
+  border:1px solid var(--glass-border,rgba(255,255,255,.08));
+  overflow:hidden;
+}
+.v107-menu-hd{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:14px 16px;cursor:pointer;-webkit-tap-highlight-color:transparent;
+  user-select:none;
+}
+.v107-menu-hd:active{background:rgba(255,255,255,.02)}
+.v107-menu-hd-left{display:flex;align-items:center;gap:10px;min-width:0}
+.v107-menu-hd-ic{
+  width:34px;height:34px;border-radius:10px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:17px;
+  background:linear-gradient(135deg,rgba(255,109,46,.2),rgba(255,214,10,.15));
+  border:1px solid rgba(255,214,10,.25);
+}
+.v107-menu-hd-title{font-size:14px;font-weight:800;letter-spacing:-.2px;color:var(--t1)}
+.v107-menu-hd-sub{font-size:10.5px;font-weight:600;color:var(--t3);margin-top:1px;letter-spacing:.2px}
+.v107-menu-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.v107-chev{
+  width:26px;height:26px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.06);color:var(--t2);font-size:11px;
+  transition:transform .28s cubic-bezier(.2,.8,.2,1);
+}
+.v107-menu.collapsed .v107-chev{transform:rotate(-90deg)}
+.v107-menu-body{
+  max-height:2000px;overflow:hidden;
+  transition:max-height .36s cubic-bezier(.2,.8,.2,1);
+}
+.v107-menu.collapsed .v107-menu-body{max-height:0}
+.v107-tabs{
+  display:flex;gap:6px;padding:0 12px 10px;overflow-x:auto;scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;
+}
+.v107-tabs::-webkit-scrollbar{display:none}
+.v107-tab{
+  flex:0 0 auto;padding:8px 13px;border-radius:999px;border:1px solid var(--glass-border,rgba(255,255,255,.08));
+  background:rgba(255,255,255,.03);color:var(--t2);
+  font-size:12px;font-weight:700;letter-spacing:.1px;cursor:pointer;
+  font-family:inherit;white-space:nowrap;display:flex;align-items:center;gap:6px;
+  transition:all .18s ease;
+}
+.v107-tab:active{transform:scale(.96)}
+.v107-tab.active{
+  background:linear-gradient(135deg,#FF6D2E,#FFD60A);
+  color:#0A0A0A;border-color:transparent;
+  box-shadow:0 4px 14px rgba(255,109,46,.28);
+}
+.v107-tab-em{font-size:13px;line-height:1}
+.v107-panels{padding:0 0 10px;position:relative}
+.v107-panel{display:none;padding:0 4px}
+.v107-panel.active{display:block;animation:v107FadeIn .24s ease}
+@keyframes v107FadeIn{
+  from{opacity:0;transform:translateY(4px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* Votes-Sektion collapse */
+.v107-votes{
+  margin:0 16px 18px;border-radius:20px;overflow:hidden;
+  background:linear-gradient(180deg,rgba(255,214,10,.05),rgba(255,109,46,.025));
+  border:1px solid rgba(255,214,10,.15);
+}
+.v107-votes-hd{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:14px 16px;cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none;
+}
+.v107-votes-hd:active{background:rgba(255,255,255,.02)}
+.v107-votes-hd-left{display:flex;align-items:center;gap:10px;min-width:0}
+.v107-votes-hd-ic{
+  width:34px;height:34px;border-radius:10px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:17px;
+  background:linear-gradient(135deg,rgba(255,214,10,.22),rgba(255,109,46,.18));
+  border:1px solid rgba(255,214,10,.3);
+}
+.v107-votes-hd-title{font-size:14px;font-weight:800;letter-spacing:-.2px;color:var(--t1)}
+.v107-votes-hd-sub{font-size:10.5px;font-weight:600;color:var(--t3);margin-top:1px;letter-spacing:.2px}
+.v107-votes-body, .v107-votes > #dailyVoting{
+  max-height:1500px;overflow:hidden;
+  transition:max-height .36s cubic-bezier(.2,.8,.2,1);
+}
+.v107-votes.collapsed .v107-votes-body,
+.v107-votes.collapsed > #dailyVoting{max-height:0;margin:0;padding-top:0;padding-bottom:0}
+.v107-votes.collapsed .v107-chev{transform:rotate(-90deg)}
+
+/* Eigene-Location-Widget in „Crews in der Nähe" */
+.v107-own-loc{
+  display:flex;align-items:center;gap:12px;
+  margin:4px 16px 14px;padding:12px 14px;border-radius:16px;
+  background:linear-gradient(135deg,rgba(52,199,89,.09),rgba(48,209,88,.04));
+  border:1px solid rgba(52,199,89,.22);
+}
+.v107-ol-ava{
+  width:42px;height:42px;border-radius:50%;flex-shrink:0;position:relative;
+  background:linear-gradient(135deg,#FF6D2E,#FFD60A);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;font-weight:900;color:#0A0A0A;overflow:hidden;
+  border:2px solid rgba(52,199,89,.45);
+}
+.v107-ol-ava img{width:100%;height:100%;object-fit:cover;display:block}
+.v107-ol-ava::after{
+  content:'';position:absolute;inset:-6px;border-radius:50%;
+  border:2px solid rgba(52,199,89,.35);animation:v107OlPulse 2.4s ease-out infinite;
+}
+@keyframes v107OlPulse{
+  0%{transform:scale(1);opacity:.55}
+  100%{transform:scale(1.35);opacity:0}
+}
+.v107-ol-body{flex:1;min-width:0}
+.v107-ol-name{font-size:13.5px;font-weight:800;color:var(--t1);letter-spacing:-.2px}
+.v107-ol-sub{font-size:11px;color:var(--t3);margin-top:2px;display:flex;align-items:center;gap:5px}
+.v107-ol-sub-dot{width:6px;height:6px;border-radius:50%;background:#34C759;box-shadow:0 0 8px rgba(52,199,89,.7)}
+.v107-own-loc.off .v107-ol-ava{filter:grayscale(1);border-color:rgba(255,255,255,.1)}
+.v107-own-loc.off .v107-ol-ava::after{display:none}
+.v107-own-loc.off .v107-ol-sub-dot{background:var(--t3);box-shadow:none}
+
+/* Toggle-Switch */
+.v107-ol-switch{
+  position:relative;display:inline-block;width:46px;height:26px;flex-shrink:0;cursor:pointer;
+}
+.v107-ol-switch input{opacity:0;width:0;height:0}
+.v107-ol-slider{
+  position:absolute;inset:0;border-radius:999px;
+  background:rgba(255,255,255,.12);transition:background .22s ease;
+  border:1px solid var(--glass-border,rgba(255,255,255,.08));
+}
+.v107-ol-slider::before{
+  content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;
+  background:#fff;transition:transform .22s cubic-bezier(.2,.8,.2,1);
+  box-shadow:0 2px 6px rgba(0,0,0,.3);
+}
+.v107-ol-switch input:checked + .v107-ol-slider{
+  background:linear-gradient(135deg,#34C759,#30D158);
+  border-color:transparent;
+}
+.v107-ol-switch input:checked + .v107-ol-slider::before{transform:translateX(20px)}
+
+@media (prefers-reduced-motion: reduce){
+  .v107-chev,.v107-menu-body,.v107-votes-body,.v107-ol-slider::before,.v107-ol-slider,.v107-panel{
+    animation:none!important;transition:none!important;
+  }
+  .v107-ol-ava::after{animation:none!important}
+}
+
 </style>
 
 <!-- LOADING -->
@@ -5330,6 +5506,12 @@ nav button.active .ni{animation:vNineCountPop .38s var(--ease-spring-soft) 1}
           <span class="ctl-tag">LVL</span>
           <span class="ctl-bar"><i id="crewTopLvlBar" style="width:0%"></i></span>
         </button>
+        <!-- v107: Safety-Pill neben dem Level-Button — schneller Zugriff auf Standort / Safe-Checkin / Privatsphäre -->
+        <button type="button" class="crew-top-safety" id="crewTopSafety" onclick="(window.openSafetyHub&&window.openSafetyHub())" aria-label="Safety &amp; Standort öffnen" title="Safety &amp; Standort">
+          <span class="cts-em" aria-hidden="true">🛡️</span>
+          <span class="cts-tag">SAFE</span>
+          <span class="cts-dot" id="crewTopSafetyDot" aria-hidden="true"></span>
+        </button>
       </div>
       <!-- v78: CONTEXT MODE SWITCHER auch auf Crew-Screen (oben über der Karte) -->
       <div class="ctx-switcher" id="ctxSwitcherCrew" role="tablist" aria-label="Modus wechseln">
@@ -5387,31 +5569,38 @@ nav button.active .ni{animation:vNineCountPop .38s var(--ease-spring-soft) 1}
           <div id="miniChatPreview" onclick="openCrewChat()" style="padding:0 14px 14px;cursor:pointer"></div>
         </div>
 
-        <!-- v105: WEEKLY CREW-QUESTS — ersetzen die alten Daily-Challenges -->
-        <div class="crew-section" id="crewQuestsSection">
-          <div class="crew-section-header">
-            <div class="csh-left"><span class="csh-emoji">🎯</span><span class="csh-title">Crew-Quests der Woche</span></div>
-            <div class="csh-badge" id="crewQuestsWeekBadge" style="background:rgba(191,90,242,.12);color:#BF5AF2;font-size:10px">KW --</div>
+        <!-- v107: CREW-MENÜ — Quests / Contributors / XP-Feed / Leaderboard in Tabs.
+             Ersetzt die 4 separaten Sections darunter. Kollabierbar über Header-Tap. -->
+        <div class="crew-section v107-menu" id="v107CrewMenu">
+          <div class="crew-section-header v107-menu-hd" onclick="window.v107ToggleCrewMenu&&window.v107ToggleCrewMenu()" role="button" aria-expanded="true" aria-controls="v107MenuBody">
+            <div class="csh-left"><span class="csh-emoji">📜</span><span class="csh-title">Crew-Menü</span></div>
+            <div class="v107-menu-right">
+              <span class="csh-badge" id="crewQuestsWeekBadge" style="background:rgba(191,90,242,.12);color:#BF5AF2;font-size:10px">KW --</span>
+              <span class="v107-chev" id="v107MenuChev" aria-hidden="true">▾</span>
+            </div>
           </div>
-          <div id="crewQuestsList" style="padding:0 14px 14px"><p class="crew-empty">Quests laden …</p></div>
-        </div>
-
-        <!-- v105: TOP CONTRIBUTORS — wer hat diese Woche am meisten für die Crew geholt? -->
-        <div class="crew-section" id="crewContribSection">
-          <div class="crew-section-header">
-            <div class="csh-left"><span class="csh-emoji">💪</span><span class="csh-title">Top Contributors</span></div>
-            <div class="csh-badge" style="background:rgba(255,109,46,.12);color:var(--o);font-size:10px">WOCHE</div>
+          <div class="v107-menu-body" id="v107MenuBody">
+            <div class="v107-tabs" role="tablist" aria-label="Crew-Menü-Tabs">
+              <button class="v107-tab active" role="tab" aria-selected="true" data-tab="quests" onclick="window.v107SwitchTab&&window.v107SwitchTab('quests')">🎯 Quests</button>
+              <button class="v107-tab" role="tab" aria-selected="false" data-tab="contribs" onclick="window.v107SwitchTab&&window.v107SwitchTab('contribs')">💪 Top</button>
+              <button class="v107-tab" role="tab" aria-selected="false" data-tab="feed" onclick="window.v107SwitchTab&&window.v107SwitchTab('feed')">✨ Feed</button>
+              <button class="v107-tab" role="tab" aria-selected="false" data-tab="leader" onclick="window.v107SwitchTab&&window.v107SwitchTab('leader')">🏆 Board</button>
+            </div>
+            <div class="v107-panels">
+              <div class="v107-panel active" role="tabpanel" data-panel="quests">
+                <div id="crewQuestsList" style="padding:0 14px 14px"><p class="crew-empty">Quests laden …</p></div>
+              </div>
+              <div class="v107-panel" role="tabpanel" data-panel="contribs">
+                <div id="crewContribList" style="padding:0 14px 14px"><p class="crew-empty">Noch keine Contributions diese Woche.</p></div>
+              </div>
+              <div class="v107-panel" role="tabpanel" data-panel="feed">
+                <div id="crewXpFeedList" style="padding:0 14px 14px"><p class="crew-empty">Noch keine XP-Events. Checkt ein, ladet ein, feiert zusammen.</p></div>
+              </div>
+              <div class="v107-panel" role="tabpanel" data-panel="leader">
+                <div id="leaderboardList" style="padding:0 14px 14px"><p class="crew-empty">Leaderboard füllt sich, sobald die Crew Aura sammelt 🏆</p></div>
+              </div>
+            </div>
           </div>
-          <div id="crewContribList" style="padding:0 14px 14px"><p class="crew-empty">Noch keine Contributions diese Woche.</p></div>
-        </div>
-
-        <!-- v105: LIVE XP-FEED — was hat gerade XP gebracht? -->
-        <div class="crew-section" id="crewXpFeedSection">
-          <div class="crew-section-header">
-            <div class="csh-left"><span class="csh-emoji">✨</span><span class="csh-title">XP-Feed</span></div>
-            <div class="csh-badge live-badge">LIVE</div>
-          </div>
-          <div id="crewXpFeedList" style="padding:0 14px 14px"><p class="crew-empty">Noch keine XP-Events. Checkt ein, ladet ein, feiert zusammen.</p></div>
         </div>
 
 
@@ -5424,6 +5613,18 @@ nav button.active .ni{animation:vNineCountPop .38s var(--ease-spring-soft) 1}
               <div class="cnh-sub" id="crewNearbySub">sucht in deiner Nähe …</div>
             </div>
             <button class="cnh-refresh" onclick="refreshNearbyCrew()" aria-label="Aktualisieren" title="Aktualisieren">↻</button>
+          </div>
+          <!-- v107: Eigener Standort mit On/Off-Toggle direkt im Nearby-Bereich -->
+          <div class="v107-own-loc" id="v107OwnLoc">
+            <div class="v107-ol-ava"><img id="v107OlPhoto" src="" alt="" loading="lazy"></div>
+            <div class="v107-ol-body">
+              <div class="v107-ol-name">Dein Standort</div>
+              <div class="v107-ol-sub" id="v107OlSub">Laden …</div>
+            </div>
+            <label class="v107-ol-switch" title="Standort teilen an/aus">
+              <input type="checkbox" id="v107OlToggle" onchange="window.v107ToggleOwnLoc&&window.v107ToggleOwnLoc(this.checked)">
+              <span class="v107-ol-slider"></span>
+            </label>
           </div>
           <div id="crewNearbyListCrewScreen" class="crew-nearby-list"><p style="color:var(--t3);font-size:12px;padding:6px 4px">Schau auf der Karte nach Crews in deiner Nähe 🗺️</p></div>
         </div>
@@ -5479,23 +5680,20 @@ nav button.active .ni{animation:vNineCountPop .38s var(--ease-spring-soft) 1}
         </div>
 
         <!-- ═══════════════════════════════════════ -->
-        <!-- ZONE 3: CREW VOTES — Psychologische Votes -->
+        <!-- v107: CREW VOTES — nur noch 1 Vote pro Tag, kollabierbar -->
         <!-- ═══════════════════════════════════════ -->
-        <div class="crew-section highlight-section">
-          <div class="crew-section-header">
-            <div class="csh-left"><span class="csh-emoji">🗳️</span><span class="csh-title">Crew Votes</span></div>
-            <div class="csh-badge vote-badge">TÄGLICH NEU</div>
+        <div class="crew-section highlight-section v107-votes" id="v107VoteSection">
+          <div class="crew-section-header v107-votes-hd" onclick="window.v107ToggleVotes&&window.v107ToggleVotes()" role="button" aria-expanded="true" aria-controls="dailyVoting">
+            <div class="csh-left"><span class="csh-emoji">🗳️</span><span class="csh-title">Crew Vote des Tages</span></div>
+            <div class="v107-menu-right">
+              <span class="csh-badge vote-badge">TÄGLICH</span>
+              <span class="v107-chev" id="v107VotesChev" aria-hidden="true">▾</span>
+            </div>
           </div>
-          <div id="dailyVoting"><p class="crew-empty">Heute noch keine Votes – sei die/der Erste ✨</p></div>
+          <div id="dailyVoting"><p class="crew-empty">Heute noch kein Vote – sei die/der Erste ✨</p></div>
         </div>
 
-        <div class="crew-section">
-          <div class="crew-section-header">
-            <div class="csh-left"><span class="csh-emoji">🏆</span><span class="csh-title">Leaderboard</span></div>
-          </div>
-          <div id="leaderboardList" style="padding:0 14px 14px"><p class="crew-empty">Leaderboard füllt sich, sobald die Crew Aura sammelt 🏆</p></div>
-        </div>
-
+        <!-- v107: Leaderboard ist jetzt Teil des Crew-Menü-Tabs "Board" (weiter oben). -->
         <!-- v105: Crew-Challenges sind jetzt Weekly-Quests und Teil des neuen Crew-Level-Systems (siehe crewLevelHero weiter oben). -->
 
 
@@ -6012,7 +6210,7 @@ async function logPrivacyConsent(mode, previousMode, state){
       deals_consent: !!(state.consent && state.consent.deals_consent),
       consent_version: 1,
       user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-      app_version: 106,
+      app_version: 107,
       // v73: tag source so we can see who was newly prompted vs. picked from settings
       source: (!previousMode && ME && ME.created_at && (Date.now()-new Date(ME.created_at).getTime())>3600000) ? 'existing_user_v72_prompt' : (!previousMode ? 'first_run' : 'settings_change')
     };
@@ -6060,7 +6258,7 @@ function clearPrivacyData(){
         deals_consent: false,
         consent_version: 1,
         user_agent: (typeof navigator!=='undefined' && navigator.userAgent) ? navigator.userAgent.slice(0,300) : null,
-        app_version: 106,
+        app_version: 107,
         source: 'user_reset'
       };
       sb.from('privacy_consent_log').insert(clearRow).then(function(r){ if(r&&r.error) console.warn('[PM] clear log err', r.error.message); });
@@ -11713,7 +11911,9 @@ async function buildDailyVoting(){
 
     // Pick today's vote set (rotates daily)
     var doy=Math.floor((new Date()-new Date(new Date().getFullYear(),0,0))/86400000);
-    var todaySet=VOTE_SETS[doy%VOTE_SETS.length];
+    var todayFullSet=VOTE_SETS[doy%VOTE_SETS.length];
+    // v107: Nur EIN Vote pro Tag anzeigen — deterministisch gepickt über day-of-year.
+    var todaySet=[ todayFullSet[ doy % todayFullSet.length ] ];
     var today=new Date().toISOString().split('T')[0];
 
     // Load ALL votes for today from Supabase
@@ -15319,10 +15519,15 @@ window.playCrewJoinCinema = async function(crew, opts){
   }
 
   function scrollTopOK(){
+    // v107: Jeder .scr ist ein eigener Scroll-Container (overflow-y:auto).
+    // Doc-scrollTop ist meist 0 — also MUSS der aktive Screen geprüft werden,
+    // sonst triggert PTR mitten beim Hochwischen.
+    var scr = document.querySelector('.scr.active');
+    if(scr && scr.scrollTop > 1) return false;
     var se = document.scrollingElement || document.documentElement;
-    if(se && se.scrollTop <= 1) return true;
-    if(window.scrollY <= 1) return true;
-    return false;
+    if(se && se.scrollTop > 1) return false;
+    if(window.scrollY > 1) return false;
+    return true;
   }
 
   function isOverlayOpen(){
@@ -17468,6 +17673,11 @@ window.playCrewJoinCinema = async function(crew, opts){
 
   function getActiveCrewId(){
     try{
+      // v107: ZUERST die echte App-Funktion nehmen — die kennt _activeCrewId + _myCrewMemberships.
+      if(typeof window.getActiveCrewId === 'function' && window.getActiveCrewId !== getActiveCrewId){
+        var realId = window.getActiveCrewId();
+        if(realId) return realId;
+      }
       if(_activeCrewId) return _activeCrewId;
       if(typeof window.CREW_CTX !== 'undefined' && window.CREW_CTX && window.CREW_CTX.active_crew_id){
         _activeCrewId = window.CREW_CTX.active_crew_id;
@@ -17481,6 +17691,11 @@ window.playCrewJoinCinema = async function(crew, opts){
         _activeCrewId = window.myCrew.id;
         return _activeCrewId;
       }
+      // v107: localStorage-Fallback (gleiche Quelle wie die Haupt-App)
+      try{
+        var ls = localStorage.getItem('active_crew_id');
+        if(ls && /^[0-9a-f-]{36}$/i.test(ls)) return ls;
+      }catch(e){}
     }catch(e){}
     return null;
   }
@@ -18034,7 +18249,156 @@ window.playCrewJoinCinema = async function(crew, opts){
   console.log('[v105] Crew-Level-System loaded — Ranks:'+CREW_RANKS.length+', Quests:'+QUEST_DEFS.length);
 })();
 
-if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js?v=18').catch(function(){});
+/* ========== V107: UI-Handler — Tabbed-Menu, Votes-Collapse, Own-Loc ========== */
+(function(){
+  'use strict';
+
+  // --- Crew-Menü (Quests / Contribs / Feed / Leader) Tabs ------------------
+  window.v107SwitchTab = function(tab){
+    try{
+      var menu = document.getElementById('v107CrewMenu'); if(!menu) return;
+      var tabs = menu.querySelectorAll('.v107-tab');
+      var panels = menu.querySelectorAll('.v107-panel');
+      for(var i=0;i<tabs.length;i++){
+        var isActive = tabs[i].getAttribute('data-tab') === tab;
+        tabs[i].classList.toggle('active', isActive);
+        tabs[i].setAttribute('aria-selected', isActive ? 'true' : 'false');
+      }
+      for(var j=0;j<panels.length;j++){
+        panels[j].classList.toggle('active', panels[j].getAttribute('data-panel') === tab);
+      }
+      // Leaderboard erst bei Bedarf laden (war vorher eine separate Section)
+      if(tab === 'leader' && typeof window.loadLeaderboard === 'function'){
+        try{ window.loadLeaderboard(); }catch(e){}
+      }
+    }catch(e){ console.warn('[v107] switchTab', e); }
+  };
+
+  window.v107ToggleCrewMenu = function(){
+    try{
+      var menu = document.getElementById('v107CrewMenu'); if(!menu) return;
+      menu.classList.toggle('collapsed');
+      var hd = menu.querySelector('.v107-menu-hd');
+      if(hd) hd.setAttribute('aria-expanded', menu.classList.contains('collapsed') ? 'false' : 'true');
+    }catch(e){}
+  };
+
+  // --- Votes collapse ------------------------------------------------------
+  window.v107ToggleVotes = function(){
+    try{
+      var s = document.getElementById('v107VoteSection'); if(!s) return;
+      s.classList.toggle('collapsed');
+      var hd = s.querySelector('.v107-votes-hd');
+      if(hd) hd.setAttribute('aria-expanded', s.classList.contains('collapsed') ? 'false' : 'true');
+    }catch(e){}
+  };
+
+  // --- Eigene Location: anzeigen + On/Off ----------------------------------
+  function readLocMode(){
+    try{ return localStorage.getItem('location_sharing_mode') || 'crew'; }catch(e){ return 'crew'; }
+  }
+  function writeLocMode(m){
+    try{ localStorage.setItem('location_sharing_mode', m); }catch(e){}
+  }
+
+  window.v107ToggleOwnLoc = function(on){
+    try{
+      writeLocMode(on ? 'crew' : 'nobody');
+      var w = document.getElementById('v107OwnLoc');
+      if(w) w.classList.toggle('off', !on);
+      var sub = document.getElementById('v107OlSub');
+      if(sub){
+        sub.innerHTML = on
+          ? '<span class="v107-ol-sub-dot"></span> Standort wird mit Crew geteilt'
+          : '<span class="v107-ol-sub-dot"></span> Standort ist aus';
+      }
+      // Ping sofort durchtreiben, wenn möglich
+      if(on && typeof window.pingMyLocation === 'function'){
+        try{ window.pingMyLocation(); }catch(e){}
+      }
+      // Safety-Dot im Top-Bar neu einfärben
+      try{ if(typeof window.v107PaintSafetyDot === 'function') window.v107PaintSafetyDot(); }catch(e){}
+    }catch(e){ console.warn('[v107] toggleOwnLoc', e); }
+  };
+
+  function paintOwnLoc(){
+    try{
+      var w = document.getElementById('v107OwnLoc'); if(!w) return;
+      var mode = readLocMode();
+      var on = (mode && mode !== 'nobody');
+      w.classList.toggle('off', !on);
+      var tgl = document.getElementById('v107OlToggle');
+      if(tgl) tgl.checked = !!on;
+
+      // Avatar
+      var img = document.getElementById('v107OlPhoto');
+      if(img){
+        var photo = '';
+        try{ if(typeof ME !== 'undefined' && ME && ME.photo_url) photo = ME.photo_url; }catch(e){}
+        if(photo){ img.src = photo; img.style.display='block'; }
+        else { img.style.display='none'; }
+      }
+
+      // Sub-Text (Stadt/Status)
+      var sub = document.getElementById('v107OlSub');
+      if(sub){
+        var label = 'Standort ist aus';
+        if(on){
+          var city = '';
+          try{ city = window._userCity || (typeof ME !== 'undefined' && ME && ME.home_city) || ''; }catch(e){}
+          if(!city){
+            try{
+              var lat = window._lastLat, lon = window._lastLon;
+              if(lat && lon) city = Number(lat).toFixed(2)+', '+Number(lon).toFixed(2);
+            }catch(e){}
+          }
+          label = city ? ('Sichtbar in '+city) : 'Standort wird mit Crew geteilt';
+        }
+        sub.innerHTML = '<span class="v107-ol-sub-dot"></span> '+label;
+      }
+    }catch(e){ console.warn('[v107] paintOwnLoc', e); }
+  }
+  window.v107PaintOwnLoc = paintOwnLoc;
+
+  // --- Safety-Dot im Top-Bar (grün wenn Standort an, grau wenn aus) -------
+  window.v107PaintSafetyDot = function(){
+    try{
+      var dot = document.getElementById('crewTopSafetyDot'); if(!dot) return;
+      var on = readLocMode() !== 'nobody';
+      dot.style.background = on ? '#34C759' : 'rgba(255,255,255,.18)';
+      dot.style.boxShadow  = on ? '0 0 10px rgba(52,199,89,.7)' : 'none';
+    }catch(e){}
+  };
+
+  // Initial + bei Öffnen des Crew-Screens neu malen
+  function initPaint(){
+    paintOwnLoc();
+    try{ window.v107PaintSafetyDot(); }catch(e){}
+  }
+  if(document.readyState === 'complete' || document.readyState === 'interactive'){
+    setTimeout(initPaint, 400);
+  } else {
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(initPaint, 400); });
+  }
+
+  // Bei Screen-Wechsel auf Crew ebenfalls refreshen
+  try{
+    var origShow = window.showScreen;
+    if(typeof origShow === 'function'){
+      window.showScreen = function(id){
+        var r = origShow.apply(this, arguments);
+        if(id === 'crew' || id === 'crewScreen'){
+          setTimeout(initPaint, 120);
+        }
+        return r;
+      };
+    }
+  }catch(e){}
+
+  console.log('[v107] UI-Handler geladen — Tabs, Votes-Collapse, Own-Loc aktiv');
+})();
+
+if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js?v=19').catch(function(){});
 </script>
 </body>
 </html>
