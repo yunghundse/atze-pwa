@@ -12,6 +12,21 @@
 <meta http-equiv="Permissions-Policy" content="camera=(self), geolocation=(self), microphone=()">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>crew.</title>
+<script>
+// iOS Native-App Detection (Capacitor WKWebView oder iOS Standalone-PWA)
+(function(){
+  try{
+    var ua = navigator.userAgent || '';
+    var isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+    var isCapacitor = !!(window.Capacitor || /Capacitor/i.test(ua));
+    var isStandalone = (window.navigator.standalone === true) || (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
+    var de = document.documentElement;
+    if(isCapacitor){ de.classList.add('native-app'); de.classList.add('capacitor-app'); }
+    if(isIOS && (isCapacitor || isStandalone)){ de.classList.add('ios-app'); de.classList.add('native-ios'); }
+    if(isIOS) de.classList.add('is-ios');
+  }catch(e){}
+})();
+</script>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="img/icon-192.png">
 <link rel="apple-touch-icon" href="img/icon-192.png">
@@ -37,6 +52,23 @@ html,body{height:100%;overflow:hidden;background:#000}
 body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;color:var(--t);-webkit-font-smoothing:antialiased;letter-spacing:-.01em}
 #app{width:100%;margin:0 auto;height:100dvh;background:var(--bg);background-image:radial-gradient(ellipse at 15% 30%, rgba(255,109,46,.05) 0%, transparent 45%),radial-gradient(ellipse at 85% 70%, rgba(191,90,242,.04) 0%, transparent 45%),radial-gradient(ellipse at 50% 100%, rgba(0,199,190,.03) 0%, transparent 40%);position:relative;overflow:hidden;display:flex;flex-direction:column}
 @media(min-width:768px){#app{max-width:430px;border-radius:48px;margin-top:10px;height:calc(100dvh - 20px);box-shadow:0 0 0 1px rgba(255,255,255,.03),0 50px 140px rgba(0,0,0,.85)}}
+/* ============ NATIVE iOS OVERRIDES ============ */
+/* Greift NUR wenn App in Capacitor/iOS-Standalone läuft — Web-Version bleibt unberührt */
+html.native-ios,html.native-ios body{height:100%;max-height:100vh;overflow:hidden;overscroll-behavior:none;-webkit-overflow-scrolling:auto}
+html.native-ios #app{height:100vh;height:100svh;width:100vw;max-width:100vw;border-radius:0!important;margin:0!important;box-shadow:none!important}
+/* Desktop-Frame NIEMALS auf Native iOS zeigen (selbst wenn Viewport > 768) */
+@media(min-width:768px){html.native-ios #app{max-width:100vw;border-radius:0!important;margin-top:0!important;height:100vh;height:100svh;box-shadow:none!important}}
+/* Header: auf iOS immer unter Dynamic Island/Notch */
+html.native-ios .app-header{padding-top:max(env(safe-area-inset-top,0),14px);padding-bottom:10px;top:0}
+/* Bottom-Nav: über Home-Indicator */
+html.native-ios nav{padding-bottom:max(env(safe-area-inset-bottom,0),8px)}
+/* Modale/Sheets sollen Safe-Area respektieren */
+html.native-ios .agegate,html.native-ios .onboarding,html.native-ios #loadingScreen{padding-top:env(safe-area-inset-top,0);padding-bottom:env(safe-area-inset-bottom,0)}
+/* Scroll-Container in native iOS: sauberes Momentum, keine Gummiband-Effekte auf Root */
+html.native-ios .scr{-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+/* Keine hover-Effekte auf iOS (vermeidet sticky :hover states) */
+@media (hover:none){html.is-ios .hdr-btn:hover,html.is-ios nav button:hover{background:inherit;color:inherit}}
+/* ============ /NATIVE iOS OVERRIDES ============ */
 .glass{background:linear-gradient(135deg,rgba(22,22,24,.72),rgba(28,28,32,.55));backdrop-filter:blur(60px) saturate(200%);-webkit-backdrop-filter:blur(60px) saturate(200%);border:1px solid rgba(255,255,255,.1);border-radius:var(--r);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),inset 0 -1px 0 rgba(0,0,0,.1),0 4px 24px rgba(0,0,0,.2),0 0 0 .5px rgba(255,255,255,.04)}
 .app-header{position:absolute;top:env(safe-area-inset-top,0);left:0;right:0;z-index:150;display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:linear-gradient(180deg,rgba(5,5,7,.7),rgba(5,5,7,.55));backdrop-filter:blur(80px) saturate(220%);-webkit-backdrop-filter:blur(80px) saturate(220%);border-bottom:.5px solid rgba(255,255,255,.08);box-shadow:0 1px 0 rgba(255,255,255,.03),0 4px 20px rgba(0,0,0,.15)}
 .logo{font-weight:900;font-size:28px;letter-spacing:-1.8px}.logo span{background:var(--gold);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 20px rgba(255,109,46,.3))}
