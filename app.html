@@ -24,6 +24,26 @@
     if(isCapacitor){ de.classList.add('native-app'); de.classList.add('capacitor-app'); }
     if(isIOS && (isCapacitor || isStandalone)){ de.classList.add('ios-app'); de.classList.add('native-ios'); }
     if(isIOS) de.classList.add('is-ios');
+    // Capacitor StatusBar: WebView edge-to-edge nach oben (StatusBar überlagert WebView)
+    if(isCapacitor){
+      var tryStatusBar = function(){
+        try{
+          var SB = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.StatusBar;
+          if(SB){
+            SB.setOverlaysWebView && SB.setOverlaysWebView({overlay:true});
+            SB.setStyle && SB.setStyle({style:'DARK'});
+            SB.setBackgroundColor && SB.setBackgroundColor({color:'#00000000'});
+            return true;
+          }
+        }catch(e){}
+        return false;
+      };
+      if(!tryStatusBar()){
+        document.addEventListener('deviceready', tryStatusBar, {once:true});
+        setTimeout(tryStatusBar, 300);
+        setTimeout(tryStatusBar, 1000);
+      }
+    }
   }catch(e){}
 })();
 </script>
