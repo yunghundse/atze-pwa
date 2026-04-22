@@ -55,12 +55,14 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;color:var(-
 /* ============ NATIVE iOS OVERRIDES ============ */
 /* Greift NUR wenn App in Capacitor/iOS-Standalone läuft — Web-Version bleibt unberührt */
 /* --ios-top und --ios-bot: harte Fallbacks falls env() in WKWebView 0 zurückgibt */
-html.native-ios{--ios-top:max(env(safe-area-inset-top,0),44px);--ios-bot:max(env(safe-area-inset-bottom,0),34px)}
+html.native-ios{--ios-top:max(env(safe-area-inset-top,0),59px);--ios-bot:max(env(safe-area-inset-bottom,0),34px)}
 html.native-ios #app{width:100%;max-width:100%;height:100dvh;border-radius:0!important;margin:0!important;box-shadow:none!important}
 /* Desktop-Frame NIEMALS auf Native iOS (selbst wenn Viewport > 768) */
 @media(min-width:768px){html.native-ios #app{max-width:100%;border-radius:0!important;margin-top:0!important;height:100dvh;box-shadow:none!important}}
-/* Bottom-Nav: HART über den Home-Indicator heben mit 34px-Fallback */
-html.native-ios nav{bottom:var(--ios-bot)!important;padding-bottom:8px!important;height:68px!important}
+/* Header: Hintergrund bis ganz oben ziehen, Content bleibt unter Status-Bar */
+html.native-ios .app-header{top:0!important;padding-top:calc(var(--ios-top) + 6px)!important;padding-bottom:10px!important}
+/* Bottom-Nav: Hintergrund bis ganz unten, Buttons bleiben über Home-Indicator */
+html.native-ios nav{bottom:0!important;height:calc(64px + var(--ios-bot))!important;padding-bottom:var(--ios-bot)!important}
 /* SOS/Crew-Float-Buttons mit Nav-Offset hochschieben */
 html.native-ios .sos-float{bottom:calc(var(--ios-bot) + 80px)}
 html.native-ios .crew-float-btns{bottom:calc(var(--ios-bot) + 76px)}
