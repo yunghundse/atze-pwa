@@ -88,6 +88,8 @@ html.native-ios .sos-float{bottom:110px}
 html.native-ios .crew-float-btns{bottom:106px}
 /* Sticky Bottom-Bars (Crew-Preview-Actions etc.) respektieren Home-Indicator */
 html.native-ios div[style*="position:fixed"][style*="bottom:0"]{padding-bottom:48px!important}
+/* Urlaub/Zuhause-Switcher direkt unter den Header ziehen (statt hinter den Header) */
+html.native-ios #screen-radar .ctx-switcher,html.native-ios #screen-crew .ctx-switcher{top:96px!important}
 /* Keine hover-Effekte auf iOS */
 @media (hover:none){html.is-ios .hdr-btn:hover,html.is-ios nav button:hover{background:inherit;color:inherit}}
 /* ============ /NATIVE iOS OVERRIDES ============ */
