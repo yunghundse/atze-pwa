@@ -54,23 +54,18 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;color:var(-
 @media(min-width:768px){#app{max-width:430px;border-radius:48px;margin-top:10px;height:calc(100dvh - 20px);box-shadow:0 0 0 1px rgba(255,255,255,.03),0 50px 140px rgba(0,0,0,.85)}}
 /* ============ NATIVE iOS OVERRIDES ============ */
 /* Greift NUR wenn App in Capacitor/iOS-Standalone läuft — Web-Version bleibt unberührt */
-html.native-ios,html.native-ios body{height:100%;overflow:hidden;overscroll-behavior:none}
+/* --ios-top und --ios-bot: harte Fallbacks falls env() in WKWebView 0 zurückgibt */
+html.native-ios{--ios-top:max(env(safe-area-inset-top,0),44px);--ios-bot:max(env(safe-area-inset-bottom,0),34px)}
 html.native-ios #app{width:100%;max-width:100%;height:100dvh;border-radius:0!important;margin:0!important;box-shadow:none!important}
-/* Desktop-Frame NIEMALS auf Native iOS zeigen (selbst wenn Viewport > 768) */
+/* Desktop-Frame NIEMALS auf Native iOS (selbst wenn Viewport > 768) */
 @media(min-width:768px){html.native-ios #app{max-width:100%;border-radius:0!important;margin-top:0!important;height:100dvh;box-shadow:none!important}}
-/* Header: sichtbar unter Dynamic Island/Notch */
-html.native-ios .app-header{padding-top:max(env(safe-area-inset-top,0),14px);padding-bottom:10px;top:0}
-/* Bottom-Nav: HOCH über den Home-Indicator heben (nicht nur pad, sondern bottom-offset) */
-html.native-ios nav{bottom:env(safe-area-inset-bottom,0)!important;padding-bottom:8px!important;height:76px!important}
-/* Main-Content-Bereich: unten mehr Raum freilassen für Nav + Home-Indicator */
-html.native-ios main{padding-bottom:0}
-/* SOS/Crew-Float-Buttons: mit Nav-Offset hochschieben */
-html.native-ios .sos-float{bottom:calc(env(safe-area-inset-bottom,0) + 92px)}
-html.native-ios .crew-float-btns{bottom:calc(env(safe-area-inset-bottom,0) + 88px)}
-/* Sticky Bottom-Bars (z.B. Crew-Preview-Actions) respektieren Safe-Area */
-html.native-ios .scr{-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding-bottom:env(safe-area-inset-bottom,0)}
-/* Modale/Sheets */
-html.native-ios .agegate,html.native-ios #loadingScreen{padding-top:env(safe-area-inset-top,0);padding-bottom:env(safe-area-inset-bottom,0)}
+/* Bottom-Nav: HART über den Home-Indicator heben mit 34px-Fallback */
+html.native-ios nav{bottom:var(--ios-bot)!important;padding-bottom:8px!important;height:68px!important}
+/* SOS/Crew-Float-Buttons mit Nav-Offset hochschieben */
+html.native-ios .sos-float{bottom:calc(var(--ios-bot) + 80px)}
+html.native-ios .crew-float-btns{bottom:calc(var(--ios-bot) + 76px)}
+/* Sticky Bottom-Bars (Crew-Preview-Actions etc.) respektieren Safe-Area */
+html.native-ios div[style*="position:fixed"][style*="bottom:0"]{padding-bottom:calc(14px + var(--ios-bot))!important}
 /* Keine hover-Effekte auf iOS */
 @media (hover:none){html.is-ios .hdr-btn:hover,html.is-ios nav button:hover{background:inherit;color:inherit}}
 /* ============ /NATIVE iOS OVERRIDES ============ */
