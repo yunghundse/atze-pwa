@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="theme-color" content="#0A0A0A">
+<meta name="theme-color" content="#09090B">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https: data: blob: mediastream:; script-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com; img-src 'self' https: data: blob:; connect-src 'self' https:; font-src https://fonts.gstatic.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
@@ -53,22 +53,224 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>
+/* ═══════════════════════════════════════════════════
+ * crew. DESIGN TOKENS v1.1 (23.04.2026)
+ * Quelle: crew-Design-Direction-2026-04-23.md
+ * Änderungen nur mit Update im Direction-Dokument.
+ * ═══════════════════════════════════════════════════ */
 :root{
-  --o:#FF6D2E;--o2:#FF9A5C;--fire:#FF3B30;--green:#34C759;--mint:#30D158;--blue:#0A84FF;--purple:#BF5AF2;--yellow:#FFD60A;
-  --coral:#FF6B6B;--turquoise:#00C7BE;--sunset:linear-gradient(135deg,#FF6D2E 0%,#FF3B82 50%,#BF5AF2 100%);
-  --gold:linear-gradient(135deg,#FF6D2E,#FFD60A);
-  --tropical:linear-gradient(135deg,#FF6D2E 0%,#FF9A5C 30%,#FFD60A 60%,#34C759 100%);
-  --ocean:linear-gradient(135deg,#0A84FF,#00C7BE,#30D158);
-  --magic:linear-gradient(135deg,#BF5AF2 0%,#FF6D2E 50%,#FFD60A 100%);
-  --bg:#050507;--bg2:#0C0C0E;--bg3:#161618;--bg4:#28282A;
-  --glass:rgba(22,22,24,.65);--glass-light:rgba(255,255,255,.045);--glass-border:rgba(255,255,255,.09);--glass2:rgba(255,255,255,.06);
-  --glow:0 0 30px rgba(255,109,46,.15),0 0 60px rgba(255,109,46,.05);--shadow:0 12px 40px rgba(0,0,0,.4),0 2px 8px rgba(0,0,0,.2);
-  --t:#F5F5F7;--t2:rgba(255,255,255,.6);--t3:rgba(255,255,255,.3);
-  --brd:rgba(255,255,255,.06);--r:18px;--r2:26px;
-  --ease:cubic-bezier(.22,.68,.36,1);--bounce:cubic-bezier(.34,1.56,.64,1);--spring:cubic-bezier(.175,.885,.32,1.275);
+  /* ─── BASE (Background / Surface) ─── */
+  --base: #09090B;
+  --base-elevated: #131317;
+  --base-overlay: rgba(9, 9, 11, 0.72);
+
+  /* ─── ACCENT (Marke · crew.-Pink) ─── */
+  --accent: #FF3B6E;
+  --accent-hover: #FF5783;
+  --accent-pressed: #E62A5C;
+  --accent-glow: 0 0 24px rgba(255, 59, 110, 0.35);
+
+  /* ─── CONTRAST (Text-Hierarchie) ─── */
+  --contrast-1: #EDEDF0;
+  --contrast-2: #A1A1AA;
+  --contrast-3: #52525B;
+  --contrast-border: rgba(255, 255, 255, 0.08);
+  --contrast-divider: rgba(255, 255, 255, 0.04);
+
+  /* ─── STATUS (Crew-Status, Feedback) ─── */
+  --status-safe: #34C759;
+  --status-caution: #FFD60A;
+  --status-alert: #FF3B30;
+
+  /* ─── MODUS-GRADIENTS (Urlaub vs. Zuhause) ─── */
+  --mode-vacation-from: #FF6A3D;
+  --mode-vacation-to: #FFB545;
+  --mode-vacation-gradient: linear-gradient(135deg, #FF6A3D 0%, #FFB545 100%);
+  --mode-home-from: #312E81;
+  --mode-home-to: #1E1B4B;
+  --mode-home-gradient: linear-gradient(135deg, #312E81 0%, #1E1B4B 100%);
+  --mode-home-accent: #7C3AED;
+
+  /* ─── TYPOGRAFIE ─── */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+  --font-display: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+
+  --text-display-xl: 40px;
+  --text-display-l: 32px;
+  --text-heading: 22px;
+  --text-body-l: 16px;
+  --text-body: 14px;
+  --text-label: 12px;
+  --text-micro: 11px;
+
+  --lh-display: 1.05;
+  --lh-heading: 1.2;
+  --lh-body: 1.4;
+  --lh-tight: 1.3;
+
+  --tracking-display-xl: -0.02em;
+  --tracking-display-l: -0.015em;
+  --tracking-heading: -0.01em;
+  --tracking-body: 0;
+  --tracking-label: 0.01em;
+  --tracking-micro: 0.02em;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-display: 800;
+
+  /* ─── SPACING-SKALA (4er-Basis) ─── */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* ─── RADII ─── */
+  --radius-button: 12px;
+  --radius-input: 12px;
+  --radius-card: 20px;
+  --radius-sheet: 28px;
+  --radius-pill: 9999px;
+
+  /* ─── SHADOWS ─── */
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.2);
+  --shadow-sheet: 0 -20px 60px rgba(0, 0, 0, 0.5);
+  --shadow-glow-accent: 0 0 24px rgba(255, 59, 110, 0.35);
+  --shadow-glow-safe: 0 0 20px rgba(52, 199, 89, 0.25);
+  --shadow-glow-alert: 0 0 20px rgba(255, 59, 48, 0.35);
+
+  /* ─── MOTION (Standard-Curve + Spring für Micro) ─── */
+  --motion-fast: 150ms;
+  --motion-normal: 250ms;
+  --motion-slow: 400ms;
+  --motion-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --motion-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+  /* ═══════════════════════════════════════════════════
+   * LEGACY-ALIASE — aktiv bis Komponenten-Refactor fertig
+   * Nicht für Neu-Code nutzen. Entfernung in Phase 1.3.
+   * ═══════════════════════════════════════════════════ */
+  --bg: var(--base);
+  --bg2: var(--base-elevated);
+  --bg3: #161618;
+  --bg4: #28282A;
+  --t: var(--contrast-1);
+  --t2: var(--contrast-2);
+  --t3: var(--contrast-3);
+  --o: var(--accent);
+  --o2: var(--accent-hover);
+  --fire: var(--status-alert);
+  --green: var(--status-safe);
+  --mint: #30D158;
+  --blue: #0A84FF;
+  --purple: #BF5AF2;
+  --yellow: var(--status-caution);
+  --coral: #FF6B6B;
+  --turquoise: #00C7BE;
+  --brd: var(--contrast-border);
+  --r: var(--radius-card);
+  --r2: var(--radius-sheet);
+  --ease: var(--motion-ease);
+  --bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --spring: var(--motion-spring);
+  --sunset: var(--mode-vacation-gradient);
+  --gold: linear-gradient(135deg, var(--accent) 0%, var(--mode-vacation-to) 100%);
+  --tropical: linear-gradient(135deg, #FF6A3D 0%, #FFB545 60%, #34C759 100%);
+  --ocean: linear-gradient(135deg, #0A84FF, #00C7BE, #30D158);
+  --magic: linear-gradient(135deg, #BF5AF2 0%, var(--accent) 50%, var(--mode-vacation-to) 100%);
+  --glass: rgba(22, 22, 24, 0.65);
+  --glass-light: rgba(255, 255, 255, 0.045);
+  --glass-border: rgba(255, 255, 255, 0.09);
+  --glass2: rgba(255, 255, 255, 0.06);
+  --glow: var(--shadow-glow-accent);
+  --shadow: var(--shadow-card);
+}
+
+/* ─── LIGHT-MODE (per <html data-theme="light">) ─── */
+html[data-theme="light"]{
+  --base: #FAFAFA;
+  --base-elevated: #FFFFFF;
+  --base-overlay: rgba(250, 250, 250, 0.72);
+  --contrast-1: #18181B;
+  --contrast-2: #52525B;
+  --contrast-3: #A1A1AA;
+  --contrast-border: rgba(0, 0, 0, 0.08);
+  --contrast-divider: rgba(0, 0, 0, 0.04);
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.08);
+  --shadow-sheet: 0 -20px 60px rgba(0, 0, 0, 0.15);
+  --bg: var(--base);
+  --bg2: var(--base-elevated);
+  --bg3: #F4F4F5;
+  --bg4: #E4E4E7;
+  --t: var(--contrast-1);
+  --t2: var(--contrast-2);
+  --t3: var(--contrast-3);
+  --brd: var(--contrast-border);
+  --glass: rgba(250, 250, 250, 0.72);
+  --glass-light: rgba(0, 0, 0, 0.04);
+  --glass-border: rgba(0, 0, 0, 0.08);
+}
+
+/* ─── URLAUBSMODUS (per <html data-mode="vacation">) ─── */
+html[data-mode="vacation"]{
+  --accent: #FF6A3D;
+  --accent-hover: #FF8558;
+  --accent-pressed: #E64F22;
+  --accent-glow: 0 0 24px rgba(255, 106, 61, 0.35);
+  --shadow-glow-accent: 0 0 24px rgba(255, 106, 61, 0.35);
+  --o: var(--accent);
+  --o2: var(--accent-hover);
+  --glow: var(--shadow-glow-accent);
+}
+
+/* ─── ZUHAUSEMODUS (per <html data-mode="home">) ─── */
+html[data-mode="home"]{
+  --accent: #7C3AED;
+  --accent-hover: #9461F0;
+  --accent-pressed: #6028CE;
+  --accent-glow: 0 0 24px rgba(124, 58, 237, 0.35);
+  --shadow-glow-accent: 0 0 24px rgba(124, 58, 237, 0.35);
+  --o: var(--accent);
+  --o2: var(--accent-hover);
+  --glow: var(--shadow-glow-accent);
+}
+
+/* ─── GLASS-SYSTEM (drei Varianten, keine ad-hoc) ─── */
+.glass-nav{
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  background: var(--base-overlay);
+  border-bottom: 0.5px solid var(--contrast-border);
+}
+.glass-sheet{
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  background: rgba(15, 15, 20, 0.85);
+  box-shadow: var(--shadow-sheet);
+  border-top: 0.5px solid var(--contrast-border);
+}
+html[data-theme="light"] .glass-sheet{
+  background: rgba(255, 255, 255, 0.85);
+}
+.glass-pill{
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-pill);
+}
+html[data-theme="light"] .glass-pill{
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.08);
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;overflow:hidden;background:#000}
+html,body{height:100%;overflow:hidden;background:var(--base)}
 body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;color:var(--t);-webkit-font-smoothing:antialiased;letter-spacing:-.01em}
 #app{width:100%;margin:0 auto;height:100dvh;background:var(--bg);background-image:radial-gradient(ellipse at 15% 30%, rgba(255,109,46,.05) 0%, transparent 45%),radial-gradient(ellipse at 85% 70%, rgba(191,90,242,.04) 0%, transparent 45%),radial-gradient(ellipse at 50% 100%, rgba(0,199,190,.03) 0%, transparent 40%);position:relative;overflow:hidden;display:flex;flex-direction:column}
 @media(min-width:768px){#app{max-width:430px;border-radius:48px;margin-top:10px;height:calc(100dvh - 20px);box-shadow:0 0 0 1px rgba(255,255,255,.03),0 50px 140px rgba(0,0,0,.85)}}
