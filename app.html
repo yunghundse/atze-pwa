@@ -5408,8 +5408,11 @@ nav button.active .ni{animation:vNineCountPop .38s var(--ease-spring-soft) 1}
 <div class="crew-profile-ov" id="crewChatOv" data-crew-id="">
   <div style="position:sticky;top:0;z-index:10;background:var(--bg);border-bottom:1px solid rgba(255,255,255,.06);padding:12px 14px;display:flex;align-items:center;gap:10px">
     <button onclick="closeCrewChat()" style="background:none;border:none;color:var(--t1);font-size:20px;cursor:pointer;padding:4px">←</button>
-    <div style="flex:1"><div style="font-size:15px;font-weight:800" id="chatCrewName">Crew Chat</div><div style="font-size:10px;color:var(--t3)">Ende-zu-Ende verschlüsselt</div></div>
+    <div style="flex:1"><div style="font-size:15px;font-weight:800" id="chatCrewName">Crew Chat</div><div style="font-size:10px;color:var(--t3)">Nur für deine Crew · 30 Tage Aufbewahrung</div></div>
     <div style="font-size:18px;cursor:pointer" onclick="openChatSettings()">⚙️</div>
+  </div>
+  <div style="padding:8px 14px;background:rgba(52,199,89,.05);border-bottom:1px solid rgba(52,199,89,.1);font-size:11px;color:var(--t3);line-height:1.4;text-align:center">
+    💬 Nachrichten werden nach 30 Tagen automatisch gelöscht — DSGVO Art. 5
   </div>
   <div id="chatMessagesList" style="flex:1;overflow-y:auto;padding:8px 0"></div>
   <div style="padding:8px 12px;border-top:1px solid rgba(255,255,255,.06);display:flex;gap:8px;align-items:center;background:var(--bg)">
@@ -11739,10 +11742,19 @@ window.closeCrewChat=function(){document.getElementById('crewChatOv').classList.
 
 async function loadChatMessages(crewId){
   _chatLoading=true;
+  // DSGVO/Crew-Care: nur Nachrichten der letzten 30 Tage laden (Server löscht ältere per RPC)
+  var thirtyDaysAgo = new Date(Date.now() - 30*24*60*60*1000).toISOString();
   try{
-    var {data}=await sb.from('crew_chat_messages').select('*').eq('crew_id',crewId).order('created_at',{ascending:true}).limit(100);
+    var {data}=await sb.from('crew_chat_messages').select('*').eq('crew_id',crewId).gte('created_at', thirtyDaysAgo).order('created_at',{ascending:true}).limit(100);
     _chatMessages=data||[];
   }catch(e){_chatMessages=[]}
+  // Opportunistischer Cleanup-Trigger: einmal pro Session die Server-seitige Löschung antriggern
+  try{
+    if(!window._chatCleanupTriggered){
+      window._chatCleanupTriggered = true;
+      sb.rpc('cleanup_old_chat_messages').then(function(){}).catch(function(e){ console.warn('chat cleanup rpc:', e && e.message); });
+    }
+  }catch(e){}
   _chatLoading=false;
   renderChatMessages();
 }
@@ -11755,7 +11767,9 @@ async function buildMiniChat(){
   var crewId=getActiveCrewId();
   if(!crewId){ el.innerHTML=''; return; }
   try{
-    var {data:msgs,error:msgErr}=await sb.from('crew_chat_messages').select('user_id,user_name,user_photo,message,created_at').eq('crew_id',crewId).order('created_at',{ascending:false}).limit(3);
+    // DSGVO: nur Nachrichten der letzten 30 Tage für Mini-Preview
+    var _cutoff30d = new Date(Date.now() - 30*24*60*60*1000).toISOString();
+    var {data:msgs,error:msgErr}=await sb.from('crew_chat_messages').select('user_id,user_name,user_photo,message,created_at').eq('crew_id',crewId).gte('created_at',_cutoff30d).order('created_at',{ascending:false}).limit(3);
     if(msgErr||!msgs||msgs.length===0){
       el.innerHTML='<div style="padding:8px 4px;font-size:12px;color:var(--t3);font-weight:600">Noch keine Nachrichten — schreib deiner Crew ✨</div>';
       return;
