@@ -297,7 +297,8 @@ html.native-ios #screen-radar .ctx-switcher,html.native-ios #screen-crew .ctx-sw
 /* ============ /NATIVE iOS OVERRIDES ============ */
 .glass{background:linear-gradient(135deg,rgba(22,22,24,.72),rgba(28,28,32,.55));backdrop-filter:blur(60px) saturate(200%);-webkit-backdrop-filter:blur(60px) saturate(200%);border:1px solid rgba(255,255,255,.1);border-radius:var(--r);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),inset 0 -1px 0 rgba(0,0,0,.1),0 4px 24px rgba(0,0,0,.2),0 0 0 .5px rgba(255,255,255,.04)}
 .app-header{position:absolute;top:env(safe-area-inset-top,0);left:0;right:0;z-index:150;display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:linear-gradient(180deg,rgba(5,5,7,.7),rgba(5,5,7,.55));backdrop-filter:blur(80px) saturate(220%);-webkit-backdrop-filter:blur(80px) saturate(220%);border-bottom:.5px solid rgba(255,255,255,.08);box-shadow:0 1px 0 rgba(255,255,255,.03),0 4px 20px rgba(0,0,0,.15)}
-.logo{font-weight:900;font-size:28px;letter-spacing:-1.8px}.logo span{background:var(--gold);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 20px rgba(255,109,46,.3))}
+.logo{font-weight:800;font-size:26px;letter-spacing:-1.6px;color:var(--contrast-1);line-height:1}
+.logo span{color:var(--accent);filter:drop-shadow(0 0 12px rgba(255,59,110,.45))}
 .hdr-actions{display:flex;gap:8px;align-items:center}
 .hdr-btn{width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.06);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);color:#fff;font-size:15px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;transition:transform .15s var(--ease),background .2s;box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 2px 8px rgba(0,0,0,.15)}
 .hdr-btn:active{transform:scale(.9)}
@@ -322,12 +323,15 @@ html.native-ios #screen-radar .ctx-switcher,html.native-ios #screen-crew .ctx-sw
 .mini-chat-time{font-size:9px;color:var(--t3);flex-shrink:0;padding-top:2px}
 .mini-chat-empty{text-align:center;padding:16px;color:var(--t3);font-size:12px}
 .mini-chat-more{text-align:center;padding:8px 0 4px;font-size:11px;font-weight:700;color:var(--o)}
-nav{position:absolute;bottom:0;left:0;right:0;z-index:200;height:76px;padding-bottom:env(safe-area-inset-bottom,8px);display:flex;align-items:center;justify-content:space-around;background:linear-gradient(0deg,rgba(5,5,7,.8),rgba(5,5,7,.6));border-top:none;backdrop-filter:blur(80px) saturate(220%);-webkit-backdrop-filter:blur(80px) saturate(220%);border-radius:28px 28px 0 0;box-shadow:0 -8px 30px rgba(0,0,0,.2)}
-nav button{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 10px;color:var(--t3);font-size:9px;font-weight:500;transition:all .25s var(--ease);position:relative;letter-spacing:.1px}
-nav button .ni{font-size:22px;transition:all .3s var(--spring)}
+nav{position:absolute;bottom:0;left:0;right:0;z-index:200;height:78px;padding-bottom:env(safe-area-inset-bottom,8px);display:flex;align-items:center;justify-content:space-around;background:rgba(9,9,11,0.78);backdrop-filter:blur(28px) saturate(180%);-webkit-backdrop-filter:blur(28px) saturate(180%);border-top:0.5px solid var(--contrast-border);border-radius:24px 24px 0 0;box-shadow:0 -12px 40px rgba(0,0,0,0.4)}
+nav button{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 12px;color:var(--contrast-3);font-size:10px;font-weight:500;transition:color var(--motion-normal) var(--motion-ease);position:relative;letter-spacing:0.02em}
+nav button .ni{display:flex;align-items:center;justify-content:center;transition:all .3s var(--spring)}
+nav button .ni svg{width:24px;height:24px;display:block;stroke:currentColor}
+nav button.crew-center-btn .ni svg{width:26px;height:26px}
 nav button span{display:block}
-nav button.active{color:var(--o)}
-nav button.active .ni{transform:scale(1.15);filter:drop-shadow(0 0 12px rgba(255,109,46,.5))}
+nav button.active{color:var(--accent)}
+nav button.active .ni{transform:scale(1.1);filter:drop-shadow(0 0 10px rgba(255,59,110,0.55))}
+nav button.active .ni svg{stroke-width:18}
 nav button.active::after{display:none!important}
 nav .match-dot{position:absolute;top:4px;right:8px;width:8px;height:8px;border-radius:50%;background:var(--fire);border:2px solid rgba(14,14,14,.82);box-shadow:0 0 12px rgba(255,59,48,.5)}
 nav .crew-center-btn{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:2px 10px;color:var(--t3);font-size:9px;font-weight:600;position:relative;letter-spacing:.2px;margin-top:-18px}
@@ -6707,11 +6711,11 @@ nav button.active .ni{animation:vNineCountPop .38s var(--ease-spring-soft) 1}
 </div></div>
   </main>
   <nav id="navBar">
-    <button class="active" onclick="go('radar',this)"><span class="ni"><svg viewBox="0 0 24 24"><use href="#i-radar"/></svg></span><span>Radar</span></button>
-    <button onclick="go('deals',this)"><span class="ni"><svg viewBox="0 0 24 24"><use href="#i-deals"/></svg></span><span>Deals</span></button>
-    <button class="crew-center-btn" onclick="go('crew',this)"><span class="ni"><svg viewBox="0 0 24 24" style="width:26px;height:26px"><use href="#i-crew"/></svg></span><span>Crew</span></button>
-    <button onclick="go('match',this)"><span class="ni"><svg viewBox="0 0 24 24"><use href="#i-flame"/></svg></span><span>Entdecken</span><span class="match-dot" id="matchDot" style="display:none"></span></button>
-    <button onclick="go('profile',this)"><span class="ni"><svg viewBox="0 0 24 24"><use href="#i-profile"/></svg></span><span>Profil</span></button>
+    <button class="active" onclick="go('radar',this)"><span class="ni"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><circle cx="128" cy="128" r="32"/><path d="M181.67,80a71.94,71.94,0,0,1,0,96"/><path d="M74.33,176a71.94,71.94,0,0,1,0-96"/><path d="M208,49.62a111.88,111.88,0,0,1,0,156.76"/><path d="M48,206.38A111.88,111.88,0,0,1,48,49.62"/></svg></span><span>Radar</span></button>
+    <button onclick="go('deals',this)"><span class="ni"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><path d="M42.34,138.34A8,8,0,0,1,40,132.69V40h92.69a8,8,0,0,1,5.65,2.34l99.32,99.32a8,8,0,0,1,0,11.31L153,237.66a8,8,0,0,1-11.31,0Z"/><circle cx="84" cy="84" r="12" fill="currentColor" stroke="none"/></svg></span><span>Deals</span></button>
+    <button class="crew-center-btn" onclick="go('crew',this)"><span class="ni"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" style="width:26px;height:26px"><path d="M192,120a59.91,59.91,0,0,1,48,24"/><path d="M16,144a59.91,59.91,0,0,1,48-24"/><circle cx="128" cy="144" r="40"/><path d="M72,216a65,65,0,0,1,112,0"/><path d="M161,80a32,32,0,1,1,31,40"/><path d="M64,120A32,32,0,1,1,95,80"/></svg></span><span>Crew</span></button>
+    <button onclick="go('match',this)"><span class="ni"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><circle cx="128" cy="128" r="96"/><polygon points="176 80 112 112 80 176 144 144 176 80"/></svg></span><span>Entdecken</span><span class="match-dot" id="matchDot" style="display:none"></span></button>
+    <button onclick="go('profile',this)"><span class="ni"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><circle cx="128" cy="128" r="96"/><circle cx="128" cy="120" r="40"/><path d="M63.8,199.37a72,72,0,0,1,128.4,0"/></svg></span><span>Profil</span></button>
   </nav>
 </div>
 
