@@ -1208,27 +1208,63 @@ nav button.active::before{opacity:1}
 .challenge-desc{font-size:12px;color:var(--t2);margin-bottom:8px}
 .challenge-pts{font-size:12px;font-weight:700;color:var(--o)}
 .challenge-btn{display:inline-flex;padding:8px 16px;border-radius:12px;background:var(--o);color:#fff;font-size:11px;font-weight:700;border:none;cursor:pointer;margin-top:8px}
-.drunk-card{display:inline-flex;flex-direction:column;align-items:center;gap:6px;padding:14px;border-radius:var(--r);background:linear-gradient(135deg,rgba(22,22,24,.68),rgba(28,28,32,.48));backdrop-filter:blur(50px) saturate(180%);-webkit-backdrop-filter:blur(50px) saturate(180%);border:1.5px solid rgba(255,255,255,.1);cursor:pointer;transition:all .2s var(--spring);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 3px 14px rgba(0,0,0,.2);flex:0 0 calc(50% - 4px)}
-.drunk-card:active{transform:scale(.95)}
-.drunk-card.voted{border-color:var(--o);background:rgba(255,109,46,.12)}
-.drunk-ava{width:48px;height:48px;border-radius:50%;overflow:hidden;border:2px solid var(--glass-border)}
-.drunk-ava img{width:100%;height:100%;object-fit:cover}
-.drunk-name{font-size:11px;font-weight:700;text-align:center}
-.drunk-count{font-size:10px;color:var(--o);font-weight:700}
-.drink-counter{position:fixed;inset:0;z-index:10008;display:none;flex-direction:column;background:rgba(0,0,0,.95);backdrop-filter:blur(20px)}
-.drink-counter.show{display:flex}
-.drink-close{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.1);border:none;color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.drink-display{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;padding:20px}
-.drink-main{text-align:center}
-.drink-count{font-size:72px;font-weight:900;color:var(--o)}
-.drink-sub{font-size:14px;color:var(--t2);margin-top:4px}
-.bac-meter{width:100%;height:40px;border-radius:20px;background:var(--bg3);overflow:hidden;margin:16px 0;position:relative}
-.bac-fill{height:100%;background:linear-gradient(90deg,#34C759,#FFD60A,#FF9500,#FF3B30);transition:width .3s}
-.bac-label{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#fff;font-size:12px;font-weight:700}
-.drink-buttons{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;width:100%;max-width:300px}
-.drink-btn{padding:20px;border-radius:var(--r);background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--glass-border);color:#fff;font-size:13px;font-weight:700;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px;transition:all .15s;box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
-.drink-btn:active{transform:scale(.92)}
-.drink-btn-emoji{font-size:28px}
+/* Alkohol-UI (drunk-card, drink-counter, bac-meter, drink-btn) entfernt 2026-04-23 — ersetzt durch Crew-Care / Safe-Night-Tracker. Siehe Task #9. */
+
+/* ═══ SAFE-NIGHT-TRACKER (Crew-Care-Konzept, 2026-04-23) ═══ */
+.night-mode{position:fixed;inset:0;z-index:10008;display:none;flex-direction:column;background:rgba(0,0,0,.88);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);justify-content:flex-end;align-items:stretch;padding:0}
+.night-mode.show{display:flex}
+.nm-sheet{background:linear-gradient(180deg,rgba(22,22,24,.96),rgba(10,10,12,.98));border-radius:28px 28px 0 0;padding:20px 18px 28px;max-height:92vh;overflow-y:auto;-webkit-overflow-scrolling:touch;box-shadow:0 -20px 60px rgba(0,0,0,.5);border-top:.5px solid rgba(255,255,255,.08)}
+.nm-header{position:relative;text-align:center;margin-bottom:20px;padding-top:4px}
+.nm-close{position:absolute;top:-4px;right:0;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.08);border:none;color:var(--t);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.nm-title{font-size:22px;font-weight:900;background:linear-gradient(135deg,#34C759,#30D158);-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:4px}
+.nm-subtitle{font-size:12px;color:var(--t3);font-weight:500}
+.nm-body{display:flex;flex-direction:column;gap:16px}
+.nm-section{padding:16px;border-radius:var(--r);background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06)}
+.nm-section-label{font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
+.nm-status-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.nm-status-btn{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 6px;border-radius:14px;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.08);color:var(--t);cursor:pointer;transition:all .2s var(--spring)}
+.nm-status-btn:active{transform:scale(.95)}
+.nm-status-btn.active[data-status="green"]{background:rgba(52,199,89,.18);border-color:#34C759;box-shadow:0 0 20px rgba(52,199,89,.25)}
+.nm-status-btn.active[data-status="yellow"]{background:rgba(255,214,10,.18);border-color:#FFD60A;box-shadow:0 0 20px rgba(255,214,10,.25)}
+.nm-status-btn.active[data-status="red"]{background:rgba(255,59,48,.18);border-color:#FF3B30;box-shadow:0 0 20px rgba(255,59,48,.25)}
+.nm-status-emoji{font-size:26px;line-height:1}
+.nm-status-text{font-size:11px;font-weight:700;text-align:center;line-height:1.2}
+.nm-status-info{font-size:11px;color:var(--t3);margin-top:10px;line-height:1.5}
+.nm-water-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
+.nm-water-btn{width:48px;height:48px;border-radius:50%;background:rgba(10,132,255,.18);border:1.5px solid rgba(10,132,255,.3);color:#0A84FF;font-size:22px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .15s}
+.nm-water-btn:active{transform:scale(.9)}
+.nm-water-display{text-align:center;flex:1}
+.nm-water-count{font-size:48px;font-weight:900;color:#0A84FF;line-height:1}
+.nm-water-target{font-size:11px;color:var(--t3);font-weight:600;margin-top:4px}
+.nm-water-hint{font-size:11px;color:var(--t3);text-align:center;line-height:1.5}
+.nm-time-display{text-align:center;margin-bottom:10px}
+.nm-time-duration{font-size:28px;font-weight:900;color:var(--t);letter-spacing:-.5px}
+.nm-time-start{font-size:11px;color:var(--t3);margin-top:4px}
+.nm-time-nudge{font-size:12px;color:var(--o);text-align:center;font-weight:600;margin-top:8px;min-height:18px;line-height:1.4}
+.nm-home-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+.nm-home-btn{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 6px;border-radius:14px;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.08);color:var(--t);cursor:pointer;transition:all .2s var(--spring)}
+.nm-home-btn:active{transform:scale(.95)}
+.nm-home-btn.active{background:rgba(255,109,46,.2);border-color:var(--o);box-shadow:0 0 20px rgba(255,109,46,.25)}
+.nm-home-emoji{font-size:22px;line-height:1}
+.nm-home-text{font-size:11px;font-weight:700;text-align:center;line-height:1.2}
+.nm-home-info{font-size:11px;color:var(--t3);line-height:1.5}
+
+/* Crew-Ansicht: Self-Status-Dot am Avatar (permanent sichtbar für eigene Crew) */
+.crew-status-dot{position:absolute;bottom:-2px;right:-2px;width:14px;height:14px;border-radius:50%;border:2.5px solid var(--bg,#0a0a0c);box-shadow:0 0 0 1px rgba(0,0,0,.3);z-index:2}
+.crew-status-dot.green{background:#34C759;box-shadow:0 0 0 1px rgba(0,0,0,.3),0 0 8px rgba(52,199,89,.6)}
+.crew-status-dot.yellow{background:#FFD60A;box-shadow:0 0 0 1px rgba(0,0,0,.3),0 0 8px rgba(255,214,10,.6)}
+.crew-status-dot.red{background:#FF3B30;box-shadow:0 0 0 1px rgba(0,0,0,.3),0 0 12px rgba(255,59,48,.7);animation:crewStatusPulse 1.6s ease-in-out infinite}
+@keyframes crewStatusPulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.15);opacity:.85}}
+
+/* Night-Mode Trigger-Kachel in der Crew-Section */
+.nm-trigger-row{margin:12px 14px 0}
+.nm-trigger-btn{width:100%;display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:var(--r);background:linear-gradient(135deg,rgba(52,199,89,.12),rgba(10,132,255,.08));backdrop-filter:blur(40px) saturate(160%);-webkit-backdrop-filter:blur(40px) saturate(160%);border:1px solid rgba(52,199,89,.18);color:var(--t);cursor:pointer;text-align:left;transition:all .2s var(--spring);box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 2px 10px rgba(0,0,0,.15)}
+.nm-trigger-btn:active{transform:scale(.98);opacity:.9}
+.nm-trigger-emoji{font-size:24px;line-height:1;flex-shrink:0}
+.nm-trigger-text{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0}
+.nm-trigger-title{font-size:14px;font-weight:800;color:var(--t)}
+.nm-trigger-sub{font-size:11px;color:var(--t3);font-weight:500}
+.nm-trigger-arrow{font-size:22px;color:var(--t3);font-weight:300;flex-shrink:0}
 .countdown-card{margin:10px 14px;padding:18px;border-radius:var(--r);background:linear-gradient(135deg,rgba(255,109,46,.14),rgba(255,214,10,.08));backdrop-filter:blur(50px) saturate(200%);-webkit-backdrop-filter:blur(50px) saturate(200%);border:1px solid rgba(255,214,10,.15);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 0 40px rgba(255,109,46,.1),0 8px 28px rgba(0,0,0,.3);text-align:center;cursor:pointer;transition:all .2s var(--ease)}
 .countdown-card h3{font-size:18px;font-weight:900;margin-bottom:6px}
 .countdown-card p{font-size:12px;color:var(--t2)}
@@ -5650,29 +5686,76 @@ nav button.active .ni{animation:vNineCountPop .38s var(--ease-spring-soft) 1}
   </div>
 </div>
 
-<!-- ALCOHOL TRACKER OVERLAY -->
-<div class="drink-counter" id="drinkCounter" onclick="if(event.target===this)closeAlcoholTracker()">
-  <button class="drink-close" onclick="closeAlcoholTracker()">✕</button>
-  <div class="drink-display">
-    <div class="drink-main">
-      <div style="font-size:12px;color:var(--t3);text-transform:uppercase;font-weight:700;margin-bottom:8px">Drinks heute</div>
-      <div class="drink-count" id="drinkTotal">0</div>
-      <div class="drink-sub" id="drinkBac">BAC: 0.0‰</div>
-      <div class="drink-sub" id="drinkTime">Start: -</div>
+<!-- SAFE-NIGHT-TRACKER OVERLAY (Crew-Care-Konzept, ersetzt seit 2026-04-23 den alten Alcohol-Tracker) -->
+<div class="night-mode" id="nightMode" onclick="if(event.target===this)closeNightMode()">
+  <div class="nm-sheet">
+    <div class="nm-header">
+      <button class="nm-close" onclick="closeNightMode()" aria-label="Schließen">✕</button>
+      <div class="nm-title">Night Mode</div>
+      <div class="nm-subtitle">Pass auf dich und deine Crew auf</div>
     </div>
-    <div class="bac-meter">
-      <div class="bac-fill" id="bacFill" style="width:0%"></div>
-      <div class="bac-label" id="bacLabel">0.0‰</div>
+    <div class="nm-body">
+      <!-- Self-Status -->
+      <div class="nm-section">
+        <div class="nm-section-label">Wie geht's dir?</div>
+        <div class="nm-status-row">
+          <button class="nm-status-btn" data-status="green" onclick="setSelfStatus('green')">
+            <span class="nm-status-emoji">🙂</span>
+            <span class="nm-status-text">Alles safe</span>
+          </button>
+          <button class="nm-status-btn" data-status="yellow" onclick="setSelfStatus('yellow')">
+            <span class="nm-status-emoji">😐</span>
+            <span class="nm-status-text">Müde / angetrunken</span>
+          </button>
+          <button class="nm-status-btn" data-status="red" onclick="setSelfStatus('red')">
+            <span class="nm-status-emoji">🆘</span>
+            <span class="nm-status-text">Brauche Crew</span>
+          </button>
+        </div>
+        <div class="nm-status-info" id="nmStatusInfo">Dein Status ist nur für deine Crew sichtbar. Du kannst ihn jederzeit ändern.</div>
+      </div>
+      <!-- Wasser-Counter -->
+      <div class="nm-section">
+        <div class="nm-section-label">Wasser heute Abend</div>
+        <div class="nm-water-row">
+          <button class="nm-water-btn nm-water-minus" onclick="addWater(-1)" aria-label="Weniger">−</button>
+          <div class="nm-water-display">
+            <div class="nm-water-count" id="nmWaterCount">0</div>
+            <div class="nm-water-target">von 6 Gläsern</div>
+          </div>
+          <button class="nm-water-btn nm-water-plus" onclick="addWater(1)" aria-label="Mehr">+</button>
+        </div>
+        <div class="nm-water-hint" id="nmWaterHint">Ein Glas Wasser zwischendurch — dein Kopf morgen wird es dir danken.</div>
+      </div>
+      <!-- Zeit-Signal -->
+      <div class="nm-section">
+        <div class="nm-section-label">Unterwegs seit</div>
+        <div class="nm-time-display">
+          <div class="nm-time-duration" id="nmTimeDuration">Noch nicht gestartet</div>
+          <div class="nm-time-start" id="nmTimeStart">—</div>
+        </div>
+        <div class="nm-time-nudge" id="nmTimeNudge"></div>
+      </div>
+      <!-- Home-Safe-Flow -->
+      <div class="nm-section">
+        <div class="nm-section-label">Heimweg</div>
+        <div class="nm-home-row">
+          <button class="nm-home-btn" data-step="onway" onclick="triggerHomeStep('onway')">
+            <span class="nm-home-emoji">🚕</span>
+            <span class="nm-home-text">Auf dem Weg</span>
+          </button>
+          <button class="nm-home-btn" data-step="pause" onclick="triggerHomeStep('pause')">
+            <span class="nm-home-emoji">☕</span>
+            <span class="nm-home-text">Brauche kurz</span>
+          </button>
+          <button class="nm-home-btn" data-step="home" onclick="triggerHomeStep('home')">
+            <span class="nm-home-emoji">🏠</span>
+            <span class="nm-home-text">Bin zuhause</span>
+          </button>
+        </div>
+        <div class="nm-home-info" id="nmHomeInfo">Die Crew sieht dein Signal nur in der Crew-Ansicht. Kein externes Senden ohne dein OK.</div>
+      </div>
     </div>
-    <div class="drink-buttons">
-      <button class="drink-btn" onclick="addDrink('beer')"><div class="drink-btn-emoji">🍺</div>Bier</button>
-      <button class="drink-btn" onclick="addDrink('wine')"><div class="drink-btn-emoji">🍷</div>Wein</button>
-      <button class="drink-btn" onclick="addDrink('cocktail')"><div class="drink-btn-emoji">🍹</div>Cocktail</button>
-      <button class="drink-btn" onclick="addDrink('shot')"><div class="drink-btn-emoji">🥃</div>Shot</button>
-      <button class="drink-btn" onclick="addDrink('sparkling')"><div class="drink-btn-emoji">🍾</div>Sekt</button>
-      <button class="drink-btn" onclick="resetDrinks()" style="grid-column:1/-1;background:rgba(255,59,48,.15);color:var(--fire)">🔄 Zurücksetzen</button>
-    </div>
-    <div style="font-size:11px;color:var(--t3);margin-top:16px;line-height:1.6">💡 Estimation: Rauer Wert. Immer verantwortungsvoll feiern!</div>
   </div>
 </div>
 
@@ -6052,6 +6135,18 @@ nav button.active .ni{animation:vNineCountPop .38s var(--ease-spring-soft) 1}
             <div class="crew-limit-badge" id="crewCount">0/8</div>
           </div>
           <div id="crewList"></div>
+
+          <!-- Safe-Night-Tracker Trigger (Crew-Care, 2026-04-23) -->
+          <div class="nm-trigger-row">
+            <button class="nm-trigger-btn" onclick="openNightMode()" aria-label="Night Mode öffnen">
+              <span class="nm-trigger-emoji">🌙</span>
+              <span class="nm-trigger-text">
+                <span class="nm-trigger-title">Night Mode</span>
+                <span class="nm-trigger-sub">Auf dich und die Crew achten</span>
+              </span>
+              <span class="nm-trigger-arrow">›</span>
+            </button>
+          </div>
         </div>
 
         <!-- v108: Standalone Vote-Section entfernt — Vote ist jetzt zweiter Tab im Crew-Menü.
@@ -6067,7 +6162,7 @@ nav button.active .ni{animation:vNineCountPop .38s var(--ease-spring-soft) 1}
              v108: Tagesvollster → aus der Section entfernt. -->
         <div id="crewActivityFeed" style="display:none"></div>
         <div id="crewLocationList" style="display:none"></div>
-        <div id="drunkList" style="display:none"></div>
+        <!-- drunkList (Tagesvollster) entfernt 2026-04-23 — Crew-Care statt Fremdbewertung. -->
 
         <!-- v94: Party-Spiele hier entfernt — laufen in Zukunft über das Game Center (Deals-Tab).
              Keine freischwebende Section mehr im Crew-Menü. -->
@@ -7567,7 +7662,7 @@ var I18N = {
     // Party features
     leaderboard: 'Crew-Leaderboard',
     tonight_planner: 'Heute Abend',
-    drunk_contest: 'Tagesvollster',
+    wingman_contest: 'Crew-Wingman',
     challenges: 'Crew-Challenges',
     taxi_splitter: 'Taxi-Splitter',
     malle_countdown: 'Malle-Countdown',
@@ -9305,6 +9400,8 @@ async function buildCrewList(){
     });
     var oc=document.getElementById('crewOnlineCount');
     if(oc)oc.textContent=onlineCount;
+    // Safe-Night-Tracker Self-Status-Dot am eigenen Avatar einblenden
+    try{ if(typeof refreshCrewStatusDot==='function') refreshCrewStatusDot(); }catch(e){}
   }catch(e){
     console.error('buildCrewList error:',e);
     el.innerHTML='<p class="crew-empty">Crew konnte nicht geladen werden.</p>';
@@ -12231,8 +12328,8 @@ var VOTE_SETS = [
   // Set 0 — Party-Nacht
   [
     {id:'mvp',emoji:'⭐',q:'Wer war gestern der absolute MVP?',label:'Crew MVP',color:'#FFD60A',bg:'rgba(255,214,10,.1)'},
-    {id:'drunk',emoji:'🍻',q:'Wer war am vollsten?',label:'Tagesvollster',color:'#FF6D2E',bg:'rgba(255,109,46,.1)'},
-    {id:'flirt',emoji:'😏',q:'Wer hat am härtesten geflirtet?',label:'Flirt-King/Queen',color:'#FF3B82',bg:'rgba(255,59,130,.1)'}
+    {id:'wingman',emoji:'🤝',q:'Wer hat am meisten auf die Crew aufgepasst?',label:'Crew-Wingman',color:'#34C759',bg:'rgba(52,199,89,.1)'},
+    {id:'storyteller',emoji:'🎬',q:'Wer hatte heute Abend die beste Story?',label:'Storyteller',color:'#FF3B82',bg:'rgba(255,59,130,.1)'}
   ],
   // Set 1 — Moves & Vibes
   [
@@ -15363,114 +15460,188 @@ function buildCrewTips(){
   }).join('');
 }
 
-// 4. TAGESVOLLSTER
-async function buildDrunkList(){
-  try{
-    var el=document.getElementById('drunkList');if(!el)return;
-    var ids=await getActiveCrewMemberIds();
-    if(!ids||ids.length===0){el.innerHTML='<p style="color:var(--t3);font-size:13px;width:100%">Noch keine Crew-Mitglieder.</p>';return}
-    var {data:profiles}=await sb.from('profiles').select('*').in('user_id',ids);
-    if(!profiles||profiles.length===0){el.innerHTML='<p style="color:var(--t3);font-size:13px;width:100%">Keine Crew.</p>';return}
-    var today=new Date().toISOString().split('T')[0];
-    var votes=JSON.parse(localStorage.getItem('crew_drunk_vote_'+today)||'{}');
-    var voteCount={};
-    Object.values(votes).forEach(function(v){voteCount[v]=(voteCount[v]||0)+1});
-    var userVote=votes[ME.user_id];
-    el.innerHTML=profiles.map(function(p){
-      return '<div class="drunk-card'+(userVote===p.user_id?' voted':'')+'" onclick="voteDrunk(\''+p.user_id+'\',\''+esc(p.name)+'\')"><div class="drunk-ava"><img src="'+(p.photo_url||'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80')+'" loading="lazy"></div><div class="drunk-name">'+esc(p.name)+'</div><div class="drunk-count">'+(voteCount[p.user_id]||0)+'</div></div>';
-    }).join('');
-  }catch(e){
-    console.error('buildDrunkList error:',e);
-    var el=document.getElementById('drunkList');
-    if(el)el.innerHTML='<p style="color:var(--t3);font-size:13px;width:100%">Tagesvollster nicht verfügbar.</p>';
+// 4. + 5. TAGESVOLLSTER und ALKOHOLTRACKER entfernt 2026-04-23
+// Crew-Care-Prinzip: kein Ranking Dritter über Alkoholzustand (DSGVO Art. 6/9, UWG),
+// kein BAC-Rechner (Haftungsrisiko, Ley de Excesos für Malle-Zonen).
+// Ersatz: Safe-Night-Tracker mit Self-Status, Wasser-Counter, Zeit-Signal, Home-Safe-Flow.
+
+// ═══ SAFE-NIGHT-TRACKER (Crew-Care-Konzept) ═══
+var _nmTickHandle = null;
+var NM_STATUS_TTL = 12 * 60 * 60 * 1000; // Self-Status verfällt nach 12 Stunden
+
+window.openNightMode = function(){
+  var el = document.getElementById('nightMode');
+  if(!el) return;
+  _nmStartSessionIfNeeded();
+  _nmRender();
+  el.classList.add('show');
+  _nmStartTick();
+};
+
+window.closeNightMode = function(){
+  var el = document.getElementById('nightMode');
+  if(el) el.classList.remove('show');
+  _nmStopTick();
+};
+
+window.setSelfStatus = function(color){
+  if(['green','yellow','red'].indexOf(color) < 0) return;
+  var now = Date.now();
+  var record = { status: color, ts: now, expiresAt: now + NM_STATUS_TTL };
+  localStorage.setItem('crew_self_status', JSON.stringify(record));
+  _nmRender();
+  if(typeof refreshCrewStatusDot === 'function') refreshCrewStatusDot();
+  var msg = color === 'green' ? 'Status gesetzt: alles safe.'
+          : color === 'yellow' ? 'Status gesetzt: müde oder angetrunken.'
+          : 'Status gesetzt: brauche die Crew.';
+  if(typeof toast === 'function') toast(msg);
+};
+
+window.getSelfStatus = function(){
+  try {
+    var raw = localStorage.getItem('crew_self_status');
+    if(!raw) return null;
+    var r = JSON.parse(raw);
+    if(!r || !r.status) return null;
+    if(r.expiresAt && Date.now() > r.expiresAt){
+      localStorage.removeItem('crew_self_status');
+      return null;
+    }
+    return r.status;
+  } catch(e){ return null; }
+};
+
+window.clearSelfStatus = function(){
+  localStorage.removeItem('crew_self_status');
+  _nmRender();
+  if(typeof refreshCrewStatusDot === 'function') refreshCrewStatusDot();
+};
+
+window.addWater = function(delta){
+  var today = new Date().toISOString().split('T')[0];
+  var key = 'crew_water_' + today;
+  var cur = parseInt(localStorage.getItem(key) || '0', 10);
+  var next = Math.max(0, cur + (delta | 0));
+  localStorage.setItem(key, String(next));
+  _nmRender();
+};
+
+function _nmGetWater(){
+  var today = new Date().toISOString().split('T')[0];
+  return parseInt(localStorage.getItem('crew_water_' + today) || '0', 10);
+}
+
+function _nmStartSessionIfNeeded(){
+  if(!localStorage.getItem('crew_nightmode_start')){
+    localStorage.setItem('crew_nightmode_start', String(Date.now()));
   }
 }
-window.voteDrunk=function(uid,name){
-  var today=new Date().toISOString().split('T')[0];
-  if(uid===ME.user_id){toast('Du kannst nicht für dich selbst abstimmen! 😄');return}
-  var votes=JSON.parse(localStorage.getItem('crew_drunk_vote_'+today)||'{}');
-  if(votes[ME.user_id]===uid){delete votes[ME.user_id]}else{votes[ME.user_id]=uid}
-  localStorage.setItem('crew_drunk_vote_'+today,JSON.stringify(votes));
-  buildDrunkList();
-  if(votes[ME.user_id]===uid){toast('Vote für '+name+' abgegeben! 🍻')}
+
+function _nmStopSession(){
+  localStorage.removeItem('crew_nightmode_start');
 }
 
-// 5. ALKOHOLTRACKER
-window.openAlcoholTracker=function(){
-  document.getElementById('drinkCounter').classList.add('show');
-  updateDrinkDisplay();
+function _nmStartTick(){
+  if(_nmTickHandle) return;
+  _nmTickHandle = setInterval(_nmRender, 60000);
 }
-window.closeAlcoholTracker=function(){
-  document.getElementById('drinkCounter').classList.remove('show');
+function _nmStopTick(){
+  if(_nmTickHandle){ clearInterval(_nmTickHandle); _nmTickHandle = null; }
 }
-window.addDrink=function(type){
-  var today=new Date().toISOString().split('T')[0];
-  var data=JSON.parse(localStorage.getItem('crew_drinks_'+today)||'{"beer":0,"wine":0,"cocktail":0,"shot":0,"sparkling":0,"firstTime":null}');
-  if(!data.firstTime)data.firstTime=Date.now();
-  data[type]=(data[type]||0)+1;
-  localStorage.setItem('crew_drinks_'+today,JSON.stringify(data));
-  updateDrinkDisplay();
-  toast('🍺 +1 '+(type==='beer'?'Bier':type==='wine'?'Wein':type==='cocktail'?'Cocktail':type==='shot'?'Shot':'Sekt'));
-}
-window.resetDrinks=function(){
-  if(!confirm('Alle Drinks zurücksetzen?'))return;
-  var today=new Date().toISOString().split('T')[0];
-  localStorage.removeItem('crew_drinks_'+today);
-  updateDrinkDisplay();
-  toast('Zurückgesetzt!');
-}
-function updateDrinkDisplay(){
-  var today=new Date().toISOString().split('T')[0];
-  var data=JSON.parse(localStorage.getItem('crew_drinks_'+today)||'{"beer":0,"wine":0,"cocktail":0,"shot":0,"sparkling":0,"firstTime":null}');
-  var total=(data.beer||0)+(data.wine||0)+(data.cocktail||0)+(data.shot||0)+(data.sparkling||0);
 
-  // Grams of pure alcohol per standard drink
-  // Beer 0.5L x 5% x 0.789 g/ml = ~20g
-  // Wine 0.2L x 12% x 0.789 = ~19g
-  // Cocktail 0.3L x ~15% x 0.789 = ~35g
-  // Shot 0.04L x 40% x 0.789 = ~13g
-  // Sparkling 0.15L x 11% x 0.789 = ~13g
-  var gramsPerDrink = {beer:20, wine:19, cocktail:35, shot:13, sparkling:13};
+function _nmRender(){
+  // Status-Buttons
+  var statusBtns = document.querySelectorAll('#nightMode .nm-status-btn');
+  var status = getSelfStatus();
+  statusBtns.forEach(function(b){
+    b.classList.toggle('active', b.getAttribute('data-status') === status);
+  });
 
-  var totalGrams = 0;
-  Object.keys(gramsPerDrink).forEach(function(k){ totalGrams += (data[k]||0) * gramsPerDrink[k] });
+  // Wasser-Counter
+  var waterEl = document.getElementById('nmWaterCount');
+  if(waterEl) waterEl.textContent = _nmGetWater();
 
-  // Widmark formula: BAC (‰) = alcohol(g) / (body weight(kg) × r)
-  // r = 0.68 for men, 0.55 for women
-  var weight = 75; // default
-  var factor = (ME && ME.gender === 'Frau') ? 0.55 : 0.68;
-  var bac = totalGrams / (weight * factor);
-
-  // Subtract metabolism: ~0.15‰ per hour
-  if(data.firstTime){
-    var hours = (Date.now() - data.firstTime) / 3600000;
-    bac = Math.max(0, bac - (hours * 0.15));
+  // Zeit-Signal
+  var startTs = parseInt(localStorage.getItem('crew_nightmode_start') || '0', 10);
+  var durEl = document.getElementById('nmTimeDuration');
+  var startEl = document.getElementById('nmTimeStart');
+  var nudgeEl = document.getElementById('nmTimeNudge');
+  if(startTs){
+    var diff = Date.now() - startTs;
+    var mins = Math.floor(diff / 60000);
+    var h = Math.floor(mins / 60);
+    var m = mins % 60;
+    if(durEl) durEl.textContent = (h > 0 ? h + ' h ' : '') + m + ' min';
+    if(startEl) startEl.textContent = 'Gestartet: ' + new Date(startTs).toLocaleTimeString('de-DE', {hour: '2-digit', minute: '2-digit'});
+    if(nudgeEl){
+      if(mins >= 240) nudgeEl.textContent = 'Du bist seit über 4 Stunden unterwegs. Alles okay?';
+      else if(mins >= 120) nudgeEl.textContent = 'Schon 2 Stunden. Wie geht\'s dir gerade?';
+      else nudgeEl.textContent = '';
+    }
+  } else {
+    if(durEl) durEl.textContent = 'Noch nicht gestartet';
+    if(startEl) startEl.textContent = '—';
+    if(nudgeEl) nudgeEl.textContent = '';
   }
 
-  // Status text based on BAC level
-  var status = '';
-  if(bac === 0) status = 'Nüchtern 👍';
-  else if(bac < 0.3) status = 'Leicht angetrunken 😊';
-  else if(bac < 0.8) status = 'Angetrunken 🥴';
-  else if(bac < 1.5) status = 'Betrunken 😵';
-  else if(bac < 2.0) status = 'Stark betrunken ⚠️';
-  else status = 'Gefährlich! Bitte aufhören! 🚨';
-
-  var bacPct = Math.min(100, (bac / 3) * 100);
-
-  document.getElementById('drinkTotal').textContent = total;
-  document.getElementById('drinkBac').textContent = bac.toFixed(2) + '‰ — ' + status;
-  document.getElementById('drinkTime').textContent = 'Seit: ' + (data.firstTime ? new Date(data.firstTime).toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'}) : '—');
-  document.getElementById('bacFill').style.width = bacPct + '%';
-  document.getElementById('bacLabel').textContent = bac.toFixed(2) + '‰';
-
-  // Color the BAC bar based on level
-  var barColor = bac < 0.3 ? 'linear-gradient(90deg,#34C759,#34C759)' :
-                 bac < 0.8 ? 'linear-gradient(90deg,#34C759,#FFD60A)' :
-                 bac < 1.5 ? 'linear-gradient(90deg,#FFD60A,#FF9500)' :
-                 'linear-gradient(90deg,#FF9500,#FF3B30)';
-  document.getElementById('bacFill').style.background = barColor;
+  // Home-Flow Active-States
+  var homeBtns = document.querySelectorAll('#nightMode .nm-home-btn');
+  var hs = getSelfStatus();
+  var hasSession = !!localStorage.getItem('crew_nightmode_start');
+  homeBtns.forEach(function(b){
+    var step = b.getAttribute('data-step');
+    var active = (step === 'onway' && hs === 'yellow' && hasSession)
+              || (step === 'pause' && hs === 'red' && hasSession)
+              || (step === 'home' && !hasSession && hs === 'green');
+    b.classList.toggle('active', active);
+  });
 }
+
+window.triggerHomeStep = function(stage){
+  if(stage === 'onway'){
+    setSelfStatus('yellow');
+    if(typeof toast === 'function') toast('Auf dem Weg. Crew sieht dein gelbes Licht.');
+  } else if(stage === 'pause'){
+    setSelfStatus('red');
+    if(typeof toast === 'function') toast('Brauchst kurz. Crew weiß Bescheid.');
+  } else if(stage === 'home'){
+    _nmStopSession();
+    setSelfStatus('green');
+    if(typeof toast === 'function') toast('Zuhause. Gute Nacht.');
+  }
+  _nmRender();
+};
+
+// Status-Dot im Crew-Feed am eigenen Avatar rendern/aktualisieren
+window.refreshCrewStatusDot = function(){
+  try {
+    var status = getSelfStatus();
+    if(typeof ME === 'undefined' || !ME || !ME.user_id) return;
+    // Mehrere mögliche Selector-Patterns für Avatar-Elemente der eigenen Person
+    var selectors = [
+      '[data-user-id="' + ME.user_id + '"] .crew-ava',
+      '[data-user-id="' + ME.user_id + '"] .crew-ava-wrap',
+      '.crew-self-avatar',
+      '.v108-self-card .crew-ava'
+    ];
+    var avatars = [];
+    selectors.forEach(function(sel){
+      try { document.querySelectorAll(sel).forEach(function(n){ avatars.push(n); }); } catch(e){}
+    });
+    avatars.forEach(function(av){
+      // Sicherstellen dass Parent relative Positionierung hat
+      var cs = window.getComputedStyle(av);
+      if(cs && cs.position === 'static') av.style.position = 'relative';
+      var old = av.querySelector('.crew-status-dot');
+      if(old) old.remove();
+      if(status){
+        var dot = document.createElement('span');
+        dot.className = 'crew-status-dot ' + status;
+        av.appendChild(dot);
+      }
+    });
+  } catch(e){ console.warn('refreshCrewStatusDot error:', e); }
+};
 
 // 6. MALLE COUNTDOWN
 function buildCountdownCard(){
@@ -19621,7 +19792,7 @@ window.playCrewJoinCinema = async function(crew, opts){
   console.log('[v109] Location + Presence Overhaul aktiv');
 })();
 
-if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js?v=23').catch(function(){});
+if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js?v=24').catch(function(){});
 </script>
 
 <!-- v109: Hide-Last-Seen Privacy Sheet -->
