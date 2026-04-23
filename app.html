@@ -7401,7 +7401,11 @@ function closeTravelMap(){
 }
 window.openTravelMap=openTravelMap;
 window.closeTravelMap=closeTravelMap;
-var GAMES = [
+// PARTY-GAMES deaktiviert 2026-04-23 — Alkohol-Inhalte (Trinkspiele, Sangria-Trivia, Saufgeschichten)
+// verstoßen gegen Ley de Excesos auf Malle und Crew-Care-Prinzip. Refactor als eigene Post-Launch-Task,
+// siehe MiloZ-Brain. Alter Content bleibt als _GAMES_ARCHIV_2026_04_23 für Referenz beim Refactor.
+var GAMES = [];
+var _GAMES_ARCHIV_2026_04_23 = [
   {name:'Wer bin ich?',icon:'🤔',desc:'Rate die Person auf deiner Stirn',players:'2-10',cards:[
     'Ich bin ein deutscher Schlagerstar','Ich bin der DJ im Megapark','Ich bin ein Sangria-Eimer','Ich bin Jürgen Drews','Ich bin die Sonne auf Mallorca',
     'Ich bin ein Taxi um 5 Uhr morgens','Ich bin ein verlorenes Handy','Ich bin die Pommesbude am Strand','Ich bin der Türsteher im Bierkönig','Ich bin ein Sonnenbrand',
@@ -7470,7 +7474,7 @@ var GAMES = [
 var CHALLENGES = [
   {title:'Erster im Bierkönig',icon:'🏃',desc:'Wer checkt als erster ein?',pts:100},
   {title:'Sonnenbrand-Selfie',icon:'☀️',desc:'Poste ein Selfie mit deinem Sonnenbrand-Tan',pts:50},
-  {title:'Eimer-Runde',icon:'🍹',desc:'Bestelle einen Eimer für die Crew — instant Aura!',pts:75},
+  {title:'Wasser-Runde',icon:'🧊',desc:'Sorge dafür dass jeder in der Crew ein Wasser hat — safe night',pts:75},
   {title:'Taxi-Karaoke',icon:'🎤',desc:'Singe im Taxi einen Schlager — laut!',pts:60},
   {title:'Strand um 6',icon:'🌅',desc:'Sei um 6 Uhr morgens am Strand und mach ein Foto',pts:120},
   {title:'10 Neue Leute',icon:'👥',desc:'Lerne heute 10 neue Leute kennen',pts:80},
@@ -17096,7 +17100,7 @@ window.playCrewJoinCinema = async function(crew, opts){
   // ── 8) Daily Quest System ──────────────────
   var QUEST_KEY = 'crew_quest_v1';
   var QUEST_POOL = [
-    {id:'match3',    label:'Mache 3 neue Matches',    goal:3, icon:'👥', reward:30, counter:'match'},
+    {id:'match3',    label:'Mache 3 neue Verbindungen', goal:3, icon:'👥', reward:30, counter:'match'},
     {id:'checkin2',  label:'Checke an 2 Orten ein',   goal:2, icon:'📍', reward:25, counter:'checkin'},
     {id:'vibe1',     label:'Setze deinen Vibe',       goal:1, icon:'🎨', reward:15, counter:'vibe'},
     {id:'react5',    label:'Reagiere auf 5 Posts',    goal:5, icon:'💬', reward:20, counter:'react'},
@@ -18172,10 +18176,10 @@ window.playCrewJoinCinema = async function(crew, opts){
   // Pro Woche werden 3 Quests deterministisch aus diesem Pool gezogen (WeekKey).
   var QUEST_DEFS = [
     {id:'checkins_5',  icon:'📍', title:'5 Partner-Check-ins',    desc:'Mitglieder checken gemeinsam bei 5 Partnern ein.', target:5,  reward:200},
-    {id:'checkins_10', icon:'🍹', title:'10 Partner-Check-ins',   desc:'Eine echte Crew-Tour: 10 Check-ins zusammen.',      target:10, reward:400},
+    {id:'checkins_10', icon:'🏆', title:'10 Partner-Check-ins',   desc:'Eine echte Crew-Tour: 10 Check-ins zusammen.',      target:10, reward:400},
     {id:'invites_3',   icon:'📲', title:'3 neue Leute einladen',  desc:'Jedes neue Crew-Mitglied zählt.',                  target:3,  reward:250},
     {id:'votes_5',     icon:'🗳️', title:'5x Crew-Votes gevotet',  desc:'Stimmt zusammen über eure Tages-Topics ab.',       target:5,  reward:150},
-    {id:'matches_10',  icon:'💫', title:'10 Matches in der Crew', desc:'Crew-Mitglieder matchen gemeinsam 10 Leute.',      target:10, reward:200},
+    {id:'matches_10',  icon:'💫', title:'10 Verbindungen in der Crew', desc:'Crew-Mitglieder verbinden sich gemeinsam mit 10 Leuten.', target:10, reward:200},
     {id:'chat_20',     icon:'💬', title:'20 Chat-Messages',       desc:'Bleibt in Verbindung — Chat schreiben zählt.',     target:20, reward:120},
     {id:'safe_5',      icon:'✅', title:'5 Safe-Check-ins',       desc:'Achtet aufeinander mit Safe-Pings.',               target:5,  reward:150},
     {id:'bootstour_1', icon:'🚤', title:'Eine Bootstour planen',  desc:'Organisiert einen gemeinsamen Ausflug.',           target:1,  reward:300},
