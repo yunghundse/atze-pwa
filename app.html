@@ -490,26 +490,87 @@ main{flex:1;overflow:hidden;position:relative}
 @keyframes rz{from{transform:scale(1) rotate(0deg)}to{transform:scale(1.12) rotate(.5deg)}}
 .auth-ov{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 0%,rgba(0,0,0,.3) 30%,rgba(0,0,0,.75) 60%,rgba(5,5,7,.98) 100%)}
 .auth-content{position:absolute;bottom:0;left:0;right:0;padding:0 28px 48px;z-index:2}
-.auth-brand{font-size:56px;font-weight:900;letter-spacing:-3.5px;margin-bottom:6px}.auth-brand span{background:var(--gold);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 30px rgba(255,109,46,.4))}
-.auth-tag{font-size:17px;color:rgba(255,255,255,.75);margin-bottom:30px;line-height:1.7;font-weight:300}
+.auth-brand{
+  font-size:var(--text-display-xl);
+  font-weight:var(--weight-display);
+  letter-spacing:var(--tracking-display-xl);
+  margin-bottom:6px;
+  color:#FFFFFF;
+  line-height:var(--lh-display);
+}
+.auth-brand span{color:var(--accent);filter:drop-shadow(0 0 18px rgba(255,59,110,.55))}
+.auth-tag{
+  font-size:var(--text-body-l);
+  color:rgba(255,255,255,.78);
+  margin-bottom:var(--space-8);
+  line-height:var(--lh-body);
+  font-weight:var(--weight-regular);
+}
 .rbtn{width:100%;padding:15px;border:none;border-radius:14px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:8px;transition:all .15s var(--ease)}
 .rbtn:active{transform:scale(.97)}
 .auth-form{display:flex;flex-direction:column;gap:10px;margin-top:16px}
 .auth-form.show{display:flex}
-.auth-terms{text-align:center;font-size:11px;color:var(--t3);margin-top:16px;line-height:1.5}
-.auth-terms a{color:var(--t2);text-decoration:underline}
-.auth-switch{text-align:center;font-size:13px;color:var(--t2);margin-top:12px;cursor:pointer}.auth-switch span{color:var(--o);font-weight:700}
+.auth-terms{
+  text-align:center;
+  font-size:var(--text-micro);
+  color:var(--contrast-3);
+  margin-top:var(--space-4);
+  line-height:var(--lh-body);
+  letter-spacing:var(--tracking-label);
+}
+.auth-terms a{color:var(--contrast-2);text-decoration:underline}
+.auth-switch{
+  text-align:center;
+  font-size:var(--text-label);
+  color:var(--contrast-2);
+  margin-top:var(--space-3);
+  cursor:pointer;
+  letter-spacing:var(--tracking-label);
+}
+.auth-switch span{color:var(--accent);font-weight:var(--weight-semibold)}
 
 /* ONBOARDING (nach Auth) */
 .onboard{position:fixed;inset:0;z-index:99998;background:var(--bg);display:flex;flex-direction:column}
 .onboard.gone{display:none}
-.ob-step{position:absolute;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:all .4s var(--ease);padding:60px 28px 40px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.ob-step{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+  opacity:0;pointer-events:none;
+  transition:opacity var(--motion-slow) var(--motion-ease);
+  padding:var(--space-12) var(--space-6) var(--space-8);
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+}
 .ob-step.active{opacity:1;pointer-events:all}
-.ob-back{position:absolute;top:16px;left:16px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.06);border:none;color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.ob-back{
+  position:absolute;top:var(--space-4);left:var(--space-4);
+  width:40px;height:40px;
+  border-radius:50%;
+  background:rgba(255,255,255,.06);
+  border:0.5px solid var(--contrast-border);
+  color:var(--contrast-1);
+  font-size:18px;
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-family:inherit;
+}
+.ob-back:active{transform:scale(.92);background:rgba(255,255,255,.1)}
 .rprog{display:flex;gap:4px;margin-bottom:32px}
 .rprog .rp{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.08);transition:background .3s}.rprog .rp.done{background:var(--o)}
-.ob-step h2{font-size:26px;font-weight:900;letter-spacing:-.5px;margin-bottom:6px}
-.rsub{font-size:14px;color:var(--t2);margin-bottom:24px;line-height:1.5}
+.ob-step h2{
+  font-size:var(--text-display-l);
+  font-weight:var(--weight-display);
+  letter-spacing:var(--tracking-display-l);
+  line-height:var(--lh-display);
+  color:var(--contrast-1);
+  margin-bottom:6px;
+}
+.rsub{
+  font-size:var(--text-body-l);
+  color:var(--contrast-2);
+  margin-bottom:var(--space-6);
+  line-height:var(--lh-body);
+}
 .ri{width:100%;padding:15px 16px;border-radius:14px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:#fff;font-size:15px;font-family:inherit;outline:none;margin-bottom:10px;transition:all .3s var(--ease);box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 2px 6px rgba(0,0,0,.08)}
 .ri:focus{border-color:var(--o);background:rgba(255,109,46,.04);box-shadow:0 0 0 3px rgba(255,109,46,.1),inset 0 .5px 0 rgba(255,255,255,.06)}.ri::placeholder{color:rgba(255,255,255,.25)}
 select.ri{appearance:none;-webkit-appearance:none}
@@ -5028,39 +5089,48 @@ nav button.active .ni{animation:vNineCountPop .38s var(--ease-spring-soft) 1}
 
 /* Pass-Button im Profil-Screen (ersetzt v103 pmi-QR) */
 .v104-pass-card{
-  margin:0 14px 14px;padding:18px;border-radius:20px;cursor:pointer;
-  background:linear-gradient(135deg,#FF6D2E 0%,#FFD60A 60%,#FF6D2E 120%);
-  background-size:220% 220%;background-position:0% 50%;
+  margin:0 var(--space-4) var(--space-4);
+  padding:var(--space-5);
+  border-radius:var(--radius-card);
+  cursor:pointer;
+  background:linear-gradient(135deg,var(--accent) 0%,#FF5783 50%,#FF6A3D 100%);
   position:relative;overflow:hidden;
-  box-shadow:0 14px 36px rgba(255,109,46,.28);
-  transition:transform var(--dur-short,.18s) var(--ease-out,cubic-bezier(.22,.61,.36,1)),box-shadow var(--dur-short,.18s) ease;
-  animation:v104PassShimmer 8s ease-in-out infinite;
+  box-shadow:var(--accent-glow),0 8px 24px rgba(0,0,0,.25);
+  transition:transform var(--motion-fast) var(--motion-ease),
+             box-shadow var(--motion-normal) var(--motion-ease);
 }
-@keyframes v104PassShimmer{
-  0%,100%{background-position:0% 50%}
-  50%{background-position:100% 50%}
-}
-.v104-pass-card:hover{transform:translateY(-2px);box-shadow:0 18px 44px rgba(255,109,46,.35)}
 .v104-pass-card:active{transform:scale(.985)}
+.v104-pass-card:hover{box-shadow:0 0 32px rgba(255,59,110,.45),0 12px 32px rgba(0,0,0,.3)}
 .v104-pass-card::after{
-  content:'';position:absolute;inset:0;border-radius:20px;
-  background:
-    radial-gradient(circle at 20% 0%,rgba(255,255,255,.25),transparent 45%),
-    radial-gradient(circle at 80% 100%,rgba(255,255,255,.15),transparent 50%);
+  content:'';position:absolute;inset:0;border-radius:var(--radius-card);
+  background:radial-gradient(circle at 20% 0%,rgba(255,255,255,.18),transparent 55%);
   pointer-events:none;
 }
-.v104-pass-card-inner{position:relative;z-index:1;display:flex;align-items:center;gap:14px}
+.v104-pass-card-inner{position:relative;z-index:1;display:flex;align-items:center;gap:var(--space-3)}
 .v104-pass-ico{
-  width:54px;height:54px;flex-shrink:0;border-radius:14px;
-  background:rgba(10,10,10,.88);display:flex;align-items:center;justify-content:center;
-  box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.25);
-  color:#FFD60A;
+  width:52px;height:52px;flex-shrink:0;
+  border-radius:var(--radius-button);
+  background:rgba(9,9,11,.85);
+  display:flex;align-items:center;justify-content:center;
+  color:#FFFFFF;
 }
-.v104-pass-lbl{flex:1;min-width:0;color:#0A0A0A;text-shadow:0 1px 0 rgba(255,255,255,.1)}
-.v104-pass-ttl{font-size:16px;font-weight:900;letter-spacing:-.3px;line-height:1.15;display:flex;align-items:center;gap:6px}
-.v104-pass-verify{font-size:14px;color:#0A84FF;filter:drop-shadow(0 0 2px rgba(10,132,255,.4))}
-.v104-pass-sub{font-size:12px;font-weight:700;opacity:.78;margin-top:3px;line-height:1.3}
-.v104-pass-arr{color:#0A0A0A;font-size:22px;font-weight:900;opacity:.7}
+.v104-pass-lbl{flex:1;min-width:0;color:#FFFFFF}
+.v104-pass-ttl{
+  font-size:var(--text-body-l);
+  font-weight:var(--weight-semibold);
+  letter-spacing:var(--tracking-heading);
+  line-height:var(--lh-heading);
+  display:flex;align-items:center;gap:6px;
+}
+.v104-pass-verify{font-size:14px;color:#FFFFFF;opacity:.9}
+.v104-pass-sub{
+  font-size:var(--text-label);
+  font-weight:var(--weight-medium);
+  opacity:.82;
+  margin-top:3px;
+  letter-spacing:var(--tracking-label);
+}
+.v104-pass-arr{color:#FFFFFF;font-size:20px;font-weight:var(--weight-regular);opacity:.7}
 
 /* Crew-Pass Fullscreen-Modal */
 .v104-pass-ov{
