@@ -8920,26 +8920,42 @@ async function loadAllDealsForAdmin(){
 
 // Echtzeit-Refresh: bei jeder DB-Änderung in 'deals' werden User-Feed und Admin-Liste neu geladen
 var _dealsRealtimeChannel = null;
+var _dealsPollFallback = null;
+function _dealsTriggerRefresh(source){
+  try { console.log('[deals] refresh triggered by', source); } catch(e){}
+  loadDealsFromSupabase().then(function(){
+    if(typeof buildDeals === 'function'){
+      var active = document.querySelector('.dtab.active');
+      buildDeals(active ? (active.dataset.cat || 'all') : 'all');
+    }
+  }).catch(function(){});
+  var ov = document.getElementById('dealsAdminOv');
+  if(ov && ov.style.display !== 'none' && typeof refreshDealsAdminList === 'function'){
+    refreshDealsAdminList();
+  }
+}
 function setupDealsRealtime(){
   if(_dealsRealtimeChannel) return;
   try {
-    _dealsRealtimeChannel = sb.channel('deals-realtime-' + Date.now())
+    _dealsRealtimeChannel = sb.channel('deals-realtime-v2')
       .on('postgres_changes', { event:'*', schema:'public', table:'deals' }, function(payload){
-        // 1) User-Feed aktualisieren
-        loadDealsFromSupabase().then(function(){
-          if(typeof buildDeals === 'function'){
-            var active = document.querySelector('.dtab.active');
-            buildDeals(active ? (active.dataset.cat || 'all') : 'all');
-          }
-        }).catch(function(){});
-        // 2) Admin-Liste aktualisieren, falls geöffnet
-        var ov = document.getElementById('dealsAdminOv');
-        if(ov && ov.style.display !== 'none' && typeof refreshDealsAdminList === 'function'){
-          refreshDealsAdminList();
-        }
+        _dealsTriggerRefresh('realtime:' + (payload && payload.eventType ? payload.eventType : 'unknown'));
       })
-      .subscribe();
+      .subscribe(function(status, err){
+        try { console.log('[deals] realtime status:', status, err ? err.message : ''); } catch(e){}
+      });
   } catch(e){ console.warn('deals realtime setup failed:', e && e.message); }
+
+  // Polling-Fallback: alle 8 Sekunden checken ob sich was geändert hat — nur wenn Deals-Tab sichtbar
+  if(_dealsPollFallback) clearInterval(_dealsPollFallback);
+  _dealsPollFallback = setInterval(function(){
+    var dealsScreen = document.getElementById('screen-deals');
+    var adminOv = document.getElementById('dealsAdminOv');
+    var dealsVisible = dealsScreen && dealsScreen.classList.contains('active');
+    var adminVisible = adminOv && adminOv.style.display !== 'none';
+    if(!dealsVisible && !adminVisible) return; // Nur pollen wenn User interessiert
+    _dealsTriggerRefresh('poll');
+  }, 8000);
 }
 
 // ═══ DEALS ADMIN UI (CRUD für Admin-User) ═══
