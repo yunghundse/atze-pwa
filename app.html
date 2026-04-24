@@ -663,9 +663,81 @@ nav button.active::before{opacity:1}
 .leaflet-popup-close-button{color:rgba(255,255,255,.6) !important;font-size:18px !important;padding:4px 8px !important}
 .leaflet-container{background:#0C0A10 !important}
 /* Custom Controls — Map-Recenter */
-.map-recenter{position:absolute;z-index:410;width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,rgba(22,22,28,.85),rgba(12,10,14,.75));backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);border:1px solid rgba(255,255,255,.1);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.4);transition:all .2s var(--spring)}
-.map-recenter:hover{background:linear-gradient(135deg,rgba(32,32,38,.9),rgba(18,14,22,.8));transform:translateY(-1px)}
+.map-recenter{
+  position:absolute;z-index:410;
+  width:44px;height:44px;
+  border-radius:var(--radius-button);
+  background:rgba(9,9,11,.78);
+  backdrop-filter:blur(24px) saturate(180%);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  border:0.5px solid var(--contrast-border);
+  color:var(--contrast-1);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  box-shadow:0 4px 14px rgba(0,0,0,.35);
+  transition:background var(--motion-fast) var(--motion-ease),
+             transform var(--motion-fast) var(--motion-ease);
+}
+.map-recenter:hover{background:rgba(15,15,20,.85)}
 .map-recenter:active{transform:scale(.94)}
+
+/* ─── Long-Press Karten-Fullscreen (v1.1 feature) ─── */
+.map-full{transition:all var(--motion-slow) var(--motion-ease)}
+.map-full.is-fullscreen{
+  position:fixed!important;inset:0!important;
+  z-index:10000!important;
+  height:100vh!important;height:100dvh!important;
+  width:100vw!important;
+  border-radius:0!important;
+  background:var(--base);
+  margin:0!important;
+}
+.map-full.is-fullscreen .map-fade{display:none}
+.map-full.is-fullscreen #radarMap,.map-full.is-fullscreen #crewMap{
+  height:100%!important;width:100%!important;border-radius:0!important;
+}
+.map-fullscreen-close{
+  position:fixed;
+  top:max(env(safe-area-inset-top,0),16px);right:16px;
+  z-index:10001;
+  width:44px;height:44px;
+  border-radius:50%;
+  background:rgba(9,9,11,.8);
+  backdrop-filter:blur(24px) saturate(180%);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  border:0.5px solid var(--contrast-border);
+  color:var(--contrast-1);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  font-size:18px;font-weight:var(--weight-semibold);
+  font-family:inherit;
+  opacity:0;transform:scale(.8);pointer-events:none;
+  transition:opacity var(--motion-normal) var(--motion-ease),
+             transform var(--motion-normal) var(--motion-spring);
+}
+.map-fullscreen-close.visible{opacity:1;transform:scale(1);pointer-events:auto}
+.map-fullscreen-close:active{transform:scale(.9)}
+.map-fullscreen-hint{
+  position:fixed;
+  bottom:max(env(safe-area-inset-bottom,0),24px);left:50%;transform:translateX(-50%) translateY(10px);
+  z-index:10001;
+  padding:10px 16px;
+  border-radius:var(--radius-pill);
+  background:rgba(9,9,11,.85);
+  backdrop-filter:blur(20px) saturate(180%);
+  -webkit-backdrop-filter:blur(20px) saturate(180%);
+  border:0.5px solid var(--contrast-border);
+  color:var(--contrast-2);
+  font-size:var(--text-micro);
+  font-weight:var(--weight-medium);
+  letter-spacing:var(--tracking-label);
+  pointer-events:none;
+  opacity:0;
+  transition:opacity var(--motion-normal) var(--motion-ease),
+             transform var(--motion-normal) var(--motion-ease);
+  white-space:nowrap;
+}
+.map-fullscreen-hint.visible{opacity:.9;transform:translateX(-50%) translateY(0)}
 .map-recenter svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 #screen-radar .map-recenter{bottom:14px;right:14px}
 .crew-map-full .map-recenter{bottom:12px;right:12px}
@@ -698,17 +770,66 @@ nav button.active::before{opacity:1}
 .sec-label{font-size:11px;font-weight:800;color:var(--o);text-transform:uppercase;letter-spacing:1.5px;padding:16px 16px 10px;display:flex;align-items:center;gap:8px}
 .sec-label::before{content:'';width:4px;height:16px;border-radius:2px;background:var(--o)}
 .hscroll{display:flex;gap:10px;overflow-x:auto;padding:0 14px 14px;scroll-snap-type:x mandatory;scrollbar-width:none}.hscroll::-webkit-scrollbar{display:none}
-.vcard{min-width:220px;scroll-snap-align:start;border-radius:var(--r2);overflow:hidden;cursor:pointer;flex-shrink:0;position:relative;transition:all .2s var(--ease);box-shadow:0 8px 32px rgba(0,0,0,.3),0 0 0 .5px rgba(255,255,255,.06)}.vcard:active{transform:scale(.96)}
+.vcard{
+  min-width:240px;
+  scroll-snap-align:start;
+  border-radius:var(--radius-card);
+  overflow:hidden;
+  cursor:pointer;
+  flex-shrink:0;
+  position:relative;
+  background:var(--base-elevated);
+  border:0.5px solid var(--contrast-border);
+  transition:transform var(--motion-fast) var(--motion-ease),
+             border-color var(--motion-normal) var(--motion-ease);
+}
+.vcard:active{transform:scale(.97);border-color:rgba(255,59,110,.3)}
 .vcard .vc-img{height:150px;position:relative;overflow:hidden}
 .vcard .vc-img img{width:100%;height:100%;object-fit:cover}
-.vc-grad{position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(255,109,46,.2) 70%,rgba(191,90,242,.15) 100%)}
-.vc-live{position:absolute;top:10px;left:10px;background:var(--fire);color:#fff;font-size:9px;font-weight:800;padding:3px 8px;border-radius:6px;display:flex;align-items:center;gap:4px;letter-spacing:.3px}
-.vc-live::before{content:'';width:4px;height:4px;border-radius:50%;background:#fff;animation:blink 1s infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-.vc-crowd{position:absolute;top:10px;right:10px;padding:3px 8px;border-radius:6px;font-size:10px;font-weight:700;color:#fff;background:rgba(0,0,0,.35);backdrop-filter:blur(8px)}
-.vc-info{position:absolute;bottom:10px;left:10px;right:10px}
-.vc-info h3{font-size:14px;font-weight:800;color:#fff}
-.vc-info .vc-meta{font-size:11px;color:rgba(255,255,255,.65);margin-top:2px}
+.vc-grad{
+  position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 40%,rgba(9,9,11,.65) 80%,rgba(9,9,11,.9) 100%);
+}
+.vc-live{
+  position:absolute;top:12px;left:12px;
+  background:var(--status-alert);
+  color:#FFFFFF;
+  font-size:var(--text-micro);
+  font-weight:var(--weight-semibold);
+  padding:3px 10px;
+  border-radius:var(--radius-pill);
+  display:flex;align-items:center;gap:5px;
+  letter-spacing:var(--tracking-label);
+}
+.vc-live::before{content:'';width:5px;height:5px;border-radius:50%;background:#FFFFFF;animation:blink 1.2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+.vc-crowd{
+  position:absolute;top:12px;right:12px;
+  padding:3px 10px;
+  border-radius:var(--radius-pill);
+  font-size:var(--text-micro);
+  font-weight:var(--weight-medium);
+  color:#FFFFFF;
+  background:rgba(0,0,0,.45);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  border:0.5px solid rgba(255,255,255,.1);
+  letter-spacing:var(--tracking-label);
+}
+.vc-info{position:absolute;bottom:12px;left:12px;right:12px}
+.vc-info h3{
+  font-size:var(--text-body-l);
+  font-weight:var(--weight-semibold);
+  color:#FFFFFF;
+  letter-spacing:var(--tracking-heading);
+  line-height:1.25;
+}
+.vc-info .vc-meta{
+  font-size:var(--text-label);
+  color:rgba(255,255,255,.72);
+  margin-top:3px;
+  letter-spacing:var(--tracking-label);
+}
 
 /* MATCH */
 .match-area{padding:68px 0 0;display:flex;flex-direction:column;height:100%}
@@ -3489,42 +3610,56 @@ nav{padding-bottom:max(6px,env(safe-area-inset-bottom)) !important}
 .ps-btn.danger{color:#FF6B6B;border-color:rgba(255,107,107,.2)}
 .ps-btn.danger:hover{background:rgba(255,107,107,.08)}
 
-/* ====== CONTEXT MODE SWITCHER v76 ====== */
+/* ====== CONTEXT MODE SWITCHER (v1.1 Redesign) ====== */
 .ctx-switcher{
-  display:flex;gap:6px;padding:4px;border-radius:16px;
-  background:linear-gradient(160deg,rgba(20,16,24,.78),rgba(14,10,18,.62));
-  border:1px solid rgba(255,255,255,.09);
-  backdrop-filter:blur(18px) saturate(1.2);
-  -webkit-backdrop-filter:blur(18px) saturate(1.2);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 8px 24px -10px rgba(0,0,0,.7);
+  display:flex;gap:4px;padding:4px;
+  border-radius:var(--radius-pill);
+  background:rgba(9,9,11,.72);
+  border:0.5px solid var(--contrast-border);
+  backdrop-filter:blur(24px) saturate(180%);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  box-shadow:0 4px 20px rgba(0,0,0,.3);
 }
-/* Radar: absolut am oberen Rand über der Karte platzieren, damit immer sichtbar */
 #screen-radar .ctx-switcher,#screen-crew .ctx-switcher{
-  position:absolute;top:calc(env(safe-area-inset-top,0) + 8px);left:10px;right:10px;z-index:430;margin:0;
-  animation:ctxFadeIn .5s var(--spring,ease) both;
+  position:absolute;top:calc(env(safe-area-inset-top,0) + 8px);left:12px;right:12px;z-index:430;margin:0;
+  animation:ctxFadeIn .5s var(--motion-spring) both;
 }
-@keyframes ctxFadeIn{0%{opacity:0;transform:translateY(-10px)}100%{opacity:1;transform:translateY(0)}}
+@keyframes ctxFadeIn{0%{opacity:0;transform:translateY(-8px)}100%{opacity:1;transform:translateY(0)}}
 .ctx-chip{
   flex:1;display:flex;align-items:center;justify-content:center;gap:6px;
-  padding:9px 10px;border-radius:12px;
+  padding:10px 12px;
+  border-radius:var(--radius-pill);
   background:transparent;border:none;
-  color:var(--t2,#b8b8c0);font-size:12.5px;font-weight:700;
+  color:var(--contrast-2);
+  font-size:var(--text-label);
+  font-weight:var(--weight-semibold);
+  letter-spacing:var(--tracking-label);
   font-family:inherit;cursor:pointer;
-  transition:background .22s var(--spring,ease),color .22s,transform .15s;
+  transition:background var(--motion-normal) var(--motion-ease),
+             color var(--motion-normal) var(--motion-ease),
+             transform var(--motion-fast) var(--motion-ease);
   position:relative;
 }
-.ctx-chip .ctx-ico{font-size:15px;line-height:1}
-.ctx-chip .ctx-lbl{letter-spacing:.15px}
-.ctx-chip:hover{color:var(--t1,#fff);background:rgba(255,255,255,.03)}
+.ctx-chip .ctx-ico{font-size:14px;line-height:1;opacity:.85}
+.ctx-chip:hover{color:var(--contrast-1)}
 .ctx-chip:active{transform:scale(.97)}
-.ctx-chip.active{
-  color:#fff;
-  background:linear-gradient(135deg,rgba(255,109,46,.35),rgba(254,60,114,.3));
-  box-shadow:0 6px 14px -4px rgba(254,60,114,.35),inset 0 1px 0 rgba(255,255,255,.12);
+/* Urlaubsmodus-Chip: aktives Sunset-Gradient als Background */
+.ctx-chip.active[data-ctx="urlaub"]{
+  color:#FFFFFF;
+  background:var(--mode-vacation-gradient);
+  box-shadow:0 4px 14px rgba(255,106,61,.35);
 }
-.ctx-chip.active[data-ctx="zuhause"]{background:linear-gradient(135deg,rgba(10,132,255,.38),rgba(52,199,89,.28))}
-/* v98: Event-Chip vorerst entfernt, Style bleibt für späteres Re-Enable */
-.ctx-chip.active[data-ctx="event"]{background:linear-gradient(135deg,rgba(191,90,242,.4),rgba(255,109,46,.28))}
+/* Zuhause-Chip: aktives Deep-Violet */
+.ctx-chip.active[data-ctx="zuhause"]{
+  color:#FFFFFF;
+  background:linear-gradient(135deg,#7C3AED 0%,#5B21B6 100%);
+  box-shadow:0 4px 14px rgba(124,58,237,.4);
+}
+/* Fallback für Legacy-aktiv-State (ohne data-ctx-Attribut) */
+.ctx-chip.active{color:#FFFFFF;background:var(--accent)}
+.ctx-chip.active[data-ctx="event"]{
+  background:linear-gradient(135deg,#BF5AF2 0%,var(--accent) 100%);
+}
 @media (max-width:374px){
   .ctx-chip{padding:8px 6px;font-size:11.5px}
   .ctx-chip .ctx-ico{font-size:14px}
@@ -9572,7 +9707,133 @@ function initMap(){
     }, 60000);
   }
   setTimeout(function(){ try{ rMap.invalidateSize(); }catch(e){} }, 250);
+  // Long-Press-Fullscreen-Setup (einmalig)
+  _setupMapLongPress(c.parentElement);
 }
+
+/* ─── Long-Press Karten-Fullscreen (v1.1 feature) ─── */
+function _setupMapLongPress(wrap){
+  if(!wrap || wrap._longPressReady) return;
+  wrap._longPressReady = true;
+
+  var pressTimer = null;
+  var startX = 0, startY = 0;
+  var LONG_PRESS_MS = 500;
+  var MOVE_THRESHOLD = 12;
+
+  function clearPress(){ if(pressTimer){clearTimeout(pressTimer); pressTimer = null;} }
+
+  function onDown(e){
+    if(wrap.classList.contains('is-fullscreen')) return; // Bereits offen
+    var t = (e.touches && e.touches[0]) || e;
+    startX = t.clientX; startY = t.clientY;
+    clearPress();
+    pressTimer = setTimeout(function(){
+      pressTimer = null;
+      window.openMapFullscreen(wrap);
+    }, LONG_PRESS_MS);
+  }
+  function onMove(e){
+    if(!pressTimer) return;
+    var t = (e.touches && e.touches[0]) || e;
+    if(Math.abs(t.clientX - startX) > MOVE_THRESHOLD || Math.abs(t.clientY - startY) > MOVE_THRESHOLD){
+      clearPress();
+    }
+  }
+
+  wrap.addEventListener('touchstart', onDown, {passive:true});
+  wrap.addEventListener('touchmove', onMove, {passive:true});
+  wrap.addEventListener('touchend', clearPress);
+  wrap.addEventListener('touchcancel', clearPress);
+  wrap.addEventListener('mousedown', onDown);
+  wrap.addEventListener('mousemove', onMove);
+  wrap.addEventListener('mouseup', clearPress);
+  wrap.addEventListener('mouseleave', clearPress);
+}
+
+window.openMapFullscreen = function(wrap){
+  wrap = wrap || document.querySelector('#screen-radar .map-full') || document.querySelector('.map-full');
+  if(!wrap || wrap.classList.contains('is-fullscreen')) return;
+  wrap.classList.add('is-fullscreen');
+  wrap._fullscreenOwner = wrap;
+
+  // Close-Button und Hint ins body injecten
+  var btn = document.createElement('button');
+  btn.className = 'map-fullscreen-close';
+  btn.setAttribute('aria-label','Vollbild schließen');
+  btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px"><path d="M18 6L6 18M6 6l12 12"/></svg>';
+  btn.onclick = window.closeMapFullscreen;
+  document.body.appendChild(btn);
+
+  var hint = document.createElement('div');
+  hint.className = 'map-fullscreen-hint';
+  hint.textContent = 'Tippe ✕ oder drücke lang zum Verkleinern';
+  document.body.appendChild(hint);
+
+  // Einblenden mit Delay für smooth Transition
+  requestAnimationFrame(function(){
+    btn.classList.add('visible');
+    hint.classList.add('visible');
+  });
+  // Hint nach 2.5s ausblenden
+  setTimeout(function(){ if(hint) hint.classList.remove('visible'); }, 2500);
+
+  // Leaflet neu rendern
+  setTimeout(function(){
+    try{ if(window.rMap) rMap.invalidateSize(); }catch(e){}
+    try{ if(window.cMap) cMap.invalidateSize(); }catch(e){}
+  }, 320);
+
+  // Haptik-Feedback
+  if(navigator.vibrate){ try{ navigator.vibrate(15); }catch(e){} }
+
+  // Long-Press auch in Fullscreen zum Schließen
+  if(!wrap._closeLongPressReady){
+    wrap._closeLongPressReady = true;
+    var closePressTimer = null;
+    var cx=0, cy=0;
+    function closeDown(e){
+      if(!wrap.classList.contains('is-fullscreen')) return;
+      var t = (e.touches && e.touches[0]) || e;
+      cx=t.clientX; cy=t.clientY;
+      if(closePressTimer) clearTimeout(closePressTimer);
+      closePressTimer = setTimeout(function(){window.closeMapFullscreen();}, 500);
+    }
+    function closeMove(e){
+      if(!closePressTimer) return;
+      var t = (e.touches && e.touches[0]) || e;
+      if(Math.abs(t.clientX-cx)>12 || Math.abs(t.clientY-cy)>12){
+        clearTimeout(closePressTimer); closePressTimer=null;
+      }
+    }
+    function closeUp(){ if(closePressTimer){clearTimeout(closePressTimer); closePressTimer=null;} }
+    wrap.addEventListener('touchstart', closeDown, {passive:true});
+    wrap.addEventListener('touchmove', closeMove, {passive:true});
+    wrap.addEventListener('touchend', closeUp);
+    wrap.addEventListener('touchcancel', closeUp);
+  }
+};
+
+window.closeMapFullscreen = function(){
+  var wrap = document.querySelector('.map-full.is-fullscreen');
+  if(!wrap) return;
+  wrap.classList.remove('is-fullscreen');
+
+  var btn = document.querySelector('.map-fullscreen-close');
+  var hint = document.querySelector('.map-fullscreen-hint');
+  if(btn){
+    btn.classList.remove('visible');
+    setTimeout(function(){ if(btn.parentElement) btn.remove(); }, 300);
+  }
+  if(hint){
+    hint.classList.remove('visible');
+    setTimeout(function(){ if(hint.parentElement) hint.remove(); }, 300);
+  }
+  setTimeout(function(){
+    try{ if(window.rMap) rMap.invalidateSize(); }catch(e){}
+    try{ if(window.cMap) cMap.invalidateSize(); }catch(e){}
+  }, 320);
+};
 
 function initCMap(){
   var c=document.getElementById('crewMap');if(!c||cMap)return;
@@ -9607,6 +9868,8 @@ function initCMap(){
     }, 60000);
   }
   setTimeout(function(){ try{ cMap.invalidateSize(); }catch(e){} }, 250);
+  // Long-Press-Fullscreen auch auf Crew-Karte aktivieren
+  _setupMapLongPress(c.parentElement);
 }
 
 window.openVenue = function(id){
