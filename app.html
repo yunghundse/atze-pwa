@@ -2059,11 +2059,11 @@ nav .crew-center-btn .ni{width:48px;height:48px;border-radius:50%;background:var
   --o:#FF5864;                /* primary accent (coral red) */
   --o2:#FE3C72;               /* hot pink */
   --o3:#D97757;               /* claude warm */
-  --flame:linear-gradient(135deg,#FE3C72 0%,#FF5864 45%,#FF7854 100%);
-  --flame-soft:linear-gradient(135deg,rgba(254,60,114,.85),rgba(255,88,100,.7));
-  --gold:linear-gradient(135deg,#FF5864 0%,#FF7854 50%,#FFB36B 100%);
-  --sunset:linear-gradient(135deg,#FE3C72 0%,#FF4E88 35%,#FF7854 70%,#FFB36B 100%);
-  --magic:linear-gradient(135deg,#BF5AF2 0%,#FE3C72 50%,#FF7854 100%);
+  --flame:linear-gradient(135deg,#FF3B6E 0%,#FF5783 45%,#FF6A3D 100%);
+  --flame-soft:linear-gradient(135deg,rgba(255,59,110,.85),rgba(255,106,61,.6));
+  --gold:linear-gradient(135deg,#FF3B6E 0%,#FF6A3D 50%,#FFB545 100%);
+  --sunset:linear-gradient(135deg,#FF3B6E 0%,#FF5783 35%,#FF6A3D 70%,#FFB545 100%);
+  --magic:linear-gradient(135deg,#BF5AF2 0%,#FF3B6E 50%,#FF6A3D 100%);
   --claude-grad:linear-gradient(135deg,#D97757 0%,#E8A87C 100%);
   --aurora:linear-gradient(135deg,#FE3C72 0%,#BF5AF2 40%,#0A84FF 80%,#00C7BE 100%);
 
@@ -6584,17 +6584,17 @@ nav button.active .ni{animation:vNineCountPop .38s var(--ease-spring-soft) 1}
         </div>
         <div id="gpsStatusBanner" style="margin:0 14px 8px;padding:8px 14px;border-radius:12px;font-size:12px;font-weight:700;display:none;align-items:center;gap:8px"></div>
         <div class="quick-stats anim stagger" id="quickStats" style="margin:0 14px 8px;display:flex;gap:8px">
-          <div onclick="go('match',document.querySelectorAll('#navBar button')[3])" style="flex:1;padding:10px;border-radius:12px;background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--glass-border);text-align:center;cursor:pointer">
-            <div style="font-size:18px;font-weight:900;color:#FF6B6B" id="qsMatches">0</div>
-            <div style="font-size:9px;font-weight:700;color:var(--t3);text-transform:uppercase">Connects</div>
+          <div onclick="go('match',document.querySelectorAll('#navBar button')[3])" style="flex:1;padding:12px 10px;border-radius:var(--radius-card);background:var(--base-elevated);border:0.5px solid var(--contrast-border);text-align:center;cursor:pointer;transition:border-color var(--motion-normal) var(--motion-ease)" onmouseover="this.style.borderColor='rgba(255,59,110,.3)'" onmouseout="this.style.borderColor='var(--contrast-border)'">
+            <div style="font-size:var(--text-heading);font-weight:var(--weight-display);color:var(--accent);line-height:1" id="qsMatches">0</div>
+            <div style="font-size:var(--text-micro);font-weight:var(--weight-medium);color:var(--contrast-3);text-transform:uppercase;letter-spacing:var(--tracking-micro);margin-top:4px">Connects</div>
           </div>
-          <div onclick="go('crew',document.querySelectorAll('#navBar button')[2])" style="flex:1;padding:10px;border-radius:12px;background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--glass-border);text-align:center;cursor:pointer">
-            <div style="font-size:18px;font-weight:900;color:var(--green)" id="qsCrew">0</div>
-            <div style="font-size:9px;font-weight:700;color:var(--t3);text-transform:uppercase">Crew</div>
+          <div onclick="go('crew',document.querySelectorAll('#navBar button')[2])" style="flex:1;padding:12px 10px;border-radius:var(--radius-card);background:var(--base-elevated);border:0.5px solid var(--contrast-border);text-align:center;cursor:pointer">
+            <div style="font-size:var(--text-heading);font-weight:var(--weight-display);color:var(--status-safe);line-height:1" id="qsCrew">0</div>
+            <div style="font-size:var(--text-micro);font-weight:var(--weight-medium);color:var(--contrast-3);text-transform:uppercase;letter-spacing:var(--tracking-micro);margin-top:4px">Crew</div>
           </div>
-          <div onclick="go('profile',document.querySelectorAll('#navBar button')[4])" style="flex:1;padding:10px;border-radius:12px;background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--glass-border);text-align:center;cursor:pointer">
-            <div style="font-size:18px;font-weight:900;color:var(--o)" id="qsAura">0</div>
-            <div style="font-size:9px;font-weight:700;color:var(--t3);text-transform:uppercase">✨ Aura</div>
+          <div onclick="go('profile',document.querySelectorAll('#navBar button')[4])" style="flex:1;padding:12px 10px;border-radius:var(--radius-card);background:var(--base-elevated);border:0.5px solid var(--contrast-border);text-align:center;cursor:pointer">
+            <div style="font-size:var(--text-heading);font-weight:var(--weight-display);color:var(--accent);line-height:1" id="qsAura">0</div>
+            <div style="font-size:var(--text-micro);font-weight:var(--weight-medium);color:var(--contrast-3);text-transform:uppercase;letter-spacing:var(--tracking-micro);margin-top:4px">Aura</div>
           </div>
         </div>
         <div class="mood-bar glass anim"><div class="mb-label">Vibe</div><div class="mood-emojis" id="moodBar"></div></div>
@@ -6620,13 +6620,13 @@ nav button.active .ni{animation:vNineCountPop .38s var(--ease-spring-soft) 1}
         <div id="nearbyCrewList" style="display:none"></div>
         <div id="countdownCard" style="display:none"></div>
 
-        <!-- v95: Neue Leute entdecken — hier auf Radar, nicht mehr im Crew-Menü -->
+        <!-- v95: Neue Leute entdecken — Radar-CTA (v1.1 Redesign) -->
         <div class="anim d1" style="padding:0 14px 14px">
-          <div style="padding:16px;border-radius:16px;background:linear-gradient(135deg,rgba(255,109,46,.10),rgba(201,58,122,.08));border:1px solid rgba(255,109,46,.22);text-align:center">
-            <div style="font-size:28px;margin-bottom:6px">🔥</div>
-            <div style="font-size:15px;font-weight:900;letter-spacing:-.3px">Neue Leute entdecken</div>
-            <div style="font-size:12px;color:var(--t3);margin:4px 0 12px;line-height:1.5">Entdecke Reisende in deiner Nähe — connecte dich direkt über Instagram, Snapchat oder TikTok.</div>
-            <button onclick="go('match',document.querySelectorAll('#navBar button')[3])" style="padding:14px 28px;border:none;border-radius:14px;background:var(--gold);color:#000;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;min-height:48px">🔥 Entdecken</button>
+          <div style="padding:20px 16px;border-radius:var(--radius-card);background:var(--base-elevated);border:0.5px solid var(--contrast-border);text-align:center">
+            <div style="display:flex;align-items:center;justify-content:center;width:48px;height:48px;margin:0 auto 12px;border-radius:50%;background:rgba(255,59,110,.12);color:var(--accent)"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px"><circle cx="128" cy="128" r="96"/><polygon points="176 80 112 112 80 176 144 144 176 80"/></svg></div>
+            <div style="font-size:var(--text-body-l);font-weight:var(--weight-semibold);letter-spacing:var(--tracking-heading);color:var(--contrast-1)">Neue Leute entdecken</div>
+            <div style="font-size:var(--text-label);color:var(--contrast-2);margin:4px 0 14px;line-height:var(--lh-body)">Entdecke Reisende in deiner Nähe — connecte dich direkt über Instagram, Snapchat oder TikTok.</div>
+            <button onclick="go('match',document.querySelectorAll('#navBar button')[3])" class="btn btn-primary btn-md" style="min-width:160px">Entdecken</button>
           </div>
         </div>
       </div>
@@ -9155,7 +9155,7 @@ function buildDeals(filter){
       var dealUrl=buildDealUrl(a,profile);
       html+='<div class="deal-card" onclick="openDeal(\''+esc(a.partner)+'\',\''+esc(a.cat)+'\',\''+esc(a.net)+'\',\''+encodeURIComponent(dealUrl)+'\')">';
       if(a.badge){
-        var badgeText=a.badge==='hot'?'🔥 Hot Deal':a.badge==='top'?'⭐ Top':'⚡ Last Minute';
+        var badgeText=a.badge==='hot'?'Hot Deal':a.badge==='top'?'Top Pick':'Last Minute';
         html+='<div class="deal-badge '+a.badge+'">'+badgeText+'</div>';
       }
       html+='<div class="deal-card-top"><div class="deal-icon">'+a.icon+'</div><div><h4>'+esc(a.partner)+'</h4><div class="deal-net">'+esc(a.net)+(profile.airport?' · ab '+AIRPORT_NAMES[profile.airport]:'')+'</div></div></div>';
@@ -9369,7 +9369,7 @@ function buildVenues(){
     return '<div class="vcard" onclick="openVenue(\''+v.id+'\')">' +
       '<div class="vc-img"><img src="'+(v.image_url||'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&q=60')+'" loading="lazy"><div class="vc-grad"></div>' +
       (v.is_live?'<div class="vc-live">LIVE</div>':'') +
-      '<div class="vc-crowd" style="background:'+heatColors[heat]+'">🔥 '+liveCount+'</div>' +
+      '<div class="vc-crowd" style="background:'+heatColors[heat]+'"><span style="width:6px;height:6px;border-radius:50%;background:#fff;display:inline-block;animation:blink 1.5s infinite"></span> '+liveCount+'</div>' +
       '</div><div class="vc-info"><h3>'+esc(v.name)+'</h3>' +
       '<div class="vc-meta">'+(v.rating?'★'+v.rating+' · ':'')+esc(v.description||'')+'</div></div></div>';
   }).join('');
