@@ -1383,47 +1383,176 @@ nav button.active::before{opacity:1}
 /* DEALS */
 .deals-wrap{padding:68px 0 90px}
 /* Deal Profile Bar */
-.deal-profile{margin:0 14px 10px;padding:14px 16px;border-radius:var(--r);background:var(--glass);backdrop-filter:blur(40px);border:1px solid var(--glass-border);box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
-.deal-profile-row{display:flex;gap:8px;align-items:center}
-.deal-profile-row select{flex:1;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);color:#fff;font-family:inherit;font-size:13px;font-weight:600;appearance:none;-webkit-appearance:none;outline:none;transition:border-color .2s}
-.deal-profile-row select:focus{border-color:var(--o)}
-.deal-profile-row select option{background:#1a1a1a;color:#fff}
+.deal-profile{
+  margin:0 var(--space-4) var(--space-3);
+  padding:var(--space-4);
+  border-radius:var(--radius-card);
+  background:var(--base-elevated);
+  border:0.5px solid var(--contrast-border);
+}
+.deal-profile-row{display:flex;gap:var(--space-2);align-items:center}
+.deal-profile-row select{
+  flex:1;
+  padding:10px 14px;
+  border-radius:var(--radius-button);
+  background:var(--bg3);
+  border:0.5px solid var(--contrast-border);
+  color:var(--contrast-1);
+  font-family:inherit;
+  font-size:var(--text-label);
+  font-weight:var(--weight-medium);
+  letter-spacing:var(--tracking-label);
+  appearance:none;-webkit-appearance:none;
+  outline:none;
+  transition:border-color var(--motion-fast) var(--motion-ease);
+}
+.deal-profile-row select:focus{border-color:var(--accent)}
+.deal-profile-row select option{background:var(--base-elevated);color:var(--contrast-1)}
 .dp-label{font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px}
 .dp-airport-display{display:flex;align-items:center;gap:6px;margin-top:8px;font-size:12px;color:var(--o);font-weight:700}
 .dp-airport-display .dp-change{font-size:11px;color:var(--t3);font-weight:500;cursor:pointer;text-decoration:underline;margin-left:auto}
 /* Deal Tabs */
-.deals-tabs{display:flex;gap:6px;padding:8px 14px;overflow-x:auto;scrollbar-width:none}.deals-tabs::-webkit-scrollbar{display:none}
+.deals-tabs{display:flex;gap:var(--space-2);padding:var(--space-2) var(--space-4);overflow-x:auto;scrollbar-width:none}
+.deals-tabs::-webkit-scrollbar{display:none}
 .dtab{padding:10px 18px;border-radius:24px;background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--glass-border);color:var(--t2);font-size:12px;font-weight:800;white-space:nowrap;cursor:pointer;flex-shrink:0;transition:all .2s var(--ease);letter-spacing:.2px;box-shadow:inset 0 1px 0 rgba(255,255,255,.04)}.dtab:active{transform:scale(.95)}.dtab.active{background:var(--gold);color:#fff;border-color:transparent;box-shadow:0 4px 16px rgba(255,109,46,.25),0 0 20px rgba(255,109,46,.2)}
 /* Deal Cards */
-.deal-phase{padding:10px 14px 0}
-.deal-phase-label{font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;display:flex;align-items:center;gap:6px}
-.deal-phase-label .dpl-dot{width:6px;height:6px;border-radius:50%;background:var(--o)}
-.deal-card{background:linear-gradient(135deg,rgba(22,22,24,.7),rgba(28,28,32,.5));backdrop-filter:blur(50px) saturate(180%);-webkit-backdrop-filter:blur(50px) saturate(180%);border:1px solid rgba(255,255,255,.1);border-radius:var(--r);padding:16px;margin-bottom:10px;cursor:pointer;transition:all .2s var(--ease);position:relative;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,.1),inset 0 -1px 0 rgba(0,0,0,.06),0 4px 20px rgba(0,0,0,.25)}
-.deal-card:active{transform:scale(.98);background:rgba(255,255,255,.08)}
-.deal-card:hover{border-color:rgba(255,214,10,.3);box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 0 20px rgba(255,214,10,.2)}
-.deal-card-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-.deal-icon{width:42px;height:42px;border-radius:10px;background:rgba(255,109,46,.08);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
-.deal-card-top h4{font-size:14px;font-weight:800;line-height:1.2}.deal-card-top .deal-net{font-size:10px;color:var(--t3);margin-top:1px}
-.deal-card .deal-price{font-size:18px;font-weight:900;color:var(--o);margin-bottom:2px}
-.deal-card .deal-price .deal-price-sub{font-size:11px;font-weight:500;color:var(--t3)}
-.deal-card p{font-size:12px;color:var(--t2);line-height:1.5;margin-bottom:10px}
-.deal-cta{display:inline-flex;align-items:center;gap:5px;padding:10px 20px;border-radius:12px;background:var(--gold);color:#fff;font-size:12px;font-weight:800;border:none;cursor:pointer;transition:all .2s var(--ease);letter-spacing:.3px;box-shadow:0 4px 12px rgba(255,109,46,.2),0 0 20px rgba(255,109,46,.15)}
-.deal-cta:active{transform:scale(.93);box-shadow:0 4px 12px rgba(255,109,46,.2),0 0 30px rgba(255,109,46,.25)}
-.deal-tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px}
-.deal-tag{padding:3px 8px;border-radius:6px;font-size:10px;font-weight:600;background:rgba(255,255,255,.04);color:var(--t3)}
-.deal-tag.hot{background:rgba(255,59,48,.1);color:var(--fire)}
-.deal-tag.save{background:rgba(52,199,89,.08);color:var(--green)}
-.deal-tag.com{background:rgba(255,109,46,.08);color:var(--o)}
-.deal-badge{position:absolute;top:0;right:0;padding:5px 12px;border-radius:0 0 0 12px;font-size:10px;font-weight:800;letter-spacing:.3px}
-.deal-badge.hot{background:var(--fire);color:#fff}
-.deal-badge.last{background:var(--purple);color:#fff}
-.deal-badge.top{background:var(--green);color:#fff}
+.deal-phase{padding:var(--space-3) var(--space-4) 0}
+.deal-phase-label{
+  font-size:var(--text-micro);
+  font-weight:var(--weight-medium);
+  color:var(--contrast-3);
+  text-transform:uppercase;
+  letter-spacing:var(--tracking-micro);
+  margin-bottom:var(--space-3);
+  display:flex;align-items:center;gap:6px;
+}
+.deal-phase-label .dpl-dot{width:6px;height:6px;border-radius:50%;background:var(--accent)}
+.deal-card{
+  background:var(--base-elevated);
+  border:0.5px solid var(--contrast-border);
+  border-radius:var(--radius-card);
+  padding:var(--space-4);
+  margin-bottom:var(--space-3);
+  cursor:pointer;
+  transition:border-color var(--motion-normal) var(--motion-ease),
+             transform var(--motion-fast) var(--motion-ease);
+  position:relative;
+  overflow:hidden;
+}
+.deal-card:active{transform:scale(.98);border-color:rgba(255,59,110,.3)}
+.deal-card-top{display:flex;align-items:center;gap:var(--space-3);margin-bottom:var(--space-2)}
+.deal-icon{
+  width:44px;height:44px;
+  border-radius:var(--radius-button);
+  background:rgba(255,59,110,.1);
+  color:var(--accent);
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;
+  flex-shrink:0;
+}
+.deal-card-top h4{
+  font-size:var(--text-body-l);
+  font-weight:var(--weight-semibold);
+  color:var(--contrast-1);
+  letter-spacing:var(--tracking-heading);
+  line-height:1.25;
+}
+.deal-card-top .deal-net{
+  font-size:var(--text-micro);
+  color:var(--contrast-3);
+  margin-top:2px;
+  letter-spacing:var(--tracking-micro);
+}
+.deal-card .deal-price{
+  font-size:var(--text-heading);
+  font-weight:var(--weight-display);
+  color:var(--accent);
+  margin-bottom:2px;
+  letter-spacing:var(--tracking-heading);
+}
+.deal-card .deal-price .deal-price-sub{
+  font-size:var(--text-micro);
+  font-weight:var(--weight-regular);
+  color:var(--contrast-3);
+}
+.deal-card p{
+  font-size:var(--text-label);
+  color:var(--contrast-2);
+  line-height:var(--lh-body);
+  margin-bottom:var(--space-3);
+}
+.deal-cta{
+  display:inline-flex;align-items:center;gap:var(--space-2);
+  padding:10px 20px;
+  border-radius:var(--radius-pill);
+  background:var(--accent);
+  color:#FFFFFF;
+  font-size:var(--text-label);
+  font-weight:var(--weight-semibold);
+  letter-spacing:var(--tracking-label);
+  border:none;
+  cursor:pointer;
+  transition:background var(--motion-fast) var(--motion-ease),
+             transform var(--motion-fast) var(--motion-ease);
+  font-family:inherit;
+}
+.deal-cta:active{background:var(--accent-pressed);transform:scale(.96)}
+.deal-cta:hover{background:var(--accent-hover)}
+.deal-tags{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:var(--space-2)}
+.deal-tag{
+  padding:3px 10px;
+  border-radius:var(--radius-pill);
+  font-size:var(--text-micro);
+  font-weight:var(--weight-medium);
+  background:rgba(255,255,255,.05);
+  border:0.5px solid var(--contrast-border);
+  color:var(--contrast-2);
+  letter-spacing:var(--tracking-label);
+}
+.deal-tag.hot{background:rgba(255,59,48,.1);color:var(--status-alert);border-color:rgba(255,59,48,.3)}
+.deal-tag.save{background:rgba(52,199,89,.08);color:var(--status-safe);border-color:rgba(52,199,89,.3)}
+.deal-tag.com{background:rgba(255,59,110,.08);color:var(--accent);border-color:rgba(255,59,110,.3)}
+.deal-badge{
+  position:absolute;top:12px;right:12px;
+  padding:4px 10px;
+  border-radius:var(--radius-pill);
+  font-size:var(--text-micro);
+  font-weight:var(--weight-semibold);
+  letter-spacing:var(--tracking-label);
+}
+.deal-badge.hot{background:var(--status-alert);color:#FFFFFF}
+.deal-badge.last{background:#BF5AF2;color:#FFFFFF}
+.deal-badge.top{background:var(--status-safe);color:#FFFFFF}
 .deal-season{margin:0 14px 10px;padding:12px 14px;border-radius:14px;background:linear-gradient(135deg,rgba(255,109,46,.06),rgba(255,214,10,.04));border:1px solid rgba(255,214,10,.1);display:flex;align-items:center;gap:10px}
 .deal-season-icon{font-size:24px}
 .deal-season-text{font-size:12px;color:var(--t2);line-height:1.4}
 .deal-season-text strong{color:var(--yellow);font-weight:800}
 .deal-disclosure{margin:16px 14px 0;padding:10px 12px;border-radius:8px;background:rgba(255,255,255,.02);font-size:10px;color:var(--t3);line-height:1.5}
-.deal-empty{text-align:center;padding:40px 20px;color:var(--t3);font-size:13px}
+.deal-empty{
+  text-align:center;
+  padding:var(--space-16) var(--space-6);
+  display:flex;flex-direction:column;align-items:center;
+  gap:var(--space-3);
+}
+.deal-empty-ico{
+  width:64px;height:64px;
+  border-radius:50%;
+  background:rgba(255,59,110,.1);
+  color:var(--accent);
+  display:flex;align-items:center;justify-content:center;
+}
+.deal-empty-title{
+  font-size:var(--text-heading);
+  font-weight:var(--weight-semibold);
+  color:var(--contrast-1);
+  letter-spacing:var(--tracking-heading);
+}
+.deal-empty-sub{
+  font-size:var(--text-label);
+  color:var(--contrast-2);
+  line-height:var(--lh-body);
+  max-width:280px;
+}
 
 /* PROFILE */
 .prof-hero{text-align:center;padding:var(--space-12) var(--space-5) var(--space-4)}
@@ -8632,27 +8761,11 @@ var CHALLENGES = [
   {title:'Malle-Frühstück',icon:'🥐',desc:'Frühstückt gemeinsam vor 9 Uhr (ja, wirklich!)',pts:90}
 ];
 
-var AFFILIATES = [
-  // ====== NUR ECHTE AFFILIATE-LINKS ======
-  // Check24 Pauschalreisen (pid=1170160, cat=9)
-  // Check24 Mietwagen (pid=1170160, cat=10)
-
-  // FLÜGE & PAUSCHALREISEN
-  {cat:'flight',icon:'✈️',partner:'Check24 Pauschalreisen',net:'Check24',desc:'Flug + Hotel nach Mallorca zum besten Preis. Über 300 Veranstalter im Vergleich — Condor, TUI, FTI & mehr.',cta:'Reisen vergleichen',url:'https://a.check24.net/misc/click.php?pid=1170160&aid=18&deep=pauschalreisen-vergleich&cat=9',tags:['Pauschalreise','Flug+Hotel'],badge:'top',price:'ab 299€',priceSub:'p.P. / 1 Woche'},
-  {cat:'flight',icon:'🛫',partner:'Check24 Nur-Flug',net:'Check24',desc:'Nur Flug nach Palma de Mallorca gesucht? Alle Airlines vergleichen — Condor, Eurowings, Ryanair & Co.',cta:'Flüge vergleichen',url:'https://a.check24.net/misc/click.php?pid=1170160&aid=18&deep=pauschalreisen-vergleich&cat=9',tags:['Nur Flug','Alle Airlines'],price:'ab 79€',priceSub:'one-way'},
-  {cat:'flight',icon:'👥',partner:'Check24 Gruppen-Pauschalreise',net:'Check24',desc:'Mit der Crew nach Malle! Gruppenreisen vergleichen — geteilte Apartments, Party-Hotels, All-Inclusive.',cta:'Gruppen-Deal finden',url:'https://a.check24.net/misc/click.php?pid=1170160&aid=18&deep=pauschalreisen-vergleich&cat=9',tags:['Gruppen','Crew-Trip'],badge:'hot',price:'ab 249€',priceSub:'p.P. / 1 Woche'},
-
-  // UNTERKÜNFTE
-  {cat:'hotel',icon:'🏨',partner:'Check24 Hotels Mallorca',net:'Check24',desc:'Hotels in Playa de Palma, El Arenal & Magaluf vergleichen. All-Inclusive, Halbpension oder nur Frühstück.',cta:'Hotels vergleichen',url:'https://a.check24.net/misc/click.php?pid=1170160&aid=18&deep=pauschalreisen-vergleich&cat=9',tags:['Hotel','All-Inclusive'],badge:'top',price:'ab 39€',priceSub:'p.P. / Nacht'},
-  {cat:'hotel',icon:'🎉',partner:'Check24 Party-Hotels',net:'Check24',desc:'Die besten Party-Hotels direkt am Ballermann. Kurze Wege zu Bierkönig, Megapark & Co.',cta:'Party-Hotels finden',url:'https://a.check24.net/misc/click.php?pid=1170160&aid=18&deep=pauschalreisen-vergleich&cat=9',tags:['Party-Hotel','Ballermann'],badge:'hot',price:'ab 49€',priceSub:'p.P. / Nacht'},
-
-  // MIETWAGEN
-  {cat:'car',icon:'🚗',partner:'Check24 Mietwagen',net:'Check24',desc:'Mietwagen auf Mallorca zum besten Preis. Alle Anbieter vergleichen — Sixt, Europcar, Hertz & lokale.',cta:'Mietwagen finden',url:'https://a.check24.net/misc/click.php?pid=1170160&aid=18&deep=mietwagen-preisvergleich&cat=10',tags:['Mietwagen','Preisvergleich'],badge:'top',price:'ab 12€',priceSub:'pro Tag'},
-  {cat:'car',icon:'🏖️',partner:'Check24 Cabrio & SUV',net:'Check24',desc:'Cabrio oder SUV für den Malle-Roadtrip? Küstenstraße, Serra de Tramuntana, versteckte Buchten.',cta:'Cabrio vergleichen',url:'https://a.check24.net/misc/click.php?pid=1170160&aid=18&deep=mietwagen-preisvergleich&cat=10',tags:['Cabrio','Roadtrip'],price:'ab 29€',priceSub:'pro Tag'},
-
-  // ERLEBNISSE — Coming Soon (keine echten Affiliate-Links verfügbar)
-  {cat:'activity',icon:'🚀',partner:'Mehr Deals kommen bald!',net:'crew.',desc:'Wir arbeiten an Erlebnis-Deals: Bootstouren, Jetski, Quad-Touren & mehr. Bald verfügbar!',cta:'Pauschalreise mit Extras',url:'https://a.check24.net/misc/click.php?pid=1170160&aid=18&deep=pauschalreisen-vergleich&cat=9',tags:['Coming Soon','Erlebnisse'],price:'Stay tuned',priceSub:''}
-];
+// AFFILIATES-Array geleert 2026-04-23 (Phase A des Deals-Redesigns).
+// Phase B (Task #29): Deals werden aus Supabase-Tabelle 'deals' gelesen,
+// verwaltet via Admin-Dashboard-CRUD. Bis dahin zeigt die UI den Empty-State.
+// Historie der alten Check24-Einträge siehe Git-Log vor Commit refactor(deals) 2026-04-23.
+var AFFILIATES = [];
 
 var obData = {gender:'',seek:'',status:'',club:'',bio:'',birthdate:''};
 var authMode = 'signup'; // or 'login'
@@ -9542,7 +9655,7 @@ function buildDeals(filter){
   if(!c) return;
   var profile=getDealProfile();
   var items=filter==='all'?AFFILIATES:AFFILIATES.filter(function(a){return a.cat===filter});
-  if(items.length===0){c.innerHTML='<div class="deal-empty">Keine Deals in dieser Kategorie verfügbar.</div>';return}
+  if(items.length===0){c.innerHTML='<div class="deal-empty"><div class="deal-empty-ico"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" style="width:28px;height:28px"><path d="M42.34,138.34A8,8,0,0,1,40,132.69V40h92.69a8,8,0,0,1,5.65,2.34l99.32,99.32a8,8,0,0,1,0,11.31L153,237.66a8,8,0,0,1-11.31,0Z"/><circle cx="84" cy="84" r="12" fill="currentColor" stroke="none"/></svg></div><div class="deal-empty-title">Deals kommen bald</div><div class="deal-empty-sub">Wir bauen gerade an exklusiven Partner-Angeboten. Ab Saisonstart findest du hier deine Deals.</div></div>';return}
   var cats=filter==='all'?['flight','hotel','car','activity']:[filter];
   var html='';
   cats.forEach(function(cat){
