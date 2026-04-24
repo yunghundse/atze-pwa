@@ -6941,6 +6941,115 @@ nav button.active .ni{animation:vNineCountPop .38s var(--ease-spring-soft) 1}
 <!-- REPORT OVERLAY --><div class="bsheet" id="reportSheet"><div class="bsheet-backdrop" onclick="closeReport()"></div><div class="bsheet-body"><div class="bsheet-handle"></div><div style="padding:20px"><h2 style="font-size:20px;font-weight:900;margin-bottom:12px">Nutzer melden</h2><div style="font-size:13px;color:var(--t2);margin-bottom:20px">Warum möchtest du diesen Nutzer melden?</div><div id="reportReasons" style="display:flex;flex-direction:column;gap:8px"></div><button class="rnext" style="margin-top:16px;opacity:.25;cursor:default" id="reportSubmit" disabled onclick="submitReport()">Melden</button><button class="rnext" style="background:var(--bg3);color:var(--t2);margin-top:8px;opacity:1" onclick="closeReport()">Abbrechen</button></div></div></div>
 
 <!-- ADMIN PANEL OVERLAY -->
+<!-- DEALS ADMIN OVERLAY -->
+<div id="dealsAdminOv" style="position:fixed;inset:0;z-index:9999999;background:var(--base);display:none;flex-direction:column;overflow-y:auto;-webkit-overflow-scrolling:touch">
+  <div style="position:sticky;top:0;z-index:2;background:rgba(9,9,11,0.92);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);padding:16px 20px;display:flex;align-items:center;gap:12px;border-bottom:0.5px solid var(--contrast-border)">
+    <button onclick="closeDealsAdmin()" style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.06);border:0.5px solid var(--contrast-border);color:var(--contrast-1);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit">←</button>
+    <h2 style="font-size:var(--text-heading);font-weight:var(--weight-semibold);flex:1;color:var(--contrast-1);letter-spacing:var(--tracking-heading)">Deals verwalten</h2>
+    <button onclick="openDealEditor()" class="btn btn-primary btn-sm" style="gap:6px"><span style="font-size:16px;line-height:1">+</span> Neu</button>
+  </div>
+  <div id="dealsAdminList" style="padding:16px 20px 40px">
+    <div style="text-align:center;padding:40px;color:var(--contrast-3)">Lädt…</div>
+  </div>
+</div>
+
+<!-- DEAL EDITOR MODAL -->
+<div id="dealEditorOv" style="position:fixed;inset:0;z-index:99999999;background:rgba(0,0,0,0.75);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:none;flex-direction:column;align-items:stretch;justify-content:flex-end">
+  <div class="glass-sheet" style="max-height:92vh;padding:20px 18px 28px;border-radius:28px 28px 0 0;overflow-y:auto;-webkit-overflow-scrolling:touch">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+      <h3 id="dealEditorTitle" style="font-size:var(--text-heading);font-weight:var(--weight-semibold);color:var(--contrast-1)">Neuer Deal</h3>
+      <button onclick="closeDealEditor()" style="width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.06);border:none;color:var(--contrast-1);font-size:15px;cursor:pointer;font-family:inherit">✕</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div>
+        <label style="font-size:var(--text-label);font-weight:var(--weight-medium);color:var(--contrast-2);display:block;margin-bottom:4px">Partner-Name *</label>
+        <input type="text" id="dealF_partner" class="ri" placeholder="z.B. Megapark" maxlength="80">
+      </div>
+      <div style="display:flex;gap:10px">
+        <div style="flex:1">
+          <label style="font-size:var(--text-label);font-weight:var(--weight-medium);color:var(--contrast-2);display:block;margin-bottom:4px">Kategorie *</label>
+          <select id="dealF_category" class="ri">
+            <option value="club">Club / Bar</option>
+            <option value="hotel">Hotel</option>
+            <option value="flight">Flug / Reise</option>
+            <option value="car">Mietwagen</option>
+            <option value="activity">Erlebnis</option>
+            <option value="event">Event</option>
+            <option value="food">Essen</option>
+            <option value="transport">Transport</option>
+            <option value="merch">Merch</option>
+            <option value="other">Andere</option>
+          </select>
+        </div>
+        <div style="width:110px">
+          <label style="font-size:var(--text-label);font-weight:var(--weight-medium);color:var(--contrast-2);display:block;margin-bottom:4px">Icon</label>
+          <input type="text" id="dealF_icon" class="ri" placeholder="🎯" maxlength="2" style="text-align:center;font-size:20px">
+        </div>
+      </div>
+      <div>
+        <label style="font-size:var(--text-label);font-weight:var(--weight-medium);color:var(--contrast-2);display:block;margin-bottom:4px">Netzwerk / Quelle</label>
+        <input type="text" id="dealF_network" class="ri" placeholder="z.B. Direktpartner oder Check24" maxlength="60">
+      </div>
+      <div>
+        <label style="font-size:var(--text-label);font-weight:var(--weight-medium);color:var(--contrast-2);display:block;margin-bottom:4px">Beschreibung</label>
+        <textarea id="dealF_description" class="ri" placeholder="Was ist das Angebot?" maxlength="300" style="min-height:70px;resize:vertical"></textarea>
+      </div>
+      <div style="display:flex;gap:10px">
+        <div style="flex:2">
+          <label style="font-size:var(--text-label);font-weight:var(--weight-medium);color:var(--contrast-2);display:block;margin-bottom:4px">CTA-Button-Text</label>
+          <input type="text" id="dealF_cta" class="ri" placeholder="z.B. Jetzt buchen" maxlength="40">
+        </div>
+        <div style="flex:1">
+          <label style="font-size:var(--text-label);font-weight:var(--weight-medium);color:var(--contrast-2);display:block;margin-bottom:4px">Badge</label>
+          <select id="dealF_badge" class="ri">
+            <option value="">—</option>
+            <option value="hot">Hot</option>
+            <option value="top">Top</option>
+            <option value="last">Last Minute</option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <label style="font-size:var(--text-label);font-weight:var(--weight-medium);color:var(--contrast-2);display:block;margin-bottom:4px">Link / URL *</label>
+        <input type="url" id="dealF_url" class="ri" placeholder="https://…" maxlength="500">
+      </div>
+      <div style="display:flex;gap:10px">
+        <div style="flex:1">
+          <label style="font-size:var(--text-label);font-weight:var(--weight-medium);color:var(--contrast-2);display:block;margin-bottom:4px">Preis</label>
+          <input type="text" id="dealF_price" class="ri" placeholder="z.B. ab 49€" maxlength="30">
+        </div>
+        <div style="flex:1">
+          <label style="font-size:var(--text-label);font-weight:var(--weight-medium);color:var(--contrast-2);display:block;margin-bottom:4px">Preis-Zusatz</label>
+          <input type="text" id="dealF_price_sub" class="ri" placeholder="z.B. p.P. / Nacht" maxlength="30">
+        </div>
+      </div>
+      <div>
+        <label style="font-size:var(--text-label);font-weight:var(--weight-medium);color:var(--contrast-2);display:block;margin-bottom:4px">Tags (komma-getrennt)</label>
+        <input type="text" id="dealF_tags" class="ri" placeholder="z.B. Party, Ballermann, Crew" maxlength="120">
+      </div>
+      <div>
+        <label style="font-size:var(--text-label);font-weight:var(--weight-medium);color:var(--contrast-2);display:block;margin-bottom:4px">Bild-URL (optional)</label>
+        <input type="url" id="dealF_image_url" class="ri" placeholder="https://…" maxlength="500">
+      </div>
+      <div style="display:flex;gap:10px">
+        <div style="flex:1">
+          <label style="font-size:var(--text-label);font-weight:var(--weight-medium);color:var(--contrast-2);display:block;margin-bottom:4px">Reihenfolge (kleiner = weiter oben)</label>
+          <input type="number" id="dealF_display_order" class="ri" placeholder="100" value="100">
+        </div>
+        <div style="flex:1;display:flex;align-items:flex-end">
+          <label style="display:flex;align-items:center;gap:8px;color:var(--contrast-1);font-size:var(--text-label);cursor:pointer"><input type="checkbox" id="dealF_is_active" checked style="width:18px;height:18px;accent-color:var(--accent)"> Aktiv (sichtbar)</label>
+        </div>
+      </div>
+      <div id="dealEditorError" style="color:var(--status-alert);font-size:var(--text-label);padding:8px 12px;border-radius:10px;background:rgba(255,59,48,.08);display:none"></div>
+      <div style="display:flex;gap:10px;margin-top:6px">
+        <button onclick="closeDealEditor()" class="btn btn-secondary btn-md" style="flex:1">Abbrechen</button>
+        <button id="dealEditorDelete" onclick="deleteDealFromEditor()" class="btn btn-destructive btn-md" style="display:none">Löschen</button>
+        <button onclick="saveDealForm()" class="btn btn-primary btn-md" style="flex:1">Speichern</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div id="adminPanel" style="position:fixed;inset:0;z-index:999999;background:var(--bg);background-image:radial-gradient(ellipse at 50% 0%,rgba(255,109,46,.08),transparent 50%);display:none;flex-direction:column;overflow-y:auto;-webkit-overflow-scrolling:touch">
   <div style="position:sticky;top:0;z-index:2;background:rgba(5,5,7,.8);backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);padding:16px 20px 14px;display:flex;align-items:center;gap:12px;border-bottom:.5px solid rgba(255,255,255,.06)">
     <button onclick="closeAdmin()" style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.06);border:none;color:var(--t);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center">←</button>
@@ -8761,11 +8870,230 @@ var CHALLENGES = [
   {title:'Malle-Frühstück',icon:'🥐',desc:'Frühstückt gemeinsam vor 9 Uhr (ja, wirklich!)',pts:90}
 ];
 
-// AFFILIATES-Array geleert 2026-04-23 (Phase A des Deals-Redesigns).
-// Phase B (Task #29): Deals werden aus Supabase-Tabelle 'deals' gelesen,
-// verwaltet via Admin-Dashboard-CRUD. Bis dahin zeigt die UI den Empty-State.
-// Historie der alten Check24-Einträge siehe Git-Log vor Commit refactor(deals) 2026-04-23.
+// AFFILIATES werden dynamisch aus Supabase-Tabelle 'deals' geladen (v111).
+// Verwaltung via Admin-Dashboard (nur für profiles.is_admin = true Nutzer).
 var AFFILIATES = [];
+
+// Deals aus Supabase laden und in AFFILIATES-Format mappen
+async function loadDealsFromSupabase(){
+  try {
+    var {data, error} = await sb.from('deals')
+      .select('*')
+      .eq('is_active', true)
+      .order('display_order', {ascending: true})
+      .order('created_at', {ascending: false});
+    if(error) { console.warn('loadDealsFromSupabase:', error.message); return; }
+    if(!Array.isArray(data)) return;
+    AFFILIATES = data.map(function(d){
+      return {
+        _id: d.id,
+        cat: d.category,
+        icon: d.icon || '🎯',
+        partner: d.partner || '',
+        net: d.network || '',
+        desc: d.description || '',
+        cta: d.cta_text || 'Details',
+        url: d.url || '#',
+        tags: Array.isArray(d.tags) ? d.tags : [],
+        badge: d.badge || null,
+        price: d.price || '',
+        priceSub: d.price_sub || '',
+        image_url: d.image_url || ''
+      };
+    });
+  } catch(e) {
+    console.warn('loadDealsFromSupabase failed:', e && e.message);
+  }
+}
+
+// Admin-helper: Alle Deals inkl. inaktive laden (für Admin-UI)
+async function loadAllDealsForAdmin(){
+  try {
+    var {data, error} = await sb.from('deals')
+      .select('*')
+      .order('display_order', {ascending: true})
+      .order('created_at', {ascending: false});
+    if(error) { console.warn('loadAllDealsForAdmin:', error.message); return []; }
+    return Array.isArray(data) ? data : [];
+  } catch(e) { return []; }
+}
+
+// ═══ DEALS ADMIN UI (CRUD für Admin-User) ═══
+var _currentDealEditId = null;
+var CAT_LABELS_ADMIN = {
+  club:'🎉 Club/Bar', hotel:'🏨 Hotel', flight:'✈️ Flug', car:'🚗 Mietwagen',
+  activity:'🏄 Erlebnis', event:'🎟️ Event', food:'🥘 Essen',
+  transport:'🚕 Transport', merch:'👕 Merch', other:'🎯 Andere'
+};
+
+window.openDealsAdmin = async function(){
+  if(!ME || !ME.is_admin){ if(typeof toast==='function') toast('Kein Admin-Zugriff'); return; }
+  document.getElementById('dealsAdminOv').style.display = 'flex';
+  await refreshDealsAdminList();
+};
+
+window.closeDealsAdmin = function(){
+  document.getElementById('dealsAdminOv').style.display = 'none';
+  // Nach Schließen: live-Liste auf Deals-Screen refreshen
+  loadDealsFromSupabase().then(function(){
+    if(typeof buildDeals === 'function'){
+      var active = document.querySelector('.dtab.active');
+      buildDeals(active ? active.dataset.cat || 'all' : 'all');
+    }
+  });
+};
+
+async function refreshDealsAdminList(){
+  var el = document.getElementById('dealsAdminList');
+  if(!el) return;
+  el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--contrast-3)">Lädt…</div>';
+  var deals = await loadAllDealsForAdmin();
+  if(!deals.length){
+    el.innerHTML = '<div style="text-align:center;padding:60px 24px;color:var(--contrast-2)"><div style="font-size:var(--text-body-l);font-weight:var(--weight-semibold);color:var(--contrast-1);margin-bottom:6px">Noch keine Deals</div><div style="font-size:var(--text-label);line-height:var(--lh-body);max-width:280px;margin:0 auto">Klick oben auf "Neu" um deinen ersten Partner-Deal zu erstellen.</div></div>';
+    return;
+  }
+  var html = '';
+  deals.forEach(function(d){
+    var catLabel = CAT_LABELS_ADMIN[d.category] || d.category;
+    var badgeStr = d.badge ? '<span style="padding:3px 8px;border-radius:var(--radius-pill);background:'+(d.badge==='hot'?'rgba(255,59,48,.15);color:var(--status-alert)':d.badge==='top'?'rgba(52,199,89,.15);color:var(--status-safe)':'rgba(191,90,242,.15);color:#BF5AF2')+';font-size:var(--text-micro);font-weight:var(--weight-semibold);letter-spacing:var(--tracking-label)">'+(d.badge==='hot'?'HOT':d.badge==='top'?'TOP':'LAST')+'</span>' : '';
+    var inactiveStr = !d.is_active ? '<span style="padding:3px 8px;border-radius:var(--radius-pill);background:rgba(255,255,255,.06);color:var(--contrast-3);font-size:var(--text-micro);font-weight:var(--weight-medium);margin-left:6px">Inaktiv</span>' : '';
+    html += '<div style="background:var(--base-elevated);border:0.5px solid var(--contrast-border);border-radius:var(--radius-card);padding:var(--space-4);margin-bottom:10px;cursor:pointer"'+(d.is_active?'':' class="deals-admin-inactive"')+' onclick="openDealEditor(\''+d.id+'\')">';
+    html += '<div style="display:flex;align-items:center;gap:var(--space-3);margin-bottom:8px">';
+    html += '<div style="font-size:24px;flex-shrink:0">'+(d.icon||'🎯')+'</div>';
+    html += '<div style="flex:1;min-width:0">';
+    html += '<div style="font-size:var(--text-body);font-weight:var(--weight-semibold);color:var(--contrast-1);line-height:1.25;letter-spacing:var(--tracking-heading)">'+esc(d.partner||'(ohne Name)')+'</div>';
+    html += '<div style="font-size:var(--text-micro);color:var(--contrast-3);margin-top:2px;letter-spacing:var(--tracking-micro)">'+catLabel+(d.network?' · '+esc(d.network):'')+'</div>';
+    html += '</div>';
+    html += '<div style="display:flex;align-items:center;gap:6px;flex-shrink:0">'+badgeStr+inactiveStr+'</div>';
+    html += '</div>';
+    if(d.description){
+      html += '<div style="font-size:var(--text-label);color:var(--contrast-2);line-height:var(--lh-body);margin-bottom:8px">'+esc(d.description.length>110?d.description.substring(0,110)+'…':d.description)+'</div>';
+    }
+    html += '<div style="display:flex;align-items:center;justify-content:space-between;font-size:var(--text-micro);color:var(--contrast-3)">';
+    html += '<span>Reihenfolge: '+d.display_order+'</span>';
+    html += '<span>'+(d.price||'—')+'</span>';
+    html += '</div>';
+    html += '</div>';
+  });
+  el.innerHTML = html;
+}
+
+window.openDealEditor = function(dealId){
+  _currentDealEditId = dealId || null;
+  var ov = document.getElementById('dealEditorOv');
+  var titleEl = document.getElementById('dealEditorTitle');
+  var deleteBtn = document.getElementById('dealEditorDelete');
+  var errEl = document.getElementById('dealEditorError');
+  if(errEl){ errEl.style.display='none'; errEl.textContent=''; }
+
+  if(dealId){
+    titleEl.textContent = 'Deal bearbeiten';
+    deleteBtn.style.display = 'inline-flex';
+    // Werte laden
+    sb.from('deals').select('*').eq('id', dealId).maybeSingle().then(function(r){
+      if(!r || !r.data) return;
+      var d = r.data;
+      document.getElementById('dealF_partner').value = d.partner || '';
+      document.getElementById('dealF_category').value = d.category || 'club';
+      document.getElementById('dealF_icon').value = d.icon || '';
+      document.getElementById('dealF_network').value = d.network || '';
+      document.getElementById('dealF_description').value = d.description || '';
+      document.getElementById('dealF_cta').value = d.cta_text || '';
+      document.getElementById('dealF_badge').value = d.badge || '';
+      document.getElementById('dealF_url').value = d.url || '';
+      document.getElementById('dealF_price').value = d.price || '';
+      document.getElementById('dealF_price_sub').value = d.price_sub || '';
+      document.getElementById('dealF_tags').value = (d.tags||[]).join(', ');
+      document.getElementById('dealF_image_url').value = d.image_url || '';
+      document.getElementById('dealF_display_order').value = (d.display_order == null ? 100 : d.display_order);
+      document.getElementById('dealF_is_active').checked = !!d.is_active;
+    });
+  } else {
+    titleEl.textContent = 'Neuer Deal';
+    deleteBtn.style.display = 'none';
+    // Reset
+    ['partner','icon','network','description','cta','url','price','price_sub','tags','image_url'].forEach(function(f){
+      var el = document.getElementById('dealF_'+f);
+      if(el) el.value = '';
+    });
+    document.getElementById('dealF_category').value = 'club';
+    document.getElementById('dealF_badge').value = '';
+    document.getElementById('dealF_display_order').value = 100;
+    document.getElementById('dealF_is_active').checked = true;
+  }
+  ov.style.display = 'flex';
+};
+
+window.closeDealEditor = function(){
+  document.getElementById('dealEditorOv').style.display = 'none';
+  _currentDealEditId = null;
+};
+
+function _dealErr(msg){
+  var errEl = document.getElementById('dealEditorError');
+  if(errEl){ errEl.textContent = msg; errEl.style.display = 'block'; }
+}
+
+window.saveDealForm = async function(){
+  var partner = document.getElementById('dealF_partner').value.trim();
+  var url = document.getElementById('dealF_url').value.trim();
+  if(!partner){ _dealErr('Partner-Name ist Pflicht.'); return; }
+  if(!url){ _dealErr('Link ist Pflicht.'); return; }
+
+  var tagsRaw = document.getElementById('dealF_tags').value.trim();
+  var tagsArr = tagsRaw ? tagsRaw.split(',').map(function(t){return t.trim()}).filter(Boolean) : [];
+  var badge = document.getElementById('dealF_badge').value || null;
+  var displayOrder = parseInt(document.getElementById('dealF_display_order').value, 10);
+  if(isNaN(displayOrder)) displayOrder = 100;
+
+  var payload = {
+    category: document.getElementById('dealF_category').value,
+    icon: document.getElementById('dealF_icon').value.trim() || '🎯',
+    partner: partner,
+    network: document.getElementById('dealF_network').value.trim(),
+    description: document.getElementById('dealF_description').value.trim(),
+    cta_text: document.getElementById('dealF_cta').value.trim() || 'Details',
+    url: url,
+    tags: tagsArr,
+    badge: badge,
+    price: document.getElementById('dealF_price').value.trim(),
+    price_sub: document.getElementById('dealF_price_sub').value.trim(),
+    image_url: document.getElementById('dealF_image_url').value.trim(),
+    display_order: displayOrder,
+    is_active: document.getElementById('dealF_is_active').checked
+  };
+
+  try {
+    if(_currentDealEditId){
+      var {error} = await sb.from('deals').update(payload).eq('id', _currentDealEditId);
+      if(error){ _dealErr('Fehler: '+error.message); return; }
+      if(typeof toast==='function') toast('Deal aktualisiert');
+    } else {
+      payload.created_by = ME && ME.user_id ? ME.user_id : null;
+      var {error:err2} = await sb.from('deals').insert(payload);
+      if(err2){ _dealErr('Fehler: '+err2.message); return; }
+      if(typeof toast==='function') toast('Deal erstellt');
+    }
+    closeDealEditor();
+    refreshDealsAdminList();
+  } catch(e){
+    _dealErr('Unerwarteter Fehler: ' + (e && e.message ? e.message : 'unknown'));
+  }
+};
+
+window.deleteDealFromEditor = async function(){
+  if(!_currentDealEditId) return;
+  if(!confirm('Diesen Deal wirklich löschen? Das kann nicht rückgängig gemacht werden.')) return;
+  try {
+    var {error} = await sb.from('deals').delete().eq('id', _currentDealEditId);
+    if(error){ _dealErr('Löschen fehlgeschlagen: '+error.message); return; }
+    if(typeof toast==='function') toast('Deal gelöscht');
+    closeDealEditor();
+    refreshDealsAdminList();
+  } catch(e){
+    _dealErr('Unerwarteter Fehler: ' + (e && e.message ? e.message : 'unknown'));
+  }
+};
 
 var obData = {gender:'',seek:'',status:'',club:'',bio:'',birthdate:''};
 var authMode = 'signup'; // or 'login'
@@ -9543,7 +9871,8 @@ function buildApp(){
   buildMatchList();
   buildGames();
   loadDealProfile();
-  buildDeals('all');
+  // Deals aus Supabase laden, dann UI bauen
+  loadDealsFromSupabase().then(function(){ buildDeals('all'); }).catch(function(){ buildDeals('all'); });
   updateProfile();
   initMap();
   initCMap();
@@ -14822,6 +15151,14 @@ window.openAdminPanel = async function(){
     html += '<button onclick="saveAdminMessages()" style="width:100%;padding:10px;border:none;border-radius:12px;background:var(--o);color:#fff;font-size:13px;font-weight:700;cursor:pointer">Nachrichten speichern</button>';
     html += '</div>';
     html += '</div>';
+
+    // Deals-Verwaltung Button
+    html += '<div style="background:var(--base-elevated);border:0.5px solid var(--contrast-border);border-radius:var(--radius-card);padding:var(--space-4);margin-bottom:var(--space-4);cursor:pointer" onclick="openDealsAdmin()">';
+    html += '<div style="display:flex;align-items:center;gap:var(--space-3)">';
+    html += '<div style="width:44px;height:44px;border-radius:var(--radius-button);background:rgba(255,59,110,.1);color:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" style="width:22px;height:22px"><path d="M42.34,138.34A8,8,0,0,1,40,132.69V40h92.69a8,8,0,0,1,5.65,2.34l99.32,99.32a8,8,0,0,1,0,11.31L153,237.66a8,8,0,0,1-11.31,0Z"/><circle cx="84" cy="84" r="12" fill="currentColor" stroke="none"/></svg></div>';
+    html += '<div style="flex:1"><div style="font-size:var(--text-body-l);font-weight:var(--weight-semibold);color:var(--contrast-1)">Deals verwalten</div><div style="font-size:var(--text-micro);color:var(--contrast-2);margin-top:2px">Partner-Angebote erstellen, bearbeiten, Reihenfolge ändern</div></div>';
+    html += '<span style="color:var(--contrast-3);font-size:20px">›</span>';
+    html += '</div></div>';
 
     // KPI Cards
     html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px">';
