@@ -7690,11 +7690,17 @@ nav button.active .ni{animation:vNineCountPop .38s var(--ease-spring-soft) 1}
       </div>
       <!-- Category Tabs -->
       <div class="deals-tabs" id="dealsTabs">
-        <div class="dtab active" onclick="showDeals('all',this)"><svg viewBox="0 0 24 24" style="width:14px;height:14px;vertical-align:-2px;margin-right:5px"><use href="#i-lightning"/></svg>Alle</div>
-        <div class="dtab" onclick="showDeals('flight',this)"><svg viewBox="0 0 24 24" style="width:14px;height:14px;vertical-align:-2px;margin-right:5px"><use href="#i-plane"/></svg>Flüge</div>
-        <div class="dtab" onclick="showDeals('hotel',this)"><svg viewBox="0 0 24 24" style="width:14px;height:14px;vertical-align:-2px;margin-right:5px"><use href="#i-hotel"/></svg>Unterkünfte</div>
-        <div class="dtab" onclick="showDeals('car',this)"><svg viewBox="0 0 24 24" style="width:14px;height:14px;vertical-align:-2px;margin-right:5px"><use href="#i-car"/></svg>Mietwagen</div>
-        <div class="dtab" onclick="showDeals('activity',this)"><svg viewBox="0 0 24 24" style="width:14px;height:14px;vertical-align:-2px;margin-right:5px"><use href="#i-confetti"/></svg>Erlebnisse</div>
+        <div class="dtab active" onclick="showDeals('all',this)" data-cat="all">Alle</div>
+        <div class="dtab" onclick="showDeals('club',this)" data-cat="club">🎉 Clubs &amp; Bars</div>
+        <div class="dtab" onclick="showDeals('hotel',this)" data-cat="hotel">🏠 Unterkünfte</div>
+        <div class="dtab" onclick="showDeals('flight',this)" data-cat="flight">✈️ Flüge</div>
+        <div class="dtab" onclick="showDeals('car',this)" data-cat="car">🚗 Mietwagen</div>
+        <div class="dtab" onclick="showDeals('activity',this)" data-cat="activity">🏄 Erlebnisse</div>
+        <div class="dtab" onclick="showDeals('event',this)" data-cat="event">🎟️ Events</div>
+        <div class="dtab" onclick="showDeals('food',this)" data-cat="food">🥘 Essen</div>
+        <div class="dtab" onclick="showDeals('transport',this)" data-cat="transport">🚕 Transport</div>
+        <div class="dtab" onclick="showDeals('merch',this)" data-cat="merch">👕 Merch</div>
+        <div class="dtab" onclick="showDeals('other',this)" data-cat="other">🎯 Andere</div>
       </div>
       <div id="dealsContent"></div>
       <div class="deal-disclosure">⚠️ Affiliate-Hinweis: Einige Links sind Partnerlinks. Bei einer Buchung/Kauf erhalten wir eine kleine Provision — für dich ändert sich der Preis nicht. Butterbread Technologies · DSGVO-konform · Server EU</div>
@@ -9971,7 +9977,18 @@ function buildApp(){
 // ============================================
 // DEALS / AFFILIATE — Smart Deals System
 // ============================================
-var CAT_LABELS = {flight:'✈️ Flüge',hotel:'🏠 Unterkünfte',car:'🚗 Mietwagen',activity:'🎉 Erlebnisse'};
+var CAT_LABELS = {
+  club:'🎉 Clubs & Bars',
+  hotel:'🏠 Unterkünfte',
+  flight:'✈️ Flüge',
+  car:'🚗 Mietwagen',
+  activity:'🏄 Erlebnisse',
+  event:'🎟️ Events',
+  food:'🥘 Essen',
+  transport:'🚕 Transport',
+  merch:'👕 Merch',
+  other:'🎯 Andere'
+};
 var SEASON_TIPS = {
   '05':{icon:'🌸',text:'<strong>Mai = Opening!</strong> Günstige Flüge, Clubs öffnen, Wetter schon gut (22°C). Bester Monat für Sparfüchse.'},
   '06':{icon:'☀️',text:'<strong>Juni = Sweet Spot!</strong> Warm (28°C), noch nicht Peak-Saison. Gute Preise, volle Clubs, perfektes Timing.'},
@@ -10033,7 +10050,7 @@ function buildDeals(filter){
   var profile=getDealProfile();
   var items=filter==='all'?AFFILIATES:AFFILIATES.filter(function(a){return a.cat===filter});
   if(items.length===0){c.innerHTML='<div class="deal-empty"><div class="deal-empty-ico"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" style="width:28px;height:28px"><path d="M42.34,138.34A8,8,0,0,1,40,132.69V40h92.69a8,8,0,0,1,5.65,2.34l99.32,99.32a8,8,0,0,1,0,11.31L153,237.66a8,8,0,0,1-11.31,0Z"/><circle cx="84" cy="84" r="12" fill="currentColor" stroke="none"/></svg></div><div class="deal-empty-title">Deals kommen bald</div><div class="deal-empty-sub">Wir bauen gerade an exklusiven Partner-Angeboten. Ab Saisonstart findest du hier deine Deals.</div></div>';return}
-  var cats=filter==='all'?['flight','hotel','car','activity']:[filter];
+  var cats=filter==='all'?Object.keys(CAT_LABELS):[filter];
   var html='';
   cats.forEach(function(cat){
     var catItems=items.filter(function(a){return a.cat===cat});
