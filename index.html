@@ -716,11 +716,7 @@ body::after{
   border-color: rgba(254,60,114,.35) !important;
 }
 
-/* Erstes Milestone (250) glüht aktiv */
-.rm-step:first-of-type{
-  border-color: rgba(254,60,114,.4) !important;
-  box-shadow: 0 12px 48px rgba(254,60,114,.18), inset 0 1px 0 rgba(255,255,255,.08), 0 0 0 1px rgba(254,60,114,.2) !important;
-}
+/* (Active-Milestone wird vom JS via .active-Klasse markiert — siehe weiter unten) */
 
 /* — Roadmap-Progress-Bar Shimmer — */
 .roadmap-progress-fill{
@@ -749,17 +745,24 @@ body::after{
   isolation: isolate;
 }
 .manifesto::before{
-  content:'';
-  position: absolute;
-  inset: 0;
+  content:'' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  transform: none !important;
   background:
     radial-gradient(60% 60% at 50% 30%, rgba(254,60,114,.18), transparent 70%),
     linear-gradient(180deg, rgba(5,5,7,.65) 0%, rgba(5,5,7,.92) 60%, var(--bg) 100%),
-    url('https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?w=2000&q=70&auto=format&fit=crop');
-  background-size: cover, cover, cover;
-  background-position: center, center, center;
-  z-index: 0;
-  pointer-events: none;
+    url('https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?w=2000&q=70&auto=format&fit=crop') !important;
+  background-size: cover, cover, cover !important;
+  background-position: center, center, center !important;
+  background-repeat: no-repeat !important;
+  z-index: 0 !important;
+  pointer-events: none !important;
 }
 .manifesto > .manifesto-inner{
   position: relative;
@@ -866,6 +869,12 @@ body::after{
 /* — Section-Container & Headlines — */
 .roadmap{
   padding: 100px 24px 120px;
+}
+/* Wichtig: Original-Site hat roadmap-inner auf 560px begrenzt — wir brauchen volle Breite für 3-Spalten-Grid */
+.roadmap-inner{
+  max-width: 1200px !important;
+  margin: 0 auto !important;
+  width: 100% !important;
 }
 .roadmap .section-tag{
   display: block;
@@ -1006,23 +1015,66 @@ body::after{
   flex: 1;
 }
 
-/* — Status-Pill am unteren Card-Rand — */
+/* — rm-head Container (enthält die Member-Zahl) — */
 .rm-step .rm-head{
-  display: inline-block !important;
-  font-size: 10px !important;
-  font-weight: 800 !important;
-  letter-spacing: .14em !important;
-  text-transform: uppercase;
-  padding: 5px 12px !important;
-  border-radius: 999px !important;
-  background: rgba(255,255,255,.06) !important;
-  color: var(--muted, #888) !important;
-  border: 1px solid rgba(255,255,255,.06);
-  margin-top: auto;
+  display: block !important;
+  background: transparent !important;
+  border: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
 }
 
-/* — Erster Milestone (next/active) glüht pink — */
-.rm-step:first-of-type{
+/* — Badge: dynamisch via JS gesetzt mit "Noch X bis hierhin" / "Erreicht ✓" — */
+.rm-step .rm-badge{
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.06);
+  color: var(--muted, #888);
+  border: 1px solid rgba(255,255,255,.08);
+  margin-top: 14px;
+}
+.rm-step.active .rm-badge{
+  background: rgba(254,60,114,.16);
+  color: var(--pink2, #FE3C72);
+  border-color: rgba(254,60,114,.3);
+}
+.rm-step.done .rm-badge{
+  background: rgba(74,222,128,.15);
+  color: #4ADE80;
+  border-color: rgba(74,222,128,.3);
+}
+
+/* — Done-State: grüne Card — */
+.rm-step.done{
+  border-color: rgba(74,222,128,.4) !important;
+  background: linear-gradient(135deg, rgba(74,222,128,.05), rgba(74,222,128,.02)) !important;
+}
+.rm-step.done .rm-dot{
+  background: linear-gradient(135deg, #4ADE80, #22C55E) !important;
+  border-color: rgba(74,222,128,.5) !important;
+}
+.rm-step.done .rm-members{
+  background: linear-gradient(135deg, #4ADE80, #22C55E) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+/* — Locked-State: leicht entsättigt — */
+.rm-step.locked{
+  opacity: .68;
+}
+.rm-step.locked .rm-dot{
+  filter: saturate(.4);
+}
+
+/* — Active-Milestone (vom JS via .active markiert — der nächste der erreicht werden muss) — */
+.rm-step.active{
   border-color: rgba(254,60,114,.45) !important;
   background: linear-gradient(135deg, rgba(254,60,114,.04), rgba(255,109,46,.02)) !important;
   box-shadow:
@@ -1035,20 +1087,15 @@ body::after{
   0%, 100%{ box-shadow: 0 16px 56px rgba(254,60,114,.22), inset 0 1px 0 rgba(255,255,255,.08), 0 0 0 1px rgba(254,60,114,.25); }
   50%    { box-shadow: 0 20px 64px rgba(254,60,114,.35), inset 0 1px 0 rgba(255,255,255,.10), 0 0 0 2px rgba(254,60,114,.45); }
 }
-.rm-step:first-of-type .rm-dot{
+.rm-step.active .rm-dot{
   background: var(--grad-hero) !important;
   border-color: rgba(254,60,114,.5) !important;
   box-shadow: 0 8px 24px rgba(254,60,114,.4), 0 0 0 4px rgba(254,60,114,.12);
 }
-.rm-step:first-of-type .rm-head{
-  background: rgba(254,60,114,.16) !important;
-  color: var(--pink2, #FE3C72) !important;
-  border-color: rgba(254,60,114,.3) !important;
-}
 
 /* — Reduced motion — */
 @media (prefers-reduced-motion: reduce){
-  .rm-step:first-of-type{ animation: none; }
+  .rm-step.active{ animation: none; }
 }
 </style>
 </head>
