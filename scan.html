@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#050507">
+<title>crew. Partner Check-in</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#050507;color:#fff;font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+:root{--o:#FF6D2E;--mint:#30D158;--fire:#FF3B30;--yellow:#FFD60A;--gold:linear-gradient(135deg,#FF6D2E,#FFD60A)}
+.container{max-width:440px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;padding:24px}
+.header{text-align:center;padding:20px 0 30px}
+.logo{font-size:32px;font-weight:900;letter-spacing:-1.5px}.logo span{background:var(--gold);-webkit-background-clip:text;background-clip:text;color:transparent}
+.partner-badge{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:5px 14px;border-radius:99px;background:rgba(255,109,46,.1);border:1px solid rgba(255,109,46,.2);color:var(--o);margin-top:8px}
+
+/* Auth screen for partner login */
+.auth-box{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:28px 24px;margin-bottom:20px}
+.auth-box h2{font-size:18px;font-weight:800;margin-bottom:6px}
+.auth-box .sub{font-size:13px;color:#888;margin-bottom:20px;line-height:1.5}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#666;margin-bottom:6px}
+.field input,.field select{width:100%;background:rgba(255,255,255,.06);color:#fff;border:1px solid rgba(255,255,255,.1);padding:14px 16px;border-radius:14px;font:inherit;font-size:15px;outline:none;transition:border-color .2s}
+.field input:focus{border-color:var(--o)}
+.field input::placeholder{color:#444}
+.btn{width:100%;padding:16px;border:none;border-radius:14px;font-size:14px;font-weight:700;cursor:pointer;transition:all .15s}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--gold);color:#000}
+.btn-ghost{background:rgba(255,255,255,.06);color:#fff;border:1px solid rgba(255,255,255,.1);margin-top:8px}
+.msg{margin-top:12px;padding:14px;border-radius:14px;font-size:13px;text-align:center;display:none}
+.msg.show{display:block}
+.msg.success{background:rgba(48,209,88,.08);border:1px solid rgba(48,209,88,.15);color:var(--mint)}
+.msg.error{background:rgba(255,59,48,.08);border:1px solid rgba(255,59,48,.15);color:var(--fire)}
+
+/* Scan result */
+.scan-panel{display:none}
+.scan-panel.show{display:block}
+.user-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:28px 24px;text-align:center;margin-bottom:16px}
+.user-ava{width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid var(--o);margin-bottom:12px}
+.user-name{font-size:20px;font-weight:900}
+.user-handle{font-size:13px;color:var(--o);margin-top:2px}
+.checkin-btn{width:100%;padding:20px;border:none;border-radius:16px;background:var(--gold);color:#000;font-size:16px;font-weight:800;cursor:pointer;transition:all .2s;box-shadow:0 8px 24px rgba(255,109,46,.2);margin-top:16px}
+.checkin-btn:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(255,109,46,.3)}
+.checkin-btn:active{transform:scale(.97)}
+.checkin-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+
+/* Success animation */
+.checkin-success{display:none;text-align:center;padding:40px 20px}
+.checkin-success.show{display:block}
+.success-icon{font-size:64px;margin-bottom:16px;animation:popIn .5s cubic-bezier(.175,.885,.32,1.275)}
+@keyframes popIn{0%{transform:scale(0)}100%{transform:scale(1)}}
+.success-title{font-size:24px;font-weight:900;margin-bottom:8px}
+.success-points{font-size:18px;font-weight:700;color:var(--o);margin-bottom:8px}
+.success-deal{padding:16px;border-radius:14px;background:rgba(255,214,10,.08);border:1px solid rgba(255,214,10,.15);font-size:14px;color:var(--yellow);font-weight:700;margin-top:16px}
+
+/* Stats */
+.stats-box{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:20px;margin-top:16px}
+.stats-box h3{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#666;margin-bottom:12px}
+.stat-row{display:flex;justify-content:space-around;gap:12px}
+.stat-item{text-align:center}
+.stat-num{font-size:28px;font-weight:900;color:var(--o)}
+.stat-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#666;margin-top:2px}
+
+.footer{margin-top:auto;text-align:center;padding:20px 0;font-size:11px;color:#333}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="logo">crew<span>.</span></div>
+    <div class="partner-badge">Partner Check-in</div>
+  </div>
+
+  <!-- Step 1: Partner Auth -->
+  <div id="authSection">
+    <div class="auth-box">
+      <h2>Partner-Login</h2>
+      <p class="sub">Melde dich mit deinem Partner-Code an, um Kunden einzuchecken.</p>
+      <div class="field">
+        <label>Partner-Code</label>
+        <input type="text" id="partnerCode" placeholder="z.B. mega-001" autocapitalize="none">
+      </div>
+      <button class="btn btn-primary" onclick="loginPartner()">Anmelden</button>
+      <div class="msg" id="authMsg"></div>
+    </div>
+  </div>
+
+  <!-- Step 2: Scan / Enter User -->
+  <div id="scanSection" class="scan-panel">
+    <div style="text-align:center;margin-bottom:20px">
+      <div style="font-size:16px;font-weight:800" id="partnerNameDisplay"></div>
+      <div style="font-size:12px;color:#888;margin-top:2px" id="partnerTypeDisplay"></div>
+    </div>
+
+    <!-- User from URL or manual entry -->
+    <div class="auth-box" id="userLookup">
+      <h2>Kunden-Check-in</h2>
+      <p class="sub">Scanne den QR-Code des crew.-Users oder gib die User-ID manuell ein.</p>
+      <div class="field">
+        <label>User-ID / QR-Daten</label>
+        <input type="text" id="userIdInput" placeholder="User-ID eingeben">
+      </div>
+      <button class="btn btn-primary" onclick="lookupUser()">User verifizieren</button>
+      <div class="msg" id="lookupMsg"></div>
+    </div>
+
+    <!-- User confirmed -->
+    <div id="userConfirmed" style="display:none">
+      <div class="user-card">
+        <img class="user-ava" id="ucPhoto" src="">
+        <div class="user-name" id="ucName"></div>
+        <div class="user-handle" id="ucHandle"></div>
+      </div>
+      <button class="checkin-btn" id="checkinBtn" onclick="doCheckin()">📲 Check-in bestätigen</button>
+      <button class="btn btn-ghost" onclick="resetUser()">Anderen User einchecken</button>
+    </div>
+
+    <!-- Success -->
+    <div class="checkin-success" id="successPanel">
+      <div class="success-icon">✅</div>
+      <div class="success-title">Check-in erfolgreich!</div>
+      <div class="success-points" id="successPoints"></div>
+      <div class="success-deal" id="successDeal" style="display:none"></div>
+      <button class="btn btn-primary" style="margin-top:24px" onclick="resetUser()">Nächster Check-in</button>
+    </div>
+
+    <!-- Partner Stats -->
+    <div class="stats-box" id="partnerStats" style="display:none">
+      <h3>Deine Statistiken</h3>
+      <div class="stat-row">
+        <div class="stat-item"><div class="stat-num" id="statCheckins">0</div><div class="stat-label">Check-ins</div></div>
+        <div class="stat-item"><div class="stat-num" id="statUsers">0</div><div class="stat-label">Unique User</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">crew. Partner-System · Butterbread Technologies · 2026</div>
+</div>
+
+<script>
+var sb;
+try { sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY); } catch(e){}
+
+var currentPartner = null;
+var currentUser = null;
+
+// Check URL params for user QR
+var params = new URLSearchParams(window.location.search);
+var urlUserId = params.get('u');
+
+// If this is a crew join or partner redeem link, redirect to app.html
+var joinCrewParam = params.get('joincrew');
+var partnerParam = params.get('partner');
+if(joinCrewParam){window.location.href='app.html?joincrew='+encodeURIComponent(joinCrewParam);throw 'redirect'}
+if(partnerParam){window.location.href='app.html?partner='+encodeURIComponent(partnerParam);throw 'redirect'}
+
+// Partner login
+async function loginPartner(){
+  var code = document.getElementById('partnerCode').value.trim().toLowerCase();
+  var msg = document.getElementById('authMsg');
+  if(!code){showMsg(msg,'error','Bitte Partner-Code eingeben.');return}
+
+  try {
+    var {data, error} = await sb.from('partners').select('*').eq('partner_code', code).eq('is_active', true).single();
+    if(error || !data){showMsg(msg,'error','Partner-Code nicht gefunden oder inaktiv.');return}
+
+    currentPartner = data;
+    localStorage.setItem('crew_partner_code', code);
+
+    // Show scan section
+    document.getElementById('authSection').style.display = 'none';
+    document.getElementById('scanSection').classList.add('show');
+    document.getElementById('partnerNameDisplay').textContent = data.business_name;
+    document.getElementById('partnerTypeDisplay').textContent = data.business_type + (data.location ? ' · ' + data.location : '');
+
+    loadPartnerStats();
+
+    // If user came via QR link, auto-lookup
+    if(urlUserId) {
+      document.getElementById('userIdInput').value = urlUserId;
+      lookupUser();
+    }
+  } catch(e){showMsg(msg,'error','Fehler: '+(e.message||'Unbekannt'))}
+}
+
+// Auto-login if saved code
+var savedCode = localStorage.getItem('crew_partner_code');
+if(savedCode){
+  document.getElementById('partnerCode').value = savedCode;
+  loginPartner();
+}
+
+// Lookup user — direct profiles query (no RPC needed)
+async function lookupUser(){
+  var input = document.getElementById('userIdInput').value.trim();
+  var msg = document.getElementById('lookupMsg');
+
+  // Extract user ID from URL if full URL was scanned
+  if(input.includes('scan.html?u=')){
+    input = input.split('u=')[1].split('&')[0];
+  }
+  // Also handle full app URLs
+  if(input.includes('?u=')){
+    input = input.split('u=')[1].split('&')[0];
+  }
+
+  if(!input){showMsg(msg,'error','Bitte User-ID eingeben oder QR-Code scannen.');return}
+
+  // Validate UUID format loosely
+  input = input.trim();
+
+  try {
+    var {data, error} = await sb.from('profiles').select('user_id,name,username,photo_url,score,age,gender').eq('user_id', input).single();
+    if(error || !data){showMsg(msg,'error','User nicht gefunden. Prüfe die ID.');return}
+
+    currentUser = {
+      user_id: data.user_id,
+      name: data.name || 'Unbekannt',
+      username: data.username || 'user',
+      photo_url: data.photo_url || '',
+      score: data.score || 0
+    };
+
+    // Show user card
+    document.getElementById('ucPhoto').src = currentUser.photo_url || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80';
+    document.getElementById('ucName').textContent = currentUser.name;
+    document.getElementById('ucHandle').textContent = '@' + currentUser.username;
+
+    document.getElementById('userLookup').style.display = 'none';
+    document.getElementById('userConfirmed').style.display = 'block';
+    document.getElementById('successPanel').classList.remove('show');
+
+  } catch(e){showMsg(msg,'error','Fehler: '+(e.message||'Ungültige User-ID'))}
+}
+
+// Do check-in — direct insert into partner_checkins table
+async function doCheckin(){
+  if(!currentPartner || !currentUser) return;
+  var btn = document.getElementById('checkinBtn');
+  btn.disabled = true;
+  btn.textContent = 'Wird verarbeitet...';
+
+  try {
+    // Check cooldown: max 1 check-in per user per partner per 24h
+    var since = new Date(Date.now() - 24*60*60*1000).toISOString();
+    var {data:existing} = await sb.from('partner_checkins')
+      .select('id')
+      .eq('user_id', currentUser.user_id)
+      .eq('partner_code', currentPartner.partner_code)
+      .gte('created_at', since)
+      .limit(1);
+
+    if(existing && existing.length > 0){
+      btn.disabled = false;
+      btn.textContent = '📲 Check-in bestätigen';
+      alert('Dieser User wurde in den letzten 24h bereits bei dir eingecheckt.');
+      return;
+    }
+
+    var points = 25;
+    var dealText = currentPartner.deal_text || '';
+
+    // Insert check-in record
+    var {error: insertErr} = await sb.from('partner_checkins').insert({
+      user_id: currentUser.user_id,
+      partner_id: currentPartner.id,
+      partner_code: currentPartner.partner_code,
+      points_awarded: points,
+      deal_text: dealText || null
+    });
+    if(insertErr) throw insertErr;
+
+    // Update user score (add points)
+    try {
+      var {data:prof} = await sb.from('profiles').select('score').eq('user_id', currentUser.user_id).single();
+      var newScore = (prof && prof.score ? prof.score : 0) + points;
+      await sb.from('profiles').update({score: newScore}).eq('user_id', currentUser.user_id);
+    } catch(e){ console.log('Score update error (non-critical):', e); }
+
+    // Show success
+    document.getElementById('userConfirmed').style.display = 'none';
+    document.getElementById('successPanel').classList.add('show');
+    document.getElementById('successPoints').textContent = '+' + points + ' 🍹 Sangria-Punkte für ' + currentUser.name;
+
+    if(dealText){
+      document.getElementById('successDeal').style.display = 'block';
+      document.getElementById('successDeal').textContent = '🎁 Deal freigeschaltet: ' + dealText;
+    } else {
+      document.getElementById('successDeal').style.display = 'none';
+    }
+
+    // Vibration feedback
+    if(navigator.vibrate) navigator.vibrate([50, 30, 50]);
+
+    loadPartnerStats();
+
+  } catch(e){
+    btn.disabled = false;
+    btn.textContent = '📲 Check-in bestätigen';
+    alert('Fehler: ' + (e.message || 'Versuche es erneut.'));
+  }
+}
+
+// Reset for next user
+function resetUser(){
+  currentUser = null;
+  document.getElementById('userLookup').style.display = 'block';
+  document.getElementById('userConfirmed').style.display = 'none';
+  document.getElementById('successPanel').classList.remove('show');
+  document.getElementById('userIdInput').value = '';
+  document.getElementById('lookupMsg').classList.remove('show');
+  document.getElementById('checkinBtn').disabled = false;
+  document.getElementById('checkinBtn').textContent = '📲 Check-in bestätigen';
+}
+
+// Load partner stats — direct query from partner_checkins table
+async function loadPartnerStats(){
+  if(!currentPartner) return;
+  try {
+    var {data, error} = await sb.from('partner_checkins')
+      .select('user_id')
+      .eq('partner_id', currentPartner.id);
+    if(error || !data) return;
+
+    var totalCheckins = data.length;
+    var uniqueUsers = {};
+    data.forEach(function(r){ uniqueUsers[r.user_id] = true; });
+    var uniqueCount = Object.keys(uniqueUsers).length;
+
+    document.getElementById('partnerStats').style.display = 'block';
+    document.getElementById('statCheckins').textContent = totalCheckins;
+    document.getElementById('statUsers').textContent = uniqueCount;
+  } catch(e){ console.log('Stats error:', e); }
+}
+
+function showMsg(el,type,text){
+  el.className = 'msg show ' + type;
+  el.textContent = text;
+}
+</script>
+</body>
+</html>

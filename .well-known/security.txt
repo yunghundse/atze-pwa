@@ -1,0 +1,6 @@
+Contact: mailto:security@partycrew.app
+Contact: mailto:info@butterbread-tech.com
+Expires: 2027-04-28T00:00:00Z
+Preferred-Languages: de, en
+Canonical: https://partycrew.app/.well-known/security.txt
+Policy: https://partycrew.app/security-policy
