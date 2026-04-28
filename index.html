@@ -5,11 +5,18 @@
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>crew. — Allein landen, zusammen feiern.</title>
-<meta name="description" content="crew. — Die Party-App für Mallorca. Finde deine Crew, tracke deine Freunde, erlebe den besten Urlaub.">
+<meta name="description" content="crew. — Die App für deine Event-Crew. Festival, Stadt-Trip, Konzert: finde deine Crew, tracke deine Freunde, erlebe den besten Trip — überall in Europa.">
 <meta name="theme-color" content="#050507">
 <meta property="og:title" content="crew. — Allein landen, zusammen feiern.">
-<meta property="og:description" content="Die Party-App für die Playa de Palma. Crew-Tracker, Matches & mehr.">
+<meta property="og:description" content="Die App für deine Event-Crew — Festivals, Stadt-Trips, Konzerte. Crew-Tracker, Matches & mehr. Überall in Europa.">
 <meta property="og:type" content="website">
+<meta property="og:image" content="https://partycrew.app/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://partycrew.app">
+<meta property="og:locale" content="de_DE">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://partycrew.app/og.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -20,6 +27,7 @@ html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
 body{background:#050507;color:#FAFAFA;font-family:'Inter',system-ui,sans-serif;font-weight:400;line-height:1.55;overflow-x:hidden}
 a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
 :root{--bg:#050507;--fg:#FAFAFA;--muted:#888;--o:#FF6D2E;--gold:linear-gradient(135deg,#FF6D2E,#FFD60A);--line:rgba(255,255,255,.06);--r:18px}
+.hp-trap{position:absolute !important;left:-9999px !important;top:-9999px !important;width:1px !important;height:1px !important;opacity:0 !important;pointer-events:none !important;}
 
 /* NAV */
 .nav{position:fixed;top:0;left:0;right:0;z-index:50;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);background:rgba(5,5,7,.65);border-bottom:1px solid var(--line)}
@@ -302,6 +310,746 @@ footer{padding:32px 24px;border-top:1px solid var(--line);text-align:center}
   .hero-eyebrow{font-size:13px;letter-spacing:.4em}
   .feat-row{gap:40px}
 }
+
+/* ═══════════════════════════════════════════════════════
+   v2-POLISH-LAYER · Glassmorphism · Photos · Apple-Headlines
+   ═══════════════════════════════════════════════════════ */
+
+/* — Brand-Tokens, falls noch nicht definiert — */
+:root{
+  --pink2: #FE3C72;
+  --grad-hero: linear-gradient(135deg, #FE3C72 0%, #FF6D2E 100%);
+  --grad-soft: linear-gradient(135deg, rgba(254,60,114,.12), rgba(255,109,46,.06));
+  --glass-bg: rgba(255,255,255,.04);
+  --glass-bd: rgba(255,255,255,.08);
+  --glass-bd-hover: rgba(255,255,255,.18);
+  --ease-cubic: cubic-bezier(.2,.7,.2,1);
+}
+
+/* — Background-Glow body-wide — */
+body::after{
+  content:'';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(60% 50% at 80% 0%, rgba(254,60,114,.10), transparent 60%),
+    radial-gradient(50% 40% at 0% 30%, rgba(255,109,46,.08), transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+.hero, .feat-showcase, .roadmap, .partner-section, .community-cta, .manifesto { position: relative; z-index: 1; }
+
+/* — Hero: echtes Photo als Background-Layer — */
+.hero-bg{
+  background-image:
+    linear-gradient(180deg, rgba(5,5,7,.55) 0%, rgba(5,5,7,.85) 60%, var(--bg) 100%),
+    url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=2000&q=70&auto=format&fit=crop') !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+}
+
+/* — Pink-Em-Akzent für Headlines (.hook .word, h2, h3) — */
+.hook .word.brand{
+  background: var(--grad-hero) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+}
+.hook .word.brand .dot{
+  background: var(--gold) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+/* — Section-Tags glühen schöner — */
+.section-tag{
+  background: var(--grad-hero);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent !important;
+}
+
+/* — Waitlist-Form als Glas-Card — */
+.wl-card{
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(28px) saturate(170%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(170%) !important;
+  border: 1px solid var(--glass-bd) !important;
+  box-shadow: 0 12px 48px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.06) !important;
+}
+
+.wl-card input, .wl-card select{
+  background: rgba(255,255,255,.04) !important;
+  border: 1px solid var(--glass-bd) !important;
+  transition: border-color .2s var(--ease-cubic), background .2s var(--ease-cubic) !important;
+}
+.wl-card input:focus, .wl-card select:focus{
+  border-color: var(--pink2) !important;
+  background: rgba(255,255,255,.06) !important;
+  outline: none !important;
+}
+
+/* — Feature-Cards (Drei Gründe) als Glas — */
+.feat-card{
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(24px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(160%) !important;
+  border: 1px solid var(--glass-bd) !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.05) !important;
+  transition: transform .3s var(--ease-cubic), border-color .3s var(--ease-cubic) !important;
+  position: relative;
+  overflow: hidden;
+}
+.feat-card::before{
+  content:'';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--grad-hero);
+  opacity: 0;
+  transition: opacity .3s var(--ease-cubic);
+}
+.feat-card:hover{
+  transform: translateY(-6px) !important;
+  border-color: var(--glass-bd-hover) !important;
+}
+.feat-card:hover::before{ opacity: 1; }
+
+.feat-card-icon{
+  background: var(--grad-soft) !important;
+  border: 1px solid rgba(255,109,46,.2) !important;
+  border-radius: 16px;
+}
+
+/* — Feature-Tags (Smart Matching, Echtzeit-Standort, etc.) — */
+.feat-tag{
+  background: rgba(255,214,10,.08) !important;
+  border: 1px solid rgba(255,214,10,.22) !important;
+  color: var(--gold) !important;
+  letter-spacing: -0.005em !important;
+}
+
+/* — "In Planung" Card-Variante (gestempelt) — */
+.feat-card.feat-soon{
+  border-style: dashed !important;
+  border-color: rgba(255,214,10,.32) !important;
+  background: rgba(255,214,10,.025) !important;
+}
+.feat-card.feat-soon .feat-card-icon{
+  filter: saturate(.7);
+}
+.soon-badge{
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border-radius: 999px;
+  color: var(--gold);
+  background: rgba(255,214,10,.10);
+  border: 1px solid rgba(255,214,10,.32);
+  z-index: 2;
+}
+
+/* — Mini-Features-Header über der Pill-Reihe — */
+.feat-more-head{
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+  text-align: center;
+}
+.feat-more-head .feat-more-tag{
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  background: rgba(255,214,10,.08);
+  border: 1px solid rgba(255,214,10,.28);
+  padding: 5px 12px;
+  border-radius: 999px;
+  margin-bottom: 10px;
+}
+.feat-more-head p{
+  font-size: 13px;
+  color: var(--muted, #888);
+  max-width: 460px;
+  margin: 0 auto;
+  line-height: 1.55;
+}
+.feat-more{
+  margin-top: 16px !important;
+  padding-top: 0 !important;
+  border-top: 0 !important;
+  display: grid !important;
+  grid-template-columns: repeat(6, 1fr) !important;
+  gap: 12px !important;
+  justify-content: center !important;
+}
+@media (max-width: 980px){ .feat-more{ grid-template-columns: repeat(3, 1fr) !important; } }
+@media (max-width: 600px){ .feat-more{ grid-template-columns: repeat(2, 1fr) !important; } }
+
+/* Mini-Feature als richtige Karte */
+.feat-more-item{
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  gap: 8px !important;
+  padding: 22px 14px 16px !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  color: var(--fg, #FAFAFA) !important;
+  background: rgba(255,255,255,.03) !important;
+  border: 1px dashed rgba(255,214,10,.22) !important;
+  border-radius: 16px !important;
+  overflow: hidden;
+}
+.feat-more-item::after{
+  content: '🔒';
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  font-size: 10px;
+  opacity: .35;
+  margin: 0 !important;
+  transition: opacity .3s var(--ease-cubic);
+}
+.feat-more-item:hover::after{ opacity: .8; }
+.feat-more-item .fmi-emoji{
+  font-size: 26px !important;
+  line-height: 1;
+  filter: saturate(.65);
+  transition: filter .3s var(--ease-cubic), transform .3s var(--ease-cubic);
+}
+.feat-more-item:hover .fmi-emoji{
+  filter: saturate(1);
+  transform: scale(1.08);
+}
+.feat-more-item .fmi-name{
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+.feat-more-item .fmi-status{
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  background: rgba(255,214,10,.10);
+  border: 1px solid rgba(255,214,10,.24);
+  padding: 3px 8px;
+  border-radius: 999px;
+  margin-top: 2px;
+}
+
+/* Mystery-Card (Challenges) — extra cryptisch */
+.feat-card.feat-mystery{
+  background:
+    repeating-linear-gradient(135deg, rgba(255,214,10,.025) 0, rgba(255,214,10,.025) 8px, transparent 8px, transparent 16px),
+    rgba(255,214,10,.025) !important;
+}
+.feat-mystery .mystery-dots{
+  background: var(--grad-hero);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-left: 2px;
+  letter-spacing: 1px;
+  animation: mysteryDots 2s var(--ease-cubic) infinite;
+}
+@keyframes mysteryDots{
+  0%, 100%{ opacity: .4; letter-spacing: 1px; }
+  50%    { opacity: 1; letter-spacing: 4px; }
+}
+.feat-tag.mystery-tag{
+  background: rgba(255,214,10,.06) !important;
+  border: 1px dashed rgba(255,214,10,.4) !important;
+  color: var(--gold) !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: 2px !important;
+}
+
+/* ═══════════════════════════════════════════
+   PARTNER-SECTION — Premium-Polish
+   ═══════════════════════════════════════════ */
+.partner-section{
+  position: relative !important;
+  padding: 100px 24px 120px !important;
+  isolation: isolate;
+}
+.partner-section::before{
+  content:'';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(60% 40% at 20% 0%, rgba(255,109,46,.10), transparent 60%),
+    radial-gradient(50% 40% at 80% 100%, rgba(254,60,114,.08), transparent 70%);
+  z-index: 0;
+  pointer-events: none;
+}
+.partner-section .partner-inner{
+  position: relative;
+  z-index: 1;
+}
+.partner-section .section-tag{
+  display: block;
+  text-align: center !important;
+  margin-bottom: 14px !important;
+  background: var(--grad-hero) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+}
+.partner-section h2{
+  font-size: clamp(28px, 4vw, 44px) !important;
+  font-weight: 900 !important;
+  letter-spacing: -1px !important;
+  line-height: 1.1 !important;
+  text-align: center !important;
+  margin-bottom: 14px !important;
+}
+.partner-section h2 em,
+.partner-section h2 strong{
+  font-style: normal;
+  background: var(--grad-hero);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.partner-section > .partner-inner > p{
+  font-size: 16px !important;
+  color: var(--fg-2, #C8C8D4) !important;
+  text-align: center !important;
+  max-width: 540px !important;
+  margin: 0 auto 48px !important;
+  line-height: 1.6 !important;
+}
+
+/* Partner-Form als großzügigere Glas-Card */
+.partner-form{
+  max-width: 760px;
+  margin: 0 auto !important;
+  padding: 36px !important;
+  border-radius: 24px !important;
+}
+.pf-row{
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 14px !important;
+  margin-bottom: 14px !important;
+}
+@media (max-width: 700px){ .pf-row{ grid-template-columns: 1fr !important; } }
+
+.pf-field label{
+  display: block !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  letter-spacing: .14em !important;
+  text-transform: uppercase !important;
+  color: var(--muted, #888) !important;
+  margin-bottom: 6px !important;
+}
+.pf-field input,
+.pf-field select,
+.pf-field textarea{
+  width: 100% !important;
+  padding: 12px 14px !important;
+  border-radius: 12px !important;
+  font-size: 14px !important;
+  color: var(--fg, #FAFAFA) !important;
+}
+.partner-form button[type="submit"]{
+  margin-top: 6px !important;
+  padding: 14px 28px !important;
+  background: var(--grad-hero) !important;
+  color: #fff !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  font-weight: 800 !important;
+  font-size: 14px !important;
+  letter-spacing: -0.005em !important;
+  box-shadow: 0 12px 32px rgba(254,60,114,.3), inset 0 1px 0 rgba(255,255,255,.15) !important;
+  transition: transform .2s var(--ease-cubic) !important;
+  cursor: pointer;
+}
+.partner-form button[type="submit"]:hover{ transform: translateY(-2px); }
+
+/* — Mini-Feature-Strip Pills — */
+.feat-more-item{
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(20px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(160%) !important;
+  border: 1px solid var(--glass-bd) !important;
+  transition: background .2s var(--ease-cubic), transform .2s var(--ease-cubic) !important;
+}
+.feat-more-item:hover{
+  background: rgba(254,60,114,.10) !important;
+  transform: translateY(-2px);
+  border-color: rgba(254,60,114,.3) !important;
+}
+
+/* — Roadmap-Steps als Glas-Cards mit Status-Glow — */
+.rm-step{
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(24px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(160%) !important;
+  border: 1px solid var(--glass-bd) !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.05) !important;
+  transition: transform .3s var(--ease-cubic), border-color .3s var(--ease-cubic) !important;
+}
+.rm-step:hover{
+  transform: translateY(-4px) !important;
+  border-color: rgba(254,60,114,.35) !important;
+}
+
+/* Erstes Milestone (250) glüht aktiv */
+.rm-step:first-of-type{
+  border-color: rgba(254,60,114,.4) !important;
+  box-shadow: 0 12px 48px rgba(254,60,114,.18), inset 0 1px 0 rgba(255,255,255,.08), 0 0 0 1px rgba(254,60,114,.2) !important;
+}
+
+/* — Roadmap-Progress-Bar Shimmer — */
+.roadmap-progress-fill{
+  background: var(--grad-hero) !important;
+  box-shadow: 0 0 16px rgba(254,60,114,.5) !important;
+  position: relative;
+  overflow: hidden;
+}
+.roadmap-progress-fill::after{
+  content:'';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.4), transparent);
+  background-size: 200% 100%;
+  animation: rmShimmer 2.5s linear infinite;
+}
+@keyframes rmShimmer{
+  0%{ background-position: 200% 0; }
+  100%{ background-position: -200% 0; }
+}
+
+/* — Manifesto-Section editorial mit Photo-Background — */
+.manifesto{
+  position: relative !important;
+  overflow: hidden !important;
+  isolation: isolate;
+}
+.manifesto::before{
+  content:'';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(60% 60% at 50% 30%, rgba(254,60,114,.18), transparent 70%),
+    linear-gradient(180deg, rgba(5,5,7,.65) 0%, rgba(5,5,7,.92) 60%, var(--bg) 100%),
+    url('https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?w=2000&q=70&auto=format&fit=crop');
+  background-size: cover, cover, cover;
+  background-position: center, center, center;
+  z-index: 0;
+  pointer-events: none;
+}
+.manifesto > .manifesto-inner{
+  position: relative;
+  z-index: 1;
+}
+
+/* — Community-CTA Section — */
+.community-cta{
+  position: relative !important;
+  overflow: hidden !important;
+  isolation: isolate;
+}
+.community-cta::before{
+  content:'';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(5,5,7,.6) 0%, rgba(5,5,7,.9) 70%, var(--bg) 100%),
+    url('https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=2000&q=70&auto=format&fit=crop');
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+  pointer-events: none;
+}
+.community-cta > .community-cta-inner{
+  position: relative;
+  z-index: 1;
+}
+
+/* — Social-Buttons (WhatsApp, Insta) glasiger — */
+.social-link{
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(24px) saturate(170%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(170%) !important;
+  border: 1px solid var(--glass-bd) !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.05) !important;
+  transition: transform .3s var(--ease-cubic), border-color .3s var(--ease-cubic), background .3s var(--ease-cubic) !important;
+}
+.social-link:hover{
+  transform: translateY(-3px) !important;
+  border-color: var(--glass-bd-hover) !important;
+}
+.social-link.wa:hover{ border-color: rgba(37,211,102,.4) !important; background: rgba(37,211,102,.06) !important; }
+.social-link.ig:hover{ border-color: rgba(254,60,114,.4) !important; background: rgba(254,60,114,.06) !important; }
+
+/* — Partner-Form glasig — */
+.partner-form{
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(28px) saturate(170%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(170%) !important;
+  border: 1px solid var(--glass-bd) !important;
+  box-shadow: 0 12px 48px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.06) !important;
+}
+.pf-field input, .pf-field select, .pf-field textarea{
+  background: rgba(255,255,255,.04) !important;
+  border: 1px solid var(--glass-bd) !important;
+  transition: border-color .2s var(--ease-cubic), background .2s var(--ease-cubic) !important;
+}
+.pf-field input:focus, .pf-field select:focus, .pf-field textarea:focus{
+  border-color: var(--pink2) !important;
+  background: rgba(255,255,255,.06) !important;
+  outline: none !important;
+}
+
+/* — Pulse-Dot in Nav etwas fancier — */
+.nav-pill{
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  background: rgba(255,109,46,.06) !important;
+}
+
+/* — Reveal-Animation on scroll-in — */
+.feat-card, .rm-step, .feat-more-item, .social-link{
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity .8s var(--ease-cubic), transform .8s var(--ease-cubic), border-color .3s var(--ease-cubic), background .3s var(--ease-cubic);
+}
+.feat-card.is-visible, .rm-step.is-visible, .feat-more-item.is-visible, .social-link.is-visible{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* — prefers-reduced-motion respect — */
+@media (prefers-reduced-motion: reduce){
+  *, *::before, *::after{
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+  .feat-card, .rm-step, .feat-more-item, .social-link{ opacity: 1 !important; transform: none !important; }
+}
+
+/* — Mobile-Tweak: weniger blur damit's nicht laggt — */
+@media (max-width: 700px){
+  .wl-card, .feat-card, .rm-step, .partner-form, .social-link, .feat-more-item{
+    backdrop-filter: blur(16px) saturate(150%) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(150%) !important;
+  }
+}
+
+/* ═══════════════════════════════════════════
+   ROADMAP — Polish-Layer Pass 2
+   ═══════════════════════════════════════════ */
+
+/* — Section-Container & Headlines — */
+.roadmap{
+  padding: 100px 24px 120px;
+}
+.roadmap .section-tag{
+  display: block;
+  text-align: center;
+  margin-bottom: 14px;
+}
+.roadmap-sub{
+  text-align: center;
+  font-size: 18px;
+  color: var(--fg-2, #C8C8D4);
+  max-width: 640px;
+  margin: 0 auto 50px;
+  line-height: 1.5;
+}
+.roadmap > .roadmap-inner > h2{
+  text-align: center;
+  font-size: clamp(28px, 4.5vw, 48px) !important;
+  font-weight: 900 !important;
+  letter-spacing: -1.5px !important;
+  line-height: 1.05 !important;
+  margin-bottom: 16px !important;
+}
+/* Pink-Em auf "feiern." in der Roadmap-Headline */
+.roadmap > .roadmap-inner > h2 em,
+.roadmap > .roadmap-inner > h2 strong{
+  font-style: normal;
+  background: var(--grad-hero);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* — Big Counter (56 / 50.000) als Glas-Hero — */
+.roadmap-progress{
+  max-width: 720px;
+  margin: 0 auto 60px;
+  padding: 28px 32px;
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(28px) saturate(170%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(170%) !important;
+  border: 1px solid var(--glass-bd) !important;
+  border-radius: 24px !important;
+  box-shadow: 0 12px 48px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.06) !important;
+}
+.roadmap-progress-label{
+  font-size: clamp(28px, 3.4vw, 40px) !important;
+  font-weight: 900 !important;
+  letter-spacing: -1px !important;
+  background: var(--grad-hero);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 16px !important;
+  display: block;
+  text-align: left;
+}
+.roadmap-progress-bar{
+  height: 12px !important;
+  background: rgba(255,255,255,.06) !important;
+  border: 1px solid rgba(255,255,255,.06) !important;
+  border-radius: 999px !important;
+  overflow: hidden;
+}
+
+/* — Timeline-Container — */
+.rm-timeline{
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 18px !important;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+}
+@media (max-width: 980px){
+  .rm-timeline{ grid-template-columns: repeat(2, 1fr) !important; }
+}
+@media (max-width: 600px){
+  .rm-timeline{ grid-template-columns: 1fr !important; gap: 14px !important; }
+}
+
+/* — Milestone-Step: Glas-Card mit Layout-Reset — */
+.rm-step{
+  position: relative !important;
+  padding: 60px 24px 24px !important;
+  border-radius: 18px !important;
+  text-align: center;
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+/* — Emoji-Kreis (Dot) prominent oben — */
+.rm-step .rm-dot{
+  position: absolute !important;
+  top: -22px !important;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 56px !important;
+  height: 56px !important;
+  border-radius: 50% !important;
+  background: linear-gradient(135deg, #1a1a26, #0B0B14) !important;
+  border: 2px solid var(--glass-bd) !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,.4);
+  z-index: 2;
+}
+
+/* — Member-Zahl als Hero-Statement — */
+.rm-step .rm-members{
+  font-size: clamp(28px, 3.5vw, 40px) !important;
+  font-weight: 900 !important;
+  letter-spacing: -1.5px !important;
+  background: var(--grad-hero);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1 !important;
+  margin-bottom: 8px !important;
+}
+
+.rm-step .rm-title{
+  font-size: 16px !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.01em !important;
+  margin-bottom: 8px !important;
+  color: var(--fg, #FAFAFA) !important;
+}
+
+.rm-step .rm-desc{
+  font-size: 13px !important;
+  line-height: 1.55 !important;
+  color: var(--muted, #888) !important;
+  margin-bottom: 14px !important;
+  flex: 1;
+}
+
+/* — Status-Pill am unteren Card-Rand — */
+.rm-step .rm-head{
+  display: inline-block !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  letter-spacing: .14em !important;
+  text-transform: uppercase;
+  padding: 5px 12px !important;
+  border-radius: 999px !important;
+  background: rgba(255,255,255,.06) !important;
+  color: var(--muted, #888) !important;
+  border: 1px solid rgba(255,255,255,.06);
+  margin-top: auto;
+}
+
+/* — Erster Milestone (next/active) glüht pink — */
+.rm-step:first-of-type{
+  border-color: rgba(254,60,114,.45) !important;
+  background: linear-gradient(135deg, rgba(254,60,114,.04), rgba(255,109,46,.02)) !important;
+  box-shadow:
+    0 16px 56px rgba(254,60,114,.22),
+    inset 0 1px 0 rgba(255,255,255,.08),
+    0 0 0 1px rgba(254,60,114,.25) !important;
+  animation: rmActivePulse 3.2s var(--ease-cubic) infinite;
+}
+@keyframes rmActivePulse{
+  0%, 100%{ box-shadow: 0 16px 56px rgba(254,60,114,.22), inset 0 1px 0 rgba(255,255,255,.08), 0 0 0 1px rgba(254,60,114,.25); }
+  50%    { box-shadow: 0 20px 64px rgba(254,60,114,.35), inset 0 1px 0 rgba(255,255,255,.10), 0 0 0 2px rgba(254,60,114,.45); }
+}
+.rm-step:first-of-type .rm-dot{
+  background: var(--grad-hero) !important;
+  border-color: rgba(254,60,114,.5) !important;
+  box-shadow: 0 8px 24px rgba(254,60,114,.4), 0 0 0 4px rgba(254,60,114,.12);
+}
+.rm-step:first-of-type .rm-head{
+  background: rgba(254,60,114,.16) !important;
+  color: var(--pink2, #FE3C72) !important;
+  border-color: rgba(254,60,114,.3) !important;
+}
+
+/* — Reduced motion — */
+@media (prefers-reduced-motion: reduce){
+  .rm-step:first-of-type{ animation: none; }
+}
 </style>
 </head>
 <body>
@@ -316,7 +1064,7 @@ footer{padding:32px 24px;border-top:1px solid var(--line);text-align:center}
 <section class="hero">
   <div class="hero-bg"></div>
   <div class="hero-inner">
-    <div class="hero-eyebrow">Die Party-App für Mallorca · Saison 2026</div>
+    <div class="hero-eyebrow">Die Event-App für deine Crew · Europa · 2026</div>
     <div class="hook">
       <span class="word">Allein</span>
     </div>
@@ -332,8 +1080,9 @@ footer{padding:32px 24px;border-top:1px solid var(--line);text-align:center}
     <div class="hook" style="margin-top:.05em">
       <span class="word brand">crew<span class="dot">.</span></span>
     </div>
-    <p class="hero-sub">Finde deine Crew, bevor du landest. Die App die Alleinreisende und Gruppen auf Mallorca zusammenbringt.</p>
+    <p class="hero-sub">Finde deine Crew, bevor's losgeht. Die App die Alleinreisende und Gruppen auf Festivals, Stadt-Trips und Events in ganz Europa zusammenbringt.</p>
     <form class="wl-card" id="wlForm" novalidate>
+      <input type="text" name="website" id="wlHp" class="hp-trap" tabindex="-1" autocomplete="off" aria-hidden="true">
       <h2>Trag dich in die Warteliste ein</h2>
       <div class="wl-field">
         <label>Name</label>
@@ -403,7 +1152,8 @@ footer{padding:32px 24px;border-top:1px solid var(--line);text-align:center}
       <h3>Schon auf der Liste? Code abrufen</h3>
       <p class="cl-sub">Gib deine E-Mail ein, um deinen Referral-Code abzurufen oder einen neuen zu generieren.</p>
       <div class="cl-form">
-        <input type="email" id="clEmail" placeholder="Deine E-Mail-Adresse">
+        <input type="text" id="clHp" class="hp-trap" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <input type="email" id="clEmail" placeholder="Deine E-Mail-Adresse" maxlength="120">
         <button type="button" onclick="lookupCode()">Code abrufen</button>
       </div>
       <div class="cl-result" id="clResult"></div>
@@ -443,26 +1193,59 @@ footer{padding:32px 24px;border-top:1px solid var(--line);text-align:center}
         <div class="feat-card-icon blue">📍</div>
         <h3>Live-Tracker</h3>
       </div>
-      <p>3 Uhr nachts, Bierkönig war geil, aber wo ist der Rest? Der Live-Tracker zeigt dir in Echtzeit wo deine Crew gerade ist. Nie wieder Leute verlieren. Nie wieder 47 Sprachnachrichten schicken um rauszufinden in welcher Bar alle sind.</p>
+      <p>3 Uhr nachts, der Club war geil, aber wo ist der Rest? Der Live-Tracker zeigt dir in Echtzeit wo deine Crew gerade ist. Nie wieder Leute verlieren. Nie wieder 47 Sprachnachrichten schicken um rauszufinden in welcher Bar alle sind.</p>
       <div class="feat-tags"><span class="feat-tag">Echtzeit-Standort</span><span class="feat-tag">Nur für deine Crew</span><span class="feat-tag">SOS-Button</span></div>
     </div>
 
-    <div class="feat-card">
+    <div class="feat-card feat-soon feat-mystery">
+      <span class="soon-badge">Geheim · Coming</span>
       <div class="feat-card-head">
         <div class="feat-card-icon green">🎲</div>
-        <h3>Party-Challenges</h3>
+        <h3>Challenges<span class="mystery-dots">…</span></h3>
       </div>
-      <p>Crew-Challenges, Foto-Battles, Tages-Quests gegen andere Crews. Punkte sammeln, Ranglisten erklimmen und am Ende der Woche sehen, welche Crew am meisten zusammen erlebt hat. Das wird euer Urlaub auf einem anderen Level.</p>
-      <div class="feat-tags"><span class="feat-tag">Crew vs. Crew</span><span class="feat-tag">Tages-Challenges</span><span class="feat-tag">Leaderboard</span></div>
+      <p>Crew gegen Crew. Punkte. Streaks. Ranglisten. Mehr verraten wir noch nicht — Founding Members sehen es zuerst.</p>
+      <div class="feat-tags">
+        <span class="feat-tag">Crew vs. Crew</span>
+        <span class="feat-tag mystery-tag">???</span>
+        <span class="feat-tag mystery-tag">???</span>
+      </div>
     </div>
 
+    <div class="feat-more-head">
+      <span class="feat-more-tag">Roadmap · In Planung</span>
+      <p>Was als Nächstes kommt — was die Community priorisiert, ziehen wir vor.</p>
+    </div>
     <div class="feat-more">
-      <div class="feat-more-item"><span>🌙</span>Safe-Night-Tracker</div>
-      <div class="feat-more-item"><span>💬</span>Crew-Chat</div>
-      <div class="feat-more-item"><span>🗳️</span>Votings</div>
-      <div class="feat-more-item"><span>🎵</span>Playlist-Voting</div>
-      <div class="feat-more-item"><span>📸</span>Foto-Battles</div>
-      <div class="feat-more-item"><span>🚨</span>SOS-System</div>
+      <div class="feat-more-item">
+        <div class="fmi-emoji">🌙</div>
+        <div class="fmi-name">Safe-Night-Tracker</div>
+        <div class="fmi-status">Geplant</div>
+      </div>
+      <div class="feat-more-item">
+        <div class="fmi-emoji">💬</div>
+        <div class="fmi-name">Crew-Chat</div>
+        <div class="fmi-status">Geplant</div>
+      </div>
+      <div class="feat-more-item">
+        <div class="fmi-emoji">🗳️</div>
+        <div class="fmi-name">Votings</div>
+        <div class="fmi-status">Geplant</div>
+      </div>
+      <div class="feat-more-item">
+        <div class="fmi-emoji">🎵</div>
+        <div class="fmi-name">Playlist-Voting</div>
+        <div class="fmi-status">Geplant</div>
+      </div>
+      <div class="feat-more-item">
+        <div class="fmi-emoji">📸</div>
+        <div class="fmi-name">Foto-Battles</div>
+        <div class="fmi-status">Geplant</div>
+      </div>
+      <div class="feat-more-item">
+        <div class="fmi-emoji">🚨</div>
+        <div class="fmi-name">SOS-System</div>
+        <div class="fmi-status">Geplant</div>
+      </div>
     </div>
   </div>
 </section>
@@ -493,8 +1276,9 @@ footer{padding:32px 24px;border-top:1px solid var(--line);text-align:center}
     <form class="fb-form" id="fbForm" onsubmit="return false">
       <textarea id="fbMessage" placeholder="Eure Idee, euer Wunsch, euer Feedback..." required></textarea>
       <div class="fb-row">
-        <input type="text" id="fbName" placeholder="Name (optional)">
-        <input type="email" id="fbEmail" placeholder="E-Mail (optional)">
+        <input type="text" id="fbHp" class="hp-trap" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <input type="text" id="fbName" placeholder="Name (optional)" maxlength="80">
+        <input type="email" id="fbEmail" placeholder="E-Mail (optional)" maxlength="120">
       </div>
       <button type="submit" class="fb-btn" id="fbBtn">Feedback senden &rarr;</button>
     </form>
@@ -507,7 +1291,7 @@ footer{padding:32px 24px;border-top:1px solid var(--line);text-align:center}
   <div class="manifesto-inner">
     <div class="section-tag">Wofür wir stehen</div>
     <h2>Kein Startup-Gelaber.<br>Nur Leute mit <span class="hl">einer Mission.</span></h2>
-    <p>crew. wurde nicht gegründet, um reich zu werden. Sondern weil wir selbst wissen, wie es sich anfühlt, auf Malle zu landen und nicht die richtige Crew zu haben.</p>
+    <p>crew. wurde nicht gegründet, um reich zu werden. Sondern weil wir selbst wissen, wie es sich anfühlt, auf einem Festival oder in einer fremden Stadt zu landen und nicht die richtige Crew zu haben.</p>
     <p>crew. ist kein Produkt. Es ist eine Bewegung. Der beste Urlaub hängt nicht vom Hotel ab, sondern von den Menschen um dich rum. Und genau dafür bauen wir das hier — mit euch, für euch, von Anfang an.</p>
     <p>Jede Idee, jedes Feature, jede Entscheidung — ihr seid dabei. Weil crew. euch gehört, nicht uns.</p>
     <div class="sig"><span>crew.</span></div>
@@ -546,8 +1330,8 @@ footer{padding:32px 24px;border-top:1px solid var(--line);text-align:center}
       <div class="rm-step" id="rmStep4" data-target="10000">
         <div class="rm-dot">🏝️</div>
         <div class="rm-head"><span class="rm-members">10.000 Mitglieder</span></div>
-        <div class="rm-title">Erstes crew. Meetup auf Malle</div>
-        <div class="rm-desc">Vom Bildschirm an den Strand. Das erste offizielle crew. Treffen auf der Insel — organisiert mit der Community, gefeiert von allen.</div>
+        <div class="rm-title">Erstes crew. Meetup</div>
+        <div class="rm-desc">Vom Bildschirm aufs Festival-Gelände. Das erste offizielle crew. Treffen — Stadt oder Festival, von der Community gewählt, von allen gefeiert.</div>
       </div>
       <div class="rm-step" id="rmStep5" data-target="25000">
         <div class="rm-dot">👑</div>
@@ -559,7 +1343,7 @@ footer{padding:32px 24px;border-top:1px solid var(--line);text-align:center}
         <div class="rm-dot">🌍</div>
         <div class="rm-head"><span class="rm-members">50.000 Mitglieder</span></div>
         <div class="rm-title">Expansion — neue Inseln, neue Crews</div>
-        <div class="rm-desc">crew. wächst über Mallorca hinaus. Wohin als Nächstes? Das entscheidet ihr. Ibiza, Kreta, Goldstrand — die Community zeigt den Weg.</div>
+        <div class="rm-desc">crew. wächst weiter. Wohin als Nächstes? Das entscheidet ihr. Tomorrowland, Sziget, Hurricane, Berlin, Wien, Amsterdam — die Community zeigt den Weg.</div>
       </div>
     </div>
   </div>
@@ -587,11 +1371,12 @@ footer{padding:32px 24px;border-top:1px solid var(--line);text-align:center}
 <section class="partner-section" id="partner">
   <div class="partner-inner">
     <div class="section-tag" style="font-size:11px;letter-spacing:.35em;text-transform:uppercase;color:var(--o);font-weight:700;margin-bottom:8px;text-align:center">Partnerprogramm</div>
-    <h2 style="font-size:clamp(20px,3.5vw,32px);font-weight:900;letter-spacing:-1px;text-align:center;margin-bottom:8px">Werde crew. Partner auf Mallorca</h2>
-    <p style="font-size:13px;color:#888;text-align:center;margin-bottom:32px;line-height:1.6;max-width:460px;margin-left:auto;margin-right:auto">Du hast eine Location, organisierst Events oder Festivals auf Mallorca? Werde Teil des crew.-Netzwerks und erreiche tausende Partyurlauber direkt in der App.</p>
+    <h2 style="font-size:clamp(20px,3.5vw,32px);font-weight:900;letter-spacing:-1px;text-align:center;margin-bottom:8px">Werde crew. Partner</h2>
+    <p style="font-size:13px;color:#888;text-align:center;margin-bottom:32px;line-height:1.6;max-width:460px;margin-left:auto;margin-right:auto">Du hast eine Location, organisierst Events oder Festivals — egal wo in Europa? Werde Teil des crew.-Netzwerks und erreiche tausende Event-Crews direkt in der App.</p>
     <form class="partner-form" id="partnerForm" novalidate>
+      <input type="text" id="pfHp" class="hp-trap" tabindex="-1" autocomplete="off" aria-hidden="true">
       <div class="pf-row">
-        <div class="pf-field"><label>Firmenname *</label><input type="text" id="pfBusiness" placeholder="z.B. Megapark, Bierkönig..." required></div>
+        <div class="pf-field"><label>Firmenname *</label><input type="text" id="pfBusiness" placeholder="z.B. Club, Bar, Festival..." required maxlength="120"></div>
         <div class="pf-field"><label>Art der Location *</label><select id="pfType" required><option value="">Bitte wählen</option><option value="Club / Bar">Club / Bar</option><option value="Beach Club">Beach Club</option><option value="Restaurant">Restaurant</option><option value="Hotel / Hostel">Hotel / Hostel</option><option value="Veranstalter">Veranstalter</option><option value="Festival">Festival</option><option value="Tour / Aktivität">Tour / Aktivität</option><option value="Sonstiges">Sonstiges</option></select></div>
       </div>
       <div class="pf-row">
@@ -600,7 +1385,7 @@ footer{padding:32px 24px;border-top:1px solid var(--line);text-align:center}
       </div>
       <div class="pf-row">
         <div class="pf-field"><label>Telefon</label><input type="tel" id="pfPhone" placeholder="+49 ..."></div>
-        <div class="pf-field"><label>Standort auf Mallorca</label><input type="text" id="pfLocation" placeholder="z.B. Playa de Palma"></div>
+        <div class="pf-field"><label>Standort / Stadt</label><input type="text" id="pfLocation" placeholder="z.B. Berlin, Wien, Mallorca, Festival"></div>
       </div>
       <div class="pf-field"><label>Website</label><input type="url" id="pfWebsite" placeholder="https://..."></div>
       <div class="pf-field"><label>Beschreibung</label><textarea id="pfDesc" placeholder="Erzähl uns kurz von deiner Location oder deinem Event..." rows="3"></textarea></div>
@@ -648,17 +1433,49 @@ try { sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY); } catch(e){}
 var urlParams = new URLSearchParams(window.location.search);
 var referredBy = urlParams.get('ref') || '';
 
+/* ===== Sicherheits-Härtungen (Honeypot, Rate-Limit, strenge Email-Validation) ===== */
+var EMAIL_RE = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,24}$/;
+var SUBMIT_COOLDOWN_MS = 8000;
+var lastSubmitAt = {};
+
+function isHoneypotTriggered(formId) {
+  var hpMap = { wlForm: 'wlHp', clEmail: 'clHp', fbForm: 'fbHp', partnerForm: 'pfHp' };
+  var hpId = hpMap[formId];
+  if (!hpId) return false;
+  var hp = document.getElementById(hpId);
+  return !!(hp && hp.value);
+}
+
+function isRateLimited(formId) {
+  var now = Date.now();
+  var last = lastSubmitAt[formId] || 0;
+  if (now - last < SUBMIT_COOLDOWN_MS) {
+    var wait = Math.ceil((SUBMIT_COOLDOWN_MS - (now - last)) / 1000);
+    alert('Bitte kurz warten (' + wait + 's), dann nochmal probieren.');
+    return true;
+  }
+  lastSubmitAt[formId] = now;
+  return false;
+}
+
+function isValidEmail(e) {
+  return typeof e === 'string' && e.length > 0 && e.length <= 120 && EMAIL_RE.test(e);
+}
+
 // Waitlist
 document.getElementById('wlForm').addEventListener('submit', async function(e){
   e.preventDefault();
-  var name = document.getElementById('wlName').value.trim();
-  var email = document.getElementById('wlEmail').value.trim();
-  var city = document.getElementById('wlCity').value.trim();
+  // Honeypot: Bot füllt verstecktes Feld aus → still verwerfen
+  if (isHoneypotTriggered('wlForm')) { return; }
+  if (isRateLimited('wlForm')) { return; }
+  var name = document.getElementById('wlName').value.trim().substring(0,80);
+  var email = document.getElementById('wlEmail').value.trim().toLowerCase();
+  var city = document.getElementById('wlCity').value.trim().substring(0,80);
   var age = document.getElementById('wlAge').value;
   var gender = document.getElementById('wlGender').value;
   var consent = document.getElementById('wlConsent').checked;
   if(!name){alert('Bitte gib deinen Namen ein.');return}
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){alert('Bitte eine gültige E-Mail eingeben.');return}
+  if(!isValidEmail(email)){alert('Bitte eine gültige E-Mail eingeben.');return}
   if(!city){alert('Bitte gib deinen Wohnort ein.');return}
   if(!age){alert('Bitte wähle deine Altersgruppe.');return}
   if(!gender){alert('Bitte wähle dein Geschlecht.');return}
@@ -690,7 +1507,7 @@ async function showReferralCard(code){
   var refLink = 'https://partycrew.app/?ref=' + code;
   document.getElementById('refLink').value = refLink;
   // WhatsApp share
-  var waText = encodeURIComponent('Yo! Ich hab mich bei crew. eingetragen — die neue Party-App für Mallorca. Trag dich auch ein und wir sichern uns Premium! 🌴🔥 ' + refLink);
+  var waText = encodeURIComponent('Yo! Ich hab mich bei crew. eingetragen — die neue Event-App für deine Crew. Trag dich auch ein und wir sichern uns Premium! 🔥 ' + refLink);
   document.getElementById('refShareWA').href = 'https://wa.me/?text=' + waText;
   refCard.classList.add('show');
   // Load referral count
@@ -723,7 +1540,7 @@ function updateMilestoneTrigger(count){
     {target:250, label:'Sagt uns, was eure App können muss', emoji:'💬'},
     {target:1000, label:'Exklusiver Community-Chat', emoji:'🔓'},
     {target:5000, label:'Closed Beta startet', emoji:'🚀'},
-    {target:10000, label:'Erstes Meetup auf Malle', emoji:'🏝️'},
+    {target:10000, label:'Erstes Meetup', emoji:'🏝️'},
     {target:25000, label:'Offizieller Launch', emoji:'👑'},
     {target:50000, label:'Expansion — neue Inseln', emoji:'🌍'}
   ];
@@ -752,10 +1569,13 @@ function copyRefLink(){
 // Feedback form
 document.getElementById('fbForm').addEventListener('submit', async function(e){
   e.preventDefault();
-  var message = document.getElementById('fbMessage').value.trim();
-  var name = document.getElementById('fbName').value.trim();
-  var email = document.getElementById('fbEmail').value.trim();
+  if (isHoneypotTriggered('fbForm')) { return; }
+  if (isRateLimited('fbForm')) { return; }
+  var message = document.getElementById('fbMessage').value.trim().substring(0,2000);
+  var name = document.getElementById('fbName').value.trim().substring(0,80);
+  var email = document.getElementById('fbEmail').value.trim().toLowerCase();
   if(!message){alert('Bitte schreib uns was du dir wünschst.');return}
+  if(email && !isValidEmail(email)){alert('Die E-Mail-Adresse ist ungültig.');return}
   var btn = document.getElementById('fbBtn');
   btn.textContent = 'Senden...';btn.disabled = true;
   try {
@@ -774,9 +1594,11 @@ document.getElementById('fbForm').addEventListener('submit', async function(e){
 
 // Code lookup
 async function lookupCode(){
-  var email = document.getElementById('clEmail').value.trim();
+  if (isHoneypotTriggered('clEmail')) { return; }
+  if (isRateLimited('clEmail')) { return; }
+  var email = document.getElementById('clEmail').value.trim().toLowerCase();
   var res = document.getElementById('clResult');
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+  if(!isValidEmail(email)){
     res.className = 'cl-result show error';
     res.textContent = 'Bitte eine gültige E-Mail eingeben.';
     return;
@@ -803,18 +1625,20 @@ async function lookupCode(){
 // Partner form
 document.getElementById('partnerForm').addEventListener('submit', async function(e){
   e.preventDefault();
-  var biz = document.getElementById('pfBusiness').value.trim();
+  if (isHoneypotTriggered('partnerForm')) { return; }
+  if (isRateLimited('partnerForm')) { return; }
+  var biz = document.getElementById('pfBusiness').value.trim().substring(0,120);
   var type = document.getElementById('pfType').value;
-  var contact = document.getElementById('pfContact').value.trim();
-  var email = document.getElementById('pfEmail').value.trim();
-  var phone = document.getElementById('pfPhone').value.trim();
-  var loc = document.getElementById('pfLocation').value.trim();
-  var web = document.getElementById('pfWebsite').value.trim();
-  var desc = document.getElementById('pfDesc').value.trim();
+  var contact = document.getElementById('pfContact').value.trim().substring(0,80);
+  var email = document.getElementById('pfEmail').value.trim().toLowerCase();
+  var phone = document.getElementById('pfPhone').value.trim().substring(0,40);
+  var loc = document.getElementById('pfLocation').value.trim().substring(0,120);
+  var web = document.getElementById('pfWebsite').value.trim().substring(0,200);
+  var desc = document.getElementById('pfDesc').value.trim().substring(0,2000);
   if(!biz){alert('Bitte gib den Firmennamen ein.');return}
   if(!type){alert('Bitte wähle die Art der Location.');return}
   if(!contact){alert('Bitte gib einen Ansprechpartner ein.');return}
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){alert('Bitte eine gültige E-Mail eingeben.');return}
+  if(!isValidEmail(email)){alert('Bitte eine gültige E-Mail eingeben.');return}
   var btn = this.querySelector('button[type=submit]');
   btn.textContent = 'Senden...';btn.disabled = true;
   try {
@@ -845,6 +1669,24 @@ async function loadWaitlistCount(){
   } catch(e){}
 }
 loadWaitlistCount();
+
+// Scroll-Reveal — fügt is-visible Klasse zu Cards beim Scroll-In
+(function(){
+  var els = document.querySelectorAll('.feat-card, .rm-step, .feat-more-item, .social-link');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el){ el.classList.add('is-visible'); });
+    return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting){
+        e.target.classList.add('is-visible');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+  els.forEach(function(el){ io.observe(el); });
+})();
 
 // Roadmap updater
 function updateRoadmap(count){

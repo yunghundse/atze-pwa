@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#05050A" />
+<meta name="robots" content="index, follow" />
+<title>Kontakt · crew.</title>
+<meta name="description" content="So erreichst du das crew.-Team. WhatsApp, Mail, Instagram." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --pink: #FE3C72;
+  --orange: #FF6D2E;
+  --gold: #FFD60A;
+  --bg: #05050A;
+  --fg: #FAFAFA;
+  --fg-2: #C8C8D4;
+  --muted: #8B8B99;
+  --line: rgba(255,255,255,.08);
+  --hero-grad: linear-gradient(135deg, var(--pink) 0%, var(--orange) 100%);
+  --ease: cubic-bezier(.2,.7,.2,1);
+}
+*, *::before, *::after { box-sizing: border-box; }
+body{
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+body::before{
+  content:'';
+  position: fixed; inset: 0;
+  background:
+    radial-gradient(50% 40% at 80% 0%, rgba(254,60,114,.14), transparent 60%),
+    radial-gradient(40% 30% at 0% 30%, rgba(255,109,46,.1), transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+a { color: var(--pink); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.nav{
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 50;
+  padding: 14px 20px;
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  background: rgba(5,5,10,.75);
+  border-bottom: 1px solid var(--line);
+}
+.nav-inner{
+  max-width: 880px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.brand{
+  display: inline-flex;
+  align-items: baseline;
+  font-weight: 900;
+  font-size: 22px;
+  letter-spacing: -0.02em;
+  color: var(--fg);
+  text-decoration: none;
+}
+.brand-name{
+  background: var(--hero-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.brand-dot{
+  width: 8px; height: 8px;
+  margin-left: 2px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 12px rgba(255,214,10,.6);
+  align-self: center;
+  transform: translateY(2px);
+}
+.nav-back{
+  margin-left: auto;
+  font-size: 13px;
+  color: var(--fg-2);
+  font-weight: 600;
+}
+
+main{
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 120px 24px 80px;
+  position: relative;
+  z-index: 1;
+}
+h1{
+  font-size: clamp(40px, 6vw, 72px);
+  font-weight: 900;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+  margin: 0 0 16px;
+}
+h1 em{
+  font-style: normal;
+  background: var(--hero-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.lead{
+  font-size: 18px;
+  color: var(--fg-2);
+  margin: 0 0 56px;
+  max-width: 560px;
+}
+
+.contact-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+@media (max-width: 700px){
+  .contact-grid{ grid-template-columns: 1fr; }
+}
+
+.contact-card{
+  position: relative;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  padding: 32px 28px;
+  border-radius: 24px;
+  background: rgba(255,255,255,.04);
+  backdrop-filter: blur(28px) saturate(170%);
+  -webkit-backdrop-filter: blur(28px) saturate(170%);
+  border: 1px solid rgba(255,255,255,.08);
+  box-shadow: 0 12px 48px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.06);
+  text-decoration: none;
+  color: var(--fg);
+  overflow: hidden;
+  transition: transform .3s var(--ease), border-color .3s var(--ease);
+}
+.contact-card:hover{ transform: translateY(-4px); border-color: rgba(255,255,255,.18); }
+.contact-card::before{
+  content:'';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: .15;
+  transition: opacity .3s var(--ease);
+}
+.contact-card.mail::before{ background: radial-gradient(circle at 0% 0%, var(--pink), transparent 60%); }
+.contact-card.partner::before{ background: radial-gradient(circle at 100% 0%, var(--orange), transparent 60%); }
+.contact-card.whatsapp::before{ background: radial-gradient(circle at 0% 0%, #25D366, transparent 60%); }
+.contact-card.instagram::before{ background: radial-gradient(circle at 100% 0%, var(--pink), transparent 60%); }
+.contact-card:hover::before{ opacity: .3; }
+
+.contact-icon{
+  width: 56px; height: 56px;
+  border-radius: 16px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  margin-bottom: 18px;
+  position: relative;
+  z-index: 1;
+}
+.contact-meta{
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+  position: relative;
+  z-index: 1;
+}
+.contact-title{
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  margin: 0 0 6px;
+  position: relative;
+  z-index: 1;
+}
+.contact-sub{
+  font-size: 14px;
+  color: var(--fg-2);
+  margin: 0 0 18px;
+  position: relative;
+  z-index: 1;
+}
+.contact-cta{
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--pink);
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: gap .2s var(--ease);
+}
+.contact-card:hover .contact-cta{ gap: 10px; }
+
+.address{
+  margin-top: 60px;
+  padding: 28px 32px;
+  background: rgba(255,255,255,.03);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+}
+.address-h{
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.address p{ margin: 0; color: var(--fg-2); font-size: 15px; line-height: 1.7; }
+.address strong{ color: var(--fg); font-weight: 700; }
+
+.warn{
+  background: rgba(255,214,10,.08);
+  border: 1px solid rgba(255,214,10,.3);
+  padding: 14px 18px;
+  border-radius: 10px;
+  color: var(--gold);
+  font-size: 13px;
+  margin-top: 20px;
+}
+
+footer{
+  max-width: 760px;
+  margin: 60px auto 0;
+  padding: 24px;
+  border-top: 1px solid var(--line);
+  font-size: 13px;
+  color: var(--muted);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+footer a{ color: var(--fg-2); }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="brand"><span class="brand-name">crew</span><span class="brand-dot"></span></a>
+    <a href="/" class="nav-back">← zurück</a>
+  </div>
+</nav>
+
+<main>
+
+<h1>Kontakt. <em>Direkt.</em></h1>
+<p class="lead">
+  Kein Support-Ticket-System. Kein Chatbot. Wenn du schreibst, schreibt ein Mensch zurück.
+</p>
+
+<div class="contact-grid">
+
+  <a href="mailto:info@butterbread-tech.com" class="contact-card mail">
+    <div class="contact-icon">✉️</div>
+    <div>
+      <div class="contact-meta">Mail · Direkt</div>
+      <h3 class="contact-title">info@butterbread-tech.com</h3>
+      <p class="contact-sub">Feedback, Fragen, Partner-Anfragen, Datenschutz — alles direkt zu uns.</p>
+    </div>
+    <span class="contact-cta">Schreiben →</span>
+  </a>
+
+  <a href="tel:+4917663447217" class="contact-card partner">
+    <div class="contact-icon">📞</div>
+    <div>
+      <div class="contact-meta">Telefon</div>
+      <h3 class="contact-title">+49 176 63447217</h3>
+      <p class="contact-sub">Werktags 10–18 Uhr. Für Partner, Presse, dringende Fragen.</p>
+    </div>
+    <span class="contact-cta">Anrufen →</span>
+  </a>
+
+  <a href="https://whatsapp.com/channel/0029VbD10Vg3GJOtfhXJDG2e" target="_blank" rel="noopener" class="contact-card whatsapp">
+    <div class="contact-icon">💬</div>
+    <div>
+      <div class="contact-meta">WhatsApp-Kanal</div>
+      <h3 class="contact-title">crew. Updates</h3>
+      <p class="contact-sub">Build-Logs, Polls, Sneak-Peeks. Keine Werbung, kein Spam.</p>
+    </div>
+    <span class="contact-cta">Folgen →</span>
+  </a>
+
+  <a href="https://www.instagram.com/playa.crew" target="_blank" rel="noopener" class="contact-card instagram">
+    <div class="contact-icon">📸</div>
+    <div>
+      <div class="contact-meta">Instagram</div>
+      <h3 class="contact-title">@playa.crew</h3>
+      <p class="contact-sub">Stories, Reels, Behind-the-Scenes — wie die App entsteht.</p>
+    </div>
+    <span class="contact-cta">Folgen →</span>
+  </a>
+
+</div>
+
+<div class="address">
+  <div class="address-h">Postanschrift &amp; rechtliche Stelle</div>
+  <p>
+    <strong>Butterbread Technologies</strong><br/>
+    Jan Hundsdorff<br/>
+    Sudetenstraße 27<br/>
+    72474 Winterlingen<br/>
+    Deutschland
+  </p>
+</div>
+
+</main>
+
+<footer>
+  <span>© 2026 crew. — Butterbread Technologies</span>
+  <span><a href="/">Startseite</a> · <a href="/impressum.html">Impressum</a> · <a href="/datenschutz.html">Datenschutz</a></span>
+</footer>
+
+</body>
+</html>

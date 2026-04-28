@@ -1,6 +1,18 @@
+## Backups (nicht ins Repo)
+*.BACKUP
+*.LIVE-CLONE
+*.MEINE-V2-BACKUP
+index.html.*
 
-# Build pipeline
-build/node_modules/
-build/package-lock.json
+## OS / Editor noise
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.vscode/
+.idea/
+
+## Build-Artefakte (falls jemand mal Build-Step dazu macht)
+node_modules/
 dist/
-test_write_file.txt
+.cache/
