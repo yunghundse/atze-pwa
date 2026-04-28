@@ -1,0 +1,6 @@
+
+# Build pipeline
+build/node_modules/
+build/package-lock.json
+dist/
+test_write_file.txt
