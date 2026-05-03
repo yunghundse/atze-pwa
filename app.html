@@ -3952,4 +3952,601 @@
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 1500); });
   else setTimeout(init, 1500);
+})();</script><style id="bb-features">/* ============== ONBOARDING ============== */
+.ob-ov{position:fixed;inset:0;z-index:10005;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.ob-ov.show{display:flex}
+.ob-card{width:100%;max-width:440px;background:linear-gradient(180deg,#1a161e 0%,#100c14 100%);border-radius:24px;padding:32px 24px 22px;border:.5px solid rgba(255,255,255,.10);text-align:center}
+.ob-icon{width:72px;height:72px;border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 18px;box-shadow:0 8px 22px rgba(254,60,114,.4)}
+.ob-step-1 .ob-icon{background:linear-gradient(135deg,#FE3C72,#FF1F5C)}
+.ob-step-2 .ob-icon{background:linear-gradient(135deg,#0A84FF,#5E5CE6)}
+.ob-step-3 .ob-icon{background:linear-gradient(135deg,#34C759,#30D158)}
+.ob-step-4 .ob-icon{background:linear-gradient(135deg,#FFD60A,#FFAA00);color:#000}
+.ob-headline{font-family:'Anton',Impact,sans-serif;font-size:26px;letter-spacing:1px;color:#fff;text-transform:uppercase;margin-bottom:10px}
+.ob-text{font-size:14px;color:rgba(255,255,255,.78);line-height:1.55;margin-bottom:22px;padding:0 6px}
+.ob-progress{display:flex;gap:6px;justify-content:center;margin-bottom:18px}
+.ob-progress-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.18);transition:background .25s}
+.ob-progress-dot.active{background:#FE3C72;width:24px;border-radius:4px}
+.ob-actions{display:flex;flex-direction:column;gap:8px}
+.ob-btn-primary{padding:14px;border:0;border-radius:999px;background:linear-gradient(135deg,#FE3C72,#FF1F5C);color:#fff;font-size:14px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;cursor:pointer;box-shadow:0 6px 18px rgba(254,60,114,.4)}
+.ob-btn-secondary{padding:11px;border:0;border-radius:999px;background:transparent;color:rgba(255,255,255,.5);font-size:12px;font-weight:600;cursor:pointer}
+.ob-btn-primary:active{transform:scale(.97)}
+
+/* ============== HEIMWEG ============== */
+.hr-section{}
+.hr-card{padding:14px 16px;background:linear-gradient(135deg,rgba(0,199,190,.1),rgba(0,199,190,.02));border:.5px solid rgba(0,199,190,.25);border-radius:16px;margin-bottom:8px}
+.hr-card.is-active{background:linear-gradient(135deg,rgba(0,199,190,.18),rgba(0,199,190,.05));border-color:rgba(0,199,190,.45)}
+.hr-card-head{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.hr-card-icon{flex:none;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;font-size:20px}
+.hr-card.is-active .hr-card-icon{background:linear-gradient(135deg,#00C7BE,#34C759);color:#fff;animation:hrPulse 2s ease-in-out infinite}
+@keyframes hrPulse{0%,100%{box-shadow:0 0 0 0 rgba(0,199,190,.5)}50%{box-shadow:0 0 0 12px rgba(0,199,190,0)}}
+.hr-card-info{flex:1;min-width:0}
+.hr-card-info .l{font-size:14px;font-weight:700;color:#fff;line-height:1.2}
+.hr-card-info .s{font-size:11.5px;color:rgba(255,255,255,.55);line-height:1.3;margin-top:2px}
+.hr-controls{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.hr-input{width:100%;padding:11px 13px;background:rgba(255,255,255,.05);border:.5px solid rgba(255,255,255,.10);border-radius:10px;color:#fff;font-size:13.5px;font-family:inherit}
+.hr-input:focus{outline:0;border-color:#00C7BE}
+.hr-eta-row{display:flex;gap:6px}
+.hr-eta-btn{flex:1;padding:9px;background:rgba(255,255,255,.05);border:.5px solid rgba(255,255,255,.07);border-radius:10px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.hr-eta-btn.on{background:rgba(0,199,190,.18);border-color:rgba(0,199,190,.45);color:#34D399}
+.hr-btn-primary{padding:13px;border:0;border-radius:999px;background:linear-gradient(135deg,#00C7BE,#34C759);color:#fff;font-size:13px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;cursor:pointer}
+.hr-btn-stop{padding:13px;border:0;border-radius:999px;background:rgba(255,255,255,.10);color:#fff;font-size:13px;font-weight:700;cursor:pointer}
+.hr-btn-arrived{padding:13px;border:0;border-radius:999px;background:#34C759;color:#000;font-size:13px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;cursor:pointer}
+.hr-active-stats{font-size:11.5px;font-family:ui-monospace,monospace;color:rgba(255,255,255,.7);padding:10px 12px;background:rgba(255,255,255,.04);border-radius:10px;display:flex;flex-direction:column;gap:4px}
+.hr-active-stats .row{display:flex;justify-content:space-between}
+.hr-active-stats .row .v{color:#fff}
+
+/* ============== CREW WALL ============== */
+.cw-section{padding:14px 16px;background:rgba(255,255,255,.03);border-radius:14px;margin:14px 0}
+.cw-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.cw-title{font-size:13px;font-weight:700;color:rgba(255,255,255,.85);letter-spacing:.4px;text-transform:uppercase}
+.cw-meta{font-size:11px;color:rgba(255,255,255,.45)}
+.cw-composer{display:flex;gap:8px;margin-bottom:12px;align-items:flex-end}
+.cw-composer textarea{flex:1;padding:10px 12px;background:rgba(255,255,255,.06);border:.5px solid rgba(255,255,255,.10);border-radius:12px;color:#fff;font-size:13px;font-family:inherit;line-height:1.4;min-height:42px;max-height:120px;resize:none}
+.cw-composer textarea:focus{outline:0;border-color:#FE3C72}
+.cw-composer button{flex:none;padding:10px 14px;border:0;border-radius:10px;background:linear-gradient(135deg,#FE3C72,#FF1F5C);color:#fff;font-size:12px;font-weight:700;cursor:pointer}
+.cw-composer button:disabled{opacity:.4}
+.cw-feed{display:flex;flex-direction:column;gap:8px}
+.cw-post{display:flex;gap:10px;padding:11px 12px;background:rgba(255,255,255,.04);border-radius:12px}
+.cw-post-avatar{flex:none;width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#FE3C72,#BF5AF2);background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:11px}
+.cw-post-body{flex:1;min-width:0}
+.cw-post-head{display:flex;align-items:baseline;gap:8px;margin-bottom:3px}
+.cw-post-name{font-size:12.5px;font-weight:700;color:#fff}
+.cw-post-time{font-size:10.5px;color:rgba(255,255,255,.4)}
+.cw-post-content{font-size:13px;color:rgba(255,255,255,.85);line-height:1.45;word-break:break-word}
+.cw-empty{padding:20px 12px;text-align:center;color:rgba(255,255,255,.4);font-size:12px}
+
+/* ============== MOOD CARD SHARE ============== */
+.mc-share-btn{flex:1;padding:13px;border:0;border-radius:999px;background:linear-gradient(135deg,#34C759,#30D158);color:#fff;font-size:13px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
+.mc-share-btn:active{transform:scale(.97)}</style><script id="bb-features-js">/* ==========================================================================
+ * Features Bundle:
+ *   1. PostHog Analytics
+ *   2. Welcome-Tour Onboarding
+ *   3. Heimweg-Modus
+ *   4. Crew-Wall
+ *   5. Mood-Card-Sharing
+ * ========================================================================== */
+
+/* ============== 1. PostHog ============== */
+(function(){
+  // Replace with your PostHog API key + EU host
+  var POSTHOG_KEY = 'phc_PLACEHOLDER';
+  var POSTHOG_HOST = 'https://eu.i.posthog.com';
+  if (POSTHOG_KEY === 'phc_PLACEHOLDER') return;
+  // Standard PostHog snippet
+  !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys getNextSurveyStep onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+  posthog.init(POSTHOG_KEY, {
+    api_host: POSTHOG_HOST,
+    autocapture: false,
+    capture_pageview: false,
+    persistence: 'localStorage',
+    sanitize_properties: function(props){
+      ['lat','lng','phone','email','endpoint','p256dh_key','auth_key','code','content'].forEach(function(k){
+        if (k in props) props[k] = '[REDACTED]';
+      });
+      return props;
+    }
+  });
+  // Hook into crew.safety events
+  function attach(){
+    if (!window.crew || !window.crew.safety){ setTimeout(attach, 1000); return; }
+    var me = window.crew.safety.me();
+    if (me) try { posthog.identify(me.user_id); } catch(_){}
+    window.crew.safety.on('*', function(event, payload){
+      try { posthog.capture('safety:' + event, payload || {}); } catch(_){}
+    });
+  }
+  setTimeout(attach, 1500);
+})();
+
+/* ============== 2. Welcome-Tour Onboarding ============== */
+(function(){
+  function $(id){ return document.getElementById(id); }
+  function getSb(){ return window.sb || null; }
+  function getMe(){ return (window.ME && window.ME.user_id) ? window.ME : null; }
+
+  var STEPS = [
+    { icon:'🆘', title:'SOS in 3 Sekunden', text:'Halte den pinken SOS-Button oben rechts 3 Sek. gedrückt → deine Crew wird benachrichtigt, dein Standort übertragen, optional Audio aufgenommen.', cls:'ob-step-1' },
+    { icon:'🛡️', title:'Safety-Circle aufbauen', text:'Lade Freunde ein die du im Notfall verständigen willst. Sie sehen deinen Mood, deine Check-ins, bekommen Push bei SOS. Du dasselbe von ihnen.', cls:'ob-step-2' },
+    { icon:'🎭', title:'Mood teilen', text:'Sag deinem Circle wie es dir gerade geht — von 🥳 Am Feiern bis 🚨 Brauch jemand. Privacy by default: nur dein Circle sieht es.', cls:'ob-step-3' },
+    { icon:'📍', title:'Live-Standort optional', text:'Wenn du willst: dein Live-Standort an Circle teilen für 1–24h. Auto-Stop am Ende. Kein Tracking im Hintergrund — du bestimmst.', cls:'ob-step-4' }
+  ];
+
+  var step = 0;
+
+  function ensureOv(){
+    if ($('obOv')) return;
+    var ov = document.createElement('div');
+    ov.id = 'obOv'; ov.className = 'ob-ov';
+    ov.innerHTML =
+      '<div class="ob-card" id="obCard">'+
+      '<div class="ob-icon" id="obIcon">🆘</div>'+
+      '<div class="ob-headline" id="obTitle">Willkommen</div>'+
+      '<div class="ob-text" id="obText">.</div>'+
+      '<div class="ob-progress" id="obProgress"></div>'+
+      '<div class="ob-actions">'+
+      '<button class="ob-btn-primary" id="obNext">Weiter</button>'+
+      '<button class="ob-btn-secondary" id="obSkip">Überspringen</button>'+
+      '</div></div>';
+    document.body.appendChild(ov);
+    $('obNext').addEventListener('click', goNext);
+    $('obSkip').addEventListener('click', complete);
+  }
+
+  function render(){
+    ensureOv();
+    var s = STEPS[step]; if (!s) return complete();
+    $('obIcon').textContent = s.icon;
+    $('obTitle').textContent = s.title;
+    $('obText').textContent = s.text;
+    $('obCard').className = 'ob-card ' + s.cls;
+    var prog = $('obProgress'); prog.innerHTML = '';
+    STEPS.forEach(function(_, i){
+      var d = document.createElement('div'); d.className = 'ob-progress-dot' + (i === step ? ' active' : '');
+      prog.appendChild(d);
+    });
+    $('obNext').textContent = (step === STEPS.length - 1) ? 'Verstanden' : 'Weiter';
+  }
+
+  function goNext(){ step++; if (step >= STEPS.length) complete(); else render(); }
+
+  async function complete(){
+    var ov = $('obOv'); if (ov) ov.classList.remove('show');
+    var sb = getSb(), me = getMe(); if (!sb || !me) return;
+    try {
+      await sb.from('profiles').update({ onboarding_completed_at: new Date().toISOString() }).eq('user_id', me.user_id);
+    } catch(_){}
+    if (window.crew && window.crew.safety) window.crew.safety.log('onboarding_completed', { steps: STEPS.length }, 'data');
+  }
+
+  async function maybeShow(){
+    var sb = getSb(), me = getMe(); if (!sb || !me) return;
+    try {
+      var r = await sb.from('profiles').select('onboarding_completed_at').eq('user_id', me.user_id).single();
+      if (r && r.data && r.data.onboarding_completed_at) return;
+      step = 0;
+      ensureOv();
+      render();
+      $('obOv').classList.add('show');
+    } catch(_){}
+  }
+
+  function init(){ setTimeout(maybeShow, 3500); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 800); });
+  else setTimeout(init, 800);
+})();
+
+/* ============== 3. Heimweg-Modus ============== */
+(function(){
+  function $(id){ return document.getElementById(id); }
+  function getSb(){ return window.sb || null; }
+  function getMe(){ return (window.ME && window.ME.user_id) ? window.ME : null; }
+  function toast(m){ try{ if (typeof window.toast === 'function') return window.toast(m); }catch(_){} }
+  function fmtFuture(iso){ try{var d=new Date(iso);var dif=d.getTime()-Date.now();if(dif<=0)return 'überfällig';var mn=Math.floor(dif/60000);if(mn<60)return 'in '+mn+'m';var h=Math.floor(mn/60);var rm=mn%60;return rm?'in '+h+'h '+rm+'m':'in '+h+'h';}catch(_){return ''}}
+  function fmtRel(iso){ try{var d=new Date(iso);var dif=Date.now()-d.getTime();var s=Math.floor(dif/1000);if(s<60)return 'gerade';var m=Math.floor(s/60);if(m<60)return 'vor '+m+'m';var h=Math.floor(m/60);return 'vor '+h+'h';}catch(_){return ''}}
+
+  var activeRoute = null;
+  var pushIv = null;
+
+  async function loadActiveRoute(){
+    var sb = getSb(), me = getMe(); if (!sb || !me) return null;
+    try {
+      var r = await sb.from('home_routes').select('*').eq('user_id', me.user_id).eq('status','active').order('started_at',{ascending:false}).limit(1);
+      activeRoute = (r.data && r.data[0]) || null;
+    } catch(_){ activeRoute = null; }
+    return activeRoute;
+  }
+
+  function injectSection(){
+    var host = $('safeplaceOv'); if (!host) return;
+    if ($('hrSection')) return;
+    var content = host.querySelector('.sp-content'); if (!content) return;
+    var sec = document.createElement('div');
+    sec.className = 'sp-section hr-section'; sec.id = 'hrSection';
+    sec.innerHTML =
+      '<div class="sp-section-head"><div class="sp-section-title">Heimweg</div><span id="hrStatus" class="sp-section-meta">aus</span></div>'+
+      '<div class="hr-card" id="hrCard">'+
+      '<div class="hr-card-head"><div class="hr-card-icon">🏠</div>'+
+      '<div class="hr-card-info"><div class="l" id="hrLabel">Heimweg starten</div><div class="s" id="hrSub">Sag deinem Circle wann du wieder zuhause sein willst</div></div></div>'+
+      '<div id="hrIdle">'+
+      '<div class="hr-controls">'+
+      '<input class="hr-input" id="hrDest" placeholder="Wohin? (z.B. Zuhause, Hotel, ...)" maxlength="200">'+
+      '<div style="font-size:11px;color:rgba(255,255,255,.55);margin:4px 0 2px">Ich bin in...</div>'+
+      '<div class="hr-eta-row" id="hrEtaRow">'+
+        '<button class="hr-eta-btn" data-eta="15">15min</button>'+
+        '<button class="hr-eta-btn on" data-eta="30">30min</button>'+
+        '<button class="hr-eta-btn" data-eta="60">1h</button>'+
+        '<button class="hr-eta-btn" data-eta="120">2h</button>'+
+      '</div>'+
+      '<button class="hr-btn-primary" onclick="window.startHomeRoute&&window.startHomeRoute()">Heimweg starten</button>'+
+      '</div></div>'+
+      '<div id="hrActive" style="display:none">'+
+      '<div class="hr-active-stats" id="hrActiveStats"></div>'+
+      '<div class="hr-controls" style="margin-top:10px">'+
+      '<button class="hr-btn-arrived" onclick="window.completeHomeRoute&&window.completeHomeRoute()">✓ Bin angekommen</button>'+
+      '<button class="hr-btn-stop" onclick="window.cancelHomeRoute&&window.cancelHomeRoute()">Abbrechen</button>'+
+      '</div></div>'+
+      '</div>';
+    var privacy = $('spPrivacySection') || $('spLiveLocSection');
+    if (privacy) content.insertBefore(sec, privacy); else content.appendChild(sec);
+    bindEta();
+    refreshUI();
+  }
+
+  function bindEta(){
+    var row = $('hrEtaRow'); if (!row) return;
+    row.querySelectorAll('button').forEach(function(b){
+      b.addEventListener('click', function(){
+        row.querySelectorAll('button').forEach(function(x){x.classList.remove('on');});
+        b.classList.add('on');
+      });
+    });
+  }
+
+  function getEta(){
+    var b = document.querySelector('#hrEtaRow button.on');
+    return b ? parseInt(b.dataset.eta, 10) : 30;
+  }
+
+  async function refreshUI(){
+    await loadActiveRoute();
+    var card = $('hrCard'); if (!card) return;
+    var status = $('hrStatus'), label = $('hrLabel'), sub = $('hrSub');
+    var idle = $('hrIdle'), active = $('hrActive');
+    if (activeRoute){
+      card.classList.add('is-active');
+      status.textContent = fmtFuture(activeRoute.expected_arrival_at);
+      label.textContent = 'Heimweg läuft';
+      sub.textContent = 'Ziel: ' + (activeRoute.destination_label || '—') + ' · ETA ' + fmtFuture(activeRoute.expected_arrival_at);
+      idle.style.display = 'none'; active.style.display = '';
+      var stats = $('hrActiveStats');
+      stats.innerHTML =
+        '<div class="row"><span>Ziel</span><span class="v">'+ (activeRoute.destination_label || '—') +'</span></div>'+
+        '<div class="row"><span>ETA</span><span class="v">'+ fmtFuture(activeRoute.expected_arrival_at) +'</span></div>'+
+        '<div class="row"><span>Gestartet</span><span class="v">'+ fmtRel(activeRoute.started_at) +'</span></div>';
+    } else {
+      card.classList.remove('is-active');
+      status.textContent = 'aus';
+      label.textContent = 'Heimweg starten';
+      sub.textContent = 'Sag deinem Circle wann du wieder zuhause sein willst';
+      idle.style.display = ''; active.style.display = 'none';
+    }
+  }
+
+  function getPos(){
+    return new Promise(function(res){
+      if (!navigator.geolocation) return res(null);
+      navigator.geolocation.getCurrentPosition(function(p){res({lat:p.coords.latitude,lng:p.coords.longitude})},function(){res(null)},{enableHighAccuracy:true,timeout:7000,maximumAge:30000});
+    });
+  }
+
+  window.startHomeRoute = async function(){
+    var sb = getSb(), me = getMe(); if (!sb || !me) return;
+    var dest = ($('hrDest').value || '').trim() || 'Zuhause';
+    var etaMin = getEta();
+    var pos = await getPos();
+    var expArr = new Date(Date.now() + etaMin * 60000).toISOString();
+    try {
+      var ins = await sb.from('home_routes').insert({
+        user_id: me.user_id,
+        destination_label: dest,
+        start_lat: pos ? pos.lat : null,
+        start_lng: pos ? pos.lng : null,
+        current_lat: pos ? pos.lat : null,
+        current_lng: pos ? pos.lng : null,
+        eta_minutes: etaMin,
+        expected_arrival_at: expArr
+      }).select().single();
+      activeRoute = ins.data;
+      toast('Heimweg gestartet — Crew weiß Bescheid');
+      try { navigator.vibrate && navigator.vibrate([15,40,15]); } catch(_){}
+      if (window.crew && window.crew.safety) window.crew.safety.log('homeroute_started', { eta_minutes: etaMin }, 'live_location');
+      startPositionPing();
+      refreshUI();
+    } catch(e){ toast('Fehler: ' + (e.message || e)); }
+  };
+
+  window.completeHomeRoute = async function(){
+    var sb = getSb(); if (!sb || !activeRoute) return;
+    try {
+      await sb.from('home_routes').update({ status: 'arrived', completed_at: new Date().toISOString() }).eq('id', activeRoute.id);
+      toast('Sicher angekommen ✓');
+      stopPositionPing();
+      activeRoute = null;
+      if (window.crew && window.crew.safety) window.crew.safety.log('homeroute_arrived', {}, 'live_location');
+      refreshUI();
+    } catch(_){}
+  };
+
+  window.cancelHomeRoute = async function(){
+    if (!confirm('Heimweg abbrechen? Crew bekommt keine Benachrichtigung.')) return;
+    var sb = getSb(); if (!sb || !activeRoute) return;
+    try {
+      await sb.from('home_routes').update({ status: 'cancelled', cancelled_at: new Date().toISOString() }).eq('id', activeRoute.id);
+      stopPositionPing();
+      activeRoute = null;
+      if (window.crew && window.crew.safety) window.crew.safety.log('homeroute_cancelled', {}, 'live_location');
+      refreshUI();
+    } catch(_){}
+  };
+
+  function startPositionPing(){
+    stopPositionPing();
+    pushIv = setInterval(async function(){
+      if (!activeRoute) return stopPositionPing();
+      var pos = await getPos();
+      if (!pos) return;
+      try {
+        await getSb().from('home_routes').update({ current_lat: pos.lat, current_lng: pos.lng, last_update_at: new Date().toISOString() }).eq('id', activeRoute.id);
+      } catch(_){}
+    }, 60000);
+  }
+  function stopPositionPing(){ if (pushIv){ clearInterval(pushIv); pushIv = null; } }
+
+  function wrapHub(){
+    var orig = window.openSafeplaceHub;
+    if (!orig || orig.__bbHrWrapped) return;
+    window.openSafeplaceHub = function(){
+      orig.apply(this, arguments);
+      setTimeout(function(){ injectSection(); }, 350);
+    };
+    window.openSafeplaceHub.__bbHrWrapped = true;
+  }
+
+  function init(){
+    setTimeout(function(){
+      wrapHub();
+      loadActiveRoute().then(function(){ if (activeRoute) startPositionPing(); });
+    }, 2500);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 1000); });
+  else setTimeout(init, 1000);
+})();
+
+/* ============== 4. Crew-Wall ============== */
+(function(){
+  function $(id){ return document.getElementById(id); }
+  function $$(sel){ return document.querySelectorAll(sel); }
+  function getSb(){ return window.sb || null; }
+  function getMe(){ return (window.ME && window.ME.user_id) ? window.ME : null; }
+  function fmtRel(iso){ try{var d=new Date(iso);var dif=Date.now()-d.getTime();var s=Math.floor(dif/1000);if(s<60)return 'gerade';var m=Math.floor(s/60);if(m<60)return m+'m';var h=Math.floor(m/60);if(h<24)return h+'h';var dd=Math.floor(h/24);return dd+'T';}catch(_){return ''}}
+  function initials(n){if(!n)return'?';return n.trim().split(/\s+/).slice(0,2).map(function(p){return p[0];}).join('').toUpperCase();}
+
+  function injectWall(crewId){
+    if (!crewId) return;
+    var crewScreen = document.getElementById('screen-crew');
+    if (!crewScreen) return;
+    if ($('cwSection')) return; // schon drin
+    var sec = document.createElement('div');
+    sec.id = 'cwSection'; sec.className = 'cw-section';
+    sec.innerHTML =
+      '<div class="cw-head"><div class="cw-title">Crew-Wall</div><div class="cw-meta">Posts verschwinden nach 7 Tagen</div></div>'+
+      '<div class="cw-composer"><textarea id="cwInput" placeholder="Was geht?" maxlength="500"></textarea><button id="cwPostBtn" disabled>Posten</button></div>'+
+      '<div class="cw-feed" id="cwFeed"><div class="cw-empty">Lade...</div></div>';
+    crewScreen.appendChild(sec);
+    sec.dataset.crewId = crewId;
+    bindComposer();
+    loadFeed(crewId);
+  }
+
+  function bindComposer(){
+    var inp = $('cwInput'), btn = $('cwPostBtn');
+    if (!inp || !btn) return;
+    inp.addEventListener('input', function(){ btn.disabled = !inp.value.trim(); });
+    btn.addEventListener('click', postNow);
+    inp.addEventListener('keydown', function(e){ if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) postNow(); });
+  }
+
+  async function postNow(){
+    var sb = getSb(), me = getMe(); if (!sb || !me) return;
+    var sec = $('cwSection'); var crewId = sec && sec.dataset.crewId; if (!crewId) return;
+    var inp = $('cwInput'); var content = (inp.value || '').trim();
+    if (!content) return;
+    var btn = $('cwPostBtn'); btn.disabled = true;
+    try {
+      await sb.from('crew_posts').insert({ crew_id: crewId, user_id: me.user_id, content: content });
+      inp.value = '';
+      if (window.crew && window.crew.safety) window.crew.safety.log('crewwall_posted', {}, 'data');
+      loadFeed(crewId);
+    } catch(e){ alert('Konnte nicht posten: ' + (e.message || e)); }
+    btn.disabled = false;
+  }
+
+  async function loadFeed(crewId){
+    var sb = getSb(); if (!sb || !crewId) return;
+    var feed = $('cwFeed'); if (!feed) return;
+    try {
+      var r = await sb.from('crew_posts').select('*').eq('crew_id', crewId).gt('expires_at', new Date().toISOString()).order('created_at',{ascending:false}).limit(50);
+      var posts = r.data || [];
+      var userIds = Array.from(new Set(posts.map(function(p){ return p.user_id; })));
+      var profMap = {};
+      if (userIds.length){
+        var pr = await sb.from('profiles').select('user_id,name,photo_url').in('user_id', userIds);
+        (pr.data || []).forEach(function(p){ profMap[p.user_id] = p; });
+      }
+      if (!posts.length){ feed.innerHTML = '<div class="cw-empty">Noch keine Posts. Sei der erste!</div>'; return; }
+      feed.innerHTML = '';
+      posts.forEach(function(p){
+        var pf = profMap[p.user_id] || {};
+        var item = document.createElement('div'); item.className = 'cw-post';
+        item.innerHTML =
+          '<div class="cw-post-avatar"></div>'+
+          '<div class="cw-post-body"><div class="cw-post-head"><span class="cw-post-name"></span><span class="cw-post-time"></span></div><div class="cw-post-content"></div></div>';
+        var av = item.querySelector('.cw-post-avatar');
+        if (pf.photo_url){ av.style.backgroundImage = 'url('+pf.photo_url+')'; }
+        else av.textContent = initials(pf.name);
+        item.querySelector('.cw-post-name').textContent = pf.name || 'Anon';
+        item.querySelector('.cw-post-time').textContent = fmtRel(p.created_at);
+        item.querySelector('.cw-post-content').textContent = p.content;
+        feed.appendChild(item);
+      });
+    } catch(e){ feed.innerHTML = '<div class="cw-empty">Fehler beim Laden</div>'; }
+  }
+
+  // Realtime via crew.safety event bus (rt:* events bauen auf safety-bus)
+  function attachRealtime(){
+    if (!window.crew || !window.crew.safety){ setTimeout(attachRealtime, 1000); return; }
+    var sb = getSb(); if (!sb) return;
+    try {
+      var me = getMe(); if (!me) return;
+      sb.channel('cw-rt-' + me.user_id)
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'crew_posts' }, function(){
+          var sec = $('cwSection'); if (sec && sec.dataset.crewId) loadFeed(sec.dataset.crewId);
+        })
+        .subscribe();
+    } catch(_){}
+  }
+
+  // Hook: wenn Crew-Tab aktiv wird, injecte Wall mit aktiver Crew-ID
+  function findActiveCrewId(){
+    if (typeof window.getActiveCrewId === 'function'){
+      try { return window.getActiveCrewId(); } catch(_){}
+    }
+    return null;
+  }
+
+  function trySetup(){
+    var crewId = findActiveCrewId();
+    if (crewId){ injectWall(crewId); return; }
+    setTimeout(trySetup, 1500);
+  }
+
+  function init(){
+    setTimeout(trySetup, 4000);
+    setTimeout(attachRealtime, 3000);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 1500); });
+  else setTimeout(init, 1500);
+})();
+
+/* ============== 5. Mood-Card-Sharing ============== */
+(function(){
+  function $(id){ return document.getElementById(id); }
+
+  function generateMoodCard(mood){
+    var W = 1080, H = 1920; // Instagram-Story-Format
+    var c = document.createElement('canvas'); c.width = W; c.height = H;
+    var ctx = c.getContext('2d');
+    // Gradient bg
+    var g = ctx.createLinearGradient(0, 0, W, H);
+    g.addColorStop(0, '#FE3C72');
+    g.addColorStop(1, '#FF6D2E');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    // Soft white overlay top-left
+    var rad = ctx.createRadialGradient(W*0.3, H*0.2, 50, W*0.3, H*0.2, W*0.6);
+    rad.addColorStop(0, 'rgba(255,255,255,0.18)');
+    rad.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = rad; ctx.fillRect(0, 0, W, H);
+    // Big emoji
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.font = '480px Apple Color Emoji, Segoe UI Emoji, sans-serif';
+    ctx.fillText(mood.emoji, W/2, H*0.4);
+    // Label
+    ctx.fillStyle = '#fff';
+    ctx.font = '700 110px -apple-system, BlinkMacSystemFont, "Inter", sans-serif';
+    ctx.fillText(mood.label, W/2, H*0.62);
+    // Sub-text
+    ctx.fillStyle = 'rgba(255,255,255,.85)';
+    ctx.font = '400 52px -apple-system, "Inter", sans-serif';
+    ctx.fillText('mein mood gerade', W/2, H*0.69);
+    // Brand
+    ctx.fillStyle = 'rgba(255,255,255,.65)';
+    ctx.font = '600 48px -apple-system, "Inter", sans-serif';
+    ctx.fillText('partycrew.app', W/2, H*0.92);
+    // Brand mark — gold dot
+    ctx.beginPath();
+    ctx.arc(W*0.59, H*0.92 - 12, 18, 0, Math.PI*2);
+    ctx.fillStyle = '#FFD60A';
+    ctx.fill();
+    return c;
+  }
+
+  function canvasToBlob(canvas){
+    return new Promise(function(res){ canvas.toBlob(function(b){ res(b); }, 'image/png', 0.95); });
+  }
+
+  window.shareMoodCard = async function(mood){
+    if (!mood){
+      // Try to fetch active mood
+      var sb = window.sb, me = window.ME;
+      if (sb && me){
+        try {
+          var r = await sb.from('user_moods').select('emoji,label,color').eq('user_id', me.user_id).gt('expires_at', new Date().toISOString()).order('created_at',{ascending:false}).limit(1);
+          mood = r && r.data && r.data[0];
+        } catch(_){}
+      }
+    }
+    if (!mood){ alert('Setz erst einen Mood, dann kannst du ihn teilen.'); return; }
+    var canvas = generateMoodCard(mood);
+    var blob = await canvasToBlob(canvas);
+    var file = new File([blob], 'crew-mood-'+Date.now()+'.png', { type: 'image/png' });
+    var shareData = { title:'Mein Mood auf crew.', text: 'Mood: '+mood.emoji+' '+mood.label+' — partycrew.app', files:[file] };
+    try {
+      if (navigator.canShare && navigator.canShare({ files:[file] })){
+        await navigator.share(shareData);
+        if (window.crew && window.crew.safety) window.crew.safety.log('mood_shared', { method:'native_share' }, 'data');
+        return;
+      }
+    } catch(_){}
+    // Fallback: download
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = file.name;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+    if (window.crew && window.crew.safety) window.crew.safety.log('mood_shared', { method:'download' }, 'data');
+  };
+
+  // Add Share-Button to Mood-Picker actions
+  function injectShareBtn(){
+    var actions = document.querySelector('#moodPickerOv .mp-actions');
+    if (!actions) return;
+    if (actions.querySelector('.mc-share-btn')) return;
+    var btn = document.createElement('button');
+    btn.className = 'mc-share-btn';
+    btn.innerHTML = '↗ Als Story teilen';
+    btn.addEventListener('click', function(){
+      var grid = document.getElementById('moodGrid');
+      var sel = grid && grid.querySelector('.mp-mood.selected');
+      if (sel){
+        var emoji = sel.querySelector('.mp-mood-emoji').textContent;
+        var label = sel.querySelector('.mp-mood-label').textContent;
+        var color = (sel.style.getPropertyValue('--mood-c') || '#FE3C72').trim();
+        window.shareMoodCard({ emoji: emoji, label: label, color: color });
+      } else {
+        window.shareMoodCard();
+      }
+    });
+    actions.insertBefore(btn, actions.firstChild);
+  }
+
+  function init(){
+    var observer = new MutationObserver(function(){ injectShareBtn(); });
+    setTimeout(function(){
+      var ov = document.getElementById('moodPickerOv');
+      if (ov) observer.observe(ov, { childList: true, subtree: true });
+      injectShareBtn();
+    }, 3000);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 2000); });
+  else setTimeout(init, 2000);
 })();</script></body></html>
