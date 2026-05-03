@@ -5550,4 +5550,462 @@
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 1500); });
   else setTimeout(init, 1500);
+})();</script><style id="bb-bridge">/* ========================================================
+ * Radar ↔ SafePlace Bridge + Compliance-Design
+ * ======================================================== */
+
+/* Step 1: Erweitertes Radar-Banner (SafePlace-Mini-Status) */
+.ll-radar-banner{padding:8px 12px 8px 10px}
+.ll-radar-banner-info .ll-radar-banner-l{display:flex;align-items:center;gap:6px}
+.ll-radar-banner-info .ll-radar-banner-l::before{content:'';width:8px;height:8px;border-radius:50%;background:#34D399;box-shadow:0 0 8px #34D399;flex:none}
+.ll-radar-banner.is-active .ll-radar-banner-info .ll-radar-banner-l::before{background:#FE3C72;box-shadow:0 0 8px #FE3C72;animation:rbDot 1.4s ease-in-out infinite}
+.ll-radar-banner.is-paused .ll-radar-banner-info .ll-radar-banner-l::before{background:#FFAA00;box-shadow:0 0 8px #FFAA00}
+@keyframes rbDot{0%,100%{opacity:1}50%{opacity:.4}}
+.ll-radar-banner.has-sos{background:linear-gradient(135deg,rgba(254,60,114,.30),rgba(254,60,114,.08))!important;border-color:rgba(254,60,114,.55)!important;box-shadow:0 14px 40px rgba(254,60,114,.35)!important}
+.ll-radar-banner.has-sos .ll-radar-banner-info .ll-radar-banner-l::before{background:#FE3C72;animation:rbDot .7s ease-in-out infinite}
+
+/* Step 2: Friend-Status-Sheet */
+.fs-ov{position:fixed;inset:0;z-index:10010;display:none;pointer-events:none}
+.fs-ov.show{display:block;pointer-events:auto}
+.fs-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);opacity:0;transition:opacity .25s ease}
+.fs-ov.show .fs-backdrop{opacity:1}
+.fs-sheet{position:absolute;left:0;right:0;bottom:0;max-width:520px;margin:0 auto;background:linear-gradient(180deg,#1a161e 0%,#0a080c 100%);border-radius:24px 24px 0 0;border-top:.5px solid rgba(255,255,255,.10);box-shadow:0 -20px 60px rgba(0,0,0,.7);padding:14px 22px max(28px,env(safe-area-inset-bottom,28px));transform:translateY(100%);transition:transform .42s cubic-bezier(.34,1.56,.64,1)}
+.fs-ov.show .fs-sheet{transform:translateY(0)}
+.fs-handle{width:42px;height:4px;border-radius:999px;background:rgba(255,255,255,.18);margin:0 auto 16px}
+.fs-head{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+.fs-av{flex:none;width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#FE3C72,#BF5AF2);background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:22px;border:2px solid rgba(255,255,255,.10);position:relative}
+.fs-av.is-sos{border-color:#FE3C72;animation:rbDot 1.4s ease-in-out infinite}
+.fs-mood{position:absolute;bottom:-2px;right:-2px;width:24px;height:24px;border-radius:50%;background:#1a161e;border:2px solid #1a161e;display:flex;align-items:center;justify-content:center;font-size:13px}
+.fs-info{flex:1;min-width:0}
+.fs-name{font-size:20px;font-weight:900;color:#fff;letter-spacing:-.3px;line-height:1.1}
+.fs-status{font-size:13px;color:rgba(255,255,255,.65);line-height:1.3;margin-top:3px}
+.fs-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.fs-stat{padding:11px 14px;background:rgba(255,255,255,.04);border-radius:12px}
+.fs-stat .l{font-size:10.5px;color:rgba(255,255,255,.5);font-weight:700;letter-spacing:.4px;text-transform:uppercase;margin-bottom:3px}
+.fs-stat .v{font-size:14px;font-weight:700;color:#fff}
+.fs-stat .v.green{color:#34D399}
+.fs-stat .v.pink{color:#FE3C72}
+.fs-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px}
+.fs-act{padding:13px;border:0;border-radius:14px;background:rgba(255,255,255,.06);color:#fff;font-size:12.5px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;-webkit-tap-highlight-color:transparent}
+.fs-act:active{transform:scale(.97);background:rgba(255,255,255,.10)}
+.fs-act.var-prim{background:linear-gradient(135deg,#FE3C72,#FF1F5C)}
+.fs-act.var-map{background:linear-gradient(135deg,#0A84FF,#5E5CE6)}
+.fs-act.var-msg{background:linear-gradient(135deg,#34C759,#30D158);color:#0a0a0a}
+
+/* Step 4: Compliance-Indikatoren auf der Karte */
+.cp-indicator{position:absolute;top:max(70px,calc(env(safe-area-inset-top,0px) + 70px));right:14px;z-index:60;display:flex;flex-direction:column;gap:6px;pointer-events:none}
+.cp-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 11px 6px 8px;background:rgba(15,15,18,.85);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border-radius:999px;border:.5px solid rgba(255,255,255,.10);font-size:11px;font-weight:700;color:#fff;letter-spacing:.2px;pointer-events:auto;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.cp-pill .ic{width:14px;height:14px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:9px;line-height:1}
+.cp-pill.live{border-color:rgba(254,60,114,.45);box-shadow:0 4px 16px rgba(254,60,114,.25)}
+.cp-pill.live .ic{background:#FE3C72;color:#fff;animation:rbDot 1.6s ease-in-out infinite}
+.cp-pill.pause{border-color:rgba(255,170,0,.45);color:#FFAA00}
+.cp-pill.pause .ic{background:#FFAA00;color:#000}
+.cp-pill.scope{color:rgba(255,255,255,.7);font-weight:600}
+.cp-pill .x{cursor:pointer;opacity:.6;font-size:13px;line-height:1;margin-left:2px}
+
+/* Step 5: First-Use-Consent-Toast */
+.fu-toast{position:fixed;left:50%;bottom:120px;transform:translateX(-50%) translateY(20px);z-index:99998;max-width:calc(100% - 28px);width:480px;padding:14px 16px;background:linear-gradient(135deg,rgba(254,60,114,.18),rgba(15,15,18,.92));backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);border:.5px solid rgba(254,60,114,.42);border-radius:16px;color:#fff;box-shadow:0 18px 50px rgba(254,60,114,.25);font-size:12.5px;line-height:1.45;opacity:0;transition:opacity .35s ease,transform .35s ease;pointer-events:none}
+.fu-toast.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto}
+.fu-toast strong{color:#fff;font-weight:800;display:block;margin-bottom:3px}
+.fu-toast .row{display:flex;align-items:flex-start;gap:10px}
+.fu-toast .ic{flex:none;font-size:22px;line-height:1}
+.fu-toast .body{flex:1}
+.fu-toast .x{flex:none;background:none;border:0;color:rgba(255,255,255,.6);font-size:18px;cursor:pointer;line-height:1;padding:0 4px}</style><script id="bb-bridge-js">/* ==========================================================
+ * Step 1-5: Radar ↔ SafePlace Bridge + Compliance-Design
+ * ========================================================== */
+(function(){
+  function $(id){ return document.getElementById(id); }
+  function getSb(){ return window.sb || null; }
+  function getMe(){ return (window.ME && window.ME.user_id) ? window.ME : null; }
+  function toast(m){ try{ if (typeof window.toast === 'function') return window.toast(m); }catch(_){} }
+  function fmtRel(iso){ try{var d=new Date(iso);var dif=Date.now()-d.getTime();var s=Math.floor(dif/1000);if(s<60)return 'gerade';var m=Math.floor(s/60);if(m<60)return 'vor '+m+'m';var h=Math.floor(m/60);if(h<24)return 'vor '+h+'h';return 'vor '+Math.floor(h/24)+'T';}catch(_){return ''}}
+  function fmtFut(iso){ try{var d=new Date(iso);var dif=d.getTime()-Date.now();if(dif<=0)return '0m';var mn=Math.floor(dif/60000);if(mn<60)return mn+'m';var h=Math.floor(mn/60);return h+'h '+(mn%60)+'m';}catch(_){return ''}}
+  function initials(n){if(!n)return'?';return n.trim().split(/\s+/).slice(0,2).map(function(p){return p[0];}).join('').toUpperCase();}
+  function distMeters(a,b,c,d){var R=6371000;var t=Math.PI/180;var dl=(c-a)*t;var dn=(d-b)*t;var x=Math.sin(dl/2)**2 + Math.cos(a*t)*Math.cos(c*t)*Math.sin(dn/2)**2;return R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x));}
+  function fmtDist(m){if(!m)return '—';if(m<1000)return Math.round(m)+'m';return (m/1000).toFixed(1)+'km';}
+
+  /* ============== STEP 1: Radar SafePlace-Status-Banner Update ============== */
+  // Wir bauen den existierenden ll-radar-banner (live-loc) zum Mini-SafePlace-Status um:
+  // zeigt zusätzlich aktiven SOS in Circle, eigenen Mood, Pause-State
+
+  async function refreshRadarBannerExt(){
+    var b = $('llRadarBanner'); if (!b) return;
+    var sb = getSb(), me = getMe(); if (!sb || !me) return;
+    try {
+      var [rmood, rsosMe, rsosCircle, rpause] = await Promise.all([
+        sb.from('user_moods').select('emoji,label').eq('user_id', me.user_id).gt('expires_at', new Date().toISOString()).order('created_at',{ascending:false}).limit(1),
+        sb.from('sos_alerts').select('id').eq('user_id', me.user_id).eq('resolved', false).limit(1),
+        sb.rpc('get_circle_with_moods'),
+        sb.from('profiles').select('safety_pause_until').eq('user_id', me.user_id).maybeSingle()
+      ]);
+
+      var paused = rpause && rpause.data && rpause.data.safety_pause_until && new Date(rpause.data.safety_pause_until).getTime() > Date.now();
+      var sosCircle = (rsosCircle.data || []).filter(function(m){ return m.active_sos_id; });
+      var sosMe = rsosMe.data && rsosMe.data[0];
+
+      b.classList.toggle('is-paused', !!paused);
+      b.classList.toggle('has-sos', sosCircle.length > 0 || !!sosMe);
+
+      var lEl = b.querySelector('.ll-radar-banner-l');
+      var sEl = b.querySelector('.ll-radar-banner-s');
+      if (paused){
+        lEl.textContent = 'Pausiert';
+        sEl.textContent = 'Du bist gerade unsichtbar für Crew + Circle';
+      } else if (sosMe){
+        lEl.textContent = '🆘 Dein SOS ist aktiv';
+        sEl.textContent = 'Crew + Notfallkontakte sind benachrichtigt';
+      } else if (sosCircle.length > 0){
+        lEl.textContent = '🆘 ' + sosCircle.length + ' SOS in deiner Crew';
+        sEl.textContent = 'Tippe um zur Karte zu zoomen';
+      }
+      // sonst: bestehender live-loc-status bleibt (von bb-live-loc)
+    } catch(e){ /* silent */ }
+  }
+
+  /* ============== STEP 2: Friend-Status-Sheet ============== */
+  function ensureFriendSheet(){
+    if ($('fsOv')) return;
+    var ov = document.createElement('div');
+    ov.id = 'fsOv'; ov.className = 'fs-ov';
+    ov.innerHTML =
+      '<div class="fs-backdrop" onclick="window.bbCloseFriendSheet&&window.bbCloseFriendSheet()"></div>'+
+      '<div class="fs-sheet">'+
+        '<div class="fs-handle"></div>'+
+        '<div class="fs-head">'+
+          '<div class="fs-av" id="fsAv"></div>'+
+          '<div class="fs-info"><div class="fs-name" id="fsName">—</div><div class="fs-status" id="fsStatus">—</div></div>'+
+        '</div>'+
+        '<div class="fs-stats" id="fsStats"></div>'+
+        '<div class="fs-actions">'+
+          '<button class="fs-act var-map" id="fsActMap">📍 Auf Karte</button>'+
+          '<button class="fs-act var-msg" id="fsActPing">👋 Ping schicken</button>'+
+        '</div>'+
+        '<div class="fs-actions">'+
+          '<button class="fs-act var-prim" id="fsActOpen">Öffnen Profil</button>'+
+          '<button class="fs-act" id="fsActClose">Schließen</button>'+
+        '</div>'+
+      '</div>';
+    document.body.appendChild(ov);
+  }
+
+  var currentFriend = null;
+  window.bbOpenFriendSheet = function(friend){
+    if (!friend) return;
+    currentFriend = friend;
+    ensureFriendSheet();
+    var ov = $('fsOv');
+    var av = $('fsAv');
+    av.style.backgroundImage = friend.partner_photo ? 'url('+friend.partner_photo+')' : '';
+    av.textContent = friend.partner_photo ? '' : initials(friend.partner_name);
+    av.classList.toggle('is-sos', !!friend.active_sos_id);
+    av.innerHTML = (friend.partner_photo ? '' : initials(friend.partner_name)) +
+      (friend.mood_emoji && !friend.is_paused ? '<div class="fs-mood">'+friend.mood_emoji+'</div>' : '');
+    if (friend.partner_photo) av.firstChild && (av.firstChild.textContent='');
+    $('fsName').textContent = friend.partner_name || 'Anon';
+    var statusText = '';
+    if (friend.active_sos_id) statusText = 'SOS aktiv';
+    else if (friend.is_paused) statusText = 'Hat sich pausiert';
+    else if (friend.mood_label) statusText = 'Mood: ' + friend.mood_emoji + ' ' + friend.mood_label;
+    else if (friend.last_checkin_at) statusText = 'Check-in ' + fmtRel(friend.last_checkin_at);
+    else statusText = 'Status ruhig';
+    $('fsStatus').textContent = statusText;
+
+    // Stats: Distance + Letzter Check
+    var stats = $('fsStats'); stats.innerHTML = '';
+    var distRow = '<div class="fs-stat"><div class="l">Entfernung</div><div class="v" id="fsDist">—</div></div>';
+    var checkRow = '<div class="fs-stat"><div class="l">Letzter Check</div><div class="v">' + (friend.last_checkin_at ? fmtRel(friend.last_checkin_at) : 'noch keiner') + '</div></div>';
+    stats.innerHTML = distRow + checkRow;
+    // Distance compute when location available
+    if (window.userLat && window.userLng){
+      // Try to get friend's last live-loc
+      (async function(){
+        try {
+          var sb = getSb();
+          var r = await sb.from('live_locations').select('lat,lng,expires_at').eq('user_id', friend.partner_user_id).maybeSingle();
+          if (r && r.data && new Date(r.data.expires_at).getTime() > Date.now()){
+            var d = distMeters(window.userLat, window.userLng, r.data.lat, r.data.lng);
+            var el = $('fsDist'); if (el) el.textContent = fmtDist(d);
+          }
+        } catch(_){}
+      })();
+    }
+
+    // Wire buttons
+    $('fsActMap').onclick = function(){
+      window.bbCloseFriendSheet();
+      // Close SafePlace
+      if (window.closeSafeplaceHub) window.closeSafeplaceHub();
+      // Switch to Radar
+      setTimeout(function(){
+        var radarBtn = document.querySelector('#navBar button[onclick*="\'radar\'"]');
+        if (radarBtn) radarBtn.click();
+        // Zoom to friend pin
+        setTimeout(function(){ centerMapOnFriend(friend); }, 600);
+      }, 250);
+    };
+    $('fsActPing').onclick = async function(){
+      var sb = getSb(), me = getMe(); if (!sb || !me) return;
+      // Ping = create a notification-like event. Hier: einfach Mood-Alarm-event triggern? Nein:
+      // Wir schicken ein eigenes "ping" als safety_audit_log entry für den Empfänger
+      try {
+        await sb.from('safety_audit_log').insert({
+          user_id: friend.partner_user_id,
+          action: 'ping_received',
+          category: 'circle',
+          meta: { from_user_id: me.user_id, from_name: me.name || 'jemand' }
+        });
+        toast('Ping gesendet — '+friend.partner_name+' wird benachrichtigt');
+        if (window.crew && window.crew.safety) window.crew.safety.log('ping_sent', { to_user_id: friend.partner_user_id }, 'circle');
+      } catch(e){ toast('Ping fehlgeschlagen'); }
+    };
+    $('fsActOpen').onclick = function(){
+      window.bbCloseFriendSheet();
+      if (window.bbOpenSettings) window.bbOpenSettings('circle');
+    };
+    $('fsActClose').onclick = window.bbCloseFriendSheet;
+    ov.classList.add('show');
+    try { navigator.vibrate && navigator.vibrate(8); } catch(_){}
+  };
+  window.bbCloseFriendSheet = function(){
+    var ov = $('fsOv'); if (ov) ov.classList.remove('show');
+    currentFriend = null;
+  };
+
+  function centerMapOnFriend(friend){
+    if (!window.rMap) return;
+    (async function(){
+      var sb = getSb(); if (!sb) return;
+      try {
+        var r = await sb.from('live_locations').select('lat,lng,expires_at').eq('user_id', friend.partner_user_id).maybeSingle();
+        if (r && r.data && new Date(r.data.expires_at).getTime() > Date.now()){
+          window.rMap.flyTo([r.data.lat, r.data.lng], 16, { duration: 0.7 });
+        } else {
+          toast(friend.partner_name+' teilt gerade nicht');
+        }
+      } catch(_){}
+    })();
+  }
+
+  /* ============== STEP 2b: Friend-Pins auf der Map klickbar ============== */
+  // Wir hooken in das vorhandene Pin-Rendering aus bb-live-loc, das circlePins-Map nutzt
+  function wireFriendPinsClickable(){
+    if (!window.rMap) return;
+    // Override: bei jedem add-marker-event eine click-handler dranhängen
+    // Das einfachste: nach loadSharers + renderCirclePins ein passes-through Hook
+    var origCircleMembers = null;
+    // Wir greifen auf get_circle_with_moods + sharers zu
+    if (window.crew && window.crew.safety){
+      window.crew.safety.on('rt:liveloc', function(){ setTimeout(decoratePins, 800); });
+      setTimeout(decoratePins, 1500);
+    }
+  }
+  async function decoratePins(){
+    if (!window.rMap) return;
+    var sb = getSb(); if (!sb) return;
+    try {
+      // get current circle with moods
+      var rc = await sb.rpc('get_circle_with_moods');
+      var members = rc.data || [];
+      var byId = {};
+      members.forEach(function(m){ byId[m.partner_user_id] = m; });
+      // for each existing leaflet marker on the map, attach click
+      window.rMap.eachLayer(function(layer){
+        if (layer && layer.options && layer.options.icon && layer.options.icon.options && layer.options.icon.options.html && layer.options.icon.options.html.indexOf('ll-circle-pin') >= 0){
+          // Try to identify which user this is via pin-coords
+          if (layer.__bbBound) return;
+          layer.__bbBound = true;
+          var ll = layer.getLatLng();
+          // Find member with matching lat/lng (approximate)
+          var matching = null;
+          (async function(){
+            try {
+              var rl = await sb.from('live_locations').select('user_id,lat,lng');
+              var locs = rl.data || [];
+              for (var i=0;i<locs.length;i++){
+                if (Math.abs(locs[i].lat - ll.lat) < 0.0001 && Math.abs(locs[i].lng - ll.lng) < 0.0001){
+                  matching = byId[locs[i].user_id]; break;
+                }
+              }
+              if (matching){
+                layer.off('click');
+                layer.on('click', function(){ window.bbOpenFriendSheet(matching); });
+              }
+            } catch(_){}
+          })();
+        }
+      });
+    } catch(_){}
+  }
+
+  /* ============== STEP 3: SafePlace People-Strip → Radar ============== */
+  // bb-tinder.js hat schon Click-Handler — wir wrappen die Card-Click-Handler nach injection
+  function bridgeSafeplacePeople(){
+    var strip = $('txPeopleStrip');
+    if (!strip || strip.__bbBridged) return;
+    strip.__bbBridged = true;
+    // Replace existing card click handlers — opening Friend-Sheet instead of Settings
+    strip.querySelectorAll('.tx-people-card').forEach(function(card, idx){
+      // Identify which member by name (we know top 8 from injection)
+      card.addEventListener('click', async function(e){
+        e.stopPropagation();
+        var name = card.querySelector('.tx-people-name').textContent;
+        var sb = getSb(); if (!sb) return;
+        try {
+          var r = await sb.rpc('get_circle_with_moods');
+          var match = (r.data || []).find(function(m){
+            return m.partner_user_id && (m.partner_name || '').split(' ')[0] === name;
+          });
+          if (match) window.bbOpenFriendSheet(match);
+        } catch(_){}
+      }, true);
+    });
+  }
+  // Re-bridge nach jedem Re-Render
+  function watchSafeplaceForBridge(){
+    var ov = $('safeplaceOv'); if (!ov) return;
+    var observer = new MutationObserver(function(){ bridgeSafeplacePeople(); });
+    observer.observe(ov, { childList: true, subtree: true });
+  }
+
+  /* ============== STEP 4: Compliance-Indikatoren auf der Karte ============== */
+  function ensureComplianceIndicator(){
+    var radar = $('screen-radar'); if (!radar) return;
+    if ($('cpInd')) return;
+    var ind = document.createElement('div');
+    ind.id = 'cpInd'; ind.className = 'cp-indicator';
+    radar.appendChild(ind);
+  }
+
+  async function refreshComplianceIndicator(){
+    ensureComplianceIndicator();
+    var ind = $('cpInd'); if (!ind) return;
+    var sb = getSb(), me = getMe(); if (!sb || !me) return;
+    try {
+      var [rl, rp] = await Promise.all([
+        sb.from('live_locations').select('expires_at,share_with').eq('user_id', me.user_id).maybeSingle(),
+        sb.from('profiles').select('safety_pause_until').eq('user_id', me.user_id).maybeSingle()
+      ]);
+      var liveActive = rl && rl.data && new Date(rl.data.expires_at).getTime() > Date.now();
+      var paused = rp && rp.data && rp.data.safety_pause_until && new Date(rp.data.safety_pause_until).getTime() > Date.now();
+      ind.innerHTML = '';
+      if (paused){
+        var p = document.createElement('div');
+        p.className = 'cp-pill pause';
+        p.innerHTML = '<span class="ic">⏸</span><span>Pausiert · '+fmtFut(rp.data.safety_pause_until)+'</span>';
+        p.addEventListener('click', function(){ if (window.endPauseMode) window.endPauseMode(); });
+        ind.appendChild(p);
+      }
+      if (liveActive){
+        var l = document.createElement('div');
+        l.className = 'cp-pill live';
+        var scope = rl.data.share_with === 'crew' ? 'Crew + Circle' : 'Circle';
+        l.innerHTML = '<span class="ic">●</span><span>Live an · '+scope+' · '+fmtFut(rl.data.expires_at)+'</span><span class="x" data-act="stop">×</span>';
+        l.addEventListener('click', function(e){
+          if (e.target.dataset.act === 'stop'){
+            if (window.stopLiveSharing) window.stopLiveSharing();
+            return;
+          }
+          // Open SafePlace Hub
+          if (window.openSafeplaceHub) window.openSafeplaceHub();
+        });
+        ind.appendChild(l);
+      }
+    } catch(_){}
+  }
+
+  /* ============== STEP 5: First-Use-Consent-Toasts ============== */
+  var FU_KEY = 'crew_fu_consent_v1';
+  function fuSeen(key){ try { var s = JSON.parse(localStorage.getItem(FU_KEY) || '{}'); return s[key]; } catch(_){ return false; } }
+  function fuMark(key){ try { var s = JSON.parse(localStorage.getItem(FU_KEY) || '{}'); s[key]=Date.now(); localStorage.setItem(FU_KEY, JSON.stringify(s)); } catch(_){} }
+  function showFuToast(opts){
+    var t = $('fuToast');
+    if (!t){
+      t = document.createElement('div'); t.id = 'fuToast'; t.className = 'fu-toast';
+      document.body.appendChild(t);
+    }
+    t.innerHTML = '<div class="row"><div class="ic">'+(opts.icon||'🛡️')+'</div><div class="body"><strong>'+opts.title+'</strong><div>'+opts.body+'</div></div><button class="x" onclick="document.getElementById(\'fuToast\').classList.remove(\'show\')">×</button></div>';
+    setTimeout(function(){ t.classList.add('show'); }, 50);
+    setTimeout(function(){ t.classList.remove('show'); }, 7000);
+  }
+
+  // Hook in startLiveSharing for first-use
+  function wrapStartLive(){
+    if (typeof window.startLiveSharing !== 'function') return;
+    var orig = window.startLiveSharing;
+    if (orig.__bbFuWrapped) return;
+    window.startLiveSharing = async function(scope, hours){
+      var result = await orig.apply(this, arguments);
+      if (!fuSeen('live')){
+        showFuToast({
+          icon:'📍', title:'Live-Standort aktiv',
+          body:'Sichtbar für '+(scope==='crew'?'Crew + Safety-Circle':'Safety-Circle')+' für '+hours+'h. Kein Background-Tracking, jederzeit pausierbar.'
+        });
+        fuMark('live');
+      }
+      return result;
+    };
+    window.startLiveSharing.__bbFuWrapped = true;
+  }
+  function wrapStartHomeRoute(){
+    if (typeof window.startHomeRoute !== 'function') return;
+    var orig = window.startHomeRoute;
+    if (orig.__bbFuWrapped) return;
+    window.startHomeRoute = async function(){
+      var result = await orig.apply(this, arguments);
+      if (!fuSeen('homeroute')){
+        showFuToast({
+          icon:'🏠', title:'Heimweg startet',
+          body:'Crew sieht deine ETA. Bei Überschreitung +15min bekommen sie Push. Du kannst jederzeit "Bin angekommen" tippen.'
+        });
+        fuMark('homeroute');
+      }
+      return result;
+    };
+    window.startHomeRoute.__bbFuWrapped = true;
+  }
+  function wrapSaveMood(){
+    if (typeof window.saveMood !== 'function') return;
+    var orig = window.saveMood;
+    if (orig.__bbFuWrapped) return;
+    window.saveMood = async function(){
+      var result = await orig.apply(this, arguments);
+      if (!fuSeen('mood')){
+        showFuToast({
+          icon:'🎭', title:'Mood gesetzt',
+          body:'Sichtbar für deinen Safety-Circle. Standardmäßig 4h, läuft dann automatisch ab. Anpassbar via "Mehr"-Button.'
+        });
+        fuMark('mood');
+      }
+      return result;
+    };
+    window.saveMood.__bbFuWrapped = true;
+  }
+
+  /* ============== Realtime + Periodic Refresh ============== */
+  function attachRealtime(){
+    if (!window.crew || !window.crew.safety){ setTimeout(attachRealtime, 1000); return; }
+    var refresh = function(){ refreshRadarBannerExt(); refreshComplianceIndicator(); decoratePins(); };
+    ['rt:sos','rt:mood','rt:liveloc','rt:checkin','rt:circle'].forEach(function(ev){
+      window.crew.safety.on(ev, refresh);
+    });
+    setInterval(refresh, 30000);
+  }
+
+  /* ============== Boot ============== */
+  function init(){
+    setTimeout(function(){
+      ensureComplianceIndicator();
+      ensureFriendSheet();
+      refreshRadarBannerExt();
+      refreshComplianceIndicator();
+      wireFriendPinsClickable();
+      watchSafeplaceForBridge();
+      wrapStartLive();
+      wrapStartHomeRoute();
+      wrapSaveMood();
+      attachRealtime();
+    }, 4500);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 1500); });
+  else setTimeout(init, 1500);
 })();</script></body></html>
