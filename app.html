@@ -3686,4 +3686,270 @@
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 1000); });
   else setTimeout(init, 1000);
+})();</script><style id="bb-hardening">/* Limits-Banner im Hub */
+.sp-limits-banner{display:flex;flex-direction:column;gap:6px;padding:12px 14px;background:rgba(255,255,255,.025);border:.5px solid rgba(255,255,255,.06);border-radius:12px;margin:8px 0 16px;font-size:11.5px}
+.lim-row{display:flex;align-items:center;gap:10px;color:rgba(255,255,255,.7)}
+.lim-label{flex:none;width:100px;font-weight:600;font-size:11px;color:rgba(255,255,255,.6)}
+.lim-bar{flex:1;height:6px;background:rgba(255,255,255,.07);border-radius:999px;overflow:hidden;position:relative}
+.lim-fill{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,#34C759 0%,#FFAA00 70%,#FE3C72 100%);border-radius:999px;transition:width .3s ease}
+.lim-count{flex:none;font-family:ui-monospace,monospace;font-size:11px;color:rgba(255,255,255,.55);min-width:50px;text-align:right}
+.lim-suspended{background:rgba(254,60,114,.14);color:#FE3C72;border:.5px solid rgba(254,60,114,.3);padding:8px 10px;border-radius:10px;font-size:11px;font-weight:600;text-align:center;margin-top:4px}</style><script id="bb-hardening-js">/* ============== Hardening + Email-Verify Layer ============== */
+(function(){
+  function $(id){ return document.getElementById(id); }
+  function getSb(){ return window.sb || null; }
+  function getMe(){ return (window.ME && window.ME.user_id) ? window.ME : null; }
+  function toast(m){ try{ if (typeof window.toast === 'function') return window.toast(m); }catch(_){} }
+
+  function friendlySqlError(e){
+    var msg = (e && e.message) || String(e);
+    if (msg.indexOf('max_emergency_contacts_reached') >= 0) return 'Du kannst maximal 5 Notfallkontakte hinterlegen. Lösche zuerst einen.';
+    if (msg.indexOf('sos_rate_limit_60s') >= 0) return 'Bitte warte 60 Sekunden bevor du erneut SOS auslöst.';
+    if (msg.indexOf('sos_rate_limit_daily') >= 0) return 'Tageslimit erreicht (10 SOS pro 24h). Bei akutem Notfall wähle 112.';
+    if (msg.indexOf('account_suspended') >= 0) return 'Dein Account ist gesperrt. Kontaktiere info@butterbread-tech.com.';
+    return msg;
+  }
+
+  /* ============== 1. Email-Verify-Flow ============== */
+  // Erweitert das bestehende Edit-Modal um ein Email-Feld
+  function injectEmailFieldInEditModal(){
+    var ov = $('ecEditOv'); if (!ov) return;
+    var card = ov.querySelector('.ec-edit-card'); if (!card) return;
+    if ($('ecEmail')) return; // schon da
+    // Füge Email-Input nach Telefon
+    var phoneInput = $('ecPhone'); if (!phoneInput) return;
+    var emailInput = document.createElement('input');
+    emailInput.type = 'email';
+    emailInput.className = 'ec-input';
+    emailInput.id = 'ecEmail';
+    emailInput.placeholder = 'Email (optional, kostenlose Alternative zu SMS)';
+    emailInput.maxLength = 120;
+    emailInput.autocomplete = 'off';
+    phoneInput.parentNode.insertBefore(emailInput, phoneInput.nextSibling);
+  }
+
+  // Wrap saveEcContact: speichert auch Email-Wert
+  function wrapSaveEcContact(){
+    if (typeof window.saveEcContact !== 'function') return;
+    var orig = window.saveEcContact;
+    if (orig.__bbHardWrapped) return;
+    window.saveEcContact = async function(){
+      var sb = getSb(), me = getMe();
+      if (!sb || !me){ if (orig) return orig.apply(this, arguments); }
+      var name = ($('ecName').value||'').trim();
+      var phone = ($('ecPhone').value||'').trim().replace(/[\s-]/g,'');
+      var email = ($('ecEmail') && $('ecEmail').value || '').trim();
+      var rel = ($('ecRel').value||'').trim();
+      var err = $('ecError'); if (err) err.textContent = '';
+      if (!name){ if (err) err.textContent = 'Name fehlt'; return; }
+      if (!phone || !/^\+?\d{5,}$/.test(phone)){ if (err) err.textContent = 'Telefonnummer ungültig (mit + und Vorwahl)'; return; }
+      if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ if (err) err.textContent = 'Email-Format ungültig'; return; }
+      var btn = $('ecSaveBtn'); if (btn){ btn.disabled = true; btn.textContent = 'Speichere...'; }
+      try {
+        // Counter-Vorab-Check
+        if (window.__ecEditing && window.__ecEditing.id){
+          await sb.from('emergency_contacts').update({ name: name, phone: phone, email: email || null, relationship: rel, updated_at: new Date().toISOString() }).eq('id', window.__ecEditing.id);
+        } else {
+          await sb.from('emergency_contacts').insert({ user_id: me.user_id, name: name, phone: phone, email: email || null, relationship: rel });
+        }
+        if (typeof window.loadEcContacts === 'function') await window.loadEcContacts(true);
+        window.closeEcEdit && window.closeEcEdit();
+        toast('Notfallkontakt gespeichert');
+      } catch(e){
+        if (err) err.textContent = friendlySqlError(e);
+      } finally {
+        if (btn){ btn.disabled = false; btn.textContent = 'Speichern'; }
+      }
+    };
+    window.saveEcContact.__bbHardWrapped = true;
+  }
+
+  /* ============== Email-Verify (mailto-basiert, kostenlos) ============== */
+  window.openEmailVerify = async function(contact){
+    if (!contact || !contact.email){ toast('Keine Email für diesen Kontakt hinterlegt'); return; }
+    var sb = getSb(); if (!sb) return;
+    try {
+      var r = await sb.rpc('create_email_verify_code', { p_contact_id: contact.id });
+      var d = r && r.data; if (!d || d.status !== 'code_ready'){
+        toast('Fehler: ' + (d && d.status || 'unknown'));
+        return;
+      }
+      var senderName = (window.ME && window.ME.name) || 'jemand';
+      var subject = 'Verifizierung Notfallkontakt — crew. App';
+      var body = 'Hi ' + (d.name || '') + ',\n\n'
+        + senderName + ' möchte dich als Notfallkontakt in der crew. App hinterlegen.\n'
+        + 'Falls du einverstanden bist, sende bitte den folgenden Code zurück an mich (z. B. per WhatsApp oder Antwort-Email):\n\n'
+        + 'Bestätigungscode: ' + d.code + '\n\n'
+        + '(Code ist 15 Minuten gültig)\n\n'
+        + 'Falls du das nicht erwartest, ignoriere diese Email einfach.\n\n'
+        + '— gesendet via crew. App (https://partycrew.app)';
+      var mailto = 'mailto:' + encodeURIComponent(d.email)
+        + '?subject=' + encodeURIComponent(subject)
+        + '&body=' + encodeURIComponent(body);
+      // Öffne den Default-Mail-Client des Users
+      window.location.href = mailto;
+      toast('Email-Client öffnet sich. Sende die Mail ab, dann lass dir den Code zurückgeben.');
+      // Optional: nach 1 Sek das Code-Input-Modal öffnen für die Eingabe
+      setTimeout(function(){ if (window.openSmsVerify) window.openSmsVerify(contact); }, 1500);
+    } catch(e){
+      toast('Fehler: ' + friendlySqlError(e));
+    }
+  };
+
+  /* ============== 2. Limit-Counter im Hub anzeigen ============== */
+  async function injectLimitsBanner(){
+    var host = $('safeplaceOv'); if (!host) return;
+    if ($('spLimitsBanner')) return;
+    var content = host.querySelector('.sp-content'); if (!content) return;
+    var sb = getSb(), me = getMe(); if (!sb || !me) return;
+
+    var sec = document.createElement('div');
+    sec.id = 'spLimitsBanner';
+    sec.className = 'sp-limits-banner';
+    content.appendChild(sec);
+    refreshLimits();
+  }
+
+  async function refreshLimits(){
+    var sec = $('spLimitsBanner'); if (!sec) return;
+    var sb = getSb(); if (!sb) return;
+    try {
+      var r = await sb.rpc('get_my_safety_limits');
+      var d = r && r.data; if (!d) return;
+      var ecPct = (d.emergency_contacts_count / d.emergency_contacts_max) * 100;
+      var sosPct = (d.sos_today / d.sos_daily_max) * 100;
+      sec.innerHTML =
+        '<div class="lim-row"><span class="lim-label">Notfallkontakte</span>'+
+        '<span class="lim-bar"><span class="lim-fill" style="width:'+ Math.min(100, ecPct) +'%"></span></span>'+
+        '<span class="lim-count">' + d.emergency_contacts_count + ' / ' + d.emergency_contacts_max + '</span></div>'+
+        '<div class="lim-row"><span class="lim-label">SOS heute</span>'+
+        '<span class="lim-bar"><span class="lim-fill" style="width:'+ Math.min(100, sosPct) +'%"></span></span>'+
+        '<span class="lim-count">' + d.sos_today + ' / ' + d.sos_daily_max + '</span></div>';
+      if (d.suspended){
+        sec.innerHTML += '<div class="lim-suspended">⚠️ Account gesperrt — kontaktiere Support.</div>';
+      }
+    } catch(_){}
+  }
+
+  /* ============== 3. Friendly-Errors für SOS-Insert ============== */
+  function wrapActivateSos(){
+    if (typeof window.activateSos !== 'function') return;
+    var orig = window.activateSos;
+    if (orig.__bbHardWrapped) return;
+    window.activateSos = async function(){
+      try { return await orig.apply(this, arguments); }
+      catch(e){
+        toast(friendlySqlError(e));
+        throw e;
+      }
+    };
+    window.activateSos.__bbHardWrapped = true;
+  }
+
+  /* ============== 4. Report-Contact Button beim eingehenden SOS ============== */
+  // Wenn ich (als Circle-Member) einen SOS-Toast sehe, kann ich melden falls Spam
+  function showReportPrompt(reportedUserId, reason){
+    var sb = getSb(); if (!sb) return;
+    if (!confirm('Diesen Alert als Spam/Belästigung melden?\n\nDeine ID wird mit der Meldung verknüpft (für Backend-Review).')) return;
+    var me = getMe();
+    sb.from('contact_reports').insert({
+      reported_user_id: reportedUserId,
+      reporter_identifier: me ? me.user_id : 'anon',
+      reporter_method: 'phone',
+      reason: reason || 'Spam / Belästigung über Safety-Crew',
+      meta: { source: 'in_app_button' }
+    }).then(function(r){
+      if (r && !r.error) toast('Meldung erfasst — wird geprüft.');
+      else toast('Fehler beim Melden.');
+    });
+  }
+  window.reportSafetyAbuse = showReportPrompt;
+
+  // Hook in den unified-realtime-Channel: bei eingehendem SOS-Event eine Report-Option im Toast
+  function hookSosToastReport(){
+    if (!window.crew || !window.crew.safety) { setTimeout(hookSosToastReport, 1000); return; }
+    window.crew.safety.on('rt:sos', function(payload){
+      var row = payload.row; var me = getMe();
+      if (!row || !me || row.user_id === me.user_id) return;
+      if (payload.eventType !== 'INSERT' || row.resolved) return;
+      // 5 Sek nach Toast einen Folge-Toast mit Report-Option
+      setTimeout(function(){
+        if (typeof window.toast === 'function'){
+          // Nicht-blockierender Hint, User entscheidet
+          var hint = document.createElement('div');
+          hint.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(20,18,26,.92);color:#fff;font-size:12px;padding:10px 14px;border-radius:14px;z-index:99999;-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border:.5px solid rgba(255,255,255,.10);max-width:90%;';
+          hint.innerHTML = '<span style="opacity:.7">Spam? </span><a style="color:#FE3C72;text-decoration:underline;cursor:pointer">Melden</a>';
+          hint.querySelector('a').addEventListener('click', function(){
+            showReportPrompt(row.user_id, 'Verdacht auf Spam-SOS');
+            hint.remove();
+          });
+          document.body.appendChild(hint);
+          setTimeout(function(){ hint.remove(); }, 8000);
+        }
+      }, 5000);
+    });
+  }
+
+  /* ============== 5. Hub-Hook: Limits + Refresh ============== */
+  function wrapOpenHub(){
+    var orig = window.openSafeplaceHub;
+    if (!orig || orig.__bbHardWrapped) return;
+    window.openSafeplaceHub = function(){
+      orig.apply(this, arguments);
+      setTimeout(function(){
+        injectLimitsBanner();
+        injectEmailFieldInEditModal();
+      }, 300);
+    };
+    window.openSafeplaceHub.__bbHardWrapped = true;
+  }
+
+  /* ============== 6. Erweitere Contact-Row mit Email-Verify-Button ============== */
+  // Zusätzlicher Button bei Contacts mit Email-Adresse
+  function decorateContactsWithEmailVerify(){
+    if (typeof window.loadContactsList !== 'function') return;
+    var orig = window.loadContactsList;
+    if (orig.__bbHardEmailWrapped) return;
+    window.loadContactsList = async function(){
+      await orig.apply(this, arguments);
+      var sb = getSb(); var me = getMe();
+      if (!sb || !me) return;
+      try {
+        var r = await sb.from('emergency_contacts').select('*').eq('user_id', me.user_id).order('created_at');
+        var contacts = r.data || [];
+        var items = document.querySelectorAll('.sp-contact-item');
+        items.forEach(function(item, i){
+          var c = contacts[i]; if (!c) return;
+          // Suche bereits existierende svf-row (von SMS-Verify-Modul)
+          var svfRow = item.nextElementSibling;
+          if (!svfRow || !svfRow.classList || !svfRow.classList.contains('svf-row')) return;
+          if (c.verified_at) return;
+          if (svfRow.querySelector('button[data-act="email-verify"]')) return;
+          if (c.email){
+            var emailBtn = document.createElement('button');
+            emailBtn.dataset.act = 'email-verify';
+            emailBtn.textContent = 'Email';
+            emailBtn.style.marginLeft = '4px';
+            emailBtn.style.background = 'rgba(10,132,255,.18)';
+            emailBtn.style.color = '#5FB8FF';
+            emailBtn.addEventListener('click', function(e){ e.stopPropagation(); window.openEmailVerify(c); });
+            svfRow.appendChild(emailBtn);
+          }
+        });
+      } catch(_){}
+    };
+    window.loadContactsList.__bbHardEmailWrapped = true;
+  }
+
+  /* ============== Boot ============== */
+  function init(){
+    setTimeout(function(){
+      wrapSaveEcContact();
+      wrapActivateSos();
+      wrapOpenHub();
+      decorateContactsWithEmailVerify();
+      hookSosToastReport();
+    }, 2200);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 1500); });
+  else setTimeout(init, 1500);
 })();</script></body></html>
