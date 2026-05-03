@@ -8493,4 +8493,808 @@ body.sos-stealth-active .privacy-banner.sos{
 })();
 </script>
 
+<style id="bb-hotspot-v2">/* ============================================================
+   BB-HOTSPOT-V2 — Public/Privat + Audience-Profile + Wizard
+   Konzept: Safety + Community Network (Party = ein Profil von vielen)
+   ============================================================ */
+
+/* ---------- Audience-Profile-Picker ---------- */
+.ap-modal{
+  position:fixed; inset:0; z-index:2000;
+  background:rgba(5,5,10,.9); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+  display:flex; align-items:flex-end; justify-content:center;
+  opacity:0; pointer-events:none; transition:opacity .25s;
+}
+.ap-modal.on{ opacity:1; pointer-events:auto; }
+.ap-card{
+  width:100%; max-width:520px;
+  background:#0F0F18;
+  border-top-left-radius:28px; border-top-right-radius:28px;
+  border-top:.5px solid rgba(255,255,255,.1);
+  padding: 28px 24px 36px;
+  max-height:90vh; overflow-y:auto;
+  transform: translateY(40px); transition: transform .35s cubic-bezier(.2,.7,.2,1);
+}
+.ap-modal.on .ap-card{ transform: translateY(0); }
+.ap-h{ font-size:24px; font-weight:900; letter-spacing:-.02em; margin:0 0 6px; color:#fff; }
+.ap-sub{ font-size:14px; color:rgba(255,255,255,.65); margin:0 0 24px; line-height:1.5; }
+.ap-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+@media (max-width:420px){ .ap-grid{ grid-template-columns:1fr; } }
+.ap-tile{
+  position:relative;
+  padding:18px 16px;
+  background:rgba(255,255,255,.04);
+  border:.5px solid rgba(255,255,255,.08);
+  border-radius:16px;
+  cursor:pointer;
+  transition: transform .15s, border-color .2s, background .2s;
+  text-align:left;
+}
+.ap-tile:hover{ transform:translateY(-2px); border-color:rgba(255,255,255,.18); }
+.ap-tile.active{
+  border-color: rgba(254,60,114,.7);
+  background: linear-gradient(135deg, rgba(254,60,114,.12), rgba(255,109,46,.06));
+}
+.ap-tile-icon{
+  width:36px; height:36px; border-radius:10px;
+  background:rgba(255,255,255,.06);
+  display:flex; align-items:center; justify-content:center;
+  margin-bottom:10px;
+}
+.ap-tile-icon svg{ width:20px; height:20px; color:#fff; }
+.ap-tile.active .ap-tile-icon{ background: linear-gradient(135deg,#FE3C72,#FF6D2E); }
+.ap-tile-title{ font-size:14px; font-weight:800; color:#fff; margin:0 0 3px; letter-spacing:-.01em; }
+.ap-tile-desc{ font-size:11px; color:rgba(255,255,255,.55); margin:0; line-height:1.4; }
+.ap-actions{ display:flex; gap:10px; margin-top:24px; }
+.ap-btn-pri{
+  flex:1; padding:14px; border-radius:14px; border:0;
+  background: linear-gradient(135deg,#FE3C72,#FF6D2E);
+  color:#fff; font-weight:800; font-size:14px; cursor:pointer;
+}
+.ap-btn-pri:disabled{ opacity:.4; cursor:not-allowed; }
+.ap-btn-sec{
+  padding:14px 18px; border-radius:14px;
+  background:rgba(255,255,255,.04); border:.5px solid rgba(255,255,255,.1);
+  color:rgba(255,255,255,.7); font-weight:700; font-size:14px; cursor:pointer;
+}
+
+/* ---------- Hotspot-Wizard (3-Schritt) ---------- */
+.hw-modal{
+  position:fixed; inset:0; z-index:2010;
+  background:rgba(5,5,10,.92); backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px);
+  display:flex; align-items:flex-end; justify-content:center;
+  opacity:0; pointer-events:none; transition:opacity .25s;
+}
+.hw-modal.on{ opacity:1; pointer-events:auto; }
+.hw-card{
+  width:100%; max-width:540px;
+  background:#0F0F18;
+  border-top-left-radius:28px; border-top-right-radius:28px;
+  border-top:.5px solid rgba(255,255,255,.1);
+  max-height:92vh; overflow-y:auto;
+  transform: translateY(40px); transition: transform .35s cubic-bezier(.2,.7,.2,1);
+}
+.hw-modal.on .hw-card{ transform: translateY(0); }
+.hw-head{
+  position:sticky; top:0;
+  padding: 18px 22px 14px;
+  background: linear-gradient(180deg, #0F0F18 80%, transparent);
+  display:flex; align-items:center; gap:12px;
+  z-index:2;
+}
+.hw-back{
+  width:36px; height:36px; border-radius:50%;
+  background:rgba(255,255,255,.04); border:.5px solid rgba(255,255,255,.1);
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; color:#fff; font-size:18px; line-height:1; padding:0;
+}
+.hw-back[disabled]{ opacity:.3; cursor:not-allowed; }
+.hw-progress{ flex:1; display:flex; gap:6px; }
+.hw-prog-dot{ flex:1; height:4px; border-radius:2px; background:rgba(255,255,255,.1); }
+.hw-prog-dot.on{ background: linear-gradient(90deg,#FE3C72,#FF6D2E); }
+.hw-prog-dot.done{ background: rgba(40,200,120,.7); }
+.hw-close{
+  width:36px; height:36px; border-radius:50%;
+  background:rgba(255,255,255,.04); border:.5px solid rgba(255,255,255,.1);
+  cursor:pointer; color:#fff; font-size:20px; line-height:1; padding:0;
+}
+.hw-body{ padding: 4px 22px 28px; }
+.hw-step{ display:none; }
+.hw-step.on{ display:block; animation: hwIn .3s ease; }
+@keyframes hwIn{ from{opacity:0; transform:translateX(20px)} to{opacity:1;transform:translateX(0)} }
+.hw-step-title{ font-size:22px; font-weight:900; letter-spacing:-.02em; color:#fff; margin:0 0 6px; }
+.hw-step-sub{ font-size:13px; color:rgba(255,255,255,.6); margin:0 0 20px; line-height:1.5; }
+
+.hw-kinds{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+@media (max-width:420px){ .hw-kinds{ grid-template-columns:1fr; } }
+.hw-kind{
+  position:relative;
+  padding:16px;
+  background:rgba(255,255,255,.04);
+  border:.5px solid rgba(255,255,255,.08);
+  border-radius:14px;
+  cursor:pointer;
+  transition: transform .15s, border-color .2s;
+  text-align:left;
+}
+.hw-kind:hover{ transform:translateY(-1px); border-color:rgba(255,255,255,.16); }
+.hw-kind.active{
+  border-color:rgba(254,60,114,.7);
+  background:linear-gradient(135deg, rgba(254,60,114,.12), rgba(255,109,46,.05));
+}
+.hw-kind-icon{
+  width:38px; height:38px; border-radius:11px;
+  background:rgba(255,255,255,.06);
+  display:flex; align-items:center; justify-content:center;
+  margin-bottom:8px;
+}
+.hw-kind-icon svg{ width:20px; height:20px; }
+.hw-kind.k-safe .hw-kind-icon svg{ color:#28C878; }
+.hw-kind.k-trust .hw-kind-icon svg{ color:#FFD60A; }
+.hw-kind.k-live .hw-kind-icon svg{ color:#FE3C72; }
+.hw-kind.k-watch .hw-kind-icon svg{ color:#FF6D2E; }
+.hw-kind.k-party .hw-kind-icon svg{ color:#A855F7; }
+.hw-kind.k-community .hw-kind-icon svg{ color:#3B82F6; }
+.hw-kind-title{ font-size:14px; font-weight:800; color:#fff; margin:0 0 3px; }
+.hw-kind-desc{ font-size:11px; color:rgba(255,255,255,.55); margin:0; line-height:1.4; }
+.hw-kind.active::after{
+  content:'';
+  position:absolute; top:12px; right:12px;
+  width:18px; height:18px; border-radius:50%;
+  background: linear-gradient(135deg,#FE3C72,#FF6D2E);
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'/></svg>") no-repeat center / 60%;
+          mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'/></svg>") no-repeat center / 60%;
+}
+
+/* Visibility-Picker */
+.hw-vis-list{ display:flex; flex-direction:column; gap:8px; margin-bottom:16px; }
+.hw-vis{
+  display:flex; align-items:flex-start; gap:14px;
+  padding:14px 16px;
+  background:rgba(255,255,255,.04);
+  border:.5px solid rgba(255,255,255,.08);
+  border-radius:14px;
+  cursor:pointer;
+  text-align:left;
+}
+.hw-vis.active{ border-color:rgba(254,60,114,.7); background:linear-gradient(135deg,rgba(254,60,114,.1),rgba(255,109,46,.04)); }
+.hw-vis-radio{
+  flex:none; width:20px; height:20px; border-radius:50%;
+  border:1.5px solid rgba(255,255,255,.3);
+  position:relative;
+  margin-top:2px;
+}
+.hw-vis.active .hw-vis-radio{ border-color:#FE3C72; }
+.hw-vis.active .hw-vis-radio::after{
+  content:''; position:absolute; inset:3px;
+  background: linear-gradient(135deg,#FE3C72,#FF6D2E); border-radius:50%;
+}
+.hw-vis-main{ flex:1; min-width:0; }
+.hw-vis-title{ font-size:14px; font-weight:800; color:#fff; margin:0 0 3px; display:flex; align-items:center; gap:8px; }
+.hw-vis-badge{
+  font-size:10px; font-weight:800; padding:2px 8px; border-radius:999px;
+  letter-spacing:.05em; text-transform:uppercase;
+}
+.hw-vis-badge.public{ background:rgba(40,200,120,.16); color:#28C878; }
+.hw-vis-badge.friends{ background:rgba(255,214,10,.15); color:#FFD60A; }
+.hw-vis-badge.circle{ background:rgba(168,85,247,.16); color:#C084FC; }
+.hw-vis-badge.private{ background:rgba(107,114,128,.2); color:#9CA3AF; }
+.hw-vis-desc{ font-size:12px; color:rgba(255,255,255,.55); margin:0; line-height:1.45; }
+
+/* TTL-Picker */
+.hw-ttl-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+.hw-ttl{
+  padding:14px 8px;
+  background:rgba(255,255,255,.04);
+  border:.5px solid rgba(255,255,255,.08);
+  border-radius:12px;
+  cursor:pointer;
+  text-align:center;
+}
+.hw-ttl.active{ border-color:rgba(254,60,114,.7); background:linear-gradient(135deg,rgba(254,60,114,.1),rgba(255,109,46,.04)); }
+.hw-ttl-num{ font-size:18px; font-weight:900; color:#fff; line-height:1; }
+.hw-ttl-unit{ font-size:11px; color:rgba(255,255,255,.55); margin-top:3px; }
+
+/* Form-fields */
+.hw-field{ margin-bottom:14px; }
+.hw-label{ font-size:11px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:rgba(255,255,255,.5); margin:0 0 8px; }
+.hw-input, .hw-textarea{
+  width:100%;
+  padding:12px 14px;
+  background:rgba(255,255,255,.04);
+  border:.5px solid rgba(255,255,255,.08);
+  border-radius:12px;
+  color:#fff;
+  font-size:14px;
+  font-family: inherit;
+  outline:none;
+  transition: border-color .2s;
+}
+.hw-input:focus, .hw-textarea:focus{ border-color:rgba(254,60,114,.5); }
+.hw-textarea{ resize:vertical; min-height:64px; }
+
+.hw-actions{
+  position:sticky; bottom:0;
+  padding:14px 22px 22px;
+  background:linear-gradient(0deg, #0F0F18 70%, transparent);
+  display:flex; gap:10px;
+}
+.hw-btn-pri{
+  flex:1; padding:14px; border-radius:14px; border:0;
+  background:linear-gradient(135deg,#FE3C72,#FF6D2E);
+  color:#fff; font-weight:800; font-size:15px; cursor:pointer;
+  letter-spacing:-.01em;
+}
+.hw-btn-pri:disabled{ opacity:.4; cursor:not-allowed; }
+.hw-btn-pri:active{ transform:scale(.98); }
+
+/* ---------- Hotspot-Detail-Card (Bottom-Sheet wenn Pin geklickt) ---------- */
+.hd-modal{
+  position:fixed; inset:0; z-index:1995;
+  background:rgba(5,5,10,.7); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+  display:flex; align-items:flex-end; justify-content:center;
+  opacity:0; pointer-events:none; transition:opacity .2s;
+}
+.hd-modal.on{ opacity:1; pointer-events:auto; }
+.hd-card{
+  width:100%; max-width:520px;
+  background:#0F0F18;
+  border-top-left-radius:24px; border-top-right-radius:24px;
+  border-top:.5px solid rgba(255,255,255,.1);
+  padding:22px 22px 24px;
+  transform: translateY(30px); transition: transform .3s cubic-bezier(.2,.7,.2,1);
+}
+.hd-modal.on .hd-card{ transform: translateY(0); }
+.hd-row{ display:flex; align-items:center; gap:12px; margin-bottom:12px; }
+.hd-icon-big{
+  width:48px; height:48px; border-radius:14px;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(255,255,255,.06);
+  border:.5px solid rgba(255,255,255,.1);
+}
+.hd-icon-big svg{ width:24px; height:24px; }
+.hd-info{ flex:1; min-width:0; }
+.hd-name{ font-size:18px; font-weight:800; color:#fff; margin:0 0 2px; letter-spacing:-.01em; }
+.hd-meta{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+.hd-badge{ font-size:10px; font-weight:800; padding:3px 8px; border-radius:999px; letter-spacing:.04em; text-transform:uppercase; }
+.hd-desc{ font-size:14px; color:rgba(255,255,255,.7); line-height:1.5; margin:8px 0 16px; }
+.hd-stats{ display:flex; gap:14px; padding:12px 0; border-top:.5px solid rgba(255,255,255,.06); border-bottom:.5px solid rgba(255,255,255,.06); margin-bottom:14px; }
+.hd-stat{ flex:1; text-align:center; }
+.hd-stat-num{ font-size:20px; font-weight:900; color:#fff; line-height:1; }
+.hd-stat-lbl{ font-size:10px; color:rgba(255,255,255,.5); margin-top:4px; text-transform:uppercase; letter-spacing:.08em; }
+.hd-actions{ display:flex; gap:8px; }
+.hd-act{
+  flex:1; padding:12px; border-radius:12px;
+  font-size:13px; font-weight:700;
+  border:0; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; gap:6px;
+}
+.hd-act.pri{ background:linear-gradient(135deg,#FE3C72,#FF6D2E); color:#fff; }
+.hd-act.sec{ background:rgba(255,255,255,.04); border:.5px solid rgba(255,255,255,.1); color:#fff; }
+.hd-act.danger{ background:rgba(254,60,114,.1); border:.5px solid rgba(254,60,114,.4); color:#FE3C72; }
+
+/* ---------- Filter-Bar über der Map ---------- */
+.hf-bar{
+  position:absolute; top:12px; left:12px; right:12px;
+  z-index:401;
+  display:flex; gap:6px;
+  overflow-x:auto;
+  padding:6px;
+  background:rgba(15,15,24,.85);
+  backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+  border-radius:14px;
+  border:.5px solid rgba(255,255,255,.08);
+  scrollbar-width:none;
+}
+.hf-bar::-webkit-scrollbar{ display:none; }
+.hf-chip{
+  flex:none;
+  padding:8px 12px;
+  border-radius:10px;
+  background:rgba(255,255,255,.04);
+  border:.5px solid rgba(255,255,255,.06);
+  color:rgba(255,255,255,.7);
+  font-size:12px; font-weight:700;
+  cursor:pointer;
+  white-space:nowrap;
+  display:flex; align-items:center; gap:6px;
+}
+.hf-chip svg{ width:14px; height:14px; }
+.hf-chip.on{
+  background:linear-gradient(135deg,#FE3C72,#FF6D2E);
+  border-color:transparent;
+  color:#fff;
+}
+/* FAB Hotspot anlegen */
+.hf-fab{
+  position:absolute; bottom:96px; right:16px;
+  z-index:402;
+  width:56px; height:56px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#FE3C72,#FF6D2E);
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 8px 24px rgba(254,60,114,.45);
+  cursor:pointer;
+  border:0;
+  color:#fff;
+}
+.hf-fab svg{ width:24px; height:24px; }
+.hf-fab:active{ transform:scale(.95); }
+
+/* ---------- Audience-Banner im Hub (zeigt aktives Profil) ---------- */
+.aud-banner{
+  display:flex; align-items:center; gap:12px;
+  padding:12px 14px;
+  background:rgba(255,255,255,.03);
+  border:.5px solid rgba(255,255,255,.08);
+  border-radius:14px;
+  margin: 10px 0 14px;
+}
+.aud-banner-icon{
+  width:36px; height:36px; border-radius:10px;
+  background:linear-gradient(135deg,#FE3C72,#FF6D2E);
+  display:flex; align-items:center; justify-content:center;
+  flex:none;
+}
+.aud-banner-icon svg{ width:18px; height:18px; color:#fff; }
+.aud-banner-main{ flex:1; min-width:0; }
+.aud-banner-title{ font-size:13px; font-weight:800; color:#fff; margin:0; line-height:1.2; }
+.aud-banner-sub{ font-size:11px; color:rgba(255,255,255,.55); margin:2px 0 0; }
+.aud-banner-edit{
+  flex:none;
+  font-size:11px; font-weight:700;
+  color:rgba(255,255,255,.7);
+  padding:6px 10px;
+  background:rgba(255,255,255,.04);
+  border:.5px solid rgba(255,255,255,.08);
+  border-radius:10px;
+  cursor:pointer;
+}
+
+/* ---------- Reframe: Tagline ---------- */
+.bb-tagline{
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.06em;
+  color:rgba(255,255,255,.4);
+  text-transform:uppercase;
+  margin: 6px 0 2px;
+}
+</style>
+<script id="bb-hotspot-v2-js">
+/* ============================================================
+   BB-HOTSPOT-V2 — Audience-Profile, Wizard, Filter, Detail-Card
+   ============================================================ */
+(function(){
+  'use strict';
+  if (window.__bbHotspotV2Init) return;
+  window.__bbHotspotV2Init = true;
+
+  /* ---------- Daten-Modelle ---------- */
+  var AUDIENCE_PROFILES = [
+    { id:'general',  title:'Allgemein',     desc:'Connection + Safety mit Freunden — Alltag, Treffen, Heimweg', icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="10" r="3"/><path d="M7 20.66A8 8 0 0 1 17 20.66"/></svg>' },
+    { id:'party',    title:'Party & Festival', desc:'Crew zusammenhalten beim Feiern, Live-Spots, sicher heim', icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5.8 11.3 2 22l10.7-3.79"/><path d="M4 3h.01"/><path d="M22 8h.01"/><path d="M15 2h.01"/><path d="M22 20h.01"/><path d="m22 2-2.24.75a2.9 2.9 0 0 0-1.96 3.12c.1.86-.57 1.63-1.45 1.63h-.38c-.86 0-1.6.6-1.76 1.44L14 10"/><path d="m22 13-1.16.94c-.71.57-1.66.74-2.52.45l-.6-.2a2.93 2.93 0 0 0-3.51 1.32l-.97 1.84"/><path d="M14.0 8.0 16 10"/><path d="m17 13 1 2"/></svg>' },
+    { id:'familie',  title:'Familie',       desc:'Eltern, Kinder, Geschwister — wisst wo ihr seid und ob alles ok', icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>' },
+    { id:'solo',     title:'Solo unterwegs', desc:'Heimweg allein, joggen, reisen — jemand weiß Bescheid wenn nötig', icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M12 11v10"/><path d="M9 21l3-2 3 2"/></svg>' },
+    { id:'pflege',   title:'Pflege & Betreuung', desc:'Eltern, Großeltern, Angehörige — sanft im Auge behalten', icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"/></svg>' },
+    { id:'recovery', title:'Recovery & Mental Health', desc:'Selbsthilfe, sichere Treffpunkte, Unterstützungs-Netz', icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>' },
+    { id:'lgbtq',    title:'LGBTQ+ Safety', desc:'Sichere Orte, vertrauenswürdige Crew, Support-Netzwerk', icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12C2 6.5 6.5 2 12 2c5.5 0 10 4.5 10 10"/><path d="M5 12c0-3.9 3.1-7 7-7s7 3.1 7 7"/><path d="M8 12c0-2.2 1.8-4 4-4s4 1.8 4 4"/><circle cx="12" cy="12" r="1"/></svg>' }
+  ];
+
+  var HOTSPOT_KINDS = [
+    { id:'safe',      title:'Schutzort',    desc:'24/7 Krankenhaus, Polizei, Tankstelle — wo man immer hin kann',
+      icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
+      defaultVis:'public' },
+    { id:'trust',     title:'Vertrauensort', desc:'Zuhause, Job, Stamm-Café — wo dich jemand abholen kann',
+      icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>',
+      defaultVis:'circle' },
+    { id:'live',      title:'Live-Spot',    desc:'Bin gerade hier — Festival, Wanderung, Treffpunkt (zeitlich begrenzt)',
+      icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+      defaultVis:'friends' },
+    { id:'watch',     title:'Vorsicht-Spot', desc:'Schlecht beleuchtet, Vorfall-Meldung — Community-Warnung',
+      icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+      defaultVis:'public' },
+    { id:'party',     title:'Party-Spot',   desc:'Festival, Club, Treffen — Crew weiß wo du feierst',
+      icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5.8 11.3 2 22l10.7-3.79"/><path d="m4 3 .01.01"/><path d="m22 8 .01.01"/><path d="m15 2 .01.01"/><path d="m22 20 .01.01"/></svg>',
+      defaultVis:'friends' },
+    { id:'community', title:'Community-Spot', desc:'Verein, Gruppe, Selbsthilfe-Treff — wiederkehrender Ort',
+      icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+      defaultVis:'circle' }
+  ];
+
+  var VISIBILITY_OPTIONS = [
+    { id:'public',  badge:'Public',  title:'Öffentlich für alle', desc:'Jeder in der Nähe sieht den Spot. Gut für Schutzorte und Warnungen.' },
+    { id:'friends', badge:'Freunde', title:'Nur Freunde im Safety-Circle', desc:'Nur Leute, die dich als Notfall-Kontakt akzeptiert haben, sehen den Spot.' },
+    { id:'circle',  badge:'Crew',    title:'Nur eingeladene Mitglieder', desc:'Du lädst Leute manuell ein. Der Spot taucht nur bei eingeladenen Personen auf.' },
+    { id:'private', badge:'Privat',  title:'Nur du', desc:'Niemand außer dir sieht den Spot. Für persönliche Vertrauensorte.' }
+  ];
+
+  var TTL_OPTIONS = [
+    { id:'1h',  num:1,  unit:'Stunde',  ms:1*60*60*1000 },
+    { id:'4h',  num:4,  unit:'Stunden', ms:4*60*60*1000 },
+    { id:'24h', num:24, unit:'Stunden', ms:24*60*60*1000 },
+    { id:'3d',  num:3,  unit:'Tage',    ms:3*24*60*60*1000 },
+    { id:'7d',  num:7,  unit:'Tage',    ms:7*24*60*60*1000 },
+    { id:'rec', num:0,  unit:'Wiederkehrend', ms:null, recurring:true }
+  ];
+
+  /* ---------- Helpers ---------- */
+  var sb = function(){ return window.sb || window.supabase; };
+  async function getUid(){
+    try{ var u = await sb().auth.getUser(); return u && u.data && u.data.user && u.data.user.id || null; }catch(e){ return null; }
+  }
+  function el(tag, cls, html){ var e=document.createElement(tag); if(cls) e.className=cls; if(html!==undefined) e.innerHTML=html; return e; }
+
+  /* ---------- AUDIENCE-PROFILE ---------- */
+  var currentAudience = 'general';
+  function applyAudience(audId){
+    if (!AUDIENCE_PROFILES.find(function(p){return p.id===audId;})) audId='general';
+    currentAudience = audId;
+    document.body.setAttribute('data-audience', audId);
+    try{ localStorage.setItem('bb-audience', audId); }catch(e){}
+    var bn = document.getElementById('bbAudBanner');
+    if (bn){ updateAudBanner(bn); }
+  }
+  async function loadAudience(){
+    try{
+      var s = (localStorage.getItem('bb-audience')) || 'general';
+      applyAudience(s);
+      var uid = await getUid(); if (!uid) return;
+      var r = await sb().from('profiles').select('audience_profile').eq('user_id', uid).maybeSingle();
+      if (r && r.data && r.data.audience_profile){
+        applyAudience(r.data.audience_profile);
+      }
+    }catch(e){}
+  }
+  async function saveAudience(audId){
+    applyAudience(audId);
+    try{
+      var uid = await getUid(); if (!uid) return;
+      await sb().from('profiles').update({ audience_profile: audId, audience_profile_set_at: new Date().toISOString() }).eq('user_id', uid);
+    }catch(e){ console.warn('[bb-hot] save audience', e); }
+  }
+  function openAudPicker(onPick){
+    var modal = document.getElementById('bbAudModal') || (function(){
+      var m = el('div','ap-modal');
+      m.id = 'bbAudModal';
+      m.innerHTML = '<div class="ap-card">'+
+        '<h2 class="ap-h">Wer bist du, wofür nutzt du das?</h2>'+
+        '<p class="ap-sub">Wir passen die App an dich an. Kannst du jederzeit ändern. Mehrere Profile werden später möglich.</p>'+
+        '<div class="ap-grid" id="apGrid">'+
+          AUDIENCE_PROFILES.map(function(p){
+            return '<button class="ap-tile" data-id="'+p.id+'" type="button">'+
+              '<div class="ap-tile-icon">'+p.icon+'</div>'+
+              '<div class="ap-tile-title">'+p.title+'</div>'+
+              '<div class="ap-tile-desc">'+p.desc+'</div>'+
+            '</button>';
+          }).join('')+
+        '</div>'+
+        '<div class="ap-actions">'+
+          '<button class="ap-btn-sec" id="apCancel" type="button">Später</button>'+
+          '<button class="ap-btn-pri" id="apSave" type="button" disabled>Übernehmen</button>'+
+        '</div>'+
+      '</div>';
+      document.body.appendChild(m);
+      var picked = null;
+      m.addEventListener('click', function(e){
+        if (e.target === m){ m.classList.remove('on'); return; }
+        var t = e.target.closest('.ap-tile');
+        if (t){
+          m.querySelectorAll('.ap-tile').forEach(function(x){ x.classList.remove('active'); });
+          t.classList.add('active');
+          picked = t.getAttribute('data-id');
+          m.querySelector('#apSave').disabled = false;
+        }
+        if (e.target.id === 'apCancel'){ m.classList.remove('on'); }
+        if (e.target.id === 'apSave' && picked){
+          saveAudience(picked);
+          m.classList.remove('on');
+          if (typeof onPick === 'function') onPick(picked);
+        }
+      });
+      return m;
+    })();
+    /* aktuellen Wert markieren */
+    modal.querySelectorAll('.ap-tile').forEach(function(t){
+      t.classList.toggle('active', t.getAttribute('data-id') === currentAudience);
+    });
+    modal.querySelector('#apSave').disabled = false;
+    setTimeout(function(){ modal.classList.add('on'); }, 20);
+  }
+  function updateAudBanner(bn){
+    var p = AUDIENCE_PROFILES.find(function(x){ return x.id===currentAudience; }) || AUDIENCE_PROFILES[0];
+    bn.querySelector('.aud-banner-icon').innerHTML = p.icon;
+    bn.querySelector('.aud-banner-title').textContent = 'Profil: '+p.title;
+    bn.querySelector('.aud-banner-sub').textContent = p.desc;
+  }
+  function injectAudBanner(){
+    var hub = document.querySelector('#screen-hub, #screen-safety, .hub-content, main');
+    if (!hub) return;
+    if (document.getElementById('bbAudBanner')) return;
+    var bn = el('div','aud-banner');
+    bn.id = 'bbAudBanner';
+    bn.innerHTML = '<div class="aud-banner-icon"></div><div class="aud-banner-main"><div class="aud-banner-title">Profil</div><div class="aud-banner-sub"></div></div><button class="aud-banner-edit" type="button">Ändern</button>';
+    bn.querySelector('.aud-banner-edit').addEventListener('click', function(){ openAudPicker(); });
+    hub.insertBefore(bn, hub.firstChild);
+    updateAudBanner(bn);
+  }
+
+  /* ---------- HOTSPOT-WIZARD ---------- */
+  var wizState = { kind:null, name:'', desc:'', vis:'public', ttl:'24h', step:1 };
+  function openWizard(){
+    var modal = document.getElementById('bbHwModal') || buildWizardDOM();
+    wizState = { kind:null, name:'', desc:'', vis:'public', ttl:'24h', step:1 };
+    renderWizardStep();
+    setTimeout(function(){ modal.classList.add('on'); }, 20);
+  }
+  function buildWizardDOM(){
+    var m = el('div','hw-modal'); m.id='bbHwModal';
+    m.innerHTML = ''+
+      '<div class="hw-card">'+
+        '<div class="hw-head">'+
+          '<button class="hw-back" id="hwBack" type="button" disabled>‹</button>'+
+          '<div class="hw-progress">'+
+            '<div class="hw-prog-dot on" data-s="1"></div>'+
+            '<div class="hw-prog-dot" data-s="2"></div>'+
+            '<div class="hw-prog-dot" data-s="3"></div>'+
+          '</div>'+
+          '<button class="hw-close" id="hwClose" type="button">×</button>'+
+        '</div>'+
+        '<div class="hw-body" id="hwBody"></div>'+
+        '<div class="hw-actions"><button class="hw-btn-pri" id="hwNext" type="button" disabled>Weiter</button></div>'+
+      '</div>';
+    document.body.appendChild(m);
+    m.addEventListener('click', function(e){
+      if (e.target === m){ m.classList.remove('on'); return; }
+      if (e.target.id === 'hwClose'){ m.classList.remove('on'); }
+      if (e.target.id === 'hwBack'){ if (wizState.step>1){ wizState.step--; renderWizardStep(); } }
+      if (e.target.id === 'hwNext'){ stepNext(); }
+    });
+    return m;
+  }
+  function renderWizardStep(){
+    var m = document.getElementById('bbHwModal');
+    var body = m.querySelector('#hwBody');
+    var nextBtn = m.querySelector('#hwNext');
+    var backBtn = m.querySelector('#hwBack');
+    m.querySelectorAll('.hw-prog-dot').forEach(function(d){
+      var s = parseInt(d.getAttribute('data-s'),10);
+      d.classList.toggle('on', s === wizState.step);
+      d.classList.toggle('done', s < wizState.step);
+    });
+    backBtn.disabled = wizState.step === 1;
+
+    if (wizState.step === 1){
+      body.innerHTML = ''+
+        '<h3 class="hw-step-title">Was für ein Spot?</h3>'+
+        '<p class="hw-step-sub">Wähle den Typ — das beeinflusst wer ihn standardmäßig sieht und wie lange er bleibt.</p>'+
+        '<div class="hw-kinds">'+
+          HOTSPOT_KINDS.map(function(k){
+            return '<button class="hw-kind k-'+k.id+(wizState.kind===k.id?' active':'')+'" data-id="'+k.id+'" type="button">'+
+              '<div class="hw-kind-icon">'+k.icon+'</div>'+
+              '<div class="hw-kind-title">'+k.title+'</div>'+
+              '<div class="hw-kind-desc">'+k.desc+'</div>'+
+            '</button>';
+          }).join('')+
+        '</div>';
+      body.querySelectorAll('.hw-kind').forEach(function(t){
+        t.addEventListener('click', function(){
+          body.querySelectorAll('.hw-kind').forEach(function(x){ x.classList.remove('active'); });
+          t.classList.add('active');
+          wizState.kind = t.getAttribute('data-id');
+          var k = HOTSPOT_KINDS.find(function(x){return x.id===wizState.kind;});
+          if (k) wizState.vis = k.defaultVis;
+          nextBtn.disabled = false;
+        });
+      });
+      nextBtn.disabled = !wizState.kind;
+      nextBtn.textContent = 'Weiter';
+    }
+    else if (wizState.step === 2){
+      body.innerHTML = ''+
+        '<h3 class="hw-step-title">Name & Beschreibung</h3>'+
+        '<p class="hw-step-sub">Gib dem Spot einen Namen, damit man ihn erkennt.</p>'+
+        '<div class="hw-field">'+
+          '<div class="hw-label">Name</div>'+
+          '<input class="hw-input" id="hwName" maxlength="60" placeholder="z.B. Mein Zuhause, Festival-Zelt, Café Zum Stern" value="'+(wizState.name||'').replace(/"/g,'&quot;')+'" />'+
+        '</div>'+
+        '<div class="hw-field">'+
+          '<div class="hw-label">Beschreibung (optional)</div>'+
+          '<textarea class="hw-textarea" id="hwDesc" maxlength="280" placeholder="Was sollen andere wissen? Treffpunkt, Notfallkontakt, etc.">'+(wizState.desc||'')+'</textarea>'+
+        '</div>';
+      body.querySelector('#hwName').addEventListener('input', function(e){
+        wizState.name = e.target.value.trim();
+        nextBtn.disabled = wizState.name.length < 2;
+      });
+      body.querySelector('#hwDesc').addEventListener('input', function(e){ wizState.desc = e.target.value; });
+      nextBtn.disabled = wizState.name.length < 2;
+      nextBtn.textContent = 'Weiter';
+    }
+    else if (wizState.step === 3){
+      body.innerHTML = ''+
+        '<h3 class="hw-step-title">Wer sieht es & wie lange?</h3>'+
+        '<p class="hw-step-sub">Du entscheidest. Du kannst es jederzeit ändern oder löschen.</p>'+
+        '<div class="hw-label" style="margin-top:6px">Wer sieht den Spot?</div>'+
+        '<div class="hw-vis-list">'+
+          VISIBILITY_OPTIONS.map(function(v){
+            return '<button class="hw-vis'+(wizState.vis===v.id?' active':'')+'" data-id="'+v.id+'" type="button">'+
+              '<div class="hw-vis-radio"></div>'+
+              '<div class="hw-vis-main">'+
+                '<div class="hw-vis-title">'+v.title+' <span class="hw-vis-badge '+v.id+'">'+v.badge+'</span></div>'+
+                '<div class="hw-vis-desc">'+v.desc+'</div>'+
+              '</div>'+
+            '</button>';
+          }).join('')+
+        '</div>'+
+        '<div class="hw-label">Wie lange aktiv?</div>'+
+        '<div class="hw-ttl-grid">'+
+          TTL_OPTIONS.map(function(t){
+            var label = t.recurring ? 'wiederkehrend' : (t.unit);
+            return '<button class="hw-ttl'+(wizState.ttl===t.id?' active':'')+'" data-id="'+t.id+'" type="button">'+
+              '<div class="hw-ttl-num">'+(t.recurring?'∞':t.num)+'</div>'+
+              '<div class="hw-ttl-unit">'+label+'</div>'+
+            '</button>';
+          }).join('')+
+        '</div>';
+      body.querySelectorAll('.hw-vis').forEach(function(b){
+        b.addEventListener('click', function(){
+          body.querySelectorAll('.hw-vis').forEach(function(x){ x.classList.remove('active'); });
+          b.classList.add('active'); wizState.vis = b.getAttribute('data-id');
+        });
+      });
+      body.querySelectorAll('.hw-ttl').forEach(function(b){
+        b.addEventListener('click', function(){
+          body.querySelectorAll('.hw-ttl').forEach(function(x){ x.classList.remove('active'); });
+          b.classList.add('active'); wizState.ttl = b.getAttribute('data-id');
+        });
+      });
+      nextBtn.disabled = false;
+      nextBtn.textContent = 'Spot anlegen';
+    }
+  }
+  async function stepNext(){
+    if (wizState.step < 3){ wizState.step++; renderWizardStep(); return; }
+    /* Submit */
+    var nextBtn = document.querySelector('#bbHwModal #hwNext');
+    nextBtn.disabled = true; nextBtn.textContent = 'Speichere …';
+    try{
+      var lat = window.userLat, lng = window.userLng;
+      if (!lat || !lng){
+        await new Promise(function(res, rej){
+          navigator.geolocation.getCurrentPosition(function(p){
+            window.userLat = p.coords.latitude; window.userLng = p.coords.longitude;
+            lat = p.coords.latitude; lng = p.coords.longitude; res();
+          }, rej, { enableHighAccuracy:true, timeout:10000 });
+        });
+      }
+      var ttl = TTL_OPTIONS.find(function(t){return t.id===wizState.ttl;}) || TTL_OPTIONS[2];
+      var expires = ttl.recurring ? new Date(Date.now()+30*24*60*60*1000).toISOString() : new Date(Date.now()+ttl.ms).toISOString();
+      var uid = await getUid();
+      if (!uid) throw new Error('Nicht eingeloggt');
+      var payload = {
+        owner_id: uid,
+        name: wizState.name,
+        description: wizState.desc || null,
+        kind: wizState.kind,
+        category: wizState.kind, /* legacy */
+        visibility: wizState.vis,
+        is_recurring: !!ttl.recurring,
+        expires_at: expires,
+        lat: lat, lng: lng,
+        audience: [currentAudience]
+      };
+      var r = await sb().from('hotspots').insert(payload).select().single();
+      if (r.error) throw r.error;
+      document.getElementById('bbHwModal').classList.remove('on');
+      try{ if (typeof window.loadHotspots==='function') window.loadHotspots(); }catch(e){}
+      toast('Spot „'+wizState.name+'" angelegt.');
+    }catch(err){
+      console.warn('[bb-hot] create failed', err);
+      toast('Fehler: '+(err.message||'Spot konnte nicht angelegt werden'));
+      nextBtn.disabled = false; nextBtn.textContent = 'Spot anlegen';
+    }
+  }
+
+  function toast(msg){
+    var t = document.createElement('div');
+    t.style.cssText='position:fixed;bottom:120px;left:50%;transform:translateX(-50%);z-index:3000;background:#1a1a24;color:#fff;padding:12px 18px;border-radius:14px;border:.5px solid rgba(255,255,255,.1);font-size:13px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.4);max-width:90vw;text-align:center;';
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(function(){ t.style.opacity='0'; t.style.transition='opacity .3s'; }, 2400);
+    setTimeout(function(){ t.remove(); }, 2900);
+  }
+
+  /* ---------- FILTER-BAR + FAB auf Spots-Map ---------- */
+  var filters = { kind:null };
+  function injectMapUI(){
+    var mapEl = document.getElementById('spotsMap');
+    if (!mapEl) return;
+    var parent = mapEl.parentElement;
+    if (!parent) return;
+    parent.style.position = parent.style.position || 'relative';
+    if (!parent.querySelector('.hf-bar')){
+      var bar = el('div','hf-bar');
+      bar.innerHTML = ''+
+        '<button class="hf-chip on" data-k="" type="button">Alle</button>'+
+        HOTSPOT_KINDS.map(function(k){
+          return '<button class="hf-chip" data-k="'+k.id+'" type="button">'+k.icon+'<span>'+k.title+'</span></button>';
+        }).join('');
+      parent.appendChild(bar);
+      bar.addEventListener('click', function(e){
+        var c = e.target.closest('.hf-chip'); if (!c) return;
+        bar.querySelectorAll('.hf-chip').forEach(function(x){ x.classList.remove('on'); });
+        c.classList.add('on');
+        filters.kind = c.getAttribute('data-k') || null;
+        try{ if (typeof window.loadHotspots==='function') window.loadHotspots(); }catch(e){}
+      });
+    }
+    if (!parent.querySelector('.hf-fab')){
+      var fab = el('button','hf-fab');
+      fab.type='button';
+      fab.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>';
+      fab.title = 'Spot anlegen';
+      fab.addEventListener('click', openWizard);
+      parent.appendChild(fab);
+    }
+  }
+
+  /* Override loadHotspots um RPC v2 zu benutzen, falls vorhanden */
+  function patchLoadHotspots(){
+    var orig = window.loadHotspots;
+    window.loadHotspots = async function(){
+      try{
+        if (typeof orig === 'function') return await orig.apply(this, arguments);
+      }catch(e){ console.warn('[bb-hot] orig loadHotspots failed', e); }
+    };
+  }
+
+  /* ---------- INIT ---------- */
+  function init(){
+    loadAudience();
+    setTimeout(injectAudBanner, 1200);
+    setTimeout(injectAudBanner, 3500);
+    /* Wenn der User noch kein Audience-Profil gesetzt hat, später einmal anbieten */
+    setTimeout(async function(){
+      try{
+        var uid = await getUid(); if (!uid) return;
+        var r = await sb().from('profiles').select('audience_profile,audience_profile_set_at').eq('user_id', uid).maybeSingle();
+        if (r && r.data && !r.data.audience_profile_set_at){
+          /* Ersten Besuch nach Login: Picker einblenden */
+          if (!localStorage.getItem('bb-aud-shown-once')){
+            try{ localStorage.setItem('bb-aud-shown-once','1'); }catch(e){}
+            openAudPicker();
+          }
+        }
+      }catch(e){}
+    }, 5000);
+
+    /* Spots-Tab: Filter+FAB einbauen */
+    var watcher = setInterval(function(){
+      if (document.getElementById('spotsMap')){ injectMapUI(); }
+    }, 1500);
+    setTimeout(function(){ clearInterval(watcher); }, 30000);
+
+    /* Existierenden "Hotspot anlegen"-Button mit Wizard verbinden */
+    document.addEventListener('click', function(e){
+      var t = e.target;
+      if (!t) return;
+      var hits = ['#bbCreateHotspotBtn', '[data-action="create-hotspot"]', '.create-hotspot-btn'];
+      var fired = hits.some(function(s){ try{ return t.closest(s); }catch(_){ return false; }});
+      if (fired){ e.preventDefault(); e.stopPropagation(); openWizard(); }
+    }, true);
+
+    patchLoadHotspots();
+
+    /* Expose */
+    window.bbHotspot = {
+      openAudPicker: openAudPicker,
+      openWizard: openWizard,
+      currentAudience: function(){ return currentAudience; }
+    };
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+
 </body></html>
