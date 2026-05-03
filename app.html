@@ -1838,4 +1838,378 @@
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 400); });
   else setTimeout(init, 400);
+})();</script><style id="bb-live-loc">/* ============== Urlaubs-Modus weg ============== */
+.ctx-switcher,#ctxSwitcher,#ctxSwitcherCrewHub,#ctxSwitcherCrew,.ctx-chip,.ctx-mode,.ctx-chips,.ctx-bar{display:none!important;visibility:hidden!important}
+
+/* ============== Live-Location: Banner im Radar (ersetzt ctx-switcher) ============== */
+.ll-radar-banner{position:absolute;top:max(14px,env(safe-area-inset-top,14px));left:14px;right:14px;z-index:50;display:flex;align-items:center;gap:10px;padding:10px 14px 10px 12px;background:linear-gradient(135deg,rgba(20,18,26,.82),rgba(12,10,18,.78));-webkit-backdrop-filter:blur(28px) saturate(170%);backdrop-filter:blur(28px) saturate(170%);border-radius:999px;border:.5px solid rgba(255,255,255,.10);box-shadow:0 14px 40px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.07);color:#fff;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.ll-radar-banner.is-active{background:linear-gradient(135deg,rgba(254,60,114,.20),rgba(254,60,114,.05));border-color:rgba(254,60,114,.40);box-shadow:0 14px 40px rgba(254,60,114,.25),inset 0 1px 0 rgba(255,255,255,.10)}
+.ll-radar-banner-icon{flex:none;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:16px;color:#fff}
+.ll-radar-banner.is-active .ll-radar-banner-icon{background:linear-gradient(135deg,#FE3C72,#FF1F5C);box-shadow:0 4px 12px rgba(254,60,114,.5);animation:llPulse 2s ease-in-out infinite}
+@keyframes llPulse{0%,100%{box-shadow:0 4px 12px rgba(254,60,114,.5)}50%{box-shadow:0 4px 22px rgba(254,60,114,.85)}}
+.ll-radar-banner-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.ll-radar-banner-l{font-size:13px;font-weight:700;color:#fff;line-height:1.1}
+.ll-radar-banner-s{font-size:11px;color:rgba(255,255,255,.55);line-height:1.1}
+.ll-radar-banner-sharers{flex:none;display:flex;align-items:center;-webkit-mask-image:linear-gradient(90deg,#000 0,#000 100%)}
+.ll-radar-banner-sharers .av{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#FE3C72,#BF5AF2);background-size:cover;background-position:center;border:2px solid rgba(20,18,26,1);margin-left:-6px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:9.5px;font-weight:800}
+.ll-radar-banner-sharers .av:first-child{margin-left:0}
+.ll-radar-banner-sharers .more{width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.10);border:2px solid rgba(20,18,26,1);margin-left:-6px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:9px;font-weight:800}
+
+/* ============== SafePlace Live-Location Section ============== */
+.ll-section{padding:0}
+.ll-card{padding:16px;background:linear-gradient(135deg,rgba(254,60,114,.08),rgba(254,60,114,.02));border:.5px solid rgba(254,60,114,.18);border-radius:18px;margin-bottom:10px}
+.ll-card.is-active{background:linear-gradient(135deg,rgba(254,60,114,.20),rgba(254,60,114,.05));border-color:rgba(254,60,114,.4)}
+.ll-card-head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.ll-card-icon{flex:none;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:20px}
+.ll-card.is-active .ll-card-icon{background:linear-gradient(135deg,#FE3C72,#FF1F5C);color:#fff;box-shadow:0 4px 14px rgba(254,60,114,.45);animation:llPulse 2s ease-in-out infinite}
+.ll-card-info{flex:1;min-width:0}
+.ll-card-info .l{font-size:14px;font-weight:700;color:#fff;line-height:1.2}
+.ll-card-info .s{font-size:11.5px;color:rgba(255,255,255,.55);line-height:1.2;margin-top:2px}
+.ll-card-controls{display:flex;flex-direction:column;gap:8px}
+.ll-row{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:rgba(255,255,255,.04);border:.5px solid rgba(255,255,255,.07);border-radius:12px}
+.ll-row-label{flex:1;font-size:12.5px;color:rgba(255,255,255,.65);font-weight:500}
+.ll-card-actions{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+.ll-btn-primary{padding:13px;border:0;border-radius:999px;background:linear-gradient(135deg,#FE3C72,#FF1F5C);color:#fff;font-size:13px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;cursor:pointer;box-shadow:0 6px 18px rgba(254,60,114,.4);-webkit-tap-highlight-color:transparent}
+.ll-btn-primary:active{transform:scale(.97)}
+.ll-btn-stop{padding:13px;border:0;border-radius:999px;background:rgba(255,255,255,.10);color:#fff;font-size:13px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.ll-btn-stop:active{background:rgba(255,255,255,.15)}
+
+/* Sharers-Liste (wer mit mir teilt) */
+.ll-sharers-list{display:flex;flex-direction:column;gap:6px;margin-top:12px}
+.ll-sharers-item{display:flex;align-items:center;gap:10px;padding:8px 12px;background:rgba(255,255,255,.04);border-radius:12px;font-size:12px}
+.ll-sharers-av{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#FE3C72,#BF5AF2);background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:11px;flex:none}
+.ll-sharers-name{flex:1;min-width:0;color:#fff;font-weight:600}
+.ll-sharers-name .ts{display:block;color:rgba(255,255,255,.5);font-weight:500;font-size:10.5px}
+.ll-sharers-mood{flex:none;font-size:14px}
+
+/* Radar Pin Style fuer Circle-Member */
+.ll-circle-pin{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#FE3C72,#BF5AF2);background-size:cover;background-position:center;border:3px solid #fff;box-shadow:0 4px 14px rgba(0,0,0,.45),0 0 0 4px rgba(254,60,114,.18);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:14px}
+.ll-circle-pin-mood{position:absolute;bottom:-4px;right:-4px;width:22px;height:22px;border-radius:50%;background:#1a161e;border:2px solid #1a161e;display:flex;align-items:center;justify-content:center;font-size:13px;line-height:1;box-shadow:0 2px 6px rgba(0,0,0,.4)}</style><script id="bb-live-loc-js">/* ====================== LIVE LOCATION V1 ====================== */
+(function(){
+  function $(id){ return document.getElementById(id); }
+  function getSb(){ return window.sb || null; }
+  function getMe(){ return (window.ME && window.ME.user_id) ? window.ME : null; }
+  function toast(m){ try{ if (typeof window.toast==='function') return window.toast(m); }catch(_){} }
+  function fmtFuture(iso){ try{var d=new Date(iso);var dif=d.getTime()-Date.now();if(dif<=0)return 'abgelaufen';var mn=Math.floor(dif/60000);if(mn<60)return 'noch '+mn+'m';var h=Math.floor(mn/60);var rm=mn%60;return rm?'noch '+h+'h '+rm+'m':'noch '+h+'h';}catch(_){return ''} }
+  function fmtRel(iso){ try{var d=new Date(iso);var dif=Date.now()-d.getTime();var s=Math.floor(dif/1000);if(s<60)return 'gerade';var m=Math.floor(s/60);if(m<60)return 'vor '+m+'m';var h=Math.floor(m/60);return 'vor '+h+'h';}catch(_){return ''} }
+  function initials(n){if(!n)return'?';return n.trim().split(/\s+/).slice(0,2).map(function(p){return p[0];}).join('').toUpperCase();}
+
+  /* ====== State ====== */
+  var sharing = { active:false, expiresAt:null, scope:'circle', durationHours:4 };
+  var pushInterval = null;
+  var sharers = []; // people sharing with me
+  var circlePins = {}; // user_id → leaflet marker
+  var rtCh = null;
+
+  /* ====== Load own state ====== */
+  async function loadMyShareState(){
+    var sb = getSb(), me = getMe(); if (!sb || !me) return;
+    try {
+      var r = await sb.from('live_locations').select('*').eq('user_id', me.user_id).maybeSingle();
+      if (r && r.data && new Date(r.data.expires_at).getTime() > Date.now()){
+        sharing.active = true;
+        sharing.expiresAt = r.data.expires_at;
+        sharing.scope = r.data.share_with;
+        startPushLoop();
+      } else {
+        sharing.active = false; sharing.expiresAt = null;
+        stopPushLoop();
+      }
+    } catch(_){}
+    refreshUiAll();
+  }
+
+  /* ====== Push-Loop ====== */
+  function startPushLoop(){
+    stopPushLoop();
+    pushInterval = setInterval(function(){ pushOnce(); }, 30000);
+    setTimeout(pushOnce, 1500);
+  }
+  function stopPushLoop(){ if (pushInterval){ clearInterval(pushInterval); pushInterval = null; } }
+  async function pushOnce(){
+    if (!sharing.active) return;
+    if (sharing.expiresAt && new Date(sharing.expiresAt).getTime() < Date.now()){
+      // Expired
+      sharing.active = false; sharing.expiresAt = null; stopPushLoop(); refreshUiAll(); return;
+    }
+    var sb = getSb(); if (!sb) return;
+    var pos = await new Promise(function(res){
+      if (!navigator.geolocation) return res(null);
+      navigator.geolocation.getCurrentPosition(function(p){res({lat:p.coords.latitude,lng:p.coords.longitude,acc:p.coords.accuracy})}, function(){res(null)}, {enableHighAccuracy:true,timeout:7000,maximumAge:15000});
+    });
+    if (!pos) return;
+    try { await sb.rpc('push_live_location', { p_lat: pos.lat, p_lng: pos.lng, p_accuracy: pos.acc }); } catch(_){}
+  }
+
+  /* ====== Start / Stop ====== */
+  window.startLiveSharing = async function(scope, hours){
+    var sb = getSb(), me = getMe(); if (!sb || !me){ toast('Nicht eingeloggt'); return; }
+    var pos = await new Promise(function(res){
+      if (!navigator.geolocation){ toast('Geolocation nicht verfügbar'); return res(null); }
+      navigator.geolocation.getCurrentPosition(function(p){res({lat:p.coords.latitude,lng:p.coords.longitude,acc:p.coords.accuracy})}, function(){toast('Standort verweigert');res(null)}, {enableHighAccuracy:true,timeout:8000});
+    });
+    if (!pos) return;
+    try {
+      var r = await sb.rpc('update_live_location', { p_lat: pos.lat, p_lng: pos.lng, p_accuracy: pos.acc, p_share_with: scope || 'circle', p_duration_hours: hours || 4 });
+      if (r && r.data){
+        sharing.active = true;
+        sharing.expiresAt = r.data.expires_at;
+        sharing.scope = r.data.share_with;
+        sharing.durationHours = hours || 4;
+        startPushLoop();
+        try { navigator.vibrate && navigator.vibrate([15,40,15]); } catch(_){}
+        toast('Live-Standort aktiv ('+(hours||4)+'h)');
+      }
+    } catch(e){ console.error(e); toast('Konnte nicht starten'); }
+    refreshUiAll();
+  };
+
+  window.stopLiveSharing = async function(){
+    var sb = getSb(); if (!sb) return;
+    try { await sb.rpc('stop_live_location'); } catch(_){}
+    sharing.active = false; sharing.expiresAt = null; stopPushLoop();
+    toast('Live-Standort gestoppt');
+    refreshUiAll();
+    clearAllCirclePins();
+  };
+
+  /* ====== Sharers — wer mit mir teilt ====== */
+  async function loadSharers(){
+    var sb = getSb(); if (!sb) return [];
+    try {
+      var r = await sb.rpc('get_circle_live_locations');
+      sharers = r.data || [];
+    } catch(_){ sharers = []; }
+    return sharers;
+  }
+
+  /* ====== UI: Radar Banner ====== */
+  function ensureRadarBanner(){
+    var radar = document.getElementById('screen-radar'); if (!radar) return null;
+    var b = $('llRadarBanner');
+    if (!b){
+      b = document.createElement('div');
+      b.id = 'llRadarBanner';
+      b.className = 'll-radar-banner';
+      b.innerHTML =
+        '<div class="ll-radar-banner-icon">📍</div>'+
+        '<div class="ll-radar-banner-info"><span class="ll-radar-banner-l"></span><span class="ll-radar-banner-s"></span></div>'+
+        '<div class="ll-radar-banner-sharers"></div>';
+      b.addEventListener('click', function(){ if (window.openSafeplaceHub){ window.openSafeplaceHub(); setTimeout(function(){ var sec = $('spLiveLocSection'); if (sec) sec.scrollIntoView({behavior:'smooth', block:'start'}); }, 250); } });
+      radar.appendChild(b);
+    }
+    return b;
+  }
+
+  function refreshRadarBanner(){
+    var b = ensureRadarBanner(); if (!b) return;
+    var lEl = b.querySelector('.ll-radar-banner-l');
+    var sEl = b.querySelector('.ll-radar-banner-s');
+    var avs = b.querySelector('.ll-radar-banner-sharers');
+    avs.innerHTML = '';
+    if (sharing.active){
+      b.classList.add('is-active');
+      lEl.textContent = 'Live-Standort an';
+      sEl.textContent = 'Sichtbar für ' + (sharing.scope === 'crew' ? 'Crew + Circle' : 'Safety Circle') + ' · ' + fmtFuture(sharing.expiresAt);
+    } else {
+      b.classList.remove('is-active');
+      lEl.textContent = 'Live-Standort teilen';
+      sEl.textContent = sharers.length ? sharers.length + ' Freund' + (sharers.length===1?'':'e') + ' teilen mit dir' : 'Tippen für Optionen';
+    }
+    // Avatar-Stack (max 3 + more-Bubble)
+    sharers.slice(0,3).forEach(function(s){
+      var a = document.createElement('div'); a.className = 'av';
+      if (s.photo_url){ a.style.backgroundImage = 'url('+s.photo_url+')'; }
+      else a.textContent = initials(s.name);
+      avs.appendChild(a);
+    });
+    if (sharers.length > 3){
+      var more = document.createElement('div'); more.className = 'more'; more.textContent = '+'+(sharers.length-3);
+      avs.appendChild(more);
+    }
+  }
+
+  /* ====== UI: SafePlace Section ====== */
+  function injectLiveLocSection(){
+    var host = $('safeplaceOv'); if (!host) return;
+    if ($('spLiveLocSection')) return;
+    var content = host.querySelector('.sp-content'); if (!content) return;
+    var sec = document.createElement('div');
+    sec.id = 'spLiveLocSection';
+    sec.className = 'sp-section ll-section';
+    sec.innerHTML =
+      '<div class="sp-section-head"><div class="sp-section-title">Live-Standort</div><span id="llStatus" class="sp-section-meta">aus</span></div>'+
+      '<div class="ll-card" id="llCard">'+
+      '  <div class="ll-card-head"><div class="ll-card-icon">📍</div>'+
+      '    <div class="ll-card-info"><div class="l" id="llCardLabel">Standort live teilen</div><div class="s" id="llCardSub">Hilft Freunden zu wissen wo du bist — nur wenn du es einschaltest</div></div></div>'+
+      '  <div class="ll-card-controls">'+
+      '    <div class="ll-row"><span class="ll-row-label">Wer sieht mich?</span><div class="mp-segctl" id="llScopeCtl"><button data-vis="circle" class="on">Circle</button><button data-vis="crew">+ Crew</button></div></div>'+
+      '    <div class="ll-row"><span class="ll-row-label">Dauer</span><div class="mp-segctl" id="llDurCtl"><button data-dur="1" class="on">1h</button><button data-dur="4">4h</button><button data-dur="8">8h</button><button data-dur="24">24h</button></div></div>'+
+      '  </div>'+
+      '  <div class="ll-card-actions" id="llCardActions"></div>'+
+      '  <div class="ll-sharers-list" id="llSharersList"></div>'+
+      '</div>';
+    // Insert at end (or after privacy)
+    var privacy = $('spPrivacySection');
+    if (privacy) content.insertBefore(sec, privacy);
+    else content.appendChild(sec);
+    bindLlControls();
+    refreshLlCard();
+  }
+
+  function bindLlControls(){
+    var scopeCtl = $('llScopeCtl');
+    if (scopeCtl && !scopeCtl.__bbBound){
+      scopeCtl.__bbBound = true;
+      scopeCtl.querySelectorAll('button').forEach(function(b){
+        b.addEventListener('click', function(){
+          scopeCtl.querySelectorAll('button').forEach(function(x){x.classList.remove('on');});
+          b.classList.add('on');
+          sharing.scope = b.dataset.vis;
+        });
+      });
+    }
+    var durCtl = $('llDurCtl');
+    if (durCtl && !durCtl.__bbBound){
+      durCtl.__bbBound = true;
+      durCtl.querySelectorAll('button').forEach(function(b){
+        b.addEventListener('click', function(){
+          durCtl.querySelectorAll('button').forEach(function(x){x.classList.remove('on');});
+          b.classList.add('on');
+          sharing.durationHours = parseInt(b.dataset.dur,10) || 4;
+        });
+      });
+    }
+  }
+
+  function refreshLlCard(){
+    var card = $('llCard'); if (!card) return;
+    var statusEl = $('llStatus'), labelEl = $('llCardLabel'), subEl = $('llCardSub'), actEl = $('llCardActions');
+    if (sharing.active){
+      card.classList.add('is-active');
+      if (statusEl) statusEl.textContent = 'aktiv · ' + fmtFuture(sharing.expiresAt);
+      if (labelEl) labelEl.textContent = 'Live-Standort aktiv';
+      if (subEl) subEl.textContent = 'Sichtbar für ' + (sharing.scope === 'crew' ? 'Crew + Circle' : 'Safety Circle') + ' · läuft ' + fmtFuture(sharing.expiresAt);
+      if (actEl){ actEl.innerHTML = '<button class="ll-btn-stop" onclick="window.stopLiveSharing&&window.stopLiveSharing()">Sharing beenden</button>'; }
+    } else {
+      card.classList.remove('is-active');
+      if (statusEl) statusEl.textContent = 'aus';
+      if (labelEl) labelEl.textContent = 'Standort live teilen';
+      if (subEl) subEl.textContent = 'Hilft Freunden zu wissen wo du bist — nur wenn du es einschaltest, mit TTL und Pause-Mode-Schutz.';
+      if (actEl){ actEl.innerHTML = '<button class="ll-btn-primary" onclick="window.startLiveSharing&&window.startLiveSharing(window.__llScope||\'circle\', window.__llDur||1)">Jetzt teilen</button>'; }
+    }
+    // sharers list
+    var list = $('llSharersList');
+    if (list){
+      if (!sharers.length){ list.innerHTML = ''; }
+      else {
+        list.innerHTML = '';
+        sharers.forEach(function(s){
+          var item = document.createElement('div'); item.className = 'll-sharers-item';
+          item.innerHTML = '<div class="ll-sharers-av"></div><div class="ll-sharers-name"></div><div class="ll-sharers-mood"></div>';
+          var av = item.querySelector('.ll-sharers-av');
+          if (s.photo_url){ av.style.backgroundImage = 'url('+s.photo_url+')'; }
+          else av.textContent = initials(s.name);
+          var nm = item.querySelector('.ll-sharers-name');
+          nm.innerHTML = '<span></span><span class="ts"></span>';
+          nm.querySelector('span').textContent = s.name || 'Anon';
+          nm.querySelector('.ts').textContent = 'aktualisiert ' + fmtRel(s.updated_at);
+          var mEl = item.querySelector('.ll-sharers-mood');
+          if (s.mood_emoji) mEl.textContent = s.mood_emoji;
+          list.appendChild(item);
+        });
+      }
+    }
+  }
+
+  // sync globalvars
+  window.__llScope = 'circle';
+  window.__llDur = 1;
+
+  function bindGlobalSyncs(){
+    Object.defineProperty(window, '__llScope', { get:function(){ return sharing.scope; }, set:function(v){ sharing.scope = v; } });
+    Object.defineProperty(window, '__llDur', { get:function(){ return sharing.durationHours; }, set:function(v){ sharing.durationHours = v; } });
+  }
+  try { bindGlobalSyncs(); } catch(_){}
+
+  /* ====== Map-Pins für Circle-Member ====== */
+  function clearAllCirclePins(){
+    if (!window.rMap) return;
+    Object.keys(circlePins).forEach(function(uid){ try { window.rMap.removeLayer(circlePins[uid]); } catch(_){} });
+    circlePins = {};
+  }
+  function renderCirclePins(){
+    if (!window.rMap || typeof window.L === 'undefined') return;
+    var seen = {};
+    sharers.forEach(function(s){
+      seen[s.user_id] = true;
+      var html = '<div style="position:relative"><div class="ll-circle-pin"';
+      if (s.photo_url) html += ' style="background-image:url(\''+s.photo_url+'\')"';
+      html += '>';
+      if (!s.photo_url) html += initials(s.name);
+      html += '</div>';
+      if (s.mood_emoji) html += '<div class="ll-circle-pin-mood">'+s.mood_emoji+'</div>';
+      html += '</div>';
+      var icon = window.L.divIcon({ html: html, className: '', iconSize: [44,44], iconAnchor: [22,22] });
+      if (circlePins[s.user_id]){
+        try { circlePins[s.user_id].setLatLng([s.lat, s.lng]); } catch(_){}
+      } else {
+        var mk = window.L.marker([s.lat, s.lng], { icon: icon, zIndexOffset: 900 }).addTo(window.rMap);
+        var popupHtml = '<div style="min-width:160px;font-family:inherit;color:#000"><strong>'+(s.name||'')+'</strong><br><span style="font-size:11px;color:#666">aktualisiert '+fmtRel(s.updated_at)+'</span>';
+        if (s.mood_emoji) popupHtml += '<br><span style="font-size:13px">'+s.mood_emoji+' '+(s.mood_label||'')+'</span>';
+        popupHtml += '</div>';
+        mk.bindPopup(popupHtml);
+        circlePins[s.user_id] = mk;
+      }
+    });
+    // Remove pins for users no longer sharing
+    Object.keys(circlePins).forEach(function(uid){
+      if (!seen[uid]){ try { window.rMap.removeLayer(circlePins[uid]); } catch(_){}; delete circlePins[uid]; }
+    });
+  }
+
+  /* ====== Refresh All UI ====== */
+  function refreshUiAll(){
+    refreshRadarBanner();
+    refreshLlCard();
+    renderCirclePins();
+  }
+
+  /* ====== Realtime ====== */
+  function startRealtime(){
+    var sb = getSb(), me = getMe(); if (!sb || !me || rtCh) return;
+    try {
+      rtCh = sb.channel('live-loc-'+me.user_id);
+      rtCh.on('postgres_changes', { event: '*', schema: 'public', table: 'live_locations' }, function(){
+        loadSharers().then(refreshUiAll);
+      }).subscribe();
+    } catch(_){}
+  }
+
+  /* ====== Periodic Sharer Reload (fallback if rt drops) ====== */
+  setInterval(function(){
+    var me = getMe(); if (!me) return;
+    loadSharers().then(refreshUiAll);
+  }, 60000);
+
+  /* ====== Boot ====== */
+  function init(){
+    setTimeout(function(){
+      ensureRadarBanner();
+      loadMyShareState();
+      loadSharers().then(refreshUiAll);
+      startRealtime();
+      // Hook openSafeplaceHub: insert section + refresh
+      var origHub = window.openSafeplaceHub;
+      if (origHub && !origHub.__bbLlWrapped){
+        window.openSafeplaceHub = function(){
+          origHub.apply(this, arguments);
+          setTimeout(function(){ injectLiveLocSection(); refreshLlCard(); }, 120);
+        };
+        window.openSafeplaceHub.__bbLlWrapped = true;
+      }
+    }, 1500);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 600); });
+  else setTimeout(init, 600);
 })();</script></body></html>
