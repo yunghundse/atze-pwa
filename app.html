@@ -4549,4 +4549,499 @@
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 2000); });
   else setTimeout(init, 2000);
+})();</script><style id="bb-simplify">/* ============================================================
+ * Hub-Simplify: radikale Reduktion auf 3 Top-Level-Bereiche
+ * Alle Detail-Sections werden im Hub versteckt und ins
+ * Settings-Modal verschoben.
+ * ============================================================ */
+
+/* Verstecke ALLE bestehenden Sections im Hub außer Status + Mood-Card */
+#safeplaceOv .sp-section{display:none!important}
+#safeplaceOv .sp-actions{display:none!important}
+#safeplaceOv #spLimitsBanner{display:none!important}
+
+/* Wenn settings-mode aktiv, zeige bestimmte Sections im Settings-Modal */
+.settings-mode .sp-section{display:block!important}
+.settings-mode .sp-actions{display:flex!important}
+.settings-mode #spLimitsBanner{display:flex!important}
+
+/* ============== Smart-Hub Layout ============== */
+.smart-hub{display:flex;flex-direction:column;gap:14px;padding:0 4px}
+
+/* Status-Card stays as-is, but more prominent */
+#safeplaceOv .sp-status-card{padding:18px 20px;margin-bottom:0}
+
+/* Quick-Actions: 3 grosse Buttons in einer Reihe */
+.smart-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
+.smart-act{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:18px 8px;background:rgba(255,255,255,.04);border:.5px solid rgba(255,255,255,.07);border-radius:18px;color:#fff;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .15s,background .2s,border-color .2s;min-height:88px}
+.smart-act:hover{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.12)}
+.smart-act:active{transform:scale(.96)}
+.smart-act.is-active{background:linear-gradient(135deg,var(--act-c,#FE3C72) 0%,rgba(255,255,255,.04) 100%);border-color:rgba(254,60,114,.4)}
+.smart-act .ic{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff}
+.smart-act.is-active .ic{background:linear-gradient(135deg,var(--act-c,#FE3C72),var(--act-c2,#FF1F5C));box-shadow:0 4px 12px rgba(254,60,114,.4);animation:smartPulse 2s ease-in-out infinite}
+@keyframes smartPulse{0%,100%{box-shadow:0 4px 12px rgba(254,60,114,.4)}50%{box-shadow:0 4px 22px rgba(254,60,114,.7)}}
+.smart-act .l{font-size:12px;font-weight:700;line-height:1.15;color:#fff;text-align:center}
+.smart-act .s{font-size:10px;color:rgba(255,255,255,.5);line-height:1.1;text-align:center;font-weight:500}
+
+/* Crew-Liste smartified */
+.smart-crew-section{padding:0}
+.smart-crew-head{display:flex;align-items:center;justify-content:space-between;padding:0 4px 8px}
+.smart-crew-title{font-size:12px;font-weight:700;color:rgba(255,255,255,.7);letter-spacing:.4px;text-transform:uppercase}
+.smart-crew-meta{font-size:11px;color:rgba(255,255,255,.45)}
+.smart-crew-list{display:flex;flex-direction:column;gap:6px}
+.smart-crew-card{display:flex;align-items:center;gap:12px;padding:12px 14px;background:rgba(255,255,255,.04);border:.5px solid rgba(255,255,255,.06);border-radius:14px}
+.smart-crew-card.is-sos{background:linear-gradient(135deg,rgba(254,60,114,.18),rgba(254,60,114,.04));border-color:rgba(254,60,114,.4)}
+.smart-crew-card.is-paused{opacity:.55}
+.smart-crew-av{flex:none;width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#FE3C72,#BF5AF2);background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:13px}
+.smart-crew-info{flex:1;min-width:0}
+.smart-crew-info .n{font-size:13.5px;font-weight:700;color:#fff;line-height:1.2;display:block}
+.smart-crew-info .s{font-size:11px;color:rgba(255,255,255,.55);line-height:1.2;margin-top:2px}
+.smart-crew-mood{flex:none;font-size:18px;line-height:1}
+.smart-crew-empty{padding:18px 16px;text-align:center;color:rgba(255,255,255,.45);font-size:12px;background:rgba(255,255,255,.025);border:.5px dashed rgba(255,255,255,.08);border-radius:12px}
+
+/* Footer: Settings + Invite */
+.smart-foot{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.smart-foot button{padding:12px;border:0;border-radius:14px;background:rgba(255,255,255,.04);border:.5px solid rgba(255,255,255,.06);color:#fff;font-size:12.5px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;-webkit-tap-highlight-color:transparent}
+.smart-foot button:active{transform:scale(.98);background:rgba(255,255,255,.07)}
+
+/* ============== Settings-Modal ============== */
+.set-ov{position:fixed;inset:0;z-index:10006;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.7);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.set-ov.show{display:flex}
+.set-card{width:100%;max-width:560px;max-height:92vh;background:linear-gradient(180deg,#1a161e 0%,#0a080c 100%);border-radius:24px 24px 0 0;border-top:.5px solid rgba(255,255,255,.10);overflow-y:auto;-webkit-overflow-scrolling:touch}
+@media (min-width:600px){.set-card{border-radius:24px;max-height:88vh;margin:auto}.set-ov{align-items:center;padding:20px}}
+.set-handle{width:40px;height:4px;border-radius:999px;background:rgba(255,255,255,.18);margin:10px auto}
+.set-head{display:flex;align-items:center;gap:12px;padding:6px 18px 14px;position:sticky;top:0;background:linear-gradient(180deg,rgba(26,22,30,.95),rgba(26,22,30,.85));backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:5}
+.set-close{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.08);border:0;color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none}
+.set-close:active{transform:scale(.92)}
+.set-title{font-family:'Anton',Impact,sans-serif;font-size:20px;letter-spacing:1px;color:#fff;text-transform:uppercase}
+.set-body{padding:0 16px 24px}
+
+/* Tabs */
+.set-tabs{display:flex;gap:4px;padding:6px;background:rgba(255,255,255,.04);border-radius:12px;margin-bottom:12px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.set-tab{flex:none;padding:9px 13px;border:0;border-radius:8px;background:transparent;color:rgba(255,255,255,.55);font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;-webkit-tap-highlight-color:transparent}
+.set-tab.on{background:rgba(255,255,255,.10);color:#fff}
+
+.set-pane{display:none}
+.set-pane.on{display:block}
+
+/* Header-SafePlace Header bekommt Settings-Gear */
+.sp-settings-btn{flex:none;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.08);border:0;color:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;margin-left:auto}
+.sp-settings-btn:active{transform:scale(.92)}
+
+/* Inline-Mood-Mini-Picker (kompakter als Bottom-Sheet) */
+.mini-mood-row{display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding:8px 0;scrollbar-width:none}
+.mini-mood-row::-webkit-scrollbar{display:none}
+.mini-mood{flex:none;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 12px;background:rgba(255,255,255,.04);border:.5px solid rgba(255,255,255,.06);border-radius:14px;cursor:pointer;-webkit-tap-highlight-color:transparent;min-width:64px}
+.mini-mood:active{transform:scale(.95)}
+.mini-mood .e{font-size:22px;line-height:1}
+.mini-mood .l{font-size:9.5px;font-weight:600;color:rgba(255,255,255,.6);letter-spacing:.2px;text-align:center}
+.mini-mood-clear{flex:none;padding:8px 14px;background:rgba(255,255,255,.03);border:.5px solid rgba(255,255,255,.06);border-radius:14px;color:rgba(255,255,255,.5);font-size:11px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;min-width:64px}</style><script id="bb-simplify-js">/* ============================================================
+ * Hub-Simplify: macht aus 15-Section-Hub ein 3-Block-Smart-Hub
+ * Alle Detail-Sections wandern in ein Settings-Modal
+ * ============================================================ */
+(function(){
+  function $(id){ return document.getElementById(id); }
+  function getSb(){ return window.sb || null; }
+  function getMe(){ return (window.ME && window.ME.user_id) ? window.ME : null; }
+  function toast(m){ try{ if (typeof window.toast === 'function') return window.toast(m); }catch(_){} }
+  function fmtRel(iso){ try{var d=new Date(iso);var dif=Date.now()-d.getTime();var s=Math.floor(dif/1000);if(s<60)return 'gerade';var m=Math.floor(s/60);if(m<60)return 'vor '+m+'m';var h=Math.floor(m/60);if(h<24)return 'vor '+h+'h';var dd=Math.floor(h/24);return 'vor '+dd+'T';}catch(_){return ''}}
+  function fmtFut(iso){ try{var d=new Date(iso);var dif=d.getTime()-Date.now();if(dif<=0)return 'abgelaufen';var mn=Math.floor(dif/60000);if(mn<60)return mn+'m';var h=Math.floor(mn/60);return h+'h';}catch(_){return ''}}
+  function initials(n){if(!n)return'?';return n.trim().split(/\s+/).slice(0,2).map(function(p){return p[0];}).join('').toUpperCase();}
+
+  /* ============== MINI MOOD-PICKER (Inline statt Bottom-Sheet) ============== */
+  var QUICK_MOODS = [
+    { key:'party',  emoji:'🥳', label:'Feiern',  color:'#FE3C72', tier:'safe' },
+    { key:'chill',  emoji:'🍺', label:'Chill',   color:'#FFAA00', tier:'safe' },
+    { key:'easy',   emoji:'😎', label:'Easy',    color:'#34C759', tier:'safe' },
+    { key:'home',   emoji:'🛌', label:'Daheim',  color:'#30D158', tier:'safe' },
+    { key:'down',   emoji:'😣', label:'Mies',    color:'#5E9EFF', tier:'concern' },
+    { key:'need',   emoji:'🚨', label:'Hilfe',   color:'#FF6A3D', tier:'alarm' },
+    { key:'more',   emoji:'•••', label:'Mehr',   color:'#8E8E93', tier:'safe' }
+  ];
+
+  async function quickSetMood(m){
+    if (m.key === 'more'){
+      // Open full mood picker
+      if (typeof window.openMoodPicker === 'function') window.openMoodPicker();
+      return;
+    }
+    var sb = getSb(), me = getMe(); if (!sb || !me) return;
+    var expiresAt = new Date(Date.now() + 4*3600*1000).toISOString(); // 4h default
+    try {
+      await sb.from('user_moods').insert({
+        user_id: me.user_id,
+        emoji: m.emoji, label: m.label, color: m.color, tier: m.tier,
+        visibility: 'circle', expires_at: expiresAt
+      });
+      try { navigator.vibrate && navigator.vibrate(10); } catch(_){}
+      toast('Mood gesetzt: ' + m.emoji);
+      if (typeof window.refreshMyMoodCard === 'function') window.refreshMyMoodCard();
+      refreshSmart();
+    } catch(e){
+      toast('Fehler: ' + (e.message || e));
+    }
+  }
+
+  async function quickClearMood(){
+    var sb = getSb(), me = getMe(); if (!sb || !me) return;
+    try {
+      await sb.from('user_moods').update({ expires_at: new Date().toISOString() }).eq('user_id', me.user_id).gt('expires_at', new Date().toISOString());
+      toast('Mood gelöscht');
+      if (typeof window.refreshMyMoodCard === 'function') window.refreshMyMoodCard();
+      refreshSmart();
+    } catch(_){}
+  }
+
+  /* ============== Smart-Hub bauen ============== */
+  function injectSmartHub(){
+    var ov = $('safeplaceOv'); if (!ov) return;
+    var content = ov.querySelector('.sp-content'); if (!content) return;
+    if ($('smartHub')) return;
+
+    // Hub-Header bekommt Settings-Button
+    var header = ov.querySelector('.sp-header');
+    if (header && !header.querySelector('.sp-settings-btn')){
+      var settingsBtn = document.createElement('button');
+      settingsBtn.className = 'sp-settings-btn';
+      settingsBtn.title = 'Einstellungen';
+      settingsBtn.innerHTML = '⚙';
+      settingsBtn.addEventListener('click', openSettings);
+      header.appendChild(settingsBtn);
+    }
+
+    // Smart-Hub-Container nach status-card
+    var statusCard = content.querySelector('.sp-status-card');
+    var smartHub = document.createElement('div');
+    smartHub.id = 'smartHub';
+    smartHub.className = 'smart-hub';
+    smartHub.innerHTML =
+      // Mini-Mood Quick-Picker
+      '<div class="mini-mood-row" id="miniMoodRow"></div>'+
+      // Quick-Actions
+      '<div class="smart-actions">'+
+        '<button class="smart-act" id="actLive" data-act="live"><div class="ic">📍</div><div class="l">Live</div><div class="s" id="actLiveSub">teilen</div></button>'+
+        '<button class="smart-act" id="actHome" data-act="home"><div class="ic">🏠</div><div class="l">Heimweg</div><div class="s" id="actHomeSub">starten</div></button>'+
+        '<button class="smart-act" id="actCheckin" data-act="checkin"><div class="ic">✓</div><div class="l">Bin OK</div><div class="s" id="actCheckinSub">Status pingen</div></button>'+
+      '</div>'+
+      // Crew-Liste kompakt
+      '<div class="smart-crew-section">'+
+        '<div class="smart-crew-head"><div class="smart-crew-title">Meine Crew</div><span id="smartCrewMeta" class="smart-crew-meta">—</span></div>'+
+        '<div class="smart-crew-list" id="smartCrewList"><div class="smart-crew-empty">Lade...</div></div>'+
+      '</div>'+
+      // Footer mit Invite + Settings (Settings ist auch im Header)
+      '<div class="smart-foot">'+
+        '<button onclick="window.shareSafeplaceInvite&&window.shareSafeplaceInvite()">↗ Freund einladen</button>'+
+        '<button onclick="window.bbOpenSettings&&window.bbOpenSettings()">⚙ Mehr</button>'+
+      '</div>';
+
+    if (statusCard && statusCard.nextSibling){
+      content.insertBefore(smartHub, statusCard.nextSibling);
+    } else {
+      content.appendChild(smartHub);
+    }
+
+    renderMiniMoodRow();
+    bindActions();
+    refreshSmart();
+  }
+
+  function renderMiniMoodRow(){
+    var row = $('miniMoodRow'); if (!row) return;
+    row.innerHTML = '';
+    QUICK_MOODS.forEach(function(m){
+      var btn = document.createElement('button');
+      btn.className = 'mini-mood';
+      btn.innerHTML = '<span class="e">'+m.emoji+'</span><span class="l">'+m.label+'</span>';
+      btn.style.setProperty('--act-c', m.color);
+      btn.addEventListener('click', function(){ quickSetMood(m); });
+      row.appendChild(btn);
+    });
+    var clearBtn = document.createElement('button');
+    clearBtn.className = 'mini-mood-clear';
+    clearBtn.textContent = '✕ Aus';
+    clearBtn.addEventListener('click', quickClearMood);
+    row.appendChild(clearBtn);
+  }
+
+  function bindActions(){
+    var live = $('actLive'); if (live) live.addEventListener('click', toggleLive);
+    var home = $('actHome'); if (home) home.addEventListener('click', toggleHome);
+    var ci = $('actCheckin'); if (ci) ci.addEventListener('click', doCheckin);
+  }
+
+  /* ============== Smart Quick-Actions ============== */
+  async function toggleLive(){
+    // Prüfe aktuellen Status
+    var sb = getSb(), me = getMe(); if (!sb || !me) return;
+    try {
+      var r = await sb.from('live_locations').select('expires_at').eq('user_id', me.user_id).maybeSingle();
+      var active = r && r.data && new Date(r.data.expires_at).getTime() > Date.now();
+      if (active){
+        if (typeof window.stopLiveSharing === 'function') await window.stopLiveSharing();
+      } else {
+        // Default: 4h Circle-Share, kein Picker
+        if (typeof window.startLiveSharing === 'function') await window.startLiveSharing('circle', 4);
+      }
+      refreshSmart();
+    } catch(e){ toast('Fehler: ' + (e.message || e)); }
+  }
+
+  async function toggleHome(){
+    var sb = getSb(), me = getMe(); if (!sb || !me) return;
+    try {
+      var r = await sb.from('home_routes').select('id,status').eq('user_id', me.user_id).eq('status','active').maybeSingle();
+      if (r && r.data){
+        // Heimweg läuft → "Bin angekommen"
+        await sb.from('home_routes').update({ status: 'arrived', completed_at: new Date().toISOString() }).eq('id', r.data.id);
+        toast('Sicher angekommen ✓');
+        if (window.crew && window.crew.safety) window.crew.safety.log('homeroute_arrived', {}, 'live_location');
+      } else {
+        // Default: 30min ETA, "Zuhause" als Label, kein Picker
+        var pos = await new Promise(function(res){
+          if (!navigator.geolocation) return res(null);
+          navigator.geolocation.getCurrentPosition(function(p){res({lat:p.coords.latitude,lng:p.coords.longitude})},function(){res(null)},{enableHighAccuracy:true,timeout:7000,maximumAge:30000});
+        });
+        await sb.from('home_routes').insert({
+          user_id: me.user_id, destination_label: 'Zuhause',
+          start_lat: pos ? pos.lat : null, start_lng: pos ? pos.lng : null,
+          current_lat: pos ? pos.lat : null, current_lng: pos ? pos.lng : null,
+          eta_minutes: 30,
+          expected_arrival_at: new Date(Date.now() + 30*60000).toISOString()
+        });
+        toast('Heimweg gestartet — 30min ETA, Crew weiß Bescheid');
+        if (window.crew && window.crew.safety) window.crew.safety.log('homeroute_started', { eta_minutes: 30 }, 'live_location');
+      }
+      refreshSmart();
+    } catch(e){ toast('Fehler: ' + (e.message || e)); }
+  }
+
+  async function doCheckin(){
+    if (typeof window.doSafetyCheckin !== 'function') return;
+    await window.doSafetyCheckin('Ich bin OK');
+    refreshSmart();
+  }
+
+  /* ============== Refresh Smart-Hub State ============== */
+  async function refreshSmart(){
+    var sb = getSb(), me = getMe(); if (!sb || !me) return;
+
+    // 1. Live-Action
+    try {
+      var r1 = await sb.from('live_locations').select('expires_at').eq('user_id', me.user_id).maybeSingle();
+      var liveActive = r1 && r1.data && new Date(r1.data.expires_at).getTime() > Date.now();
+      var live = $('actLive'); var liveSub = $('actLiveSub');
+      if (live){
+        live.classList.toggle('is-active', !!liveActive);
+        live.style.setProperty('--act-c', '#FE3C72');
+        if (liveSub) liveSub.textContent = liveActive ? ('noch '+fmtFut(r1.data.expires_at)) : 'teilen';
+      }
+    } catch(_){}
+
+    // 2. Heimweg-Action
+    try {
+      var r2 = await sb.from('home_routes').select('id,status,expected_arrival_at').eq('user_id', me.user_id).eq('status','active').maybeSingle();
+      var homeActive = r2 && r2.data;
+      var home = $('actHome'); var homeSub = $('actHomeSub');
+      if (home){
+        home.classList.toggle('is-active', !!homeActive);
+        home.style.setProperty('--act-c', '#00C7BE');
+        if (homeSub) homeSub.textContent = homeActive ? ('ETA '+fmtFut(r2.data.expected_arrival_at)) : 'starten';
+      }
+    } catch(_){}
+
+    // 3. Check-in: zeige relativen Zeit-Stempel des letzten Check-ins
+    try {
+      var r3 = await sb.from('safety_checkins').select('created_at').eq('user_id', me.user_id).order('created_at',{ascending:false}).limit(1);
+      var sub = $('actCheckinSub');
+      if (sub){
+        if (r3 && r3.data && r3.data[0]){
+          var diff = Date.now() - new Date(r3.data[0].created_at).getTime();
+          if (diff < 60*60000) sub.textContent = 'vor '+Math.floor(diff/60000)+'m'; // < 1h
+          else sub.textContent = 'pingen';
+        } else { sub.textContent = 'pingen'; }
+      }
+    } catch(_){}
+
+    // 4. Crew-Liste
+    try {
+      var r4 = await sb.rpc('get_circle_with_moods');
+      var members = (r4.data || []).filter(function(m){ return m.partner_user_id; });
+      renderSmartCrew(members);
+    } catch(_){}
+  }
+
+  function renderSmartCrew(members){
+    var list = $('smartCrewList'), meta = $('smartCrewMeta');
+    if (!list) return;
+    if (meta) meta.textContent = members.length + (members.length === 1 ? ' Person' : ' Leute');
+    if (!members.length){
+      list.innerHTML = '<div class="smart-crew-empty">Lade Freunde ein die die App nutzen — ihr seht euch dann live.</div>';
+      return;
+    }
+    list.innerHTML = '';
+    members.slice(0, 5).forEach(function(m){
+      var subText = '';
+      var classExtra = '';
+      if (m.status === 'pending'){ subText = m.is_initiator ? 'Wartet auf Antwort' : 'Hat dich eingeladen'; }
+      else if (m.is_paused){ subText = 'Pausiert'; classExtra = 'is-paused'; }
+      else if (m.active_sos_id){ subText = '🆘 SOS aktiv'; classExtra = 'is-sos'; }
+      else if (m.mood_label){ subText = m.mood_label; }
+      else if (m.last_checkin_at){ subText = 'Check-in '+fmtRel(m.last_checkin_at); }
+      else { subText = 'Ruhig'; }
+
+      var card = document.createElement('div');
+      card.className = 'smart-crew-card ' + classExtra;
+      card.innerHTML =
+        '<div class="smart-crew-av"></div>'+
+        '<div class="smart-crew-info"><span class="n"></span><span class="s"></span></div>'+
+        '<div class="smart-crew-mood"></div>';
+      var av = card.querySelector('.smart-crew-av');
+      if (m.partner_photo){ av.style.backgroundImage = 'url('+m.partner_photo+')'; av.style.backgroundSize='cover'; av.style.backgroundPosition='center'; }
+      else av.textContent = initials(m.partner_name);
+      card.querySelector('.n').textContent = m.partner_name || 'Anon';
+      card.querySelector('.s').textContent = subText;
+      card.querySelector('.smart-crew-mood').textContent = m.is_paused ? '⏸️' : (m.mood_emoji || '');
+      list.appendChild(card);
+    });
+    if (members.length > 5){
+      var more = document.createElement('div');
+      more.className = 'smart-crew-empty';
+      more.style.padding = '10px';
+      more.textContent = '+' + (members.length - 5) + ' weitere — Settings → Safety-Circle';
+      list.appendChild(more);
+    }
+  }
+
+  /* ============== Settings-Modal (alles Konfig-Kram) ============== */
+  function ensureSettingsModal(){
+    if ($('setOv')) return;
+    var ov = document.createElement('div');
+    ov.id = 'setOv'; ov.className = 'set-ov';
+    ov.innerHTML =
+      '<div class="set-card">'+
+      '<div class="set-handle"></div>'+
+      '<div class="set-head"><button class="set-close" onclick="window.bbCloseSettings&&window.bbCloseSettings()">✕</button><div class="set-title">Einstellungen</div></div>'+
+      '<div class="set-body">'+
+        '<div class="set-tabs" id="setTabs">'+
+          '<button class="set-tab on" data-pane="circle">Circle</button>'+
+          '<button class="set-tab" data-pane="contacts">Notfall</button>'+
+          '<button class="set-tab" data-pane="privacy">Privatsphäre</button>'+
+          '<button class="set-tab" data-pane="push">Push</button>'+
+          '<button class="set-tab" data-pane="data">Daten</button>'+
+          '<button class="set-tab" data-pane="krise">Krise</button>'+
+        '</div>'+
+        '<div class="set-pane on" id="setPaneCircle"></div>'+
+        '<div class="set-pane" id="setPaneContacts"></div>'+
+        '<div class="set-pane" id="setPanePrivacy"></div>'+
+        '<div class="set-pane" id="setPanePush"></div>'+
+        '<div class="set-pane" id="setPaneData"></div>'+
+        '<div class="set-pane" id="setPaneKrise"></div>'+
+      '</div>'+
+      '</div>';
+    document.body.appendChild(ov);
+    bindSettingsTabs();
+  }
+
+  function bindSettingsTabs(){
+    document.querySelectorAll('#setTabs .set-tab').forEach(function(b){
+      b.addEventListener('click', function(){
+        document.querySelectorAll('#setTabs .set-tab').forEach(function(x){x.classList.remove('on');});
+        document.querySelectorAll('.set-pane').forEach(function(x){x.classList.remove('on');});
+        b.classList.add('on');
+        var pane = $('setPane' + b.dataset.pane.charAt(0).toUpperCase() + b.dataset.pane.slice(1));
+        if (pane) pane.classList.add('on');
+        movePaneContent(b.dataset.pane);
+      });
+    });
+  }
+
+  // Bei Pane-Klick: bestehende Sections aus dem Hub in das Pane verschieben
+  function movePaneContent(name){
+    var hub = $('safeplaceOv');
+    var content = hub && hub.querySelector('.sp-content');
+    if (!content) return;
+    document.body.classList.add('settings-mode');
+    var paneIds = {
+      circle: ['spCircleSection'],
+      contacts: ['spContactsList','spLimitsBanner'],
+      privacy: ['spPrivacySection','spLiveLocSection'],
+      push: ['spPushSection'],
+      data: ['spPrivacyDashboard','spActivityLogSection'],
+      krise: ['spCrisisSection']
+    };
+    var ids = paneIds[name] || [];
+    var pane = $('setPane' + name.charAt(0).toUpperCase() + name.slice(1));
+    if (!pane) return;
+    pane.innerHTML = '';
+    ids.forEach(function(id){
+      var src = document.getElementById(id);
+      if (src){
+        // Clone + display-restore. Original bleibt im Hub aber hidden via CSS.
+        var clone = src.cloneNode(true);
+        clone.style.display = 'block';
+        clone.id = id + '_clone';
+        pane.appendChild(clone);
+      } else {
+        // For contacts: contact list sits inside spContactsList already
+      }
+    });
+    // Special: contacts pane needs the list items
+    if (name === 'contacts' && pane.children.length === 0){
+      // Trigger render — call existing loadContactsList
+      if (typeof window.loadContactsList === 'function') window.loadContactsList();
+      var orig = $('spContactsList');
+      if (orig){
+        var clone = orig.cloneNode(true);
+        clone.style.display = 'flex';
+        clone.id = 'spContactsList_clone';
+        pane.appendChild(clone);
+      }
+    }
+  }
+
+  window.bbOpenSettings = function(){
+    ensureSettingsModal();
+    var ov = $('setOv'); if (!ov) return;
+    ov.classList.add('show');
+    movePaneContent('circle');
+  };
+  window.bbCloseSettings = function(){
+    var ov = $('setOv'); if (ov) ov.classList.remove('show');
+  };
+  function openSettings(){ window.bbOpenSettings(); }
+
+  /* ============== Hook openSafeplaceHub: Smart-Hub injecten ============== */
+  function wrapHub(){
+    var orig = window.openSafeplaceHub;
+    if (!orig || orig.__bbSimpWrapped) return;
+    window.openSafeplaceHub = function(){
+      orig.apply(this, arguments);
+      setTimeout(function(){
+        injectSmartHub();
+        // Refresh nach 600ms wenn Daten geladen sind
+        setTimeout(refreshSmart, 600);
+      }, 200);
+    };
+    window.openSafeplaceHub.__bbSimpWrapped = true;
+  }
+
+  /* ============== Realtime: bei Mood/SOS/Live-Loc Änderungen Smart-Hub refreshen ============== */
+  function attachRealtimeRefresh(){
+    if (!window.crew || !window.crew.safety){ setTimeout(attachRealtimeRefresh, 1000); return; }
+    window.crew.safety.on('rt:mood', refreshSmart);
+    window.crew.safety.on('rt:sos', refreshSmart);
+    window.crew.safety.on('rt:liveloc', refreshSmart);
+    window.crew.safety.on('rt:checkin', refreshSmart);
+    window.crew.safety.on('rt:circle', refreshSmart);
+  }
+
+  /* ============== Boot ============== */
+  function init(){
+    setTimeout(function(){
+      wrapHub();
+      attachRealtimeRefresh();
+    }, 3500);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 1000); });
+  else setTimeout(init, 1000);
 })();</script></body></html>
