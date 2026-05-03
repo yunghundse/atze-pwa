@@ -7781,4 +7781,132 @@
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 2000); });
   else setTimeout(init, 2000);
+})();</script><style id="bb-noemoji">/* ============================================================
+ * 100% Emoji-Removal — alle Mood-Emojis durch SVG-Mask-Icons
+ * ============================================================ */
+
+/* Mood-SVG-Container: ein einheitliches Element fuer alle Mood-Renderings */
+.mood-svg{display:inline-block;width:1em;height:1em;background-color:currentColor;-webkit-mask-position:center;mask-position:center;-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;vertical-align:middle;flex-shrink:0}
+
+/* PARTY — confetti / party popper */
+.mood-svg.party{-webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='m5.8 11.3 2 6 6-2-2-6-6 2z'/><path d='M14 5l-1 1'/><path d='M18 7l-1 1'/><path d='M16 12l1-1'/><path d='M20 11l-1-1'/><path d='M22 8l-1-1'/><path d='M21 15l-1-1'/></svg>");mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='m5.8 11.3 2 6 6-2-2-6-6 2z'/><path d='M14 5l-1 1'/><path d='M18 7l-1 1'/><path d='M16 12l1-1'/><path d='M20 11l-1-1'/><path d='M22 8l-1-1'/><path d='M21 15l-1-1'/></svg>")}
+
+/* CHILL — wave / drink */
+.mood-svg.chill{-webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M2 14a3 3 0 0 1 4 0 3 3 0 0 0 4 0 3 3 0 0 1 4 0 3 3 0 0 0 4 0 3 3 0 0 1 4 0'/><path d='M2 19a3 3 0 0 1 4 0 3 3 0 0 0 4 0 3 3 0 0 1 4 0 3 3 0 0 0 4 0 3 3 0 0 1 4 0'/><path d='M2 9a3 3 0 0 1 4 0 3 3 0 0 0 4 0 3 3 0 0 1 4 0 3 3 0 0 0 4 0 3 3 0 0 1 4 0'/></svg>");mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M2 14a3 3 0 0 1 4 0 3 3 0 0 0 4 0 3 3 0 0 1 4 0 3 3 0 0 0 4 0 3 3 0 0 1 4 0'/><path d='M2 19a3 3 0 0 1 4 0 3 3 0 0 0 4 0 3 3 0 0 1 4 0 3 3 0 0 0 4 0 3 3 0 0 1 4 0'/><path d='M2 9a3 3 0 0 1 4 0 3 3 0 0 0 4 0 3 3 0 0 1 4 0 3 3 0 0 0 4 0 3 3 0 0 1 4 0'/></svg>")}
+
+/* DANCE — music note */
+.mood-svg.dance{-webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M9 18V5l12-2v13'/><circle cx='6' cy='18' r='3'/><circle cx='18' cy='16' r='3'/></svg>");mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M9 18V5l12-2v13'/><circle cx='6' cy='18' r='3'/><circle cx='18' cy='16' r='3'/></svg>")}
+
+/* EASY — smile-with-shades / sparkle */
+.mood-svg.easy{-webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'/><path d='m9 12 2 2 4-4'/></svg>");mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'/><path d='m9 12 2 2 4-4'/></svg>")}
+
+/* SOLA — minus / horizontal mouth */
+.mood-svg.sola,.mood-svg.neutral{-webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'/><line x1='8' y1='14' x2='16' y2='14'/><line x1='9' y1='9' x2='9.01' y2='9'/><line x1='15' y1='9' x2='15.01' y2='9'/></svg>");mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'/><line x1='8' y1='14' x2='16' y2='14'/><line x1='9' y1='9' x2='9.01' y2='9'/><line x1='15' y1='9' x2='15.01' y2='9'/></svg>")}
+
+/* DOWN — frown */
+.mood-svg.down{-webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'/><path d='M16 16s-1.5-2-4-2-4 2-4 2'/><line x1='9' y1='9' x2='9.01' y2='9'/><line x1='15' y1='9' x2='15.01' y2='9'/></svg>");mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'/><path d='M16 16s-1.5-2-4-2-4 2-4 2'/><line x1='9' y1='9' x2='9.01' y2='9'/><line x1='15' y1='9' x2='15.01' y2='9'/></svg>")}
+
+/* LOST — question mark */
+.mood-svg.lost{-webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'/><path d='M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3'/><line x1='12' y1='17' x2='12.01' y2='17'/></svg>");mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'/><path d='M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3'/><line x1='12' y1='17' x2='12.01' y2='17'/></svg>")}
+
+/* NEED — alarm / siren / triangle warning */
+.mood-svg.need{-webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><path d='M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z'/><line x1='12' y1='9' x2='12' y2='13'/><line x1='12' y1='17' x2='12.01' y2='17'/></svg>");mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><path d='M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z'/><line x1='12' y1='9' x2='12' y2='13'/><line x1='12' y1='17' x2='12.01' y2='17'/></svg>")}
+
+/* HOME — moon (sleep) */
+.mood-svg.home{-webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z'/></svg>");mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z'/></svg>")}
+
+/* HEALTHY — heart-pulse */
+.mood-svg.healthy{-webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z'/><path d='M3.22 12H9.5l1-2 2 4 1-2h6.27'/></svg>");mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z'/><path d='M3.22 12H9.5l1-2 2 4 1-2h6.27'/></svg>")}
+
+/* === FORCE: alle Mood-Emoji-Container Text-Content invisible === */
+.mp-mood-emoji,.mp-mood .e,.mini-mood .e,.tx-mood-pill .e,.sp-circle-mood .e,.sp-mood-emoji,.tx-status-hero-emoji,.tx-people-mood,.tx-card-icon,.fs-mood,.sm-mood-emoji,.hp-pin-mood{font-size:0!important;line-height:0!important}
+
+/* Mini-mood-pill: bekommt SVG-Icon container */
+.mini-mood,.tx-mood-pill,.mp-mood{position:relative}
+
+/* Mood-SVG bekommt brand-color */
+.mp-mood .mp-mood-emoji.mood-svg,
+.mini-mood .e.mood-svg,
+.tx-mood-pill .e.mood-svg{display:inline-block!important;width:22px!important;height:22px!important;background-color:#fff!important}
+
+.tx-status-hero-emoji.mood-svg,.sp-mood-emoji.mood-svg{display:inline-block!important;width:60px!important;height:60px!important;background-color:rgba(255,255,255,.85)!important}
+
+.sp-circle-mood .e.mood-svg,.tx-people-mood.mood-svg{display:inline-block!important;width:14px!important;height:14px!important;background-color:#fff!important}
+
+/* SOS Mood (alarm-tier) */
+.mp-mood.tier-alarm .mp-mood-emoji.mood-svg{background-color:#FE3C72!important}</style><script id="bb-noemoji-js">/* ============================================================
+ * 100% Emoji-Removal — JS-Layer der DOM-walks und Emojis ersetzt
+ * ============================================================ */
+(function(){
+  // Map: Emoji → Mood-Key
+  var EMOJI_TO_KEY = {
+    '🥳':'party','🎉':'party',
+    '🍺':'chill','🍻':'chill',
+    '💃':'dance','🕺':'dance','🎵':'dance','🎶':'dance',
+    '😎':'easy','😊':'easy','😀':'easy','✓':'easy','✅':'easy',
+    '🤔':'sola','😐':'sola',
+    '😣':'down','😔':'down','😢':'down','😞':'down','😟':'down',
+    '❓':'lost','❔':'lost','🤷':'lost',
+    '🚨':'need','⚠️':'need','📢':'need',
+    '🛌':'home','😴':'home','🌙':'home','🌜':'home',
+    '🥑':'healthy','🌿':'healthy','💪':'healthy','🌱':'healthy'
+  };
+
+  function svgizeElement(el){
+    if (!el || el.dataset.bbSvgFixed) return;
+    var txt = (el.textContent || '').trim();
+    if (!txt) return;
+    // Find first emoji char that's in our map
+    var key = null;
+    for (var k in EMOJI_TO_KEY){
+      if (txt.indexOf(k) >= 0){ key = EMOJI_TO_KEY[k]; break; }
+    }
+    if (!key) return;
+    el.classList.add('mood-svg', key);
+    el.textContent = '';
+    el.dataset.bbSvgFixed = '1';
+  }
+
+  function walkAndFix(){
+    // Mood-Picker (full)
+    document.querySelectorAll('.mp-mood-emoji').forEach(svgizeElement);
+    // Mini-Mood-Pills (im SafePlace Quick-Picker)
+    document.querySelectorAll('.mini-mood .e, .tx-mood-pill .e').forEach(svgizeElement);
+    // Friend-Avatar Mood-Bubbles
+    document.querySelectorAll('.tx-people-mood, .sp-circle-mood .e, .sp-circle-mood-emoji, .ll-circle-pin-mood, .sp-crew-pin-mood, .fs-mood').forEach(svgizeElement);
+    // Status-Hero Emoji
+    document.querySelectorAll('.tx-status-hero-emoji').forEach(svgizeElement);
+    // Mood-Card im SafePlace Hub
+    document.querySelectorAll('.sp-mood-emoji').forEach(svgizeElement);
+  }
+
+  function init(){
+    setTimeout(function(){
+      walkAndFix();
+      // Beobachte DOM-Mutations damit neu eingefuegte Mood-Anzeigen auch ge-svgized werden
+      var obs = new MutationObserver(function(mutations){
+        var did = false;
+        mutations.forEach(function(m){
+          m.addedNodes.forEach(function(n){
+            if (n.nodeType === 1){
+              if (n.classList && (n.classList.contains('mp-mood-emoji') || n.classList.contains('tx-people-mood'))){
+                svgizeElement(n);
+                did = true;
+              }
+              // Walk children
+              n.querySelectorAll && n.querySelectorAll('.mp-mood-emoji,.mini-mood .e,.tx-mood-pill .e,.tx-people-mood,.sp-circle-mood .e,.tx-status-hero-emoji,.sp-mood-emoji,.fs-mood,.ll-circle-pin-mood,.sp-crew-pin-mood').forEach(function(el){
+                svgizeElement(el);
+                did = true;
+              });
+            }
+          });
+        });
+      });
+      obs.observe(document.body, { childList: true, subtree: true });
+      // Periodic re-fix als Safety-Net
+      setInterval(walkAndFix, 3000);
+    }, 5000);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 1500); });
+  else setTimeout(init, 1500);
 })();</script></body></html>
