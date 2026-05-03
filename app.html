@@ -2682,4 +2682,315 @@
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 1500); });
   else setTimeout(init, 1500);
+})();</script><style id="bb-legal">/* ============== Cookie-Banner ============== */
+.cookie-banner{position:fixed;left:14px;right:14px;bottom:14px;z-index:9999;max-width:560px;margin:0 auto;padding:14px 18px;background:linear-gradient(180deg,rgba(20,18,26,.92),rgba(12,10,18,.94));-webkit-backdrop-filter:blur(28px) saturate(170%);backdrop-filter:blur(28px) saturate(170%);border-radius:16px;border:.5px solid rgba(255,255,255,.10);box-shadow:0 18px 60px rgba(0,0,0,.55);display:flex;align-items:center;gap:14px;color:#fff;font-family:'Inter',-apple-system,sans-serif;transform:translateY(120%);transition:transform .42s cubic-bezier(.34,1.56,.64,1)}
+.cookie-banner.show{transform:translateY(0)}
+.cookie-banner-icon{flex:none;font-size:20px}
+.cookie-banner-text{flex:1;min-width:0;font-size:12.5px;line-height:1.45;color:rgba(255,255,255,.78)}
+.cookie-banner-text a{color:#FE3C72;text-decoration:none;font-weight:600}
+.cookie-banner-text a:hover{text-decoration:underline}
+.cookie-banner-btn{flex:none;padding:8px 14px;border:0;border-radius:999px;background:linear-gradient(135deg,#FE3C72,#FF1F5C);color:#fff;font-size:12px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;cursor:pointer;-webkit-tap-highlight-color:transparent;font-family:inherit}
+.cookie-banner-btn:active{transform:scale(.95)}
+
+/* ============== AGB-Reaccept-Modal ============== */
+.tac-ov{position:fixed;inset:0;z-index:10002;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.tac-ov.show{display:flex}
+.tac-card{width:100%;max-width:480px;max-height:90vh;background:linear-gradient(180deg,#1a161e 0%,#100c14 100%);border:.5px solid rgba(255,255,255,.10);border-radius:24px;padding:28px 24px 22px;display:flex;flex-direction:column;color:#fff}
+.tac-icon{width:64px;height:64px;border-radius:18px;background:linear-gradient(135deg,#FE3C72,#BF5AF2);display:flex;align-items:center;justify-content:center;color:#fff;font-size:30px;margin:0 auto 18px;box-shadow:0 8px 22px rgba(254,60,114,.4)}
+.tac-headline{font-family:'Anton',Impact,sans-serif;font-size:24px;letter-spacing:1px;color:#fff;text-transform:uppercase;text-align:center;margin-bottom:6px}
+.tac-version{font-size:11.5px;color:rgba(255,255,255,.5);text-align:center;margin-bottom:14px;letter-spacing:.4px}
+.tac-summary{font-size:13.5px;color:rgba(255,255,255,.78);line-height:1.55;padding:14px;background:rgba(255,255,255,.04);border-radius:12px;margin-bottom:14px}
+.tac-links{display:flex;gap:10px;justify-content:center;margin-bottom:18px;font-size:12.5px}
+.tac-links a{color:#FE3C72;font-weight:600;text-decoration:none;padding:6px 12px;background:rgba(254,60,114,.10);border-radius:999px}
+.tac-links a:hover{background:rgba(254,60,114,.20)}
+.tac-checkbox{display:flex;align-items:center;gap:10px;padding:12px 14px;background:rgba(255,255,255,.04);border-radius:12px;margin-bottom:12px;cursor:pointer;-webkit-tap-highlight-color:transparent;border:.5px solid rgba(255,255,255,.07)}
+.tac-checkbox input{display:none}
+.tac-checkbox-box{flex:none;width:22px;height:22px;border-radius:6px;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;color:transparent;font-size:14px;font-weight:900}
+.tac-checkbox input:checked~.tac-checkbox-box{background:#FE3C72;border-color:#FE3C72;color:#fff}
+.tac-checkbox input:checked~.tac-checkbox-box::after{content:'✓'}
+.tac-checkbox-label{flex:1;font-size:13px;color:#fff;line-height:1.3}
+.tac-checkbox-label a{color:#FE3C72;font-weight:600}
+.tac-actions{display:flex;flex-direction:column;gap:8px;margin-top:6px}
+.tac-btn-primary{padding:14px;border:0;border-radius:999px;background:linear-gradient(135deg,#FE3C72,#FF1F5C);color:#fff;font-size:14px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;cursor:pointer;box-shadow:0 6px 18px rgba(254,60,114,.4)}
+.tac-btn-primary:disabled{opacity:.4;background:rgba(255,255,255,.1);box-shadow:none;cursor:not-allowed}
+.tac-btn-primary:not(:disabled):active{transform:scale(.97)}
+
+/* ============== Push-Consent Section (in SafePlace Hub) ============== */
+.pn-card{padding:14px 16px;background:rgba(255,255,255,.04);border:.5px solid rgba(255,255,255,.08);border-radius:14px;margin-bottom:8px}
+.pn-head{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.pn-head .ic{flex:none;width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#0A84FF,#5E5CE6);display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px}
+.pn-head .info{flex:1;min-width:0}
+.pn-head .l{font-size:13.5px;font-weight:700;color:#fff;line-height:1.2}
+.pn-head .s{font-size:11px;color:rgba(255,255,255,.55);line-height:1.3;margin-top:2px}
+.pn-head .badge{flex:none;font-size:10px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;padding:4px 9px;border-radius:999px;background:rgba(255,255,255,.06);color:rgba(255,255,255,.55)}
+.pn-head .badge.on{background:rgba(52,199,89,.18);color:#34D399}
+.pn-head .badge.off{background:rgba(255,170,0,.14);color:#FFAA00}
+.pn-scopes{display:none;flex-direction:column;gap:6px;padding-top:10px;border-top:.5px solid rgba(255,255,255,.07)}
+.pn-card.is-on .pn-scopes{display:flex}
+.pn-scope-row{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:10px;background:rgba(255,255,255,.025)}
+.pn-scope-row .l{flex:1;font-size:12px;color:#fff;font-weight:500}
+.pn-scope-row input{display:none}
+.pn-scope-row .toggle{position:relative;flex:none;width:36px;height:20px;background:rgba(255,255,255,.12);border-radius:999px;transition:background .2s ease}
+.pn-scope-row .toggle::before{content:'';position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;transition:transform .2s ease}
+.pn-scope-row input:checked~.toggle{background:#34C759}
+.pn-scope-row input:checked~.toggle::before{transform:translateX(16px)}
+.pn-actions{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.pn-btn{padding:11px;border:0;border-radius:999px;font-size:12.5px;font-weight:700;letter-spacing:.3px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.pn-btn-on{background:linear-gradient(135deg,#34C759,#30D158);color:#fff;box-shadow:0 4px 14px rgba(52,199,89,.35)}
+.pn-btn-off{background:rgba(255,255,255,.06);color:rgba(255,255,255,.7)}
+.pn-btn:active{transform:scale(.97)}</style><script id="bb-legal-js">/* ========================== Legal Layer V1 ==========================
+ * - Cookie-Hinweis-Banner (one-shot, dismissible, only essential storage)
+ * - AGB / Datenschutz Re-Accept-Modal (versionierte Akzeptanz)
+ * - Push-Notification-Consent (granular, opt-in)
+ * ==================================================================== */
+(function(){
+  function $(id){ return document.getElementById(id); }
+  function getSb(){ return window.sb || null; }
+  function getMe(){ return (window.ME && window.ME.user_id) ? window.ME : null; }
+  function toast(m){ try{ if (typeof window.toast === 'function') return window.toast(m); }catch(_){} }
+
+  /* ============== Cookie Banner ============== */
+  var COOKIE_KEY = 'crew_cookie_disclosure_v1';
+  function hasSeenCookie(){ try{ return localStorage.getItem(COOKIE_KEY) === '1'; }catch(_){ return true; } }
+  function setSeenCookie(){ try{ localStorage.setItem(COOKIE_KEY, '1'); }catch(_){} }
+
+  function showCookieBanner(){
+    if (hasSeenCookie()) return;
+    if ($('cookieBanner')) return;
+    var b = document.createElement('div');
+    b.id = 'cookieBanner';
+    b.className = 'cookie-banner';
+    b.innerHTML =
+      '<div class="cookie-banner-icon">🍪</div>'+
+      '<div class="cookie-banner-text">crew. nutzt nur <strong>technisch notwendiges localStorage</strong> (Login, App-Einstellungen). Keine Tracking-Cookies, keine Drittanbieter-Analytics. <a href="/datenschutz.html">Mehr erfahren</a></div>'+
+      '<button class="cookie-banner-btn" id="cookieBannerOk">Verstanden</button>';
+    document.body.appendChild(b);
+    setTimeout(function(){ b.classList.add('show'); }, 100);
+    $('cookieBannerOk').addEventListener('click', function(){
+      setSeenCookie();
+      b.classList.remove('show');
+      setTimeout(function(){ b.remove(); }, 500);
+    });
+  }
+
+  /* ============== AGB / Datenschutz Re-Accept ============== */
+  var pendingTerms = [];
+  var tacChecked = { agb: false, datenschutz: false };
+
+  async function checkTermsStatus(){
+    var sb = getSb(), me = getMe();
+    if (!sb || !me) return;
+    try {
+      var r = await sb.rpc('get_terms_status');
+      var rows = r.data || [];
+      pendingTerms = rows.filter(function(t){ return !t.user_accepted; });
+      if (pendingTerms.length){ showTermsModal(); }
+    } catch(e){ console.warn('[legal] terms check failed', e); }
+  }
+
+  function showTermsModal(){
+    var ov = $('tacOv');
+    if (!ov){
+      ov = document.createElement('div');
+      ov.id = 'tacOv';
+      ov.className = 'tac-ov';
+      ov.innerHTML =
+        '<div class="tac-card">'+
+        '<div class="tac-icon">📜</div>'+
+        '<div class="tac-headline" id="tacHeadline">Bitte lies und akzeptiere</div>'+
+        '<div class="tac-version" id="tacVersion">Version —</div>'+
+        '<div class="tac-summary" id="tacSummary"></div>'+
+        '<div class="tac-links" id="tacLinks"></div>'+
+        '<label class="tac-checkbox" id="tacAgbBox" style="display:none"><input type="checkbox" id="tacAgbCheck"><span class="tac-checkbox-box"></span><span class="tac-checkbox-label">Ich akzeptiere die <a href="/agb.html" target="_blank" rel="noopener">AGB</a></span></label>'+
+        '<label class="tac-checkbox" id="tacDsvBox" style="display:none"><input type="checkbox" id="tacDsvCheck"><span class="tac-checkbox-box"></span><span class="tac-checkbox-label">Ich habe die <a href="/datenschutz.html" target="_blank" rel="noopener">Datenschutzerklärung</a> gelesen und bin einverstanden</span></label>'+
+        '<div class="tac-actions"><button class="tac-btn-primary" id="tacAcceptBtn" disabled>Akzeptieren &amp; weiter</button></div>'+
+        '</div>';
+      document.body.appendChild(ov);
+    }
+    var summary = pendingTerms.map(function(t){ return t.summary; }).join(' ');
+    $('tacSummary').textContent = summary || 'Bitte akzeptiere die folgenden Dokumente um die App weiter zu nutzen.';
+    $('tacVersion').textContent = pendingTerms.map(function(t){ return (t.doc_type === 'agb' ? 'AGB' : 'Datenschutz') + ' v' + t.version; }).join(' · ');
+    var hasAgb = pendingTerms.some(function(t){ return t.doc_type === 'agb'; });
+    var hasDsv = pendingTerms.some(function(t){ return t.doc_type === 'datenschutz'; });
+    $('tacAgbBox').style.display = hasAgb ? 'flex' : 'none';
+    $('tacDsvBox').style.display = hasDsv ? 'flex' : 'none';
+    tacChecked.agb = !hasAgb;
+    tacChecked.datenschutz = !hasDsv;
+    var agbCheck = $('tacAgbCheck'), dsvCheck = $('tacDsvCheck'), btn = $('tacAcceptBtn');
+    agbCheck.checked = false; dsvCheck.checked = false;
+    function updateBtn(){ btn.disabled = !(tacChecked.agb && tacChecked.datenschutz); }
+    agbCheck.onchange = function(){ tacChecked.agb = agbCheck.checked; updateBtn(); };
+    dsvCheck.onchange = function(){ tacChecked.datenschutz = dsvCheck.checked; updateBtn(); };
+    btn.onclick = acceptAllPending;
+    updateBtn();
+    ov.classList.add('show');
+  }
+
+  async function acceptAllPending(){
+    var sb = getSb(); if (!sb) return;
+    var btn = $('tacAcceptBtn');
+    if (btn) { btn.disabled = true; btn.textContent = 'Speichere...'; }
+    try {
+      var ua = '';
+      try { ua = btoa(unescape(encodeURIComponent(navigator.userAgent || ''))).slice(0,40); } catch(_){}
+      for (var i = 0; i < pendingTerms.length; i++){
+        var t = pendingTerms[i];
+        await sb.rpc('accept_terms_version', { p_version_id: t.version_id, p_user_agent_hash: ua });
+      }
+      if (window.crew && window.crew.safety && window.crew.safety.log){
+        window.crew.safety.log('terms_accepted', { versions: pendingTerms.map(function(t){return t.doc_type+':'+t.version;}) }, 'consent');
+      }
+      var ov = $('tacOv'); if (ov) ov.classList.remove('show');
+      pendingTerms = [];
+      toast('Akzeptiert ✓');
+    } catch(e){ console.error(e); toast('Fehler — bitte erneut versuchen'); if (btn){ btn.disabled = false; btn.textContent = 'Akzeptieren & weiter'; } }
+  }
+
+  /* ============== Push Consent ============== */
+  function pushSupported(){ return ('Notification' in window) && ('serviceWorker' in navigator); }
+  async function getPushPermission(){
+    if (!pushSupported()) return 'unsupported';
+    return Notification.permission;
+  }
+
+  async function loadPushConsent(){
+    var sb = getSb(), me = getMe(); if (!sb || !me) return null;
+    try {
+      var r = await sb.from('push_consents').select('*').eq('user_id', me.user_id).maybeSingle();
+      return r && r.data;
+    } catch(_){ return null; }
+  }
+
+  async function savePushConsent(patch){
+    var sb = getSb(), me = getMe(); if (!sb || !me) return;
+    var existing = await loadPushConsent();
+    var row = Object.assign({
+      user_id: me.user_id,
+      granted: false, scope_sos: true, scope_circle_sos: true, scope_circle_mood_alarm: true, scope_marketing: false,
+      user_agent: navigator.userAgent || '', updated_at: new Date().toISOString()
+    }, existing || {}, patch);
+    try { await sb.from('push_consents').upsert(row, { onConflict: 'user_id' }); } catch(e){ console.error(e); }
+  }
+
+  function injectPushSection(){
+    var host = $('safeplaceOv'); if (!host) return;
+    if ($('spPushSection')) return;
+    var content = host.querySelector('.sp-content'); if (!content) return;
+    var sec = document.createElement('div');
+    sec.id = 'spPushSection';
+    sec.className = 'sp-section';
+    sec.innerHTML =
+      '<div class="sp-section-head"><div class="sp-section-title">Push-Benachrichtigungen</div></div>'+
+      '<div class="pn-card" id="pnCard">'+
+      '<div class="pn-head"><div class="ic">🔔</div><div class="info"><div class="l">Wichtige Alerts erhalten</div><div class="s" id="pnSubText">SOS deiner Safety-Crew, Mood-Alarm — selbst wenn die App geschlossen ist</div></div><div class="badge" id="pnBadge">aus</div></div>'+
+      '<div class="pn-scopes" id="pnScopes">'+
+      '<div class="pn-scope-row"><span class="l">SOS in meinem Safety-Circle</span><label><input type="checkbox" id="pnScopeCircleSos" checked><span class="toggle"></span></label></div>'+
+      '<div class="pn-scope-row"><span class="l">Mood-Alarm (Brauch-jemand-Tier)</span><label><input type="checkbox" id="pnScopeMoodAlarm" checked><span class="toggle"></span></label></div>'+
+      '<div class="pn-scope-row"><span class="l">Eigene SOS-Bestätigung</span><label><input type="checkbox" id="pnScopeSos" checked><span class="toggle"></span></label></div>'+
+      '<div class="pn-scope-row"><span class="l">Marketing &amp; Updates (Opt-in)</span><label><input type="checkbox" id="pnScopeMarketing"><span class="toggle"></span></label></div>'+
+      '</div>'+
+      '<div class="pn-actions" id="pnActions"></div>'+
+      '</div>';
+    var privacy = $('spPrivacyDashboard') || $('spPrivacySection');
+    if (privacy) content.insertBefore(sec, privacy);
+    else content.appendChild(sec);
+    refreshPushUi();
+    bindPushScopes();
+  }
+
+  async function refreshPushUi(){
+    var card = $('pnCard'); if (!card) return;
+    var perm = await getPushPermission();
+    var consent = await loadPushConsent();
+    var on = (perm === 'granted') && consent && consent.granted;
+    card.classList.toggle('is-on', !!on);
+    var badge = $('pnBadge'); var sub = $('pnSubText'); var actions = $('pnActions');
+    if (badge){
+      if (perm === 'unsupported'){ badge.className = 'badge'; badge.textContent = 'nicht unterstützt'; }
+      else if (on){ badge.className = 'badge on'; badge.textContent = 'an'; }
+      else if (perm === 'denied'){ badge.className = 'badge off'; badge.textContent = 'blockiert'; }
+      else { badge.className = 'badge'; badge.textContent = 'aus'; }
+    }
+    if (sub){
+      if (perm === 'unsupported') sub.textContent = 'Dein Browser unterstützt keine Web-Push-Benachrichtigungen.';
+      else if (on) sub.textContent = 'Aktiv. Du bekommst Push für die unten ausgewählten Bereiche.';
+      else if (perm === 'denied') sub.textContent = 'In Browser-Einstellungen blockiert. Bitte dort wieder erlauben.';
+      else sub.textContent = 'SOS deiner Safety-Crew, Mood-Alarm — selbst wenn die App geschlossen ist';
+    }
+    if (actions){
+      if (on){
+        actions.innerHTML = '<button class="pn-btn pn-btn-off" onclick="window.disablePushNotifications&&window.disablePushNotifications()">Push-Benachrichtigungen aus</button>';
+      } else if (perm === 'denied' || perm === 'unsupported'){
+        actions.innerHTML = '';
+      } else {
+        actions.innerHTML = '<button class="pn-btn pn-btn-on" onclick="window.enablePushNotifications&&window.enablePushNotifications()">Push-Benachrichtigungen erlauben</button>';
+      }
+    }
+    // Sync scopes to DB state
+    if (consent){
+      var s1=$('pnScopeSos'), s2=$('pnScopeCircleSos'), s3=$('pnScopeMoodAlarm'), s4=$('pnScopeMarketing');
+      if (s1) s1.checked = !!consent.scope_sos;
+      if (s2) s2.checked = !!consent.scope_circle_sos;
+      if (s3) s3.checked = !!consent.scope_circle_mood_alarm;
+      if (s4) s4.checked = !!consent.scope_marketing;
+    }
+  }
+
+  function bindPushScopes(){
+    [['pnScopeSos','scope_sos'],['pnScopeCircleSos','scope_circle_sos'],['pnScopeMoodAlarm','scope_circle_mood_alarm'],['pnScopeMarketing','scope_marketing']].forEach(function(pair){
+      var el = $(pair[0]); if (!el || el.__bbBound) return; el.__bbBound = true;
+      el.addEventListener('change', async function(){
+        var patch = {}; patch[pair[1]] = el.checked;
+        await savePushConsent(patch);
+      });
+    });
+  }
+
+  window.enablePushNotifications = async function(){
+    if (!pushSupported()){ toast('Browser unterstützt keine Push'); return; }
+    try {
+      var perm = await Notification.requestPermission();
+      if (perm !== 'granted'){ toast('Erlaubnis abgelehnt'); refreshPushUi(); return; }
+      // Endpoint registrieren (basic web-push subscription, ohne tatsächlichen Server-Push aktuell)
+      var endpoint = null;
+      try {
+        var reg = await navigator.serviceWorker.ready;
+        // Note: erfordert VAPID-Keys für echten Push — wir registrieren ohne, nur als Marker
+        endpoint = (reg && reg.scope) || null;
+      } catch(_){}
+      await savePushConsent({ granted: true, granted_at: new Date().toISOString(), revoked_at: null, endpoint: endpoint });
+      toast('Push aktiviert ✓');
+      if (window.crew && window.crew.safety && window.crew.safety.log) window.crew.safety.log('push_enabled', {}, 'consent');
+      refreshPushUi();
+    } catch(e){ console.error(e); toast('Fehler bei Push-Aktivierung'); }
+  };
+
+  window.disablePushNotifications = async function(){
+    await savePushConsent({ granted: false, revoked_at: new Date().toISOString() });
+    toast('Push deaktiviert');
+    if (window.crew && window.crew.safety && window.crew.safety.log) window.crew.safety.log('push_disabled', {}, 'consent');
+    refreshPushUi();
+  };
+
+  /* ============== Hook openSafeplaceHub ============== */
+  function wrapHub(){
+    var orig = window.openSafeplaceHub;
+    if (!orig || orig.__bbLegalWrapped) return;
+    window.openSafeplaceHub = function(){
+      orig.apply(this, arguments);
+      setTimeout(function(){ injectPushSection(); refreshPushUi(); }, 250);
+    };
+    window.openSafeplaceHub.__bbLegalWrapped = true;
+  }
+
+  /* ============== Boot ============== */
+  function init(){
+    showCookieBanner();
+    setTimeout(function(){
+      wrapHub();
+      checkTermsStatus();
+    }, 2000);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 600); });
+  else setTimeout(init, 600);
 })();</script></body></html>

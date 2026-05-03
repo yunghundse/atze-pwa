@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#05050A" />
 <meta name="robots" content="index, follow" />
 <title>Datenschutz · crew.</title>
-<meta name="description" content="Datenschutzerklärung für partycrew.app — DSGVO-konform, transparent." />
+<meta name="description" content="Datenschutzerklärung für partycrew.app — DSGVO-konform, transparent, mit allen Safety-Features detailliert dokumentiert." />
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,15 +31,22 @@ h1{font-size:clamp(36px,5vw,56px);font-weight:900;letter-spacing:-0.03em;line-he
 h2{font-size:24px;font-weight:800;letter-spacing:-0.015em;margin:48px 0 14px;padding-top:20px;border-top:1px solid var(--line);}
 h2:first-of-type{border-top:0;padding-top:0;}
 h3{font-size:18px;font-weight:700;margin:28px 0 10px;}
+h4{font-size:15px;font-weight:700;margin:18px 0 8px;color:var(--fg);}
 p,li{font-size:15.5px;color:var(--fg-2);line-height:1.7;}
 ul{padding-left:22px;margin:12px 0 16px;}ul li{margin:6px 0;}
 strong{color:var(--fg);font-weight:700;}
+code{background:rgba(255,255,255,.06);color:var(--pink);padding:1px 6px;border-radius:4px;font-size:13px;font-family:ui-monospace,monospace;}
 .toc{padding:22px 24px;margin:0 0 40px;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:16px;}
 .toc-h{font-size:11px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
 .toc ol{padding-left:20px;margin:0;}
 .toc li{font-size:14px;margin:4px 0;}
 .toc a{color:var(--fg-2);}
 .toc a:hover{color:var(--pink);}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13.5px;}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);color:var(--fg-2);}
+th{color:var(--fg);font-weight:700;background:rgba(255,255,255,.03);font-size:12.5px;text-transform:uppercase;letter-spacing:.05em;}
+.callout{padding:16px 20px;background:rgba(254,60,114,.06);border:1px solid rgba(254,60,114,.18);border-radius:12px;margin:18px 0;}
+.callout p{margin:0;color:var(--fg);font-size:14.5px;}
 footer{max-width:760px;margin:60px auto 0;padding:24px;border-top:1px solid var(--line);font-size:13px;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;}
 footer a{color:var(--fg-2);}
 </style>
@@ -56,8 +63,8 @@ footer a{color:var(--fg-2);}
 <main>
 
 <h1>Datenschutz.</h1>
-<p class="lead">Was wir speichern, warum, und wie du's wieder loswirst — kurz, ehrlich, DSGVO-konform.</p>
-<p class="update">Stand: April 2026 · gilt für https://partycrew.app</p>
+<p class="lead">Was wir speichern, warum, mit wem geteilt und wie du's wieder loswirst — vollständig, ehrlich, DSGVO-konform.</p>
+<p class="update">Stand: Mai 2026 · Version 2.0 · gilt für https://partycrew.app</p>
 
 <div class="toc">
   <div class="toc-h">Übersicht</div>
@@ -66,19 +73,32 @@ footer a{color:var(--fg-2);}
     <li><a href="#verantwortlich">Verantwortliche Stelle</a></li>
     <li><a href="#hosting">Hosting &amp; Datenverarbeitung</a></li>
     <li><a href="#externe">Externe Dienste</a></li>
-    <li><a href="#warteliste">Warteliste — Datenerfassung</a></li>
-    <li><a href="#cookies">Cookies &amp; Tracking</a></li>
+    <li><a href="#warteliste">Warteliste</a></li>
+    <li><a href="#account">Account &amp; Profil</a></li>
+    <li><a href="#safety">Safety-Features (SOS / Mood / Live-Standort / Safety-Circle)</a></li>
+    <li><a href="#crew">Crew, Match &amp; Check-ins</a></li>
+    <li><a href="#audit">Aktivitäts-Log &amp; Audit-Trail</a></li>
+    <li><a href="#push">Push-Benachrichtigungen</a></li>
+    <li><a href="#cookies">Cookies, localStorage &amp; Tracking</a></li>
+    <li><a href="#aufbewahrung">Aufbewahrungsfristen</a></li>
     <li><a href="#rechte">Deine Rechte (Art. 15–22 DSGVO)</a></li>
     <li><a href="#beschwerde">Beschwerderecht</a></li>
     <li><a href="#alter">Mindestalter</a></li>
+    <li><a href="#aenderungen">Änderungen dieser Erklärung</a></li>
   </ol>
 </div>
 
 <h2 id="blick">1. Datenschutz auf einen Blick</h2>
 <p>
-  Die folgenden Hinweise geben einen Überblick darüber, was mit deinen personenbezogenen Daten passiert,
-  wenn du diese Website bzw. die crew.-App nutzt.
+  crew. ist eine Connection- und Safety-App für Freundesgruppen. Wir verarbeiten personenbezogene Daten ausschließlich
+  zur Bereitstellung der App-Funktionen, zur Sicherheit der Nutzer:innen und auf Basis deiner ausdrücklichen Einwilligung.
+  Diese Erklärung beschreibt vollständig was, wann, mit wem und wie lange.
 </p>
+<div class="callout">
+  <p><strong>Privacy-by-Default:</strong> Sicherheits- und Stimmungsdaten sind standardmäßig nur für deinen Safety-Circle sichtbar.
+  Standort wird nie automatisch im Hintergrund erfasst — nur wenn du es explizit aktivierst, mit zeitlicher Begrenzung (max. 24 h)
+  und jederzeit pausierbar.</p>
+</div>
 
 <h2 id="verantwortlich">2. Verantwortliche Stelle</h2>
 <p>
@@ -86,35 +106,46 @@ footer a{color:var(--fg-2);}
   Jan Hundsdorff<br/>
   Sudetenstraße 27<br/>
   72474 Winterlingen<br/>
+  Deutschland<br/>
   E-Mail: <a href="mailto:info@butterbread-tech.com">info@butterbread-tech.com</a>
 </p>
 
 <h2 id="hosting">3. Hosting &amp; Datenverarbeitung</h2>
 <p>
-  Diese Website wird über <strong>GitHub Pages</strong> (GitHub Inc., USA) gehostet.
-  Die App-Daten werden über <strong>Supabase</strong> (Supabase Inc.) verarbeitet.
-  Server-Standort: <strong>EU (Frankfurt)</strong>. Alle Daten sind AES-256 verschlüsselt.
-  Supabase verarbeitet Daten gemäß der EU-DSGVO und hat Standard-Vertragsklauseln (SCCs) implementiert.
+  Die Website wird über <strong>GitHub Pages</strong> (GitHub Inc., USA) ausgeliefert.
+  Die App-Daten werden über <strong>Supabase</strong> (Supabase Inc.) verarbeitet — Server-Region: <strong>EU (Frankfurt, Deutschland)</strong>.
+  Verschlüsselung at rest mit AES-256, Verbindung TLS 1.3.
+  Supabase verarbeitet Daten gemäß DSGVO; Standardvertragsklauseln (SCC) sind implementiert.
+  Auftragsverarbeitungsvertrag (DPA) liegt vor.
 </p>
 
 <h2 id="externe">4. Externe Dienste</h2>
+
 <h3>Google Fonts</h3>
 <p>
-  Diese Seite nutzt Google Fonts zur einheitlichen Darstellung von Schriftarten. Beim Aufruf wird eine
-  Verbindung zu Servern von Google (Google LLC, USA) hergestellt, wobei deine IP-Adresse an Google
-  übertragen wird. Rechtsgrundlage: Art. 6 Abs. 1 f DSGVO (berechtigtes Interesse an einheitlicher Darstellung).
-  Google Datenschutzerklärung:
-  <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">https://policies.google.com/privacy</a>
+  Diese Seite und die App nutzen Google Fonts (Inter) zur einheitlichen Darstellung von Schriftarten. Beim Aufruf
+  wird eine Verbindung zu Servern von Google (Google LLC, USA) hergestellt; deine IP-Adresse wird übertragen.
+  Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an einheitlicher Darstellung).
+  <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Datenschutzerklärung</a>.
 </p>
+
+<h3>OpenStreetMap / CartoDB</h3>
+<p>
+  Für die Kartendarstellung werden Tiles von <strong>OpenStreetMap</strong> bzw. <strong>CartoDB</strong> geladen.
+  Beim Laden wird deine IP-Adresse an die jeweiligen Server übertragen.
+  Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO.
+</p>
+
+<h3>jsDelivr CDN</h3>
+<p>
+  Für technische Bibliotheken (Supabase JS-Client, Leaflet) wird das jsDelivr Content Delivery Network genutzt.
+  Dabei wird deine IP-Adresse an jsDelivr-Server übertragen.
+</p>
+
 <h3>Unsplash</h3>
 <p>
   Für Hintergrundbilder werden Bilder von Unsplash Inc. geladen. Dabei wird deine IP-Adresse an
   Unsplash-Server übertragen.
-</p>
-<h3>jsDelivr CDN</h3>
-<p>
-  Für technische Bibliotheken (Supabase JS-Client) wird das jsDelivr Content Delivery Network genutzt.
-  Dabei wird deine IP-Adresse an jsDelivr-Server übertragen.
 </p>
 
 <h2 id="warteliste">5. Warteliste — Datenerfassung</h2>
@@ -122,48 +153,209 @@ footer a{color:var(--fg-2);}
   Wenn du dich für die Warteliste einträgst, erfassen wir folgende Daten:
 </p>
 <p>
-  <strong>Pflichtangaben:</strong> Name, E-Mail-Adresse, Wohnort, Altersgruppe, Geschlecht
-</p>
-<p>
-  <strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 a DSGVO (deine ausdrückliche Einwilligung per Checkbox)
-</p>
-<p>
-  <strong>Zweck:</strong> Dich über den Start der crew.-App zu informieren und die Zielgruppe besser zu verstehen.
-</p>
-<p>
-  <strong>Speicherdauer:</strong> Bis du deine Einwilligung widerrufst oder die Warteliste aufgelöst wird,
-  spätestens jedoch 12 Monate nach Eintragung.
-</p>
-<p>
-  <strong>Referral-System:</strong> Nach der Eintragung erhältst du einen individuellen Empfehlungslink.
-  Wenn Freunde sich über diesen Link eintragen, wird die Zuordnung gespeichert, um dir Premium-Vorteile
-  gutschreiben zu können.
-</p>
-<p>
-  <strong>Weitergabe:</strong> Keine Weitergabe an Dritte. Daten werden ausschließlich in der
-  Supabase-Datenbank (EU-Server) gespeichert.
+  <strong>Pflichtangaben:</strong> Name, E-Mail-Adresse, Wohnort, Altersgruppe, Geschlecht.<br/>
+  <strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. a DSGVO (deine ausdrückliche Einwilligung per Checkbox).<br/>
+  <strong>Zweck:</strong> Dich über den Start der crew. App zu informieren und die Zielgruppe besser zu verstehen.<br/>
+  <strong>Speicherdauer:</strong> Bis zum Widerruf, spätestens 12 Monate nach Eintragung.<br/>
+  <strong>Referral-System:</strong> Bei Eintragung erhältst du einen Empfehlungslink. Anmeldungen über deinen Link werden zugeordnet.<br/>
+  <strong>Weitergabe:</strong> Keine Weitergabe an Dritte. Speicherung ausschließlich auf EU-Servern.
 </p>
 
-<h2 id="cookies">6. Cookies &amp; Tracking</h2>
+<h2 id="account">6. Account &amp; Profil</h2>
 <p>
-  Diese Website verwendet keine Tracking-Cookies, keine Werbe-Cookies und keine Drittanbieter-Analytics.
-  Es werden lediglich technisch notwendige Session-Tokens für die Admin-Authentifizierung im lokalen
-  Speicher (localStorage) abgelegt.
+  Bei Erstellung eines Accounts erfassen wir:
 </p>
-
-<h2 id="rechte">7. Deine Rechte (Art. 15–22 DSGVO)</h2>
-<p>Du hast jederzeit das Recht auf:</p>
 <ul>
-  <li><strong>Auskunft</strong> (Art. 15) — welche Daten wir über dich speichern</li>
-  <li><strong>Berichtigung</strong> (Art. 16) — fehlerhafte Daten korrigieren lassen</li>
-  <li><strong>Löschung</strong> (Art. 17) — deine Daten löschen lassen</li>
-  <li><strong>Einschränkung</strong> (Art. 18) — Verarbeitung einschränken</li>
-  <li><strong>Datenübertragbarkeit</strong> (Art. 20) — Daten in maschinenlesbarem Format erhalten</li>
-  <li><strong>Widerspruch</strong> (Art. 21) — der Verarbeitung widersprechen</li>
-  <li><strong>Widerruf der Einwilligung</strong> — jederzeit per E-Mail an <a href="mailto:info@butterbread-tech.com">info@butterbread-tech.com</a></li>
+  <li><strong>E-Mail-Adresse</strong> (für Login + Wiederherstellung)</li>
+  <li><strong>Anzeigename</strong> + optional Foto (URL zu hochgeladenem Bild im Storage-Bucket <code>avatars</code>)</li>
+  <li><strong>Alter</strong> (Pflichtangabe ≥ 18, Altersnachweis-Logik prüft Plausibilität)</li>
+  <li><strong>Optional:</strong> Bio, Geschlecht, Suche, Status, Lieblingsclub, Insta/TikTok-Handle, Mood-Emoji</li>
+</ul>
+<p>
+  <strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung — Bereitstellung der App).<br/>
+  <strong>Speicherdauer:</strong> Bis zur Account-Löschung. Auf Anfrage <em>oder</em> per Self-Service über die App
+  („Datenschutz-Dashboard → Account vollständig löschen").
+</p>
+
+<h2 id="safety">7. Safety-Features</h2>
+<p>
+  Die Safety-Schicht ist das Herzstück von crew. — alle Funktionen sind <strong>opt-in</strong>, mit klarem Zweck und TTL.
+</p>
+
+<h3>SOS-Alerts</h3>
+<p>
+  Wenn du einen SOS-Alert auslöst (3-Sekunden-Hold), legen wir einen Eintrag in der Tabelle <code>sos_alerts</code> an.
+  Erfasste Daten:
+</p>
+<ul>
+  <li>Standort (lat/lng) zum Zeitpunkt des Auslösens</li>
+  <li>Live-Standort-Updates alle 30 Sekunden, solange der SOS aktiv ist</li>
+  <li>Optional: Audio-Aufnahme (max. 30 Sekunden) — nur wenn du den Toggle aktivierst</li>
+  <li>Status (aktiv / aufgelöst), Zeitstempel</li>
+</ul>
+<p>
+  <strong>Sichtbar für:</strong> dich, deine aktive Crew, deinen Safety-Circle.<br/>
+  <strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. a + d DSGVO (Einwilligung + Schutz lebenswichtiger Interessen).<br/>
+  <strong>Speicherdauer:</strong> 90 Tage nach Auflösung. Aktive SOS bleiben bis zum Resolve.<br/>
+  <strong>Audio-Aufnahmen:</strong> 24 Stunden nach Aufnahme automatischer Cleanup im <code>sos-audio</code> Storage-Bucket.
+</p>
+
+<h3>Notfallkontakte</h3>
+<p>
+  Du kannst Notfallkontakte (Telefonnummer + Name + Beziehung) hinterlegen. Bei aktivem SOS werden für jeden Kontakt
+  WhatsApp-Deeplinks erzeugt mit vorgefüllter Nachricht — der Versand erfolgt durch dich, nicht automatisch.
+</p>
+<ul>
+  <li><strong>Tabelle:</strong> <code>emergency_contacts</code></li>
+  <li><strong>Sichtbar für:</strong> nur du</li>
+  <li><strong>Speicherdauer:</strong> Bis du den Kontakt löschst</li>
+  <li><strong>Weitergabe:</strong> Keine. Nummern werden nicht an Server übertragen, nur in deiner Browser-Sitzung als Deeplink-URL erzeugt.</li>
 </ul>
 
-<h2 id="beschwerde">8. Beschwerderecht</h2>
+<h3>Safety-Circle (bidirektional)</h3>
+<p>
+  Du kannst andere App-User zu deinem Safety-Circle hinzufügen (Magic-Invite-Link). Beziehungen sind beidseitig — beide
+  müssen zustimmen.
+</p>
+<ul>
+  <li><strong>Tabelle:</strong> <code>safety_circle</code> mit <code>user_a</code>/<code>user_b</code> sortiert + Status (pending/accepted/blocked)</li>
+  <li><strong>Sichtbar für:</strong> beide beteiligten User</li>
+  <li><strong>Berechtigt zu sehen:</strong> Mood, Live-Standort (wenn geteilt), Check-ins, aktive SOS</li>
+  <li><strong>Speicherdauer:</strong> Bis Verbindung von einer Seite entfernt wird</li>
+</ul>
+
+<h3>Mood / Stimmungs-Status</h3>
+<p>
+  Du kannst einen Mood (Emoji + Label, z. B. „🥳 Am Feiern" oder „🚨 Brauch jemand") setzen. Dieser ist für
+  einen wählbaren Zeitraum (1–24 h) für eine wählbare Gruppe sichtbar.
+</p>
+<ul>
+  <li><strong>Tabelle:</strong> <code>user_moods</code> mit <code>expires_at</code> TTL und <code>visibility</code> (circle/crew/all/private)</li>
+  <li><strong>Default-Sichtbarkeit:</strong> nur Safety-Circle (privacy by default)</li>
+  <li><strong>Speicherdauer:</strong> bis Ablauf, danach 7 Tage Auto-Cleanup für Statistik (anonymisiert beim System-Cleanup)</li>
+  <li>Pre-SOS-Tier („Brauch jemand", „Verloren") triggert visuelle Hervorhebung im Hub deines Safety-Circles, aber keinen automatischen Alarm</li>
+</ul>
+
+<h3>Live-Standort-Sharing</h3>
+<p>
+  Optionales, zeitlich begrenztes Live-Tracking deines Standorts für deinen Safety-Circle.
+</p>
+<ul>
+  <li><strong>Tabelle:</strong> <code>live_locations</code> (eine Zeile pro User)</li>
+  <li><strong>TTL:</strong> 1 / 4 / 8 / 24 Stunden — serverseitig auf max. 24 h gecappt</li>
+  <li><strong>Push-Frequenz:</strong> alle 30 Sekunden Update, nur wenn aktiv</li>
+  <li><strong>Sichtbar für:</strong> Safety-Circle (Standard) oder Safety-Circle + aktive Crew (Wahl beim Start)</li>
+  <li><strong>Pause-Mode-aware:</strong> Wenn du Pause-Mode aktivierst, werden deine Daten <em>serverseitig</em> aus den Sichtbarkeits-Queries deiner Circle-Member ausgefiltert (Row Level Security)</li>
+  <li><strong>Speicherdauer:</strong> Bis zum Ablauf oder Stop. <code>stop_live_location()</code> löscht die Zeile sofort komplett.</li>
+</ul>
+
+<h3>Check-ins</h3>
+<p>
+  „Ich bin OK"-Pings, die du manuell auslöst.
+</p>
+<ul>
+  <li><strong>Tabelle:</strong> <code>safety_checkins</code></li>
+  <li><strong>Erfasst:</strong> Zeitpunkt, optional Standort und Kurznachricht</li>
+  <li><strong>Sichtbar für:</strong> dich + Safety-Circle</li>
+  <li><strong>Speicherdauer:</strong> 30 Tage</li>
+</ul>
+
+<h3>Pause-Mode</h3>
+<p>
+  Master-Toggle: für 1 / 4 / 24 Stunden werden alle deine Safety-Daten <em>serverseitig</em> aus den Queries
+  deines Safety-Circles ausgeblendet — auch wenn Live-Sharing technisch noch läuft. Pause endet automatisch oder
+  manuell via Button.
+</p>
+
+<h2 id="crew">8. Crew, Match &amp; Check-ins (App-Features)</h2>
+<p>
+  Neben den Safety-Features bietet crew. weitere Funktionen.
+</p>
+<ul>
+  <li><strong>Crews:</strong> Du kannst Gruppen erstellen oder beitreten. Mitglieder sehen einander auf der Map und im Crew-Hub.</li>
+  <li><strong>Match / Entdecken:</strong> Connection-Feature, Profilbasiert. Swipe-Aktionen werden in <code>matches</code> gespeichert.</li>
+  <li><strong>Venue-Check-ins:</strong> Du kannst dich an einem Venue (Bar, Club) einchecken — sichtbar in deinem Feed.</li>
+</ul>
+<p>
+  <strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung).<br/>
+  <strong>Speicherdauer:</strong> Bis zur Account-Löschung oder zur Auflösung der Crew/des Matches.
+</p>
+
+<h2 id="audit">9. Aktivitäts-Log &amp; Audit-Trail</h2>
+<p>
+  Alle Safety-Aktionen (Mood-Setzen, SOS auslösen/auflösen, Live-Standort-Start/Stop, Check-in, Kontakt-Hinzufügen,
+  Circle-Annehmen, Pause aktivieren, Daten-Löschen) werden in <code>safety_audit_log</code> protokolliert.
+</p>
+<ul>
+  <li><strong>Sichtbar für:</strong> nur du</li>
+  <li><strong>Zweck:</strong> Transparenz über deine eigenen Aktivitäten (Art. 13 DSGVO)</li>
+  <li><strong>Speicherdauer:</strong> 365 Tage</li>
+  <li><strong>Zugriff:</strong> Im SafePlace Hub → „Mein Aktivitäts-Log"</li>
+</ul>
+
+<h2 id="push">10. Push-Benachrichtigungen</h2>
+<p>
+  crew. unterstützt optionale Push-Notifications via Web Push (Browser-API).
+</p>
+<ul>
+  <li><strong>Opt-In:</strong> Bei Aktivierung wird <code>navigator.permissions</code> abgefragt</li>
+  <li><strong>Granular wählbar:</strong> SOS deiner Safety-Crew, Mood-Alarm-Tier, Marketing</li>
+  <li><strong>Tabelle:</strong> <code>push_consents</code> speichert deine Wahl + Endpoint</li>
+  <li><strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. a DSGVO (Einwilligung)</li>
+  <li><strong>Widerruf:</strong> jederzeit über die App-Einstellungen</li>
+  <li><strong>Endpoint-Speicherung:</strong> nur dein eigener Push-Endpoint, ausschließlich für Versand an dich genutzt</li>
+</ul>
+
+<h2 id="cookies">11. Cookies, localStorage &amp; Tracking</h2>
+<p>
+  crew. setzt <strong>keine Tracking-Cookies, keine Werbe-Cookies und keine Drittanbieter-Analytics ein</strong>.
+</p>
+<p>
+  Es werden ausschließlich technisch notwendige Daten im <code>localStorage</code> deines Browsers abgelegt:
+</p>
+<ul>
+  <li>Session-Token (Supabase Auth) — zur Aufrechterhaltung deines Logins</li>
+  <li>UI-Einstellungen (z. B. Mood-Picker-Auswahl, Drag-Position der Bottom-Nav)</li>
+  <li>DSGVO-Consent-Flag</li>
+  <li>SOS-Settings-Cache (für schnelles Vorausfüllen)</li>
+</ul>
+<p>
+  Diese Speicherung ist <strong>technisch zwingend erforderlich</strong> (§ 25 Abs. 2 TTDSG) und benötigt keine separate Einwilligung.
+  Du kannst <code>localStorage</code> jederzeit über deine Browser-Einstellungen löschen — beim nächsten Login wird er neu aufgebaut.
+</p>
+
+<h2 id="aufbewahrung">12. Aufbewahrungsfristen — Übersicht</h2>
+<table>
+  <thead><tr><th>Datentyp</th><th>Aufbewahrung</th><th>Ort</th></tr></thead>
+  <tbody>
+    <tr><td>Account / Profil</td><td>bis Account-Löschung</td><td>Supabase EU</td></tr>
+    <tr><td>Mood</td><td>bis <code>expires_at</code> + 7 d</td><td>Supabase EU</td></tr>
+    <tr><td>Check-ins</td><td>30 Tage</td><td>Supabase EU</td></tr>
+    <tr><td>SOS (resolved)</td><td>90 Tage</td><td>Supabase EU</td></tr>
+    <tr><td>Audio-Recording</td><td>24 Stunden</td><td>Supabase EU Storage</td></tr>
+    <tr><td>Live-Standort</td><td>max. 24 h, dann auto-DELETE</td><td>Supabase EU</td></tr>
+    <tr><td>Notfallkontakte</td><td>bis User löscht</td><td>Supabase EU</td></tr>
+    <tr><td>Safety-Circle</td><td>bis Verbindung entfernt</td><td>Supabase EU</td></tr>
+    <tr><td>Aktivitäts-Log</td><td>365 Tage</td><td>Supabase EU</td></tr>
+    <tr><td>AGB-Akzeptanzen</td><td>3 Jahre nach Account-Löschung (Beweissicherung)</td><td>Supabase EU</td></tr>
+    <tr><td>Push-Endpoints</td><td>bis Widerruf oder Account-Löschung</td><td>Supabase EU</td></tr>
+  </tbody>
+</table>
+
+<h2 id="rechte">13. Deine Rechte (Art. 15–22 DSGVO)</h2>
+<p>Du hast jederzeit das Recht auf:</p>
+<ul>
+  <li><strong>Auskunft</strong> (Art. 15) — welche Daten gespeichert sind</li>
+  <li><strong>Berichtigung</strong> (Art. 16) — fehlerhafte Daten korrigieren</li>
+  <li><strong>Löschung</strong> (Art. 17) — vollständige Account-Löschung über das Datenschutz-Dashboard</li>
+  <li><strong>Einschränkung</strong> (Art. 18) — Verarbeitung einschränken (Pause-Mode)</li>
+  <li><strong>Datenübertragbarkeit</strong> (Art. 20) — Export deiner Daten als JSON über das Datenschutz-Dashboard („Daten als JSON exportieren")</li>
+  <li><strong>Widerspruch</strong> (Art. 21) — der Verarbeitung widersprechen</li>
+  <li><strong>Widerruf der Einwilligung</strong> — jederzeit per E-Mail an
+    <a href="mailto:info@butterbread-tech.com">info@butterbread-tech.com</a> oder direkt in der App</li>
+</ul>
+
+<h2 id="beschwerde">14. Beschwerderecht</h2>
 <p>
   Dir steht ein Beschwerderecht bei der zuständigen Aufsichtsbehörde zu:
 </p>
@@ -174,19 +366,30 @@ footer a{color:var(--fg-2);}
   <a href="https://www.baden-wuerttemberg.datenschutz.de" target="_blank" rel="noopener">https://www.baden-wuerttemberg.datenschutz.de</a>
 </p>
 
-<h2 id="alter">9. Mindestalter</h2>
+<h2 id="alter">15. Mindestalter</h2>
 <p>
-  Die Nutzung der Warteliste und der crew.-App ist erst ab <strong>18 Jahren</strong> gestattet.
-  Wir erheben wissentlich keine Daten von Minderjährigen.
+  Die Nutzung der Warteliste und der crew. App ist erst ab <strong>18 Jahren</strong> gestattet.
+  Wir erheben wissentlich keine Daten von Minderjährigen. Bei Bekanntwerden einer Minderjährigen-Anmeldung
+  werden alle erfassten Daten unverzüglich gelöscht.
 </p>
 
-<p style="margin-top:50px;font-size:13px;color:var(--muted);">Stand: April 2026</p>
+<h2 id="aenderungen">16. Änderungen dieser Erklärung</h2>
+<p>
+  Wir behalten uns vor, diese Datenschutzerklärung bei wesentlichen Änderungen anzupassen. Die jeweils aktuelle
+  Fassung ist über <a href="/datenschutz.html">/datenschutz.html</a> abrufbar. Versionierung der akzeptierten Fassungen
+  erfolgt in der Tabelle <code>terms_versions</code> mit User-Akzeptanz in <code>user_terms_acceptance</code>.
+</p>
+<p>
+  Bei substantiellen Änderungen wirst du beim nächsten App-Login informiert und musst die neue Fassung erneut akzeptieren.
+</p>
+
+<p style="margin-top:50px;font-size:13px;color:var(--muted);">Stand: Mai 2026 · Version 2.0.0</p>
 
 </main>
 
 <footer>
   <span>© 2026 crew. — Butterbread Technologies</span>
-  <span><a href="/">Startseite</a> · <a href="/impressum.html">Impressum</a> · <a href="/kontakt.html">Kontakt</a></span>
+  <span><a href="/">Startseite</a> · <a href="/agb.html">AGB</a> · <a href="/impressum.html">Impressum</a> · <a href="/kontakt.html">Kontakt</a></span>
 </footer>
 
 </body>
