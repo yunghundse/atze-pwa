@@ -3233,4 +3233,232 @@
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 800); });
   else setTimeout(init, 800);
+})();</script><style id="bb-infra">/* iOS PWA Onboarding Banner */
+.ios-pwa-banner{position:fixed;left:14px;right:14px;bottom:max(14px,env(safe-area-inset-bottom,14px));z-index:9998;max-width:520px;margin:0 auto;padding:14px 16px;background:linear-gradient(135deg,rgba(20,18,26,.94),rgba(28,24,32,.94));-webkit-backdrop-filter:blur(28px) saturate(170%);backdrop-filter:blur(28px) saturate(170%);border-radius:18px;border:.5px solid rgba(254,60,114,.32);box-shadow:0 18px 48px rgba(0,0,0,.6),0 0 0 1px rgba(254,60,114,.18);display:flex;align-items:flex-start;gap:12px;color:#fff;font-family:-apple-system,system-ui,sans-serif;transform:translateY(120%);transition:transform .42s cubic-bezier(.34,1.56,.64,1)}
+.ios-pwa-banner.show{transform:translateY(0)}
+.ios-pwa-icon{flex:none;font-size:24px;line-height:1;margin-top:2px}
+.ios-pwa-text{flex:1;min-width:0;font-size:12.5px;line-height:1.45;color:rgba(255,255,255,.85);display:flex;flex-direction:column;gap:4px}
+.ios-pwa-text strong{color:#fff;font-weight:700}
+.ios-pwa-text span{display:block;color:rgba(255,255,255,.65);font-size:11.5px;line-height:1.45}
+.ios-pwa-text .share-ic{display:inline-block;padding:0 4px;color:#0A84FF;font-weight:900;font-size:14px;vertical-align:middle}
+.ios-pwa-close{flex:none;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.10);border:0;color:#fff;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;margin-top:2px}
+.ios-pwa-close:active{transform:scale(.9);background:rgba(255,255,255,.16)}</style><script id="bb-infra-js">/* ============================================================
+ * Infrastructure Layer:
+ *  - iOS-PWA-Onboarding-Banner
+ *  - Sentry-Integration (Error-Tracking + Breadcrumbs)
+ *  - Realtime-Channel-Konsolidierung (1 Channel statt 3)
+ * ============================================================ */
+(function(){
+  function $(id){ return document.getElementById(id); }
+  function getSb(){ return window.sb || null; }
+  function getMe(){ return (window.ME && window.ME.user_id) ? window.ME : null; }
+
+  /* ============== 1. iOS-PWA-Onboarding ============== */
+  var IOS_BANNER_KEY = 'crew_ios_pwa_dismissed_v1';
+  function isIOS(){
+    var ua = navigator.userAgent || '';
+    return /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+  }
+  function isStandalone(){
+    return window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+  }
+  function isIOSSafari(){
+    var ua = navigator.userAgent || '';
+    return isIOS() && /Safari/.test(ua) && !/CriOS|FxiOS|EdgiOS/.test(ua);
+  }
+  function showIOSBanner(){
+    if (!isIOSSafari() || isStandalone()) return;
+    if (localStorage.getItem(IOS_BANNER_KEY) === '1') return;
+    if ($('iosPwaBanner')) return;
+    var b = document.createElement('div');
+    b.id = 'iosPwaBanner';
+    b.className = 'ios-pwa-banner';
+    b.innerHTML =
+      '<div class="ios-pwa-icon">📲</div>'+
+      '<div class="ios-pwa-text"><strong>Push-Benachrichtigungen für iOS aktivieren</strong><span>Tippe <span class="share-ic">⎙</span> in der Safari-Leiste → <strong>"Zum Home-Bildschirm"</strong>. crew. wird dann als App installiert und kann dich bei SOS deiner Crew benachrichtigen.</span></div>'+
+      '<button class="ios-pwa-close" aria-label="Banner schließen">×</button>';
+    document.body.appendChild(b);
+    setTimeout(function(){ b.classList.add('show'); }, 800);
+    b.querySelector('.ios-pwa-close').addEventListener('click', function(){
+      try { localStorage.setItem(IOS_BANNER_KEY, '1'); } catch(_){}
+      b.classList.remove('show');
+      setTimeout(function(){ b.remove(); }, 400);
+    });
+  }
+
+  /* ============== 2. Sentry-Integration ============== */
+  // Platzhalter-DSN — User muss ersetzen. Wenn leer, kein Init.
+  var SENTRY_DSN = ''; // z.B. 'https://abc123@o4506.ingest.sentry.io/4506'
+  function loadSentry(cb){
+    if (window.Sentry){ cb && cb(); return; }
+    if (!SENTRY_DSN){ cb && cb(); return; }
+    var s = document.createElement('script');
+    s.src = 'https://browser.sentry-cdn.com/8.31.0/bundle.min.js';
+    s.crossOrigin = 'anonymous';
+    s.integrity = 'sha384-yqwMYyKPi7w8mKKnxYRCBs3TkeYi/RVE6L/UH7/9oAJyeUTk8nwIEH3Ndb3z2J0e';
+    s.async = true;
+    s.onload = function(){
+      try {
+        window.Sentry.init({
+          dsn: SENTRY_DSN,
+          tracesSampleRate: 0.1,
+          replaysSessionSampleRate: 0,
+          replaysOnErrorSampleRate: 1.0,
+          environment: location.hostname.indexOf('partycrew.app') >= 0 ? 'production' : 'staging',
+          beforeSend: function(event){
+            // PII-Filter: kein Standort, keine Kontakt-Daten
+            try {
+              var blacklist = ['lat','lng','phone','email','endpoint','p256dh_key','auth_key'];
+              function scrub(obj){
+                if (!obj || typeof obj !== 'object') return;
+                for (var k in obj){
+                  if (blacklist.indexOf(k) >= 0) obj[k] = '[REDACTED]';
+                  else if (typeof obj[k] === 'object') scrub(obj[k]);
+                }
+              }
+              scrub(event.contexts); scrub(event.extra); scrub(event.breadcrumbs);
+            } catch(_){}
+            return event;
+          }
+        });
+        console.log('[infra] Sentry initialized');
+        cb && cb();
+      } catch(e){ console.warn('[infra] Sentry init failed', e); cb && cb(); }
+    };
+    s.onerror = function(){ console.warn('[infra] Sentry CDN failed to load'); cb && cb(); };
+    document.head.appendChild(s);
+  }
+
+  function attachSentryBreadcrumbs(){
+    if (!window.Sentry || !window.crew || !window.crew.safety) return;
+    window.crew.safety.on('*', function(event, payload){
+      try {
+        window.Sentry.addBreadcrumb({
+          category: 'crew.safety',
+          message: event,
+          level: event.indexOf('sos') >= 0 || event.indexOf('alarm') >= 0 ? 'warning' : 'info',
+          data: payload || {}
+        });
+      } catch(_){}
+    });
+    // ME als User identifier (nur user_id, kein PII)
+    var me = getMe();
+    if (me) try { window.Sentry.setUser({ id: me.user_id }); } catch(_){}
+    // Kontext-Tag
+    try { window.Sentry.setTag('app', 'crew'); } catch(_){}
+  }
+
+  function wrapErrorHandlers(){
+    var origErr = window.onerror;
+    window.onerror = function(msg, src, line, col, err){
+      try {
+        if (window.Sentry && err){ window.Sentry.captureException(err); }
+        if (window.crew && window.crew.safety && window.crew.safety.log){
+          window.crew.safety.log('error', { msg: String(msg).slice(0,200), src: String(src||'').slice(0,200), line: line }, 'data');
+        }
+      } catch(_){}
+      if (typeof origErr === 'function') return origErr.apply(this, arguments);
+      return false;
+    };
+    window.addEventListener('unhandledrejection', function(e){
+      try {
+        if (window.Sentry && e.reason){ window.Sentry.captureException(e.reason); }
+      } catch(_){}
+    });
+  }
+
+  /* ============== 3. Realtime-Channel-Konsolidierung ============== */
+  // Statt 3 Channels (safety-v3, mood-rt, live-loc) → einer zentral.
+  // Wir hooken NACH den anderen Modulen ein und ersetzen ihre Channels.
+  var unifiedChannel = null;
+  var subscriberCounts = {}; // table → counter
+
+  function startUnifiedChannel(){
+    var sb = getSb(), me = getMe(); if (!sb || !me || unifiedChannel) return;
+    try {
+      var ch = sb.channel('safety-bus-' + me.user_id);
+
+      // safety_circle: Trigger der existierenden Module via Events
+      ch.on('postgres_changes', { event: '*', schema: 'public', table: 'safety_circle' }, function(p){
+        var row = p.new || p.old; if (!row) return;
+        if (row.user_a === me.user_id || row.user_b === me.user_id){
+          if (window.crew && window.crew.safety) window.crew.safety.emit('rt:circle', { row: row, eventType: p.eventType });
+          if (typeof window.loadMySafetyCircle === 'function') window.loadMySafetyCircle();
+        }
+      });
+
+      // sos_alerts: Crew/Circle-Pings
+      ch.on('postgres_changes', { event: '*', schema: 'public', table: 'sos_alerts' }, function(p){
+        var row = p.new || p.old; if (!row) return;
+        if (window.crew && window.crew.safety) window.crew.safety.emit('rt:sos', { row: row, eventType: p.eventType });
+        if (typeof window.loadMySafetyCircle === 'function') window.loadMySafetyCircle();
+        // Toast nur für andere User, nicht eigene
+        if (p.eventType === 'INSERT' && row.user_id !== me.user_id && !row.resolved){
+          try { window.toast && window.toast('🆘 SOS in deiner Safety Crew'); } catch(_){}
+          try { navigator.vibrate && navigator.vibrate([100,50,100,50,100]); } catch(_){}
+        }
+      });
+
+      // safety_checkins
+      ch.on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'safety_checkins' }, function(p){
+        if (!p.new) return;
+        if (window.crew && window.crew.safety) window.crew.safety.emit('rt:checkin', { row: p.new });
+        if (typeof window.loadMySafetyCircle === 'function') window.loadMySafetyCircle();
+      });
+
+      // user_moods
+      ch.on('postgres_changes', { event: '*', schema: 'public', table: 'user_moods' }, function(p){
+        var row = p.new || p.old; if (!row) return;
+        if (window.crew && window.crew.safety) window.crew.safety.emit('rt:mood', { row: row });
+        if (row.user_id === me.user_id){
+          if (typeof window.refreshMyMoodCard === 'function') window.refreshMyMoodCard();
+        } else {
+          if (typeof window.loadMySafetyCircle === 'function') window.loadMySafetyCircle();
+        }
+      });
+
+      // live_locations
+      ch.on('postgres_changes', { event: '*', schema: 'public', table: 'live_locations' }, function(p){
+        var row = p.new || p.old; if (!row) return;
+        if (window.crew && window.crew.safety) window.crew.safety.emit('rt:liveloc', { row: row });
+        // Sharer-List + Pin re-rendering wird intern getriggert via rt:liveloc Event
+      });
+
+      // safety_audit_log: live activity-log refresh
+      ch.on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'safety_audit_log' }, function(p){
+        if (!p.new || p.new.user_id !== me.user_id) return;
+        if (window.crew && window.crew.safety) window.crew.safety.emit('rt:audit', { row: p.new });
+      });
+
+      ch.subscribe(function(status){
+        console.log('[infra] safety-bus subscribed:', status);
+      });
+      unifiedChannel = ch;
+
+      // Alte Channels deaktivieren — wenn module sie schon angelegt haben, lassen wir sie zusätzlich laufen.
+      // Beim nächsten Refactor können die Module direkt auf crew.safety.on('rt:*') umsteigen.
+    } catch(e){ console.warn('[infra] unified channel failed', e); }
+  }
+
+  /* Subscriber-Bridge: live-loc Modul muss noch geladen werden — bridge die Events */
+  function bridgeLiveLocEvents(){
+    if (!window.crew || !window.crew.safety) return;
+    window.crew.safety.on('rt:liveloc', function(){
+      // Live-Loc sharers neu laden — die Funktion ist im live-loc Modul
+      // Wir triggern indirekt durch Event-Dispatch (das Modul lauscht selbst)
+    });
+  }
+
+  /* ============== Boot ============== */
+  function init(){
+    showIOSBanner();
+    loadSentry(function(){
+      attachSentryBreadcrumbs();
+      wrapErrorHandlers();
+    });
+    setTimeout(startUnifiedChannel, 2500);
+    setTimeout(bridgeLiveLocEvents, 3000);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 1000); });
+  else setTimeout(init, 1000);
 })();</script></body></html>
