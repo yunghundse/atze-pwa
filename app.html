@@ -1259,4 +1259,583 @@
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 300); });
   else setTimeout(init, 300);
-})();</script><style id="bb-deals-qr-cleanup">#screen-deals,.deals-tabs,.deals-tab,.deal-card,.deal-banner{display:none!important}.ach-qr,#achQRImg,#achQRName,#achQRHandle,.ach-qr-actions,.ach-qr-name,.ach-qr-handle,.ach-qr-btn{display:none!important}.v104-pass-qr-wrap,#v104PassQrWrap,.v104-pass-qr-card,.v104-pass-tabs{display:none!important}#partnerRedeemOv,.partner-redeem,.partner-checkin-card,.partner-card,.partner-list,.partner-deal{display:none!important}#exsub-deals,#exsub-hub,.explore-sub-nav,.exploreSub{display:none!important}.v103-qr-btn,#qrSafetyOv,.qr-safety-ov{display:none!important}</style></body></html>
+})();</script><style id="bb-deals-qr-cleanup">#screen-deals,.deals-tabs,.deals-tab,.deal-card,.deal-banner{display:none!important}.ach-qr,#achQRImg,#achQRName,#achQRHandle,.ach-qr-actions,.ach-qr-name,.ach-qr-handle,.ach-qr-btn{display:none!important}.v104-pass-qr-wrap,#v104PassQrWrap,.v104-pass-qr-card,.v104-pass-tabs{display:none!important}#partnerRedeemOv,.partner-redeem,.partner-checkin-card,.partner-card,.partner-list,.partner-deal{display:none!important}#exsub-deals,#exsub-hub,.explore-sub-nav,.exploreSub{display:none!important}.v103-qr-btn,#qrSafetyOv,.qr-safety-ov{display:none!important}</style><style id="bb-mood-privacy">/* ========================== MOOD PICKER ========================== */
+.mp-ov{position:fixed;inset:0;z-index:9996;display:none;pointer-events:none}
+.mp-ov.show{display:block;pointer-events:auto}
+.mp-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);opacity:0;transition:opacity .3s ease}
+.mp-ov.show .mp-backdrop{opacity:1}
+.mp-sheet{position:absolute;left:0;right:0;bottom:0;max-width:540px;margin:0 auto;background:linear-gradient(180deg,#1a161e 0%,#0d0a12 100%);border-radius:28px 28px 0 0;border-top:.5px solid rgba(255,255,255,.10);box-shadow:0 -20px 60px rgba(0,0,0,.7);padding:14px 20px max(28px,env(safe-area-inset-bottom,28px));transform:translateY(100%);transition:transform .42s cubic-bezier(.34,1.56,.64,1);max-height:90vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.mp-ov.show .mp-sheet{transform:translateY(0)}
+.mp-handle{width:42px;height:4px;border-radius:999px;background:rgba(255,255,255,.18);margin:0 auto 16px}
+.mp-headline{font-family:'Anton',Impact,sans-serif;font-size:24px;letter-spacing:1px;color:#fff;text-transform:uppercase;text-align:center;margin-bottom:6px}
+.mp-sub{font-size:12.5px;color:rgba(255,255,255,.55);text-align:center;margin-bottom:18px;line-height:1.4}
+
+.mp-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:18px}
+.mp-mood{display:flex;flex-direction:column;align-items:center;gap:5px;padding:14px 10px;background:rgba(255,255,255,.04);border:.5px solid rgba(255,255,255,.07);border-radius:14px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .15s ease,background .2s ease,border-color .2s ease;text-align:center}
+.mp-mood:hover{background:rgba(255,255,255,.06)}
+.mp-mood:active{transform:scale(.96)}
+.mp-mood.selected{border-color:var(--mood-c,#FE3C72);background:linear-gradient(135deg,var(--mood-tint,rgba(254,60,114,.15)),rgba(255,255,255,.02))}
+.mp-mood.tier-concern{border-color:rgba(255,170,0,.35)}
+.mp-mood.tier-alarm{border-color:rgba(254,60,114,.45);background:linear-gradient(135deg,rgba(254,60,114,.10),rgba(255,255,255,.02))}
+.mp-mood-emoji{font-size:30px;line-height:1;filter:drop-shadow(0 2px 4px rgba(0,0,0,.25))}
+.mp-mood-label{font-size:12px;font-weight:700;color:#fff;line-height:1.2}
+.mp-mood-tier-hint{font-size:9.5px;font-weight:600;letter-spacing:.4px;color:rgba(255,170,0,.85);text-transform:uppercase;margin-top:1px}
+.mp-mood.tier-alarm .mp-mood-tier-hint{color:#FE3C72}
+
+.mp-options{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+.mp-row{display:flex;align-items:center;gap:10px;padding:11px 14px;background:rgba(255,255,255,.04);border:.5px solid rgba(255,255,255,.07);border-radius:12px}
+.mp-row-label{flex:1;font-size:12.5px;color:rgba(255,255,255,.65);font-weight:500}
+.mp-segctl{display:flex;background:rgba(0,0,0,.3);border-radius:999px;padding:3px;gap:0}
+.mp-segctl button{padding:6px 11px;border:0;background:transparent;color:rgba(255,255,255,.55);font-size:11px;font-weight:600;cursor:pointer;border-radius:999px;-webkit-tap-highlight-color:transparent}
+.mp-segctl button.on{background:rgba(255,255,255,.14);color:#fff}
+.mp-segctl button:active{transform:scale(.95)}
+
+.mp-actions{display:flex;gap:10px;flex-direction:column}
+.mp-btn{padding:14px;border:0;border-radius:999px;font-size:14px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .15s ease}
+.mp-btn-primary{background:linear-gradient(135deg,#FE3C72,#FF1F5C);color:#fff;box-shadow:0 6px 18px rgba(254,60,114,.4)}
+.mp-btn-primary:active{transform:scale(.96)}
+.mp-btn-primary:disabled{opacity:.4;background:rgba(255,255,255,.1);box-shadow:none;cursor:not-allowed}
+.mp-btn-clear{background:rgba(255,255,255,.06);color:rgba(255,255,255,.7)}
+.mp-btn-clear:active{background:rgba(255,255,255,.10)}
+
+/* ========================== CURRENT MOOD CARD im SafePlace Hub ========================== */
+.sp-mood-card{display:flex;align-items:center;gap:14px;padding:14px 16px;background:linear-gradient(135deg,var(--my-mood-tint,rgba(255,255,255,.06)),rgba(255,255,255,.02));border:.5px solid var(--my-mood-c,rgba(255,255,255,.10));border-radius:18px;margin-bottom:14px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .15s ease}
+.sp-mood-card:active{transform:scale(.98)}
+.sp-mood-card.empty{background:rgba(255,255,255,.03);border-style:dashed}
+.sp-mood-emoji{flex:none;width:46px;height:46px;border-radius:50%;background:var(--my-mood-c,rgba(255,255,255,.08));display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 4px 12px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.15)}
+.sp-mood-info{flex:1;min-width:0}
+.sp-mood-info .l{font-size:14px;font-weight:700;color:#fff;line-height:1.2;display:block}
+.sp-mood-info .s{font-size:11px;color:rgba(255,255,255,.5);line-height:1.2}
+.sp-mood-arrow{flex:none;color:rgba(255,255,255,.4);font-size:18px}
+
+/* ========================== Mood Pill in Safety-Circle Cards ========================== */
+.sp-circle-mood{flex:none;display:inline-flex;align-items:center;gap:5px;padding:3px 9px 3px 5px;border-radius:999px;background:var(--mood-tint,rgba(255,255,255,.06));font-size:11px;font-weight:700;color:#fff;letter-spacing:.2px}
+.sp-circle-mood .e{font-size:14px;line-height:1}
+.sp-circle-card.has-mood-alarm{background:linear-gradient(135deg,rgba(254,60,114,.18),rgba(254,60,114,.04));border-color:rgba(254,60,114,.4)}
+.sp-circle-card.has-mood-concern{border-color:rgba(255,170,0,.35)}
+.sp-circle-card.is-paused{opacity:.55}
+.sp-circle-card.is-paused .sp-circle-status{background:rgba(255,255,255,.06);color:rgba(255,255,255,.5)}
+.sp-circle-card.is-paused .sp-circle-status .dot{background:rgba(255,255,255,.4);animation:none}
+
+/* ========================== Privacy / Pause / Consent ========================== */
+.sp-privacy-card{padding:16px;background:rgba(255,255,255,.04);border:.5px solid rgba(255,255,255,.07);border-radius:16px;display:flex;flex-direction:column;gap:10px;margin-bottom:10px}
+.sp-privacy-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.sp-privacy-info{flex:1;min-width:0}
+.sp-privacy-info .l{font-size:13px;font-weight:600;color:#fff;line-height:1.2}
+.sp-privacy-info .s{font-size:11px;color:rgba(255,255,255,.5);line-height:1.3;margin-top:2px}
+.sp-privacy-pause{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:12px;background:linear-gradient(135deg,rgba(255,170,0,.16),rgba(255,170,0,.04));border:.5px solid rgba(255,170,0,.32);color:#FFAA00;font-size:12px;font-weight:600}
+.sp-privacy-pause-active{background:linear-gradient(135deg,rgba(254,60,114,.18),rgba(254,60,114,.04));border-color:rgba(254,60,114,.45);color:#FE3C72}
+.sp-privacy-pause .ic{font-size:16px;line-height:1}
+.sp-privacy-pause .l{flex:1;font-weight:700}
+.sp-privacy-pause button{margin-left:auto;background:transparent;border:.5px solid currentColor;color:inherit;padding:4px 10px;border-radius:999px;font-size:10.5px;font-weight:700;cursor:pointer;letter-spacing:.4px;text-transform:uppercase;-webkit-tap-highlight-color:transparent}
+.sp-privacy-pause button:active{transform:scale(.95)}
+
+.sp-privacy-actions{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.sp-privacy-btn{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 14px;border:.5px solid rgba(255,255,255,.10);border-radius:12px;background:rgba(255,255,255,.04);color:#fff;font-size:13px;font-weight:600;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.sp-privacy-btn:active{transform:scale(.98);background:rgba(255,255,255,.07)}
+.sp-privacy-btn.danger{border-color:rgba(254,60,114,.4);color:#FE3C72}
+.sp-privacy-btn .ic{font-size:16px}
+
+/* DSGVO Consent / Pause-Dialog */
+.dsv-ov{position:fixed;inset:0;z-index:10001;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.dsv-ov.show{display:flex}
+.dsv-card{width:100%;max-width:440px;background:linear-gradient(180deg,#1a161e 0%,#100c14 100%);border:.5px solid rgba(255,255,255,.10);border-radius:24px;padding:28px 24px 22px}
+.dsv-icon{width:64px;height:64px;border-radius:18px;background:linear-gradient(135deg,#FE3C72,#BF5AF2);display:flex;align-items:center;justify-content:center;color:#fff;font-size:30px;margin:0 auto 18px;box-shadow:0 8px 22px rgba(254,60,114,.4)}
+.dsv-headline{font-family:'Anton',Impact,sans-serif;font-size:22px;letter-spacing:1px;color:#fff;text-transform:uppercase;text-align:center;margin-bottom:10px}
+.dsv-sub{font-size:13.5px;color:rgba(255,255,255,.7);line-height:1.5;text-align:center;margin-bottom:14px}
+.dsv-points{display:flex;flex-direction:column;gap:8px;margin:14px 0}
+.dsv-point{display:flex;gap:10px;font-size:12.5px;color:rgba(255,255,255,.78);line-height:1.4;padding:8px 12px;background:rgba(255,255,255,.04);border-radius:10px}
+.dsv-point::before{content:'•';color:#FE3C72;font-weight:900;flex:none}
+.dsv-actions{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+.dsv-btn-primary{padding:14px;border:0;border-radius:999px;background:linear-gradient(135deg,#FE3C72,#FF1F5C);color:#fff;font-size:14px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;cursor:pointer;box-shadow:0 6px 18px rgba(254,60,114,.4)}
+.dsv-btn-primary:active{transform:scale(.97)}
+.dsv-btn-secondary{padding:12px;border:0;border-radius:999px;background:rgba(255,255,255,.06);color:rgba(255,255,255,.7);font-size:12.5px;font-weight:600;cursor:pointer}
+
+/* Pause-Dialog (gleicher .dsv-ov style aber spezifisch) */
+.pause-options{display:flex;flex-direction:column;gap:8px;margin:14px 0}
+.pause-option{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:rgba(255,255,255,.04);border:.5px solid rgba(255,255,255,.07);border-radius:14px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .15s ease}
+.pause-option:active{transform:scale(.97);background:rgba(255,255,255,.07)}
+.pause-option .l{font-size:14px;font-weight:700;color:#fff}
+.pause-option .s{font-size:11px;color:rgba(255,255,255,.5);margin-top:1px}
+.pause-option .ar{color:rgba(255,255,255,.4)}</style><div class="mp-ov" id="moodPickerOv" role="dialog" aria-modal="true" aria-label="Mood setzen">
+<div class="mp-backdrop" onclick="window.closeMoodPicker&&window.closeMoodPicker()"></div>
+<div class="mp-sheet">
+<div class="mp-handle"></div>
+<div class="mp-headline">Wie fühlst du dich?</div>
+<div class="mp-sub">Sag deinem Safety Circle wie es dir gerade geht.</div>
+<div class="mp-grid" id="moodGrid"></div>
+<div class="mp-options">
+<div class="mp-row"><span class="mp-row-label">Wer sieht's?</span><div class="mp-segctl" id="moodVisCtl"><button data-vis="circle" class="on">Circle</button><button data-vis="crew">+ Crew</button><button data-vis="all">Alle</button></div></div>
+<div class="mp-row"><span class="mp-row-label">Dauer</span><div class="mp-segctl" id="moodDurCtl"><button data-dur="1" class="on">1h</button><button data-dur="4">4h</button><button data-dur="8">8h</button><button data-dur="24">24h</button></div></div>
+</div>
+<div class="mp-actions"><button class="mp-btn mp-btn-primary" id="moodSaveBtn" disabled onclick="window.saveMood&&window.saveMood()">Mood setzen</button><button class="mp-btn mp-btn-clear" onclick="window.clearMood&&window.clearMood()">Mood löschen</button></div>
+</div>
+</div>
+
+<div class="dsv-ov" id="dsvConsentOv" role="dialog" aria-modal="true" aria-label="Datenschutz-Hinweis">
+<div class="dsv-card">
+<div class="dsv-icon">🛡️</div>
+<div class="dsv-headline">Du entscheidest</div>
+<div class="dsv-sub">Bevor du deinen ersten Mood teilst — kurz erklärt was hier passiert:</div>
+<div class="dsv-points">
+<div class="dsv-point">Dein Mood ist nur sichtbar wer du auswählst (Standard: Safety Circle).</div>
+<div class="dsv-point">Mood läuft automatisch ab nach der gewählten Dauer (1h–24h).</div>
+<div class="dsv-point">Standort wird nur bei SOS oder Check-in geteilt — nie automatisch im Hintergrund.</div>
+<div class="dsv-point">Du kannst jederzeit Pause-Modus aktivieren oder alles löschen.</div>
+<div class="dsv-point">DSGVO-konform: keine Daten an Dritte, EU-Server, du hast die volle Kontrolle.</div>
+</div>
+<div class="dsv-actions"><button class="dsv-btn-primary" onclick="window.acceptDsvConsent&&window.acceptDsvConsent()">Verstanden, los geht's</button></div>
+</div>
+</div>
+
+<div class="dsv-ov" id="pauseDialogOv" role="dialog" aria-modal="true" aria-label="Pause-Modus">
+<div class="dsv-card">
+<div class="dsv-icon">⏸️</div>
+<div class="dsv-headline">Pause-Mode</div>
+<div class="dsv-sub">Während Pause sehen weder Crew noch Safety Circle deinen Mood, Standort oder Check-ins. Wie lange?</div>
+<div class="pause-options">
+<div class="pause-option" onclick="window.activatePause&&window.activatePause(1)"><div><div class="l">1 Stunde</div><div class="s">Quick-Pause für eine Pause</div></div><span class="ar">→</span></div>
+<div class="pause-option" onclick="window.activatePause&&window.activatePause(4)"><div><div class="l">4 Stunden</div><div class="s">Ein ruhiger Abend allein</div></div><span class="ar">→</span></div>
+<div class="pause-option" onclick="window.activatePause&&window.activatePause(24)"><div><div class="l">24 Stunden</div><div class="s">Kompletter Tag privat</div></div><span class="ar">→</span></div>
+</div>
+<div class="dsv-actions"><button class="dsv-btn-secondary" onclick="window.closePauseDialog&&window.closePauseDialog()">Abbrechen</button></div>
+</div>
+</div><script id="bb-mood-privacy-js">/* ======================== MOOD + PRIVACY V1 ======================== */
+(function(){
+  function $(id){ return document.getElementById(id); }
+  function getSb(){ return window.sb || null; }
+  function getMe(){ return (window.ME && window.ME.user_id) ? window.ME : null; }
+  function toast(m){ try{ if (typeof window.toast === 'function') return window.toast(m); console.log('[MP]',m); }catch(_){} }
+  function fmtRel(iso){
+    try{ var d=new Date(iso); var dif=Date.now()-d.getTime(); var s=Math.floor(dif/1000);
+      if(s<60)return 'gerade eben'; var m=Math.floor(s/60); if(m<60)return 'vor '+m+' Min';
+      var h=Math.floor(m/60); if(h<24)return 'vor '+h+' Std'; var dd=Math.floor(h/24); return 'vor '+dd+' T';
+    }catch(_){return ''} }
+  function fmtFuture(iso){
+    try{ var d=new Date(iso); var dif=d.getTime()-Date.now(); if(dif<=0)return 'abgelaufen';
+      var m=Math.floor(dif/60000); if(m<60)return 'noch '+m+' Min';
+      var h=Math.floor(m/60); var rm=m%60; if(rm) return 'noch '+h+'h '+rm+'m'; return 'noch '+h+'h';
+    }catch(_){return ''} }
+
+  /* ====== Mood Catalog ====== */
+  var MOODS = [
+    { key:'party',    emoji:'🥳', label:'Am Feiern',         color:'#FE3C72', tier:'safe' },
+    { key:'chill',    emoji:'🍺', label:'Chill',              color:'#FFAA00', tier:'safe' },
+    { key:'dance',    emoji:'💃', label:'Tanzfläche',         color:'#BF5AF2', tier:'safe' },
+    { key:'easy',     emoji:'😎', label:'Easy / Gucci',       color:'#34C759', tier:'safe' },
+    { key:'sola',     emoji:'🤔', label:'So la la',           color:'#8E8E93', tier:'neutral' },
+    { key:'down',     emoji:'😣', label:'Heute nicht so gut', color:'#5E9EFF', tier:'concern' },
+    { key:'lost',     emoji:'❓', label:'Verloren',           color:'#FFD60A', tier:'concern' },
+    { key:'need',     emoji:'🚨', label:'Brauch jemand',      color:'#FF6A3D', tier:'alarm' },
+    { key:'home',     emoji:'🛌', label:'Safe daheim',        color:'#30D158', tier:'safe' },
+    { key:'healthy',  emoji:'🥑', label:'Healthy mode',       color:'#00C7BE', tier:'safe' }
+  ];
+  var moodSelected = null;
+  var moodVisibility = 'circle';
+  var moodDuration = 1;
+
+  function tintFor(color, alpha){ return color ? 'rgba('+hexToRgb(color).join(',')+','+(alpha||0.18)+')' : 'rgba(255,255,255,0.08)'; }
+  function hexToRgb(hex){ hex = hex.replace('#',''); if(hex.length===3)hex=hex.split('').map(function(c){return c+c}).join(''); return [parseInt(hex.slice(0,2),16),parseInt(hex.slice(2,4),16),parseInt(hex.slice(4,6),16)]; }
+
+  /* ====== DSGVO Consent ====== */
+  var CONSENT_KEY = 'crew_dsv_consent_v1';
+  function hasConsent(){ try { return localStorage.getItem(CONSENT_KEY) === '1'; } catch(_) { return false; } }
+  function setConsent(){ try { localStorage.setItem(CONSENT_KEY, '1'); } catch(_) {} ; var sb=getSb(),me=getMe(); if(sb&&me){ sb.from('profiles').update({ safety_consent_seen_at: new Date().toISOString() }).eq('user_id', me.user_id).then(function(){}); } }
+
+  function showConsentIfNeeded(after){
+    if (hasConsent()){ if(after) after(); return; }
+    var ov = $('dsvConsentOv'); if (!ov){ if(after) after(); return; }
+    ov.dataset.afterCb = '1';
+    ov.classList.add('show');
+    window.__dsvCb = after || null;
+  }
+  window.acceptDsvConsent = function(){
+    setConsent();
+    var ov = $('dsvConsentOv'); if (ov) ov.classList.remove('show');
+    if (window.__dsvCb) { var cb = window.__dsvCb; window.__dsvCb = null; cb(); }
+  };
+
+  /* ====== Mood Picker ====== */
+  function renderMoodGrid(){
+    var grid = $('moodGrid'); if (!grid) return;
+    grid.innerHTML = '';
+    MOODS.forEach(function(m){
+      var btn = document.createElement('button');
+      btn.className = 'mp-mood tier-' + m.tier;
+      btn.dataset.key = m.key;
+      btn.style.setProperty('--mood-c', m.color);
+      btn.style.setProperty('--mood-tint', tintFor(m.color, 0.18));
+      btn.innerHTML = '<span class="mp-mood-emoji">'+m.emoji+'</span><span class="mp-mood-label">'+m.label+'</span>'+(m.tier==='alarm'?'<span class="mp-mood-tier-hint">Pre-SOS</span>':(m.tier==='concern'?'<span class="mp-mood-tier-hint">Hilfe?</span>':''));
+      btn.addEventListener('click', function(){ selectMood(m.key); });
+      grid.appendChild(btn);
+    });
+  }
+  function selectMood(key){
+    moodSelected = key;
+    var grid = $('moodGrid'); if (!grid) return;
+    Array.prototype.forEach.call(grid.querySelectorAll('.mp-mood'), function(b){ b.classList.toggle('selected', b.dataset.key === key); });
+    var save = $('moodSaveBtn'); if (save) save.disabled = false;
+    try { navigator.vibrate && navigator.vibrate(8); } catch(_){}
+  }
+  function bindSegCtl(id, key, defaultVal, store){
+    var el = $(id); if (!el) return;
+    Array.prototype.forEach.call(el.querySelectorAll('button'), function(b){
+      if (b.dataset[key] === String(defaultVal)) b.classList.add('on');
+      b.addEventListener('click', function(){
+        Array.prototype.forEach.call(el.querySelectorAll('button'), function(x){ x.classList.remove('on'); });
+        b.classList.add('on');
+        store(b.dataset[key]);
+      });
+    });
+  }
+
+  window.openMoodPicker = function(){
+    showConsentIfNeeded(function(){
+      var ov = $('moodPickerOv'); if (!ov) return;
+      moodSelected = null;
+      moodVisibility = 'circle';
+      moodDuration = 1;
+      renderMoodGrid();
+      bindSegCtl('moodVisCtl','vis','circle', function(v){ moodVisibility = v; });
+      bindSegCtl('moodDurCtl','dur','1', function(v){ moodDuration = parseInt(v,10) || 1; });
+      var save = $('moodSaveBtn'); if (save) save.disabled = true;
+      ov.classList.add('show');
+    });
+  };
+  window.closeMoodPicker = function(){
+    var ov = $('moodPickerOv'); if (ov) ov.classList.remove('show');
+  };
+
+  window.saveMood = async function(){
+    if (!moodSelected) return;
+    var sb = getSb(), me = getMe(); if (!sb || !me){ toast('Nicht eingeloggt'); return; }
+    var mood = MOODS.find(function(m){ return m.key === moodSelected; });
+    if (!mood) return;
+    var expiresAt = new Date(Date.now() + (moodDuration * 3600 * 1000)).toISOString();
+    try {
+      await sb.from('user_moods').insert({
+        user_id: me.user_id,
+        emoji: mood.emoji,
+        label: mood.label,
+        color: mood.color,
+        tier: mood.tier,
+        text: '',
+        visibility: moodVisibility,
+        expires_at: expiresAt
+      });
+      try { navigator.vibrate && navigator.vibrate([15,40,15]); } catch(_){}
+      toast('Mood gesetzt: ' + mood.emoji + ' ' + mood.label);
+      window.closeMoodPicker();
+      refreshMyMoodCard();
+      if (window.loadMySafetyCircle) window.loadMySafetyCircle();
+    } catch(e){ console.error('[MP]',e); toast('Konnte Mood nicht setzen'); }
+  };
+
+  window.clearMood = async function(){
+    var sb = getSb(), me = getMe(); if (!sb || !me) return;
+    try {
+      await sb.from('user_moods').update({ expires_at: new Date().toISOString() }).eq('user_id', me.user_id).gt('expires_at', new Date().toISOString());
+      toast('Mood gelöscht');
+      window.closeMoodPicker();
+      refreshMyMoodCard();
+    } catch(e){ console.error(e); toast('Fehler'); }
+  };
+
+  /* ====== My Mood Card im SafePlace Hub ====== */
+  async function getMyActiveMood(){
+    var sb = getSb(), me = getMe(); if (!sb || !me) return null;
+    try {
+      var r = await sb.from('user_moods').select('*').eq('user_id', me.user_id).gt('expires_at', new Date().toISOString()).order('created_at',{ascending:false}).limit(1);
+      return (r.data && r.data[0]) || null;
+    } catch(_){ return null; }
+  }
+
+  async function refreshMyMoodCard(){
+    var host = $('safeplaceOv'); if (!host) return;
+    var sec = $('spMyMoodCard');
+    if (!sec){
+      var content = host.querySelector('.sp-content'); if (!content) return;
+      sec = document.createElement('div');
+      sec.id = 'spMyMoodCard';
+      sec.className = 'sp-mood-card empty';
+      sec.innerHTML = '<div class="sp-mood-emoji">+</div><div class="sp-mood-info"><span class="l">Wie fühlst du dich?</span><span class="s">Tippen zum Setzen</span></div><span class="sp-mood-arrow">→</span>';
+      sec.addEventListener('click', function(){ window.openMoodPicker(); });
+      // Insert nach status card, vor quick-actions
+      var statusCard = content.querySelector('.sp-status-card');
+      if (statusCard && statusCard.nextSibling){ content.insertBefore(sec, statusCard.nextSibling); }
+      else content.appendChild(sec);
+    }
+    var mood = await getMyActiveMood();
+    if (!mood){
+      sec.classList.add('empty');
+      sec.style.removeProperty('--my-mood-c');
+      sec.style.removeProperty('--my-mood-tint');
+      sec.querySelector('.sp-mood-emoji').textContent = '+';
+      sec.querySelector('.l').textContent = 'Wie fühlst du dich?';
+      sec.querySelector('.s').textContent = 'Tippen zum Setzen';
+    } else {
+      sec.classList.remove('empty');
+      sec.style.setProperty('--my-mood-c', mood.color || '#FE3C72');
+      sec.style.setProperty('--my-mood-tint', tintFor(mood.color, 0.18));
+      sec.querySelector('.sp-mood-emoji').textContent = mood.emoji;
+      sec.querySelector('.l').textContent = mood.label;
+      var visLabel = mood.visibility === 'circle' ? 'Safety Circle' : (mood.visibility === 'crew' ? 'Crew + Circle' : 'Alle');
+      sec.querySelector('.s').textContent = visLabel + ' · ' + fmtFuture(mood.expires_at);
+    }
+  }
+
+  /* ====== Privacy / Pause / Purge Section ====== */
+  function injectPrivacySection(){
+    var host = $('safeplaceOv'); if (!host) return;
+    if ($('spPrivacySection')) return;
+    var content = host.querySelector('.sp-content'); if (!content) return;
+    var sec = document.createElement('div');
+    sec.id = 'spPrivacySection';
+    sec.className = 'sp-section';
+    sec.innerHTML =
+      '<div class="sp-section-head"><div class="sp-section-title">Privatsphäre</div></div>'+
+      '<div class="sp-privacy-card">'+
+      '  <div class="sp-privacy-row"><div class="sp-privacy-info"><div class="l">Standort beim Check-in teilen</div><div class="s">Nur beim aktiven Check-in / SOS — kein Background-Tracking</div></div>'+
+      '    <label class="sp-toggle-wrap"><input type="checkbox" id="ppShareLoc"><span class="sp-toggle"></span></label></div>'+
+      '</div>'+
+      '<div class="sp-privacy-pause" id="ppPauseStatus" style="display:none"><span class="ic">⏸️</span><span class="l" id="ppPauseLabel">Pause aktiv</span><button onclick="window.endPauseMode&&window.endPauseMode()">Beenden</button></div>'+
+      '<div class="sp-privacy-actions">'+
+      '<button class="sp-privacy-btn" onclick="window.openPauseDialog&&window.openPauseDialog()"><span><span class="ic">⏸️</span> Pause-Modus aktivieren</span><span>→</span></button>'+
+      '<button class="sp-privacy-btn" onclick="window.showDataInfo&&window.showDataInfo()"><span><span class="ic">📋</span> Datenschutz auf einen Blick</span><span>→</span></button>'+
+      '<button class="sp-privacy-btn danger" onclick="window.confirmPurgeData&&window.confirmPurgeData()"><span><span class="ic">🗑️</span> Alle meine Safety-Daten löschen</span><span>→</span></button>'+
+      '</div>';
+    // Append at end (after settings)
+    content.appendChild(sec);
+    bindPrivacyHandlers();
+    refreshPauseStatus();
+  }
+
+  function bindPrivacyHandlers(){
+    var ppLoc = $('ppShareLoc');
+    if (ppLoc && !ppLoc.__bbBound){
+      ppLoc.__bbBound = true;
+      ppLoc.addEventListener('change', async function(){
+        var sb = getSb(), me = getMe(); if (!sb || !me) return;
+        try {
+          await sb.from('profiles').update({ safety_share_location: ppLoc.checked }).eq('user_id', me.user_id);
+          toast(ppLoc.checked ? 'Standort-Sharing an' : 'Standort-Sharing aus');
+        } catch(_){}
+      });
+      // Initial-Wert laden
+      (async function(){
+        var sb = getSb(), me = getMe(); if (!sb || !me) return;
+        try { var r = await sb.from('profiles').select('safety_share_location').eq('user_id', me.user_id).single();
+          if (r && r.data) ppLoc.checked = r.data.safety_share_location !== false;
+        } catch(_){}
+      })();
+    }
+  }
+
+  async function refreshPauseStatus(){
+    var statusEl = $('ppPauseStatus'), labelEl = $('ppPauseLabel');
+    if (!statusEl) return;
+    var sb = getSb(), me = getMe(); if (!sb || !me) return;
+    try {
+      var r = await sb.from('profiles').select('safety_pause_until').eq('user_id', me.user_id).single();
+      var until = r && r.data && r.data.safety_pause_until ? r.data.safety_pause_until : null;
+      if (until && new Date(until).getTime() > Date.now()){
+        statusEl.style.display = 'flex';
+        statusEl.classList.add('sp-privacy-pause-active');
+        if (labelEl) labelEl.textContent = 'Pause aktiv (' + fmtFuture(until) + ')';
+      } else {
+        statusEl.style.display = 'none';
+      }
+    } catch(_){}
+  }
+
+  /* ====== Pause Dialog ====== */
+  window.openPauseDialog = function(){
+    var ov = $('pauseDialogOv'); if (ov) ov.classList.add('show');
+  };
+  window.closePauseDialog = function(){
+    var ov = $('pauseDialogOv'); if (ov) ov.classList.remove('show');
+  };
+  window.activatePause = async function(hours){
+    var sb = getSb(), me = getMe(); if (!sb || !me) return;
+    try {
+      var r = await sb.rpc('set_safety_pause', { duration_hours: hours });
+      window.closePauseDialog();
+      refreshPauseStatus();
+      toast('Pause aktiviert: ' + hours + 'h');
+    } catch(e){ console.error(e); toast('Fehler'); }
+  };
+  window.endPauseMode = async function(){
+    var sb = getSb(), me = getMe(); if (!sb || !me) return;
+    try {
+      await sb.rpc('set_safety_pause', { duration_hours: 0 });
+      refreshPauseStatus();
+      toast('Pause beendet');
+    } catch(_){}
+  };
+
+  /* ====== Datenschutz-Info ====== */
+  window.showDataInfo = function(){
+    var html = 'Was wir speichern und wie lange:\n\n' +
+      '• Mood: solange aktiv, Auto-Delete nach Ablauf\n' +
+      '• Check-ins: 30 Tage\n' +
+      '• SOS-Alerts (resolved): 90 Tage\n' +
+      '• Aktive SOS: bis du sie beendest\n' +
+      '• Audio: 24h (nur wenn du es einschaltest)\n' +
+      '• Notfallkontakte: bis du sie löschst\n' +
+      '• Safety Circle: bis du jemanden entfernst\n\n' +
+      'Sichtbar für andere:\n' +
+      '• Mood: nur wer du gewählt hast (Default Safety Circle)\n' +
+      '• Standort: nur bei SOS oder Check-in\n' +
+      '• Profile: nur Name + Foto, nicht deine Aktivität\n\n' +
+      'Niemals geteilt mit Dritten. EU-Server (Frankfurt). Du kannst alles jederzeit löschen.';
+    alert(html);
+  };
+
+  /* ====== Daten-Lösch ====== */
+  window.confirmPurgeData = async function(){
+    if (!confirm('Wirklich ALLE deine Safety-Daten löschen?\n\nDas löscht: Notfallkontakte, Safety Circle, alle Check-ins, alle Moods, alle SOS-Alerts (auch alte).\n\nDein Profil bleibt — nur der Safety-Stack wird neutralisiert.\n\nDieser Vorgang ist UNUMKEHRBAR.')) return;
+    if (!confirm('Letzte Bestätigung: Alle Safety-Daten endgültig löschen?')) return;
+    var sb = getSb(); if (!sb) return;
+    try {
+      var r = await sb.rpc('purge_my_safety_data');
+      var counts = r.data || {};
+      var summary = 'Gelöscht: ' + (counts.checkins||0) + ' Check-ins, ' + (counts.sos_alerts||0) + ' SOS, ' + (counts.moods||0) + ' Moods, ' + (counts.emergency_contacts||0) + ' Kontakte, ' + (counts.safety_circle||0) + ' Verbindungen.';
+      toast(summary);
+      // Reload Hub
+      if (window.loadMySafetyCircle) window.loadMySafetyCircle();
+      if (window.loadMyCheckins) window.loadMyCheckins();
+      refreshMyMoodCard();
+      refreshPauseStatus();
+    } catch(e){ console.error(e); toast('Fehler beim Löschen'); }
+  };
+
+  /* ====== Hook: Erweitere Safety-Circle Cards mit Mood-Pills ====== */
+  function decorateCircleCards(){
+    // Wir hooken in loadMySafetyCircle und nutzen die neue RPC
+    var origLoad = window.loadMySafetyCircle;
+    if (!origLoad || origLoad.__bbMoodWrapped) return;
+    window.loadMySafetyCircle = async function(){
+      var sb = getSb(), me = getMe();
+      if (!sb || !me){ if(origLoad) return origLoad.apply(this, arguments); }
+      try {
+        // Nutze get_circle_with_moods statt der alten RPC
+        var r = await sb.rpc('get_circle_with_moods');
+        var data = (r.data || []).filter(function(m){ return m.partner_user_id; });
+        renderCircleWithMoods(data);
+      } catch(e) {
+        console.warn('[MP] new circle rpc failed, fallback to original', e);
+        if (origLoad) return origLoad.apply(this, arguments);
+      }
+    };
+    window.loadMySafetyCircle.__bbMoodWrapped = true;
+  }
+
+  function renderCircleWithMoods(members){
+    var host = $('safeplaceOv'); if (!host) return;
+    var sec = $('spCircleSection');
+    if (!sec){
+      var content = host.querySelector('.sp-content'); if (!content) return;
+      sec = document.createElement('div'); sec.className = 'sp-section'; sec.id = 'spCircleSection';
+      sec.innerHTML = '<div class="sp-section-head"><div class="sp-section-title">Mein Safety Circle</div><span id="spCircleCount" class="sp-section-meta">0 Freunde</span></div><div class="sp-list" id="spCircleList"></div>';
+      // insert after my-mood-card or after status-card
+      var myMood = $('spMyMoodCard');
+      var anchor = myMood ? myMood.nextSibling : content.querySelector('.sp-actions');
+      if (anchor && anchor.parentNode === content) content.insertBefore(sec, anchor.nextSibling);
+      else content.appendChild(sec);
+    }
+    var list = $('spCircleList'), count = $('spCircleCount');
+    if (count) count.textContent = members.length + (members.length === 1 ? ' Freund' : ' Freunde');
+    if (!members.length){
+      list.innerHTML = '<div class="sp-empty">Lade jemanden ein, der die crew. App nutzt — ihr seht dann gegenseitig Mood + SOS + Check-ins.</div>';
+      return;
+    }
+    list.innerHTML = '';
+    members.forEach(function(m){
+      var statusClass = '', statusLabel = '', subText = '';
+      if (m.status === 'pending'){ statusClass='is-pending'; statusLabel = m.is_initiator?'Wartet':'Anfrage'; subText = m.is_initiator?'Einladung gesendet':'Will dich adden'; }
+      else if (m.is_paused){ statusClass='is-paused'; statusLabel='Pause'; subText='Hat sich kurz ausgeklinkt'; }
+      else if (m.active_sos_id){ statusClass='is-sos'; statusLabel='SOS'; subText='Aktiver SOS — JETZT antworten'; }
+      else if (m.mood_emoji){
+        if (m.mood_tier === 'alarm'){ statusClass='is-sos has-mood-alarm'; statusLabel='Hilfe?'; }
+        else if (m.mood_tier === 'concern'){ statusClass='is-quiet has-mood-concern'; statusLabel='Mood'; }
+        else { statusClass='is-safe'; statusLabel='Safe'; }
+        subText = m.mood_label;
+      }
+      else if (m.last_checkin_at){ statusClass='is-safe'; statusLabel='Safe'; subText = 'Check-in ' + fmtRel(m.last_checkin_at); }
+      else { statusClass='is-quiet'; statusLabel='Ruhig'; subText='Noch kein Status'; }
+
+      var card = document.createElement('div');
+      card.className = 'sp-circle-card ' + statusClass;
+      var moodPill = '';
+      if (m.mood_emoji && !m.is_paused){
+        moodPill = '<span class="sp-circle-mood" style="--mood-tint:'+tintFor(m.mood_color,0.20)+'"><span class="e">'+m.mood_emoji+'</span><span>'+(m.mood_label||'')+'</span></span>';
+      }
+      card.innerHTML =
+        '<div class="sp-circle-avatar"></div>'+
+        '<div class="sp-circle-info"><span class="n"></span><span class="s"></span></div>'+
+        moodPill +
+        '<div class="sp-circle-status"><span class="dot"></span><span class="lbl"></span></div>'+
+        '<button class="sp-circle-x" aria-label="Entfernen">×</button>';
+      var av = card.querySelector('.sp-circle-avatar');
+      if (m.partner_photo){ av.style.backgroundImage = 'url('+m.partner_photo+')'; av.style.backgroundSize='cover'; av.style.backgroundPosition='center'; av.textContent=''; }
+      else av.textContent = (m.partner_name||'?').trim().split(/\s+/).slice(0,2).map(function(p){return p[0];}).join('').toUpperCase();
+      card.querySelector('.n').textContent = m.partner_name || 'Anonymer Member';
+      card.querySelector('.s').textContent = subText;
+      card.querySelector('.sp-circle-status .lbl').textContent = statusLabel;
+      var partnerUid = m.partner_user_id;
+      card.querySelector('.sp-circle-x').addEventListener('click', function(){
+        if (!confirm('Verbindung zu '+(m.partner_name||'diesem Member')+' entfernen?')) return;
+        if (window.removeSafetyCircleMember) window.removeSafetyCircleMember(partnerUid);
+      });
+      if (m.status === 'pending' && !m.is_initiator){
+        var acc = document.createElement('button');
+        acc.className = 'sp-circle-accept'; acc.textContent = '✓';
+        acc.addEventListener('click', function(){ if (window.acceptCirclePending) window.acceptCirclePending(partnerUid); });
+        card.insertBefore(acc, card.querySelector('.sp-circle-x'));
+      }
+      list.appendChild(card);
+    });
+  }
+
+  /* ====== Hook openSafeplaceHub: render mood card + privacy section ====== */
+  function wrapOpenHub(){
+    var orig = window.openSafeplaceHub; if (!orig || orig.__bbMoodWrapped) return;
+    window.openSafeplaceHub = function(){
+      orig.apply(this, arguments);
+      setTimeout(function(){
+        refreshMyMoodCard();
+        injectPrivacySection();
+        decorateCircleCards();
+        if (window.loadMySafetyCircle) window.loadMySafetyCircle();
+      }, 100);
+    };
+    window.openSafeplaceHub.__bbMoodWrapped = true;
+  }
+
+  /* ====== Realtime: own mood updates trigger card refresh ====== */
+  function startMoodRealtime(){
+    var sb = getSb(), me = getMe(); if (!sb || !me || window.__bbMoodRtStarted) return;
+    window.__bbMoodRtStarted = true;
+    try {
+      var ch = sb.channel('mood-rt-'+me.user_id);
+      ch.on('postgres_changes', { event: '*', schema: 'public', table: 'user_moods' }, function(p){
+        var row = p.new || p.old; if (!row) return;
+        if (row.user_id === me.user_id) refreshMyMoodCard();
+        else if (window.loadMySafetyCircle) window.loadMySafetyCircle();
+      }).subscribe();
+    } catch(_){}
+  }
+
+  /* ====== Public: openMoodPicker als Quick-Action im SafePlace Hub  ====== */
+  /* Bereits via spMyMoodCard click implementiert */
+
+  /* ====== Boot ====== */
+  function init(){
+    setTimeout(function(){
+      wrapOpenHub();
+      startMoodRealtime();
+    }, 1000);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 400); });
+  else setTimeout(init, 400);
+})();</script></body></html>
