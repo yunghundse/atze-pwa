@@ -11370,4 +11370,351 @@ input:focus, textarea:focus, select:focus{
 })();
 </script>
 
+<style id="bb-mapfull">/* ============================================================
+   BB-MAPFULL — Spots-Map auf Vollbild, Leaflet-Resize, Float-Overlay
+   ============================================================ */
+
+/* ---------- 1. Spots-Screen wird Fullscreen-Container ---------- */
+#screen-spots,
+[data-screen="spots"]{
+  position: fixed !important;
+  inset: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: #0a0a0e !important;
+  overflow: hidden !important;
+  display: block !important;
+  z-index: 5 !important;
+}
+
+/* Wenn nicht aktiv (display:none) → ignorieren */
+#screen-spots[hidden],
+#screen-spots[style*="display: none"],
+#screen-spots[style*="display:none"]{
+  display: none !important;
+}
+
+/* Optionaler Spots-Header oben (falls vorhanden) — schmal halten */
+#screen-spots > .spots-header,
+#screen-spots > .screen-header,
+#screen-spots > h1,
+#screen-spots > h2{
+  position: absolute !important;
+  top: calc(var(--safe-top, 0px) + 8px) !important;
+  left: 12px !important;
+  right: 12px !important;
+  z-index: 410 !important;
+  margin: 0 !important;
+  pointer-events: none;
+}
+
+/* ---------- 2. Map-Container füllt alles ---------- */
+#spotsMap,
+#screen-spots .map-wrap,
+#screen-spots .spots-map-wrap{
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  z-index: 1 !important;
+}
+
+#spotsMap{
+  background: #0a0a0e !important;
+}
+
+/* Wrapper-Parents auch zwingen */
+#screen-spots > div:not(.hf-bar):not(.hf-fab):not(.sm-map-state):not(.sc-no-spots-hint):not(.sm-empty-card){
+  height: 100% !important;
+  width: 100% !important;
+}
+
+/* Leaflet-Container forcing fullscreen */
+.leaflet-container{
+  width: 100% !important;
+  height: 100% !important;
+  background: #0a0a0e !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif !important;
+}
+
+/* Leaflet-Tiles dürfen Karte nicht überschreiben */
+.leaflet-pane{ z-index: 1 !important; }
+.leaflet-tile-pane{ z-index: 1 !important; }
+.leaflet-overlay-pane{ z-index: 2 !important; }
+.leaflet-marker-pane{ z-index: 3 !important; }
+.leaflet-tooltip-pane{ z-index: 4 !important; }
+.leaflet-popup-pane{ z-index: 5 !important; }
+
+/* Leaflet-Controls (Zoom-Buttons) richtig positionieren */
+.leaflet-top, .leaflet-bottom{ z-index: 405 !important; }
+.leaflet-control-zoom{
+  margin-top: calc(var(--safe-top, 0px) + 70px) !important;
+  margin-right: 12px !important;
+}
+.leaflet-control-zoom a{
+  background: rgba(15,15,24,.85) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: .5px solid rgba(255,255,255,.1) !important;
+  color: #fff !important;
+  border-radius: 10px !important;
+  width: 36px !important; height: 36px !important;
+  line-height: 36px !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+}
+.leaflet-control-zoom-in{ margin-bottom: 4px !important; }
+.leaflet-control-attribution{
+  background: rgba(15,15,24,.6) !important;
+  color: rgba(255,255,255,.5) !important;
+  font-size: 9px !important;
+  padding: 2px 6px !important;
+  bottom: calc(var(--nav-h, 76px) + var(--safe-bot, 0px) + 10px) !important;
+  position: absolute !important;
+  right: 4px !important;
+  border-radius: 6px !important;
+}
+.leaflet-control-attribution a{ color: rgba(255,255,255,.6) !important; }
+
+/* ---------- 3. Filter-Bar floated über Map ---------- */
+.hf-bar{
+  position: absolute !important;
+  top: calc(var(--safe-top, 0px) + 12px) !important;
+  left: 12px !important;
+  right: 60px !important; /* Platz für Zoom-Controls */
+  z-index: 410 !important;
+  background: rgba(10,10,15,.8) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  border: .5px solid rgba(255,255,255,.08) !important;
+  border-radius: 14px !important;
+  padding: 6px !important;
+  display: flex !important;
+  gap: 6px !important;
+  overflow-x: auto !important;
+  scrollbar-width: none !important;
+}
+
+/* ---------- 4. FAB Hotspot anlegen — über Bottom-Nav ---------- */
+.hf-fab{
+  position: absolute !important;
+  bottom: calc(var(--nav-h, 76px) + var(--safe-bot, 0px) + 24px) !important;
+  right: 16px !important;
+  z-index: 1200 !important;
+  width: 60px !important;
+  height: 60px !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: linear-gradient(135deg, #FE3C72, #FF6D2E) !important;
+  box-shadow: 0 12px 32px rgba(254,60,114,.5), 0 4px 12px rgba(0,0,0,.3) !important;
+  border: 0 !important;
+  color: #fff !important;
+  cursor: pointer !important;
+  transition: transform .15s !important;
+}
+.hf-fab:active{ transform: scale(.92) !important; }
+.hf-fab svg{ width: 26px !important; height: 26px !important; color: #fff !important; }
+
+/* ---------- 5. Map-State-Layer (Loading/Empty) ---------- */
+.sm-map-state{
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 408 !important;
+}
+
+.sc-no-spots-hint{
+  top: calc(var(--safe-top, 0px) + 76px) !important;
+  z-index: 411 !important;
+}
+
+.sm-empty-card{
+  position: absolute !important;
+  bottom: calc(var(--nav-h, 76px) + var(--safe-bot, 0px) + 100px) !important;
+  left: 16px !important; right: 16px !important;
+  margin: 0 !important;
+  z-index: 411 !important;
+  background: rgba(15,15,24,.92) !important;
+  backdrop-filter: blur(24px) !important;
+}
+
+/* ---------- 6. Status-Center NICHT auf Spots-Screen ---------- */
+#screen-spots .sc-wrap,
+#screen-spots .aud-banner,
+#screen-spots .qt-row{
+  display: none !important;
+}
+
+/* ---------- 7. Pin-Wrapper (Leaflet wraps) ---------- */
+.hp-pin-wrap{
+  background: transparent !important;
+  border: 0 !important;
+}
+
+/* ---------- 8. Scroll-Lock auf Spots-Screen (gegen Body-Scroll) ---------- */
+body.spots-active{
+  overflow: hidden !important;
+  position: fixed !important;
+  width: 100% !important;
+}
+
+/* ---------- 9. Bottom-Nav bleibt sichtbar über Map ---------- */
+.bottom-nav, #bottomNav, .bn-pill, .nav-pill{
+  z-index: 1100 !important;
+}
+
+/* ---------- 10. Map-Tiles dunkel (CartoDB Dark) Fallback ---------- */
+.leaflet-tile{
+  filter: brightness(0.95) contrast(1.05) !important;
+}
+</style>
+<script id="bb-mapfull-js">
+/* ============================================================
+   BB-MAPFULL — Leaflet invalidateSize + Spots-Screen Activator
+   ============================================================ */
+(function(){
+  'use strict';
+  if (window.__bbMapFullInit) return;
+  window.__bbMapFullInit = true;
+
+  function findLeafletMap(){
+    var mapEl = document.getElementById('spotsMap');
+    if (!mapEl) return null;
+    /* Verschiedene Stellen wo die Map-Instanz gespeichert sein könnte */
+    if (mapEl._leaflet_map) return mapEl._leaflet_map;
+    if (window.bbMap && window.bbMap.invalidateSize) return window.bbMap;
+    if (window._leafletMap && window._leafletMap.invalidateSize) return window._leafletMap;
+    /* Letzter Versuch — über _leaflet_id */
+    if (mapEl._leaflet_id && window.L && window.L.DomEvent){
+      try{
+        for (var key in window){
+          if (window[key] && window[key].invalidateSize && window[key]._container === mapEl){
+            return window[key];
+          }
+        }
+      }catch(e){}
+    }
+    return null;
+  }
+
+  function refreshMapSize(){
+    var map = findLeafletMap();
+    if (!map || !map.invalidateSize) return false;
+    try{
+      map.invalidateSize(true);
+      return true;
+    }catch(e){
+      console.warn('[bb-mapfull] invalidateSize fail', e);
+      return false;
+    }
+  }
+
+  function activateSpotsScreen(){
+    var spots = document.getElementById('screen-spots');
+    if (!spots) return;
+    document.body.classList.add('spots-active');
+    /* Multi-Pass-Refresh damit Leaflet sich wirklich anpasst */
+    setTimeout(refreshMapSize, 100);
+    setTimeout(refreshMapSize, 350);
+    setTimeout(refreshMapSize, 800);
+    setTimeout(refreshMapSize, 1500);
+    /* Hotspots laden falls noch nicht */
+    setTimeout(function(){
+      if (typeof window.bbLoadHotspotsV2 === 'function') window.bbLoadHotspotsV2();
+      else if (typeof window.loadHotspots === 'function') window.loadHotspots();
+    }, 600);
+  }
+
+  function deactivateSpotsScreen(){
+    document.body.classList.remove('spots-active');
+  }
+
+  function isSpotsActive(){
+    var s = document.getElementById('screen-spots');
+    if (!s) return false;
+    var st = window.getComputedStyle(s);
+    return st.display !== 'none' && st.visibility !== 'hidden' && !s.hasAttribute('hidden');
+  }
+
+  /* Tab-Wechsel-Listener */
+  function watchTabs(){
+    /* Click-Events auf Nav */
+    document.addEventListener('click', function(e){
+      var t = e.target;
+      if (!t || !t.closest) return;
+      var spotsTrig = t.closest('[data-tab="spots"], [data-screen="spots"], .tab-spots, [data-screen-target="spots"]');
+      if (spotsTrig){ setTimeout(activateSpotsScreen, 250); return; }
+      var anyTab = t.closest('.bn-pill .bn-item, .nav-item, [data-tab], [data-screen]');
+      if (anyTab && !spotsTrig){
+        setTimeout(function(){
+          if (isSpotsActive()) activateSpotsScreen();
+          else deactivateSpotsScreen();
+        }, 300);
+      }
+    });
+
+    /* MutationObserver auf #screen-spots display-Style */
+    var spots = document.getElementById('screen-spots');
+    if (spots){
+      var obs = new MutationObserver(function(){
+        if (isSpotsActive()) activateSpotsScreen();
+        else deactivateSpotsScreen();
+      });
+      obs.observe(spots, { attributes: true, attributeFilter: ['style', 'class', 'hidden'] });
+    } else {
+      setTimeout(watchTabs, 1500);
+    }
+  }
+
+  /* Resize-Listener */
+  window.addEventListener('resize', function(){
+    if (isSpotsActive()) refreshMapSize();
+  });
+  window.addEventListener('orientationchange', function(){
+    if (isSpotsActive()) setTimeout(refreshMapSize, 300);
+  });
+
+  /* Visual-Viewport API für iOS-Keyboard-Resize */
+  if (window.visualViewport){
+    window.visualViewport.addEventListener('resize', function(){
+      if (isSpotsActive()) refreshMapSize();
+    });
+  }
+
+  /* Init */
+  function init(){
+    watchTabs();
+    /* Initial check */
+    setTimeout(function(){
+      if (isSpotsActive()) activateSpotsScreen();
+    }, 1500);
+    /* Periodischer Refresh wenn Spots aktiv */
+    setInterval(function(){
+      if (isSpotsActive()){
+        var map = findLeafletMap();
+        if (map){
+          var c = document.getElementById('spotsMap');
+          if (c && (c.offsetWidth < 200 || c.offsetHeight < 200)){
+            /* Container ist zu klein — irgendwas constraint die Größe */
+            console.warn('[bb-mapfull] map container too small', c.offsetWidth, c.offsetHeight);
+            refreshMapSize();
+          }
+        }
+      }
+    }, 5000);
+    /* Expose */
+    window.bbMapRefresh = refreshMapSize;
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+
 </body></html>
