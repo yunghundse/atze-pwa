@@ -9297,4 +9297,410 @@ body.sos-stealth-active .privacy-banner.sos{
 })();
 </script>
 
+<style id="bb-polish-v2">/* ============================================================
+   BB-POLISH-V2 — Z-Index-Ladder, Safe-Area, Anti-Overlap, Emoji-Kill
+   ============================================================ */
+
+/* ---------- 1. GLOBALE Z-INDEX-LADDER ---------- */
+:root{
+  --z-content: 1;
+  --z-pill: 50;
+  --z-header: 1000;
+  --z-bottom-nav: 1100;
+  --z-fab: 1200;
+  --z-toast: 1900;
+  --z-bottom-sheet: 1950;
+  --z-modal: 2000;
+  --z-modal-stack: 2100;
+  --z-tour: 2200;
+  --safe-bot: env(safe-area-inset-bottom, 0px);
+  --safe-top: env(safe-area-inset-top, 0px);
+  --nav-h: 76px;
+}
+
+/* ---------- 2. HEADER + BOTTOM-NAV ANCHOR ---------- */
+#appHeader, .app-header, .hdr-wrap{
+  position:sticky !important;
+  top:0 !important;
+  z-index: var(--z-header) !important;
+  padding-top: calc(8px + var(--safe-top)) !important;
+}
+
+/* Bottom-Nav fest unten + Safe-Area */
+.bottom-nav, #bottomNav, .bn-pill, .nav-pill, [data-nav="bottom"]{
+  position:fixed !important;
+  left:50% !important;
+  bottom: calc(12px + var(--safe-bot)) !important;
+  transform: translateX(-50%) !important;
+  z-index: var(--z-bottom-nav) !important;
+  /* Pointer-Events nur auf Inhalt, nicht auf Container */
+}
+/* Body-Padding damit Inhalt nicht hinter Nav verschwindet */
+body, #app, .app-shell, main, .screen, .scroll-container{
+  padding-bottom: calc(var(--nav-h) + var(--safe-bot) + 16px) !important;
+}
+.screen-content, .hub-content, .scroll-area{
+  padding-bottom: calc(var(--nav-h) + var(--safe-bot) + 24px) !important;
+}
+
+/* ---------- 3. SPOTS-MAP-Overlay ---------- */
+/* Filter-Bar nicht unter Header verschwinden */
+.hf-bar{
+  top: calc(var(--safe-top) + 60px) !important;
+  z-index: 405 !important;
+}
+/* FAB nicht unter Bottom-Nav verschwinden */
+.hf-fab{
+  bottom: calc(var(--nav-h) + var(--safe-bot) + 20px) !important;
+  z-index: var(--z-fab) !important;
+  width: 60px !important; height: 60px !important;
+}
+.hf-fab svg{ width: 26px !important; height: 26px !important; }
+
+/* ---------- 4. MODAL Z-INDEX KLAR GETRENNT ---------- */
+.ap-modal{ z-index: var(--z-modal) !important; }
+.hw-modal{ z-index: var(--z-modal-stack) !important; }
+.hd-modal{ z-index: var(--z-bottom-sheet) !important; }
+.set-ov, .settings-modal, [data-modal="settings"]{ z-index: var(--z-modal) !important; }
+.sp-ov, .safeplace-modal{ z-index: var(--z-bottom-sheet) !important; }
+.welcome-tour, .onboarding-overlay{ z-index: var(--z-tour) !important; }
+
+/* Modal-Content Safe-Area-Bottom */
+.ap-card, .hw-card, .hd-card, .set-card{
+  padding-bottom: calc(28px + var(--safe-bot)) !important;
+}
+
+/* ---------- 5. AUDIENCE-BANNER POSITIONIERUNG ---------- */
+.aud-banner{
+  margin: 14px 16px 8px !important;
+}
+
+/* ---------- 6. EMOJI-KILL für Crew-Wall + Friends + Crew-Posts ---------- */
+/* Beliebige Emoji-Zeichen in Posts werden visuell unterdrückt */
+.cw-post-mood-emoji, .crew-post-emoji, .post-mood-emoji,
+.fr-emoji, .friend-avatar-emoji, .post-emoji-inline,
+.cp-emoji, .crew-vibe-emoji, .mood-bar-emoji,
+.timeline-mood-emoji{
+  font-size:0 !important;
+  width: 18px; height: 18px;
+  display: inline-block;
+  background-color: currentColor;
+  background-color: #FE3C72;
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'/><path d='M8 14s1.5 2 4 2 4-2 4-2'/><line x1='9' y1='9' x2='9.01' y2='9'/><line x1='15' y1='9' x2='15.01' y2='9'/></svg>") no-repeat center / contain;
+          mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'/><path d='M8 14s1.5 2 4 2 4-2 4-2'/><line x1='9' y1='9' x2='9.01' y2='9'/><line x1='15' y1='9' x2='15.01' y2='9'/></svg>") no-repeat center / contain;
+}
+
+/* Crew-Wall Posts: Konsistente Card-Optik */
+.cw-post, .crew-post-item, .friend-wall-post{
+  background: rgba(255,255,255,.04) !important;
+  border: .5px solid rgba(255,255,255,.08) !important;
+  border-radius: 16px !important;
+  padding: 14px 16px !important;
+  margin: 10px 0 !important;
+  position: relative;
+}
+.cw-post-head, .crew-post-head, .post-head{
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  margin-bottom: 8px !important;
+}
+.cw-post-avatar, .post-avatar, .friend-avatar{
+  width: 36px !important; height: 36px !important;
+  border-radius: 50% !important;
+  background: linear-gradient(135deg, #FE3C72, #FF6D2E) !important;
+  display: flex; align-items: center; justify-content: center;
+  flex: none;
+  font-size: 0 !important;
+  position: relative;
+}
+.cw-post-avatar::after, .post-avatar::after, .friend-avatar::after{
+  content:'';
+  width: 16px; height: 16px;
+  background: #fff;
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/><circle cx='12' cy='7' r='4'/></svg>") no-repeat center / contain;
+          mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/><circle cx='12' cy='7' r='4'/></svg>") no-repeat center / contain;
+}
+.cw-post-name, .post-name, .friend-name{
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  color: #fff !important;
+  margin: 0 !important;
+}
+.cw-post-time, .post-time, .friend-meta{
+  font-size: 11px !important;
+  color: rgba(255,255,255,.5) !important;
+  margin: 0 !important;
+}
+.cw-post-body, .post-body, .crew-post-text{
+  font-size: 14px !important;
+  color: rgba(255,255,255,.85) !important;
+  line-height: 1.5 !important;
+  margin: 0 !important;
+}
+
+/* ---------- 7. STATUS-SYSTEM KONSISTENZ ---------- */
+/* Privacy-Pill bekommt feste Höhe + zentrierten Text */
+.priv-pill{
+  height: 32px !important;
+  padding: 0 14px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  border-radius: 999px !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  letter-spacing: -.01em !important;
+}
+.priv-pill .dot{
+  width: 8px !important; height: 8px !important;
+  border-radius: 50% !important;
+  flex: none !important;
+}
+.priv-pill.live .dot{ background:#28C878 !important; }
+.priv-pill.pause .dot{ background:#FFD60A !important; }
+/* Default-State (kein Modifier) */
+.priv-pill:not(.sos):not(.live):not(.pause) .dot{ background:#28C878 !important; }
+.priv-pill:not(.sos):not(.live):not(.pause){
+  background: rgba(40,200,120,.08) !important;
+  border-color: rgba(40,200,120,.3) !important;
+  color: #fff !important;
+}
+
+/* ---------- 8. CARDS & SECTIONS einheitlich ---------- */
+.card, .glass-card, .tile-card, .hub-card{
+  background: rgba(255,255,255,.04) !important;
+  border: .5px solid rgba(255,255,255,.08) !important;
+  border-radius: 16px !important;
+  padding: 16px !important;
+  margin: 10px 0 !important;
+}
+
+/* Headings konsistent */
+h1, h2, h3, .h-section{
+  letter-spacing: -.02em !important;
+}
+.h-section{
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  letter-spacing: .14em !important;
+  text-transform: uppercase !important;
+  color: rgba(255,255,255,.5) !important;
+  margin: 24px 0 8px !important;
+  padding: 0 16px !important;
+}
+
+/* ---------- 9. KEINE HORIZONTAL-OVERFLOWS ---------- */
+html, body{ overflow-x: hidden !important; }
+.screen, main, .hub-content{ overflow-x: hidden !important; }
+
+/* ---------- 10. BUTTONS einheitlich ---------- */
+.btn, button.primary, .btn-pri, .cta-btn{
+  border-radius: 14px !important;
+  padding: 12px 20px !important;
+  font-weight: 800 !important;
+  font-size: 14px !important;
+  letter-spacing: -.01em !important;
+  border: 0 !important;
+  cursor: pointer !important;
+  transition: transform .15s !important;
+}
+.btn:active, button.primary:active, .btn-pri:active, .cta-btn:active{ transform: scale(.97) !important; }
+
+/* ---------- 11. EMPTY-STATES ---------- */
+.empty-state, .sm-empty{
+  text-align: center !important;
+  padding: 36px 20px !important;
+  color: rgba(255,255,255,.5) !important;
+}
+.empty-state h4, .sm-empty h4{
+  font-size: 16px !important; font-weight: 800 !important;
+  color: rgba(255,255,255,.85) !important;
+  margin: 0 0 6px !important;
+}
+
+/* ---------- 12. WEITERE OVERLAPS (alte Reste) ---------- */
+.lim-banner, .lim-block{
+  margin: 8px 16px !important;
+  border-radius: 12px !important;
+}
+.privacy-banner, .compliance-banner{
+  margin: 8px 16px !important;
+}
+
+/* ---------- 13. NAVIGATION BUTTON STYLES ---------- */
+.bn-pill .bn-item, .nav-item, .bottom-nav-item{
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 2px !important;
+}
+.bn-pill .bn-item.active, .nav-item.active, .bottom-nav-item.active{
+  color: #FE3C72 !important;
+}
+
+/* ---------- 14. SETTINGS-PANE Spacing ---------- */
+.set-pane, .settings-pane{
+  padding: 16px !important;
+}
+.set-tabs, .settings-tabs{
+  display: flex !important;
+  gap: 6px !important;
+  padding: 12px 16px 0 !important;
+  overflow-x: auto !important;
+  scrollbar-width: none;
+}
+.set-tabs::-webkit-scrollbar{ display:none; }
+.set-tab, .settings-tab{
+  flex: none !important;
+  padding: 8px 14px !important;
+  border-radius: 999px !important;
+  background: rgba(255,255,255,.04) !important;
+  border: .5px solid rgba(255,255,255,.06) !important;
+  color: rgba(255,255,255,.7) !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.set-tab.on, .settings-tab.on, .set-tab.active{
+  background: linear-gradient(135deg, #FE3C72, #FF6D2E) !important;
+  border-color: transparent !important;
+  color: #fff !important;
+}
+
+/* ---------- 15. SCROLL-MOMENTUM ---------- */
+.scroll-area, .hw-card, .ap-card, .hd-card, .set-card{
+  -webkit-overflow-scrolling: touch !important;
+}
+
+/* ---------- 16. iOS-SAFE-AREAS ---------- */
+@supports (padding: max(0px)){
+  body{
+    padding-left: env(safe-area-inset-left) !important;
+    padding-right: env(safe-area-inset-right) !important;
+  }
+}
+
+/* ---------- 17. DARK-MODE FORCING (immer) ---------- */
+html, body{ background: #05050A !important; color: #FAFAFA !important; }
+
+/* ---------- 18. TRANSITIONS & PERFORMANCE ---------- */
+* { -webkit-tap-highlight-color: transparent; }
+.glass-card, .priv-pill, .bn-pill{ will-change: transform; }
+</style>
+<script id="bb-polish-v2-js">
+/* ============================================================
+   BB-POLISH-V2 — Runtime-Polish: Emoji-Replace, DOM-Cleanup
+   ============================================================ */
+(function(){
+  'use strict';
+  if (window.__bbPolishV2Init) return;
+  window.__bbPolishV2Init = true;
+
+  /* --------- Emoji-Detection-Regex (greedy) --------- */
+  var EMOJI_RE = /(?:[✀-➿]|[-]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[‑-⛿]|\uD83E[\uDD10-\uDDFF])/g;
+
+  function stripEmojisInTextNodes(root){
+    if (!root) return;
+    var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode: function(n){
+        if (!n.nodeValue || !EMOJI_RE.test(n.nodeValue)) return NodeFilter.FILTER_SKIP;
+        EMOJI_RE.lastIndex = 0;
+        /* Don't strip inside script/style */
+        var p = n.parentNode;
+        while (p){ if (p.tagName === 'SCRIPT' || p.tagName === 'STYLE') return NodeFilter.FILTER_REJECT; p = p.parentNode; }
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    var nodes = [];
+    var cur;
+    while ((cur = walker.nextNode())){ nodes.push(cur); }
+    nodes.forEach(function(n){
+      n.nodeValue = n.nodeValue.replace(EMOJI_RE, '').replace(/\s{2,}/g,' ').trim();
+    });
+  }
+
+  /* --------- Targeted Emoji-Cleanup für Wall/Friends/Posts --------- */
+  function cleanupWallEmojis(){
+    var sel = '.cw-post-body, .crew-post-text, .post-body, .friend-wall-post .post-body, .crew-vibe-text, .timeline-text, .friend-wall-text';
+    var nodes = document.querySelectorAll(sel);
+    nodes.forEach(stripEmojisInTextNodes);
+  }
+
+  /* --------- Avatar-Emojis durch SVG ersetzen --------- */
+  function fixAvatars(){
+    var sel = '.cw-post-avatar, .post-avatar, .friend-avatar, .crew-post-avatar';
+    document.querySelectorAll(sel).forEach(function(a){
+      if (a.dataset.bbAvatarFixed) return;
+      a.dataset.bbAvatarFixed = '1';
+      /* Wenn Text-Inhalt nur Emoji ist, leeren — CSS ::after rendert SVG */
+      var text = (a.textContent || '').trim();
+      if (!text || EMOJI_RE.test(text)){
+        a.textContent = '';
+      }
+    });
+  }
+
+  /* --------- Layout-Heights setzen (CSS-Var --nav-h) --------- */
+  function syncNavHeight(){
+    var nav = document.querySelector('.bottom-nav, #bottomNav, .bn-pill, .nav-pill');
+    if (!nav) return;
+    var h = nav.offsetHeight || 76;
+    document.documentElement.style.setProperty('--nav-h', h + 'px');
+  }
+
+  /* --------- DOM-Observer --------- */
+  function startObserver(){
+    var obs = new MutationObserver(function(muts){
+      var dirty = false;
+      muts.forEach(function(m){
+        if (m.addedNodes && m.addedNodes.length){ dirty = true; }
+      });
+      if (dirty){
+        cleanupWallEmojis();
+        fixAvatars();
+        syncNavHeight();
+      }
+    });
+    obs.observe(document.body, { subtree: true, childList: true });
+  }
+
+  /* --------- Globaler Click-Outside-Handler für Modals --------- */
+  function setupModalDismiss(){
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape'){
+        document.querySelectorAll('.ap-modal.on, .hw-modal.on, .hd-modal.on').forEach(function(m){
+          m.classList.remove('on');
+        });
+      }
+    });
+  }
+
+  /* --------- Init --------- */
+  function init(){
+    cleanupWallEmojis();
+    fixAvatars();
+    syncNavHeight();
+    startObserver();
+    setupModalDismiss();
+    window.addEventListener('resize', syncNavHeight);
+    /* Re-Polish nach Tab-Wechsel */
+    document.addEventListener('click', function(e){
+      var nav = e.target && e.target.closest && e.target.closest('.bn-pill, .nav-item, [data-tab]');
+      if (nav){
+        setTimeout(function(){
+          cleanupWallEmojis();
+          fixAvatars();
+          syncNavHeight();
+        }, 250);
+      }
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+
 </body></html>
