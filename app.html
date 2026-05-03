@@ -12135,4 +12135,784 @@ body.spots-active{
 })();
 </script>
 
+<style id="bb-hotspot-v3">/* ============================================================
+   BB-HOTSPOT-V3 — Join/Leave + Spot-Chat + Member-Liste
+   ============================================================ */
+
+/* ---------- Detail-Card erweitert ---------- */
+.hd-card{
+  max-height: 80vh !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+  padding-bottom: 0 !important;
+}
+.hd-card-head{
+  flex: none;
+  padding: 22px 22px 0;
+}
+.hd-card-tabs{
+  flex: none;
+  display: flex;
+  gap: 6px;
+  padding: 12px 22px 0;
+  border-bottom: .5px solid rgba(255,255,255,.06);
+}
+.hd-tab{
+  padding: 10px 14px;
+  background: transparent;
+  border: 0;
+  color: rgba(255,255,255,.55);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: color .2s, border-color .2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.hd-tab.on{ color: #fff; border-bottom-color: #FE3C72; }
+.hd-tab-badge{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  background: rgba(255,255,255,.08);
+  border-radius: 9px;
+  font-size: 10px;
+  font-weight: 800;
+  color: rgba(255,255,255,.7);
+}
+.hd-tab.on .hd-tab-badge{
+  background: linear-gradient(135deg, #FE3C72, #FF6D2E);
+  color: #fff;
+}
+
+.hd-card-body{
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 22px;
+  min-height: 200px;
+}
+.hd-pane{ display: none; padding: 16px 0; }
+.hd-pane.on{ display: block; }
+
+.hd-card-footer{
+  flex: none;
+  padding: 14px 22px calc(20px + var(--safe-bot, 0px));
+  border-top: .5px solid rgba(255,255,255,.06);
+  display: flex;
+  gap: 10px;
+}
+
+/* ---------- Member-Liste ---------- */
+.mb-list{
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.mb-item{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: rgba(255,255,255,.03);
+  border: .5px solid rgba(255,255,255,.06);
+  border-radius: 12px;
+}
+.mb-avatar{
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FE3C72, #FF6D2E);
+  flex: none;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0;
+  position: relative;
+}
+.mb-avatar::after{
+  content:'';
+  width: 16px; height: 16px;
+  background: #fff;
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/><circle cx='12' cy='7' r='4'/></svg>") no-repeat center / contain;
+          mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/><circle cx='12' cy='7' r='4'/></svg>") no-repeat center / contain;
+}
+.mb-main{ flex: 1; min-width: 0; }
+.mb-name{ font-size: 14px; font-weight: 700; color: #fff; margin: 0 0 2px; }
+.mb-meta{ font-size: 11px; color: rgba(255,255,255,.5); margin: 0; }
+.mb-badge-owner{
+  background: rgba(255,214,10,.15);
+  color: #FFD60A;
+  font-size: 10px; font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 999px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.mb-badge-me{
+  background: rgba(40,200,120,.15);
+  color: #28C878;
+  font-size: 10px; font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 999px;
+}
+
+/* ---------- Spot-Chat ---------- */
+.sc-msgs{
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 8px;
+  min-height: 240px;
+  max-height: 360px;
+  overflow-y: auto;
+  padding: 10px 0;
+}
+.sc-msg{
+  display: flex;
+  flex-direction: column;
+  max-width: 86%;
+  align-self: flex-start;
+  padding: 8px 12px;
+  background: rgba(255,255,255,.05);
+  border-radius: 14px 14px 14px 4px;
+  border: .5px solid rgba(255,255,255,.05);
+}
+.sc-msg.mine{
+  align-self: flex-end;
+  background: linear-gradient(135deg, rgba(254,60,114,.4), rgba(255,109,46,.18));
+  border-color: rgba(254,60,114,.35);
+  border-radius: 14px 14px 4px 14px;
+}
+.sc-msg-author{
+  font-size: 10px;
+  font-weight: 800;
+  color: rgba(255,255,255,.6);
+  margin-bottom: 2px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.sc-msg.mine .sc-msg-author{ color: rgba(255,255,255,.85); }
+.sc-msg-body{
+  font-size: 14px;
+  color: rgba(255,255,255,.95);
+  line-height: 1.4;
+  word-wrap: break-word;
+  margin: 0;
+}
+.sc-msg-time{
+  font-size: 10px;
+  color: rgba(255,255,255,.4);
+  margin-top: 3px;
+}
+.sc-msg.mine .sc-msg-time{ color: rgba(255,255,255,.6); text-align: right; }
+
+.sc-empty{
+  text-align: center;
+  padding: 32px 16px;
+  color: rgba(255,255,255,.45);
+  font-size: 13px;
+}
+
+.sc-input-row{
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 12px 0 4px;
+  border-top: .5px solid rgba(255,255,255,.06);
+}
+.sc-input{
+  flex: 1;
+  height: 40px;
+  padding: 0 14px;
+  background: rgba(255,255,255,.04);
+  border: .5px solid rgba(255,255,255,.08);
+  border-radius: 20px;
+  color: #fff;
+  font-size: 14px;
+  outline: none;
+}
+.sc-input:focus{ border-color: rgba(254,60,114,.5); }
+.sc-send{
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FE3C72, #FF6D2E);
+  border: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex: none;
+}
+.sc-send:disabled{ opacity: .4; cursor: not-allowed; }
+.sc-send svg{ width: 18px; height: 18px; color: #fff; }
+.sc-send:active{ transform: scale(.92); }
+
+/* ---------- Action-Buttons im Footer ---------- */
+.hd-act-join{
+  flex: 1;
+  background: linear-gradient(135deg, #28C878, #1ea860);
+  color: #fff;
+}
+.hd-act-leave{
+  flex: 1;
+  background: rgba(255,255,255,.04);
+  border: .5px solid rgba(255,255,255,.1);
+  color: rgba(255,255,255,.85);
+}
+.hd-act-share{
+  flex: 0 0 auto;
+  width: 44px; height: 44px;
+  padding: 0;
+  border-radius: 50%;
+  background: rgba(255,255,255,.04);
+  border: .5px solid rgba(255,255,255,.1);
+  color: rgba(255,255,255,.85);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.hd-act-share svg{ width: 18px; height: 18px; }
+
+/* ---------- Owner-Footer (Delete) ---------- */
+.hd-act-delete{
+  flex: 1;
+  background: rgba(254,60,114,.1);
+  border: .5px solid rgba(254,60,114,.4);
+  color: #FE3C72;
+}
+
+/* ---------- Live-Indicator wenn Members aktiv ---------- */
+.hd-live-dot{
+  display: inline-block;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #28C878;
+  margin-right: 4px;
+  animation: hdLivePulse 1.6s ease-in-out infinite;
+}
+@keyframes hdLivePulse{ 0%,100%{ opacity:1 } 50%{ opacity:.4 } }
+</style>
+<script id="bb-hotspot-v3-js">
+/* ============================================================
+   BB-HOTSPOT-V3 — Join/Leave + Spot-Chat + Member-Liste + Realtime
+   ============================================================ */
+(function(){
+  'use strict';
+  if (window.__bbHotspotV3Init) return;
+  window.__bbHotspotV3Init = true;
+
+  var sb = function(){ return window.sb || window.supabase; };
+  async function getUid(){
+    try{ var u = await sb().auth.getUser(); return u && u.data && u.data.user && u.data.user.id || null; }catch(e){ return null; }
+  }
+  function timeAgo(ts){
+    var d = (Date.now() - new Date(ts).getTime()) / 1000;
+    if (d < 60) return 'jetzt';
+    if (d < 3600) return Math.round(d/60) + ' min';
+    if (d < 86400) return Math.round(d/3600) + ' h';
+    return Math.round(d/86400) + ' Tg';
+  }
+
+  /* Globaler State */
+  var currentDetailHotspot = null;
+  var currentRealtimeChannel = null;
+  var currentMembers = [];
+  var currentMessages = [];
+  var currentIsMember = false;
+
+  /* ============= ÜBERSCHREIBEN openHotspotDetail (aus bb-status-center) ============= */
+  /* Wir ersetzen die einfache Detail-Card mit der Tab-Variante */
+  window.bbOpenHotspotDetailV3 = openHotspotDetailV3;
+
+  async function openHotspotDetailV3(h){
+    /* Cleanup vorheriges Modal + Channel */
+    closeAndCleanup();
+
+    currentDetailHotspot = h;
+    var uid = await getUid();
+
+    /* Fetch Members + Messages parallel */
+    var [membersRes, messagesRes] = await Promise.all([
+      sb().rpc('get_hotspot_members', { p_hotspot_id: h.id }),
+      sb().rpc('get_hotspot_messages', { p_hotspot_id: h.id, p_limit: 50 })
+    ]).catch(function(e){
+      console.warn('[bb-hot-v3] fetch fail', e);
+      return [{data:[]}, {data:[]}];
+    });
+
+    currentMembers = (membersRes && membersRes.data) || [];
+    currentMessages = (messagesRes && messagesRes.data) || [];
+    currentIsMember = currentMembers.some(function(m){ return m.user_id === uid; });
+
+    var visBadge = h.visibility === 'public' ? 'Öffentlich' : (h.visibility === 'friends' ? 'Freunde' : (h.visibility === 'circle' ? 'Crew' : 'Privat'));
+    var visClass = h.visibility;
+    var distance = h.distance_km !== undefined && h.distance_km !== null
+      ? (h.distance_km < 1 ? Math.round(h.distance_km*1000)+' m' : h.distance_km.toFixed(1)+' km')
+      : '';
+    var memberCount = currentMembers.length || h.member_count || 0;
+
+    var m = document.createElement('div');
+    m.className = 'hd-modal';
+    m.id = 'hdModal';
+    m.innerHTML = ''+
+      '<div class="hd-card">'+
+        '<div class="hd-card-head">'+
+          '<div class="hd-row">'+
+            '<div class="hd-icon-big"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s-7-7-7-12a7 7 0 0 1 14 0c0 5-7 12-7 12z"/><circle cx="12" cy="10" r="3"/></svg></div>'+
+            '<div class="hd-info">'+
+              '<h3 class="hd-name">'+escapeHtml(h.name||'Spot')+'</h3>'+
+              '<div class="hd-meta">'+
+                '<span class="hd-badge hw-vis-badge '+visClass+'">'+visBadge+'</span>'+
+                (distance ? '<span class="hd-badge" style="background:rgba(255,255,255,.06);color:rgba(255,255,255,.7);">'+distance+'</span>' : '')+
+                (h.kind ? '<span class="hd-badge" style="background:rgba(255,255,255,.06);color:rgba(255,255,255,.7);">'+h.kind+'</span>' : '')+
+              '</div>'+
+            '</div>'+
+            '<button class="hd-act-share" id="hdShare" type="button" title="Teilen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>'+
+          '</div>'+
+        '</div>'+
+
+        '<div class="hd-card-tabs">'+
+          '<button class="hd-tab on" data-pane="info" type="button">Info</button>'+
+          '<button class="hd-tab" data-pane="members" type="button">Mitglieder <span class="hd-tab-badge" id="hdBadgeMembers">'+memberCount+'</span></button>'+
+          '<button class="hd-tab" data-pane="chat" type="button">Chat <span class="hd-tab-badge" id="hdBadgeMsgs">'+currentMessages.length+'</span></button>'+
+        '</div>'+
+
+        '<div class="hd-card-body">'+
+          '<div class="hd-pane on" data-pane="info">'+
+            (h.description ? '<p class="hd-desc">'+escapeHtml(h.description)+'</p>' : '<p class="hd-desc" style="color:rgba(255,255,255,.4)">Keine Beschreibung.</p>')+
+            '<div class="hd-stats">'+
+              '<div class="hd-stat"><div class="hd-stat-num">'+memberCount+'</div><div class="hd-stat-lbl">Mitglieder</div></div>'+
+              '<div class="hd-stat"><div class="hd-stat-num">'+(h.is_recurring ? '∞' : (h.expires_at ? Math.max(0, Math.round((new Date(h.expires_at)-Date.now())/3600000))+'h' : '—'))+'</div><div class="hd-stat-lbl">'+(h.is_recurring?'wiederkehrend':'verbleibend')+'</div></div>'+
+              '<div class="hd-stat"><div class="hd-stat-num">'+(h.kind||'—').toUpperCase()+'</div><div class="hd-stat-lbl">Typ</div></div>'+
+            '</div>'+
+          '</div>'+
+          '<div class="hd-pane" data-pane="members">'+
+            '<div class="mb-list" id="mbList"></div>'+
+          '</div>'+
+          '<div class="hd-pane" data-pane="chat">'+
+            '<div class="sc-msgs" id="scMsgs"></div>'+
+            (currentIsMember || h.is_mine ? '<div class="sc-input-row">'+
+              '<input class="sc-input" id="scInput" placeholder="Nachricht an die Crew …" maxlength="280" />'+
+              '<button class="sc-send" id="scSend" type="button" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>'+
+            '</div>' : '<p class="sc-empty">Tritt erst dem Spot bei um mitzuschreiben.</p>')+
+          '</div>'+
+        '</div>'+
+
+        '<div class="hd-card-footer" id="hdFooter"></div>'+
+      '</div>';
+    document.body.appendChild(m);
+    setTimeout(function(){ m.classList.add('on'); }, 30);
+
+    /* Footer rendern */
+    renderFooter(m, h, uid);
+    /* Members + Messages rendern */
+    renderMembers();
+    renderMessages();
+
+    /* Tab-Switcher */
+    m.querySelectorAll('.hd-tab').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        m.querySelectorAll('.hd-tab').forEach(function(b){ b.classList.remove('on'); });
+        m.querySelectorAll('.hd-pane').forEach(function(p){ p.classList.remove('on'); });
+        btn.classList.add('on');
+        var pane = btn.getAttribute('data-pane');
+        m.querySelector('.hd-pane[data-pane="'+pane+'"]').classList.add('on');
+        if (pane === 'chat'){
+          setTimeout(function(){
+            var inp = document.getElementById('scInput'); if (inp) inp.focus();
+          }, 100);
+        }
+      });
+    });
+
+    /* Send-Button */
+    var inp = m.querySelector('#scInput');
+    var snd = m.querySelector('#scSend');
+    if (inp && snd){
+      inp.addEventListener('input', function(){ snd.disabled = !inp.value.trim(); });
+      inp.addEventListener('keydown', function(e){ if (e.key === 'Enter' && !snd.disabled) sendMessage(); });
+      snd.addEventListener('click', sendMessage);
+    }
+
+    /* Close + Share */
+    m.addEventListener('click', function(e){
+      if (e.target === m){ closeAndCleanup(); return; }
+      if (e.target.id === 'hdShare' || e.target.closest('#hdShare')){ shareSpot(h); }
+      if (e.target.id === 'hdJoin'){ joinSpot(h.id); }
+      if (e.target.id === 'hdLeave'){ leaveSpot(h.id); }
+      if (e.target.id === 'hdDelete'){ deleteSpot(h.id); }
+      if (e.target.id === 'hdClose'){ closeAndCleanup(); }
+    });
+
+    /* Realtime-Subscription für Messages + Members */
+    setupRealtime(h.id);
+  }
+
+  function renderFooter(modal, h, uid){
+    var f = modal.querySelector('#hdFooter');
+    if (!f) return;
+    if (h.is_mine){
+      f.innerHTML = '<button class="hd-act hd-act-delete" id="hdDelete" type="button">Spot löschen</button>'+
+                    '<button class="hd-act sec" id="hdClose" type="button">Schließen</button>';
+    } else if (currentIsMember){
+      f.innerHTML = '<button class="hd-act hd-act-leave" id="hdLeave" type="button">Verlassen</button>'+
+                    '<button class="hd-act sec" id="hdClose" type="button">Schließen</button>';
+    } else {
+      f.innerHTML = '<button class="hd-act hd-act-join" id="hdJoin" type="button">Ich bin hier</button>'+
+                    '<button class="hd-act sec" id="hdClose" type="button">Schließen</button>';
+    }
+  }
+
+  function renderMembers(){
+    var host = document.getElementById('mbList');
+    if (!host) return;
+    if (!currentMembers.length){
+      host.innerHTML = '<p class="sc-empty">Noch keine Mitglieder. Sei die/der Erste!</p>';
+      return;
+    }
+    host.innerHTML = currentMembers.map(function(m){
+      return '<div class="mb-item">'+
+        '<div class="mb-avatar"></div>'+
+        '<div class="mb-main">'+
+          '<p class="mb-name">'+escapeHtml(m.display_name || 'Crew')+'</p>'+
+          '<p class="mb-meta">seit '+timeAgo(m.joined_at)+'</p>'+
+        '</div>'+
+        (m.is_owner ? '<span class="mb-badge-owner">Owner</span>' : '')+
+      '</div>';
+    }).join('');
+    /* Badge updaten */
+    var badge = document.getElementById('hdBadgeMembers');
+    if (badge) badge.textContent = currentMembers.length;
+  }
+
+  function renderMessages(){
+    var host = document.getElementById('scMsgs');
+    if (!host) return;
+    if (!currentMessages.length){
+      host.innerHTML = '<p class="sc-empty">Noch keine Nachrichten. Schreib der Crew was!</p>';
+      return;
+    }
+    host.innerHTML = currentMessages.map(function(msg){
+      return '<div class="sc-msg'+(msg.is_mine ? ' mine' : '')+'">'+
+        (!msg.is_mine ? '<div class="sc-msg-author">'+escapeHtml(msg.display_name || 'Crew')+'</div>' : '')+
+        '<p class="sc-msg-body">'+escapeHtml(msg.body)+'</p>'+
+        '<div class="sc-msg-time">'+timeAgo(msg.created_at)+'</div>'+
+      '</div>';
+    }).join('');
+    /* Scroll an oben (column-reverse → top = neueste) */
+    host.scrollTop = 0;
+    /* Badge updaten */
+    var badge = document.getElementById('hdBadgeMsgs');
+    if (badge) badge.textContent = currentMessages.length;
+  }
+
+  async function joinSpot(hid){
+    try{
+      var uid = await getUid(); if (!uid) return;
+      var r = await sb().from('hotspot_members').upsert({
+        hotspot_id: hid, user_id: uid, status: 'joined', joined_at: new Date().toISOString()
+      }, { onConflict: 'hotspot_id,user_id' });
+      if (r.error) throw r.error;
+      currentIsMember = true;
+      if (window.bbToast) window.bbToast('Bist drin · Crew sieht dich');
+      /* Re-fetch & re-render */
+      await refetchMembers();
+      var modal = document.getElementById('hdModal');
+      if (modal && currentDetailHotspot){
+        renderFooter(modal, currentDetailHotspot, uid);
+      }
+      /* Map-Refresh */
+      if (typeof window.bbLoadHotspotsV2 === 'function') window.bbLoadHotspotsV2();
+    }catch(e){
+      console.warn('[bb-hot-v3] join fail', e);
+      if (window.bbToast) window.bbToast('Fehler: '+(e.message||'konnte nicht beitreten'));
+    }
+  }
+
+  async function leaveSpot(hid){
+    try{
+      var uid = await getUid(); if (!uid) return;
+      var r = await sb().from('hotspot_members').delete().eq('hotspot_id', hid).eq('user_id', uid);
+      if (r.error) throw r.error;
+      currentIsMember = false;
+      if (window.bbToast) window.bbToast('Du bist raus', 'Wieder beitreten', function(){ joinSpot(hid); });
+      await refetchMembers();
+      var modal = document.getElementById('hdModal');
+      if (modal && currentDetailHotspot){
+        renderFooter(modal, currentDetailHotspot, uid);
+      }
+      if (typeof window.bbLoadHotspotsV2 === 'function') window.bbLoadHotspotsV2();
+    }catch(e){
+      console.warn('[bb-hot-v3] leave fail', e);
+      if (window.bbToast) window.bbToast('Fehler: '+(e.message||'konnte nicht verlassen'));
+    }
+  }
+
+  async function deleteSpot(hid){
+    if (!confirm('Spot wirklich löschen? Alle Mitglieder verlieren Zugriff.')) return;
+    try{
+      var r = await sb().from('hotspots').update({ closed_at: new Date().toISOString() }).eq('id', hid);
+      if (r.error) throw r.error;
+      closeAndCleanup();
+      if (window.bbToast) window.bbToast('Spot gelöscht');
+      if (typeof window.bbLoadHotspotsV2 === 'function') window.bbLoadHotspotsV2();
+    }catch(e){
+      console.warn('[bb-hot-v3] delete fail', e);
+      if (window.bbToast) window.bbToast('Fehler: '+(e.message||'Löschung fehlgeschlagen'));
+    }
+  }
+
+  async function sendMessage(){
+    var inp = document.getElementById('scInput');
+    var snd = document.getElementById('scSend');
+    if (!inp || !currentDetailHotspot) return;
+    var text = inp.value.trim();
+    if (!text) return;
+    snd.disabled = true;
+    try{
+      var uid = await getUid(); if (!uid) return;
+      var r = await sb().from('hotspot_messages').insert({
+        hotspot_id: currentDetailHotspot.id,
+        user_id: uid,
+        body: text
+      });
+      if (r.error) throw r.error;
+      inp.value = '';
+      /* Optimistic: re-fetch */
+      await refetchMessages();
+    }catch(e){
+      console.warn('[bb-hot-v3] send fail', e);
+      if (window.bbToast) window.bbToast('Nachricht konnte nicht gesendet werden');
+      snd.disabled = false;
+    }
+  }
+
+  function shareSpot(h){
+    var url = window.location.origin + '/?spot=' + h.id;
+    if (navigator.share){
+      navigator.share({
+        title: h.name,
+        text: 'Komm zu „'+h.name+'" auf crew.',
+        url: url
+      }).catch(function(){});
+    } else if (navigator.clipboard){
+      navigator.clipboard.writeText(url).then(function(){
+        if (window.bbToast) window.bbToast('Link kopiert');
+      });
+    } else {
+      if (window.bbToast) window.bbToast(url);
+    }
+  }
+
+  async function refetchMembers(){
+    if (!currentDetailHotspot) return;
+    try{
+      var r = await sb().rpc('get_hotspot_members', { p_hotspot_id: currentDetailHotspot.id });
+      if (r.data) {
+        currentMembers = r.data;
+        var uid = await getUid();
+        currentIsMember = currentMembers.some(function(m){ return m.user_id === uid; });
+        renderMembers();
+      }
+    }catch(e){}
+  }
+  async function refetchMessages(){
+    if (!currentDetailHotspot) return;
+    try{
+      var r = await sb().rpc('get_hotspot_messages', { p_hotspot_id: currentDetailHotspot.id, p_limit: 50 });
+      if (r.data){
+        currentMessages = r.data;
+        renderMessages();
+      }
+    }catch(e){}
+  }
+
+  function setupRealtime(hid){
+    try{
+      if (currentRealtimeChannel){ try{ sb().removeChannel(currentRealtimeChannel); }catch(e){} }
+      currentRealtimeChannel = sb().channel('hotspot-detail-'+hid)
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'hotspot_messages', filter: 'hotspot_id=eq.'+hid }, function(){ refetchMessages(); })
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'hotspot_members', filter: 'hotspot_id=eq.'+hid }, function(){ refetchMembers(); })
+        .subscribe();
+    }catch(e){ console.warn('[bb-hot-v3] realtime fail', e); }
+  }
+
+  function closeAndCleanup(){
+    var m = document.getElementById('hdModal');
+    if (m){
+      m.classList.remove('on');
+      setTimeout(function(){ m.remove(); }, 320);
+    }
+    if (currentRealtimeChannel){
+      try{ sb().removeChannel(currentRealtimeChannel); }catch(e){}
+      currentRealtimeChannel = null;
+    }
+    currentDetailHotspot = null;
+    currentMembers = [];
+    currentMessages = [];
+  }
+
+  function escapeHtml(s){
+    if (!s) return '';
+    return String(s).replace(/[&<>"']/g, function(c){
+      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];
+    });
+  }
+
+  /* ============= Override openHotspotDetail aus bb-status-center ============= */
+  /* Sicherstellen dass alle bisherigen Pin-Click-Handler die V3-Variante öffnen */
+  setTimeout(function(){
+    if (typeof window.bbOpenHotspotDetail !== 'undefined'){
+      window.bbOpenHotspotDetail = openHotspotDetailV3;
+    }
+  }, 1500);
+
+  /* Hijack bbLoadHotspotsV2.renderPins indirekt: monkey-patch markers */
+  /* Stattdessen: Beobachte Pin-Klicks via Delegation */
+  document.addEventListener('click', function(e){
+    /* Ein Marker-Wrapper hat oft die Klasse hp-pin oder ähnlich */
+    var pin = e.target.closest && e.target.closest('.hp-pin, .hp-pin-marker');
+    if (!pin) return;
+    /* Wenn Click auf Pin → suche zugehörigen Hotspot (best-effort über Datenattribute) */
+    /* Nicht sicher dass Daten dranhängen — der bbLoadHotspotsV2 nutzt L.marker.on('click') was schon funktioniert */
+  }, true);
+
+  /* Ersatz: replace renderPins-Logik damit sie V3 öffnet */
+  if (window.bbLoadHotspotsV2){
+    /* Schon vorhanden — registriere globalen marker click handler */
+    /* In bb-status-center wurde m.on('click', function(){ openHotspotDetail(h); }) gesetzt.
+       Ersetze openHotspotDetail durch V3 wenn möglich. */
+    var origOpen = window.openHotspotDetail;
+    window.openHotspotDetail = openHotspotDetailV3;
+  }
+
+  /* Falls bb-status-center die lokale openHotspotDetail nutzt (nicht window),
+     setze einen Realtime-Channel-Override: re-render bei jeder hotspots-Änderung neu laden */
+  setTimeout(function(){
+    if (window.bbLoadHotspotsV2){
+      /* Ergänze: alle existierenden Marker-Click-Handler durch V3 ersetzen via Re-Load */
+      window.bbLoadHotspotsV2();
+    }
+  }, 2000);
+
+  /* ============= V3 Pin-Loader: ÜBERSCHREIBT bb-status-center bbLoadHotspotsV2 ============= */
+  var leafletMap = null;
+  var hotspotMarkers = [];
+  var currentKindFilter = null;
+
+  async function bbLoadHotspotsV3(){
+    try{
+      var s = sb();
+      if (!s) return;
+      if (!window.userLat || !window.userLng){
+        await new Promise(function(res){
+          if (!navigator.geolocation){ res(); return; }
+          navigator.geolocation.getCurrentPosition(function(p){
+            window.userLat = p.coords.latitude; window.userLng = p.coords.longitude; res();
+          }, function(){ res(); }, { enableHighAccuracy:true, timeout:5000 });
+        });
+      }
+      if (!window.userLat) return;
+      var aud = (localStorage.getItem('bb-audience') || 'general');
+      var rpcArgs = {
+        p_lat: window.userLat,
+        p_lng: window.userLng,
+        p_radius_km: 25,
+        p_kinds: currentKindFilter ? [currentKindFilter] : null,
+        p_audience: aud
+      };
+      var r = await s.rpc('get_visible_hotspots_v2', rpcArgs);
+      var spots = (r && r.data) || [];
+      if (r.error){
+        var r2 = await s.rpc('get_visible_hotspots', { p_lat: window.userLat, p_lng: window.userLng, p_radius_km: 25 });
+        spots = (r2 && r2.data) || [];
+      }
+      renderPinsV3(spots);
+    }catch(e){ console.warn('[bb-hot-v3] load fail', e); }
+  }
+
+  function renderPinsV3(spots){
+    var L = window.L;
+    if (!L) return;
+    var mapEl = document.getElementById('spotsMap');
+    if (!mapEl) return;
+    if (!leafletMap){
+      try{ leafletMap = mapEl._leaflet_map || window.bbMap || null; }catch(e){}
+      if (!leafletMap){
+        for (var key in window){
+          try{
+            if (window[key] && typeof window[key] === 'object' && window[key].invalidateSize && window[key]._container === mapEl){
+              leafletMap = window[key]; break;
+            }
+          }catch(_){}
+        }
+      }
+    }
+    if (!leafletMap || !leafletMap.addLayer) return;
+    /* Alte Marker entfernen */
+    hotspotMarkers.forEach(function(m){ try{ leafletMap.removeLayer(m); }catch(e){} });
+    hotspotMarkers = [];
+    spots.forEach(function(h){
+      try{
+        var isMine = h.is_mine;
+        var classes = 'hp-pin-marker';
+        if (isMine) classes += ' var-mine';
+        else if (h.visibility === 'private') classes += ' var-private';
+        var html = '<div class="hp-pin">'+
+          '<div class="'+classes+'"></div>'+
+          (h.member_count > 0 ? '<div class="hp-pin-count">'+h.member_count+'</div>' : '')+
+          '<div class="hp-pin-tail"></div></div>';
+        var icon = L.divIcon({ html: html, className: 'hp-pin-wrap', iconSize: [34, 42], iconAnchor: [17, 42] });
+        var mk = L.marker([h.lat, h.lng], { icon: icon }).addTo(leafletMap);
+        /* WICHTIG: V3-Detail-Card öffnen */
+        mk.on('click', function(){ openHotspotDetailV3(h); });
+        hotspotMarkers.push(mk);
+      }catch(e){ console.warn('[bb-hot-v3] pin fail', e); }
+    });
+  }
+
+  /* ============= INIT ============= */
+  function init(){
+    /* Expose */
+    window.bbHotspotV3 = {
+      openDetail: openHotspotDetailV3,
+      joinSpot: joinSpot,
+      leaveSpot: leaveSpot,
+      load: bbLoadHotspotsV3
+    };
+    /* Override globale Funktion damit andere Layer V3 nutzen */
+    window.openHotspotDetail = openHotspotDetailV3;
+    /* Override Loader: jetzt nutzen alle bbLoadHotspotsV2-Aufrufe die V3-Pin-Click-Handler */
+    window.bbLoadHotspotsV2 = bbLoadHotspotsV3;
+    window.loadHotspots = bbLoadHotspotsV3;
+
+    /* Filter-Chip-Click-Handler synchron zu V3 */
+    document.addEventListener('click', function(e){
+      var chip = e.target.closest && e.target.closest('.hf-chip');
+      if (chip){
+        var k = chip.getAttribute('data-k') || null;
+        currentKindFilter = k;
+        setTimeout(bbLoadHotspotsV3, 100);
+      }
+    });
+
+    /* Tab-Switch zu Spots → V3 laden */
+    document.addEventListener('click', function(e){
+      var nav = e.target && e.target.closest && e.target.closest('[data-tab="spots"], [data-screen="spots"], .tab-spots');
+      if (nav){ setTimeout(bbLoadHotspotsV3, 600); }
+    });
+
+    /* Initial-Load wenn Map sichtbar */
+    setTimeout(function(){
+      if (document.getElementById('spotsMap')) bbLoadHotspotsV3();
+    }, 2500);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+
 </body></html>
