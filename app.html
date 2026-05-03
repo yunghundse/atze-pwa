@@ -5044,4 +5044,510 @@
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 1000); });
   else setTimeout(init, 1000);
+})();</script><style id="bb-tinder">/* ============================================================
+ * SafePlace Tinder-Card-Design
+ * Photo-style Cards mit Color-Overlay, Bold-Typo, Counter-Badges
+ * ============================================================ */
+
+/* Hub-Container: extra Padding für mehr Atemfläche */
+#safeplaceOv .sp-content{padding:0 14px}
+
+/* Hub-Header: groesser, mit Sub-Title */
+#safeplaceOv .sp-header{padding:8px 18px 14px;flex-direction:column;align-items:flex-start;gap:4px}
+.tx-hub-head-row{display:flex;align-items:center;gap:14px;width:100%}
+.tx-hub-sub{font-size:13px;color:rgba(255,255,255,.55);font-weight:500;line-height:1.3;letter-spacing:.1px;padding-left:52px}
+
+/* Verstecke das alte Status-Card + Smart-Hub — wir ersetzen komplett */
+#smartHub{display:none!important}
+#safeplaceOv .sp-status-card{display:none!important}
+
+/* ============== TX-CARDS ============== */
+.tx-section-title{font-size:24px;font-weight:900;color:#fff;letter-spacing:-.5px;line-height:1.05;margin:18px 4px 4px}
+.tx-section-sub{font-size:13px;color:rgba(255,255,255,.55);margin:0 4px 14px;line-height:1.4}
+
+/* Big Status-Hero Card */
+.tx-status-hero{position:relative;display:block;width:100%;border-radius:24px;overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent;height:160px;border:0;text-align:left;color:#fff;font-family:inherit;background:linear-gradient(135deg,rgba(52,199,89,.4),rgba(0,199,190,.3));margin-bottom:14px}
+.tx-status-hero.is-sos{background:linear-gradient(135deg,rgba(254,60,114,.55),rgba(209,26,82,.4))}
+.tx-status-hero.is-paused{background:linear-gradient(135deg,rgba(142,142,147,.4),rgba(99,99,102,.3))}
+.tx-status-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 70% 30%,rgba(255,255,255,.18),transparent 60%);pointer-events:none}
+.tx-status-hero-emoji{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:80px;opacity:.85;line-height:1;filter:drop-shadow(0 4px 12px rgba(0,0,0,.3))}
+.tx-status-hero-content{position:absolute;left:0;right:0;bottom:0;padding:16px 18px;display:flex;flex-direction:column;gap:2px;z-index:1}
+.tx-status-hero-title{font-size:30px;font-weight:900;letter-spacing:-.6px;line-height:1.05;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.25);max-width:65%}
+.tx-status-hero-sub{font-size:13px;color:rgba(255,255,255,.78);font-weight:500;text-shadow:0 1px 4px rgba(0,0,0,.2);max-width:65%}
+
+/* 2x2 Grid für Quick-Actions */
+.tx-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+
+.tx-card{position:relative;display:flex;flex-direction:column;justify-content:flex-end;border-radius:20px;overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent;height:200px;border:0;text-align:left;color:#fff;font-family:inherit;padding:14px 16px;transition:transform .15s ease}
+.tx-card:active{transform:scale(.98)}
+.tx-card::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 75% 25%,rgba(255,255,255,.16),transparent 65%)}
+.tx-card-icon{position:absolute;right:14px;top:14px;font-size:42px;line-height:1;opacity:.85;filter:drop-shadow(0 4px 10px rgba(0,0,0,.3))}
+.tx-card-title{font-size:18px;font-weight:900;letter-spacing:-.3px;line-height:1.1;color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.25);position:relative;z-index:1}
+.tx-card-sub{font-size:12px;color:rgba(255,255,255,.78);font-weight:600;line-height:1.25;text-shadow:0 1px 3px rgba(0,0,0,.2);margin-top:3px;position:relative;z-index:1}
+.tx-card-badge{position:absolute;top:12px;left:14px;display:inline-flex;align-items:center;gap:5px;padding:5px 9px 5px 7px;background:rgba(0,0,0,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:8px;font-size:12px;font-weight:800;color:#fff;line-height:1}
+.tx-card-badge .ic{font-size:13px}
+
+/* Color-Variants (Tinder-Style) */
+.tx-card.var-live{background:linear-gradient(135deg,#FE3C72 0%,#D11A52 100%)}
+.tx-card.var-live.is-active{background:linear-gradient(135deg,#FE3C72 0%,#FF6A3D 100%);box-shadow:0 0 0 1.5px rgba(254,60,114,.7),0 12px 30px rgba(254,60,114,.45);animation:txPulse 2.4s ease-in-out infinite}
+@keyframes txPulse{0%,100%{box-shadow:0 0 0 1.5px rgba(254,60,114,.7),0 12px 30px rgba(254,60,114,.45)}50%{box-shadow:0 0 0 3px rgba(254,60,114,1),0 12px 36px rgba(254,60,114,.7)}}
+
+.tx-card.var-home{background:linear-gradient(135deg,#00C7BE 0%,#0A84FF 100%)}
+.tx-card.var-home.is-active{background:linear-gradient(135deg,#00C7BE 0%,#34C759 100%);box-shadow:0 0 0 1.5px rgba(0,199,190,.7),0 12px 30px rgba(0,199,190,.45);animation:txHomePulse 2.4s ease-in-out infinite}
+@keyframes txHomePulse{0%,100%{box-shadow:0 0 0 1.5px rgba(0,199,190,.7),0 12px 30px rgba(0,199,190,.45)}50%{box-shadow:0 0 0 3px rgba(0,199,190,1),0 12px 36px rgba(0,199,190,.7)}}
+
+.tx-card.var-checkin{background:linear-gradient(135deg,#34C759 0%,#30D158 100%)}
+.tx-card.var-circle{background:linear-gradient(135deg,#BF5AF2 0%,#FE3C72 100%)}
+.tx-card.var-crews{background:linear-gradient(135deg,#FF6A3D 0%,#FFD60A 100%)}
+.tx-card.var-emergency{background:linear-gradient(135deg,#FF3B6E 0%,#FF8558 100%)}
+.tx-card.var-invite{background:linear-gradient(135deg,#1a161e 0%,#2d2530 100%);border:1px dashed rgba(255,255,255,.18)}
+.tx-card.var-invite::before{display:none}
+
+/* Big Wide CTA-Card */
+.tx-wide{position:relative;display:flex;align-items:center;justify-content:space-between;border-radius:20px;overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent;height:120px;border:0;text-align:left;color:#fff;font-family:inherit;padding:16px 18px;margin-bottom:14px;transition:transform .15s ease}
+.tx-wide:active{transform:scale(.99)}
+.tx-wide::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 90% 30%,rgba(255,255,255,.16),transparent 65%)}
+.tx-wide.var-heimweg{background:linear-gradient(135deg,#0A84FF 0%,#5E5CE6 50%,#BF5AF2 100%)}
+.tx-wide-info{flex:1;min-width:0;z-index:1;position:relative}
+.tx-wide-title{font-size:20px;font-weight:900;letter-spacing:-.4px;line-height:1.1;color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.25);margin-bottom:3px}
+.tx-wide-sub{font-size:13px;color:rgba(255,255,255,.78);font-weight:500;text-shadow:0 1px 3px rgba(0,0,0,.2);max-width:80%}
+.tx-wide-cta{flex:none;padding:11px 18px;border-radius:999px;background:#fff;color:#000;font-size:12.5px;font-weight:900;letter-spacing:.5px;text-transform:uppercase;z-index:1;position:relative;border:0;cursor:pointer}
+.tx-wide-emoji{position:absolute;right:140px;top:50%;transform:translateY(-50%);font-size:60px;opacity:.7;line-height:1;filter:drop-shadow(0 3px 10px rgba(0,0,0,.25))}
+
+/* Mood Strip (kompakter) */
+.tx-mood-strip{display:flex;gap:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding:4px 0 12px;scrollbar-width:none;margin-bottom:14px}
+.tx-mood-strip::-webkit-scrollbar{display:none}
+.tx-mood-pill{flex:none;display:flex;align-items:center;gap:6px;padding:9px 14px;background:rgba(255,255,255,.05);border:.5px solid rgba(255,255,255,.07);border-radius:999px;color:#fff;cursor:pointer;-webkit-tap-highlight-color:transparent;font-size:12.5px;font-weight:600}
+.tx-mood-pill:active{transform:scale(.95)}
+.tx-mood-pill .e{font-size:18px;line-height:1}
+.tx-mood-pill.is-current{background:rgba(254,60,114,.18);border-color:rgba(254,60,114,.42);color:#fff}
+
+/* Friends-People-Strip — horizontale Avatar-Liste */
+.tx-people-strip{display:flex;gap:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding:4px 0 12px;scrollbar-width:none;margin-bottom:14px}
+.tx-people-strip::-webkit-scrollbar{display:none}
+.tx-people-card{flex:none;width:80px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;-webkit-tap-highlight-color:transparent;text-align:center}
+.tx-people-card:active{transform:scale(.95)}
+.tx-people-av{position:relative;width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#FE3C72,#BF5AF2);background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:20px;border:2px solid rgba(255,255,255,.10)}
+.tx-people-av.is-sos{border-color:#FE3C72;animation:txAvPulse 1.4s ease-in-out infinite}
+@keyframes txAvPulse{0%,100%{box-shadow:0 0 0 0 rgba(254,60,114,.6)}50%{box-shadow:0 0 0 8px rgba(254,60,114,0)}}
+.tx-people-av.is-paused{opacity:.5;border-color:rgba(255,255,255,.06)}
+.tx-people-mood{position:absolute;bottom:-4px;right:-4px;width:24px;height:24px;border-radius:50%;background:#1a161e;border:2px solid #1a161e;display:flex;align-items:center;justify-content:center;font-size:12px;line-height:1}
+.tx-people-name{font-size:11.5px;font-weight:600;color:#fff;line-height:1.1;width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tx-people-status{font-size:10px;color:rgba(255,255,255,.5);line-height:1;font-weight:500}
+.tx-people-add{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;flex:none;width:80px}
+.tx-people-add .av{width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.05);border:2px dashed rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-size:30px;color:rgba(255,255,255,.5);font-weight:300}
+
+/* Footer wie vorher aber besser passend */
+#smartFooter{display:none}
+
+/* Friends-Section */
+.tx-friends-tabs{display:flex;gap:6px;padding:6px;background:rgba(255,255,255,.04);border-radius:14px;margin-bottom:12px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tx-friends-tab{flex:none;padding:9px 14px;border:0;border-radius:10px;background:transparent;color:rgba(255,255,255,.55);font-size:12.5px;font-weight:700;cursor:pointer}
+.tx-friends-tab.on{background:rgba(255,255,255,.10);color:#fff}
+.tx-friends-list{display:flex;flex-direction:column;gap:6px}
+.tx-friend-row{display:flex;align-items:center;gap:12px;padding:11px 14px;background:rgba(255,255,255,.04);border:.5px solid rgba(255,255,255,.06);border-radius:14px}
+.tx-friend-av{flex:none;width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#FE3C72,#BF5AF2);background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:13px}
+.tx-friend-info{flex:1;min-width:0}
+.tx-friend-name{font-size:13.5px;font-weight:700;color:#fff;line-height:1.2}
+.tx-friend-sub{font-size:11px;color:rgba(255,255,255,.55);line-height:1.2;margin-top:2px;display:flex;gap:6px;flex-wrap:wrap}
+.tx-friend-tag{padding:2px 6px;border-radius:6px;font-size:10px;font-weight:700;letter-spacing:.3px;text-transform:uppercase}
+.tx-friend-tag.sc{background:rgba(254,60,114,.18);color:#FE3C72}
+.tx-friend-tag.crew{background:rgba(255,106,61,.18);color:#FF8558}
+.tx-friend-tag.notfall{background:rgba(255,59,110,.18);color:#FF6A8E}</style><script id="bb-tinder-js">/* ============================================================
+ * SafePlace Tinder-Card-Design + Unified Friends-System
+ * ============================================================ */
+(function(){
+  function $(id){ return document.getElementById(id); }
+  function getSb(){ return window.sb || null; }
+  function getMe(){ return (window.ME && window.ME.user_id) ? window.ME : null; }
+  function toast(m){ try{ if (typeof window.toast === 'function') return window.toast(m); }catch(_){} }
+  function fmtRel(iso){ try{var d=new Date(iso);var dif=Date.now()-d.getTime();var s=Math.floor(dif/1000);if(s<60)return 'gerade';var m=Math.floor(s/60);if(m<60)return 'vor '+m+'m';var h=Math.floor(m/60);if(h<24)return 'vor '+h+'h';return 'vor '+Math.floor(h/24)+'T';}catch(_){return ''}}
+  function fmtFut(iso){ try{var d=new Date(iso);var dif=d.getTime()-Date.now();if(dif<=0)return 'abgelaufen';var mn=Math.floor(dif/60000);if(mn<60)return mn+'m';var h=Math.floor(mn/60);return h+'h '+(mn%60)+'m';}catch(_){return ''}}
+  function initials(n){if(!n)return'?';return n.trim().split(/\s+/).slice(0,2).map(function(p){return p[0];}).join('').toUpperCase();}
+
+  /* ============== Mood-Strip ============== */
+  var QUICK_MOODS = [
+    { key:'party',  emoji:'🥳', label:'Feiern',  color:'#FE3C72', tier:'safe' },
+    { key:'chill',  emoji:'🍺', label:'Chill',   color:'#FFAA00', tier:'safe' },
+    { key:'easy',   emoji:'😎', label:'Easy',    color:'#34C759', tier:'safe' },
+    { key:'home',   emoji:'🛌', label:'Daheim',  color:'#30D158', tier:'safe' },
+    { key:'down',   emoji:'😣', label:'Mies',    color:'#5E9EFF', tier:'concern' },
+    { key:'need',   emoji:'🚨', label:'Hilfe',   color:'#FF6A3D', tier:'alarm' }
+  ];
+
+  async function setQuickMood(m){
+    var sb = getSb(), me = getMe(); if (!sb || !me) return;
+    try {
+      await sb.from('user_moods').insert({
+        user_id: me.user_id, emoji: m.emoji, label: m.label, color: m.color, tier: m.tier,
+        visibility: 'circle', expires_at: new Date(Date.now()+4*3600*1000).toISOString()
+      });
+      try { navigator.vibrate && navigator.vibrate(10); } catch(_){}
+      toast('Mood: '+m.emoji+' '+m.label);
+      refreshAll();
+    } catch(e){ toast('Fehler'); }
+  }
+
+  /* ============== Inject Tinder-Hub ============== */
+  function injectHub(){
+    var ov = $('safeplaceOv'); if (!ov) return;
+    var content = ov.querySelector('.sp-content'); if (!content) return;
+    if ($('txHub')) return;
+
+    // Header upgrade
+    var header = ov.querySelector('.sp-header');
+    if (header && !header.classList.contains('is-tx')){
+      header.classList.add('is-tx');
+      var sub = document.createElement('div');
+      sub.className = 'tx-hub-sub';
+      sub.textContent = 'Deine Crew, dein Backup, dein Status';
+      // Wrap title row + add sub
+      var title = header.querySelector('.sp-title');
+      var close = header.querySelector('.sp-close');
+      var settingsBtn = header.querySelector('.sp-settings-btn');
+      header.innerHTML = '';
+      var row = document.createElement('div');
+      row.className = 'tx-hub-head-row';
+      if (close) row.appendChild(close);
+      if (title) row.appendChild(title);
+      if (settingsBtn) row.appendChild(settingsBtn);
+      else {
+        var sb_btn = document.createElement('button');
+        sb_btn.className = 'sp-settings-btn';
+        sb_btn.title = 'Einstellungen';
+        sb_btn.innerHTML = '⚙';
+        sb_btn.addEventListener('click', function(){ if (window.bbOpenSettings) window.bbOpenSettings(); });
+        row.appendChild(sb_btn);
+      }
+      header.appendChild(row);
+      header.appendChild(sub);
+    }
+
+    var hub = document.createElement('div');
+    hub.id = 'txHub';
+    hub.innerHTML =
+      // Mood-Strip ganz oben
+      '<div class="tx-mood-strip" id="txMoodStrip"></div>'+
+      // Status-Hero (groß)
+      '<button class="tx-status-hero" id="txStatusHero">'+
+        '<div class="tx-status-hero-emoji" id="txStatusEmoji">🛡️</div>'+
+        '<div class="tx-status-hero-content">'+
+          '<div class="tx-status-hero-title" id="txStatusTitle">Du bist safe</div>'+
+          '<div class="tx-status-hero-sub" id="txStatusSub">Letzter Check vor —</div>'+
+        '</div>'+
+      '</button>'+
+      // Quick-Actions Section
+      '<div class="tx-section-title">Was machst du gerade?</div>'+
+      '<div class="tx-section-sub">Tippen = aktivieren, nochmal tippen = stoppen</div>'+
+      '<div class="tx-grid">'+
+        '<button class="tx-card var-live" id="txCardLive">'+
+          '<div class="tx-card-icon">📍</div>'+
+          '<div class="tx-card-badge"><span class="ic">·</span><span id="txLiveBadge">aus</span></div>'+
+          '<div class="tx-card-title">Live-Standort</div>'+
+          '<div class="tx-card-sub" id="txLiveSub">teilen mit Crew</div>'+
+        '</button>'+
+        '<button class="tx-card var-home" id="txCardHome">'+
+          '<div class="tx-card-icon">🏠</div>'+
+          '<div class="tx-card-badge"><span class="ic">·</span><span id="txHomeBadge">aus</span></div>'+
+          '<div class="tx-card-title">Heimweg</div>'+
+          '<div class="tx-card-sub" id="txHomeSub">in 30 min</div>'+
+        '</button>'+
+      '</div>'+
+      // Wide Check-in CTA
+      '<button class="tx-wide var-heimweg" id="txCardCheckin">'+
+        '<div class="tx-wide-emoji">✓</div>'+
+        '<div class="tx-wide-info">'+
+          '<div class="tx-wide-title">Bin sicher</div>'+
+          '<div class="tx-wide-sub" id="txCheckinSub">Sag deiner Crew kurz Bescheid</div>'+
+        '</div>'+
+        '<span class="tx-wide-cta">PINGEN</span>'+
+      '</button>'+
+      // Friends Section
+      '<div class="tx-section-title">Deine Leute</div>'+
+      '<div class="tx-section-sub" id="txPeopleSub">Freunde aus Crew, Safety-Circle und Notfall</div>'+
+      '<div class="tx-people-strip" id="txPeopleStrip"></div>'+
+      // Friends-Categories Grid
+      '<div class="tx-grid">'+
+        '<button class="tx-card var-circle" id="txCardCircle">'+
+          '<div class="tx-card-icon">🤝</div>'+
+          '<div class="tx-card-badge"><span class="ic">👥</span><span id="txCircleCount">0</span></div>'+
+          '<div class="tx-card-title">Safety-Circle</div>'+
+          '<div class="tx-card-sub">Deine engsten Leute</div>'+
+        '</button>'+
+        '<button class="tx-card var-crews" id="txCardCrews">'+
+          '<div class="tx-card-icon">🍻</div>'+
+          '<div class="tx-card-badge"><span class="ic">🍻</span><span id="txCrewsCount">0</span></div>'+
+          '<div class="tx-card-title">Crews</div>'+
+          '<div class="tx-card-sub">Gruppen für Trips</div>'+
+        '</button>'+
+        '<button class="tx-card var-emergency" id="txCardEmergency">'+
+          '<div class="tx-card-icon">📞</div>'+
+          '<div class="tx-card-badge"><span class="ic">📞</span><span id="txEmergencyCount">0</span></div>'+
+          '<div class="tx-card-title">Notfall</div>'+
+          '<div class="tx-card-sub">Telefon-Kontakte</div>'+
+        '</button>'+
+        '<button class="tx-card var-invite" id="txCardInvite">'+
+          '<div class="tx-card-icon" style="opacity:.5">+</div>'+
+          '<div class="tx-card-title">Einladen</div>'+
+          '<div class="tx-card-sub">Freunde dazu holen</div>'+
+        '</button>'+
+      '</div>';
+
+    content.appendChild(hub);
+
+    bindMoodStrip();
+    bindActions();
+    refreshAll();
+  }
+
+  function bindMoodStrip(){
+    var strip = $('txMoodStrip'); if (!strip) return;
+    strip.innerHTML = '';
+    QUICK_MOODS.forEach(function(m){
+      var b = document.createElement('button');
+      b.className = 'tx-mood-pill'; b.dataset.key = m.key;
+      b.innerHTML = '<span class="e">'+m.emoji+'</span><span>'+m.label+'</span>';
+      b.addEventListener('click', function(){ setQuickMood(m); });
+      strip.appendChild(b);
+    });
+    var clear = document.createElement('button');
+    clear.className = 'tx-mood-pill';
+    clear.innerHTML = '<span class="e">✕</span><span>Aus</span>';
+    clear.addEventListener('click', clearMood);
+    strip.appendChild(clear);
+    var more = document.createElement('button');
+    more.className = 'tx-mood-pill';
+    more.innerHTML = '<span class="e">•••</span><span>Mehr</span>';
+    more.addEventListener('click', function(){ if (window.openMoodPicker) window.openMoodPicker(); });
+    strip.appendChild(more);
+  }
+
+  async function clearMood(){
+    var sb = getSb(), me = getMe(); if (!sb || !me) return;
+    try {
+      await sb.from('user_moods').update({ expires_at: new Date().toISOString() }).eq('user_id', me.user_id).gt('expires_at', new Date().toISOString());
+      toast('Mood weg');
+      refreshAll();
+    } catch(_){}
+  }
+
+  function bindActions(){
+    $('txCardLive').addEventListener('click', toggleLive);
+    $('txCardHome').addEventListener('click', toggleHome);
+    $('txCardCheckin').addEventListener('click', doCheckin);
+    $('txStatusHero').addEventListener('click', function(){ if (window.openMoodPicker) window.openMoodPicker(); });
+    $('txCardCircle').addEventListener('click', function(){ if (window.bbOpenSettings) window.bbOpenSettings('circle'); });
+    $('txCardCrews').addEventListener('click', function(){ if (typeof window.go === 'function') { window.closeSafeplaceHub && window.closeSafeplaceHub(); setTimeout(function(){ window.go('crew', document.querySelectorAll('#navBar button')[0]); }, 300); } });
+    $('txCardEmergency').addEventListener('click', function(){ if (window.bbOpenSettings) window.bbOpenSettings('contacts'); });
+    $('txCardInvite').addEventListener('click', function(){ if (window.shareSafeplaceInvite) window.shareSafeplaceInvite(); });
+  }
+
+  /* ============== Quick-Action Toggles ============== */
+  async function toggleLive(){
+    var sb = getSb(), me = getMe(); if (!sb || !me) return;
+    try {
+      var r = await sb.from('live_locations').select('expires_at').eq('user_id', me.user_id).maybeSingle();
+      var act = r && r.data && new Date(r.data.expires_at).getTime() > Date.now();
+      if (act){ if (window.stopLiveSharing) await window.stopLiveSharing(); }
+      else { if (window.startLiveSharing) await window.startLiveSharing('circle', 4); }
+      refreshAll();
+    } catch(e){ toast('Fehler'); }
+  }
+
+  async function toggleHome(){
+    var sb = getSb(), me = getMe(); if (!sb || !me) return;
+    try {
+      var r = await sb.from('home_routes').select('id,status').eq('user_id', me.user_id).eq('status','active').maybeSingle();
+      if (r && r.data){
+        await sb.from('home_routes').update({ status:'arrived', completed_at: new Date().toISOString() }).eq('id', r.data.id);
+        toast('Sicher angekommen ✓');
+        if (window.crew && window.crew.safety) window.crew.safety.log('homeroute_arrived',{},'live_location');
+      } else {
+        var pos = await new Promise(function(res){
+          if (!navigator.geolocation) return res(null);
+          navigator.geolocation.getCurrentPosition(function(p){res({lat:p.coords.latitude,lng:p.coords.longitude})},function(){res(null)},{enableHighAccuracy:true,timeout:7000,maximumAge:30000});
+        });
+        await sb.from('home_routes').insert({
+          user_id: me.user_id, destination_label:'Zuhause',
+          start_lat: pos?pos.lat:null, start_lng: pos?pos.lng:null,
+          current_lat: pos?pos.lat:null, current_lng: pos?pos.lng:null,
+          eta_minutes: 30,
+          expected_arrival_at: new Date(Date.now()+30*60000).toISOString()
+        });
+        toast('Heimweg gestartet — 30min ETA');
+        if (window.crew && window.crew.safety) window.crew.safety.log('homeroute_started',{eta_minutes:30},'live_location');
+      }
+      refreshAll();
+    } catch(e){ toast('Fehler'); }
+  }
+
+  async function doCheckin(){
+    if (window.doSafetyCheckin) await window.doSafetyCheckin('Ich bin OK');
+    refreshAll();
+  }
+
+  /* ============== Refresh All Cards ============== */
+  async function refreshAll(){
+    var sb = getSb(), me = getMe(); if (!sb || !me) return;
+
+    // Mood + Status-Hero
+    try {
+      var rmood = await sb.from('user_moods').select('emoji,label,color,tier,expires_at').eq('user_id', me.user_id).gt('expires_at', new Date().toISOString()).order('created_at',{ascending:false}).limit(1);
+      var mood = rmood.data && rmood.data[0];
+      var rsos = await sb.from('sos_alerts').select('id,created_at').eq('user_id', me.user_id).eq('resolved', false).order('created_at',{ascending:false}).limit(1);
+      var sosActive = rsos.data && rsos.data[0];
+      var hero = $('txStatusHero'), eEmoji = $('txStatusEmoji'), eTitle = $('txStatusTitle'), eSub = $('txStatusSub');
+      if (hero){
+        hero.classList.remove('is-sos','is-paused');
+        if (sosActive){
+          hero.classList.add('is-sos');
+          eEmoji.textContent = '🆘';
+          eTitle.textContent = 'SOS aktiv';
+          eSub.textContent = 'Seit '+fmtRel(sosActive.created_at);
+        } else if (mood){
+          eEmoji.textContent = mood.emoji;
+          eTitle.textContent = mood.label;
+          eSub.textContent = 'Mood läuft '+fmtFut(mood.expires_at);
+        } else {
+          eEmoji.textContent = '🛡️';
+          eTitle.textContent = 'Du bist safe';
+          var rci = await sb.from('safety_checkins').select('created_at').eq('user_id', me.user_id).order('created_at',{ascending:false}).limit(1);
+          if (rci.data && rci.data[0]) eSub.textContent = 'Letzter Check '+fmtRel(rci.data[0].created_at);
+          else eSub.textContent = 'Tipp das Hero an für Mood';
+        }
+      }
+      // Mood-Strip Highlight
+      document.querySelectorAll('#txMoodStrip .tx-mood-pill').forEach(function(p){
+        p.classList.toggle('is-current', mood && p.dataset.key && QUICK_MOODS.find(function(qm){return qm.key === p.dataset.key && qm.emoji === mood.emoji}));
+      });
+    } catch(_){}
+
+    // Live-Action
+    try {
+      var r1 = await sb.from('live_locations').select('expires_at').eq('user_id', me.user_id).maybeSingle();
+      var liveAct = r1 && r1.data && new Date(r1.data.expires_at).getTime() > Date.now();
+      var c1 = $('txCardLive'); if (c1) c1.classList.toggle('is-active', !!liveAct);
+      var b1 = $('txLiveBadge'); if (b1) b1.textContent = liveAct ? 'an' : 'aus';
+      var s1 = $('txLiveSub'); if (s1) s1.textContent = liveAct ? ('noch '+fmtFut(r1.data.expires_at)) : 'teilen mit Crew';
+    } catch(_){}
+
+    // Heimweg-Action
+    try {
+      var r2 = await sb.from('home_routes').select('id,status,expected_arrival_at').eq('user_id', me.user_id).eq('status','active').maybeSingle();
+      var hAct = r2 && r2.data;
+      var c2 = $('txCardHome'); if (c2) c2.classList.toggle('is-active', !!hAct);
+      var b2 = $('txHomeBadge'); if (b2) b2.textContent = hAct ? 'live' : 'aus';
+      var s2 = $('txHomeSub'); if (s2) s2.textContent = hAct ? ('ETA '+fmtFut(r2.data.expected_arrival_at)) : 'in 30 min';
+      // Title swap when active
+      var t2 = c2 ? c2.querySelector('.tx-card-title') : null;
+      if (t2) t2.textContent = hAct ? 'Bin angekommen?' : 'Heimweg';
+    } catch(_){}
+
+    // Check-in last
+    try {
+      var r3 = await sb.from('safety_checkins').select('created_at').eq('user_id', me.user_id).order('created_at',{ascending:false}).limit(1);
+      var sub = $('txCheckinSub');
+      if (sub){
+        if (r3.data && r3.data[0]){
+          var diff = Date.now() - new Date(r3.data[0].created_at).getTime();
+          if (diff < 60*60000) sub.textContent = 'Letzter vor '+Math.floor(diff/60000)+'m — alles ok?';
+          else sub.textContent = 'Sag deiner Crew kurz Bescheid';
+        }
+      }
+    } catch(_){}
+
+    // Friends + Counts
+    refreshFriends();
+  }
+
+  async function refreshFriends(){
+    var sb = getSb(), me = getMe(); if (!sb || !me) return;
+    try {
+      var [r1, r2, r3] = await Promise.all([
+        sb.rpc('get_circle_with_moods'),
+        sb.from('crew_members').select('crew_id', { count: 'exact', head: false }).eq('user_id', me.user_id),
+        sb.from('emergency_contacts').select('*', { count: 'exact', head: false }).eq('user_id', me.user_id)
+      ]);
+      var circle = (r1.data || []).filter(function(m){ return m.partner_user_id; });
+      var crewsCount = r2.count || 0;
+      var ecCount = r3.count || 0;
+      $('txCircleCount').textContent = circle.length;
+      $('txCrewsCount').textContent = crewsCount;
+      $('txEmergencyCount').textContent = ecCount;
+      var sub = $('txPeopleSub');
+      if (sub){
+        var total = circle.length + crewsCount + ecCount;
+        sub.textContent = total === 0 ? 'Lade Freunde ein die die App nutzen — ihr seht euch dann live.' : (total + ' Verbindungen aus Circle, Crews und Notfall');
+      }
+      renderPeopleStrip(circle);
+    } catch(_){}
+  }
+
+  function renderPeopleStrip(members){
+    var strip = $('txPeopleStrip'); if (!strip) return;
+    strip.innerHTML = '';
+    members.slice(0, 8).forEach(function(m){
+      var c = document.createElement('div');
+      c.className = 'tx-people-card';
+      c.innerHTML =
+        '<div class="tx-people-av' + (m.active_sos_id ? ' is-sos' : '') + (m.is_paused ? ' is-paused' : '') + '">' +
+          (m.partner_photo ? '' : initials(m.partner_name)) +
+          (m.mood_emoji && !m.is_paused ? '<div class="tx-people-mood">'+m.mood_emoji+'</div>' : '') +
+        '</div>'+
+        '<div class="tx-people-name"></div>'+
+        '<div class="tx-people-status"></div>';
+      var av = c.querySelector('.tx-people-av');
+      if (m.partner_photo){ av.style.backgroundImage = 'url('+m.partner_photo+')'; }
+      c.querySelector('.tx-people-name').textContent = (m.partner_name || 'Anon').split(' ')[0];
+      var status = m.active_sos_id ? 'SOS' : m.is_paused ? 'Pause' : (m.mood_label || (m.last_checkin_at ? 'OK' : '—'));
+      c.querySelector('.tx-people-status').textContent = status;
+      c.addEventListener('click', function(){ if (window.bbOpenSettings) window.bbOpenSettings('circle'); });
+      strip.appendChild(c);
+    });
+    var add = document.createElement('div');
+    add.className = 'tx-people-add';
+    add.innerHTML = '<div class="av">+</div><div class="tx-people-name">Einladen</div><div class="tx-people-status">Freund</div>';
+    add.addEventListener('click', function(){ if (window.shareSafeplaceInvite) window.shareSafeplaceInvite(); });
+    strip.appendChild(add);
+  }
+
+  /* ============== Settings-Tab Pre-Selector ============== */
+  var origOpenSettings = window.bbOpenSettings;
+  window.bbOpenSettings = function(tab){
+    if (typeof origOpenSettings === 'function') origOpenSettings.apply(this, arguments);
+    if (!tab) return;
+    setTimeout(function(){
+      var btn = document.querySelector('#setTabs .set-tab[data-pane="'+tab+'"]');
+      if (btn) btn.click();
+    }, 200);
+  };
+
+  /* ============== Hook openSafeplaceHub ============== */
+  function wrapHub(){
+    var orig = window.openSafeplaceHub;
+    if (!orig || orig.__bbTxWrapped) return;
+    window.openSafeplaceHub = function(){
+      orig.apply(this, arguments);
+      setTimeout(injectHub, 250);
+    };
+    window.openSafeplaceHub.__bbTxWrapped = true;
+  }
+
+  /* ============== Realtime ============== */
+  function attachRT(){
+    if (!window.crew || !window.crew.safety){ setTimeout(attachRT, 1000); return; }
+    ['rt:mood','rt:sos','rt:liveloc','rt:checkin','rt:circle'].forEach(function(ev){
+      window.crew.safety.on(ev, refreshAll);
+    });
+  }
+
+  /* ============== Boot ============== */
+  function init(){
+    setTimeout(function(){
+      wrapHub();
+      attachRT();
+    }, 4000);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 1500); });
+  else setTimeout(init, 1500);
 })();</script></body></html>
