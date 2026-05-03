@@ -7909,4 +7909,588 @@
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 1500); });
   else setTimeout(init, 1500);
-})();</script></body></html>
+})();</script><style id="bb-stealth">/* ============================================================
+   BB-STEALTH — SOS-Stealth + Color-Picker + Hotspot-Fix + Audit
+   ============================================================ */
+
+/* ---------- 1. SOS Color Customization (CSS-Variablen) ---------- */
+:root{
+  --sos-c1: #FE3C72;
+  --sos-c2: #FF1F5C;
+  --sos-glow: rgba(254,60,114,.45);
+  --sos-glow-soft: rgba(254,60,114,.55);
+  --sos-glow-hard: rgba(254,60,114,.35);
+}
+body.sos-color-pink{ --sos-c1:#FE3C72; --sos-c2:#FF1F5C; --sos-glow:rgba(254,60,114,.45); --sos-glow-soft:rgba(254,60,114,.55); --sos-glow-hard:rgba(254,60,114,.35); }
+body.sos-color-red{ --sos-c1:#E11D48; --sos-c2:#B91C1C; --sos-glow:rgba(225,29,72,.45); --sos-glow-soft:rgba(225,29,72,.55); --sos-glow-hard:rgba(225,29,72,.35); }
+body.sos-color-orange{ --sos-c1:#FF6D2E; --sos-c2:#F97316; --sos-glow:rgba(255,109,46,.45); --sos-glow-soft:rgba(255,109,46,.55); --sos-glow-hard:rgba(255,109,46,.35); }
+body.sos-color-gray{ --sos-c1:#6B7280; --sos-c2:#4B5563; --sos-glow:rgba(107,114,128,.45); --sos-glow-soft:rgba(107,114,128,.55); --sos-glow-hard:rgba(107,114,128,.35); }
+body.sos-color-black{ --sos-c1:#1F2937; --sos-c2:#0B0F19; --sos-glow:rgba(31,41,55,.45); --sos-glow-soft:rgba(31,41,55,.55); --sos-glow-hard:rgba(31,41,55,.35); }
+body.sos-color-blue{ --sos-c1:#3B82F6; --sos-c2:#1E40AF; --sos-glow:rgba(59,130,246,.45); --sos-glow-soft:rgba(59,130,246,.55); --sos-glow-hard:rgba(59,130,246,.35); }
+
+/* SOS-Button + Pulse benutzen die Variablen */
+.hdr-btn.hdr-sos{
+  background:linear-gradient(135deg, var(--sos-c1) 0%, var(--sos-c2) 100%) !important;
+  box-shadow:0 4px 14px var(--sos-glow), inset 0 1px 0 rgba(255,255,255,.25), 0 0 0 0.5px rgba(0,0,0,.15) !important;
+}
+.hdr-btn.hdr-sos .sos-pulse{ box-shadow:0 0 0 0 var(--sos-glow-soft) !important; }
+.sos-active-pulse{ background:radial-gradient(circle, var(--sos-c1) 0%, var(--sos-c2) 70%) !important; }
+.priv-pill.sos{
+  border-color: var(--sos-glow-soft) !important;
+  background:linear-gradient(135deg, rgba(254,60,114,.30), rgba(254,60,114,.10)) !important;
+  box-shadow:0 4px 18px var(--sos-glow-hard) !important;
+}
+.priv-pill.sos .dot{ background: var(--sos-c1) !important; }
+
+/* ---------- 2. STEALTH-MODE — Tarn-Optik wenn aktiv & Gefahr ---------- */
+/* Wenn body.sos-stealth-active gesetzt ist, sieht man NICHTS davon dass SOS gerade läuft.
+   Der Knopf sieht aus wie ein normaler Header-Button, kein Pulse, kein Glow, kein "SOS aktiv". */
+body.sos-stealth-active .hdr-btn.hdr-sos{
+  background: rgba(255,255,255,.08) !important;
+  box-shadow: inset 0 0 0 0.5px rgba(255,255,255,.12) !important;
+  color: rgba(255,255,255,.85) !important;
+  animation: none !important;
+}
+body.sos-stealth-active .hdr-btn.hdr-sos .sos-pulse,
+body.sos-stealth-active .sos-active-pulse,
+body.sos-stealth-active .sos-active-ring,
+body.sos-stealth-active [class*="sosBeacon"],
+body.sos-stealth-active [class*="sos-beacon"]{
+  display:none !important;
+  animation:none !important;
+}
+body.sos-stealth-active .priv-pill.sos{
+  background: linear-gradient(135deg, rgba(40,200,120,.30), rgba(40,200,120,.10)) !important;
+  border-color: rgba(40,200,120,.55) !important;
+  box-shadow: 0 2px 10px rgba(40,200,120,.20) !important;
+}
+body.sos-stealth-active .priv-pill.sos .dot{
+  background:#28C878 !important;
+  animation: privPulseSoft 2s ease-in-out infinite !important;
+}
+body.sos-stealth-active .priv-pill.sos .priv-pill-text,
+body.sos-stealth-active .priv-pill.sos .ppl-text{
+  /* Pill zeigt "Sicher" statt "SOS aktiv" */
+}
+@keyframes privPulseSoft { 0%,100%{opacity:1} 50%{opacity:.6} }
+
+/* Auch alle anderen Stealth-Verstecke: Toasts, Banner, Modals während SOS */
+body.sos-stealth-active .sos-confirm-toast,
+body.sos-stealth-active .sos-status-banner,
+body.sos-stealth-active .sos-active-modal,
+body.sos-stealth-active [class*="sosToast"],
+body.sos-stealth-active .privacy-banner.sos{
+  display:none !important;
+}
+
+/* ---------- 3. SETTINGS — Stealth & Farb-Picker UI ---------- */
+.bb-stealth-section{
+  margin-top: 20px;
+  padding: 18px 16px;
+  background: rgba(255,255,255,.03);
+  border: .5px solid rgba(255,255,255,.08);
+  border-radius: 16px;
+}
+.bb-stealth-h{
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.5);
+  margin-bottom: 10px;
+}
+.bb-stealth-row{
+  display:flex; align-items:center; gap:12px;
+  padding: 10px 0;
+  border-bottom: .5px solid rgba(255,255,255,.06);
+}
+.bb-stealth-row:last-child{ border-bottom:0; }
+.bb-stealth-row-main{ flex:1; min-width:0; }
+.bb-stealth-row-title{ font-size:14px; font-weight:700; color:#fff; margin:0 0 2px; }
+.bb-stealth-row-sub{ font-size:12px; color:rgba(255,255,255,.55); margin:0; line-height:1.4; }
+.bb-toggle{
+  flex:none;
+  width:44px; height:26px;
+  background:rgba(255,255,255,.1);
+  border-radius:13px;
+  position:relative;
+  cursor:pointer;
+  transition: background .2s;
+  border:0; padding:0;
+}
+.bb-toggle::after{
+  content:'';
+  position:absolute;
+  top:3px; left:3px;
+  width:20px; height:20px;
+  border-radius:50%;
+  background:#fff;
+  transition: transform .2s, background .2s;
+}
+.bb-toggle.on{ background: linear-gradient(135deg, var(--sos-c1), var(--sos-c2)); }
+.bb-toggle.on::after{ transform: translateX(18px); }
+
+.bb-color-picker{
+  display:flex; gap:8px; flex-wrap:wrap;
+  padding: 12px 0 4px;
+}
+.bb-color-swatch{
+  width:36px; height:36px;
+  border-radius:50%;
+  cursor:pointer;
+  border:2px solid transparent;
+  position:relative;
+  transition: transform .15s;
+}
+.bb-color-swatch:hover{ transform: scale(1.08); }
+.bb-color-swatch.active{ border-color:#fff; box-shadow:0 0 0 2px rgba(255,255,255,.2); }
+.bb-color-swatch.c-pink{ background:linear-gradient(135deg,#FE3C72,#FF1F5C); }
+.bb-color-swatch.c-red{ background:linear-gradient(135deg,#E11D48,#B91C1C); }
+.bb-color-swatch.c-orange{ background:linear-gradient(135deg,#FF6D2E,#F97316); }
+.bb-color-swatch.c-gray{ background:linear-gradient(135deg,#6B7280,#4B5563); }
+.bb-color-swatch.c-black{ background:linear-gradient(135deg,#1F2937,#0B0F19); }
+.bb-color-swatch.c-blue{ background:linear-gradient(135deg,#3B82F6,#1E40AF); }
+.bb-stealth-warn{
+  margin-top: 12px;
+  padding: 10px 12px;
+  background: rgba(255,214,10,.06);
+  border: .5px solid rgba(255,214,10,.2);
+  border-radius: 10px;
+  font-size: 12px;
+  color: #FFD60A;
+  line-height: 1.45;
+}
+
+/* ---------- 4. HOTSPOT-FIX — robustere Map UI ---------- */
+.sm-map-state{
+  position:absolute; inset:0;
+  display:flex; align-items:center; justify-content:center;
+  flex-direction:column; gap:14px;
+  background:rgba(10,10,15,.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 400;
+  padding: 28px 24px;
+  text-align:center;
+  pointer-events:auto;
+}
+.sm-map-state[hidden]{ display:none !important; }
+.sm-map-state h4{ font-size:18px; font-weight:800; margin:0; color:#fff; letter-spacing:-.01em; }
+.sm-map-state p{ font-size:14px; color:rgba(255,255,255,.65); margin:0; max-width:300px; line-height:1.5; }
+.sm-map-state .sm-state-icon{
+  width:56px; height:56px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(255,255,255,.05);
+  border:.5px solid rgba(255,255,255,.1);
+}
+.sm-map-state .sm-state-icon svg{ width:28px; height:28px; color:rgba(255,255,255,.7); }
+.sm-state-actions{ display:flex; gap:10px; flex-wrap:wrap; justify-content:center; }
+.sm-state-btn{
+  padding: 10px 20px;
+  border-radius: 999px;
+  border:0;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  background: linear-gradient(135deg, #FE3C72, #FF6D2E);
+  color: #fff;
+  letter-spacing: -.01em;
+}
+.sm-state-btn.alt{
+  background: rgba(255,255,255,.06);
+  color: rgba(255,255,255,.8);
+  border: .5px solid rgba(255,255,255,.1);
+}
+.sm-state-btn:active{ transform: scale(.97); }
+
+/* Hotspot-Pin-Fix: kein Emoji, sauberer Pin */
+.hp-pin{ position:relative; transform: translate(-50%, -100%); }
+.hp-pin-marker{
+  width:34px; height:34px; border-radius:50%;
+  background: linear-gradient(135deg,#FE3C72,#FF6D2E);
+  border: 2px solid #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,.3);
+  display:flex; align-items:center; justify-content:center;
+  position:relative;
+  font-size:0;
+}
+.hp-pin-marker::before{
+  content:'';
+  width:14px; height:14px;
+  background:#fff;
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><path d='M12 22s-7-7-7-12a7 7 0 0 1 14 0c0 5-7 12-7 12z'/><circle cx='12' cy='10' r='2.5'/></svg>") no-repeat center / contain;
+  mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><path d='M12 22s-7-7-7-12a7 7 0 0 1 14 0c0 5-7 12-7 12z'/><circle cx='12' cy='10' r='2.5'/></svg>") no-repeat center / contain;
+}
+.hp-pin-marker.var-mine{ background:linear-gradient(135deg,#FFD60A,#FF6D2E); }
+.hp-pin-marker.var-private{ background:linear-gradient(135deg,#6B7280,#1F2937); }
+.hp-pin-tail{
+  position:absolute; left:50%; bottom:-7px; transform: translateX(-50%);
+  width:0; height:0;
+  border-left:6px solid transparent;
+  border-right:6px solid transparent;
+  border-top:8px solid #fff;
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,.2));
+}
+.hp-pin-count{
+  position:absolute;
+  top:-4px; right:-6px;
+  min-width:18px; height:18px;
+  padding:0 4px;
+  background:#1a161e;
+  border:1.5px solid #fff;
+  border-radius:9px;
+  font-size:10px; font-weight:800;
+  color:#fff;
+  display:flex; align-items:center; justify-content:center;
+  line-height:1;
+}
+
+/* ---------- 5. DESIGN-AUDIT — Überflüssiges weg ---------- */
+/* Doppel-Status: Activity-Log, alte SOS-Banner, Live-Loc-Indikator-Banner werden ausgeblendet */
+.lim-banner.lim-redundant,
+#hubActivityLog,
+.activity-log-section,
+.crew-vibe-header,
+.crew-weather-card,
+.daily-quest-card,
+.crew-map-mini,
+#cpInd,
+.live-loc-banner-redundant,
+.sp-compliance-banner,
+.llRadarBanner,
+.privacy-banner-old,
+.dual-privacy-display{
+  display:none !important;
+}
+/* Header bleibt OBEN */
+#appHeader{ z-index:1001 !important; position:sticky !important; top:0 !important; }
+/* Schmalere Padding-Werte für mobiler */
+@media (max-width:480px){
+  .set-card{ padding:18px 14px !important; }
+  .bb-stealth-section{ padding:14px 12px; }
+}
+</style>
+<script id="bb-stealth-js">
+/* ============================================================
+   BB-STEALTH — runtime: Profile-Load, Stealth-Anwendung, UI-Inject,
+   Hotspot-Fix, Design-Audit-Cleanup
+   ============================================================ */
+(function(){
+  'use strict';
+  if (window.__bbStealthInit) return;
+  window.__bbStealthInit = true;
+
+  var SOS_COLORS = ['pink','red','orange','gray','black','blue'];
+  var COLOR_LABELS = {
+    pink: 'Pink (Standard)',
+    red:  'Rot (Notfall-rot)',
+    orange:'Orange (Warm)',
+    gray: 'Grau (Unauffällig)',
+    black:'Schwarz (Stealth)',
+    blue: 'Blau (Ruhig)'
+  };
+
+  function $(id){ return document.getElementById(id); }
+  function applyColor(color){
+    if (SOS_COLORS.indexOf(color) === -1) color = 'pink';
+    SOS_COLORS.forEach(function(c){ document.body.classList.remove('sos-color-'+c); });
+    document.body.classList.add('sos-color-'+color);
+    try{ localStorage.setItem('bb-sos-color', color); }catch(e){}
+  }
+  function applyStealth(on){
+    document.body.classList.toggle('sos-stealth-mode-on', !!on);
+    try{ localStorage.setItem('bb-sos-stealth', on ? '1' : '0'); }catch(e){}
+  }
+  function setStealthActive(active){
+    /* Wird gesetzt wenn SOS gerade läuft UND Stealth-Mode an ist */
+    document.body.classList.toggle('sos-stealth-active', !!active);
+  }
+
+  /* Sofort aus localStorage anwenden, damit kein Flackern */
+  try{
+    var c = localStorage.getItem('bb-sos-color') || 'pink';
+    var s = localStorage.getItem('bb-sos-stealth') === '1';
+    applyColor(c);
+    applyStealth(s);
+  }catch(e){}
+
+  /* ---------- Profile aus DB nachladen + Settings binden ---------- */
+  async function loadStealthFromDB(){
+    try{
+      var sb = window.sb || window.supabase;
+      if (!sb || !sb.auth) return;
+      var u = await sb.auth.getUser();
+      var uid = u && u.data && u.data.user && u.data.user.id;
+      if (!uid) return;
+      var r = await sb.from('profiles')
+        .select('safety_sos_color,safety_sos_stealth')
+        .eq('user_id', uid)
+        .maybeSingle();
+      if (r && r.data){
+        var col = r.data.safety_sos_color || 'pink';
+        var st = !!r.data.safety_sos_stealth;
+        applyColor(col);
+        applyStealth(st);
+        if (window.ME) {
+          window.ME.safety_sos_color = col;
+          window.ME.safety_sos_stealth = st;
+        }
+      }
+    }catch(e){ console.warn('[bb-stealth] profile load failed', e); }
+  }
+
+  async function saveColor(color){
+    applyColor(color);
+    try{
+      var sb = window.sb || window.supabase;
+      if (!sb) return;
+      var u = await sb.auth.getUser();
+      var uid = u && u.data && u.data.user && u.data.user.id;
+      if (!uid) return;
+      await sb.from('profiles').update({ safety_sos_color: color }).eq('user_id', uid);
+    }catch(e){ console.warn('[bb-stealth] save color', e); }
+  }
+  async function saveStealth(on){
+    applyStealth(on);
+    try{
+      var sb = window.sb || window.supabase;
+      if (!sb) return;
+      var u = await sb.auth.getUser();
+      var uid = u && u.data && u.data.user && u.data.user.id;
+      if (!uid) return;
+      await sb.from('profiles').update({ safety_sos_stealth: !!on }).eq('user_id', uid);
+    }catch(e){ console.warn('[bb-stealth] save stealth', e); }
+  }
+
+  /* ---------- UI-Section in Privacy/Safety-Pane einfügen ---------- */
+  function buildUI(){
+    var pane = document.querySelector('#set-pane-safety, #set-pane-privacy, .set-pane.on');
+    if (!pane) return null;
+    if (pane.querySelector('.bb-stealth-section')) return pane.querySelector('.bb-stealth-section');
+
+    var stealthOn = (window.ME && window.ME.safety_sos_stealth) || (localStorage.getItem('bb-sos-stealth') === '1');
+    var color = (window.ME && window.ME.safety_sos_color) || (localStorage.getItem('bb-sos-color') || 'pink');
+
+    var sec = document.createElement('div');
+    sec.className = 'bb-stealth-section';
+    sec.innerHTML = ''+
+      '<div class="bb-stealth-h">SOS — Farbe & Stealth</div>'+
+      '<div class="bb-stealth-row">'+
+        '<div class="bb-stealth-row-main">'+
+          '<div class="bb-stealth-row-title">Stealth-Mode</div>'+
+          '<div class="bb-stealth-row-sub">Wenn an, sieht man dem Knopf NICHT an dass du SOS ausgelöst hast. Kein Pulsieren, keine Farbe, kein Banner. Hilfe wird trotzdem geholt.</div>'+
+        '</div>'+
+        '<button class="bb-toggle '+(stealthOn?'on':'')+'" id="bbStealthTog" type="button" aria-label="Stealth Mode"></button>'+
+      '</div>'+
+      '<div class="bb-stealth-row">'+
+        '<div class="bb-stealth-row-main">'+
+          '<div class="bb-stealth-row-title">SOS-Farbe</div>'+
+          '<div class="bb-stealth-row-sub">Wähle, wie dein SOS-Knopf aussehen soll. Funktioniert immer gleich — du wählst nur die Optik.</div>'+
+          '<div class="bb-color-picker" id="bbColorPicker">'+
+            SOS_COLORS.map(function(c){
+              return '<div class="bb-color-swatch c-'+c+(c===color?' active':'')+'" data-c="'+c+'" title="'+COLOR_LABELS[c]+'"></div>';
+            }).join('')+
+          '</div>'+
+        '</div>'+
+      '</div>'+
+      '<div class="bb-stealth-warn">Stealth-Mode hilft in echten Gefahrensituationen — wenn jemand auf dein Handy schaut, sieht er nichts. Trotzdem werden alle SOS-Aktionen ausgeführt: Standort, Push an Notfall-Kontakte, Audit-Log.</div>';
+    pane.appendChild(sec);
+
+    sec.querySelector('#bbStealthTog').addEventListener('click', function(){
+      var tog = this;
+      var on = !tog.classList.contains('on');
+      tog.classList.toggle('on', on);
+      saveStealth(on);
+    });
+    sec.querySelectorAll('.bb-color-swatch').forEach(function(sw){
+      sw.addEventListener('click', function(){
+        sec.querySelectorAll('.bb-color-swatch').forEach(function(s){ s.classList.remove('active'); });
+        sw.classList.add('active');
+        saveColor(sw.getAttribute('data-c'));
+      });
+    });
+    return sec;
+  }
+
+  /* Beobachter: jedes Mal wenn die Settings-Modal geöffnet wird, Section sicherstellen */
+  function ensureUIWhenOpen(){
+    document.addEventListener('click', function(e){
+      var t = e.target;
+      if (!t) return;
+      var openers = ['#openSettings', '.open-settings', '[data-open-settings]', '.priv-pill', '.hdr-btn-settings'];
+      var match = openers.some(function(sel){ try{ return t.closest(sel); }catch(_){ return false; } });
+      if (match){ setTimeout(buildUI, 200); }
+    });
+    /* Direkt beim Mount versuchen */
+    setTimeout(buildUI, 1500);
+    setTimeout(buildUI, 4000);
+  }
+
+  /* ---------- Hook: SOS-Trigger erkennen, Stealth aktivieren ---------- */
+  function hookSosTrigger(){
+    /* Beobachte ob priv-pill in 'sos'-State wechselt */
+    var pill = document.querySelector('.priv-pill');
+    if (!pill) { setTimeout(hookSosTrigger, 1500); return; }
+    var obs = new MutationObserver(function(){
+      var sosOn = pill.classList.contains('sos');
+      var stealthOn = document.body.classList.contains('sos-stealth-mode-on');
+      setStealthActive(sosOn && stealthOn);
+      /* Im Stealth: Pill-Text auf "Sicher" setzen, dot grün */
+      if (sosOn && stealthOn){
+        var txt = pill.querySelector('.priv-pill-text, .ppl-text, span');
+        if (txt && txt.textContent !== 'Sicher') txt.textContent = 'Sicher';
+      }
+    });
+    obs.observe(pill, { attributes:true, attributeFilter:['class'], subtree:true, childList:true, characterData:true });
+  }
+
+  /* ---------- Hotspot-Fix: Robustere Map-Initialisierung + Empty-States ---------- */
+  function fixHotspots(){
+    var mapEl = document.getElementById('spotsMap');
+    if (!mapEl) return;
+    /* State-Layer einfügen wenn fehlt */
+    var parent = mapEl.parentElement;
+    if (parent && !parent.querySelector('.sm-map-state')){
+      parent.style.position = parent.style.position || 'relative';
+      var state = document.createElement('div');
+      state.className = 'sm-map-state';
+      state.id = 'spotsMapState';
+      state.hidden = true;
+      state.innerHTML = ''+
+        '<div class="sm-state-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s-7-7-7-12a7 7 0 0 1 14 0c0 5-7 12-7 12z"/><circle cx="12" cy="10" r="3"/></svg></div>'+
+        '<h4 id="smStateTitle">Karte lädt …</h4>'+
+        '<p id="smStateMsg">Wir suchen deinen Standort und laden Hotspots in der Nähe.</p>'+
+        '<div class="sm-state-actions" id="smStateActions"></div>';
+      parent.appendChild(state);
+    }
+    showState('Karte lädt …', 'Standort wird ermittelt …', []);
+    /* Versuche init mit Retry */
+    var tries = 0;
+    var maxTries = 12;
+    function tick(){
+      tries++;
+      var ok = false;
+      try{
+        if (typeof window.L === 'undefined'){
+          showState('Karte lädt …', 'Leaflet wird geladen …', []);
+        } else if (!mapEl.offsetWidth || !mapEl.offsetHeight){
+          showState('Karte lädt …', 'Karte wird vorbereitet …', []);
+        } else {
+          ok = true;
+        }
+      }catch(e){}
+      if (ok){
+        try{
+          if (typeof window.initSpotsMap === 'function'){
+            window.initSpotsMap();
+            requestGPS();
+          } else {
+            showState('Hotspots nicht verfügbar', 'Die Karten-Funktion konnte nicht starten. Lade die App neu.', [{label:'Neu laden', action:function(){ location.reload(); }}]);
+          }
+        }catch(err){
+          console.warn('[bb-stealth] initSpotsMap failed', err);
+          showState('Karte konnte nicht starten', 'Bitte versuche es erneut.', [{label:'Erneut versuchen', action:function(){ tries=0; tick(); }}]);
+        }
+      } else if (tries < maxTries){
+        setTimeout(tick, 500);
+      } else {
+        showState('Karte lädt zu lange', 'Verbindung prüfen oder Seite neu laden.', [
+          {label:'Neu laden', action:function(){ location.reload(); }},
+          {label:'Erneut versuchen', alt:true, action:function(){ tries=0; tick(); }}
+        ]);
+      }
+    }
+    tick();
+  }
+  function showState(title, msg, actions){
+    var s = document.getElementById('spotsMapState'); if (!s) return;
+    var t = document.getElementById('smStateTitle');
+    var m = document.getElementById('smStateMsg');
+    var a = document.getElementById('smStateActions');
+    if (t) t.textContent = title;
+    if (m) m.textContent = msg;
+    if (a){
+      a.innerHTML = '';
+      (actions||[]).forEach(function(act){
+        var b = document.createElement('button');
+        b.className = 'sm-state-btn' + (act.alt ? ' alt' : '');
+        b.textContent = act.label;
+        b.addEventListener('click', act.action);
+        a.appendChild(b);
+      });
+    }
+    s.hidden = false;
+  }
+  function hideState(){
+    var s = document.getElementById('spotsMapState'); if (s) s.hidden = true;
+  }
+  function requestGPS(){
+    if (!navigator.geolocation){
+      showState('Standort nicht verfügbar', 'Dein Browser unterstützt keine Standort-Erkennung.', []);
+      return;
+    }
+    showState('Standort wird gesucht …', 'Bitte erlaube den Zugriff falls dein Browser fragt.', []);
+    navigator.geolocation.getCurrentPosition(
+      function(pos){
+        window.userLat = pos.coords.latitude;
+        window.userLng = pos.coords.longitude;
+        hideState();
+        try{
+          if (typeof window.loadHotspots === 'function') window.loadHotspots();
+          if (typeof window.bbMap !== 'undefined' && window.bbMap && window.bbMap.setView){
+            window.bbMap.setView([pos.coords.latitude, pos.coords.longitude], 14);
+          }
+        }catch(e){}
+      },
+      function(err){
+        var msg = 'Standort wurde nicht freigegeben.';
+        if (err.code === 1) msg = 'Du hast den Standort-Zugriff abgelehnt. Erlaube ihn in den Browser-Einstellungen um Hotspots zu sehen.';
+        else if (err.code === 2) msg = 'GPS nicht verfügbar. Versuche es draußen oder erneut.';
+        else if (err.code === 3) msg = 'Standort-Suche dauert zu lange.';
+        showState('Standort blockiert', msg, [
+          {label:'Erneut versuchen', action: requestGPS},
+          {label:'Ohne GPS laden', alt:true, action: function(){
+            window.userLat = window.userLat || 48.137; /* München fallback */
+            window.userLng = window.userLng || 11.575;
+            hideState();
+            if (typeof window.loadHotspots === 'function') window.loadHotspots();
+          }}
+        ]);
+      },
+      { enableHighAccuracy:true, timeout:15000, maximumAge:60000 }
+    );
+  }
+
+  /* Wenn Spots-Tab geöffnet wird, Fix anwenden */
+  function watchSpotsTab(){
+    document.addEventListener('click', function(e){
+      var t = e.target;
+      if (!t) return;
+      var triggers = ['[data-tab="spots"]', '.tab-spots', '#tabSpots', '[data-screen="spots"]'];
+      var hit = triggers.some(function(sel){ try{ return t.closest(sel); }catch(_){ return false; } });
+      if (hit){
+        setTimeout(fixHotspots, 250);
+        setTimeout(fixHotspots, 1200);
+      }
+    });
+    /* Auch beim Mount falls Spots default open ist */
+    setTimeout(function(){
+      if (document.getElementById('spotsMap')) fixHotspots();
+    }, 2500);
+  }
+
+  /* ---------- Init ---------- */
+  function init(){
+    loadStealthFromDB();
+    ensureUIWhenOpen();
+    hookSosTrigger();
+    watchSpotsTab();
+    /* Expose für Debug */
+    window.bbStealth = { applyColor: applyColor, applyStealth: applyStealth, fixHotspots: fixHotspots };
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+
+</body></html>
