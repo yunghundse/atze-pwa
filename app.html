@@ -7036,4 +7036,72 @@
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 1500); });
   else setTimeout(init, 1500);
+})();</script><style id="bb-radar-replace">/* Radar-Screen komplett aushebeln — alle Inhalte hidden, screen-radar selbst hidden */
+#screen-radar{display:none!important}
+#screen-radar.active{display:none!important}
+
+/* Verstecke die alte Live-Loc-Banner die im Radar-Screen sass */
+#llRadarBanner{display:none!important}
+
+/* Verstecke alte Radar-Sub-Elemente die in safety-bus events haengen */
+#screen-radar *{display:none!important}
+
+/* Compliance-Indikator aus bb-bridge der oben rechts auf Radar war — der ist jetzt im SafePlace-Modal selbst */
+#cpInd{display:none!important}
+
+/* SafePlace-Modal: wenn Safe-Tab aktiv, immer voll sichtbar ohne Backdrop-Verdunkelung */
+.sp-ov.is-tab{background:#06050a}
+.sp-ov.is-tab .sp-backdrop{display:none}
+.sp-ov.is-tab .sp-card{transform:translateY(0);opacity:1;border-radius:0;top:0;left:0;right:0;bottom:0;inset:0;height:100vh;padding-top:max(20px,env(safe-area-inset-top,20px));padding-bottom:max(120px,calc(env(safe-area-inset-bottom,0px) + 100px))}
+.sp-ov.is-tab .sp-close{display:none}
+@media (min-width:600px){.sp-ov.is-tab .sp-card{max-width:none;margin-left:0;border-radius:0;top:0;bottom:0;height:100vh}}</style><script id="bb-radar-replace-js">/* Radar-Tab macht SafePlace zum Tab-Content (nicht Modal-over-anderes-Screen) */
+(function(){
+  function getMe(){ return (window.ME && window.ME.user_id) ? window.ME : null; }
+
+  function ensureInit(){
+    if (typeof window.go !== 'function'){ setTimeout(ensureInit, 500); return; }
+    // Re-wrap go() um die Tab-Variante zu liefern
+    var prevGo = window.go;
+    window.go = function(name, btn){
+      if (name === 'radar'){
+        // Nav-Active markieren
+        document.querySelectorAll('#navBar button').forEach(function(b){ b.classList.remove('active'); });
+        if (btn) btn.classList.add('active');
+        // Alle Screens deaktivieren
+        document.querySelectorAll('.scr').forEach(function(s){ s.classList.remove('active'); });
+        // SafePlace als Tab markieren + öffnen
+        var ov = document.getElementById('safeplaceOv');
+        if (ov) ov.classList.add('is-tab');
+        if (typeof window.openSafeplaceHub === 'function') window.openSafeplaceHub();
+        // Auto-trigger Mood/Circle/Status refresh
+        try { if (window.refreshMyMoodCard) window.refreshMyMoodCard(); } catch(_){}
+        try { if (window.loadMySafetyCircle) window.loadMySafetyCircle(); } catch(_){}
+        return;
+      }
+      // Bei anderen Tabs: SafePlace-Modal schließen + is-tab entfernen
+      var ov = document.getElementById('safeplaceOv');
+      if (ov && ov.classList.contains('is-tab')){
+        ov.classList.remove('is-tab');
+        ov.classList.remove('show');
+      }
+      return prevGo.apply(this, arguments);
+    };
+  }
+
+  function init(){
+    setTimeout(ensureInit, 5500);
+    // Defensive: nach Boot, wenn jemand auf Safe-Tab default aktiv hatte, modal öffnen
+    setTimeout(function(){
+      var activeBtn = document.querySelector('#navBar button.active');
+      if (activeBtn && (activeBtn.getAttribute('onclick') || '').indexOf("'radar'") >= 0){
+        if (typeof window.openSafeplaceHub === 'function'){
+          var ov = document.getElementById('safeplaceOv');
+          if (ov) ov.classList.add('is-tab');
+          window.openSafeplaceHub();
+        }
+      }
+    }, 7000);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 2000); });
+  else setTimeout(init, 2000);
 })();</script></body></html>
