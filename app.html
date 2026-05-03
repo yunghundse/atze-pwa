@@ -6630,4 +6630,410 @@
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 1500); });
   else setTimeout(init, 1500);
+})();</script><script id="bb-refactor-pre">
+(function(){
+  if (typeof window.L === 'undefined') { setTimeout(arguments.callee, 500); return; }
+  var origMap = window.L.map;
+  if (origMap.__bbWrapped) return;
+  window.L.map = function(el, opts){
+    var m = origMap(el, opts);
+    try {
+      if (el && el.id === 'spotsMap') window.__bbSpotsMap = m;
+    } catch(_){}
+    return m;
+  };
+  for (var k in origMap) window.L.map[k] = origMap[k];
+  window.L.map.__bbWrapped = true;
+})();
+</script><style id="bb-refactor">/* ============================================================
+ * Nav-Refactor + Crew-Hub Cleanup
+ * ============================================================ */
+
+/* === 1. BOTTOM-NAV === */
+/* Spots-Label hidden (nur Icon) */
+#navBar button[onclick*="'spots'"] span:last-child{display:none!important}
+#navBar button[onclick*="'spots'"]{justify-content:center}
+
+/* Radar-Tab wird visuell zum SafePlace-Tab umgebaut (Icon + Label) */
+#navBar button[onclick*="'radar'"] span:last-child{display:none!important}
+#navBar button[onclick*="'radar'"]::after{content:'Safe';position:absolute;bottom:7px;left:50%;transform:translateX(-50%);font-size:10px;font-weight:600;color:inherit;letter-spacing:.2px}
+#navBar button[onclick*="'radar'"]{flex-direction:column;justify-content:center;position:relative}
+
+/* === 2. CREW-HUB CLEANUP === */
+/* Map raus */
+#screen-crew #crewMap,
+#screen-crew .crew-map-wrap,
+#screen-crew .map-full,
+#screen-crew .map-fade{display:none!important}
+
+/* Tages-Quest raus */
+#screen-crew .v108-daily-bonus,
+#screen-crew .daily-quest,
+#screen-crew .quest-card,
+#screen-crew .v102-daily,
+#screen-crew [class*="quest"]{display:none!important}
+
+/* Vibe-Header raus */
+#screen-crew .vibe-header,
+#screen-crew .v107-vibe,
+#screen-crew .crew-vibe,
+#screen-crew [class*="vibe-hd"],
+#screen-crew .crew-mood-hero{display:none!important}
+
+/* Standort + Wetter weg */
+#screen-crew .crew-loc,
+#screen-crew .weather,
+#screen-crew .weather-card,
+#screen-crew .v105-weather,
+#screen-crew .crew-weather,
+#screen-crew [class*="weather"]:not([class*="show"]){display:none!important}
+#screen-crew .crew-location,
+#screen-crew .crew-city{display:none!important}
+
+/* === 3. FRIENDS/CREW WALL TOGGLE im Crew-Hub === */
+.fw-toggle{display:flex;gap:0;padding:4px;background:rgba(255,255,255,.04);border-radius:14px;margin:14px 0 12px}
+.fw-toggle button{flex:1;padding:10px 14px;border:0;border-radius:10px;background:transparent;color:rgba(255,255,255,.55);font-size:13px;font-weight:700;cursor:pointer;-webkit-tap-highlight-color:transparent;display:flex;align-items:center;justify-content:center;gap:6px;font-family:inherit}
+.fw-toggle button.on{background:linear-gradient(135deg,#FE3C72,#FF1F5C);color:#fff;box-shadow:0 4px 12px rgba(254,60,114,.35)}
+
+.fw-section{padding:0 14px 24px}
+.fw-composer{display:flex;gap:8px;margin-bottom:14px;align-items:flex-end;background:rgba(255,255,255,.04);padding:10px;border-radius:16px;border:.5px solid rgba(255,255,255,.06)}
+.fw-composer textarea{flex:1;padding:8px 10px;background:transparent;border:0;color:#fff;font-size:13.5px;font-family:inherit;line-height:1.4;min-height:36px;max-height:120px;resize:none;outline:0}
+.fw-composer textarea::placeholder{color:rgba(255,255,255,.4)}
+.fw-composer button{flex:none;padding:8px 14px;border:0;border-radius:10px;background:linear-gradient(135deg,#FE3C72,#FF1F5C);color:#fff;font-size:12px;font-weight:800;cursor:pointer;letter-spacing:.4px;text-transform:uppercase}
+.fw-composer button:disabled{opacity:.4;background:rgba(255,255,255,.08)}
+.fw-feed{display:flex;flex-direction:column;gap:8px}
+.fw-post{display:flex;gap:10px;padding:12px 14px;background:rgba(255,255,255,.04);border:.5px solid rgba(255,255,255,.06);border-radius:14px}
+.fw-post-av{flex:none;width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#FE3C72,#BF5AF2);background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:12px}
+.fw-post-body{flex:1;min-width:0}
+.fw-post-head{display:flex;align-items:baseline;gap:8px;margin-bottom:3px}
+.fw-post-name{font-size:13px;font-weight:700;color:#fff}
+.fw-post-time{font-size:10.5px;color:rgba(255,255,255,.4)}
+.fw-post-content{font-size:13.5px;color:rgba(255,255,255,.85);line-height:1.45;word-break:break-word}
+.fw-empty{padding:30px 16px;text-align:center;color:rgba(255,255,255,.45);font-size:13px}
+.fw-empty .em{font-size:42px;margin-bottom:8px}
+
+/* === 4. "Neue Leute" Button → Spots === */
+#screen-crew .crew-discover-cta,
+#screen-crew .v107-newpeople-btn{display:none!important}
+.fw-spots-cta{margin:14px 14px 0;padding:14px 16px;background:linear-gradient(135deg,#FE3C72,#FF1F5C);border:0;border-radius:18px;color:#fff;font-size:13px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px;box-shadow:0 8px 22px rgba(254,60,114,.4);width:calc(100% - 28px);font-family:inherit;-webkit-tap-highlight-color:transparent}
+.fw-spots-cta:active{transform:scale(.98)}
+.fw-spots-cta-info{flex:1;text-align:left}
+.fw-spots-cta-info .l{display:block;font-size:14px;font-weight:900;letter-spacing:-.2px;text-transform:none;margin-bottom:2px}
+.fw-spots-cta-info .s{display:block;font-size:11.5px;font-weight:500;color:rgba(255,255,255,.85);letter-spacing:0;text-transform:none}
+.fw-spots-cta-emoji{flex:none;font-size:30px;line-height:1}
+
+/* === 5. Compliance-Indikator auf Spots-Map === */
+.sp-compliance-banner{position:absolute;left:14px;right:14px;bottom:max(120px,calc(env(safe-area-inset-bottom,0px) + 110px));z-index:55;display:flex;align-items:center;gap:10px;padding:10px 14px;background:linear-gradient(135deg,rgba(20,18,26,.92),rgba(30,28,36,.86));-webkit-backdrop-filter:blur(28px);backdrop-filter:blur(28px);border-radius:14px;border:.5px solid rgba(254,60,114,.32);box-shadow:0 10px 30px rgba(0,0,0,.4);font-size:11.5px;color:#fff;line-height:1.35;max-width:560px;margin:0 auto}
+.sp-compliance-banner .ic{flex:none;font-size:18px;line-height:1}
+.sp-compliance-banner .body{flex:1}
+.sp-compliance-banner strong{display:block;font-weight:800;font-size:12px}
+.sp-compliance-banner .sub{color:rgba(255,255,255,.6);font-size:10.5px;margin-top:1px}
+.sp-compliance-banner.hidden{display:none}
+
+/* Crew-Member-Pin auf Spots-Map */
+.sp-crew-pin{position:relative}
+.sp-crew-pin-wrap{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#FE3C72,#BF5AF2);background-size:cover;background-position:center;border:2.5px solid #fff;box-shadow:0 4px 12px rgba(0,0,0,.4),0 0 0 3px rgba(254,60,114,.18);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:11px}
+.sp-crew-pin-mood{position:absolute;bottom:-4px;right:-4px;width:18px;height:18px;border-radius:50%;background:#1a161e;border:2px solid #1a161e;display:flex;align-items:center;justify-content:center;font-size:10px}</style><script id="bb-refactor-js">/* ============================================================
+ * Nav-Refactor + Crew-Hub-Cleanup + Friends-Wall + Spots-Crew-Pins
+ * ============================================================ */
+(function(){
+  function $(id){ return document.getElementById(id); }
+  function getSb(){ return window.sb || null; }
+  function getMe(){ return (window.ME && window.ME.user_id) ? window.ME : null; }
+  function toast(m){ try{ if (typeof window.toast === 'function') return window.toast(m); }catch(_){} }
+  function fmtRel(iso){ try{var d=new Date(iso);var dif=Date.now()-d.getTime();var s=Math.floor(dif/1000);if(s<60)return 'gerade';var m=Math.floor(s/60);if(m<60)return m+'m';var h=Math.floor(m/60);if(h<24)return h+'h';return Math.floor(h/24)+'T';}catch(_){return ''}}
+  function initials(n){if(!n)return'?';return n.trim().split(/\s+/).slice(0,2).map(function(p){return p[0];}).join('').toUpperCase();}
+
+  /* ============== 1. Radar-Tab → SafePlace ============== */
+  // Override go('radar') → öffnet SafePlace-Hub statt Radar-Map
+  function rebindRadarTab(){
+    if (typeof window.go !== 'function') return;
+    if (window.go.__bbRefactored) return;
+    var orig = window.go;
+    window.go = function(name, btn){
+      if (name === 'radar'){
+        // Statt Radar-Screen → SafePlace-Hub öffnen
+        document.querySelectorAll('#navBar button').forEach(function(b){ b.classList.remove('active'); });
+        if (btn) btn.classList.add('active');
+        // Ein "anderer" Screen muss aktiv sein für die App-Logic
+        document.querySelectorAll('.scr').forEach(function(s){ s.classList.remove('active'); });
+        var screenCrew = document.getElementById('screen-crew');
+        if (screenCrew) screenCrew.classList.add('active');
+        // Hub öffnen
+        if (typeof window.openSafeplaceHub === 'function') window.openSafeplaceHub();
+        return;
+      }
+      return orig.apply(this, arguments);
+    };
+    window.go.__bbRefactored = true;
+  }
+
+  /* ============== 2. Friends/Crew-Wall Toggle im Crew-Hub ============== */
+  var currentWallTab = 'crew';
+
+  function injectWallToggle(){
+    var crewScreen = document.getElementById('screen-crew');
+    if (!crewScreen) return;
+    if ($('fwToggle')) return;
+    // Spots-CTA injecten ganz oben
+    if (!$('fwSpotsCta')){
+      var cta = document.createElement('button');
+      cta.id = 'fwSpotsCta';
+      cta.className = 'fw-spots-cta';
+      cta.innerHTML =
+        '<div class="fw-spots-cta-info"><span class="l">Neue Leute kennenlernen</span><span class="s">Live-Spots in deiner Nähe entdecken</span></div>'+
+        '<div class="fw-spots-cta-emoji">📍</div>';
+      cta.addEventListener('click', function(){
+        var spotBtn = document.querySelector('#navBar button[onclick*="\'spots\'"]');
+        if (spotBtn) spotBtn.click();
+      });
+      crewScreen.insertBefore(cta, crewScreen.firstChild);
+    }
+    // Toggle Tabs einfügen
+    var toggle = document.createElement('div');
+    toggle.id = 'fwToggle'; toggle.className = 'fw-toggle';
+    toggle.innerHTML =
+      '<button class="on" data-wall="crew">🍻 Crew-Wall</button>'+
+      '<button data-wall="friends">🤝 Freunde</button>';
+    crewScreen.insertBefore(toggle, crewScreen.children[1]); // nach CTA
+
+    var section = document.createElement('div');
+    section.id = 'fwSection'; section.className = 'fw-section';
+    section.innerHTML =
+      '<div class="fw-composer"><textarea id="fwInput" placeholder="Was geht?" maxlength="500"></textarea><button id="fwPostBtn" disabled>Posten</button></div>'+
+      '<div class="fw-feed" id="fwFeed"></div>';
+    crewScreen.insertBefore(section, toggle.nextSibling);
+
+    bindWallToggle();
+    bindComposer();
+    loadCurrentWall();
+  }
+
+  function bindWallToggle(){
+    document.querySelectorAll('#fwToggle button').forEach(function(b){
+      b.addEventListener('click', function(){
+        document.querySelectorAll('#fwToggle button').forEach(function(x){x.classList.remove('on');});
+        b.classList.add('on');
+        currentWallTab = b.dataset.wall;
+        loadCurrentWall();
+      });
+    });
+  }
+
+  function bindComposer(){
+    var inp = $('fwInput'), btn = $('fwPostBtn');
+    if (!inp || !btn) return;
+    inp.addEventListener('input', function(){ btn.disabled = !inp.value.trim(); });
+    btn.addEventListener('click', postNow);
+    inp.addEventListener('keydown', function(e){ if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) postNow(); });
+  }
+
+  async function postNow(){
+    var sb = getSb(), me = getMe(); if (!sb || !me) return;
+    var inp = $('fwInput'); var content = (inp.value || '').trim();
+    if (!content) return;
+    var btn = $('fwPostBtn'); btn.disabled = true;
+    try {
+      if (currentWallTab === 'crew'){
+        var crewId = (typeof window.getActiveCrewId === 'function') ? window.getActiveCrewId() : null;
+        if (!crewId){ toast('Keine aktive Crew'); btn.disabled = false; return; }
+        await sb.from('crew_posts').insert({ crew_id: crewId, user_id: me.user_id, content: content });
+      } else {
+        await sb.from('friend_posts').insert({ user_id: me.user_id, content: content });
+      }
+      inp.value = '';
+      if (window.crew && window.crew.safety) window.crew.safety.log('wall_posted', { tab: currentWallTab }, 'data');
+      loadCurrentWall();
+    } catch(e){ toast('Konnte nicht posten'); }
+    btn.disabled = false;
+  }
+
+  async function loadCurrentWall(){
+    var sb = getSb(), me = getMe(); if (!sb || !me) return;
+    var feed = $('fwFeed'); if (!feed) return;
+    feed.innerHTML = '<div class="fw-empty">Lade...</div>';
+    try {
+      var posts = [], userIdsToFetch = [];
+      if (currentWallTab === 'crew'){
+        var crewId = (typeof window.getActiveCrewId === 'function') ? window.getActiveCrewId() : null;
+        if (!crewId){ feed.innerHTML = '<div class="fw-empty"><div class="em">🍻</div>Trete einer Crew bei um die Wall zu sehen.</div>'; return; }
+        var r = await sb.from('crew_posts').select('id,user_id,content,created_at').eq('crew_id', crewId).gt('expires_at', new Date().toISOString()).order('created_at',{ascending:false}).limit(50);
+        posts = r.data || [];
+        userIdsToFetch = posts.map(function(p){ return p.user_id; });
+      } else {
+        var r2 = await sb.rpc('get_friend_feed');
+        posts = (r2.data || []).map(function(p){ return { id:p.id, user_id:p.user_id, content:p.content, created_at:p.created_at, _name:p.user_name, _photo:p.user_photo }; });
+      }
+      var profMap = {};
+      if (currentWallTab === 'crew' && userIdsToFetch.length){
+        var pr = await sb.from('profiles').select('user_id,name,photo_url').in('user_id', Array.from(new Set(userIdsToFetch)));
+        (pr.data || []).forEach(function(p){ profMap[p.user_id] = p; });
+      }
+      if (!posts.length){
+        var emoji = currentWallTab === 'crew' ? '🍻' : '🤝';
+        var msg = currentWallTab === 'crew' ? 'Noch keine Crew-Posts. Sei der erste!' : 'Noch keine Friend-Posts. Lade Safety-Circle-Member ein damit du was siehst.';
+        feed.innerHTML = '<div class="fw-empty"><div class="em">'+emoji+'</div>'+msg+'</div>';
+        return;
+      }
+      feed.innerHTML = '';
+      posts.forEach(function(p){
+        var pf = (currentWallTab === 'crew') ? (profMap[p.user_id] || {}) : { name:p._name, photo_url:p._photo };
+        var item = document.createElement('div'); item.className = 'fw-post';
+        item.innerHTML =
+          '<div class="fw-post-av"></div>'+
+          '<div class="fw-post-body"><div class="fw-post-head"><span class="fw-post-name"></span><span class="fw-post-time"></span></div><div class="fw-post-content"></div></div>';
+        var av = item.querySelector('.fw-post-av');
+        if (pf.photo_url){ av.style.backgroundImage = 'url('+pf.photo_url+')'; }
+        else av.textContent = initials(pf.name);
+        item.querySelector('.fw-post-name').textContent = pf.name || 'Anon';
+        item.querySelector('.fw-post-time').textContent = fmtRel(p.created_at);
+        item.querySelector('.fw-post-content').textContent = p.content;
+        feed.appendChild(item);
+      });
+    } catch(e){ feed.innerHTML = '<div class="fw-empty">Fehler beim Laden</div>'; }
+  }
+
+  /* ============== 3. Spots-Map: Crew-Member-Pins zusätzlich ============== */
+  var crewPinsOnSpots = {};
+
+  async function renderCrewMembersOnSpots(){
+    if (typeof window.L === 'undefined') return;
+    // Try to find spots map instance
+    var sMap = null;
+    try {
+      // The spots map is initialized in bb-spots; we access via a reference
+      // Use the global window flag if set, else look for the leaflet container element
+      sMap = window.__bbSpotsMap || null;
+      if (!sMap){
+        // Try to find map by searching div#spotsMap leaflet ID
+        var el = document.getElementById('spotsMap');
+        if (el && el._leaflet_id){
+          // we can't easily access map from here; skip
+        }
+      }
+    } catch(_){}
+    if (!sMap) return;
+
+    var sb = getSb(); if (!sb) return;
+    try {
+      var r = await sb.rpc('get_circle_live_locations');
+      var members = r.data || [];
+      var seen = {};
+      members.forEach(function(m){
+        seen[m.user_id] = true;
+        var html =
+          '<div class="sp-crew-pin"><div class="sp-crew-pin-wrap" style="' +
+            (m.photo_url ? 'background-image:url('+m.photo_url+')' : '') +
+          '">' + (m.photo_url ? '' : initials(m.name)) + '</div>' +
+          (m.mood_emoji ? '<div class="sp-crew-pin-mood">'+m.mood_emoji+'</div>' : '') +
+          '</div>';
+        var icon = window.L.divIcon({ html: html, className: '', iconSize: [42, 42], iconAnchor: [21, 21] });
+        if (crewPinsOnSpots[m.user_id]){
+          try { crewPinsOnSpots[m.user_id].setLatLng([m.lat, m.lng]); } catch(_){}
+        } else {
+          var mk = window.L.marker([m.lat, m.lng], { icon: icon, zIndexOffset: 800 }).addTo(sMap);
+          mk.bindPopup('<div style="min-width:120px;color:#000"><strong>'+(m.name||'')+'</strong><br><span style="font-size:11px">'+(m.mood_emoji||'')+' '+(m.mood_label||'')+'</span></div>');
+          crewPinsOnSpots[m.user_id] = mk;
+        }
+      });
+      Object.keys(crewPinsOnSpots).forEach(function(uid){
+        if (!seen[uid]){ try { sMap.removeLayer(crewPinsOnSpots[uid]); } catch(_){}; delete crewPinsOnSpots[uid]; }
+      });
+    } catch(_){}
+  }
+
+  /* ============== 4. Compliance-Banner auf Spots ============== */
+  function ensureComplianceBanner(){
+    var spots = document.getElementById('screen-spots'); if (!spots) return;
+    if ($('spCompBanner')) return;
+    var b = document.createElement('div');
+    b.id = 'spCompBanner'; b.className = 'sp-compliance-banner hidden';
+    b.innerHTML = '<span class="ic">🛡️</span><div class="body"><strong>Du teilst gerade Live-Standort</strong><span class="sub">Sichtbar für deinen Safety-Circle. Stop unten links.</span></div>';
+    spots.appendChild(b);
+  }
+
+  async function refreshComplianceBanner(){
+    ensureComplianceBanner();
+    var b = $('spCompBanner'); if (!b) return;
+    var sb = getSb(), me = getMe(); if (!sb || !me){ b.classList.add('hidden'); return; }
+    try {
+      var r = await sb.from('live_locations').select('expires_at').eq('user_id', me.user_id).maybeSingle();
+      var act = r && r.data && new Date(r.data.expires_at).getTime() > Date.now();
+      b.classList.toggle('hidden', !act);
+    } catch(_){}
+  }
+
+  /* ============== 5. Spots-Map Reference exportieren ============== */
+  // Wir hooken in den Spots-Init um die Map-Referenz zu kapturen
+  function captureSpotsMap(){
+    var origInit = window.bbCreateHotspot;
+    if (!origInit) return;
+    // Different approach: poll for the leaflet instance via DOM
+    setInterval(function(){
+      var el = document.getElementById('spotsMap');
+      if (el && el._leaflet_id && !window.__bbSpotsMap){
+        // Find the L.Map instance attached
+        try {
+          for (var k in window){
+            // suchen brutal-force ist zu teuer, alternative:
+          }
+        } catch(_){}
+      }
+    }, 5000);
+  }
+
+  /* ============== 6. Hide Wetter / Standort etc per JS-Lookup ============== */
+  function hideCrewClutter(){
+    var screen = document.getElementById('screen-crew'); if (!screen) return;
+    // Suche nach ähnlich-benannten elements und versteck sie
+    var hideSelectors = [
+      '[class*="weather"]','[class*="wetter"]',
+      '[class*="city"]','[class*="loc-card"]',
+      '[class*="quest"]','[class*="vibe"]','[class*="vibe-hd"]',
+      '[id*="weather"]','[id*="quest"]','[id*="vibe"]'
+    ];
+    hideSelectors.forEach(function(sel){
+      try {
+        screen.querySelectorAll(sel).forEach(function(el){
+          // schon-mood-elements lassen
+          if (el.id && (el.id.indexOf('Mood') >= 0 || el.id.indexOf('mood') >= 0)) return;
+          el.style.display = 'none';
+        });
+      } catch(_){}
+    });
+  }
+
+  /* ============== Realtime ============== */
+  function attachRT(){
+    var sb = getSb(), me = getMe(); if (!sb || !me) return;
+    try {
+      sb.channel('refactor-rt-'+me.user_id)
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'friend_posts' }, function(){ if (currentWallTab === 'friends') loadCurrentWall(); })
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'crew_posts' }, function(){ if (currentWallTab === 'crew') loadCurrentWall(); })
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'live_locations' }, function(){
+          renderCrewMembersOnSpots();
+          refreshComplianceBanner();
+        })
+        .subscribe();
+    } catch(_){}
+  }
+
+  /* ============== Boot ============== */
+  function init(){
+    setTimeout(function(){
+      rebindRadarTab();
+      injectWallToggle();
+      hideCrewClutter();
+      ensureComplianceBanner();
+      attachRT();
+      setInterval(refreshComplianceBanner, 30000);
+      // Periodisch Crew-Pins auf Spots updaten (5sec polling als safer fallback)
+      setInterval(renderCrewMembersOnSpots, 8000);
+      // Re-trigger hide-clutter mehrmals (falls Crew-Hub später renderd)
+      setTimeout(hideCrewClutter, 3000);
+      setTimeout(hideCrewClutter, 7000);
+    }, 4500);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 1500); });
+  else setTimeout(init, 1500);
 })();</script></body></html>
