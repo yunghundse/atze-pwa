@@ -778,4 +778,485 @@
   if (document.readyState === 'loading'){
     document.addEventListener('DOMContentLoaded', function(){ setTimeout(bootApply, 400); });
   } else { setTimeout(bootApply, 400); }
+})();</script><style id="bb-safety-v3">/* ============ Safety-Circle Invite Modal ============ */
+.sci-ov{position:fixed;inset:0;z-index:10000;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.sci-ov.show{display:flex}
+.sci-card{width:100%;max-width:420px;background:linear-gradient(180deg,#1a161e 0%,#100c14 100%);border:.5px solid rgba(255,255,255,.10);border-radius:24px;padding:32px 24px 24px;text-align:center;position:relative}
+.sci-avatar{width:88px;height:88px;border-radius:50%;background:linear-gradient(135deg,#FE3C72,#BF5AF2);background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:32px;margin:0 auto 16px;box-shadow:0 8px 24px rgba(254,60,114,.4),inset 0 1px 0 rgba(255,255,255,.2)}
+.sci-headline{font-family:'Anton',Impact,sans-serif;font-size:24px;letter-spacing:1px;color:#fff;text-transform:uppercase;margin-bottom:6px}
+.sci-name{font-size:16px;font-weight:800;color:#FE3C72;margin-bottom:8px}
+.sci-sub{font-size:13.5px;color:rgba(255,255,255,.7);line-height:1.45;margin-bottom:24px}
+.sci-actions{display:flex;flex-direction:column;gap:10px}
+.sci-btn{padding:14px;border:0;border-radius:999px;font-size:14.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.sci-btn-primary{background:linear-gradient(135deg,#FE3C72,#FF1F5C);color:#fff;box-shadow:0 6px 18px rgba(254,60,114,.45)}
+.sci-btn-primary:active{transform:scale(.96)}
+.sci-btn-secondary{background:rgba(255,255,255,.08);color:#fff}
+.sci-btn-secondary:active{background:rgba(255,255,255,.12)}
+
+/* ============ Safety-Circle Cards ============ */
+.sp-circle-card{display:flex;align-items:center;gap:12px;padding:11px 12px 11px 12px;background:rgba(255,255,255,.04);border:.5px solid rgba(255,255,255,.07);border-radius:14px;position:relative;overflow:hidden}
+.sp-circle-card.is-sos{background:linear-gradient(135deg,rgba(254,60,114,.18),rgba(254,60,114,.04));border-color:rgba(254,60,114,.45)}
+.sp-circle-card.is-pending{opacity:.7}
+.sp-circle-avatar{flex:none;width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#FE3C72,#BF5AF2);background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:13px;text-shadow:0 1px 2px rgba(0,0,0,.3)}
+.sp-circle-info{flex:1;min-width:0}
+.sp-circle-info .n{font-size:14px;font-weight:600;color:#fff;line-height:1.2;display:block}
+.sp-circle-info .s{font-size:11.5px;color:rgba(255,255,255,.55);line-height:1.2}
+.sp-circle-status{flex:none;display:flex;align-items:center;gap:5px;padding:4px 9px;border-radius:999px;font-size:10px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;background:rgba(255,255,255,.06);color:rgba(255,255,255,.7)}
+.sp-circle-status .dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.4)}
+.sp-circle-card.is-safe .sp-circle-status{background:rgba(52,199,89,.16);color:#34D399}
+.sp-circle-card.is-safe .sp-circle-status .dot{background:#34D399}
+.sp-circle-card.is-sos .sp-circle-status{background:rgba(254,60,114,.22);color:#FE3C72;animation:spStatusPulse 1.4s ease-in-out infinite}
+.sp-circle-card.is-sos .sp-circle-status .dot{background:#FE3C72}
+.sp-circle-card.is-pending .sp-circle-status{background:rgba(255,214,10,.14);color:#FFD60A}
+.sp-circle-card.is-pending .sp-circle-status .dot{background:#FFD60A}
+.sp-circle-card.is-quiet .sp-circle-status{color:rgba(255,255,255,.45)}
+.sp-circle-x,.sp-circle-accept{flex:none;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.08);border:0;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;-webkit-tap-highlight-color:transparent;margin-left:4px}
+.sp-circle-accept{background:#34C759;color:#0a0a0a;font-weight:900}
+.sp-circle-accept:active{transform:scale(.92);background:#30D158}
+.sp-circle-x:active{transform:scale(.92);background:rgba(255,255,255,.14)}
+
+/* ============ Check-In Button ============ */
+.sp-checkin-btn{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;padding:18px 16px;width:100%;background:linear-gradient(135deg,rgba(52,199,89,.16),rgba(48,209,88,.06));border:.5px solid rgba(52,199,89,.32);border-radius:18px;color:#fff;cursor:pointer;-webkit-tap-highlight-color:transparent;overflow:hidden;transition:transform .15s ease;margin-bottom:10px}
+.sp-checkin-btn:hover{background:linear-gradient(135deg,rgba(52,199,89,.22),rgba(48,209,88,.10))}
+.sp-checkin-btn:active{transform:scale(.97)}
+.sp-checkin-btn .ci-pulse{position:absolute;top:50%;left:50%;width:80px;height:80px;border-radius:50%;background:rgba(52,199,89,.3);transform:translate(-50%,-50%);animation:sosCheckinPulse 2.4s ease-in-out infinite;pointer-events:none;z-index:0}
+@keyframes sosCheckinPulse{0%,100%{opacity:0;transform:translate(-50%,-50%) scale(.4)}50%{opacity:.4;transform:translate(-50%,-50%) scale(1.6)}}
+.sp-checkin-btn .ci-icon{position:relative;z-index:1;width:36px;height:36px;border-radius:50%;background:#34C759;display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;font-weight:900;box-shadow:0 4px 12px rgba(52,199,89,.4)}
+.sp-checkin-btn .ci-label{position:relative;z-index:1;font-size:14px;font-weight:800;letter-spacing:.4px}
+.sp-checkin-btn .ci-sub{position:relative;z-index:1;font-size:11px;color:rgba(255,255,255,.55);line-height:1.2;text-align:center}
+
+.sp-checkin-history{display:flex;flex-direction:column;gap:4px}
+.sp-checkin-item{display:flex;align-items:center;gap:10px;padding:8px 12px;background:rgba(255,255,255,.025);border-radius:10px;font-size:11.5px;color:rgba(255,255,255,.6)}
+.sp-checkin-item .dot{flex:none;width:6px;height:6px;border-radius:50%;background:#34D399}
+.sp-checkin-item .msg{flex:1;color:#fff;font-weight:500}
+.sp-checkin-item .ts{flex:none;color:rgba(255,255,255,.4)}
+
+/* ============ SOS Resolved Followup ============ */
+.sos-resolved{display:flex;flex-direction:column;align-items:center;gap:14px;padding:16px 0}
+.sos-resolved-icon{width:80px;height:80px;border-radius:50%;background:radial-gradient(circle,#34C759 0%,#1B8E3C 100%);display:flex;align-items:center;justify-content:center;font-size:40px;color:#fff;font-weight:900;box-shadow:0 14px 40px rgba(52,199,89,.5),inset 0 1px 0 rgba(255,255,255,.2);animation:sosResolvedPop .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes sosResolvedPop{0%{transform:scale(0);opacity:0}100%{transform:scale(1);opacity:1}}
+.sos-resolved-headline{font-family:'Anton',Impact,sans-serif;font-size:30px;letter-spacing:1px;color:#34D399;text-transform:uppercase}
+.sos-resolved-sub{font-size:13px;color:rgba(255,255,255,.65);text-align:center;padding:0 8px;line-height:1.4}
+.sos-resolved-list{display:flex;flex-direction:column;gap:6px;width:100%}
+.sos-resolved .sos-contact-card .sos-contact-action{background:#25D366}</style><div class="sci-ov" id="sciOv" role="dialog" aria-modal="true" aria-label="Safety-Crew Einladung"><div class="sci-card"><div class="sci-avatar" id="sciAvatar">?</div><div class="sci-headline">Safety-Einladung</div><div class="sci-name" id="sciName">Jemand</div><div class="sci-sub" id="sciSub">möchte dich in seine Safety Crew adden.</div><div class="sci-actions"><button class="sci-btn sci-btn-primary" onclick="window.acceptSafetyCircleInvite&&window.acceptSafetyCircleInvite()">Annehmen</button><button class="sci-btn sci-btn-secondary" onclick="window.declineSafetyCircleInvite&&window.declineSafetyCircleInvite()">Ablehnen</button></div></div></div><script id="bb-safety-v3-js">/* ==================== SAFETY V3 — Circle + Invite + Checkins ==================== */
+(function(){
+  function $(id){ return document.getElementById(id); }
+  function getSb(){ return window.sb || null; }
+  function getMe(){ return (window.ME && window.ME.user_id) ? window.ME : null; }
+  function toast(m){ try { if (typeof window.toast === 'function') return window.toast(m); console.log('[SV3]',m); } catch(_){} }
+  function fmtRel(iso){
+    try {
+      var d = new Date(iso); var diff = Date.now() - d.getTime();
+      var s = Math.floor(diff/1000); if (s < 60) return 'gerade eben';
+      var m = Math.floor(s/60); if (m < 60) return 'vor '+m+' Min';
+      var h = Math.floor(m/60); if (h < 24) return 'vor '+h+' Std';
+      var dd = Math.floor(h/24); if (dd < 7) return 'vor '+dd+' Tagen';
+      return d.toLocaleDateString('de-DE',{day:'numeric',month:'short'});
+    } catch(_) { return ''; }
+  }
+  function initials(n){ if (!n) return '?'; return n.trim().split(/\s+/).slice(0,2).map(function(p){return p[0];}).join('').toUpperCase(); }
+
+  /* ========== State ========== */
+  var rtChannel = null;
+  var circleMembers = [];
+  var memberStatus = {}; // {user_id: {sosActive: id|null, lastCheckin: iso|null}}
+  var inviteParam = null;
+  var invitePromptShown = false;
+
+  /* ============ Magic Invite Flow ============ */
+  function parseInviteUrl(){
+    try {
+      var p = new URLSearchParams(window.location.search);
+      inviteParam = p.get('safeplaceInviteFrom') || p.get('safeplace_invite_from');
+    } catch(_) { inviteParam = null; }
+  }
+  function cleanInviteUrl(){
+    try {
+      var u = new URL(window.location.href);
+      u.searchParams.delete('safeplaceInviteFrom');
+      u.searchParams.delete('safeplace_invite_from');
+      window.history.replaceState({}, '', u);
+    } catch(_){}
+  }
+  function checkPendingInvite(){
+    if (!inviteParam || invitePromptShown) return;
+    var me = getMe();
+    if (!me){ setTimeout(checkPendingInvite, 800); return; }
+    if (me.user_id === inviteParam){ cleanInviteUrl(); return; }
+    invitePromptShown = true;
+    window.openSafetyCircleInvite(inviteParam);
+  }
+
+  window.openSafetyCircleInvite = async function(fromUserId){
+    var sb = getSb(); if (!sb) return;
+    // Profil des Einladers laden
+    var profile = null;
+    try {
+      var r = await sb.from('profiles').select('user_id,name,age,photo_url').eq('user_id', fromUserId).single();
+      profile = r.data;
+    } catch(_){}
+    var ov = $('sciOv'); if (!ov) return;
+    var nameEl = $('sciName'), avaEl = $('sciAvatar'), subEl = $('sciSub');
+    if (nameEl) nameEl.textContent = profile && profile.name ? profile.name : 'Jemand';
+    if (avaEl){ avaEl.style.backgroundImage = profile && profile.photo_url ? 'url('+profile.photo_url+')' : ''; avaEl.textContent = profile && profile.photo_url ? '' : initials(profile && profile.name); }
+    if (subEl) subEl.textContent = (profile && profile.name ? profile.name : 'Jemand') + ' möchte dich in seine Safety Crew adden. Ihr seht euch gegenseitig: SOS-Alerts, Check-ins, Standort.';
+    ov.dataset.fromUid = fromUserId;
+    ov.classList.add('show');
+  };
+
+  window.acceptSafetyCircleInvite = async function(){
+    var ov = $('sciOv'); if (!ov) return;
+    var fromUid = ov.dataset.fromUid; var sb = getSb(); var me = getMe();
+    if (!sb || !me || !fromUid) return;
+    try {
+      // user_a < user_b convention enforce
+      var ua = me.user_id < fromUid ? me.user_id : fromUid;
+      var ub = me.user_id < fromUid ? fromUid : me.user_id;
+      // INSERT mit ON CONFLICT update auf accepted
+      var ins = await sb.from('safety_circle').upsert({
+        user_a: ua, user_b: ub,
+        status: 'accepted',
+        initiator: fromUid,
+        accepted_at: new Date().toISOString()
+      }, { onConflict: 'user_a,user_b' });
+      if (ins && ins.error) throw ins.error;
+      ov.classList.remove('show');
+      cleanInviteUrl();
+      toast('Safety Crew verbunden ✓');
+      loadMySafetyCircle();
+    } catch(e){
+      console.error('[SV3] accept failed', e);
+      toast('Konnte nicht verbinden');
+    }
+  };
+  window.declineSafetyCircleInvite = function(){
+    var ov = $('sciOv'); if (ov) ov.classList.remove('show');
+    cleanInviteUrl();
+  };
+
+  /* ============ Safety Circle Loading ============ */
+  window.loadMySafetyCircle = async function(){
+    var sb = getSb(), me = getMe();
+    if (!sb || !me){ circleMembers = []; renderCircleSection(); return; }
+    try {
+      var r = await sb.rpc('get_my_safety_circle');
+      circleMembers = (r.data || []).filter(function(m){ return m.partner_user_id; });
+      // Status für alle gleichzeitig laden
+      await refreshAllMemberStatuses();
+      renderCircleSection();
+    } catch(e){ console.warn('[SV3] circle load', e); }
+  };
+
+  async function refreshAllMemberStatuses(){
+    var sb = getSb(); if (!sb || !circleMembers.length) return;
+    var ids = circleMembers.map(function(m){ return m.partner_user_id; });
+    try {
+      var r1 = await sb.from('sos_alerts').select('user_id,id,resolved,created_at,last_update_at').in('user_id', ids).eq('resolved', false);
+      var r2 = await sb.from('safety_checkins').select('user_id,created_at').in('user_id', ids).order('created_at',{ascending:false}).limit(50);
+      // Map active SOS
+      ids.forEach(function(id){ memberStatus[id] = memberStatus[id] || {sosActive:null,lastCheckin:null}; });
+      (r1.data || []).forEach(function(s){ memberStatus[s.user_id].sosActive = s; });
+      // Latest checkin per user
+      var seen = {};
+      (r2.data || []).forEach(function(c){ if (!seen[c.user_id]){ seen[c.user_id] = true; memberStatus[c.user_id].lastCheckin = c.created_at; } });
+    } catch(_){}
+  }
+
+  function renderCircleSection(){
+    var host = $('safeplaceOv'); if (!host) return;
+    var sec = $('spCircleSection');
+    if (!sec){
+      // Inject section before "Letzte SOS-Aktivität"
+      var content = host.querySelector('.sp-content'); if (!content) return;
+      sec = document.createElement('div');
+      sec.className = 'sp-section';
+      sec.id = 'spCircleSection';
+      sec.innerHTML = '<div class="sp-section-head"><div class="sp-section-title">Mein Safety Circle</div><span id="spCircleCount" class="sp-section-meta">0 Freunde</span></div><div class="sp-list" id="spCircleList"></div>';
+      // insert before activity section
+      var actSec = content.querySelector('.sp-section:nth-of-type(2)');
+      if (actSec) content.insertBefore(sec, actSec);
+      else content.appendChild(sec);
+    }
+    var list = $('spCircleList'), count = $('spCircleCount');
+    if (count) count.textContent = circleMembers.length + (circleMembers.length === 1 ? ' Freund' : ' Freunde');
+    if (!circleMembers.length){
+      list.innerHTML = '<div class="sp-empty">Lade jemanden ein, der die crew. App schon nutzt — ihr seht dann gegenseitig SOS-Alerts und Check-ins.</div>';
+      return;
+    }
+    list.innerHTML = '';
+    circleMembers.forEach(function(m){
+      var st = memberStatus[m.partner_user_id] || {};
+      var statusClass = '', statusLabel = '', subText = '';
+      if (m.status === 'pending'){
+        statusClass = 'is-pending'; statusLabel = m.is_initiator ? 'Wartet' : 'Anfrage';
+        subText = m.is_initiator ? 'Einladung gesendet' : 'Will dich adden';
+      } else if (st.sosActive){
+        statusClass = 'is-sos'; statusLabel = 'SOS'; subText = 'aktiv seit ' + fmtRel(st.sosActive.created_at);
+      } else if (st.lastCheckin){
+        statusClass = 'is-safe'; statusLabel = 'Safe'; subText = 'Check-in ' + fmtRel(st.lastCheckin);
+      } else {
+        statusClass = 'is-quiet'; statusLabel = 'Ruhig'; subText = 'Noch kein Check-in';
+      }
+      var card = document.createElement('div');
+      card.className = 'sp-circle-card ' + statusClass;
+      card.innerHTML =
+        '<div class="sp-circle-avatar"></div>'+
+        '<div class="sp-circle-info"><span class="n"></span><span class="s"></span></div>'+
+        '<div class="sp-circle-status"><span class="dot"></span><span class="lbl"></span></div>'+
+        '<button class="sp-circle-x" aria-label="Entfernen">×</button>';
+      var av = card.querySelector('.sp-circle-avatar');
+      if (m.partner_photo){ av.style.backgroundImage = 'url(' + m.partner_photo + ')'; av.style.backgroundSize='cover'; av.style.backgroundPosition='center'; }
+      else av.textContent = initials(m.partner_name);
+      card.querySelector('.n').textContent = m.partner_name || 'Anonymer Member';
+      card.querySelector('.s').textContent = subText;
+      card.querySelector('.lbl').textContent = statusLabel;
+      var x = card.querySelector('.sp-circle-x');
+      x.addEventListener('click', function(){
+        if (!confirm('Diese Verbindung entfernen?')) return;
+        window.removeSafetyCircleMember(m.partner_user_id);
+      });
+      // Pending mit eingehender Anfrage: Accept-Button anzeigen
+      if (m.status === 'pending' && !m.is_initiator){
+        var acc = document.createElement('button');
+        acc.className = 'sp-circle-accept'; acc.textContent = '✓';
+        acc.title = 'Annehmen';
+        acc.addEventListener('click', function(){ window.acceptCirclePending(m.partner_user_id); });
+        card.insertBefore(acc, x);
+      }
+      list.appendChild(card);
+    });
+  }
+
+  window.acceptCirclePending = async function(partnerUid){
+    var sb = getSb(), me = getMe(); if (!sb || !me) return;
+    var ua = me.user_id < partnerUid ? me.user_id : partnerUid;
+    var ub = me.user_id < partnerUid ? partnerUid : me.user_id;
+    try {
+      await sb.from('safety_circle').update({ status: 'accepted', accepted_at: new Date().toISOString() }).eq('user_a', ua).eq('user_b', ub);
+      toast('Angenommen ✓');
+      loadMySafetyCircle();
+    } catch(e){ console.error(e); toast('Fehler beim Annehmen'); }
+  };
+
+  window.removeSafetyCircleMember = async function(partnerUid){
+    var sb = getSb(), me = getMe(); if (!sb || !me) return;
+    var ua = me.user_id < partnerUid ? me.user_id : partnerUid;
+    var ub = me.user_id < partnerUid ? partnerUid : me.user_id;
+    try {
+      await sb.from('safety_circle').delete().eq('user_a', ua).eq('user_b', ub);
+      toast('Entfernt');
+      loadMySafetyCircle();
+    } catch(e){ console.error(e); toast('Fehler beim Entfernen'); }
+  };
+
+  /* ============ Check-Ins ============ */
+  function getPos(){
+    return new Promise(function(resolve){
+      if (!navigator.geolocation) return resolve(null);
+      navigator.geolocation.getCurrentPosition(
+        function(p){ resolve({lat:p.coords.latitude,lng:p.coords.longitude}); },
+        function(){ resolve(null); },
+        { enableHighAccuracy:false, timeout:5000, maximumAge:60000 }
+      );
+    });
+  }
+
+  window.doSafetyCheckin = async function(message){
+    var sb = getSb(), me = getMe(); if (!sb || !me){ toast('Nicht eingeloggt'); return; }
+    var pos = await getPos();
+    try {
+      await sb.from('safety_checkins').insert({
+        user_id: me.user_id,
+        message: message || 'Ich bin OK',
+        lat: pos ? pos.lat : null,
+        lng: pos ? pos.lng : null
+      });
+      try { navigator.vibrate && navigator.vibrate([15,40,15]); } catch(_){}
+      toast('Check-in gesendet ✓');
+      injectCheckinSection();
+      loadMyCheckins();
+    } catch(e){ console.error(e); toast('Check-in fehlgeschlagen'); }
+  };
+
+  function injectCheckinSection(){
+    var host = $('safeplaceOv'); if (!host) return;
+    if ($('spCheckinSection')) return;
+    var content = host.querySelector('.sp-content'); if (!content) return;
+    var sec = document.createElement('div');
+    sec.className = 'sp-section'; sec.id = 'spCheckinSection';
+    sec.innerHTML =
+      '<div class="sp-section-head"><div class="sp-section-title">Check-in</div></div>'+
+      '<button class="sp-checkin-btn" onclick="window.doSafetyCheckin&&window.doSafetyCheckin()"><span class="ci-pulse"></span><span class="ci-icon">✓</span><span class="ci-label">Ich bin OK</span><span class="ci-sub">Crew + Safety Circle bekommen kurzen Status-Ping</span></button>'+
+      '<div class="sp-checkin-list" id="spCheckinList"></div>';
+    var actSec = content.querySelector('#spCircleSection') || content.querySelector('.sp-section:nth-of-type(2)');
+    if (actSec) content.insertBefore(sec, actSec);
+    else content.appendChild(sec);
+  }
+
+  window.loadMyCheckins = async function(){
+    var sb = getSb(), me = getMe(); if (!sb || !me) return;
+    var list = $('spCheckinList'); if (!list) return;
+    try {
+      var r = await sb.from('safety_checkins').select('id,message,created_at').eq('user_id', me.user_id).order('created_at',{ascending:false}).limit(5);
+      var arr = r.data || [];
+      if (!arr.length){ list.innerHTML = ''; return; }
+      list.innerHTML = '<div class="sp-checkin-history">';
+      arr.forEach(function(c){
+        list.innerHTML += '<div class="sp-checkin-item"><span class="dot"></span><span class="msg"></span><span class="ts"></span></div>';
+      });
+      list.innerHTML += '</div>';
+      var items = list.querySelectorAll('.sp-checkin-item');
+      arr.forEach(function(c, i){
+        items[i].querySelector('.msg').textContent = c.message;
+        items[i].querySelector('.ts').textContent = fmtRel(c.created_at);
+      });
+    } catch(_){}
+  };
+
+  /* ============ Realtime Subscription ============ */
+  function startRealtimeSubscription(){
+    var sb = getSb(), me = getMe(); if (!sb || !me || rtChannel) return;
+    try {
+      rtChannel = sb.channel('safety-v3-' + me.user_id);
+      rtChannel
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'safety_circle' }, function(p){
+          var row = p.new || p.old; if (!row) return;
+          if (row.user_a === me.user_id || row.user_b === me.user_id) loadMySafetyCircle();
+        })
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'sos_alerts' }, function(p){
+          var row = p.new || p.old; if (!row) return;
+          var ids = circleMembers.map(function(m){ return m.partner_user_id; });
+          if (ids.indexOf(row.user_id) >= 0){
+            memberStatus[row.user_id] = memberStatus[row.user_id] || {};
+            memberStatus[row.user_id].sosActive = (row.resolved ? null : row);
+            renderCircleSection();
+            if (!row.resolved && p.eventType === 'INSERT'){
+              toast('🆘 SOS in deiner Safety Crew');
+              try { navigator.vibrate && navigator.vibrate([100,50,100,50,100]); } catch(_){}
+            }
+          }
+        })
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'safety_checkins' }, function(p){
+          var row = p.new; if (!row) return;
+          var ids = circleMembers.map(function(m){ return m.partner_user_id; });
+          if (ids.indexOf(row.user_id) >= 0){
+            memberStatus[row.user_id] = memberStatus[row.user_id] || {};
+            memberStatus[row.user_id].lastCheckin = row.created_at;
+            renderCircleSection();
+          }
+        })
+        .subscribe();
+    } catch(e){ console.warn('[SV3] rt subscribe failed', e); }
+  }
+
+  /* ============ Resolve-Notification (I'm safe) ============ */
+  function notifyContactsAfterResolve(){
+    var me = getMe(); if (!me) return;
+    var ov = $('sosSheetOv'); if (!ov) return;
+    // Existierende Active-State Sheet umbauen → "Resolved"
+    var sheet = ov.querySelector('.sos-state-active'); if (!sheet) return;
+    var existing = $('sosResolvedFollowup'); if (existing) return;
+    var followup = document.createElement('div');
+    followup.id = 'sosResolvedFollowup';
+    followup.className = 'sos-resolved';
+    followup.innerHTML =
+      '<div class="sos-resolved-icon">✓</div>'+
+      '<div class="sos-resolved-headline">Du bist wieder safe</div>'+
+      '<div class="sos-resolved-sub">Sag deinen Notfallkontakten Bescheid:</div>'+
+      '<div class="sos-resolved-list" id="sosResolvedList"></div>'+
+      '<button class="sos-cancel-btn" onclick="window.closeSosSheet&&window.closeSosSheet()" style="background:rgba(255,255,255,.08);color:#fff">SCHLIESSEN</button>';
+    sheet.parentNode.insertBefore(followup, sheet);
+    sheet.style.display = 'none';
+    // Render WhatsApp-Cards mit "I'm safe" Message
+    var sb = getSb();
+    if (sb){
+      sb.from('emergency_contacts').select('*').eq('user_id', me.user_id).order('position').then(function(r){
+        var list = $('sosResolvedList'); if (!list) return;
+        var arr = r.data || [];
+        if (!arr.length){ list.innerHTML = '<div style="text-align:center;color:rgba(255,255,255,.45);font-size:12px;padding:8px">Keine Notfallkontakte</div>'; return; }
+        var msg = encodeURIComponent('✓ Update: '+(me.name||'Ich')+' ist wieder safe. Alles ok. (via crew. App)');
+        list.innerHTML = '';
+        arr.forEach(function(c){
+          var phone = (c.phone||'').replace(/[^+\d]/g,'').replace(/^\+/,'');
+          var card = document.createElement('div'); card.className = 'sos-contact-card';
+          card.innerHTML = '<div class="sos-contact-name"><span class="n"></span><span class="r"></span></div><a class="sos-contact-action" target="_blank" rel="noopener">"Bin safe" senden</a>';
+          card.querySelector('.n').textContent = c.name;
+          card.querySelector('.r').textContent = c.relationship || c.phone;
+          card.querySelector('.sos-contact-action').href = 'https://wa.me/'+phone+'?text='+msg;
+          list.appendChild(card);
+        });
+      });
+    }
+  }
+
+  // Wrap cancelSosActive um Notify danach zu zeigen
+  function wrapCancelSos(){
+    if (window.__bbSosCancelWrapped) return;
+    var orig = window.cancelSosActive;
+    if (typeof orig !== 'function') return;
+    window.__bbSosCancelWrapped = true;
+    window.cancelSosActive = async function(){
+      var was_active = true; // wir wissen ja dass es active war
+      try { await orig.apply(this, arguments); } catch(_){}
+      // Leider closeSosSheet wurde im Original aufgerufen — wir reopen + zeigen Resolve
+      setTimeout(function(){
+        var ov = $('sosSheetOv'); if (!ov) return;
+        ov.classList.add('show');
+        notifyContactsAfterResolve();
+      }, 50);
+    };
+  }
+
+  /* ============ Update share invite link to include user_id ============ */
+  function wrapShareInvite(){
+    var orig = window.shareSafeplaceInvite;
+    window.shareSafeplaceInvite = async function(){
+      var me = getMe();
+      var inviteUrl = 'https://partycrew.app/app.html' + (me ? ('?safeplaceInviteFrom=' + encodeURIComponent(me.user_id)) : '');
+      var text = (me && me.name ? me.name : 'Ein Freund') + ' will dich in seine Safety Crew adden auf crew. — gegenseitige SOS-Alerts + Check-ins. Mitmachen: ' + inviteUrl;
+      try {
+        if (navigator.share){
+          await navigator.share({ title: 'crew. Safeplace Invite', text: text, url: inviteUrl });
+          toast('Invite geteilt');
+          return;
+        }
+      } catch(_){}
+      try {
+        await navigator.clipboard.writeText(text);
+        toast('Invite-Link kopiert');
+      } catch(_) {
+        window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
+      }
+    };
+  }
+
+  /* ============ Hook into openSafeplaceHub ============ */
+  function wrapOpenHub(){
+    var orig = window.openSafeplaceHub;
+    if (!orig) return;
+    window.openSafeplaceHub = function(){
+      orig.apply(this, arguments);
+      setTimeout(function(){
+        injectCheckinSection();
+        // Circle-Section wird in renderCircleSection erzeugt
+        loadMySafetyCircle();
+        loadMyCheckins();
+        startRealtimeSubscription();
+      }, 80);
+    };
+  }
+
+  /* ============ Boot ============ */
+  function init(){
+    parseInviteUrl();
+    wrapShareInvite();
+    setTimeout(function(){
+      wrapOpenHub();
+      wrapCancelSos();
+      startRealtimeSubscription();
+      checkPendingInvite();
+    }, 800);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 300); });
+  else setTimeout(init, 300);
 })();</script></body></html>
