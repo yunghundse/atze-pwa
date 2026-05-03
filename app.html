@@ -7104,4 +7104,180 @@
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 2000); });
   else setTimeout(init, 2000);
+})();</script><style id="bb-iconfix">/* ============================================================
+ * Nav-Anchor-Fix + Custom-Icons (Emojis → SVG)
+ * ============================================================ */
+
+/* === 1. Nav-Bar Anchor: SafePlace im Tab-Mode darf Nav NICHT überdecken === */
+.sp-ov.is-tab{z-index:999!important}
+.sp-ov.is-tab .sp-card{box-shadow:none}
+
+/* Stelle sicher dass navBar über dem Modal liegt */
+#navBar{z-index:1000!important}
+
+/* SafePlace-Card: Bottom-Padding damit Content nicht hinter der Nav verschwindet */
+.sp-ov.is-tab .sp-card{padding-bottom:calc(120px + env(safe-area-inset-bottom,0px))!important}
+
+/* === 2. Custom Icons (replacing Emojis) === */
+/* Wir nutzen masked-icons mit data-uri SVGs damit sie via currentColor brand-getintet sind */
+
+.bb-ic{display:inline-block;width:1em;height:1em;vertical-align:middle;background-color:currentColor;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center;-webkit-mask-size:contain;mask-size:contain;flex-shrink:0}
+
+.bb-ic-pin{-webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 22s-8-7-8-13a8 8 0 1 1 16 0c0 6-8 13-8 13z'/><circle cx='12' cy='9' r='3'/></svg>");mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 22s-8-7-8-13a8 8 0 1 1 16 0c0 6-8 13-8 13z'/><circle cx='12' cy='9' r='3'/></svg>")}
+
+.bb-ic-home{-webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M3 11l9-8 9 8'/><path d='M5 10v10a1 1 0 0 0 1 1h4v-7h4v7h4a1 1 0 0 0 1-1V10'/></svg>");mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M3 11l9-8 9 8'/><path d='M5 10v10a1 1 0 0 0 1 1h4v-7h4v7h4a1 1 0 0 0 1-1V10'/></svg>")}
+
+.bb-ic-check{-webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'/></svg>");mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'/></svg>")}
+
+.bb-ic-shield{-webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2 4 5v6c0 5 3.4 9.7 8 11 4.6-1.3 8-6 8-11V5l-8-3Z'/><path d='m9 12 2 2 4-4'/></svg>");mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2 4 5v6c0 5 3.4 9.7 8 11 4.6-1.3 8-6 8-11V5l-8-3Z'/><path d='m9 12 2 2 4-4'/></svg>")}
+
+.bb-ic-people{-webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><circle cx='9' cy='7' r='3'/><circle cx='17' cy='7' r='2.5'/><path d='M3 19a6 6 0 0 1 12 0'/><path d='M14 19a6 6 0 0 1 7 0'/></svg>");mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><circle cx='9' cy='7' r='3'/><circle cx='17' cy='7' r='2.5'/><path d='M3 19a6 6 0 0 1 12 0'/><path d='M14 19a6 6 0 0 1 7 0'/></svg>")}
+
+.bb-ic-crew{-webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='8' r='4'/><circle cx='5' cy='10' r='3'/><circle cx='19' cy='10' r='3'/><path d='M2 20a4 4 0 0 1 6-3.5'/><path d='M22 20a4 4 0 0 0-6-3.5'/><path d='M5 22a7 7 0 0 1 14 0'/></svg>");mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='8' r='4'/><circle cx='5' cy='10' r='3'/><circle cx='19' cy='10' r='3'/><path d='M2 20a4 4 0 0 1 6-3.5'/><path d='M22 20a4 4 0 0 0-6-3.5'/><path d='M5 22a7 7 0 0 1 14 0'/></svg>")}
+
+.bb-ic-phone{-webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z'/></svg>");mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z'/></svg>")}
+
+.bb-ic-plus{-webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><line x1='12' y1='5' x2='12' y2='19'/><line x1='5' y1='12' x2='19' y2='12'/></svg>");mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><line x1='12' y1='5' x2='12' y2='19'/><line x1='5' y1='12' x2='19' y2='12'/></svg>")}
+
+.bb-ic-sos{-webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'/><line x1='12' y1='8' x2='12' y2='12'/><line x1='12' y1='16' x2='12.01' y2='16'/></svg>");mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'/><line x1='12' y1='8' x2='12' y2='12'/><line x1='12' y1='16' x2='12.01' y2='16'/></svg>")}
+
+.bb-ic-share{-webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8'/><polyline points='16 6 12 2 8 6'/><line x1='12' y1='2' x2='12' y2='15'/></svg>");mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8'/><polyline points='16 6 12 2 8 6'/><line x1='12' y1='2' x2='12' y2='15'/></svg>")}
+
+/* === 3. tx-cards: emoji-icons werden ersetzt === */
+/* Override the tx-card-icon size + use bb-ic */
+.tx-card-icon-svg{position:absolute;right:16px;top:16px;width:36px;height:36px;color:rgba(255,255,255,.85);font-size:36px;filter:drop-shadow(0 4px 10px rgba(0,0,0,.3))}
+.tx-card-icon-svg .bb-ic{width:36px;height:36px}
+
+/* tx-status-hero icon SVG */
+.tx-status-hero-svg{position:absolute;right:14px;top:50%;transform:translateY(-50%);width:64px;height:64px;color:rgba(255,255,255,.9);font-size:64px;filter:drop-shadow(0 4px 12px rgba(0,0,0,.3))}
+.tx-status-hero-svg .bb-ic{width:64px;height:64px}
+
+/* tx-wide-emoji als SVG */
+.tx-wide-svg{position:absolute;right:140px;top:50%;transform:translateY(-50%);width:48px;height:48px;color:rgba(255,255,255,.85);font-size:48px;filter:drop-shadow(0 3px 10px rgba(0,0,0,.25))}
+.tx-wide-svg .bb-ic{width:48px;height:48px}
+
+/* Hide the emoji span when SVG is rendered */
+.tx-card.has-svg .tx-card-icon{display:none}
+.tx-status-hero.has-svg .tx-status-hero-emoji{display:none}
+.tx-wide.has-svg .tx-wide-emoji{display:none}</style><script id="bb-iconfix-js">/* ============================================================
+ * Icon-Replace: Emojis durch Custom-SVGs in den Smart-Cards
+ * Plus: Defensive Re-Layout bei Tab-Wechsel
+ * ============================================================ */
+(function(){
+  function $(id){ return document.getElementById(id); }
+
+  // Map: tx-card class → Icon-Class
+  var ICON_MAP = {
+    'var-live':     'bb-ic-pin',
+    'var-home':     'bb-ic-home',
+    'var-checkin':  'bb-ic-check',
+    'var-circle':   'bb-ic-people',
+    'var-crews':    'bb-ic-crew',
+    'var-emergency':'bb-ic-phone',
+    'var-invite':   'bb-ic-plus',
+    'var-heimweg':  'bb-ic-check'
+  };
+
+  function ensureCardSvg(card){
+    var iconClass = null;
+    Object.keys(ICON_MAP).forEach(function(k){ if (card.classList.contains(k)) iconClass = ICON_MAP[k]; });
+    if (!iconClass) return;
+    if (card.querySelector('.tx-card-icon-svg')) return;
+    var wrap = document.createElement('div');
+    wrap.className = 'tx-card-icon-svg';
+    wrap.innerHTML = '<span class="bb-ic ' + iconClass + '"></span>';
+    card.appendChild(wrap);
+    card.classList.add('has-svg');
+  }
+
+  function ensureStatusHeroSvg(){
+    var hero = $('txStatusHero'); if (!hero) return;
+    if (hero.querySelector('.tx-status-hero-svg')) return;
+    // Status-Hero: Shield-Icon als Default, ändert sich je nach State
+    var wrap = document.createElement('div');
+    wrap.className = 'tx-status-hero-svg';
+    wrap.innerHTML = '<span class="bb-ic bb-ic-shield"></span>';
+    hero.appendChild(wrap);
+    hero.classList.add('has-svg');
+  }
+
+  function updateStatusHeroIcon(){
+    var hero = $('txStatusHero'); if (!hero) return;
+    var svg = hero.querySelector('.tx-status-hero-svg .bb-ic');
+    if (!svg) return;
+    var emoji = ($('txStatusEmoji') || {}).textContent || '';
+    var iconClass = 'bb-ic-shield';
+    if (emoji === '🆘') iconClass = 'bb-ic-sos';
+    else if (emoji === '🛡️' || emoji === '✓') iconClass = 'bb-ic-shield';
+    else iconClass = ''; // Mood-Emojis bleiben sichtbar (kein SVG)
+
+    if (iconClass){
+      svg.className = 'bb-ic ' + iconClass;
+      svg.style.display = '';
+      hero.classList.add('has-svg');
+    } else {
+      svg.className = 'bb-ic';
+      svg.style.display = 'none';
+      hero.classList.remove('has-svg');
+    }
+  }
+
+  function ensureWideSvg(){
+    var w = $('txCardCheckin'); if (!w) return;
+    if (w.querySelector('.tx-wide-svg')) return;
+    var wrap = document.createElement('div');
+    wrap.className = 'tx-wide-svg';
+    wrap.innerHTML = '<span class="bb-ic bb-ic-check"></span>';
+    w.appendChild(wrap);
+    w.classList.add('has-svg');
+  }
+
+  function applyAll(){
+    document.querySelectorAll('.tx-card').forEach(ensureCardSvg);
+    ensureStatusHeroSvg();
+    ensureWideSvg();
+    updateStatusHeroIcon();
+  }
+
+  // Beobachte Hub-Mutations damit neu-injizierte Karten auch SVGs kriegen
+  function watchHub(){
+    var hub = $('safeplaceOv'); if (!hub) return;
+    var observer = new MutationObserver(function(){
+      applyAll();
+    });
+    observer.observe(hub, { childList: true, subtree: true });
+  }
+
+  /* === Sections-Header Crew-Tab CTA-Icon ersetzen (Pin) === */
+  function fixCtaIcon(){
+    var cta = $('fwSpotsCta'); if (!cta) return;
+    var em = cta.querySelector('.fw-spots-cta-emoji');
+    if (em && !em.dataset.svgFixed){
+      em.innerHTML = '<span class="bb-ic bb-ic-pin" style="width:30px;height:30px;color:#fff"></span>';
+      em.dataset.svgFixed = '1';
+    }
+  }
+
+  function init(){
+    setTimeout(function(){
+      applyAll();
+      watchHub();
+      fixCtaIcon();
+      // Refresh SVGs whenever Hub opens
+      var origOpen = window.openSafeplaceHub;
+      if (origOpen && !origOpen.__bbIconFixWrapped){
+        var orig = origOpen;
+        window.openSafeplaceHub = function(){
+          orig.apply(this, arguments);
+          setTimeout(applyAll, 350);
+          setTimeout(applyAll, 800);
+        };
+        window.openSafeplaceHub.__bbIconFixWrapped = true;
+      }
+      // Re-fix CTA periodically
+      setInterval(function(){ fixCtaIcon(); applyAll(); }, 3000);
+    }, 5500);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 1500); });
+  else setTimeout(init, 1500);
 })();</script></body></html>
