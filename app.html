@@ -10555,4 +10555,819 @@ input:focus, textarea:focus, select:focus{
 })();
 </script>
 
+<style id="bb-status-center">/* ============================================================
+   BB-STATUS-CENTER — Swipeable Status-Cards + Hotspot/Banner-Bugfixes
+   ============================================================ */
+
+/* ---------- 1. STATUS-SWIPE-ROW (horizontal scroll cards) ---------- */
+.sc-wrap{
+  position: relative;
+  margin: 12px 0 16px;
+  padding: 0;
+}
+.sc-row{
+  display: flex;
+  gap: 10px;
+  padding: 4px 16px 10px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.sc-row::-webkit-scrollbar{ display: none; }
+.sc-card{
+  flex: 0 0 78%;
+  max-width: 280px;
+  scroll-snap-align: start;
+  position: relative;
+  padding: 16px;
+  border-radius: 18px;
+  background: rgba(255,255,255,.04);
+  border: .5px solid rgba(255,255,255,.08);
+  cursor: pointer;
+  transition: transform .15s, border-color .25s, background .25s;
+  text-align: left;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.sc-card:active{ transform: scale(.98); }
+.sc-card.on{
+  background: linear-gradient(135deg, rgba(254,60,114,.18), rgba(255,109,46,.06));
+  border-color: rgba(254,60,114,.55);
+}
+.sc-card-head{ display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.sc-card-icon{
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  background: rgba(255,255,255,.06);
+  display: flex; align-items: center; justify-content: center;
+  flex: none;
+}
+.sc-card-icon svg{ width: 18px; height: 18px; color: #fff; }
+.sc-card.on .sc-card-icon{ background: linear-gradient(135deg, #FE3C72, #FF6D2E); }
+.sc-card-title{
+  font-size: 13px; font-weight: 800;
+  color: #fff;
+  margin: 0;
+  letter-spacing: -.01em;
+  flex: 1; min-width: 0;
+}
+.sc-card-state{
+  font-size: 11px; font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 999px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.sc-card-state.off{ background: rgba(255,255,255,.06); color: rgba(255,255,255,.5); }
+.sc-card-state.on{ background: rgba(40,200,120,.16); color: #28C878; }
+.sc-card-state.alert{ background: rgba(254,60,114,.16); color: #FE3C72; }
+.sc-card-body{
+  font-size: 12px;
+  color: rgba(255,255,255,.6);
+  line-height: 1.5;
+  margin: 0 0 12px;
+}
+.sc-card.on .sc-card-body{ color: rgba(255,255,255,.85); }
+.sc-card-action{
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 12px; font-weight: 800;
+  color: #FE3C72;
+  letter-spacing: -.005em;
+}
+.sc-card-action svg{ width: 12px; height: 12px; }
+.sc-card.on .sc-card-action{ color: #fff; }
+.sc-card-bigtoggle{
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 10px;
+}
+.sc-card-bigtoggle .lbl{
+  font-size: 11px;
+  color: rgba(255,255,255,.4);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+/* Big-Switch Toggle */
+.sc-switch{
+  flex: none;
+  width: 50px; height: 28px;
+  background: rgba(255,255,255,.1);
+  border-radius: 14px;
+  position: relative;
+  cursor: pointer;
+  transition: background .25s;
+  border: 0; padding: 0;
+}
+.sc-switch::after{
+  content: '';
+  position: absolute;
+  top: 3px; left: 3px;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform .25s, background .25s;
+}
+.sc-switch.on{ background: linear-gradient(135deg, #FE3C72, #FF6D2E); }
+.sc-switch.on::after{ transform: translateX(22px); }
+
+/* TTL-Pill in Card */
+.sc-ttl-pill{
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 10px; font-weight: 700;
+  color: rgba(255,255,255,.7);
+  background: rgba(255,255,255,.06);
+  padding: 3px 8px;
+  border-radius: 999px;
+  margin-top: 6px;
+}
+.sc-ttl-pill .dot{
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: #28C878;
+  animation: scPulse 1.5s ease-in-out infinite;
+}
+@keyframes scPulse{ 0%,100%{ opacity:1 } 50%{ opacity:.4 } }
+
+/* Profile-Card spezial */
+.sc-card.kind-profile .sc-card-icon{ background: linear-gradient(135deg, rgba(168,85,247,.4), rgba(168,85,247,.15)); }
+.sc-card.kind-profile.on .sc-card-icon{ background: linear-gradient(135deg, #A855F7, #6366F1); }
+
+/* Mood-Card mit Mini-Picker */
+.sc-mood-row{ display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.sc-mood-pill{
+  font-size: 11px; font-weight: 700;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.06);
+  border: .5px solid rgba(255,255,255,.06);
+  color: rgba(255,255,255,.7);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.sc-mood-pill.on{
+  background: linear-gradient(135deg, #FE3C72, #FF6D2E);
+  border-color: transparent;
+  color: #fff;
+}
+
+/* Stealth-Card */
+.sc-card.kind-stealth.on{ background: linear-gradient(135deg, rgba(31,41,55,.5), rgba(11,15,25,.3)); border-color: rgba(150,150,170,.4); }
+.sc-card.kind-stealth.on .sc-card-icon{ background: linear-gradient(135deg, #4B5563, #1F2937); }
+
+/* Indicator-dots unter dem Carousel */
+.sc-dots{
+  display: flex; justify-content: center; gap: 5px;
+  padding: 0 0 4px;
+}
+.sc-dot{
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.15);
+  transition: width .25s, background .25s;
+}
+.sc-dot.on{ background: #FE3C72; width: 16px; border-radius: 3px; }
+
+/* ---------- 2. AUDIENCE-BANNER FIX (kompakter, klar) ---------- */
+.aud-banner{
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 10px 12px !important;
+  background: rgba(255,255,255,.03) !important;
+  border: .5px solid rgba(255,255,255,.08) !important;
+  border-radius: 12px !important;
+  margin: 8px 16px !important;
+}
+.aud-banner-icon{
+  width: 32px !important; height: 32px !important;
+  border-radius: 8px !important;
+  background: linear-gradient(135deg, #FE3C72, #FF6D2E) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: none !important;
+}
+.aud-banner-icon svg{
+  width: 16px !important; height: 16px !important;
+  color: #fff !important;
+}
+.aud-banner-title{
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  color: #fff !important;
+  margin: 0 !important;
+  letter-spacing: -.01em !important;
+}
+.aud-banner-sub{
+  font-size: 10px !important;
+  color: rgba(255,255,255,.55) !important;
+  margin: 1px 0 0 !important;
+  line-height: 1.3 !important;
+}
+.aud-banner-edit{
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  color: #FE3C72 !important;
+  padding: 6px 12px !important;
+  background: rgba(254,60,114,.1) !important;
+  border: .5px solid rgba(254,60,114,.3) !important;
+  border-radius: 8px !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+}
+
+/* ---------- 3. HOTSPOT-MAP STATE FIX ---------- */
+.sm-map-state{ pointer-events: auto !important; }
+.sm-map-state.is-info{
+  background: rgba(10,10,15,.5) !important;
+}
+
+/* Empty-State sauberer */
+.sm-empty-card{
+  padding: 28px 22px;
+  text-align: center;
+  background: rgba(255,255,255,.04);
+  border: .5px solid rgba(255,255,255,.08);
+  border-radius: 18px;
+  margin: 14px;
+}
+.sm-empty-card h4{
+  font-size: 16px; font-weight: 800;
+  color: #fff; margin: 0 0 6px;
+}
+.sm-empty-card p{
+  font-size: 13px;
+  color: rgba(255,255,255,.6);
+  line-height: 1.5;
+  margin: 0 0 16px;
+}
+.sm-empty-card button{
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #FE3C72, #FF6D2E);
+  border: 0;
+  border-radius: 12px;
+  color: #fff;
+  font-weight: 800;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+/* Filter-Bar Overflow-Fix */
+.hf-bar{
+  scroll-behavior: smooth;
+  scroll-snap-type: x proximity;
+}
+.hf-chip{
+  scroll-snap-align: start;
+}
+</style>
+<script id="bb-status-center-js">
+/* ============================================================
+   BB-STATUS-CENTER — Bugfixes + Status-Swipe-Center
+   ============================================================ */
+(function(){
+  'use strict';
+  if (window.__bbStatusCenterInit) return;
+  window.__bbStatusCenterInit = true;
+
+  var sb = function(){ return window.sb || window.supabase; };
+  async function getUid(){
+    try{ var u = await sb().auth.getUser(); return u && u.data && u.data.user && u.data.user.id || null; }catch(e){ return null; }
+  }
+
+  /* ============= BUGFIX 1: HOTSPOTS — V2-RPC + window-Expose ============= */
+  /* Eigene robuste Implementierung die unabhängig von der bb-spots-IIFE läuft */
+  var leafletMap = null;
+  var hotspotMarkers = [];
+  var currentKindFilter = null;
+
+  async function bbLoadHotspotsV2(){
+    try{
+      var s = sb();
+      if (!s) return;
+      if (!window.userLat || !window.userLng) {
+        /* Versuch Position holen */
+        await new Promise(function(res){
+          if (!navigator.geolocation) { res(); return; }
+          navigator.geolocation.getCurrentPosition(function(p){
+            window.userLat = p.coords.latitude; window.userLng = p.coords.longitude; res();
+          }, function(){ res(); }, { enableHighAccuracy:true, timeout:5000 });
+        });
+      }
+      if (!window.userLat) return;
+      var aud = (localStorage.getItem('bb-audience') || 'general');
+      var rpcArgs = {
+        p_lat: window.userLat,
+        p_lng: window.userLng,
+        p_radius_km: 25,
+        p_kinds: currentKindFilter ? [currentKindFilter] : null,
+        p_audience: aud
+      };
+      var r = await s.rpc('get_visible_hotspots_v2', rpcArgs);
+      if (r.error){
+        console.warn('[bb-status] V2 RPC error, fallback to V1', r.error);
+        /* Fallback auf V1 */
+        var r2 = await s.rpc('get_visible_hotspots', { p_lat: window.userLat, p_lng: window.userLng, p_radius_km: 25 });
+        if (r2.error){ throw r2.error; }
+        renderPins(r2.data || []);
+      } else {
+        renderPins(r.data || []);
+      }
+    }catch(e){
+      console.warn('[bb-status] loadHotspots v2 fail', e);
+      showHotspotEmpty();
+    }
+  }
+  function renderPins(spots){
+    /* Versuche existierende Map-Instanz zu finden */
+    var L = window.L;
+    if (!L){ return; }
+    var mapEl = document.getElementById('spotsMap');
+    if (!mapEl) return;
+    if (!leafletMap){
+      try{ leafletMap = mapEl._leaflet_map || (window.bbMap || null); }catch(e){}
+    }
+    /* Wenn keine Map gefunden — keine Pins zeichnen */
+    if (!leafletMap || !leafletMap.addLayer) return;
+    /* Alte Marker weg */
+    hotspotMarkers.forEach(function(m){ try{ leafletMap.removeLayer(m); }catch(e){} });
+    hotspotMarkers = [];
+    /* Pin-Icon-Faktor */
+    spots.forEach(function(h){
+      try{
+        var isMine = h.is_mine;
+        var classes = 'hp-pin-marker';
+        if (isMine) classes += ' var-mine';
+        else if (h.visibility === 'private') classes += ' var-private';
+        var html = '<div class="hp-pin">'+
+          '<div class="'+classes+'"></div>'+
+          (h.member_count > 0 ? '<div class="hp-pin-count">'+h.member_count+'</div>' : '')+
+          '<div class="hp-pin-tail"></div></div>';
+        var icon = L.divIcon({ html: html, className: 'hp-pin-wrap', iconSize: [34, 42], iconAnchor: [17, 42] });
+        var m = L.marker([h.lat, h.lng], { icon: icon }).addTo(leafletMap);
+        m.on('click', function(){ openHotspotDetail(h); });
+        hotspotMarkers.push(m);
+      }catch(e){ console.warn('[bb-status] pin fail', e); }
+    });
+    /* Wenn keine Spots in Reichweite → Empty-State im Map-Container */
+    if (spots.length === 0){
+      showNoSpotsHint();
+    } else {
+      hideNoSpotsHint();
+    }
+  }
+  function showNoSpotsHint(){
+    var mapEl = document.getElementById('spotsMap');
+    if (!mapEl) return;
+    var parent = mapEl.parentElement;
+    if (!parent || parent.querySelector('.sc-no-spots-hint')) return;
+    var hint = document.createElement('div');
+    hint.className = 'sc-no-spots-hint';
+    hint.style.cssText = 'position:absolute;top:96px;left:50%;transform:translateX(-50%);background:rgba(15,15,24,.85);backdrop-filter:blur(20px);border:.5px solid rgba(255,255,255,.1);padding:10px 16px;border-radius:12px;font-size:12px;font-weight:600;color:rgba(255,255,255,.7);z-index:402;pointer-events:none;white-space:nowrap;';
+    hint.textContent = 'Keine Spots in 25 km — leg einen an';
+    parent.appendChild(hint);
+  }
+  function hideNoSpotsHint(){
+    var h = document.querySelector('.sc-no-spots-hint');
+    if (h) h.remove();
+  }
+  function showHotspotEmpty(){
+    var mapEl = document.getElementById('spotsMap');
+    if (!mapEl) return;
+    var parent = mapEl.parentElement;
+    if (!parent || parent.querySelector('.sm-empty-card')) return;
+    var c = document.createElement('div');
+    c.className = 'sm-empty-card';
+    c.innerHTML = '<h4>Hotspots werden geladen …</h4><p>Falls nichts erscheint, prüfe deinen Standort-Zugriff oder leg den ersten Spot an.</p><button type="button">Spot anlegen</button>';
+    c.querySelector('button').addEventListener('click', function(){
+      if (window.bbHotspot && window.bbHotspot.openWizard) window.bbHotspot.openWizard();
+      else if (window.bbCreateHotspot) window.bbCreateHotspot();
+    });
+    parent.appendChild(c);
+    setTimeout(function(){ c.remove(); }, 8000);
+  }
+  function openHotspotDetail(h){
+    /* Nutze hd-modal CSS aus bb-hotspot-v2 */
+    var existing = document.getElementById('hdModal');
+    if (existing) existing.remove();
+    var m = document.createElement('div');
+    m.className = 'hd-modal';
+    m.id = 'hdModal';
+    var visBadge = h.visibility === 'public' ? 'Öffentlich' : (h.visibility === 'friends' ? 'Freunde' : (h.visibility === 'circle' ? 'Crew' : 'Privat'));
+    var visClass = h.visibility;
+    var distance = h.distance_km !== undefined ? (h.distance_km < 1 ? Math.round(h.distance_km*1000)+' m' : h.distance_km.toFixed(1)+' km') : '';
+    m.innerHTML = '<div class="hd-card">'+
+      '<div class="hd-row">'+
+        '<div class="hd-icon-big"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s-7-7-7-12a7 7 0 0 1 14 0c0 5-7 12-7 12z"/><circle cx="12" cy="10" r="3"/></svg></div>'+
+        '<div class="hd-info">'+
+          '<h3 class="hd-name">'+(h.name||'Spot')+'</h3>'+
+          '<div class="hd-meta">'+
+            '<span class="hd-badge hw-vis-badge '+visClass+'">'+visBadge+'</span>'+
+            (distance ? '<span class="hd-badge" style="background:rgba(255,255,255,.06);color:rgba(255,255,255,.7);">'+distance+'</span>' : '')+
+          '</div>'+
+        '</div>'+
+      '</div>'+
+      (h.description ? '<p class="hd-desc">'+h.description+'</p>' : '')+
+      '<div class="hd-stats">'+
+        '<div class="hd-stat"><div class="hd-stat-num">'+(h.member_count||0)+'</div><div class="hd-stat-lbl">Mitglieder</div></div>'+
+        '<div class="hd-stat"><div class="hd-stat-num">'+(h.kind||'safe').toUpperCase()+'</div><div class="hd-stat-lbl">Typ</div></div>'+
+      '</div>'+
+      '<div class="hd-actions">'+
+        (h.is_mine ? '<button class="hd-act danger" id="hdDelete" type="button">Löschen</button>' : '<button class="hd-act pri" id="hdJoin" type="button">Ich bin auch hier</button>')+
+        '<button class="hd-act sec" id="hdClose" type="button">Schließen</button>'+
+      '</div>'+
+    '</div>';
+    document.body.appendChild(m);
+    setTimeout(function(){ m.classList.add('on'); }, 30);
+    m.addEventListener('click', function(e){
+      if (e.target === m || e.target.id === 'hdClose'){ m.classList.remove('on'); setTimeout(function(){ m.remove(); }, 300); }
+      if (e.target.id === 'hdJoin'){ joinHotspot(h.id, m); }
+      if (e.target.id === 'hdDelete'){ deleteHotspot(h.id, m); }
+    });
+  }
+  async function joinHotspot(id, modal){
+    try{
+      var uid = await getUid(); if (!uid) return;
+      await sb().from('hotspot_members').upsert({ hotspot_id: id, user_id: uid }, { onConflict: 'hotspot_id,user_id' });
+      modal.classList.remove('on'); setTimeout(function(){ modal.remove(); }, 300);
+      if (window.bbToast) window.bbToast('Bist drin · andere sehen es jetzt');
+      bbLoadHotspotsV2();
+    }catch(e){ console.warn(e); if (window.bbToast) window.bbToast('Fehler — versuch nochmal'); }
+  }
+  async function deleteHotspot(id, modal){
+    try{
+      await sb().from('hotspots').update({ closed_at: new Date().toISOString() }).eq('id', id);
+      modal.classList.remove('on'); setTimeout(function(){ modal.remove(); }, 300);
+      if (window.bbToast) window.bbToast('Spot gelöscht', 'Rückgängig', async function(){
+        await sb().from('hotspots').update({ closed_at: null }).eq('id', id);
+        bbLoadHotspotsV2();
+      });
+      bbLoadHotspotsV2();
+    }catch(e){ console.warn(e); }
+  }
+
+  /* Expose damit andere Layer es aufrufen können */
+  window.bbLoadHotspotsV2 = bbLoadHotspotsV2;
+  /* Override altes loadHotspots fallback */
+  if (typeof window.loadHotspots !== 'function'){
+    window.loadHotspots = bbLoadHotspotsV2;
+  }
+
+  /* Hook FAB+Filter aus bb-hotspot-v2 → bbLoadHotspotsV2 */
+  document.addEventListener('click', function(e){
+    var chip = e.target.closest && e.target.closest('.hf-chip');
+    if (chip){
+      var k = chip.getAttribute('data-k') || null;
+      currentKindFilter = k;
+      setTimeout(bbLoadHotspotsV2, 100);
+    }
+  });
+
+  /* Override bbCreateHotspot um Wizard zu öffnen */
+  setTimeout(function(){
+    if (window.bbHotspot && window.bbHotspot.openWizard){
+      var orig = window.bbCreateHotspot;
+      window.bbCreateHotspot = function(){
+        try{ window.bbHotspot.openWizard(); }
+        catch(e){ if (typeof orig === 'function') orig(); }
+      };
+    }
+  }, 2000);
+
+  /* Beim Tab-Switch zu Spots: Hotspots laden */
+  document.addEventListener('click', function(e){
+    var nav = e.target && e.target.closest && e.target.closest('[data-tab="spots"], [data-screen="spots"], .tab-spots');
+    if (nav){ setTimeout(bbLoadHotspotsV2, 800); }
+  });
+  /* Beim Mount, wenn Spots-Map sichtbar */
+  setTimeout(function(){
+    if (document.getElementById('spotsMap')) bbLoadHotspotsV2();
+  }, 3500);
+
+  /* ============= BUGFIX 2: AUDIENCE-BANNER ============= */
+  /* Banner nur in Hub-Screen, sauber gerendert, mit korrekter Aktualisierung */
+  var AUDIENCE_LABELS = {
+    general:   { title: 'Allgemein',          desc: 'Connection + Safety mit Freunden' },
+    party:     { title: 'Party & Festival',   desc: 'Crew zusammenhalten beim Feiern' },
+    familie:   { title: 'Familie',            desc: 'Eltern, Kinder, Geschwister' },
+    solo:      { title: 'Solo unterwegs',     desc: 'Heimweg, Reise, Joggen' },
+    pflege:    { title: 'Pflege & Betreuung', desc: 'Angehörige sanft im Auge behalten' },
+    recovery:  { title: 'Recovery',           desc: 'Mental Health & Selbsthilfe' },
+    lgbtq:     { title: 'LGBTQ+ Safety',      desc: 'Sichere Orte & Support-Netzwerk' }
+  };
+  function refreshAudBanner(){
+    var bn = document.getElementById('bbAudBanner');
+    if (!bn) return;
+    var aud = localStorage.getItem('bb-audience') || 'general';
+    var info = AUDIENCE_LABELS[aud] || AUDIENCE_LABELS.general;
+    var titleEl = bn.querySelector('.aud-banner-title');
+    var subEl = bn.querySelector('.aud-banner-sub');
+    if (titleEl) titleEl.textContent = info.title;
+    if (subEl) subEl.textContent = info.desc;
+  }
+  function ensureAudBannerInHubOnly(){
+    var bn = document.getElementById('bbAudBanner');
+    if (!bn) return;
+    /* Hub-Screen finden — bn nur dort lassen */
+    var hub = document.querySelector('#screen-hub, [data-screen="hub"], .hub-content');
+    if (!hub){ return; }
+    if (bn.parentNode !== hub){
+      hub.insertBefore(bn, hub.firstChild);
+    }
+    refreshAudBanner();
+  }
+  setInterval(ensureAudBannerInHubOnly, 1500);
+  setTimeout(refreshAudBanner, 2000);
+
+  /* ============= STATUS-SWIPE-CENTER ============= */
+  function buildStatusCenter(){
+    var hub = document.querySelector('#screen-hub, [data-screen="hub"], .hub-content');
+    if (!hub) return;
+    if (hub.querySelector('.sc-wrap')) return;
+
+    var wrap = document.createElement('div');
+    wrap.className = 'sc-wrap';
+    wrap.innerHTML = ''+
+      '<div class="sc-row" id="scRow">'+
+
+        /* LIVE-LOCATION CARD */
+        '<button class="sc-card kind-live" id="scCardLive" type="button">'+
+          '<div class="sc-card-head">'+
+            '<div class="sc-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg></div>'+
+            '<h4 class="sc-card-title">Live-Standort</h4>'+
+            '<span class="sc-card-state off">Aus</span>'+
+          '</div>'+
+          '<p class="sc-card-body">Teile deinen Standort 30 min mit deiner Crew. Auto-Stop danach.</p>'+
+          '<div class="sc-card-bigtoggle">'+
+            '<span class="lbl">Tippen zum Aktivieren</span>'+
+            '<button class="sc-switch" type="button" aria-label="Live-Standort"></button>'+
+          '</div>'+
+        '</button>'+
+
+        /* HEIMWEG CARD */
+        '<button class="sc-card kind-home" id="scCardHomemode" type="button">'+
+          '<div class="sc-card-head">'+
+            '<div class="sc-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>'+
+            '<h4 class="sc-card-title">Heimweg-Modus</h4>'+
+            '<span class="sc-card-state off">Aus</span>'+
+          '</div>'+
+          '<p class="sc-card-body">30 min Countdown. Crew bekommt Push wenn du nicht „Bin da" drückst.</p>'+
+          '<div class="sc-card-bigtoggle">'+
+            '<span class="lbl">Tippen zum Starten</span>'+
+            '<button class="sc-switch" type="button" aria-label="Heimweg"></button>'+
+          '</div>'+
+        '</button>'+
+
+        /* MOOD CARD */
+        '<button class="sc-card kind-mood" id="scCardMood" type="button">'+
+          '<div class="sc-card-head">'+
+            '<div class="sc-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></div>'+
+            '<h4 class="sc-card-title">Mein Mood</h4>'+
+            '<span class="sc-card-state off" id="scMoodState">—</span>'+
+          '</div>'+
+          '<p class="sc-card-body">Schnell-Update für deine Crew. Verfällt nach 12h.</p>'+
+          '<div class="sc-mood-row" id="scMoodPicker">'+
+            '<span class="sc-mood-pill" data-m="party">Party</span>'+
+            '<span class="sc-mood-pill" data-m="chill">Chill</span>'+
+            '<span class="sc-mood-pill" data-m="dance">Dance</span>'+
+            '<span class="sc-mood-pill" data-m="easy">Easy</span>'+
+            '<span class="sc-mood-pill" data-m="sola">Solo</span>'+
+            '<span class="sc-mood-pill" data-m="down">Down</span>'+
+            '<span class="sc-mood-pill" data-m="lost">Lost</span>'+
+            '<span class="sc-mood-pill" data-m="need">Hilfe</span>'+
+            '<span class="sc-mood-pill" data-m="home">Zuhause</span>'+
+          '</div>'+
+        '</button>'+
+
+        /* STEALTH-SOS CARD */
+        '<button class="sc-card kind-stealth" id="scCardStealth" type="button">'+
+          '<div class="sc-card-head">'+
+            '<div class="sc-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 7v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V7l-8-5z"/><circle cx="12" cy="11" r="3"/></svg></div>'+
+            '<h4 class="sc-card-title">Stealth-SOS</h4>'+
+            '<span class="sc-card-state off">Aus</span>'+
+          '</div>'+
+          '<p class="sc-card-body">Im Notfall keine sichtbaren Hinweise — Knopf bleibt neutral, Hilfe geht trotzdem raus.</p>'+
+          '<div class="sc-card-bigtoggle">'+
+            '<span class="lbl">Vol-Up + Vol-Down = SOS</span>'+
+            '<button class="sc-switch" type="button" aria-label="Stealth-SOS"></button>'+
+          '</div>'+
+        '</button>'+
+
+        /* PROFIL CARD */
+        '<button class="sc-card kind-profile on" id="scCardProfile" type="button">'+
+          '<div class="sc-card-head">'+
+            '<div class="sc-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>'+
+            '<h4 class="sc-card-title">Profil-Modus</h4>'+
+            '<span class="sc-card-state on" id="scProfileState">Allgemein</span>'+
+          '</div>'+
+          '<p class="sc-card-body" id="scProfileDesc">Connection + Safety mit Freunden — Alltag, Treffen, Heimweg.</p>'+
+          '<span class="sc-card-action">Wechseln <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>'+
+        '</button>'+
+      '</div>'+
+      '<div class="sc-dots" id="scDots"></div>';
+
+    /* Position oben im Hub, ÜBER dem Audience-Banner */
+    hub.insertBefore(wrap, hub.firstChild);
+
+    /* Dots erstellen */
+    var row = wrap.querySelector('#scRow');
+    var cards = row.querySelectorAll('.sc-card');
+    var dotsHost = wrap.querySelector('#scDots');
+    cards.forEach(function(_, i){
+      var d = document.createElement('span');
+      d.className = 'sc-dot' + (i === 0 ? ' on' : '');
+      dotsHost.appendChild(d);
+    });
+
+    /* Scroll-Listener für Dots */
+    row.addEventListener('scroll', function(){
+      var idx = Math.round(row.scrollLeft / (cards[0].offsetWidth + 10));
+      dotsHost.querySelectorAll('.sc-dot').forEach(function(d, i){
+        d.classList.toggle('on', i === idx);
+      });
+    });
+
+    /* Klick-Handler */
+    bindStatusCardHandlers(wrap);
+    /* Status synchronisieren */
+    syncStatusCards();
+  }
+
+  function bindStatusCardHandlers(wrap){
+    var live = wrap.querySelector('#scCardLive');
+    var home = wrap.querySelector('#scCardHomemode');
+    var mood = wrap.querySelector('#scCardMood');
+    var stealth = wrap.querySelector('#scCardStealth');
+    var profile = wrap.querySelector('#scCardProfile');
+
+    /* LIVE Click oder Switch */
+    function liveAction(){
+      if (window.bbUx && window.bbUx.toggleLiveBroadcast) window.bbUx.toggleLiveBroadcast();
+      else if (window.toggleLiveBroadcast) window.toggleLiveBroadcast();
+      setTimeout(syncStatusCards, 400);
+    }
+    live.addEventListener('click', function(e){ e.preventDefault(); liveAction(); });
+
+    /* HOMEMODE */
+    home.addEventListener('click', function(e){
+      e.preventDefault();
+      var isOn = home.classList.contains('on');
+      if (isOn){
+        if (confirm('Heimweg beenden? „Bin da"-Bestätigung wird gesendet.')){
+          try{ localStorage.removeItem('bb-homemode-active'); localStorage.removeItem('bb-homemode-eta'); }catch(_){}
+          if (window.bbToast) window.bbToast('Heimweg beendet — Bin da ✓');
+          syncStatusCards();
+        }
+      } else {
+        if (window.bbUx && window.bbUx.startHomemode) window.bbUx.startHomemode();
+        else {
+          /* Inline-Start */
+          var eta = Date.now() + 30*60*1000;
+          try{ localStorage.setItem('bb-homemode-active','1'); localStorage.setItem('bb-homemode-eta', String(eta)); }catch(_){}
+          if (window.bbToast) window.bbToast('Heimweg läuft · 30 min');
+        }
+        setTimeout(syncStatusCards, 200);
+      }
+    });
+
+    /* MOOD: Pills clickbar */
+    mood.addEventListener('click', function(e){
+      var pill = e.target.closest('.sc-mood-pill');
+      if (!pill){ return; }
+      e.preventDefault(); e.stopPropagation();
+      var m = pill.getAttribute('data-m');
+      mood.querySelectorAll('.sc-mood-pill').forEach(function(p){ p.classList.toggle('on', p === pill); });
+      try{ localStorage.setItem('bb-mood-current', m); localStorage.setItem('bb-mood-at', String(Date.now())); }catch(_){}
+      saveMoodToDb(m);
+      var stEl = mood.querySelector('#scMoodState');
+      if (stEl){ stEl.classList.add('on'); stEl.classList.remove('off'); stEl.textContent = m.charAt(0).toUpperCase()+m.slice(1); }
+      mood.classList.add('on');
+      if (window.bbToast) window.bbToast('Mood "'+m+'" geteilt mit Crew');
+    });
+
+    /* STEALTH */
+    stealth.addEventListener('click', function(e){
+      e.preventDefault();
+      var on = !document.body.classList.contains('sos-stealth-mode-on');
+      document.body.classList.toggle('sos-stealth-mode-on', on);
+      try{ localStorage.setItem('bb-sos-stealth', on ? '1' : '0'); }catch(_){}
+      saveStealthToDb(on);
+      if (window.bbToast) window.bbToast(on ? 'Stealth aktiv — Knopf bleibt neutral bei SOS' : 'Stealth aus — normaler SOS-Modus');
+      syncStatusCards();
+    });
+
+    /* PROFILE */
+    profile.addEventListener('click', function(e){
+      e.preventDefault();
+      if (window.bbHotspot && window.bbHotspot.openAudPicker){ window.bbHotspot.openAudPicker(); }
+    });
+  }
+
+  async function saveMoodToDb(m){
+    try{
+      var s = sb(); if (!s) return;
+      var uid = await getUid(); if (!uid) return;
+      await s.from('user_moods').insert({ user_id: uid, mood: m, expires_at: new Date(Date.now()+12*60*60*1000).toISOString() });
+    }catch(e){ console.warn(e); }
+  }
+  async function saveStealthToDb(on){
+    try{
+      var s = sb(); if (!s) return;
+      var uid = await getUid(); if (!uid) return;
+      await s.from('profiles').update({ safety_sos_stealth: !!on }).eq('user_id', uid);
+    }catch(e){}
+  }
+
+  function syncStatusCards(){
+    /* LIVE */
+    var live = document.getElementById('scCardLive');
+    if (live){
+      var liveOn = localStorage.getItem('bb-live-on') === '1';
+      live.classList.toggle('on', liveOn);
+      live.querySelector('.sc-card-state').textContent = liveOn ? 'Live' : 'Aus';
+      live.querySelector('.sc-card-state').classList.toggle('on', liveOn);
+      live.querySelector('.sc-card-state').classList.toggle('off', !liveOn);
+      var sw = live.querySelector('.sc-switch'); if (sw) sw.classList.toggle('on', liveOn);
+      var lbl = live.querySelector('.sc-card-bigtoggle .lbl');
+      if (lbl) lbl.textContent = liveOn ? 'Aktiv · 30 min' : 'Tippen zum Aktivieren';
+    }
+    /* HOMEMODE */
+    var home = document.getElementById('scCardHomemode');
+    if (home){
+      var homeOn = localStorage.getItem('bb-homemode-active') === '1';
+      home.classList.toggle('on', homeOn);
+      home.querySelector('.sc-card-state').textContent = homeOn ? 'Aktiv' : 'Aus';
+      home.querySelector('.sc-card-state').classList.toggle('on', homeOn);
+      home.querySelector('.sc-card-state').classList.toggle('off', !homeOn);
+      var sw = home.querySelector('.sc-switch'); if (sw) sw.classList.toggle('on', homeOn);
+      var lbl = home.querySelector('.sc-card-bigtoggle .lbl');
+      if (lbl) {
+        if (homeOn){
+          var eta = parseInt(localStorage.getItem('bb-homemode-eta')||'0', 10);
+          var remain = Math.max(0, Math.round((eta-Date.now())/60000));
+          lbl.textContent = remain > 0 ? ('Noch ~'+remain+' min') : 'Läuft …';
+        } else {
+          lbl.textContent = 'Tippen zum Starten';
+        }
+      }
+    }
+    /* MOOD */
+    var moodCard = document.getElementById('scCardMood');
+    if (moodCard){
+      var m = localStorage.getItem('bb-mood-current');
+      var stEl = moodCard.querySelector('#scMoodState');
+      if (m && stEl){
+        stEl.textContent = m.charAt(0).toUpperCase()+m.slice(1);
+        stEl.classList.add('on'); stEl.classList.remove('off');
+        moodCard.classList.add('on');
+        moodCard.querySelectorAll('.sc-mood-pill').forEach(function(p){ p.classList.toggle('on', p.getAttribute('data-m') === m); });
+      }
+    }
+    /* STEALTH */
+    var stealth = document.getElementById('scCardStealth');
+    if (stealth){
+      var stOn = localStorage.getItem('bb-sos-stealth') === '1';
+      stealth.classList.toggle('on', stOn);
+      stealth.querySelector('.sc-card-state').textContent = stOn ? 'Aktiv' : 'Aus';
+      stealth.querySelector('.sc-card-state').classList.toggle('on', stOn);
+      stealth.querySelector('.sc-card-state').classList.toggle('off', !stOn);
+      var sw = stealth.querySelector('.sc-switch'); if (sw) sw.classList.toggle('on', stOn);
+    }
+    /* PROFILE */
+    var prof = document.getElementById('scCardProfile');
+    if (prof){
+      var aud = localStorage.getItem('bb-audience') || 'general';
+      var info = AUDIENCE_LABELS[aud] || AUDIENCE_LABELS.general;
+      var stE = prof.querySelector('#scProfileState');
+      var ds = prof.querySelector('#scProfileDesc');
+      if (stE) stE.textContent = info.title;
+      if (ds) ds.textContent = info.desc;
+    }
+  }
+
+  /* Auto-Refresh Status alle 15s */
+  setInterval(syncStatusCards, 15000);
+
+  /* ============= INIT ============= */
+  function init(){
+    setTimeout(buildStatusCenter, 1500);
+    setTimeout(buildStatusCenter, 3500);
+    setTimeout(syncStatusCards, 4000);
+    /* Re-Build bei Tab-Switch */
+    document.addEventListener('click', function(e){
+      var t = e.target;
+      if (!t || !t.closest) return;
+      if (t.closest('[data-tab="hub"], [data-screen="hub"], .tab-hub')){
+        setTimeout(function(){ buildStatusCenter(); syncStatusCards(); }, 300);
+      }
+    });
+    /* Storage change listener */
+    window.addEventListener('storage', syncStatusCards);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+
 </body></html>
