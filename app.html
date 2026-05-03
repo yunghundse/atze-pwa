@@ -3461,4 +3461,229 @@
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 1000); });
   else setTimeout(init, 1000);
+})();</script><style id="bb-sms-verify">/* SMS-Verifizierung UI */
+.svf-row{display:flex;align-items:center;gap:8px;padding:8px 12px;background:rgba(255,255,255,.04);border-radius:10px;margin-top:6px;font-size:11.5px}
+.svf-row.verified{background:linear-gradient(135deg,rgba(52,199,89,.14),rgba(52,199,89,.04));color:#34D399}
+.svf-row.unverified{background:linear-gradient(135deg,rgba(255,170,0,.14),rgba(255,170,0,.04));color:#FFAA00}
+.svf-row .ic{flex:none;font-size:13px}
+.svf-row .l{flex:1}
+.svf-row button{flex:none;font-size:10.5px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;padding:5px 10px;border:0;border-radius:999px;background:rgba(255,255,255,.10);color:#fff;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.svf-row button:active{transform:scale(.95);background:rgba(255,255,255,.16)}
+
+/* Code-Input Modal */
+.svf-ov{position:fixed;inset:0;z-index:10003;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.svf-ov.show{display:flex}
+.svf-card{width:100%;max-width:400px;background:linear-gradient(180deg,#1a161e 0%,#100c14 100%);border:.5px solid rgba(255,255,255,.10);border-radius:24px;padding:28px 22px 20px;color:#fff;text-align:center}
+.svf-icon{font-size:42px;margin-bottom:14px}
+.svf-headline{font-family:'Anton',Impact,sans-serif;font-size:22px;letter-spacing:1px;color:#fff;text-transform:uppercase;margin-bottom:6px}
+.svf-sub{font-size:13px;color:rgba(255,255,255,.65);line-height:1.4;margin-bottom:18px}
+.svf-sub strong{color:#fff}
+.svf-code-wrap{display:flex;gap:8px;justify-content:center;margin-bottom:14px}
+.svf-code-wrap input{width:42px;height:52px;font-size:24px;font-weight:800;text-align:center;border-radius:12px;background:rgba(255,255,255,.06);border:.5px solid rgba(255,255,255,.10);color:#fff;font-family:ui-monospace,monospace}
+.svf-code-wrap input:focus{outline:0;border-color:#FE3C72;background:rgba(254,60,114,.08)}
+.svf-error{min-height:18px;color:#FE3C72;font-size:11.5px;margin-bottom:8px}
+.svf-actions{display:flex;flex-direction:column;gap:8px}
+.svf-btn-primary{padding:13px;border:0;border-radius:999px;background:linear-gradient(135deg,#FE3C72,#FF1F5C);color:#fff;font-size:13px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;cursor:pointer;box-shadow:0 6px 18px rgba(254,60,114,.4)}
+.svf-btn-primary:disabled{opacity:.4;background:rgba(255,255,255,.1);box-shadow:none}
+.svf-btn-secondary{padding:11px;border:0;border-radius:999px;background:rgba(255,255,255,.06);color:rgba(255,255,255,.7);font-size:12px;font-weight:600;cursor:pointer}
+.svf-btn-link{background:transparent;color:rgba(255,255,255,.55);font-size:11.5px;padding:6px;cursor:pointer;border:0}
+.svf-btn-link:hover{color:#fff}</style><script id="bb-sms-verify-js">/* ============== Emergency Contact SMS Verification ============== */
+(function(){
+  function $(id){ return document.getElementById(id); }
+  function getSb(){ return window.sb || null; }
+  function toast(m){ try{ if (typeof window.toast === 'function') return window.toast(m); }catch(_){} }
+
+  /* ============== Modal HTML lazily ============== */
+  function ensureModal(){
+    if ($('svfOv')) return;
+    var ov = document.createElement('div');
+    ov.id = 'svfOv';
+    ov.className = 'svf-ov';
+    ov.innerHTML =
+      '<div class="svf-card">'+
+      '<div class="svf-icon">📱</div>'+
+      '<div class="svf-headline">SMS-Code eingeben</div>'+
+      '<div class="svf-sub" id="svfSub">Wir haben einen 6-stelligen Code an <strong>...</strong> gesendet.</div>'+
+      '<div class="svf-code-wrap" id="svfCodeWrap">'+
+        '<input maxlength="1" inputmode="numeric" autocomplete="one-time-code"/>'.repeat(6)+
+      '</div>'+
+      '<div class="svf-error" id="svfError"></div>'+
+      '<div class="svf-actions">'+
+      '<button class="svf-btn-primary" id="svfVerifyBtn" disabled>Verifizieren</button>'+
+      '<button class="svf-btn-link" id="svfResendBtn">Code erneut senden</button>'+
+      '<button class="svf-btn-secondary" id="svfCancelBtn">Später</button>'+
+      '</div>'+
+      '</div>';
+    document.body.appendChild(ov);
+    bindCodeInputs();
+  }
+
+  function bindCodeInputs(){
+    var inputs = document.querySelectorAll('#svfCodeWrap input');
+    inputs.forEach(function(inp, i){
+      inp.addEventListener('input', function(e){
+        var v = inp.value.replace(/\D/g,'');
+        inp.value = v.slice(0,1);
+        if (v && i < inputs.length - 1) inputs[i+1].focus();
+        updateBtn();
+      });
+      inp.addEventListener('keydown', function(e){
+        if (e.key === 'Backspace' && !inp.value && i > 0){ inputs[i-1].focus(); inputs[i-1].value=''; updateBtn(); }
+        if (e.key === 'Enter') $('svfVerifyBtn').click();
+      });
+      inp.addEventListener('paste', function(e){
+        var d = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g,'').slice(0,6);
+        if (!d) return;
+        e.preventDefault();
+        for (var k = 0; k < d.length && k < inputs.length; k++) inputs[k].value = d[k];
+        if (d.length < inputs.length) inputs[d.length].focus();
+        else inputs[inputs.length-1].focus();
+        updateBtn();
+      });
+    });
+    $('svfVerifyBtn').addEventListener('click', doVerify);
+    $('svfResendBtn').addEventListener('click', doResend);
+    $('svfCancelBtn').addEventListener('click', closeSvf);
+  }
+
+  function getCode(){
+    var inputs = document.querySelectorAll('#svfCodeWrap input');
+    var s = '';
+    inputs.forEach(function(i){ s += i.value; });
+    return s;
+  }
+  function updateBtn(){ var btn = $('svfVerifyBtn'); if (btn) btn.disabled = getCode().length !== 6; }
+  function clearCode(){ document.querySelectorAll('#svfCodeWrap input').forEach(function(i){ i.value = ''; }); updateBtn(); }
+
+  var currentContact = null;
+
+  window.openSmsVerify = async function(contact){
+    if (!contact || !contact.id) return;
+    ensureModal();
+    currentContact = contact;
+    clearCode();
+    $('svfError').textContent = '';
+    var sub = $('svfSub'); if (sub) sub.innerHTML = 'Wir senden einen 6-stelligen Code an <strong>' + maskPhone(contact.phone) + '</strong>.<br>Falls die Person den Code an dich weitergibt, ist sie einverstanden.';
+    $('svfOv').classList.add('show');
+    setTimeout(function(){ var first = document.querySelectorAll('#svfCodeWrap input')[0]; if (first) first.focus(); }, 300);
+    await doSendCode();
+  };
+
+  function closeSvf(){ var ov = $('svfOv'); if (ov) ov.classList.remove('show'); currentContact = null; }
+
+  function maskPhone(p){
+    if (!p || p.length < 4) return '****';
+    return '****' + p.slice(-3);
+  }
+
+  async function doSendCode(){
+    var sb = getSb(); if (!sb || !currentContact) return;
+    try {
+      await sb.rpc('send_emergency_contact_verification', { p_contact_id: currentContact.id });
+      toast('Code wurde gesendet');
+    } catch(e){
+      var msg = (e && e.message) || '';
+      if (msg.indexOf('rate_limited') >= 0){ $('svfError').textContent = 'Zu viele Versuche — bitte 10 Min warten.'; }
+      else { $('svfError').textContent = 'Fehler beim Senden: ' + msg; }
+    }
+  }
+
+  async function doResend(){
+    $('svfError').textContent = '';
+    await doSendCode();
+  }
+
+  async function doVerify(){
+    var sb = getSb(); if (!sb || !currentContact) return;
+    var code = getCode(); if (code.length !== 6) return;
+    var btn = $('svfVerifyBtn'); btn.disabled = true; btn.textContent = 'Prüfe...';
+    try {
+      var r = await sb.rpc('verify_emergency_contact', { p_contact_id: currentContact.id, p_code: code });
+      var status = r && r.data && r.data.status;
+      if (status === 'verified'){
+        toast('Verifiziert ✓');
+        if (window.crew && window.crew.safety && window.crew.safety.log) window.crew.safety.log('contact_verified', {}, 'contact');
+        closeSvf();
+        if (typeof window.loadEcContacts === 'function') window.loadEcContacts(true);
+        if (typeof window.loadContactsList === 'function') window.loadContactsList();
+      } else if (status === 'wrong'){
+        var left = r.data.attempts_left;
+        $('svfError').textContent = 'Code falsch. Noch ' + left + ' Versuche.';
+        clearCode();
+      } else if (status === 'expired'){
+        $('svfError').textContent = 'Code abgelaufen. Bitte neu senden.';
+      } else if (status === 'locked'){
+        $('svfError').textContent = 'Zu viele Fehlversuche. 30 Min gesperrt.';
+      } else {
+        $('svfError').textContent = 'Unerwarteter Status.';
+      }
+    } catch(e){
+      $('svfError').textContent = 'Fehler: ' + ((e && e.message) || e);
+    } finally {
+      btn.textContent = 'Verifizieren'; updateBtn();
+    }
+  }
+
+  /* ============== Erweitere Contact-Cards mit Verify-Status ============== */
+  function decorateContactCards(){
+    if (typeof window.loadContactsList !== 'function') return;
+    var orig = window.loadContactsList;
+    if (orig.__bbSvfWrapped) return;
+    window.loadContactsList = async function(){
+      await orig.apply(this, arguments);
+      // Nach dem Render: Verify-Rows pro Card hinzufügen
+      var sb = getSb(); var me = (window.ME && window.ME.user_id);
+      if (!sb || !me) return;
+      try {
+        var r = await sb.from('emergency_contacts').select('*').eq('user_id', me).order('created_at');
+        var contacts = r.data || [];
+        var items = document.querySelectorAll('.sp-contact-item');
+        items.forEach(function(item, i){
+          var c = contacts[i]; if (!c) return;
+          if (item.querySelector('.svf-row')) return;
+          var row = document.createElement('div');
+          row.className = 'svf-row ' + (c.verified_at ? 'verified' : 'unverified');
+          row.innerHTML = '<span class="ic">' + (c.verified_at ? '✓' : '⚠️') + '</span>' +
+            '<span class="l">' + (c.verified_at ? 'Verifiziert' : 'Unverifiziert — Spam-Schutz') + '</span>' +
+            (c.verified_at ? '' : '<button>Verifizieren</button>');
+          if (!c.verified_at){
+            row.querySelector('button').addEventListener('click', function(e){ e.stopPropagation(); window.openSmsVerify(c); });
+          }
+          item.parentNode.insertBefore(row, item.nextSibling);
+        });
+      } catch(_){}
+    };
+    window.loadContactsList.__bbSvfWrapped = true;
+  }
+
+  /* ============== Hook saveEcContact: nach Speichern direkt Verify-Modal ============== */
+  function wrapSaveContact(){
+    if (typeof window.saveEcContact !== 'function') return;
+    var orig = window.saveEcContact;
+    if (orig.__bbSvfWrapped) return;
+    window.saveEcContact = async function(){
+      await orig.apply(this, arguments);
+      // Nach dem Save: hole die letzte Row und biete Verify an
+      try {
+        var sb = getSb(); var me = (window.ME && window.ME.user_id);
+        if (!sb || !me) return;
+        var r = await sb.from('emergency_contacts').select('*').eq('user_id', me).is('verified_at', null).order('created_at',{ascending:false}).limit(1);
+        if (r && r.data && r.data[0]){
+          if (confirm('Notfallkontakt gespeichert!\n\nFür Spam-Schutz: möchtest du jetzt eine Verifizierungs-SMS schicken? Die Person muss den 6-stelligen Code an dich weitergeben.\n\n(Du kannst das auch später machen.)')){
+            window.openSmsVerify(r.data[0]);
+          }
+        }
+      } catch(_){}
+    };
+    window.saveEcContact.__bbSvfWrapped = true;
+  }
+
+  function init(){
+    setTimeout(function(){
+      decorateContactCards();
+      wrapSaveContact();
+    }, 1500);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 1000); });
+  else setTimeout(init, 1000);
 })();</script></body></html>
