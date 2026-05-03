@@ -2993,4 +2993,244 @@
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 600); });
   else setTimeout(init, 600);
+})();</script><script id="bb-webpush">/* ============== Real Web Push Subscription ==============
+ * Ersetzt die Stubs in bb-legal.js mit echtem subscribe-Flow:
+ *  - VAPID Public Key fetchen (aus app_config) + applicationServerKey
+ *  - Browser-PushManager subscribe / unsubscribe
+ *  - Endpoint + p256dh + auth in push_consents speichern
+ *  - SW-Message-Handler fuer push:click + resubscribe
+ * ======================================================== */
+(function(){
+  function $(id){ return document.getElementById(id); }
+  function getSb(){ return window.sb || null; }
+  function getMe(){ return (window.ME && window.ME.user_id) ? window.ME : null; }
+  function toast(m){ try{ if (typeof window.toast === 'function') return window.toast(m); }catch(_){} }
+
+  var VAPID_PUBLIC_KEY = 'BPD5Mn8YXT-JVm7GZlUG69bVQWVlgLIkh9r3WX8iyIiRI4Alkj0Pb2RQQcwUE13JUr2yFZvLwWrUDxFst197kFg';
+  var vapidLoaded = false;
+
+  async function loadVapidKey(){
+    if (vapidLoaded) return VAPID_PUBLIC_KEY;
+    var sb = getSb(); if (!sb) return VAPID_PUBLIC_KEY;
+    try {
+      var r = await sb.from('app_config').select('value').eq('key','vapid_public_key').single();
+      if (r && r.data && r.data.value) VAPID_PUBLIC_KEY = r.data.value;
+      vapidLoaded = true;
+    } catch(_) { vapidLoaded = true; }
+    return VAPID_PUBLIC_KEY;
+  }
+
+  function urlBase64ToUint8Array(base64String){
+    var padding = '='.repeat((4 - base64String.length % 4) % 4);
+    var base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+    var rawData = atob(base64);
+    var outputArray = new Uint8Array(rawData.length);
+    for (var i = 0; i < rawData.length; ++i) outputArray[i] = rawData.charCodeAt(i);
+    return outputArray;
+  }
+
+  function arrayBufferToBase64Url(buffer){
+    var bytes = new Uint8Array(buffer);
+    var binary = '';
+    for (var i = 0; i < bytes.byteLength; i++) binary += String.fromCharCode(bytes[i]);
+    return btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+  }
+
+  async function getOrSubscribe(){
+    if (!('serviceWorker' in navigator) || !('PushManager' in window)){
+      throw new Error('Push wird vom Browser nicht unterstützt');
+    }
+    var reg = await navigator.serviceWorker.ready;
+    var existing = await reg.pushManager.getSubscription();
+    if (existing){
+      // Falls applicationServerKey nicht passt → unsubscribe + neu
+      try {
+        var key = existing.options && existing.options.applicationServerKey;
+        if (!key) {
+          await existing.unsubscribe();
+          existing = null;
+        }
+      } catch(_){}
+    }
+    if (!existing){
+      var pubKey = await loadVapidKey();
+      existing = await reg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(pubKey)
+      });
+    }
+    return existing;
+  }
+
+  async function saveSubscriptionToDb(sub){
+    var sb = getSb(), me = getMe();
+    if (!sb || !me || !sub) return;
+    var json = sub.toJSON();
+    var p256dh = json.keys && json.keys.p256dh;
+    var auth = json.keys && json.keys.auth;
+    var existing = null;
+    try { var r = await sb.from('push_consents').select('*').eq('user_id', me.user_id).maybeSingle(); existing = r && r.data; } catch(_){}
+    var row = Object.assign({
+      user_id: me.user_id,
+      granted: true, scope_sos: true, scope_circle_sos: true, scope_circle_mood_alarm: true, scope_marketing: false,
+      user_agent: navigator.userAgent || ''
+    }, existing || {}, {
+      granted: true,
+      granted_at: new Date().toISOString(),
+      revoked_at: null,
+      endpoint: json.endpoint,
+      p256dh_key: p256dh,
+      auth_key: auth,
+      expiration_time: json.expirationTime || null,
+      updated_at: new Date().toISOString()
+    });
+    await sb.from('push_consents').upsert(row, { onConflict: 'user_id' });
+  }
+
+  /* ============== Override stubs in bb-legal.js ============== */
+  window.enablePushNotifications = async function(){
+    if (!('Notification' in window)){ toast('Browser unterstützt keine Push'); return; }
+    try {
+      var perm = await Notification.requestPermission();
+      if (perm !== 'granted'){
+        toast('Push-Erlaubnis abgelehnt');
+        try { await refreshUi(); } catch(_){}
+        return;
+      }
+      var sub = await getOrSubscribe();
+      await saveSubscriptionToDb(sub);
+      toast('Push aktiviert ✓');
+      if (window.crew && window.crew.safety && window.crew.safety.log) window.crew.safety.log('push_enabled', { endpoint_host: (function(){ try { return new URL(sub.endpoint).host; } catch(_) { return ''; } })() }, 'consent');
+      try { await refreshUi(); } catch(_){}
+    } catch(e){
+      console.error('[push] enable failed', e);
+      toast('Fehler bei Push-Aktivierung: ' + (e && e.message ? e.message : 'unbekannt'));
+    }
+  };
+
+  window.disablePushNotifications = async function(){
+    try {
+      if ('serviceWorker' in navigator){
+        try {
+          var reg = await navigator.serviceWorker.ready;
+          var sub = await reg.pushManager.getSubscription();
+          if (sub) await sub.unsubscribe();
+        } catch(_){}
+      }
+      var sb = getSb(), me = getMe();
+      if (sb && me) await sb.from('push_consents').upsert({
+        user_id: me.user_id, granted: false, revoked_at: new Date().toISOString(),
+        endpoint: null, p256dh_key: null, auth_key: null, updated_at: new Date().toISOString()
+      }, { onConflict: 'user_id' });
+      toast('Push deaktiviert');
+      if (window.crew && window.crew.safety && window.crew.safety.log) window.crew.safety.log('push_disabled', {}, 'consent');
+      try { await refreshUi(); } catch(_){}
+    } catch(e){ console.error(e); }
+  };
+
+  /* ============== Test-Push Button (im Push-Section unten ergaenzen) ============== */
+  window.sendTestPush = async function(){
+    var sb = getSb(); if (!sb) return;
+    try {
+      await sb.rpc('send_self_test_push', { p_title: 'crew. funktioniert!', p_body: 'Wenn du das siehst, ist Push korrekt eingerichtet.' });
+      toast('Test gesendet — innerhalb von 5 Sek. erscheint die Notification');
+    } catch(e){ console.error(e); toast('Test fehlgeschlagen'); }
+  };
+
+  /* ============== UI-Refresh-Helper (nutzt die existierende refreshPushUi falls da) ============== */
+  async function refreshUi(){
+    // Trigger der bb-legal.js-internen Refresh — wir simulieren durch openSafeplaceHub re-trigger
+    var card = $('pnCard'); if (!card) return;
+    var perm = ('Notification' in window) ? Notification.permission : 'unsupported';
+    var sub = null;
+    try { var reg = await navigator.serviceWorker.ready; sub = await reg.pushManager.getSubscription(); } catch(_){}
+    var on = (perm === 'granted') && !!sub;
+    card.classList.toggle('is-on', on);
+    var badge = $('pnBadge');
+    if (badge){
+      if (perm === 'unsupported'){ badge.className='badge'; badge.textContent='nicht unterstützt'; }
+      else if (on){ badge.className='badge on'; badge.textContent='an'; }
+      else if (perm === 'denied'){ badge.className='badge off'; badge.textContent='blockiert'; }
+      else { badge.className='badge'; badge.textContent='aus'; }
+    }
+    var actions = $('pnActions');
+    if (actions){
+      if (on){
+        actions.innerHTML = '<button class="pn-btn pn-btn-on" onclick="window.sendTestPush&&window.sendTestPush()" style="background:rgba(255,255,255,.08);color:#fff">Test-Push senden</button><button class="pn-btn pn-btn-off" onclick="window.disablePushNotifications&&window.disablePushNotifications()">Push aus</button>';
+      } else if (perm === 'denied' || perm === 'unsupported'){
+        actions.innerHTML = '<div style="font-size:11px;color:rgba(255,255,255,.5);text-align:center;padding:6px">' + (perm === 'denied' ? 'Bitte in Browser-Einstellungen Push erlauben.' : 'Browser unterstützt keine Web-Push-Notifications.') + '</div>';
+      } else {
+        actions.innerHTML = '<button class="pn-btn pn-btn-on" onclick="window.enablePushNotifications&&window.enablePushNotifications()">Push aktivieren</button>';
+      }
+    }
+  }
+
+  /* ============== SW-Messages: push:click und resubscribe ============== */
+  if ('serviceWorker' in navigator){
+    navigator.serviceWorker.addEventListener('message', function(ev){
+      var d = ev && ev.data; if (!d) return;
+      if (d.type === 'push:click'){
+        // Open SafePlace if requested
+        if (d.url && d.url.indexOf('openSafeplace=1') >= 0 && typeof window.openSafeplaceHub === 'function'){
+          try { window.openSafeplaceHub(); } catch(_){}
+        }
+      } else if (d.type === 'push:resubscribe'){
+        // Token erneuert — wenn User bereits granted, neu subscriben
+        (async function(){
+          var sb = getSb(), me = getMe(); if (!sb || !me) return;
+          try {
+            var r = await sb.from('push_consents').select('granted').eq('user_id', me.user_id).maybeSingle();
+            if (r && r.data && r.data.granted){
+              var sub = await getOrSubscribe();
+              await saveSubscriptionToDb(sub);
+              console.log('[push] resubscribed after pushsubscriptionchange');
+            }
+          } catch(e){ console.warn('[push] resubscribe failed', e); }
+        })();
+      }
+    });
+  }
+
+  /* ============== URL-Parameter: openSafeplace=1 → Hub auf machen ============== */
+  function checkUrlParams(){
+    try {
+      var p = new URLSearchParams(window.location.search);
+      if (p.get('openSafeplace') === '1'){
+        var fire = function(){
+          if (typeof window.openSafeplaceHub === 'function'){ window.openSafeplaceHub(); }
+          else setTimeout(fire, 500);
+        };
+        setTimeout(fire, 1500);
+        // URL aufräumen
+        try {
+          var u = new URL(window.location.href); u.searchParams.delete('openSafeplace');
+          window.history.replaceState({}, '', u);
+        } catch(_){}
+      }
+    } catch(_){}
+  }
+  checkUrlParams();
+
+  /* ============== Auto-Sync: existierende Subscription beim Login mit DB synchronisieren ============== */
+  async function syncExistingSubscription(){
+    if (!('serviceWorker' in navigator) || !('PushManager' in window)) return;
+    var me = getMe(); if (!me) return;
+    try {
+      var reg = await navigator.serviceWorker.ready;
+      var sub = await reg.pushManager.getSubscription();
+      if (!sub) return;
+      var sb = getSb(); if (!sb) return;
+      var r = await sb.from('push_consents').select('endpoint').eq('user_id', me.user_id).maybeSingle();
+      if (r && r.data && r.data.endpoint === sub.endpoint) return; // already synced
+      await saveSubscriptionToDb(sub);
+      console.log('[push] subscription resynced to db');
+    } catch(_){}
+  }
+
+  /* ============== Boot ============== */
+  function init(){
+    setTimeout(syncExistingSubscription, 3500);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 800); });
+  else setTimeout(init, 800);
 })();</script></body></html>
