@@ -7280,4 +7280,255 @@
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 1500); });
   else setTimeout(init, 1500);
+})();</script><style id="bb-polish">/* ============================================================
+ * Compliance-Polish: Header + Profil + Bottom-Nav + Empty-States
+ * ============================================================ */
+
+/* === 1. HEADER CLEANUP === */
+/* SafePlace-Shield-Button raus (jetzt redundant — SafePlace ist Tab) */
+.hdr-btn.hdr-safeplace{display:none!important}
+
+/* Header-Container: bessere Spacing */
+.app-header{padding:max(10px,env(safe-area-inset-top,10px)) 16px 10px!important}
+.hdr-actions{gap:8px!important}
+
+/* === Privacy-Status-Pill im Header (links neben SOS) === */
+.priv-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 10px 6px 8px;background:rgba(20,18,26,.78);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border-radius:999px;border:.5px solid rgba(255,255,255,.10);font-size:11px;font-weight:700;color:#fff;letter-spacing:.2px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .15s ease;flex:none}
+.priv-pill:active{transform:scale(.95)}
+.priv-pill .dot{width:8px;height:8px;border-radius:50%;background:#34D399;flex:none;box-shadow:0 0 6px #34D399}
+.priv-pill.live{border-color:rgba(254,60,114,.42);background:linear-gradient(135deg,rgba(254,60,114,.18),rgba(20,18,26,.78))}
+.priv-pill.live .dot{background:#FE3C72;box-shadow:0 0 8px #FE3C72;animation:privPulse 1.4s ease-in-out infinite}
+.priv-pill.pause{border-color:rgba(255,170,0,.42);color:#FFAA00}
+.priv-pill.pause .dot{background:#FFAA00;box-shadow:0 0 6px #FFAA00}
+.priv-pill.sos{border-color:rgba(254,60,114,.55);background:linear-gradient(135deg,rgba(254,60,114,.30),rgba(254,60,114,.10));color:#fff;box-shadow:0 4px 18px rgba(254,60,114,.35)}
+.priv-pill.sos .dot{background:#FE3C72;animation:privPulseHard .7s ease-in-out infinite}
+@keyframes privPulse{0%,100%{opacity:1}50%{opacity:.5}}
+@keyframes privPulseHard{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
+
+/* Auf engen Phones: Pill schrumpft, nur Dot */
+@media (max-width:380px){.priv-pill span:not(.dot){display:none}.priv-pill{padding:6px;width:24px;height:24px;justify-content:center}.priv-pill .dot{width:8px;height:8px}}
+
+/* === 2. BOTTOM-NAV: ACTIVE-PILL PROMINENTER === */
+#navBar::before{background:linear-gradient(135deg,rgba(254,60,114,.28),rgba(255,31,92,.18))!important;box-shadow:0 6px 18px rgba(254,60,114,.35),inset 0 1px 0 rgba(255,255,255,.18)!important}
+#navBar.dragging::before{background:linear-gradient(135deg,rgba(254,60,114,.40),rgba(255,31,92,.25))!important}
+
+/* Active-Tab Text/Icon brighter */
+#navBar button.active{color:#fff!important}
+#navBar button.active .ni svg{color:#fff!important;filter:drop-shadow(0 0 8px rgba(254,60,114,.5))!important}
+
+/* === 3. PROFIL-TAB CLEANUP === */
+#screen-profile .ach-section,
+#screen-profile .achievements,
+#screen-profile .v104-pass,
+#screen-profile [class*="pass-tab"],
+#screen-profile [class*="achievement"],
+#screen-profile .streak-card,
+#screen-profile .leaderboard,
+#screen-profile [class*="leaderboard"],
+#screen-profile .crew-pass-card,
+#screen-profile [class*="badge-grid"],
+#screen-profile [class*="trophy"],
+#screen-profile [class*="aura"],
+#screen-profile .v102-streak,
+#screen-profile [class*="level-card"],
+#screen-profile [class*="stats-grid"]{display:none!important}
+
+/* === Tinder-Card-Style für Profil === */
+.pf-hub{display:flex;flex-direction:column;gap:14px;padding:18px 14px max(120px,calc(env(safe-area-inset-bottom,0px) + 100px))}
+.pf-hero{display:flex;align-items:center;gap:14px;padding:18px 18px;background:linear-gradient(135deg,rgba(254,60,114,.16),rgba(255,109,46,.06));border:.5px solid rgba(254,60,114,.18);border-radius:24px}
+.pf-hero-av{flex:none;width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#FE3C72,#BF5AF2);background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:26px;border:3px solid rgba(255,255,255,.12);box-shadow:0 8px 22px rgba(254,60,114,.3)}
+.pf-hero-info{flex:1;min-width:0}
+.pf-hero-name{font-size:22px;font-weight:900;color:#fff;letter-spacing:-.4px;line-height:1.1}
+.pf-hero-handle{font-size:13px;color:rgba(255,255,255,.55);font-weight:500;margin-top:3px}
+.pf-edit-btn{flex:none;padding:8px 14px;border:0;border-radius:999px;background:rgba(255,255,255,.08);color:#fff;font-size:11.5px;font-weight:700;cursor:pointer;letter-spacing:.3px}
+.pf-edit-btn:active{transform:scale(.95);background:rgba(255,255,255,.12)}
+
+.pf-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pf-card{position:relative;display:flex;flex-direction:column;justify-content:flex-end;border-radius:20px;overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent;height:140px;border:0;text-align:left;color:#fff;font-family:inherit;padding:14px 16px;transition:transform .15s ease}
+.pf-card:active{transform:scale(.97)}
+.pf-card::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 75% 25%,rgba(255,255,255,.16),transparent 65%)}
+.pf-card-icon-wrap{position:absolute;right:14px;top:14px;width:32px;height:32px;color:rgba(255,255,255,.85);filter:drop-shadow(0 4px 10px rgba(0,0,0,.3))}
+.pf-card-icon-wrap .bb-ic{width:32px;height:32px}
+.pf-card-title{font-size:16px;font-weight:900;letter-spacing:-.2px;line-height:1.1;color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.25);position:relative;z-index:1}
+.pf-card-sub{font-size:11.5px;color:rgba(255,255,255,.78);font-weight:500;line-height:1.3;text-shadow:0 1px 3px rgba(0,0,0,.2);margin-top:2px;position:relative;z-index:1;max-width:75%}
+
+.pf-card.var-edit{background:linear-gradient(135deg,#0A84FF,#5E5CE6)}
+.pf-card.var-data{background:linear-gradient(135deg,#FE3C72,#BF5AF2)}
+.pf-card.var-set{background:linear-gradient(135deg,#FF6A3D,#FFD60A)}
+.pf-card.var-help{background:linear-gradient(135deg,#34C759,#30D158)}
+.pf-card.var-logout{background:linear-gradient(135deg,#1a161e,#2d2530);border:1px dashed rgba(255,255,255,.15)}
+
+.pf-meta{padding:14px 18px;background:rgba(255,255,255,.04);border:.5px solid rgba(255,255,255,.06);border-radius:18px;font-size:11px;color:rgba(255,255,255,.55);text-align:center;line-height:1.5}
+.pf-meta a{color:rgba(255,255,255,.78);text-decoration:none;font-weight:600}
+
+/* === 4. SPOTS-MAP EMPTY-STATE BRAND-PINK === */
+.sm-empty .em{font-size:60px;margin-bottom:14px;filter:drop-shadow(0 4px 12px rgba(254,60,114,.25))}
+.sm-empty .l{color:#fff;font-weight:900;font-size:20px;letter-spacing:-.3px;margin-bottom:8px}
+.sm-empty .s{color:rgba(255,255,255,.65);font-size:13.5px;line-height:1.5;margin-bottom:18px}
+.sm-empty button{padding:14px 28px;border:0;border-radius:999px;background:linear-gradient(135deg,#FE3C72,#FF1F5C);color:#fff;font-size:13px;font-weight:900;letter-spacing:.4px;text-transform:uppercase;cursor:pointer;box-shadow:0 6px 18px rgba(254,60,114,.45);-webkit-tap-highlight-color:transparent}
+.sm-empty button:active{transform:scale(.96)}</style><script id="bb-polish-js">/* ============================================================
+ * Compliance-Polish: Header-Privacy-Pill + Profil-Tinder + Empty-CTAs
+ * ============================================================ */
+(function(){
+  function $(id){ return document.getElementById(id); }
+  function getSb(){ return window.sb || null; }
+  function getMe(){ return (window.ME && window.ME.user_id) ? window.ME : null; }
+  function fmtFut(iso){ try{var d=new Date(iso);var dif=d.getTime()-Date.now();if(dif<=0)return '0m';var mn=Math.floor(dif/60000);if(mn<60)return mn+'m';var h=Math.floor(mn/60);return h+'h';}catch(_){return ''}}
+  function initials(n){if(!n)return'?';return n.trim().split(/\s+/).slice(0,2).map(function(p){return p[0];}).join('').toUpperCase();}
+
+  /* === 1. Privacy-Status-Pill im Header === */
+  function ensurePrivPill(){
+    if ($('privPill')) return;
+    var actions = document.querySelector('.hdr-actions'); if (!actions) return;
+    var pill = document.createElement('button');
+    pill.id = 'privPill'; pill.className = 'priv-pill';
+    pill.title = 'Mein Privacy-Status';
+    pill.innerHTML = '<span class="dot"></span><span id="privPillText">Safe</span>';
+    pill.addEventListener('click', function(){
+      // Open SafePlace
+      var safeBtn = document.querySelector('#navBar button[onclick*="\'radar\'"]');
+      if (safeBtn) safeBtn.click();
+    });
+    // Insert vor SOS-Button
+    var sosBtn = actions.querySelector('.hdr-sos');
+    if (sosBtn) actions.insertBefore(pill, sosBtn);
+    else actions.insertBefore(pill, actions.firstChild);
+  }
+
+  async function refreshPrivPill(){
+    ensurePrivPill();
+    var pill = $('privPill'); var txt = $('privPillText'); if (!pill || !txt) return;
+    var sb = getSb(), me = getMe(); if (!sb || !me) return;
+    try {
+      var [rl, rp, rs] = await Promise.all([
+        sb.from('live_locations').select('expires_at,share_with').eq('user_id', me.user_id).maybeSingle(),
+        sb.from('profiles').select('safety_pause_until').eq('user_id', me.user_id).maybeSingle(),
+        sb.from('sos_alerts').select('id').eq('user_id', me.user_id).eq('resolved', false).limit(1)
+      ]);
+      var sosActive = rs.data && rs.data[0];
+      var paused = rp && rp.data && rp.data.safety_pause_until && new Date(rp.data.safety_pause_until).getTime() > Date.now();
+      var liveActive = rl && rl.data && new Date(rl.data.expires_at).getTime() > Date.now();
+      pill.classList.remove('live','pause','sos');
+      if (sosActive){
+        pill.classList.add('sos');
+        txt.textContent = 'SOS aktiv';
+      } else if (paused){
+        pill.classList.add('pause');
+        txt.textContent = 'Pause '+fmtFut(rp.data.safety_pause_until);
+      } else if (liveActive){
+        pill.classList.add('live');
+        var scope = rl.data.share_with === 'crew' ? 'Crew+Circle' : 'Circle';
+        txt.textContent = 'Live · '+fmtFut(rl.data.expires_at);
+      } else {
+        txt.textContent = 'Safe';
+      }
+    } catch(_){}
+  }
+
+  /* === 2. Profil-Tab Tinder-Style === */
+  function injectProfileHub(){
+    var screen = document.getElementById('screen-profile'); if (!screen) return;
+    if ($('pfHub')) return;
+    var hub = document.createElement('div');
+    hub.id = 'pfHub'; hub.className = 'pf-hub';
+    hub.innerHTML =
+      '<div class="pf-hero">'+
+        '<div class="pf-hero-av" id="pfHeroAv"></div>'+
+        '<div class="pf-hero-info"><div class="pf-hero-name" id="pfHeroName">—</div><div class="pf-hero-handle" id="pfHeroHandle">—</div></div>'+
+        '<button class="pf-edit-btn" onclick="window.editProfile&&window.editProfile()">Bearbeiten</button>'+
+      '</div>'+
+      '<div class="pf-grid">'+
+        '<button class="pf-card var-data" id="pfCardData">'+
+          '<div class="pf-card-icon-wrap"><span class="bb-ic bb-ic-shield"></span></div>'+
+          '<div class="pf-card-title">Meine Daten</div>'+
+          '<div class="pf-card-sub">DSGVO-Übersicht, Export, Löschen</div>'+
+        '</button>'+
+        '<button class="pf-card var-set" id="pfCardSet">'+
+          '<div class="pf-card-icon-wrap"><span class="bb-ic bb-ic-pin"></span></div>'+
+          '<div class="pf-card-title">Privatsphäre</div>'+
+          '<div class="pf-card-sub">Wer sieht was, Pause-Mode</div>'+
+        '</button>'+
+        '<button class="pf-card var-help" id="pfCardHelp">'+
+          '<div class="pf-card-icon-wrap"><span class="bb-ic bb-ic-phone"></span></div>'+
+          '<div class="pf-card-title">Hilfe</div>'+
+          '<div class="pf-card-sub">Krisen-Hotlines, Notruf</div>'+
+        '</button>'+
+        '<button class="pf-card var-edit" id="pfCardCircle">'+
+          '<div class="pf-card-icon-wrap"><span class="bb-ic bb-ic-people"></span></div>'+
+          '<div class="pf-card-title">Mein Circle</div>'+
+          '<div class="pf-card-sub">Safety-Beziehungen verwalten</div>'+
+        '</button>'+
+      '</div>'+
+      '<button class="pf-card var-logout" id="pfCardLogout" style="height:auto;padding:14px 18px;flex-direction:row;align-items:center;justify-content:center;gap:10px">'+
+        '<span style="font-size:14px;font-weight:800;color:rgba(255,255,255,.65)">↩ Ausloggen</span>'+
+      '</button>'+
+      '<div class="pf-meta">'+
+        'crew. v1.0 — <a href="/agb.html">AGB</a> · <a href="/datenschutz.html">Datenschutz</a> · <a href="/impressum.html">Impressum</a><br>'+
+        'Butterbread Technologies'+
+      '</div>';
+    screen.appendChild(hub);
+    bindProfileCards();
+    refreshProfileHero();
+  }
+
+  function bindProfileCards(){
+    var dc = $('pfCardData'); if (dc) dc.addEventListener('click', function(){ if (window.bbOpenSettings) window.bbOpenSettings('data'); });
+    var sc = $('pfCardSet'); if (sc) sc.addEventListener('click', function(){ if (window.bbOpenSettings) window.bbOpenSettings('privacy'); });
+    var hc = $('pfCardHelp'); if (hc) hc.addEventListener('click', function(){ if (window.bbOpenSettings) window.bbOpenSettings('krise'); });
+    var cc = $('pfCardCircle'); if (cc) cc.addEventListener('click', function(){ if (window.bbOpenSettings) window.bbOpenSettings('circle'); });
+    var lo = $('pfCardLogout'); if (lo) lo.addEventListener('click', function(){
+      if (!confirm('Wirklich ausloggen?')) return;
+      var sb = getSb(); if (sb && sb.auth) sb.auth.signOut().then(function(){ window.location.href = '/'; });
+    });
+  }
+
+  async function refreshProfileHero(){
+    var sb = getSb(), me = getMe(); if (!sb || !me) return;
+    try {
+      var r = await sb.from('profiles').select('name,photo_url,age,bio').eq('user_id', me.user_id).single();
+      var p = r.data; if (!p) return;
+      var av = $('pfHeroAv');
+      if (av){
+        if (p.photo_url){ av.style.backgroundImage = 'url('+p.photo_url+')'; av.textContent = ''; }
+        else { av.textContent = initials(p.name); }
+      }
+      var nm = $('pfHeroName'); if (nm) nm.textContent = p.name || 'Anon';
+      var hd = $('pfHeroHandle'); if (hd) hd.textContent = (p.age ? p.age + ' Jahre' : '') + (p.bio ? ' · ' + p.bio.slice(0, 40) + (p.bio.length > 40 ? '…' : '') : '');
+    } catch(_){}
+  }
+
+  /* === 3. Spots-Map Empty-State CTA === */
+  function injectSpotsCta(){
+    var em = $('smEmpty'); if (!em) return;
+    if (em.querySelector('button')) return;
+    var btn = document.createElement('button');
+    btn.textContent = '+ Ersten Spot erstellen';
+    btn.addEventListener('click', function(){ if (window.bbCreateHotspot) window.bbCreateHotspot(); });
+    em.appendChild(btn);
+  }
+
+  /* === Realtime + Periodic Refresh === */
+  function attachRT(){
+    if (!window.crew || !window.crew.safety){ setTimeout(attachRT, 1000); return; }
+    ['rt:sos','rt:liveloc'].forEach(function(ev){
+      window.crew.safety.on(ev, refreshPrivPill);
+    });
+    setInterval(refreshPrivPill, 30000);
+  }
+
+  function init(){
+    setTimeout(function(){
+      ensurePrivPill();
+      refreshPrivPill();
+      injectProfileHub();
+      injectSpotsCta();
+      attachRT();
+      // Polling-Fallback für Profil-Tab (in case spots-screen erst später geladen)
+      var observer = new MutationObserver(function(){ injectSpotsCta(); injectProfileHub(); });
+      var main = document.querySelector('main');
+      if (main) observer.observe(main, { childList: true, subtree: true });
+    }, 6000);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 1500); });
+  else setTimeout(init, 1500);
 })();</script></body></html>
