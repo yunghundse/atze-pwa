@@ -16,3 +16,9 @@ Thumbs.db
 node_modules/
 dist/
 .cache/
+
+# Lokale Backups & Build-Output
+_backup-*
+dist/
+build/node_modules/
+build/package-lock.json
