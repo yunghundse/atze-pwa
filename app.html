@@ -2212,4 +2212,474 @@
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 600); });
   else setTimeout(init, 600);
+})();</script><script id="bb-architecture">/* ============================================================
+ * window.crew.safety — Unified Architecture Layer
+ * ============================================================
+ * Bietet einen einheitlichen Namespace für alle Safety-Module:
+ *  - state: zentrales Store für UI-States
+ *  - events: Pub/Sub-Bus für Modul-übergreifende Kommunikation
+ *  - log:   schreibt in safety_audit_log (Server) + Console
+ *  - sb:    konsolidierter Supabase-Zugriff
+ *  - me:    aktueller User (memoized)
+ *  - util:  Hilfen (fmtRel, fmtFuture, initials, hexToRgb)
+ *  - modules: Registry für Sub-Module
+ * ============================================================ */
+(function(){
+  if (window.crew && window.crew.safety) return;
+  var crew = window.crew = window.crew || {};
+
+  /* ---- State Store ---- */
+  var state = {
+    sharing: { active:false, expiresAt:null, scope:'circle', duration:4 },
+    sos: { active:false, alertId:null, startedAt:null },
+    mood: { current:null, expiresAt:null },
+    pause: { until:null, active:false },
+    consent: { acceptedAt:null, version:1 },
+    contacts: [],
+    circle: [],
+    sharers: [],
+    audit: []
+  };
+
+  /* ---- Event Bus ---- */
+  var listeners = {};
+  function on(event, fn){
+    if (!listeners[event]) listeners[event] = [];
+    listeners[event].push(fn);
+    return function off(){ listeners[event] = listeners[event].filter(function(x){ return x !== fn; }); };
+  }
+  function emit(event, payload){
+    var arr = listeners[event] || [];
+    arr.forEach(function(fn){ try { fn(payload); } catch(e){ console.warn('[crew.safety] listener error for '+event, e); } });
+    if (listeners['*']) listeners['*'].forEach(function(fn){ try { fn(event, payload); } catch(_){} });
+  }
+
+  /* ---- Module Registry ---- */
+  var modules = {};
+  function register(name, mod){ modules[name] = mod; emit('module:registered', { name: name }); return mod; }
+
+  /* ---- Supabase + Me ---- */
+  function sb(){ return window.sb || null; }
+  function me(){ return (window.ME && window.ME.user_id) ? window.ME : null; }
+
+  /* ---- Logging: Audit-Log + Console ---- */
+  async function log(action, meta, category){
+    var s = sb(), u = me();
+    var entry = { user_id: u && u.user_id, action: action, category: category || 'data', meta: meta || {}, created_at: new Date().toISOString() };
+    state.audit.unshift(entry);
+    if (state.audit.length > 100) state.audit.pop();
+    emit('log', entry);
+    if (!s || !u) return;
+    try {
+      await s.from('safety_audit_log').insert({ user_id: u.user_id, action: action, category: category || 'data', meta: meta || {} });
+    } catch(e){ console.warn('[crew.safety] audit insert failed', e); }
+  }
+
+  /* ---- Utilities ---- */
+  function fmtRel(iso){
+    try{var d=new Date(iso);var dif=Date.now()-d.getTime();var s=Math.floor(dif/1000);
+    if(s<60)return 'gerade eben';var m=Math.floor(s/60);if(m<60)return 'vor '+m+' Min';
+    var h=Math.floor(m/60);if(h<24)return 'vor '+h+' Std';var dd=Math.floor(h/24);if(dd<7)return 'vor '+dd+' T';
+    return d.toLocaleDateString('de-DE',{day:'numeric',month:'short'});}catch(_){return ''}
+  }
+  function fmtFuture(iso){
+    try{var d=new Date(iso);var dif=d.getTime()-Date.now();if(dif<=0)return 'abgelaufen';
+    var mn=Math.floor(dif/60000);if(mn<60)return 'noch '+mn+'m';var h=Math.floor(mn/60);var rm=mn%60;
+    return rm?'noch '+h+'h '+rm+'m':'noch '+h+'h';}catch(_){return ''}
+  }
+  function initials(n){if(!n)return'?';return n.trim().split(/\s+/).slice(0,2).map(function(p){return p[0];}).join('').toUpperCase();}
+  function hexToRgb(hex){hex=hex.replace('#','');if(hex.length===3)hex=hex.split('').map(function(c){return c+c}).join('');return [parseInt(hex.slice(0,2),16),parseInt(hex.slice(2,4),16),parseInt(hex.slice(4,6),16)];}
+  function tint(hex, a){return hex?'rgba('+hexToRgb(hex).join(',')+','+(a||0.18)+')':'rgba(255,255,255,0.08)';}
+  function toast(m){try{if(typeof window.toast==='function')return window.toast(m);}catch(_){}}
+
+  /* ---- Public API ---- */
+  crew.safety = {
+    state: state,
+    on: on,
+    emit: emit,
+    log: log,
+    register: register,
+    modules: modules,
+    sb: sb,
+    me: me,
+    util: { fmtRel: fmtRel, fmtFuture: fmtFuture, initials: initials, tint: tint, hexToRgb: hexToRgb, toast: toast },
+    version: '2.0.0'
+  };
+
+  /* ---- Auto-Hook bestehende Funktionen, damit sie Events emitten ---- */
+  function autohook(){
+    // SOS
+    if (window.cancelSosActive && !window.cancelSosActive.__bbHooked){
+      var origCancel = window.cancelSosActive;
+      window.cancelSosActive = async function(){
+        var was = state.sos.active;
+        var alertId = state.sos.alertId;
+        try { await origCancel.apply(this, arguments); } catch(e){ throw e; }
+        state.sos.active = false; state.sos.alertId = null; state.sos.startedAt = null;
+        emit('sos:resolved', { alertId: alertId });
+        if (was) log('sos_resolved', { alertId: alertId }, 'sos');
+      };
+      window.cancelSosActive.__bbHooked = true;
+    }
+    // Mood
+    if (window.saveMood && !window.saveMood.__bbHooked){
+      var origSave = window.saveMood;
+      window.saveMood = async function(){
+        var result = await origSave.apply(this, arguments);
+        emit('mood:set', { });
+        log('mood_set', {}, 'mood');
+        return result;
+      };
+      window.saveMood.__bbHooked = true;
+    }
+    // Live-Loc
+    if (window.startLiveSharing && !window.startLiveSharing.__bbHooked){
+      var origStart = window.startLiveSharing;
+      window.startLiveSharing = async function(scope, hours){
+        var result = await origStart.apply(this, arguments);
+        state.sharing.active = true; state.sharing.scope = scope; state.sharing.duration = hours;
+        emit('liveloc:started', { scope: scope, hours: hours });
+        log('liveloc_started', { scope: scope, duration_hours: hours }, 'live_location');
+        return result;
+      };
+      window.startLiveSharing.__bbHooked = true;
+    }
+    if (window.stopLiveSharing && !window.stopLiveSharing.__bbHooked){
+      var origStop = window.stopLiveSharing;
+      window.stopLiveSharing = async function(){
+        var result = await origStop.apply(this, arguments);
+        state.sharing.active = false;
+        emit('liveloc:stopped', {});
+        log('liveloc_stopped', {}, 'live_location');
+        return result;
+      };
+      window.stopLiveSharing.__bbHooked = true;
+    }
+    // Check-in
+    if (window.doSafetyCheckin && !window.doSafetyCheckin.__bbHooked){
+      var origCheckin = window.doSafetyCheckin;
+      window.doSafetyCheckin = async function(msg){
+        var result = await origCheckin.apply(this, arguments);
+        emit('checkin:done', { message: msg });
+        log('checkin_done', {}, 'checkin');
+        return result;
+      };
+      window.doSafetyCheckin.__bbHooked = true;
+    }
+    // Pause
+    if (window.activatePause && !window.activatePause.__bbHooked){
+      var origPause = window.activatePause;
+      window.activatePause = async function(hours){
+        var result = await origPause.apply(this, arguments);
+        state.pause.active = true; state.pause.until = new Date(Date.now() + hours * 3600 * 1000).toISOString();
+        emit('pause:activated', { hours: hours });
+        log('pause_activated', { duration_hours: hours }, 'privacy');
+        return result;
+      };
+      window.activatePause.__bbHooked = true;
+    }
+    if (window.endPauseMode && !window.endPauseMode.__bbHooked){
+      var origEndP = window.endPauseMode;
+      window.endPauseMode = async function(){
+        var result = await origEndP.apply(this, arguments);
+        state.pause.active = false; state.pause.until = null;
+        emit('pause:ended', {});
+        log('pause_ended', {}, 'privacy');
+        return result;
+      };
+      window.endPauseMode.__bbHooked = true;
+    }
+    // Contacts
+    if (window.saveEcContact && !window.saveEcContact.__bbHooked){
+      var origSaveEc = window.saveEcContact;
+      window.saveEcContact = async function(){
+        var result = await origSaveEc.apply(this, arguments);
+        emit('contact:saved', {});
+        log('contact_saved', {}, 'contact');
+        return result;
+      };
+      window.saveEcContact.__bbHooked = true;
+    }
+    // Circle
+    if (window.acceptSafetyCircleInvite && !window.acceptSafetyCircleInvite.__bbHooked){
+      var origAcc = window.acceptSafetyCircleInvite;
+      window.acceptSafetyCircleInvite = async function(){
+        var result = await origAcc.apply(this, arguments);
+        emit('circle:accepted', {});
+        log('circle_accepted', {}, 'circle');
+        return result;
+      };
+      window.acceptSafetyCircleInvite.__bbHooked = true;
+    }
+    // Consent
+    if (window.acceptDsvConsent && !window.acceptDsvConsent.__bbHooked){
+      var origC = window.acceptDsvConsent;
+      window.acceptDsvConsent = function(){
+        origC.apply(this, arguments);
+        state.consent.acceptedAt = new Date().toISOString();
+        emit('consent:accepted', {});
+        log('consent_accepted', { version: 1 }, 'consent');
+      };
+      window.acceptDsvConsent.__bbHooked = true;
+    }
+    // Purge
+    if (window.confirmPurgeData && !window.confirmPurgeData.__bbHooked){
+      var origPurge = window.confirmPurgeData;
+      window.confirmPurgeData = async function(){
+        var result = await origPurge.apply(this, arguments);
+        emit('data:purged', {});
+        log('data_purged', {}, 'data');
+        return result;
+      };
+      window.confirmPurgeData.__bbHooked = true;
+    }
+  }
+
+  function init(){
+    autohook();
+    setTimeout(autohook, 1500);
+    setTimeout(autohook, 3000);
+    emit('init', { version: crew.safety.version });
+    console.log('[crew.safety] architecture v'+crew.safety.version+' initialized');
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 1200); });
+  else setTimeout(init, 1200);
+})();</script><style id="bb-compliance-ui">/* ============== Compliance Dashboard CSS ============== */
+
+/* Activity Log */
+.cl-activity{display:flex;flex-direction:column;gap:4px}
+.cl-activity-item{display:flex;align-items:center;gap:10px;padding:9px 12px;background:rgba(255,255,255,.03);border-radius:10px;font-size:11.5px}
+.cl-activity-cat{flex:none;width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff}
+.cl-activity-cat.mood{background:linear-gradient(135deg,#FE3C72,#BF5AF2)}
+.cl-activity-cat.sos{background:linear-gradient(135deg,#FF1F5C,#D11A52)}
+.cl-activity-cat.checkin{background:linear-gradient(135deg,#34C759,#30D158)}
+.cl-activity-cat.live_location{background:linear-gradient(135deg,#FFAA00,#FF6A3D)}
+.cl-activity-cat.contact{background:linear-gradient(135deg,#0A84FF,#5E5CE6)}
+.cl-activity-cat.circle{background:linear-gradient(135deg,#BF5AF2,#FE3C72)}
+.cl-activity-cat.privacy{background:rgba(255,255,255,.10);color:rgba(255,255,255,.7)}
+.cl-activity-cat.consent{background:rgba(52,199,89,.20);color:#34D399}
+.cl-activity-cat.data{background:rgba(255,255,255,.08);color:rgba(255,255,255,.6)}
+.cl-activity-info{flex:1;min-width:0}
+.cl-activity-info .a{display:block;color:#fff;font-weight:600;font-size:12px}
+.cl-activity-info .t{color:rgba(255,255,255,.45);font-size:10.5px}
+
+/* Crisis Resources */
+.cl-crisis{display:flex;flex-direction:column;gap:8px}
+.cl-crisis-item{display:flex;align-items:center;gap:12px;padding:13px 14px;background:linear-gradient(135deg,rgba(254,60,114,.08),rgba(254,60,114,.02));border:.5px solid rgba(254,60,114,.18);border-radius:14px;color:#fff;text-decoration:none}
+.cl-crisis-item:active{transform:scale(.98)}
+.cl-crisis-icon{flex:none;width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#FE3C72,#FF1F5C);display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;box-shadow:0 4px 12px rgba(254,60,114,.35)}
+.cl-crisis-info{flex:1;min-width:0}
+.cl-crisis-info .l{font-size:13px;font-weight:700;color:#fff;line-height:1.2}
+.cl-crisis-info .s{font-size:11px;color:rgba(255,255,255,.55);line-height:1.2;margin-top:2px}
+.cl-crisis-call{flex:none;font-size:12px;font-weight:700;color:#34D399;letter-spacing:.4px;text-transform:uppercase;background:rgba(52,199,89,.15);padding:6px 11px;border-radius:999px}
+
+/* Privacy Dashboard */
+.cl-pd-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px}
+.cl-pd-stat{padding:12px 14px;background:rgba(255,255,255,.04);border-radius:12px}
+.cl-pd-stat .num{font-family:'Anton',Impact,sans-serif;font-size:22px;color:#fff;letter-spacing:.5px;line-height:1;display:block}
+.cl-pd-stat .lbl{font-size:10.5px;color:rgba(255,255,255,.55);font-weight:600;letter-spacing:.3px;text-transform:uppercase;margin-top:4px;display:block}
+.cl-pd-detail{padding:12px 14px;background:rgba(255,255,255,.04);border-radius:12px;font-size:11.5px;color:rgba(255,255,255,.6);line-height:1.5;margin-bottom:8px}
+.cl-pd-detail strong{color:#fff;font-weight:700}
+.cl-pd-detail code{display:inline-block;padding:1px 6px;background:rgba(255,255,255,.06);border-radius:4px;color:#FE3C72;font-size:10.5px;font-family:ui-monospace,monospace}</style><script id="bb-compliance-ui-js">/* ============== Compliance UI Module ============== */
+(function(){
+  function ready(){ return window.crew && window.crew.safety; }
+  function $(id){ return document.getElementById(id); }
+
+  function injectActivityLog(){
+    var host = $('safeplaceOv'); if (!host) return;
+    if ($('spActivityLogSection')) return;
+    var content = host.querySelector('.sp-content'); if (!content) return;
+    var sec = document.createElement('div');
+    sec.id = 'spActivityLogSection';
+    sec.className = 'sp-section';
+    sec.innerHTML =
+      '<div class="sp-section-head"><div class="sp-section-title">Mein Aktivitäts-Log</div><span class="sp-section-meta">letzte 50</span></div>'+
+      '<div class="cl-activity" id="clActivity"></div>';
+    var privacy = $('spPrivacySection');
+    if (privacy) content.insertBefore(sec, privacy);
+    else content.appendChild(sec);
+    refreshActivityLog();
+  }
+
+  async function refreshActivityLog(){
+    if (!ready()) return;
+    var sb = window.crew.safety.sb(), me = window.crew.safety.me();
+    if (!sb || !me) return;
+    var list = $('clActivity'); if (!list) return;
+    try {
+      var r = await sb.rpc('get_my_audit_log', { p_limit: 50 });
+      var arr = r.data || [];
+      if (!arr.length){ list.innerHTML = '<div class="sp-empty">Noch keine Aktivität. Sobald du Mood, Check-in oder SOS nutzt, wird es hier protokolliert.</div>'; return; }
+      var labels = {
+        mood_set:'Mood gesetzt', sos_resolved:'SOS aufgelöst', sos_triggered:'SOS ausgelöst',
+        liveloc_started:'Live-Standort gestartet', liveloc_stopped:'Live-Standort gestoppt',
+        checkin_done:'Check-in gesendet', contact_saved:'Notfallkontakt gespeichert',
+        circle_accepted:'Safety-Circle Verbindung angenommen', pause_activated:'Pause aktiviert',
+        pause_ended:'Pause beendet', consent_accepted:'Datenschutz akzeptiert',
+        data_purged:'Safety-Daten gelöscht', account_delete_requested:'Account-Löschung angefragt'
+      };
+      list.innerHTML = '';
+      arr.forEach(function(e){
+        var item = document.createElement('div'); item.className = 'cl-activity-item';
+        item.innerHTML =
+          '<div class="cl-activity-cat '+(e.category||'data')+'"></div>'+
+          '<div class="cl-activity-info"><span class="a"></span><span class="t"></span></div>';
+        var icons = { mood:'🎭', sos:'🆘', checkin:'✓', live_location:'📍', contact:'👤', circle:'🤝', privacy:'⏸️', consent:'🛡️', data:'💾' };
+        item.querySelector('.cl-activity-cat').textContent = icons[e.category] || '•';
+        item.querySelector('.a').textContent = labels[e.action] || e.action;
+        item.querySelector('.t').textContent = window.crew.safety.util.fmtRel(e.created_at);
+        list.appendChild(item);
+      });
+    } catch(e){ console.warn('[compliance] activity log load', e); }
+  }
+
+  function injectCrisisSection(){
+    var host = $('safeplaceOv'); if (!host) return;
+    if ($('spCrisisSection')) return;
+    var content = host.querySelector('.sp-content'); if (!content) return;
+    var sec = document.createElement('div');
+    sec.id = 'spCrisisSection';
+    sec.className = 'sp-section';
+    sec.innerHTML =
+      '<div class="sp-section-head"><div class="sp-section-title">Krisen-Hilfe — sofort erreichbar</div></div>'+
+      '<div class="cl-crisis">'+
+      '<a class="cl-crisis-item" href="tel:112"><div class="cl-crisis-icon">🚨</div><div class="cl-crisis-info"><div class="l">Notruf</div><div class="s">Akute Gefahr für dich oder andere</div></div><div class="cl-crisis-call">112</div></a>'+
+      '<a class="cl-crisis-item" href="tel:08001110111"><div class="cl-crisis-icon">📞</div><div class="cl-crisis-info"><div class="l">Telefonseelsorge</div><div class="s">Anonym, kostenlos, rund um die Uhr</div></div><div class="cl-crisis-call">0800-1110111</div></a>'+
+      '<a class="cl-crisis-item" href="tel:116111"><div class="cl-crisis-icon">💛</div><div class="cl-crisis-info"><div class="l">Nummer gegen Kummer</div><div class="s">Speziell für junge Menschen</div></div><div class="cl-crisis-call">116111</div></a>'+
+      '<a class="cl-crisis-item" href="tel:080000223344"><div class="cl-crisis-icon">🤝</div><div class="cl-crisis-info"><div class="l">Hilfetelefon Sexuelle Belästigung</div><div class="s">Hilfe bei Übergriffen, vertraulich</div></div><div class="cl-crisis-call">0800-2255-530</div></a>'+
+      '</div>';
+    // Insert at top, after status card
+    var statusCard = content.querySelector('.sp-status-card');
+    if (statusCard && statusCard.nextSibling){ content.insertBefore(sec, statusCard.nextSibling.nextSibling || statusCard.nextSibling); }
+    else content.appendChild(sec);
+  }
+
+  function injectPrivacyDashboard(){
+    var host = $('safeplaceOv'); if (!host) return;
+    if ($('spPrivacyDashboard')) return;
+    var privacy = $('spPrivacySection'); if (!privacy) return;
+    var sec = document.createElement('div');
+    sec.id = 'spPrivacyDashboard';
+    sec.className = 'sp-section';
+    sec.innerHTML =
+      '<div class="sp-section-head"><div class="sp-section-title">Datenschutz-Dashboard</div></div>'+
+      '<div class="cl-pd-stats" id="clPdStats"></div>'+
+      '<div class="cl-pd-detail">'+
+      '<strong>Was wird gespeichert?</strong><br>'+
+      '· Mood: <code>user_moods</code> bis <strong>expires_at</strong>, dann +7 Tage Cleanup<br>'+
+      '· Check-ins: <code>safety_checkins</code> für <strong>30 Tage</strong><br>'+
+      '· SOS-Alerts (resolved): <code>sos_alerts</code> für <strong>90 Tage</strong><br>'+
+      '· Audio-Recording: <code>sos-audio</code> Bucket für <strong>24h</strong> (nur falls aktiviert)<br>'+
+      '· Live-Standort: <code>live_locations</code> max <strong>24h</strong>, dann auto-DELETE<br>'+
+      '· Notfallkontakte: <code>emergency_contacts</code>, bis du sie löschst<br>'+
+      '· Safety Circle: <code>safety_circle</code>, bis du verbindest oder Kontakt entfernst<br>'+
+      '· Aktivitäts-Log: <code>safety_audit_log</code> für <strong>365 Tage</strong>, nur du'+
+      '</div>'+
+      '<div class="cl-pd-detail">'+
+      '<strong>Wo läuft es?</strong> Supabase EU-Region (Frankfurt). RLS auf allen Tabellen. Realtime-Channels per User authentifiziert. Keine Drittanbieter, kein Tracking.'+
+      '</div>'+
+      '<div class="sp-privacy-actions" style="margin-top:10px">'+
+      '<button class="sp-privacy-btn" onclick="window.exportMySafetyData&&window.exportMySafetyData()"><span><span class="ic">⬇️</span> Daten als JSON exportieren</span><span>→</span></button>'+
+      '<button class="sp-privacy-btn danger" onclick="window.deleteAccountFully&&window.deleteAccountFully()"><span><span class="ic">⚠️</span> Account vollständig löschen</span><span>→</span></button>'+
+      '</div>';
+    privacy.parentNode.insertBefore(sec, privacy);
+    refreshDashboardStats();
+  }
+
+  async function refreshDashboardStats(){
+    if (!ready()) return;
+    var sb = window.crew.safety.sb(), me = window.crew.safety.me();
+    if (!sb || !me) return;
+    var host = $('clPdStats'); if (!host) return;
+    try {
+      var [c,s,m,e,sc,ll,al] = await Promise.all([
+        sb.from('safety_checkins').select('id',{count:'exact',head:true}).eq('user_id', me.user_id),
+        sb.from('sos_alerts').select('id',{count:'exact',head:true}).eq('user_id', me.user_id),
+        sb.from('user_moods').select('id',{count:'exact',head:true}).eq('user_id', me.user_id),
+        sb.from('emergency_contacts').select('id',{count:'exact',head:true}).eq('user_id', me.user_id),
+        sb.from('safety_circle').select('id',{count:'exact',head:true}).or('user_a.eq.'+me.user_id+',user_b.eq.'+me.user_id),
+        sb.from('live_locations').select('id',{count:'exact',head:true}).eq('user_id', me.user_id),
+        sb.from('safety_audit_log').select('id',{count:'exact',head:true}).eq('user_id', me.user_id)
+      ]);
+      var stats = [
+        ['Check-ins', c.count || 0],
+        ['SOS', s.count || 0],
+        ['Moods', m.count || 0],
+        ['Kontakte', e.count || 0],
+        ['Verbindungen', sc.count || 0],
+        ['Audit-Events', al.count || 0]
+      ];
+      host.innerHTML = '';
+      stats.forEach(function(p){
+        var d = document.createElement('div'); d.className = 'cl-pd-stat';
+        d.innerHTML = '<span class="num">'+p[1]+'</span><span class="lbl">'+p[0]+'</span>';
+        host.appendChild(d);
+      });
+    } catch(e){ console.warn('[compliance] dashboard stats', e); }
+  }
+
+  /* ============== Public Actions ============== */
+  window.exportMySafetyData = async function(){
+    if (!ready()) return;
+    var sb = window.crew.safety.sb();
+    try {
+      var r = await sb.rpc('export_my_safety_data');
+      if (!r || r.error){ alert('Export fehlgeschlagen: '+(r&&r.error&&r.error.message||'?')); return; }
+      var data = r.data;
+      var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url; a.download = 'crew-safety-export-' + new Date().toISOString().slice(0,10) + '.json';
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+      window.crew.safety.log('data_exported', { size_bytes: blob.size }, 'data');
+      window.crew.safety.util.toast('Daten heruntergeladen');
+    } catch(e){ console.error(e); alert('Export fehlgeschlagen'); }
+  };
+
+  window.deleteAccountFully = async function(){
+    if (!confirm('ACCOUNT KOMPLETT LÖSCHEN?\n\nDas löscht:\n• Profil + Name + Foto\n• Alle Safety-Daten (Kontakte, Circle, SOS, Moods, Check-ins)\n• Aktivitäts-Log\n\nDas ist UNUMKEHRBAR. Bist du sicher?')) return;
+    if (!confirm('Letzte Warnung: dein Account wird komplett gelöscht. Fortfahren?')) return;
+    if (!ready()) return;
+    var sb = window.crew.safety.sb();
+    try {
+      var r = await sb.rpc('delete_my_account_request');
+      if (r && r.data){
+        window.crew.safety.log('account_deleted', {}, 'data');
+        alert('Account-Daten gelöscht. Du wirst jetzt ausgeloggt.');
+        try { await sb.auth.signOut(); } catch(_){}
+        try { localStorage.clear(); } catch(_){}
+        window.location.href = '/';
+      }
+    } catch(e){ console.error(e); alert('Fehler beim Löschen'); }
+  };
+
+  /* ============== Hook openSafeplaceHub ============== */
+  function wrapHub(){
+    var orig = window.openSafeplaceHub;
+    if (!orig || orig.__bbCompUiWrapped) return;
+    window.openSafeplaceHub = function(){
+      orig.apply(this, arguments);
+      setTimeout(function(){
+        injectCrisisSection();
+        injectActivityLog();
+        injectPrivacyDashboard();
+      }, 200);
+    };
+    window.openSafeplaceHub.__bbCompUiWrapped = true;
+  }
+
+  function init(){
+    function tryWrap(){ wrapHub(); if (!window.openSafeplaceHub) setTimeout(tryWrap, 500); }
+    setTimeout(tryWrap, 1500);
+    // Subscribe to events for live activity log refresh
+    if (ready()){
+      window.crew.safety.on('*', function(){
+        var ov = $('safeplaceOv');
+        if (ov && ov.classList.contains('show')) setTimeout(refreshActivityLog, 300);
+      });
+    }
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 1500); });
+  else setTimeout(init, 1500);
 })();</script></body></html>
