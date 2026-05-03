@@ -9703,4 +9703,856 @@ html, body{ background: #05050A !important; color: #FAFAFA !important; }
 })();
 </script>
 
+<style id="bb-ux-v3">/* ============================================================
+   BB-UX-V3 — Gesten + Live-Tile + Audience-Explain + Trust-Labels
+   Synthese aus 3 Persona-Beta-Tests + UX-Engineer-Audit
+   ============================================================ */
+
+/* ---------- 1. PULL-TO-REFRESH (wie Instagram) ---------- */
+.ptr-indicator{
+  position:fixed; top:0; left:0; right:0;
+  height:0;
+  display:flex; align-items:flex-end; justify-content:center;
+  pointer-events:none;
+  z-index: 999;
+  transition: height .25s ease;
+  overflow:hidden;
+}
+.ptr-indicator.pulling{ height: 64px; }
+.ptr-indicator.refreshing{ height: 64px; }
+.ptr-spinner{
+  width: 22px; height: 22px;
+  border: 2px solid rgba(255,255,255,.2);
+  border-top-color: #FE3C72;
+  border-radius: 50%;
+  margin-bottom: 12px;
+  transition: transform .15s ease;
+}
+.ptr-indicator.refreshing .ptr-spinner{
+  animation: ptrSpin .8s linear infinite;
+}
+@keyframes ptrSpin{ to{ transform: rotate(360deg); } }
+
+/* ---------- 2. BOTTOM-SHEET-DRAG-HANDLE (wie Snapchat) ---------- */
+.ap-card, .hw-card, .hd-card, .set-card{
+  position: relative;
+}
+.ap-card::before, .hw-card::before, .hd-card::before, .set-card::before{
+  content:'';
+  position:absolute;
+  top:8px; left:50%;
+  transform: translateX(-50%);
+  width:42px; height:4px;
+  background: rgba(255,255,255,.18);
+  border-radius:2px;
+  pointer-events:none;
+}
+.ap-card, .hw-card, .hd-card, .set-card{
+  padding-top: 28px !important;
+  touch-action: pan-y;
+}
+.ap-modal, .hw-modal, .hd-modal{
+  touch-action: pan-y;
+}
+
+/* ---------- 3. SWIPE-TABS (Tab-Container animation) ---------- */
+.swipe-tabs-host{ overflow: hidden; }
+.swipe-tabs-host > .screen{ transition: transform .35s cubic-bezier(.2,.7,.2,1); }
+.tab-flash-left, .tab-flash-right{
+  position:fixed; top:50%; transform:translateY(-50%);
+  width:48px; height:48px;
+  border-radius:50%;
+  background: rgba(254,60,114,.18);
+  display:flex; align-items:center; justify-content:center;
+  pointer-events:none;
+  z-index: 1500;
+  opacity:0; transition: opacity .15s;
+}
+.tab-flash-left{ left:0; transform:translateY(-50%) translateX(-50%); }
+.tab-flash-right{ right:0; transform:translateY(-50%) translateX(50%); }
+.tab-flash-left.on, .tab-flash-right.on{ opacity:1; }
+
+/* ---------- 4. DOUBLE-TAP-LIKE Heart-Burst ---------- */
+.like-burst{
+  position:fixed;
+  pointer-events:none;
+  z-index: 9999;
+  width: 80px; height:80px;
+  background: linear-gradient(135deg, #FE3C72, #FF1F5C);
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'><path d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'/></svg>") no-repeat center / contain;
+          mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'><path d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'/></svg>") no-repeat center / contain;
+  animation: likeBurst .9s cubic-bezier(.2,.7,.2,1) forwards;
+  transform: translate(-50%,-50%) scale(0);
+}
+@keyframes likeBurst{
+  0%   { transform: translate(-50%,-50%) scale(0); opacity: 0; }
+  20%  { transform: translate(-50%,-50%) scale(1.1); opacity: 1; }
+  60%  { transform: translate(-50%,-50%) scale(1); opacity: 1; }
+  100% { transform: translate(-50%, -120%) scale(.4); opacity: 0; }
+}
+
+/* ---------- 5. HEIMWEG-QUICK-TILE im Header ---------- */
+.hw-quick-pill{
+  display: inline-flex;
+  align-items: center; gap: 6px;
+  padding: 6px 12px;
+  background: rgba(40,200,120,.08);
+  border: .5px solid rgba(40,200,120,.3);
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  cursor: pointer;
+  transition: transform .15s;
+}
+.hw-quick-pill:hover{ transform: translateY(-1px); }
+.hw-quick-pill .hw-icon{
+  width: 14px; height: 14px;
+  background: #28C878;
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'/></svg>") no-repeat center/ contain;
+          mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'/></svg>") no-repeat center / contain;
+}
+.hw-quick-pill.active{ background: linear-gradient(135deg, rgba(40,200,120,.2), rgba(40,200,120,.05)); }
+
+/* ---------- 6. LIVE-QUICK-TOGGLE ---------- */
+.live-quick{
+  display:inline-flex;
+  align-items:center; gap:6px;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.04);
+  border: .5px solid rgba(255,255,255,.08);
+  color: rgba(255,255,255,.85);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .2s;
+}
+.live-quick.broadcasting{
+  background: linear-gradient(135deg, #FE3C72, #FF6D2E);
+  border-color: transparent;
+  color: #fff;
+}
+.live-quick .lq-dot{
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.4);
+}
+.live-quick.broadcasting .lq-dot{
+  background: #fff;
+  animation: lqPulse 1.5s ease-in-out infinite;
+}
+@keyframes lqPulse{ 0%,100%{ opacity:1 } 50%{ opacity:.5 } }
+
+/* ---------- 7. AUDIENCE-EXPLAIN-Carousel (nach Profil-Wahl) ---------- */
+.ae-modal{
+  position:fixed; inset:0; z-index:2050;
+  background:rgba(5,5,10,.92); backdrop-filter:blur(24px);
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; pointer-events:none; transition:opacity .3s;
+  padding: 24px;
+}
+.ae-modal.on{ opacity:1; pointer-events:auto; }
+.ae-card{
+  width:100%; max-width: 460px;
+  background:#0F0F18;
+  border: .5px solid rgba(255,255,255,.08);
+  border-radius: 24px;
+  padding: 32px 24px 24px;
+  text-align:center;
+}
+.ae-icon{
+  width: 64px; height: 64px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #FE3C72, #FF6D2E);
+  display:flex; align-items:center; justify-content:center;
+  margin: 0 auto 18px;
+}
+.ae-icon svg{ width: 32px; height: 32px; color: #fff; }
+.ae-title{ font-size: 22px; font-weight: 900; color:#fff; margin: 0 0 8px; letter-spacing:-.02em; }
+.ae-text{ font-size: 14px; color: rgba(255,255,255,.7); margin: 0 0 24px; line-height:1.55; }
+.ae-dots{ display: flex; justify-content: center; gap: 6px; margin-bottom: 20px; }
+.ae-dot{ width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,.2); transition: background .2s; }
+.ae-dot.on{ background: #FE3C72; width: 18px; border-radius: 3px; }
+.ae-actions{ display: flex; gap: 10px; }
+.ae-skip{
+  flex: 1; padding: 12px;
+  background: rgba(255,255,255,.04);
+  border: .5px solid rgba(255,255,255,.1);
+  border-radius: 12px;
+  color: rgba(255,255,255,.7);
+  font-weight: 700; font-size: 14px;
+  cursor: pointer;
+}
+.ae-next{
+  flex: 1; padding: 12px;
+  background: linear-gradient(135deg, #FE3C72, #FF6D2E);
+  border: 0;
+  border-radius: 12px;
+  color: #fff;
+  font-weight: 800; font-size: 14px;
+  cursor: pointer;
+}
+
+/* ---------- 8. TRUST-MICRO-LABEL ---------- */
+.trust-label{
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11px;
+  color: rgba(255,255,255,.45);
+  margin-top: 10px;
+  cursor: help;
+  user-select: none;
+}
+.trust-label svg{ width: 11px; height: 11px; }
+.trust-label:hover{ color: rgba(255,255,255,.75); }
+
+/* ---------- 9. TOAST-UNDO-PATTERN ---------- */
+.tu-toast{
+  position: fixed;
+  bottom: calc(var(--nav-h, 76px) + var(--safe-bot, 0px) + 24px);
+  left: 50%; transform: translateX(-50%);
+  background: #1a1a24;
+  border: .5px solid rgba(255,255,255,.12);
+  border-radius: 14px;
+  padding: 12px 16px;
+  display: flex; align-items: center; gap: 12px;
+  font-size: 13px; font-weight: 600;
+  color: #fff;
+  z-index: 1900;
+  box-shadow: 0 8px 24px rgba(0,0,0,.4);
+  max-width: 90vw;
+  animation: tuIn .3s cubic-bezier(.2,.7,.2,1);
+}
+.tu-toast.out{ animation: tuOut .3s ease forwards; }
+@keyframes tuIn{ from{transform:translateX(-50%) translateY(20px); opacity:0} to{transform:translateX(-50%) translateY(0); opacity:1} }
+@keyframes tuOut{ to{transform:translateX(-50%) translateY(20px); opacity:0} }
+.tu-toast .tu-undo{
+  background: none; border: 0;
+  color: #FE3C72;
+  font-weight: 800; font-size: 13px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+.tu-toast .tu-undo:hover{ background: rgba(254,60,114,.1); }
+
+/* ---------- 10. HUB QUICK-TILES ROW (Heimweg + Live) ---------- */
+.qt-row{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 0 16px;
+  margin: 12px 0 16px;
+}
+.qt-tile{
+  display:flex; flex-direction: column;
+  gap: 6px;
+  padding: 16px;
+  background: rgba(255,255,255,.04);
+  border: .5px solid rgba(255,255,255,.08);
+  border-radius: 16px;
+  cursor: pointer;
+  text-align: left;
+  position: relative;
+}
+.qt-tile:active{ transform: scale(.98); }
+.qt-tile.active{
+  background: linear-gradient(135deg, rgba(254,60,114,.16), rgba(255,109,46,.06));
+  border-color: rgba(254,60,114,.4);
+}
+.qt-tile-icon{
+  width: 32px; height: 32px;
+  border-radius: 9px;
+  background: rgba(255,255,255,.06);
+  display:flex; align-items:center; justify-content:center;
+}
+.qt-tile-icon svg{ width: 16px; height: 16px; color: #fff; }
+.qt-tile.active .qt-tile-icon{ background: linear-gradient(135deg, #FE3C72, #FF6D2E); }
+.qt-tile-title{ font-size: 13px; font-weight: 800; color: #fff; margin: 0; }
+.qt-tile-sub{ font-size: 11px; color: rgba(255,255,255,.55); margin: 0; }
+
+/* ---------- 11. NAV-INDICATOR Animation ---------- */
+.bn-pill .bn-item{
+  position: relative;
+  transition: color .2s;
+}
+.bn-pill .bn-item.active{
+  color: #FE3C72;
+}
+.bn-pill .bn-item.active::after{
+  content:'';
+  position: absolute;
+  bottom: -6px; left: 50%;
+  transform: translateX(-50%);
+  width: 4px; height: 4px;
+  background: #FE3C72;
+  border-radius: 50%;
+}
+
+/* ---------- 12. INPUT FOCUS RING ---------- */
+.hw-input:focus, .hw-textarea:focus,
+input:focus, textarea:focus, select:focus{
+  outline: none !important;
+  border-color: rgba(254,60,114,.55) !important;
+  box-shadow: 0 0 0 3px rgba(254,60,114,.12) !important;
+}
+
+/* ---------- 13. SCROLL-FADE Edge ---------- */
+.scroll-area::after{
+  content:'';
+  position: sticky; bottom: 0; left: 0; right: 0;
+  height: 32px;
+  background: linear-gradient(0deg, #05050A, transparent);
+  pointer-events: none;
+  display: block;
+}
+</style>
+<script id="bb-ux-v3-js">
+/* ============================================================
+   BB-UX-V3 — Runtime: Gesten, Live-Toggle, Audience-Explain,
+   Hardware-SOS, Toast-Undo, Heimweg-Tile
+   ============================================================ */
+(function(){
+  'use strict';
+  if (window.__bbUxV3Init) return;
+  window.__bbUxV3Init = true;
+
+  /* ============= 1. PULL-TO-REFRESH ============= */
+  var ptrInd = null;
+  function initPullRefresh(){
+    if (document.getElementById('ptrIndicator')) return;
+    ptrInd = document.createElement('div');
+    ptrInd.id = 'ptrIndicator';
+    ptrInd.className = 'ptr-indicator';
+    ptrInd.innerHTML = '<div class="ptr-spinner"></div>';
+    document.body.appendChild(ptrInd);
+
+    var startY = 0, currentY = 0, dragging = false, refreshing = false;
+    var SCROLL_HOSTS = function(){ return [
+      document.scrollingElement,
+      document.querySelector('#screen-hub'),
+      document.querySelector('#screen-spots'),
+      document.querySelector('#screen-crew'),
+      document.querySelector('#screen-friends'),
+      document.querySelector('main'),
+      document.querySelector('.scroll-area')
+    ].filter(Boolean); };
+
+    function onTouchStart(e){
+      if (refreshing) return;
+      var hosts = SCROLL_HOSTS();
+      var atTop = hosts.every(function(h){ return (h.scrollTop || 0) <= 1; });
+      if (!atTop) return;
+      startY = e.touches[0].clientY;
+      dragging = true;
+    }
+    function onTouchMove(e){
+      if (!dragging || refreshing) return;
+      currentY = e.touches[0].clientY;
+      var d = currentY - startY;
+      if (d > 0){
+        var pull = Math.min(d, 120);
+        ptrInd.classList.add('pulling');
+        ptrInd.style.height = (pull * 0.6) + 'px';
+        ptrInd.querySelector('.ptr-spinner').style.transform = 'rotate(' + (pull * 3) + 'deg)';
+        if (d > 80) e.preventDefault();
+      }
+    }
+    function onTouchEnd(){
+      if (!dragging) return;
+      dragging = false;
+      var d = currentY - startY;
+      if (d > 80 && !refreshing){
+        refreshing = true;
+        ptrInd.classList.remove('pulling');
+        ptrInd.classList.add('refreshing');
+        triggerRefresh().finally(function(){
+          setTimeout(function(){
+            refreshing = false;
+            ptrInd.classList.remove('refreshing');
+            ptrInd.style.height = '';
+          }, 400);
+        });
+      } else {
+        ptrInd.classList.remove('pulling');
+        ptrInd.style.height = '';
+      }
+    }
+    document.addEventListener('touchstart', onTouchStart, { passive: true });
+    document.addEventListener('touchmove', onTouchMove, { passive: false });
+    document.addEventListener('touchend', onTouchEnd, { passive: true });
+  }
+  async function triggerRefresh(){
+    /* Generischer Refresh — ruft alle bekannten Loader auf */
+    var fns = ['loadHotspots','loadCrewWall','loadFriendsWall','loadHub','loadSafeplace','refreshAll'];
+    for (var i=0;i<fns.length;i++){
+      try{ if (typeof window[fns[i]] === 'function') await window[fns[i]](); }catch(e){}
+    }
+    /* Optional: visuelles Feedback */
+    showUndoToast('Aktualisiert');
+  }
+
+  /* ============= 2. SHEET-DRAG-TO-DISMISS ============= */
+  function initSheetDrag(){
+    document.body.addEventListener('touchstart', function(e){
+      var card = e.target.closest('.ap-card, .hw-card, .hd-card, .set-card');
+      if (!card) return;
+      var rect = card.getBoundingClientRect();
+      /* Only trigger drag wenn auf den oberen 36px (drag-handle area) */
+      if (e.touches[0].clientY - rect.top > 40) return;
+      startSheetDrag(card, e.touches[0].clientY);
+    }, { passive: true });
+  }
+  function startSheetDrag(card, sy){
+    var lastY = sy, lastTime = Date.now(), velocity = 0;
+    var modal = card.closest('.ap-modal, .hw-modal, .hd-modal');
+    var origTransition = card.style.transition;
+    card.style.transition = 'none';
+    function onMove(e){
+      var y = e.touches[0].clientY;
+      var d = y - sy;
+      if (d < 0) return;
+      var now = Date.now();
+      var dt = now - lastTime;
+      if (dt > 0) velocity = (y - lastY) / dt;
+      lastY = y; lastTime = now;
+      card.style.transform = 'translateY(' + d + 'px)';
+      if (modal) modal.style.opacity = String(Math.max(.4, 1 - d/400));
+    }
+    function onEnd(){
+      var d = lastY - sy;
+      var h = card.offsetHeight || 1;
+      card.style.transition = origTransition || 'transform .3s cubic-bezier(.2,.7,.2,1)';
+      if (modal) modal.style.transition = 'opacity .3s';
+      if (d > h * 0.3 || velocity > 0.5){
+        card.style.transform = 'translateY(100%)';
+        if (modal) modal.style.opacity = '0';
+        setTimeout(function(){
+          if (modal) modal.classList.remove('on');
+          card.style.transform = '';
+          if (modal) modal.style.opacity = '';
+        }, 320);
+      } else {
+        card.style.transform = '';
+        if (modal) modal.style.opacity = '';
+      }
+      document.removeEventListener('touchmove', onMove);
+      document.removeEventListener('touchend', onEnd);
+    }
+    document.addEventListener('touchmove', onMove, { passive: true });
+    document.addEventListener('touchend', onEnd, { passive: true });
+  }
+
+  /* ============= 3. SWIPE-TABS ============= */
+  function initSwipeTabs(){
+    var TABS = ['hub','safety','spots','crew','friends'];
+    var sx = 0, sy = 0, dragging = false;
+    var nav = document.querySelector('.bn-pill, .bottom-nav');
+    function getCurrentTabIdx(){
+      if (!nav) return 0;
+      var active = nav.querySelector('.bn-item.active, .nav-item.active, [aria-selected="true"]');
+      if (!active) return 0;
+      var key = active.getAttribute('data-tab') || active.getAttribute('data-screen') || '';
+      var idx = TABS.indexOf(key);
+      return idx >= 0 ? idx : 0;
+    }
+    function switchToTab(idx){
+      if (!nav) return;
+      var items = nav.querySelectorAll('[data-tab], [data-screen]');
+      var target = items[idx];
+      if (target) target.click();
+    }
+    document.addEventListener('touchstart', function(e){
+      /* Nur am Edge starten — innerhalb 30px vom linken/rechten Rand */
+      var x = e.touches[0].clientX;
+      var w = window.innerWidth;
+      /* Edge-only swipes für Tab-Wechsel — sonst kollidiert mit Map/Scroll */
+      sx = x; sy = e.touches[0].clientY; dragging = true;
+    }, { passive: true });
+    document.addEventListener('touchmove', function(e){
+      if (!dragging) return;
+      var dx = e.touches[0].clientX - sx;
+      var dy = e.touches[0].clientY - sy;
+      if (Math.abs(dy) > Math.abs(dx)) dragging = false;
+    }, { passive: true });
+    document.addEventListener('touchend', function(e){
+      if (!dragging) return;
+      dragging = false;
+      var ex = (e.changedTouches[0]||{}).clientX || sx;
+      var dx = ex - sx;
+      var w = window.innerWidth;
+      if (Math.abs(dx) < w * 0.25) return; /* Threshold 25% */
+      /* Ignoriere Swipes über Map/Scroll-Container — nur über Hub/Crew */
+      var elAtStart = document.elementFromPoint(sx, sy);
+      if (elAtStart && elAtStart.closest && elAtStart.closest('.leaflet-container, #spotsMap, .scroll-area-h')) return;
+      var idx = getCurrentTabIdx();
+      var newIdx = dx < 0 ? Math.min(TABS.length-1, idx+1) : Math.max(0, idx-1);
+      if (newIdx !== idx){ switchToTab(newIdx); flashEdge(dx < 0 ? 'right' : 'left'); }
+    }, { passive: true });
+  }
+  function flashEdge(side){
+    var f = document.querySelector('.tab-flash-'+side);
+    if (!f){
+      f = document.createElement('div');
+      f.className = 'tab-flash-'+side;
+      f.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">'+
+        (side==='right' ? '<polyline points="9 18 15 12 9 6"/>' : '<polyline points="15 18 9 12 15 6"/>')+'</svg>';
+      document.body.appendChild(f);
+    }
+    f.classList.add('on');
+    setTimeout(function(){ f.classList.remove('on'); }, 350);
+  }
+
+  /* ============= 4. DOUBLE-TAP-LIKE ============= */
+  function initDoubleTapLike(){
+    var lastTap = 0, lastTarget = null;
+    document.addEventListener('touchend', function(e){
+      var post = e.target.closest('.cw-post, .crew-post-item, .friend-wall-post, .post-item');
+      if (!post) return;
+      var now = Date.now();
+      if (now - lastTap < 320 && lastTarget === post){
+        var t = e.changedTouches[0];
+        spawnLikeBurst(t.clientX, t.clientY);
+        likePost(post);
+        lastTap = 0;
+      } else {
+        lastTap = now;
+        lastTarget = post;
+      }
+    }, { passive: true });
+  }
+  function spawnLikeBurst(x, y){
+    var b = document.createElement('div');
+    b.className = 'like-burst';
+    b.style.left = x + 'px';
+    b.style.top = y + 'px';
+    document.body.appendChild(b);
+    setTimeout(function(){ b.remove(); }, 1000);
+  }
+  async function likePost(postEl){
+    var pid = postEl.getAttribute('data-post-id') || postEl.dataset.id;
+    if (!pid) return;
+    try{
+      var sb = window.sb || window.supabase;
+      if (!sb) return;
+      /* Best-effort upsert in post_likes — wenn Tabelle noch nicht existiert, schwarz schlucken */
+      await sb.from('post_likes').upsert({ post_id: pid, user_id: (await sb.auth.getUser()).data.user.id }, { onConflict: 'post_id,user_id' });
+    }catch(e){}
+  }
+
+  /* ============= 5. HARDWARE-SOS-SHORTCUT (Vol-Buttons) ============= */
+  /* HINWEIS: Browser-restricted — funktioniert nur in PWA-Standalone-Modus auf einigen Plattformen.
+     Wir hooken trotzdem als Best-Effort + KeyboardShortcut als Backup. */
+  function initHardwareSos(){
+    var pressed = { up:false, down:false };
+    var triggered = false;
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'AudioVolumeUp' || e.code === 'AudioVolumeUp') pressed.up = true;
+      if (e.key === 'AudioVolumeDown' || e.code === 'AudioVolumeDown') pressed.down = true;
+      /* Backup: Shift+S+O+S (debug only — use long-press SOS for real) */
+      if (e.shiftKey && e.altKey && e.key === 's') triggerSOSStealth();
+      if (pressed.up && pressed.down && !triggered){
+        triggered = true;
+        triggerSOSStealth();
+        setTimeout(function(){ triggered = false; }, 5000);
+      }
+    });
+    document.addEventListener('keyup', function(e){
+      if (e.key === 'AudioVolumeUp' || e.code === 'AudioVolumeUp') pressed.up = false;
+      if (e.key === 'AudioVolumeDown' || e.code === 'AudioVolumeDown') pressed.down = false;
+    });
+  }
+  function triggerSOSStealth(){
+    /* Suche existierenden SOS-Trigger und feuer ihn programmatisch */
+    var btn = document.querySelector('.hdr-sos, [data-action="sos"], #sosBtn');
+    if (btn){
+      /* Direkter Click-Event */
+      btn.dispatchEvent(new MouseEvent('mousedown', {bubbles:true}));
+      setTimeout(function(){
+        btn.dispatchEvent(new MouseEvent('mouseup', {bubbles:true}));
+        btn.dispatchEvent(new MouseEvent('click', {bubbles:true}));
+      }, 100);
+      showUndoToast('SOS aktiviert');
+    }
+  }
+
+  /* ============= 6. LIVE-QUICK-TOGGLE ============= */
+  function injectLiveQuick(){
+    var header = document.querySelector('#appHeader, .app-header, .hdr-wrap');
+    if (!header) { setTimeout(injectLiveQuick, 1500); return; }
+    if (header.querySelector('.live-quick')) return;
+    var lq = document.createElement('button');
+    lq.type = 'button';
+    lq.className = 'live-quick';
+    lq.innerHTML = '<span class="lq-dot"></span><span>Live</span>';
+    lq.title = 'Live-Standort an deine Crew teilen';
+    /* Position: vor dem SOS-Button */
+    var sos = header.querySelector('.hdr-sos, [data-action="sos"]');
+    if (sos && sos.parentNode){
+      sos.parentNode.insertBefore(lq, sos);
+    } else {
+      header.appendChild(lq);
+    }
+    lq.addEventListener('click', toggleLiveBroadcast);
+    /* Status aus localStorage */
+    if (localStorage.getItem('bb-live-on') === '1') lq.classList.add('broadcasting');
+  }
+  async function toggleLiveBroadcast(){
+    var lq = document.querySelector('.live-quick');
+    var on = !lq.classList.contains('broadcasting');
+    lq.classList.toggle('broadcasting', on);
+    try{ localStorage.setItem('bb-live-on', on ? '1' : '0'); }catch(e){}
+    if (on){
+      /* Live starten — 30 min default */
+      try{
+        var sb = window.sb || window.supabase;
+        if (!sb) return;
+        var u = await sb.auth.getUser();
+        var uid = u && u.data && u.data.user && u.data.user.id;
+        if (!uid) return;
+        navigator.geolocation.getCurrentPosition(async function(pos){
+          await sb.from('live_locations').upsert({
+            user_id: uid,
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude,
+            expires_at: new Date(Date.now() + 30*60*1000).toISOString(),
+            updated_at: new Date().toISOString()
+          });
+          showUndoToast('Live-Standort an Crew · 30 min', 'Stop', function(){ toggleLiveBroadcast(); });
+        }, function(err){
+          console.warn('[bb-ux] geo fail', err);
+          lq.classList.remove('broadcasting');
+        }, { enableHighAccuracy:true, timeout:10000 });
+      }catch(e){ console.warn(e); }
+    } else {
+      try{
+        var sb = window.sb || window.supabase;
+        if (!sb) return;
+        var u = await sb.auth.getUser();
+        var uid = u && u.data && u.data.user && u.data.user.id;
+        if (!uid) return;
+        await sb.from('live_locations').update({ expires_at: new Date().toISOString() }).eq('user_id', uid);
+        showUndoToast('Live gestoppt');
+      }catch(e){}
+    }
+  }
+
+  /* ============= 7. HEIMWEG-QUICK-TILE im Hub ============= */
+  function injectQuickTiles(){
+    var host = document.querySelector('#screen-hub, .hub-content, [data-screen="hub"]');
+    if (!host) return;
+    if (host.querySelector('.qt-row')) return;
+    var row = document.createElement('div');
+    row.className = 'qt-row';
+    row.innerHTML = ''+
+      '<button class="qt-tile" id="qtHomemode" type="button">'+
+        '<div class="qt-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>'+
+        '<h4 class="qt-tile-title">Heimweg starten</h4>'+
+        '<p class="qt-tile-sub">Crew kriegt Push wenn du zu spät bist</p>'+
+      '</button>'+
+      '<button class="qt-tile" id="qtLive" type="button">'+
+        '<div class="qt-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg></div>'+
+        '<h4 class="qt-tile-title">Live-Standort</h4>'+
+        '<p class="qt-tile-sub">30 min an deine Crew teilen</p>'+
+      '</button>';
+    /* Position: nach Audience-Banner, vor restlichem Content */
+    var aud = host.querySelector('.aud-banner');
+    if (aud && aud.nextSibling) host.insertBefore(row, aud.nextSibling);
+    else host.insertBefore(row, host.firstChild);
+    row.querySelector('#qtHomemode').addEventListener('click', startHomemode);
+    row.querySelector('#qtLive').addEventListener('click', toggleLiveBroadcast);
+  }
+  function startHomemode(){
+    /* Versuche bestehenden Heimweg-Modal zu triggern */
+    var hits = ['#openHomemode','[data-action="homemode"]','.start-homemode','#bbHomemodeBtn'];
+    for (var i=0;i<hits.length;i++){
+      var b = document.querySelector(hits[i]);
+      if (b){ b.click(); return; }
+    }
+    /* Fallback: einfacher Inline-Picker */
+    if (confirm('Heimweg starten — 30 Minuten ETA?\n\nDeine Crew bekommt eine Push wenn du nicht innerhalb 30 Min "Bin da" drückst.')){
+      window.bbStartHomemode && window.bbStartHomemode(30);
+      showUndoToast('Heimweg läuft · 30 min');
+    }
+  }
+  /* Status der Tile updaten wenn Live aktiv */
+  setInterval(function(){
+    var qt = document.getElementById('qtLive');
+    if (!qt) return;
+    qt.classList.toggle('active', localStorage.getItem('bb-live-on') === '1');
+  }, 1500);
+
+  /* ============= 8. AUDIENCE-EXPLAIN-Carousel ============= */
+  var EXPLAIN_BY_PROFILE = {
+    party: [
+      { title: 'Du bist im Party-Modus', text: 'Wir zeigen dir Festival- und Club-Spots zuerst und vereinfachen das Live-Sharing für deine Crew.' },
+      { title: 'Sicher heim, immer', text: 'Heimweg-Modus mit Push an deine Crew, falls du zu spät bist — auch nach langen Nächten.' },
+      { title: 'Stealth-SOS dabei', text: 'In Notlagen kannst du SOS auslösen ohne dass es jemand sieht. Du bestimmst die Optik.' }
+    ],
+    familie: [
+      { title: 'Familien-Modus aktiv', text: 'Wir machen es einfach jüngere oder ältere Familienmitglieder im Auge zu behalten.' },
+      { title: 'Vertrauensorte anlegen', text: 'Zuhause, Schule, Job — als private Trust-Spots, nur für deine Familie sichtbar.' },
+      { title: 'Sanfte Check-ins', text: 'Statt Tracking: regelmäßige "Bin OK"-Pings. Vertrauen statt Überwachung.' }
+    ],
+    solo: [
+      { title: 'Solo-Modus', text: 'Du bist oft alleine unterwegs — wir helfen dir dabei, dass jemand Bescheid weiß ohne dass du dich einschränken musst.' },
+      { title: 'Heimweg-Pill im Header', text: 'Ein Tap und deine Crew weiß: 30 Min, dann muss ich da sein. Sonst kommt eine Push.' },
+      { title: 'Vol-Up + Vol-Down = SOS', text: 'In Notlagen brauchst du keinen Bildschirm. Hardware-Knöpfe lösen still aus.' }
+    ],
+    pflege: [
+      { title: 'Pflege-Modus', text: 'Du betreust jemanden — wir bieten sanfte, würdige Tools statt Hardcore-Tracking.' },
+      { title: 'Gegenseitiger Circle', text: 'Beide Seiten geben Consent. Niemand wird ungewollt überwacht.' },
+      { title: 'Auto-Expire überall', text: 'Standorte verfallen automatisch. Keine permanenten Verläufe.' }
+    ],
+    recovery: [
+      { title: 'Recovery-Modus', text: 'Diskretion ist wichtig. Wir defaulten alle deine Spots auf "nur Eingeladene".' },
+      { title: 'Community-Spots privat', text: 'Selbsthilfe-Treffpunkte sind nur für eingeladene Mitglieder sichtbar — nie public.' },
+      { title: 'Schnell vom Bildschirm weg', text: 'Doppel-Tap auf Logo löscht alle Session-Daten sofort. Im Notfall.' }
+    ],
+    lgbtq: [
+      { title: 'LGBTQ+ Safety-Modus', text: 'Privatsphäre ist Priorität. Alle Spots defaulten auf "nur Eingeladene".' },
+      { title: 'Auto-Clear-Option', text: 'Beim Schließen werden sensible Daten aus dem Browser entfernt. Du wählst.' },
+      { title: 'Safe Spaces ausbaubar', text: 'Community-Hotspots für LGBTQ-Treffs, nur für die richtige Zielgruppe sichtbar.' }
+    ],
+    general: [
+      { title: 'Willkommen in deinem Modus', text: 'Connection + Safety mit den Leuten, denen du vertraust. Du kontrollierst alles.' },
+      { title: 'Spots & Crew', text: 'Lege private Vertrauensorte an oder feiere mit deiner Crew. Du wählst pro Spot wer es sieht.' },
+      { title: 'SOS, wenn nötig', text: 'Hold-to-confirm SOS sendet Standort + Push an deine Notfall-Kontakte.' }
+    ]
+  };
+  function showAudienceExplain(profile){
+    var slides = EXPLAIN_BY_PROFILE[profile] || EXPLAIN_BY_PROFILE.general;
+    if (document.getElementById('aeModal')) document.getElementById('aeModal').remove();
+    var m = document.createElement('div');
+    m.className = 'ae-modal';
+    m.id = 'aeModal';
+    var idx = 0;
+    function render(){
+      m.innerHTML = '<div class="ae-card">'+
+        '<div class="ae-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg></div>'+
+        '<h3 class="ae-title">'+slides[idx].title+'</h3>'+
+        '<p class="ae-text">'+slides[idx].text+'</p>'+
+        '<div class="ae-dots">'+slides.map(function(_,i){ return '<span class="ae-dot'+(i===idx?' on':'')+'"></span>'; }).join('')+'</div>'+
+        '<div class="ae-actions">'+
+          '<button class="ae-skip" type="button">'+(idx===slides.length-1?'Schließen':'Überspringen')+'</button>'+
+          '<button class="ae-next" type="button">'+(idx===slides.length-1?'Los geht\'s':'Weiter')+'</button>'+
+        '</div>'+
+      '</div>';
+      m.querySelector('.ae-skip').addEventListener('click', close);
+      m.querySelector('.ae-next').addEventListener('click', function(){
+        if (idx === slides.length - 1) close();
+        else { idx++; render(); }
+      });
+    }
+    function close(){
+      m.classList.remove('on');
+      setTimeout(function(){ m.remove(); }, 350);
+      try{ localStorage.setItem('bb-ae-shown-'+profile, '1'); }catch(e){}
+    }
+    document.body.appendChild(m);
+    render();
+    setTimeout(function(){ m.classList.add('on'); }, 50);
+  }
+  /* Hook auf saveAudience im bb-hotspot-v2 */
+  function hookAudienceSave(){
+    document.addEventListener('click', function(e){
+      var t = e.target;
+      if (!t) return;
+      var btn = t.closest('#apSave, [data-ap-save]');
+      if (!btn) return;
+      setTimeout(function(){
+        var profile = (window.bbHotspot && typeof window.bbHotspot.currentAudience === 'function') ? window.bbHotspot.currentAudience() : (localStorage.getItem('bb-audience') || 'general');
+        if (!localStorage.getItem('bb-ae-shown-'+profile)){
+          showAudienceExplain(profile);
+        }
+      }, 600);
+    });
+  }
+
+  /* ============= 9. TOAST-UNDO Pattern ============= */
+  function showUndoToast(text, undoLabel, undoFn){
+    var t = document.createElement('div');
+    t.className = 'tu-toast';
+    t.innerHTML = '<span>'+text+'</span>';
+    if (undoLabel && typeof undoFn === 'function'){
+      var btn = document.createElement('button');
+      btn.className = 'tu-undo';
+      btn.textContent = undoLabel;
+      btn.addEventListener('click', function(){
+        undoFn();
+        t.classList.add('out');
+        setTimeout(function(){ t.remove(); }, 300);
+      });
+      t.appendChild(btn);
+    }
+    document.body.appendChild(t);
+    setTimeout(function(){ t.classList.add('out'); }, 4500);
+    setTimeout(function(){ t.remove(); }, 4900);
+  }
+  window.bbToast = showUndoToast;
+
+  /* ============= 10. AUTO-CLEAR für sensitive Profile ============= */
+  function setupAutoClear(){
+    var profile = localStorage.getItem('bb-audience') || 'general';
+    if (profile !== 'lgbtq' && profile !== 'recovery') return;
+    var lastActivity = Date.now();
+    var TIMEOUT = 5 * 60 * 1000;
+    function activity(){ lastActivity = Date.now(); }
+    ['click','touchstart','scroll','keydown'].forEach(function(ev){
+      document.addEventListener(ev, activity, { passive: true });
+    });
+    setInterval(function(){
+      if (Date.now() - lastActivity > TIMEOUT){
+        var keep = ['bb-audience'];
+        var allKeys = Object.keys(localStorage).filter(function(k){ return k.indexOf('bb-')===0 && keep.indexOf(k)===-1; });
+        allKeys.forEach(function(k){ try{ localStorage.removeItem(k); }catch(e){} });
+      }
+    }, 60000);
+  }
+
+  /* ============= 11. TRUST-MICRO-LABEL Inject ============= */
+  function injectTrustLabels(){
+    var modals = document.querySelectorAll('.ap-card, .hw-card, .hd-card, .set-card');
+    modals.forEach(function(m){
+      if (m.querySelector('.trust-label')) return;
+      var lbl = document.createElement('div');
+      lbl.className = 'trust-label';
+      lbl.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>'+
+                      '<span>Verschlüsselt zwischen dir & deiner Crew · DSGVO · EU-Server</span>';
+      m.appendChild(lbl);
+    });
+    setTimeout(injectTrustLabels, 4000);
+  }
+
+  /* ============= INIT ============= */
+  function init(){
+    initPullRefresh();
+    initSheetDrag();
+    initSwipeTabs();
+    initDoubleTapLike();
+    initHardwareSos();
+    setTimeout(injectLiveQuick, 1500);
+    setTimeout(injectQuickTiles, 2000);
+    hookAudienceSave();
+    setupAutoClear();
+    setTimeout(injectTrustLabels, 3500);
+    /* Re-inject bei Tab-Wechsel */
+    document.addEventListener('click', function(e){
+      var nav = e.target && e.target.closest && e.target.closest('.bn-pill, .nav-item, [data-tab]');
+      if (nav) setTimeout(function(){ injectQuickTiles(); injectLiveQuick(); }, 250);
+    });
+    /* Expose */
+    window.bbUx = {
+      showAudienceExplain: showAudienceExplain,
+      toggleLiveBroadcast: toggleLiveBroadcast,
+      startHomemode: startHomemode,
+      showToast: showUndoToast
+    };
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+
 </body></html>

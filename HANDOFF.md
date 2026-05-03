@@ -264,4 +264,66 @@ Jeder Layer wird über `<style id="bb-X">` + `<script id="bb-X-js">` direkt vor 
 
 ---
 
-**Version dieser Handoff-Datei:** 1.0 — 03.05.2026
+---
+
+## 11. Beta-Test-Findings (3 Personas + UX-Audit, 03.05.2026)
+
+Drei junge User-Personas (Mila 19/Party, Lina 22/Solo, Sam 17/LGBTQ) und ein Senior-UX-Engineer-Audit haben folgende **Top-5-Cross-Cutting-Issues** identifiziert — alle in `bb-ux-v3` adressiert:
+
+1. **Live-Location war versteckt** → Live-Quick-Pill im Header + Quick-Tile im Hub
+2. **Stealth-SOS hatte psychologische Tells** → Hardware-Shortcut (Vol-Up + Vol-Down) als alternativer Trigger ohne UI-Tap
+3. **Audience-Profile blieb unerklärt** → 3-Slide-Carousel nach Profil-Wahl (Per-Profil maßgeschneidert)
+4. **Heimweg-Modus fehlte im Hub** → Quick-Tile in Hub-Top-Row
+5. **Keine Gesten** → Pull-to-Refresh, Sheet-Drag-Dismiss, Swipe-Tabs (Edge-only), Double-Tap-Like
+
+**Weitere implementierte Findings:**
+- Trust-Micro-Labels in allen Modals (Verschlüsselt + EU-Server + DSGVO)
+- Auto-Clear bei Inaktivität (5 Min) für `lgbtq` + `recovery` Profile
+- Toast-Undo-Pattern (`window.bbToast`) statt Bestätigungs-Dialogen für reversible Aktionen
+- Drag-Indicator-Handle in Bottom-Sheets (visueller Hint dass dragable)
+- Like-Burst-Animation auf Wall-Posts (Heart-SVG, 900ms scale + fade-up)
+
+---
+
+## 12. NEUE Layer (Sprint 11)
+
+| Layer | Zweck |
+|---|---|
+| `bb-ux-v3` | Gesten + Live-Quick + Heimweg-Tile + Audience-Carousel + Trust-Labels + Toast-Undo + Auto-Clear + Hardware-SOS |
+
+---
+
+## 13. Was JETZT noch offen (post-Sprint-11)
+
+- **Like-System Backend:** `post_likes` Tabelle muss in DB angelegt werden (`post_id, user_id, created_at`, primary key auf (post_id, user_id))
+- **Heimweg-Modal richtig integrieren:** aktuell Fallback `confirm()` — `window.bbStartHomemode(minutes)` muss in `bb-features` exposed werden
+- **Bottom-Sheet-Drag:** funktioniert nur auf Modals mit `.ap-card / .hw-card / .hd-card / .set-card` — falls weitere Sheets dazukommen, Selektor erweitern
+- **Hardware-SOS:** funktioniert in Browser-Restrictions nur eingeschränkt (PWA-Standalone-Mode auf manchen Plattformen). Empfehlung: Service-Worker mit `keyboard-handle` API erforschen
+- **Auto-Clear:** clearet aktuell `bb-*`-Keys außer `bb-audience`. Sollte via Session-Timeout-Library robuster werden
+- **Wall-Engagement:** Like-Button-UI fehlt (nur Double-Tap geht), Reply-Threads, Mood-Filter — siehe Sprint-11 Roadmap
+
+---
+
+## 14. EMPFEHLUNG für nächste Iteration (ChatGPT)
+
+**Priorität A (1-2 Tage):**
+1. `post_likes` + `post_replies` Tabellen anlegen, RLS, RPC für Counts
+2. Like-Button visuell unter jedem Post (Heart-SVG, Counter)
+3. Reply-Drawer beim Tap auf Post
+4. Heimweg-Modal-Integration (richtigen Modal triggern statt confirm)
+
+**Priorität B (1 Tag):**
+5. Hotspot-Detail-Card: Pin-Click → öffnet `hd-modal` mit Mitgliedern, "Ich bin auch hier"-Button
+6. Realtime-Subscription für Hotspots (Supabase Channel)
+
+**Priorität C (0.5 Tag):**
+7. Mood-Filter in Wall (Chip-Bar oben)
+8. Pinned-Posts (für Crew-Admins, `pinned_at`-Spalte)
+
+**Priorität D (Polish, 0.5 Tag):**
+9. Settings-Tabs auf 360px-Breite als 2-Reihen-Grid
+10. Desktop-Install-Banner (`beforeinstallprompt`)
+
+---
+
+**Version dieser Handoff-Datei:** 1.1 — 03.05.2026 (post Sprint 11)
