@@ -15408,4 +15408,496 @@ body[data-current-screen="profile"] #ccCircleHost{
 })();
 </script>
 
+<style id="bb-saferealn">/* ============================================================
+   BB-SAFEREALN — Echte SafePlace-Fix + Anti-Party-Branding + Help-Center
+   ============================================================ */
+
+/* ---------- 1. SafePlace Overlay korrekt rendern ---------- */
+#safeplaceOv{
+  z-index: 1990 !important;
+}
+#safeplaceOv:not(.show){
+  display: none !important;
+}
+#safeplaceOv.show{
+  display: block !important;
+  pointer-events: auto !important;
+  opacity: 1 !important;
+}
+
+/* ---------- 2. ANTI-PARTY-BRANDING ---------- */
+/* Piratenflagge, Konfetti, Bier, Tanz — alle Party-Emojis aus dem UI */
+.crew-hub-empty-emoji,
+.cb-empty-icon,
+[class*="party-emoji"],
+[class*="party-icon"]:not(.bb-action-icon){
+  display: none !important;
+}
+
+/* Wenn Inhalt nur "🏴‍☠️" oder "🍻" oder ähnlich ist, kollabiere ihn visuell */
+.crew-hub-empty[data-bb-stripped] .crew-hub-empty-emoji{ display: none !important; }
+
+/* "partycrew" / "Festival" / "Feiern" als Hauptframes wegblenden — über CSS schwer, via JS */
+
+/* ---------- 3. SOS-CREW-HELP UNIFIED CENTER ---------- */
+.bb-help-fab{
+  position: fixed;
+  bottom: calc(var(--nav-h, 76px) + var(--safe-bot, 0px) + 24px);
+  right: 16px;
+  z-index: 1190;
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--sos-c1, #FE3C72), var(--sos-c2, #FF1F5C));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 12px 32px rgba(254,60,114,.5), 0 4px 12px rgba(0,0,0,.3);
+  border: 0;
+  color: #fff;
+}
+.bb-help-fab svg{ width: 24px; height: 24px; color: #fff; }
+.bb-help-fab:active{ transform: scale(.92); }
+
+/* Nicht auf Spots-Screen (da gibt es schon FABs) */
+body[data-current-screen="spots"] .bb-help-fab{ display: none !important; }
+
+/* Help-Bottom-Sheet */
+.bb-help-sheet{
+  position: fixed; inset: 0; z-index: 2050;
+  background: rgba(5,5,10,.92);
+  backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+  display: flex; align-items: flex-end; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity .25s;
+}
+.bb-help-sheet.on{ opacity: 1; pointer-events: auto; }
+.bb-help-card{
+  width: 100%; max-width: 540px;
+  background: #0F0F18;
+  border-top-left-radius: 28px; border-top-right-radius: 28px;
+  padding: 28px 22px calc(28px + var(--safe-bot, 0px));
+  transform: translateY(40px);
+  transition: transform .35s cubic-bezier(.2,.7,.2,1);
+}
+.bb-help-card::before{
+  content: '';
+  position: absolute;
+  top: 8px; left: 50%; transform: translateX(-50%);
+  width: 42px; height: 4px;
+  background: rgba(255,255,255,.18);
+  border-radius: 2px;
+}
+.bb-help-sheet.on .bb-help-card{ transform: translateY(0); }
+.bb-help-h{
+  font-size: 22px; font-weight: 900;
+  letter-spacing: -.02em;
+  color: #fff;
+  margin: 0 0 6px;
+  text-align: center;
+}
+.bb-help-sub{
+  font-size: 13px;
+  color: rgba(255,255,255,.6);
+  margin: 0 0 22px;
+  text-align: center;
+}
+.bb-help-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.bb-help-tile{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 16px 14px;
+  background: rgba(255,255,255,.04);
+  border: .5px solid rgba(255,255,255,.08);
+  border-radius: 16px;
+  cursor: pointer;
+  text-align: left;
+  color: inherit;
+  transition: transform .15s, border-color .2s;
+}
+.bb-help-tile:active{ transform: scale(.97); }
+.bb-help-tile-icon{
+  width: 38px; height: 38px;
+  border-radius: 10px;
+  background: rgba(255,255,255,.06);
+  display: flex; align-items: center; justify-content: center;
+}
+.bb-help-tile-icon svg{ width: 20px; height: 20px; color: #fff; }
+.bb-help-tile.urgent .bb-help-tile-icon{ background: linear-gradient(135deg, #FE3C72, #FF1F5C); }
+.bb-help-tile.calm .bb-help-tile-icon{ background: linear-gradient(135deg, #28C878, #1ea860); }
+.bb-help-tile.info .bb-help-tile-icon{ background: linear-gradient(135deg, #3B82F6, #1E40AF); }
+.bb-help-tile.crew .bb-help-tile-icon{ background: linear-gradient(135deg, #A855F7, #6366F1); }
+.bb-help-tile-title{
+  font-size: 14px; font-weight: 800;
+  color: #fff;
+  letter-spacing: -.01em;
+  margin: 0;
+}
+.bb-help-tile-sub{
+  font-size: 11px;
+  color: rgba(255,255,255,.55);
+  margin: 0;
+  line-height: 1.45;
+}
+.bb-help-row{
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 14px;
+  background: rgba(254,60,114,.08);
+  border: .5px solid rgba(254,60,114,.3);
+  border-radius: 14px;
+  margin-bottom: 14px;
+  cursor: pointer;
+}
+.bb-help-row.sos{ background: linear-gradient(135deg, rgba(254,60,114,.18), rgba(255,31,92,.05)); border-color: rgba(254,60,114,.5); }
+.bb-help-row svg{ width: 22px; height: 22px; color: #FE3C72; flex: none; }
+.bb-help-row .lbl{
+  flex: 1;
+  font-size: 14px; font-weight: 800;
+  color: #fff;
+}
+.bb-help-row .lbl-sub{
+  display: block;
+  font-size: 11px; font-weight: 600;
+  color: rgba(255,255,255,.6);
+  margin-top: 2px;
+}
+
+/* ---------- 4. PROFILE-Overlap stark blockieren ---------- */
+body[data-current-screen="profile"] .sc-wrap,
+body[data-current-screen="profile"] .aud-banner,
+body[data-current-screen="profile"] .qt-row,
+body[data-current-screen="profile"] .crew-status-pill,
+body[data-current-screen="profile"] #ccCircleHost,
+body[data-current-screen="profile"] .ptr-indicator,
+#screen-profile .sc-wrap,
+#screen-profile .aud-banner,
+#screen-profile .qt-row,
+#screen-profile .crew-status-pill,
+#screen-profile #ccCircleHost,
+[data-screen="profile"] .sc-wrap,
+[data-screen="profile"] .aud-banner,
+[data-screen="profile"] .qt-row,
+[data-screen="profile"] .crew-status-pill,
+[data-screen="profile"] #ccCircleHost{
+  display: none !important;
+  visibility: hidden !important;
+}
+
+/* ---------- 5. Welcome-Banner-Anti-Party ---------- */
+.bb-welcome-redo{
+  background: linear-gradient(135deg, rgba(40,200,120,.15), rgba(254,60,114,.06));
+  border: .5px solid rgba(40,200,120,.3);
+  border-radius: 16px;
+  padding: 14px 16px;
+  margin: 12px 16px;
+}
+.bb-welcome-redo h3{
+  font-size: 14px; font-weight: 800;
+  color: #fff;
+  margin: 0 0 4px;
+  letter-spacing: -.01em;
+}
+.bb-welcome-redo p{
+  font-size: 12px;
+  color: rgba(255,255,255,.65);
+  margin: 0;
+  line-height: 1.5;
+}
+</style>
+<script id="bb-saferealn-js">
+/* ============================================================
+   BB-SAFEREALN — Korrekte SafePlace + Anti-Party + Help-FAB
+   ============================================================ */
+(function(){
+  'use strict';
+  if (window.__bbSafeRealnInit) return;
+  window.__bbSafeRealnInit = true;
+
+  var sb = function(){ return window.sb || window.supabase; };
+
+  /* ============= 1. SAFEPLACE OPEN — korrekte Funktion ============= */
+  function openSafePlaceCorrect(){
+    /* Erste Wahl: window.openSafeplaceHub (Camel-Case wie original definiert) */
+    if (typeof window.openSafeplaceHub === 'function'){
+      try{
+        window.openSafeplaceHub();
+        return true;
+      }catch(e){ console.warn('[bb-sr] openSafeplaceHub fail', e); }
+    }
+    /* Zweite Wahl: window.openSafetyHub */
+    if (typeof window.openSafetyHub === 'function'){
+      try{ window.openSafetyHub(); return true; }catch(e){}
+    }
+    /* Dritte Wahl: existierender Trigger im Header */
+    var trigger = document.querySelector('.hdr-btn.hdr-safeplace, #crewTopSafety, [aria-label="SafePlace Hub"]');
+    if (trigger){
+      try{ trigger.click(); return true; }catch(e){}
+    }
+    /* Vierte Wahl: direkt #safeplaceOv manipulieren */
+    var ov = document.getElementById('safeplaceOv');
+    if (ov){
+      ov.classList.add('show');
+      ov.style.display = 'block';
+      return true;
+    }
+    return false;
+  }
+
+  /* Override aller bisherigen SafePlace-Hooks */
+  window.bbOpenSafePlace = openSafePlaceCorrect;
+  if (window.bbOrch){
+    var origSwitch = window.bbOrch.switchToScreen;
+    window.bbOrch.switchToScreen = function(name){
+      if (name === 'safety' || name === 'radar' || name === 'safeplace'){
+        if (!openSafePlaceCorrect()){
+          if (origSwitch) origSwitch('hub');
+        }
+        return;
+      }
+      if (origSwitch) return origSwitch(name);
+    };
+  }
+
+  /* Click-Delegation: alle Safety/Radar/SafePlace-Klicks → richtige Funktion */
+  document.addEventListener('click', function(e){
+    var t = e.target;
+    if (!t || !t.closest) return;
+    var n = t.closest('[data-tab="safety"], [data-tab="safeplace"], [data-tab="radar"], [data-screen-target="safety"], [data-screen-target="safeplace"], [data-screen-target="radar"], [data-action="open-safeplace"], [data-action="open-safety"]');
+    if (n){
+      e.preventDefault();
+      e.stopPropagation();
+      openSafePlaceCorrect();
+    }
+  }, true);
+
+  /* ============= 2. ANTI-PARTY-BRANDING ============= */
+  /* Wir entfernen Party-Emojis aus Text-Nodes UND ersetzen Party-Wording */
+  var PARTY_EMOJI_RE = /(?:🏴‍☠️|🏴|🍻|🎉|🎊|🍾|🥳|🪩|💃|🕺|🎶|🎵|🥂|🍺|🍸|🍷|🪅)/g;
+
+  var WORD_REPLACE = [
+    [/Eure Party/g, 'Eure Crew'],
+    [/eure Party/g, 'eure Crew'],
+    [/Party-Crew/g, 'Crew'],
+    [/Party Crew/g, 'Crew'],
+    [/zum Feiern/g, 'unterwegs'],
+    [/zum feiern/g, 'unterwegs'],
+    [/feiert/g, 'unterwegs'],
+    [/Festival-/g, 'Event-'],
+    [/Festivals/g, 'Events'],
+    [/auf dem Festival/g, 'beim Treffen'],
+    [/Partycrew/g, 'crew.'],
+    [/partycrew\.app/gi, 'partycrew.app'] /* URL bleibt */
+  ];
+
+  function stripPartyEmojis(){
+    var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+      acceptNode: function(n){
+        if (!n.nodeValue || !PARTY_EMOJI_RE.test(n.nodeValue)) return NodeFilter.FILTER_SKIP;
+        PARTY_EMOJI_RE.lastIndex = 0;
+        var p = n.parentNode;
+        while (p){ if (p.tagName === 'SCRIPT' || p.tagName === 'STYLE' || p.tagName === 'A' && (p.href||'').includes('partycrew.app')) return NodeFilter.FILTER_REJECT; p = p.parentNode; }
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    var nodes = [];
+    var cur;
+    while ((cur = walker.nextNode())){ nodes.push(cur); }
+    nodes.forEach(function(n){
+      n.nodeValue = n.nodeValue.replace(PARTY_EMOJI_RE, '').replace(/\s{2,}/g,' ');
+    });
+  }
+
+  function rewordParty(){
+    /* Nur in sichtbaren Text-Nodes ersetzen, nicht in scripts/inputs */
+    var skipTags = ['SCRIPT','STYLE','TEXTAREA','INPUT','OPTION'];
+    var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+      acceptNode: function(n){
+        if (!n.nodeValue) return NodeFilter.FILTER_SKIP;
+        var p = n.parentNode;
+        while (p){ if (skipTags.indexOf(p.tagName) >= 0) return NodeFilter.FILTER_REJECT; p = p.parentNode; }
+        var hit = WORD_REPLACE.some(function(pair){ return pair[0].test(n.nodeValue); });
+        return hit ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP;
+      }
+    });
+    var nodes = [];
+    var cur;
+    while ((cur = walker.nextNode())){ nodes.push(cur); }
+    nodes.forEach(function(n){
+      var v = n.nodeValue;
+      WORD_REPLACE.forEach(function(pair){ v = v.replace(pair[0], pair[1]); });
+      n.nodeValue = v;
+    });
+  }
+
+  /* Anti-Party periodisch laufen — neue Inhalte werden auch erfasst */
+  function partyJanitor(){
+    try{
+      stripPartyEmojis();
+      rewordParty();
+    }catch(e){ console.warn('[bb-sr] janitor', e); }
+  }
+
+  /* ============= 3. SOS-CREW-HELP CENTER (FAB + Bottom-Sheet) ============= */
+  function injectHelpFAB(){
+    if (document.querySelector('.bb-help-fab')) return;
+    var fab = document.createElement('button');
+    fab.className = 'bb-help-fab';
+    fab.type = 'button';
+    fab.title = 'Hilfe & Crew';
+    fab.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>';
+    fab.addEventListener('click', openHelpSheet);
+    /* Long-Press = SOS-Trigger */
+    var holdTimer = null;
+    fab.addEventListener('touchstart', function(){
+      holdTimer = setTimeout(function(){
+        triggerSOS();
+        if (navigator.vibrate) navigator.vibrate([60,30,60]);
+      }, 1200);
+    });
+    fab.addEventListener('touchend', function(){
+      if (holdTimer){ clearTimeout(holdTimer); holdTimer = null; }
+    });
+    fab.addEventListener('touchmove', function(){
+      if (holdTimer){ clearTimeout(holdTimer); holdTimer = null; }
+    });
+    document.body.appendChild(fab);
+  }
+
+  function openHelpSheet(){
+    var existing = document.getElementById('bbHelpSheet');
+    if (existing) existing.remove();
+    var sheet = document.createElement('div');
+    sheet.className = 'bb-help-sheet';
+    sheet.id = 'bbHelpSheet';
+    sheet.innerHTML = '<div class="bb-help-card">'+
+      '<h2 class="bb-help-h">Was brauchst du?</h2>'+
+      '<p class="bb-help-sub">Ein Tap reicht. Deine Crew bekommt nur was du teilst.</p>'+
+
+      '<div class="bb-help-row sos" id="bbHelpSos">'+
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>'+
+        '<span class="lbl">Notfall — SOS<small class="lbl-sub">Standort + Push an deine Notfall-Kontakte</small></span>'+
+      '</div>'+
+
+      '<div class="bb-help-grid">'+
+        '<button class="bb-help-tile calm" id="bbHelpHome" type="button">'+
+          '<div class="bb-help-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>'+
+          '<h4 class="bb-help-tile-title">Heimweg starten</h4>'+
+          '<p class="bb-help-tile-sub">30 min — Crew kriegt Push wenn du nicht „Bin da" drückst</p>'+
+        '</button>'+
+        '<button class="bb-help-tile info" id="bbHelpLive" type="button">'+
+          '<div class="bb-help-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg></div>'+
+          '<h4 class="bb-help-tile-title">Live-Standort</h4>'+
+          '<p class="bb-help-tile-sub">30 min mit Crew teilen, dann Auto-Stop</p>'+
+        '</button>'+
+        '<button class="bb-help-tile crew" id="bbHelpCircle" type="button">'+
+          '<div class="bb-help-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>'+
+          '<h4 class="bb-help-tile-title">Safety-Circle</h4>'+
+          '<p class="bb-help-tile-sub">Crew hinzufügen, verwalten</p>'+
+        '</button>'+
+        '<button class="bb-help-tile" id="bbHelpSpot" type="button">'+
+          '<div class="bb-help-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s-7-7-7-12a7 7 0 0 1 14 0c0 5-7 12-7 12z"/><circle cx="12" cy="10" r="3"/></svg></div>'+
+          '<h4 class="bb-help-tile-title">Spot anlegen</h4>'+
+          '<p class="bb-help-tile-sub">Treffpunkt, Vertrauensort, Live-Spot</p>'+
+        '</button>'+
+      '</div>'+
+
+      '<div class="bb-help-grid">'+
+        '<button class="bb-help-tile" id="bbHelpSafePlace" type="button" style="grid-column: span 2; flex-direction:row; align-items:center;">'+
+          '<div class="bb-help-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>'+
+          '<div style="flex:1"><h4 class="bb-help-tile-title">SafePlace-Hub öffnen</h4><p class="bb-help-tile-sub">Notfall-Kontakte, Check-ins, Heimweg, Audit</p></div>'+
+        '</button>'+
+      '</div>'+
+    '</div>';
+    document.body.appendChild(sheet);
+    setTimeout(function(){ sheet.classList.add('on'); }, 30);
+    /* Click-Handler */
+    sheet.addEventListener('click', function(e){
+      if (e.target === sheet){ closeHelp(sheet); return; }
+      var sos = e.target.closest('#bbHelpSos');
+      if (sos){ closeHelp(sheet); setTimeout(triggerSOS, 200); return; }
+      if (e.target.closest('#bbHelpHome')){ closeHelp(sheet); setTimeout(startHomemode, 200); return; }
+      if (e.target.closest('#bbHelpLive')){ closeHelp(sheet); setTimeout(toggleLive, 200); return; }
+      if (e.target.closest('#bbHelpCircle')){ closeHelp(sheet); setTimeout(openCircle, 200); return; }
+      if (e.target.closest('#bbHelpSpot')){ closeHelp(sheet); setTimeout(openSpotWizard, 200); return; }
+      if (e.target.closest('#bbHelpSafePlace')){ closeHelp(sheet); setTimeout(openSafePlaceCorrect, 200); return; }
+    });
+  }
+  function closeHelp(sheet){
+    sheet.classList.remove('on');
+    setTimeout(function(){ sheet.remove(); }, 350);
+  }
+
+  function triggerSOS(){
+    var btn = document.querySelector('.hdr-sos, [data-action="sos"], #sosBtn, .hdr-btn.hdr-sos');
+    if (btn){
+      btn.click();
+      try{ navigator.vibrate && navigator.vibrate([60,40,60]); }catch(e){}
+      if (window.bbToast) window.bbToast('SOS aktiviert');
+    } else {
+      if (window.bbToast) window.bbToast('SOS-Knopf nicht gefunden');
+    }
+  }
+  function startHomemode(){
+    if (window.bbUx && window.bbUx.startHomemode){ window.bbUx.startHomemode(); return; }
+    if (window.bbStartHomemode){ window.bbStartHomemode(30); return; }
+    /* Fallback */
+    try{
+      localStorage.setItem('bb-homemode-active','1');
+      localStorage.setItem('bb-homemode-eta', String(Date.now() + 30*60*1000));
+    }catch(_){}
+    if (window.bbToast) window.bbToast('Heimweg läuft · 30 min');
+  }
+  function toggleLive(){
+    if (window.bbUx && window.bbUx.toggleLiveBroadcast) window.bbUx.toggleLiveBroadcast();
+    else if (window.bbToast) window.bbToast('Live-Funktion nicht verfügbar');
+  }
+  function openCircle(){
+    /* Versuche Safety-Circle Modal */
+    var triggers = ['[data-action="open-circle"]','[data-action="safety-circle"]','#openCircle','.open-safety-circle'];
+    for (var i=0;i<triggers.length;i++){
+      var t = document.querySelector(triggers[i]);
+      if (t){ t.click(); return; }
+    }
+    /* Fallback: SafePlace + dort ist Circle */
+    openSafePlaceCorrect();
+  }
+  function openSpotWizard(){
+    if (window.bbHotspot && window.bbHotspot.openWizard) window.bbHotspot.openWizard();
+    else if (window.bbCreateHotspot) window.bbCreateHotspot();
+  }
+
+  /* ============= 4. INIT ============= */
+  function init(){
+    /* Anti-Party einmal sofort + alle 5s */
+    setTimeout(partyJanitor, 1500);
+    setTimeout(partyJanitor, 4500);
+    setInterval(partyJanitor, 8000);
+
+    /* Help-FAB */
+    setTimeout(injectHelpFAB, 2500);
+
+    /* Pirate-Flag-Tile-Icons stripping */
+    setInterval(function(){
+      document.querySelectorAll('.crew-hub-empty-emoji').forEach(function(e){
+        e.dataset.bbStripped = '1';
+        e.style.display = 'none';
+      });
+    }, 3000);
+
+    /* Expose */
+    window.bbHelpOpen = openHelpSheet;
+    window.bbSafePlaceOpen = openSafePlaceCorrect;
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+
 </body></html>
