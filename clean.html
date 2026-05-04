@@ -1854,27 +1854,38 @@ a{ color: var(--c-violet-3); text-decoration: none; }
 .dt-rating-stat.verified{ color: #6EE7B7; }
 .dt-rating-stat.pending{ color: var(--c-gold); }
 
-/* 3D-Emoji Sticker Style — gibt Native-Emojis sanften Pop */
-.emo, .emo-lg, .emo-xl, .emo-hero{
+/* 3D Microsoft Fluent UI Emoji als img-Tag-Sticker */
+.emo3d{
   display: inline-block;
-  font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
-  font-style: normal;
-  font-weight: normal;
-  line-height: 1;
+  vertical-align: middle;
+  width: 28px; height: 28px;
+  object-fit: contain;
   filter: drop-shadow(0 4px 8px rgba(0,0,0,.35));
   user-select: none;
   -webkit-user-select: none;
+  pointer-events: none;
 }
-.emo{ font-size: 22px; }
-.emo-lg{ font-size: 32px; }
-.emo-xl{ font-size: 56px; filter: drop-shadow(0 8px 16px rgba(0,0,0,.4)); }
-.emo-hero{
-  font-size: 72px;
+.emo3d.sz-md{ width: 32px; height: 32px; }
+.emo3d.sz-lg{ width: 44px; height: 44px; }
+.emo3d.sz-xl{ width: 64px; height: 64px; filter: drop-shadow(0 8px 16px rgba(0,0,0,.4)); }
+.emo3d.sz-hero{
+  width: 96px; height: 96px;
   filter: drop-shadow(0 12px 24px rgba(139,92,246,.35));
   display: block;
   margin: 0 auto;
   animation: emoFloat 4s ease-in-out infinite;
 }
+/* Backward-Compat .emo / .emo-lg / .emo-xl / .emo-hero — falls noch verwendet */
+.emo, .emo-lg, .emo-xl, .emo-hero{
+  display: inline-block;
+  font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
+  line-height: 1;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,.35));
+}
+.emo{ font-size: 22px; }
+.emo-lg{ font-size: 32px; }
+.emo-xl{ font-size: 56px; }
+.emo-hero{ font-size: 72px; display: block; margin: 0 auto; animation: emoFloat 4s ease-in-out infinite; }
 @keyframes emoFloat{
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-8px); }
@@ -1960,7 +1971,7 @@ a{ color: var(--c-violet-3); text-decoration: none; }
         <div class="status"><span class="dot"></span><span id="fyStatus">Sicher · Crew online</span></div>
       </div>
       <div class="spa-card" id="spaCard">
-        <div class="spa-card-ic emoji"><span class="emo emo-lg">🛡️</span></div>
+        <div class="spa-card-ic emoji"><img class="emo3d sz-lg" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Shield/3D/shield_3d.png" alt="" loading="lazy"/></div>
         <div class="spa-card-main">
           <div class="t">SafePlace-Hub</div>
           <div class="s">Notfall-Kontakte, Heimweg, Audit</div>
@@ -1971,19 +1982,19 @@ a{ color: var(--c-violet-3); text-decoration: none; }
         <div class="sec-h"><h3>Schnell-Aktionen</h3></div>
         <div class="quick">
           <button class="quick-c live" data-action="live">
-            <div class="ic"><span class="emo emo-lg">📡</span></div>
+            <div class="ic"><img class="emo3d sz-md" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Satellite%20antenna/3D/satellite_antenna_3d.png" alt="" loading="lazy"/></div>
             <div class="lbl">Live</div>
           </button>
           <button class="quick-c" data-action="home">
-            <div class="ic"><span class="emo emo-lg">🏠</span></div>
+            <div class="ic"><img class="emo3d sz-md" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/House/3D/house_3d.png" alt="" loading="lazy"/></div>
             <div class="lbl">Heimweg</div>
           </button>
           <button class="quick-c" data-action="spot">
-            <div class="ic"><span class="emo emo-lg">📍</span></div>
+            <div class="ic"><img class="emo3d sz-md" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Round%20pushpin/3D/round_pushpin_3d.png" alt="" loading="lazy"/></div>
             <div class="lbl">Spot</div>
           </button>
           <button class="quick-c urgent" data-action="sos">
-            <div class="ic"><span class="emo emo-lg">🚨</span></div>
+            <div class="ic"><img class="emo3d sz-md" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Police%20car%20light/3D/police_car_light_3d.png" alt="" loading="lazy"/></div>
             <div class="lbl">SOS</div>
           </button>
         </div>
@@ -2204,7 +2215,7 @@ a{ color: var(--c-violet-3); text-decoration: none; }
 <div class="modal center" id="trustModal">
   <div class="modal-card">
     <button class="modal-close" data-close="trustModal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-    <div class="modal-hero-emo" style="margin-bottom:8px"><span class="emo-hero">🤝</span></div>
+    <div class="modal-hero-emo" style="margin-bottom:8px"><img class="emo3d sz-hero" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Handshake/3D/handshake_3d.png" alt=""/></div>
     <div class="pr-ava" id="trAva" style="margin: 0 auto 14px"></div>
     <h2 class="modal-h" id="trName" style="text-align:center;margin-top:0">Crew-Member</h2>
     <p class="modal-sub" style="text-align:center">Wie zuverlässig & vertrauenswürdig?</p>
@@ -2222,7 +2233,7 @@ a{ color: var(--c-violet-3); text-decoration: none; }
   <div class="modal-card">
     <button class="modal-close" data-close="sosModal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     <div class="sos-confirm">
-      <div class="modal-hero-emo"><span class="emo-hero" style="filter:drop-shadow(0 12px 24px rgba(236,72,153,.5))">🚨</span></div>
+      <div class="modal-hero-emo"><img class="emo3d sz-hero" style="filter:drop-shadow(0 12px 24px rgba(236,72,153,.5))" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Police%20car%20light/3D/police_car_light_3d.png" alt=""/></div>
       <h2 class="modal-h" style="text-align:center;color:var(--c-sos);margin-top:0">SOS auslösen?</h2>
       <p class="modal-sub" style="text-align:center">Halte gedrückt um zu bestätigen. Standort + Push gehen an Notfall-Kontakte.</p>
       <div class="sos-hold-track" id="sosHold">
@@ -2243,11 +2254,11 @@ a{ color: var(--c-violet-3); text-decoration: none; }
     <div class="sp-section">
       <h4>Sofort</h4>
       <button class="sp-tile" data-sp="live">
-        <div class="sp-tile-ic"><span class="emo emo-lg">📡</span></div>
+        <div class="sp-tile-ic"><img class="emo3d sz-md" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Satellite%20antenna/3D/satellite_antenna_3d.png" alt=""/></div>
         <div class="sp-tile-main"><div class="t">Live-Standort</div><div class="s">30 min mit Crew teilen</div></div>
       </button>
       <button class="sp-tile" data-sp="home">
-        <div class="sp-tile-ic"><span class="emo emo-lg">🏠</span></div>
+        <div class="sp-tile-ic"><img class="emo3d sz-md" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/House/3D/house_3d.png" alt=""/></div>
         <div class="sp-tile-main"><div class="t">Heimweg starten</div><div class="s">30 min Countdown · Crew kriegt Push</div></div>
       </button>
     </div>
@@ -2384,7 +2395,7 @@ a{ color: var(--c-violet-3); text-decoration: none; }
 <div class="modal center" id="homemodeModal">
   <div class="modal-card">
     <button class="modal-close" data-close="homemodeModal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-    <div class="modal-hero-emo"><span class="emo-hero">🏠</span></div>
+    <div class="modal-hero-emo"><img class="emo3d sz-hero" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/House/3D/house_3d.png" alt=""/></div>
     <h2 class="modal-h" style="text-align:center;margin-top:0">Heimweg starten</h2>
     <p class="modal-sub" style="text-align:center">Crew kriegt Push wenn du nicht „Bin da" drückst.</p>
     <div class="field">
@@ -2597,6 +2608,36 @@ a{ color: var(--c-violet-3); text-decoration: none; }
   let liveOn = localStorage.getItem('crew-live') === '1';
   let homeOn = localStorage.getItem('crew-home') === '1';
 
+  /* ============= FLUENT 3D EMOJI URLs ============= */
+  const FX_BASE = 'https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/';
+  const FX = {
+    shield:    FX_BASE + 'Shield/3D/shield_3d.png',
+    house:     FX_BASE + 'House/3D/house_3d.png',
+    satellite: FX_BASE + 'Satellite%20antenna/3D/satellite_antenna_3d.png',
+    pin:       FX_BASE + 'Round%20pushpin/3D/round_pushpin_3d.png',
+    sos:       FX_BASE + 'Police%20car%20light/3D/police_car_light_3d.png',
+    sparkles:  FX_BASE + 'Sparkles/3D/sparkles_3d.png',
+    map:       FX_BASE + 'World%20map/3D/world_map_3d.png',
+    hug:       FX_BASE + 'People%20hugging/3D/people_hugging_3d.png',
+    disco:     FX_BASE + 'Mirror%20ball/3D/mirror_ball_3d.png',
+    crew:      FX_BASE + 'Busts%20in%20silhouette/3D/busts_in_silhouette_3d.png',
+    target:    FX_BASE + 'Bullseye/3D/bullseye_3d.png',
+    locked:    FX_BASE + 'Locked/3D/locked_3d.png',
+    globe:     FX_BASE + 'Globe%20with%20meridians/3D/globe_with_meridians_3d.png',
+    handshake: FX_BASE + 'Handshake/3D/handshake_3d.png',
+    walking:   FX_BASE + 'Person%20walking/Default/3D/person_walking_3d_default.png',
+    twohearts: FX_BASE + 'Two%20hearts/3D/two_hearts_3d.png',
+    seedling:  FX_BASE + 'Seedling/3D/seedling_3d.png',
+    rainbow:   FX_BASE + 'Rainbow/3D/rainbow_3d.png',
+    heart:     FX_BASE + 'Red%20heart/3D/red_heart_3d.png',
+    keys:      FX_BASE + 'Old%20key/3D/old_key_3d.png'
+  };
+  function emo3d(name, size){
+    const url = FX[name] || FX.sparkles;
+    return `<img class="emo3d ${size||''}" src="${url}" alt="" loading="lazy"/>`;
+  }
+  window.FX = FX;
+
   /* ============= UTILS ============= */
   const $ = id => document.getElementById(id);
   const $$ = sel => document.querySelectorAll(sel);
@@ -2753,7 +2794,7 @@ a{ color: var(--c-violet-3); text-decoration: none; }
         items.push({ type: 'spot', name: h.name, time: h.created_at, body: h.description || ('Neuer ' + h.kind + '-Spot'), tag: h.kind });
       });
       if (!items.length){
-        host.innerHTML = '<div class="empty with-emo" style="background:var(--c-surface);border:.5px dashed var(--c-line);border-radius:var(--r-3);margin:0 16px"><span class="emo-hero">✨</span><h4>Hier wird\'s lebendig</h4><p>Lade Freunde ein, leg Spots an oder warte bis was passiert.</p></div>';
+        host.innerHTML = '<div class="empty with-emo" style="background:var(--c-surface);border:.5px dashed var(--c-line);border-radius:var(--r-3);margin:0 16px"><img class="emo3d sz-hero" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Sparkles/3D/sparkles_3d.png" alt=""/><h4>Hier wird\'s lebendig</h4><p>Lade Freunde ein, leg Spots an oder warte bis was passiert.</p></div>';
         return;
       }
       host.innerHTML = items.map(it => `
@@ -2773,7 +2814,7 @@ a{ color: var(--c-violet-3); text-decoration: none; }
   async function loadFeedSpots(){
     const host = $('feedSpots');
     if (!userLat){
-      host.innerHTML = '<div class="empty with-emo" style="background:var(--c-surface);border:.5px dashed var(--c-line);border-radius:var(--r-3);margin:0 16px;padding:24px 16px"><span class="emo-xl">🗺️</span><h4 style="margin-top:12px">Standort gesucht</h4><p>Erlaube den GPS-Zugriff um Spots in deiner Nähe zu sehen.</p></div>';
+      host.innerHTML = '<div class="empty with-emo" style="background:var(--c-surface);border:.5px dashed var(--c-line);border-radius:var(--r-3);margin:0 16px;padding:24px 16px"><img class="emo3d sz-xl" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/World%20map/3D/world_map_3d.png" alt=""/><h4 style="margin-top:12px">Standort gesucht</h4><p>Erlaube den GPS-Zugriff um Spots in deiner Nähe zu sehen.</p></div>';
       return;
     }
     try{
@@ -2991,16 +3032,16 @@ a{ color: var(--c-violet-3); text-decoration: none; }
 
   /* ============= HOTSPOT WIZARD ============= */
   const KINDS = [
-    { id: 'safe',      t: 'Schutzort',     s: 'Krankenhaus, Polizei', ic: '<span class="emo">🛡️</span>' },
-    { id: 'trust',     t: 'Vertrauensort', s: 'Zuhause, Job',         ic: '<span class="emo">🏠</span>' },
-    { id: 'live',      t: 'Live-Spot',     s: 'Bin gerade hier',      ic: '<span class="emo">📍</span>' },
-    { id: 'community', t: 'Community',     s: 'Gruppe, Verein',       ic: '<span class="emo">🤝</span>' }
+    { id: 'safe',      t: 'Schutzort',     s: 'Krankenhaus, Polizei', fx: 'shield' },
+    { id: 'trust',     t: 'Vertrauensort', s: 'Zuhause, Job',         fx: 'house' },
+    { id: 'live',      t: 'Live-Spot',     s: 'Bin gerade hier',      fx: 'pin' },
+    { id: 'community', t: 'Community',     s: 'Gruppe, Verein',       fx: 'handshake' }
   ];
   const VIS = [
-    { id: 'public',  t: 'Öffentlich', s: 'Alle in der Nähe',     ic: '<span class="emo">🌐</span>' },
-    { id: 'friends', t: 'Freunde',    s: 'Nur Safety-Circle',    ic: '<span class="emo">👥</span>' },
-    { id: 'circle',  t: 'Crew',       s: 'Nur eingeladene',      ic: '<span class="emo">🎯</span>' },
-    { id: 'private', t: 'Privat',     s: 'Nur du',               ic: '<span class="emo">🔒</span>' }
+    { id: 'public',  t: 'Öffentlich', s: 'Alle in der Nähe',     fx: 'globe' },
+    { id: 'friends', t: 'Freunde',    s: 'Nur Safety-Circle',    fx: 'crew' },
+    { id: 'circle',  t: 'Crew',       s: 'Nur eingeladene',      fx: 'target' },
+    { id: 'private', t: 'Privat',     s: 'Nur du',               fx: 'locked' }
   ];
   /* WizState mit Persistenz: Name + Desc gehen NICHT verloren beim Re-Render */
   const wizState = { kind: 'live', vis: 'friends', name: '', desc: '', photoFile: null, photoDataUrl: null };
@@ -3008,13 +3049,13 @@ a{ color: var(--c-violet-3); text-decoration: none; }
   function renderWizardPills(){
     $('wizKinds').innerHTML = KINDS.map(k => `
       <button class="pill-c ${wizState.kind === k.id ? 'on' : ''}" data-k="${k.id}" type="button">
-        <div class="ic">${k.ic}</div>
+        <div class="ic">${emo3d(k.fx)}</div>
         <div class="info"><div class="t">${k.t}</div><div class="s">${k.s}</div></div>
       </button>
     `).join('');
     $('wizVis').innerHTML = VIS.map(v => `
       <button class="pill-c ${wizState.vis === v.id ? 'on' : ''}" data-v="${v.id}" type="button">
-        <div class="ic">${v.ic}</div>
+        <div class="ic">${emo3d(v.fx)}</div>
         <div class="info"><div class="t">${v.t}</div><div class="s">${v.s}</div></div>
       </button>
     `).join('');
@@ -3419,7 +3460,7 @@ a{ color: var(--c-violet-3); text-decoration: none; }
       const search = $('cwSearch').value.toLowerCase().trim();
       if (search) members = members.filter(m => (m.display_name||'').toLowerCase().includes(search));
       if (!members.length){
-        host.innerHTML = '<div class="empty with-emo"><span class="emo-hero">🫂</span><h4>Keine Crew hier</h4><p>Lade Freunde in deinen Safety-Circle ein oder tritt einem Hotspot bei.</p></div>';
+        host.innerHTML = '<div class="empty with-emo"><img class="emo3d sz-hero" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/People%20hugging/3D/people_hugging_3d.png" alt=""/><h4>Keine Crew hier</h4><p>Lade Freunde in deinen Safety-Circle ein oder tritt einem Hotspot bei.</p></div>';
         return;
       }
       host.innerHTML = members.map(m => {
@@ -3522,13 +3563,13 @@ a{ color: var(--c-violet-3); text-decoration: none; }
 
   /* ============= SETTINGS ============= */
   const AUDIENCE_PROFILES = [
-    { id: 'general',  t: 'Allgemein',          s: 'Connection + Safety',          emo: '🌐' },
-    { id: 'party',    t: 'Party & Festival',   s: 'Crew beim Feiern',             emo: '🪩' },
-    { id: 'familie',  t: 'Familie',            s: 'Eltern, Kinder, Geschwister',  emo: '👨‍👩‍👧' },
-    { id: 'solo',     t: 'Solo',               s: 'Heimweg, Reise, Joggen',       emo: '🚶' },
-    { id: 'pflege',   t: 'Pflege',             s: 'Angehörige betreuen',          emo: '💗' },
-    { id: 'recovery', t: 'Recovery',           s: 'Mental Health & Selbsthilfe',  emo: '🌱' },
-    { id: 'lgbtq',    t: 'LGBTQ+',             s: 'Sichere Orte & Support',       emo: '🌈' }
+    { id: 'general',  t: 'Allgemein',          s: 'Connection + Safety',          fx: 'globe' },
+    { id: 'party',    t: 'Party & Festival',   s: 'Crew beim Feiern',             fx: 'disco' },
+    { id: 'familie',  t: 'Familie',            s: 'Eltern, Kinder, Geschwister',  fx: 'house' },
+    { id: 'solo',     t: 'Solo',               s: 'Heimweg, Reise, Joggen',       fx: 'walking' },
+    { id: 'pflege',   t: 'Pflege',             s: 'Angehörige betreuen',          fx: 'twohearts' },
+    { id: 'recovery', t: 'Recovery',           s: 'Mental Health & Selbsthilfe',  fx: 'seedling' },
+    { id: 'lgbtq',    t: 'LGBTQ+',             s: 'Sichere Orte & Support',       fx: 'rainbow' }
   ];
 
   function openSettings(){
@@ -3544,7 +3585,7 @@ a{ color: var(--c-violet-3); text-decoration: none; }
     /* Audience-Tiles */
     $('setAudGrid').innerHTML = AUDIENCE_PROFILES.map(p => `
       <button class="aud-tile ${profile.audience_profile === p.id ? 'on' : ''}" data-aud="${p.id}">
-        <div class="ic emoji"><span class="emo">${p.emo}</span></div>
+        <div class="ic emoji">${emo3d(p.fx)}</div>
         <div class="info"><div class="t">${p.t}</div><div class="s">${p.s}</div></div>
       </button>
     `).join('');
