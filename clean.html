@@ -1999,6 +1999,11 @@ a{ color: var(--c-violet-3); text-decoration: none; }
 
       <div class="pr-section-h">Schnell-Aktionen</div>
       <div class="pr-actions">
+        <button class="pr-act admin-only" data-pr-act="admin" id="prAdminBtn" hidden>
+          <div class="pr-act-ic" style="background: linear-gradient(135deg, #FFD60A, #FF6D2E)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg></div>
+          <div class="pr-act-main"><div class="t">Admin-Panel</div><div class="s">Stats, Spot-Moderation, User-Liste</div></div>
+          <span class="pr-act-arrow"></span>
+        </button>
         <button class="pr-act" data-pr-act="safeplace">
           <div class="pr-act-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
           <div class="pr-act-main"><div class="t">SafePlace-Hub</div><div class="s">Notfall-Kontakte, Heimweg, Audit</div></div>
@@ -2196,6 +2201,116 @@ a{ color: var(--c-violet-3); text-decoration: none; }
     </div>
   </div>
 </div>
+
+<!-- ADMIN PANEL MODAL -->
+<div class="modal" id="adminModal">
+  <div class="modal-card">
+    <button class="modal-close" data-close="adminModal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <h2 class="modal-h">Admin-Panel</h2>
+    <p class="modal-sub">Stats, Spot-Moderation, Verifikation</p>
+
+    <div class="admin-stats" id="admStats"></div>
+
+    <div class="sp-section">
+      <h4>Alle Spots (neueste 50)</h4>
+      <div class="adm-list" id="admHotspots"></div>
+    </div>
+  </div>
+</div>
+
+<style>
+.admin-stats{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--s-2);
+  margin-bottom: var(--s-4);
+}
+.adm-stat-card{
+  padding: var(--s-3);
+  background: var(--c-surface-2);
+  border: .5px solid var(--c-violet-line);
+  border-radius: var(--r-3);
+  text-align: center;
+}
+.adm-stat-card .num{
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--c-violet-3);
+  letter-spacing: -.025em;
+  display: block;
+}
+.adm-stat-card .lbl{
+  font-size: 10px;
+  color: var(--c-text-3);
+  margin-top: 4px;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+.adm-list{
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+.adm-row{
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: var(--s-2) var(--s-3);
+  background: var(--c-surface-2);
+  border: .5px solid var(--c-violet-line);
+  border-radius: var(--r-2);
+}
+.adm-row.closed{ opacity: .5; }
+.adm-row .info{ flex: 1; min-width: 0; }
+.adm-row .name{
+  font-size: var(--t-4);
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.adm-row .meta{
+  font-size: 10px;
+  color: var(--c-text-3);
+  margin-top: 2px;
+}
+.adm-row .badges{ display: flex; gap: 4px; }
+.adm-badge{
+  font-size: 9px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: var(--r-5);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.adm-badge.kind-live{ background: rgba(40,200,120,.18); color: #6EE7B7; }
+.adm-badge.kind-safe{ background: rgba(40,200,120,.18); color: #6EE7B7; }
+.adm-badge.kind-trust{ background: rgba(255,214,10,.15); color: var(--c-gold); }
+.adm-badge.kind-community{ background: rgba(139,92,246,.18); color: var(--c-violet-3); }
+.adm-badge.vis-public{ background: rgba(40,200,120,.1); color: #6EE7B7; }
+.adm-badge.vis-friends, .adm-badge.vis-circle{ background: rgba(139,92,246,.15); color: var(--c-violet-3); }
+.adm-badge.vis-private{ background: rgba(107,114,128,.18); color: var(--c-text-3); }
+.adm-badge.status-flagged{ background: rgba(236,72,153,.18); color: #F472B6; }
+.adm-badge.status-approved{ background: rgba(40,200,120,.18); color: #6EE7B7; }
+.adm-row .acts{ display: flex; gap: 4px; flex: none; }
+.adm-act{
+  width: 32px; height: 32px;
+  border-radius: var(--r-1);
+  background: var(--c-surface);
+  border: .5px solid var(--c-line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--c-text-2);
+}
+.adm-act svg{ width: 14px; height: 14px; }
+.adm-act.danger{ color: var(--c-sos); }
+.adm-act.success{ color: var(--c-green); }
+</style>
 
 <!-- TOAST -->
 <div class="toast" id="toast" hidden>
@@ -3132,17 +3247,98 @@ a{ color: var(--c-violet-3); text-decoration: none; }
       $('prActNum').textContent = actVal + '/100';
       $('prActFill').style.width = actVal + '%';
     }catch(e){ console.warn(e); }
+    syncAdminBtn();
   }
   $$('.pr-act').forEach(b => b.addEventListener('click', () => {
     const a = b.dataset.prAct;
     if (a === 'safeplace') openModal('safeplaceModal');
     else if (a === 'legal') window.open('/datenschutz.html', '_blank');
+    else if (a === 'admin') openAdminPanel();
     else if (a === 'logout'){
       if (confirm('Wirklich abmelden?')){
         sb.auth.signOut().then(() => location.reload());
       }
     }
   }));
+
+  /* Admin-Panel sichtbar wenn is_admin */
+  function syncAdminBtn(){
+    if (profile && profile.is_admin) $('prAdminBtn').hidden = false;
+    else $('prAdminBtn').hidden = true;
+  }
+
+  async function openAdminPanel(){
+    openModal('adminModal');
+    /* Stats */
+    const statsEl = $('admStats');
+    statsEl.innerHTML = '<div class="empty"><div class="spinner" style="margin:20px auto"></div></div>';
+    try{
+      const sRes = await sb.rpc('admin_stats');
+      const s = (sRes && sRes.data && sRes.data[0]) || {};
+      statsEl.innerHTML = `
+        <div class="adm-stat-card"><span class="num">${s.total_users || 0}</span><span class="lbl">Users</span></div>
+        <div class="adm-stat-card"><span class="num">${s.active_hotspots || 0}/${s.total_hotspots || 0}</span><span class="lbl">Spots aktiv/total</span></div>
+        <div class="adm-stat-card"><span class="num">${s.total_members || 0}</span><span class="lbl">Memberships</span></div>
+        <div class="adm-stat-card"><span class="num">${s.total_messages || 0}</span><span class="lbl">Messages</span></div>
+        <div class="adm-stat-card"><span class="num">${s.total_sos || 0}</span><span class="lbl">SOS-Alerts</span></div>
+        <div class="adm-stat-card"><span class="num" style="color:${s.flagged_spots > 0 ? 'var(--c-sos)' : 'var(--c-violet-3)'}">${s.flagged_spots || 0}</span><span class="lbl">Flagged Spots</span></div>
+      `;
+    }catch(e){ statsEl.innerHTML = '<div class="feed-empty">' + esc(e.message || 'Stats fehler') + '</div>'; }
+    /* Hotspot-List */
+    await renderAdmHotspots();
+  }
+
+  async function renderAdmHotspots(){
+    const host = $('admHotspots');
+    host.innerHTML = '<div class="empty"><div class="spinner" style="margin:20px auto"></div></div>';
+    try{
+      const r = await sb.rpc('admin_list_hotspots', { p_limit: 50 });
+      const data = (r && r.data) || [];
+      if (!data.length){ host.innerHTML = '<div class="feed-empty">Noch keine Spots</div>'; return; }
+      host.innerHTML = data.map(h => {
+        const isClosed = !!h.closed_at;
+        const verifBadge = h.verification_status === 'flagged' ? '<span class="adm-badge status-flagged">Flagged</span>'
+          : h.verification_status === 'approved' ? '<span class="adm-badge status-approved">✓</span>' : '';
+        return `
+          <div class="adm-row ${isClosed ? 'closed' : ''}" data-id="${h.id}">
+            <div class="info">
+              <div class="name">${esc(h.name)} ${isClosed ? '<span style="opacity:.5">(closed)</span>' : ''}</div>
+              <div class="meta">${esc(h.owner_name)} · ${h.member_count}m · ${h.rating_count}★</div>
+              <div class="badges" style="margin-top:4px">
+                <span class="adm-badge kind-${h.kind}">${h.kind}</span>
+                <span class="adm-badge vis-${h.visibility}">${h.visibility}</span>
+                ${verifBadge}
+              </div>
+            </div>
+            <div class="acts">
+              ${isClosed ? `<button class="adm-act success" data-act="reopen" title="Reopen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 12a9 9 0 11-9-9c2.5 0 4.7 1 6.4 2.6L21 8"/><polyline points="21 3 21 9 15 9"/></svg></button>` : `<button class="adm-act danger" data-act="close" title="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>`}
+            </div>
+          </div>
+        `;
+      }).join('');
+      host.querySelectorAll('.adm-act').forEach(btn => btn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        const row = btn.closest('.adm-row');
+        const id = row.dataset.id;
+        const act = btn.dataset.act;
+        try{
+          if (act === 'close'){
+            const r = await sb.rpc('admin_close_hotspot', { p_hotspot_id: id });
+            if (r.error) throw r.error;
+            toast('Spot geschlossen');
+          } else if (act === 'reopen'){
+            const r = await sb.rpc('admin_reopen_hotspot', { p_hotspot_id: id });
+            if (r.error) throw r.error;
+            toast('Spot reaktiviert · 24h Verlängerung');
+          }
+          await renderAdmHotspots();
+          loadHotspots();
+        }catch(e){ toast('Fehler: ' + e.message); }
+      }));
+    }catch(e){ host.innerHTML = '<div class="feed-empty">Fehler: ' + esc(e.message || 'unbekannt') + '</div>'; }
+  }
+
+  $$('[data-close="adminModal"]').forEach(b => b.addEventListener('click', () => closeModal('adminModal')));
   $('prAvaEdit').addEventListener('click', () => toast('Foto-Upload kommt bald'));
 
   /* ============= SAFEPLACE HUB ============= */
