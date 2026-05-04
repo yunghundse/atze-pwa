@@ -1333,6 +1333,304 @@ a{ color: var(--c-violet-3); text-decoration: none; }
   font-size: 10px;
   opacity: .75;
 }
+
+/* Live-Crew-Map als Tab */
+.cw-map-wrap{
+  margin: 0 var(--s-4) var(--s-4);
+}
+.cw-map-wrap[hidden]{ display: none; }
+.cw-map-head{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--s-2);
+}
+.cw-map-title{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 800;
+  color: #fff;
+}
+.cw-map-title img.emo3d{ width: 22px; height: 22px; }
+.cw-map-status{
+  font-size: 11px;
+  color: var(--c-text-3);
+  font-weight: 700;
+}
+.cw-map{
+  width: 100%;
+  height: 380px;
+  border-radius: var(--r-3);
+  overflow: hidden;
+  border: .5px solid var(--c-violet-line);
+  background: var(--c-surface-2);
+}
+.cw-map .leaflet-container{ background: #14101f; }
+.cw-map-foot{
+  font-size: 11px;
+  color: var(--c-text-3);
+  margin: var(--s-2) 0 0;
+  line-height: 1.45;
+}
+
+/* Stammbaum Mini-Card-Popover */
+.cw-tree-card{
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(.95);
+  width: min(330px, 88vw);
+  background: linear-gradient(180deg, var(--c-surface-2), var(--c-surface));
+  border: .5px solid rgba(192,132,252,.4);
+  border-radius: var(--r-4);
+  padding: var(--s-4);
+  box-shadow: 0 24px 48px rgba(0,0,0,.6), 0 0 0 1px rgba(192,132,252,.1);
+  z-index: 200;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s var(--ease), transform .2s var(--ease);
+}
+.cw-tree-card.show{
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+  pointer-events: auto;
+}
+.cw-tree-card[hidden]{ display: none; }
+.cw-tree-card-close{
+  position: absolute;
+  top: 8px; right: 8px;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.06);
+  font-size: 18px;
+  color: var(--c-text-2);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 600;
+}
+.cw-tree-card-head{
+  display: flex;
+  gap: var(--s-3);
+  align-items: center;
+  margin-bottom: var(--s-3);
+}
+.cw-tree-card-ava{
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--c-violet), var(--c-violet-2));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; font-weight: 900; color: #fff;
+  overflow: hidden;
+  flex: none;
+}
+.cw-tree-card-ava img{ width: 100%; height: 100%; object-fit: cover; }
+.cw-tree-card-info{ flex: 1; min-width: 0; }
+.cw-tree-card-name{
+  font-size: 18px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -.01em;
+  margin-bottom: 2px;
+}
+.cw-tree-card-presence{
+  font-size: 11px;
+  color: var(--c-text-3);
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.cw-tree-card-presence.online{ color: #6EE7B7; }
+.cw-tree-card-presence.recent{ color: #FCD34D; }
+.cw-tree-card-trust{
+  font-size: 11px;
+  color: var(--c-violet-3);
+  font-weight: 700;
+}
+.cw-tree-card-acts{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+.cw-tc-btn{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 4px;
+  background: var(--c-surface-2);
+  border: .5px solid var(--c-violet-line);
+  border-radius: var(--r-2);
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--c-text);
+  letter-spacing: .02em;
+  transition: transform .15s var(--ease), background .2s;
+}
+.cw-tc-btn:active{ transform: scale(.96); }
+.cw-tc-btn:hover{ background: rgba(139,92,246,.14); }
+.cw-tc-btn img.emo3d{ width: 22px; height: 22px; }
+.cw-tc-btn.in{ background: rgba(40,200,120,.12); border-color: rgba(40,200,120,.4); color: #6EE7B7; }
+.cw-tc-btn.danger{ color: #F472B6; }
+
+/* World-Rank Social Proof Bar */
+.cw-wp-bar{
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  color: var(--c-text-3);
+}
+.cw-wp-avas{
+  display: inline-flex;
+  align-items: center;
+}
+.cw-wp-ava{
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid var(--c-surface-2);
+  background: linear-gradient(135deg, var(--c-violet), var(--c-violet-2));
+  margin-left: -6px;
+  overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 8px; font-weight: 900; color: #fff;
+}
+.cw-wp-ava:first-child{ margin-left: 0; }
+.cw-wp-ava img{ width: 100%; height: 100%; object-fit: cover; }
+.cw-wp-text{
+  color: var(--c-violet-3);
+  font-weight: 700;
+}
+
+/* DM-Modal */
+.dm-card{
+  display: flex;
+  flex-direction: column;
+  height: min(640px, 90vh);
+  padding: 0;
+  overflow: hidden;
+}
+.dm-head{
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  padding: var(--s-4) var(--s-4) var(--s-3);
+  border-bottom: .5px solid var(--c-violet-line);
+}
+.dm-ava{
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--c-violet), var(--c-violet-2));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 800; color: #fff;
+  overflow: hidden;
+}
+.dm-ava img{ width: 100%; height: 100%; object-fit: cover; }
+.dm-head-info{ flex: 1; min-width: 0; }
+.dm-name{
+  font-size: 16px;
+  font-weight: 800;
+  color: #fff;
+}
+.dm-presence{
+  font-size: 11px;
+  color: var(--c-text-3);
+  font-weight: 700;
+  margin-top: 1px;
+}
+.dm-presence.online{ color: #6EE7B7; }
+.dm-presence.recent{ color: #FCD34D; }
+.dm-thread{
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--s-3) var(--s-4);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: var(--c-surface);
+}
+.dm-msg{
+  max-width: 78%;
+  padding: 8px 12px;
+  border-radius: var(--r-3);
+  font-size: 14px;
+  line-height: 1.4;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+.dm-msg.me{
+  align-self: flex-end;
+  background: linear-gradient(135deg, var(--c-violet), var(--c-violet-2));
+  color: #fff;
+  border-bottom-right-radius: 6px;
+}
+.dm-msg.them{
+  align-self: flex-start;
+  background: var(--c-surface-2);
+  border: .5px solid var(--c-violet-line);
+  color: var(--c-text);
+  border-bottom-left-radius: 6px;
+}
+.dm-msg-time{
+  font-size: 10px;
+  color: var(--c-text-3);
+  margin-top: 2px;
+  font-weight: 700;
+  letter-spacing: .02em;
+}
+.dm-msg.me .dm-msg-time{ color: rgba(255,255,255,.6); text-align: right; }
+.dm-day-divider{
+  align-self: center;
+  font-size: 10px;
+  color: var(--c-text-3);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin: var(--s-2) 0;
+}
+.dm-empty{
+  align-self: center;
+  margin: auto 0;
+  text-align: center;
+  color: var(--c-text-3);
+  font-size: 12px;
+  padding: 40px 24px;
+}
+.dm-input-row{
+  display: flex;
+  align-items: flex-end;
+  gap: var(--s-2);
+  padding: var(--s-3) var(--s-3) var(--s-3);
+  border-top: .5px solid var(--c-violet-line);
+  background: var(--c-surface-2);
+}
+.dm-input{
+  flex: 1;
+  min-height: 40px;
+  max-height: 120px;
+  padding: 10px 14px;
+  background: var(--c-surface);
+  border: .5px solid var(--c-violet-line);
+  border-radius: 20px;
+  color: var(--c-text);
+  font-size: 14px;
+  font-family: inherit;
+  resize: none;
+  outline: none;
+}
+.dm-input:focus{ border-color: var(--c-violet); box-shadow: 0 0 0 3px rgba(139,92,246,.18); }
+.dm-send{
+  flex: none;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--c-violet), var(--c-violet-2));
+  color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform .15s var(--ease);
+}
+.dm-send:active{ transform: scale(.92); }
+.dm-send:disabled{ opacity: .5; cursor: not-allowed; }
+.dm-send svg{ width: 18px; height: 18px; }
 .cw-item .info{ flex: 1; min-width: 0; }
 .cw-item .name{
   font-size: var(--t-3);
@@ -3146,6 +3444,7 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
         <button class="cw-tab" data-cw-tab="circle"><span>Safety-Circle</span><span class="cw-tab-badge" id="cwBadgeCircle">0</span></button>
         <button class="cw-tab" data-cw-tab="all"><span>Alle</span><span class="cw-tab-badge" id="cwBadgeAll">0</span></button>
         <button class="cw-tab" data-cw-tab="trusted"><span>Top-Trust</span></button>
+        <button class="cw-tab" data-cw-tab="map"><span>Map</span></button>
       </div>
       <div class="cw-tree" id="cwTree"></div>
       <div class="cw-trust-tabs" id="cwTrustTabs">
@@ -3169,6 +3468,38 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
         </button>
       </div>
       <div class="cw-list" id="cwList"></div>
+      <div class="cw-map-wrap" id="cwMapWrap" hidden>
+        <div class="cw-map-head">
+          <div class="cw-map-title">
+            <img class="emo3d" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Globe%20with%20meridians/3D/globe_with_meridians_3d.png" alt=""/>
+            <span>Live-Crew-Map</span>
+          </div>
+          <div class="cw-map-status" id="cwMapStatus">— online</div>
+        </div>
+        <div class="cw-map" id="cwMap"></div>
+        <p class="cw-map-foot">Nur Mitglieder mit aktivem Live-Sharing sind sichtbar. Du selbst musst Live in den Einstellungen aktivieren.</p>
+      </div>
+      <!-- Stammbaum Mini-Card (Tooltip-Popover) -->
+      <div class="cw-tree-card" id="cwTreeCard" hidden>
+        <button class="cw-tree-card-close" id="cwTreeCardClose" aria-label="Schließen">&times;</button>
+        <div class="cw-tree-card-head">
+          <div class="cw-ava-wrap">
+            <div class="ava cw-tree-card-ava" id="cwTreeCardAva"></div>
+            <span class="cw-online-dot" id="cwTreeCardDot"></span>
+            <span class="cw-mood-pill" id="cwTreeCardMood" hidden><img src="" alt=""/></span>
+          </div>
+          <div class="cw-tree-card-info">
+            <div class="cw-tree-card-name" id="cwTreeCardName"></div>
+            <div class="cw-tree-card-presence" id="cwTreeCardPresence"></div>
+            <div class="cw-tree-card-trust" id="cwTreeCardTrust"></div>
+          </div>
+        </div>
+        <div class="cw-tree-card-acts">
+          <button class="cw-tc-btn rate" id="cwTcRate"><img class="emo3d" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Star/3D/star_3d.png" alt=""/>Bewerten</button>
+          <button class="cw-tc-btn dm"   id="cwTcDm"><img class="emo3d" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Speech%20balloon/3D/speech_balloon_3d.png" alt=""/>Nachricht</button>
+          <button class="cw-tc-btn circle" id="cwTcCircle"></button>
+        </div>
+      </div>
     </section>
 
     <!-- PROFILE -->
@@ -3366,7 +3697,32 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     <div class="tr-tags" id="trTags"></div>
     <div class="modal-actions">
       <button class="btn-sec" data-close="trustModal">Abbrechen</button>
+      <button class="btn-sec" id="trDmBtn" style="background:rgba(139,92,246,.15);color:var(--c-violet-3);border-color:rgba(139,92,246,.4);display:flex;align-items:center;gap:6px;justify-content:center"><img class="emo3d" style="width:16px;height:16px" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Speech%20balloon/3D/speech_balloon_3d.png" alt=""/>Nachricht</button>
       <button class="btn-pri" id="trSave" disabled>Bewerten</button>
+    </div>
+  </div>
+</div>
+
+<!-- DIRECT-MESSAGE MODAL -->
+<div class="modal" id="dmModal">
+  <div class="modal-card dm-card">
+    <button class="modal-close" data-close="dmModal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <div class="dm-head">
+      <div class="cw-ava-wrap">
+        <div class="ava dm-ava" id="dmAva"></div>
+        <span class="cw-online-dot" id="dmAvaDot"></span>
+      </div>
+      <div class="dm-head-info">
+        <div class="dm-name" id="dmName">Crew-Member</div>
+        <div class="dm-presence" id="dmPresence">Offline</div>
+      </div>
+    </div>
+    <div class="dm-thread" id="dmThread"></div>
+    <div class="dm-input-row">
+      <textarea class="dm-input" id="dmInput" placeholder="Nachricht …" rows="1" maxlength="2000"></textarea>
+      <button class="dm-send" id="dmSend" aria-label="Senden">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
     </div>
   </div>
 </div>
@@ -5276,11 +5632,15 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     $('cwTree').classList.toggle('show', cwTab === 'tree');
     /* Trust-Sub-Tabs nur auf "trusted" */
     $('cwTrustTabs').classList.toggle('show', cwTab === 'trusted');
-    /* Search hidden auf Tree */
-    $('cwSearch').style.display = cwTab === 'tree' ? 'none' : '';
+    /* Search hidden auf Tree + Map */
+    $('cwSearch').style.display = (cwTab === 'tree' || cwTab === 'map') ? 'none' : '';
     /* Filter-Chips: nur auf Alle / Safety-Circle */
     const showFilters = cwTab === 'all' || cwTab === 'circle';
     $('cwFilters').hidden = !showFilters;
+    /* Map-Wrapper nur auf Map */
+    const mapWrap = $('cwMapWrap'); if (mapWrap) mapWrap.hidden = cwTab !== 'map';
+    /* Liste auf Map ausblenden */
+    const list = $('cwList'); if (list) list.style.display = cwTab === 'map' ? 'none' : '';
   }
   $$('.cw-tab').forEach(b => b.addEventListener('click', () => {
     $$('.cw-tab').forEach(x => x.classList.remove('on'));
@@ -5422,17 +5782,23 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
         </svg>
       `;
 
-      /* Click auf Member → Trust-Modal */
-      host.querySelectorAll('.cw-tree-node').forEach(n => n.addEventListener('click', () => {
+      /* Click auf Member → Tooltip-Card mit Quick-Actions */
+      host.querySelectorAll('.cw-tree-node').forEach(n => n.addEventListener('click', (e) => {
+        e.stopPropagation();
         const uid = n.dataset.uid;
         const m = members.find(x => x.user_id === uid);
-        if (m) openTrustRate({
+        if (m) openTreeCard({
           user_id: m.user_id,
           display_name: m.display_name,
           photo_url: m.photo_url,
           trust_avg: m.trust_avg,
+          trust_count: m.trust_count,
           activity_score: m.activity_score,
-          my_rating: 0
+          my_rating: 0,
+          mood: m.mood,
+          last_seen_at: m.last_seen_at,
+          is_in_safety_circle: m.tier === 1,
+          circle_status: m.tier === 1 ? 'accepted' : 'none'
         });
       }));
 
@@ -5461,6 +5827,12 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
       renderCircleTree();
       return;
     }
+    /* Map-Tab → Live-Map */
+    if (cwTab === 'map'){
+      $('cwList').innerHTML = '';
+      renderCrewMapTab();
+      return;
+    }
 
     const host = $('cwList');
     host.innerHTML = '<div class="empty"><div class="spinner" style="margin:20px auto"></div></div>';
@@ -5468,7 +5840,9 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     /* World-Ranking Sub-Tab unter Top-Trust */
     if (cwTab === 'trusted' && cwTrustSubTab === 'world'){
       try{
-        const r = await sb.rpc('get_world_top_trust', { p_limit: 50 });
+        /* V2 mit Social-Proof — Fallback auf v1 falls v2 noch nicht da ist */
+        let r = await sb.rpc('get_world_top_trust_v2', { p_limit: 50 });
+        if (r.error){ r = await sb.rpc('get_world_top_trust', { p_limit: 50 }); }
         const data = (r && r.data) || [];
         if (!data.length){
           host.innerHTML = '<div class="empty with-emo"><img class="emo3d sz-hero" src="'+FX.crown+'" alt=""/><h4>Welt-Ranking leer</h4><p>Niemand hat sich öffentlich gestellt. In den Einstellungen → Privatsphäre kannst du dich opt-in setzen.</p></div>';
@@ -5477,11 +5851,24 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
         host.innerHTML = data.map(m => {
           const trust = parseFloat(m.trust_avg) || 0;
           const stars = [1,2,3,4,5].map(i => '<span class="cw-star ' + (i <= Math.round(trust * 2)/2 ? 'on' : '') + '"></span>').join('');
+          /* Social-Proof-Bar */
+          let proof = '';
+          const mutuals = m.mutual_raters_count || 0;
+          const raters  = Array.isArray(m.top_raters) ? m.top_raters : (m.top_raters ? JSON.parse(m.top_raters) : []);
+          if (mutuals > 0){
+            const avas = raters.slice(0, 3).map(rt => {
+              const init = (rt.name || '?').slice(0, 2).toUpperCase();
+              return '<span class="cw-wp-ava" title="' + esc(rt.name || '') + '">' +
+                (rt.photo ? '<img src="'+esc(rt.photo)+'"/>' : esc(init)) + '</span>';
+            }).join('');
+            proof = '<div class="cw-wp-bar"><span class="cw-wp-avas">' + avas + '</span><span class="cw-wp-text">Von ' + mutuals + ' deiner Crew bewertet</span></div>';
+          }
           return `<div class="cw-item world-rank" data-uid="${m.user_id}" data-rank="${m.rank_pos}">
             <div class="ava">${m.photo_url ? '<img src="'+esc(m.photo_url)+'"/>' : initials(m.display_name)}</div>
             <div class="info">
               <div class="name">${esc(m.display_name)}${m.audience_profile && m.audience_profile !== 'general' ? '<span class="badge">'+esc(m.audience_profile)+'</span>' : ''}</div>
               <div class="meta">${stars} · ${trust.toFixed(1)} · ${m.trust_count} Bewertung${m.trust_count !== 1 ? 'en' : ''}</div>
+              ${proof}
             </div>
           </div>`;
         }).join('');
@@ -5625,6 +6012,264 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     }catch(e){ console.warn(e); host.innerHTML = '<div class="empty"><p>Fehler beim Laden</p></div>'; }
   }
 
+  /* ============= LIVE-CREW-MAP TAB ============= */
+  let cwMap = null, cwMapMarkers = [], cwMapMyMarker = null;
+  async function renderCrewMapTab(){
+    const wrap = $('cwMapWrap');
+    if (!wrap || !window.L) return;
+    /* Lazy init Leaflet */
+    if (!cwMap){
+      try{
+        const start = (typeof userLat === 'number' && typeof userLng === 'number')
+          ? [userLat, userLng] : [50.5, 9.0];
+        cwMap = L.map('cwMap', { zoomControl: true, attributionControl: false }).setView(start, 11);
+        L.tileLayer('https://basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { maxZoom: 19 }).addTo(cwMap);
+      }catch(e){ console.warn('cwMap init', e); $('cwMapStatus').textContent = 'Map-Fehler'; return; }
+    }
+    /* Resize-Trigger */
+    setTimeout(() => { try{ cwMap.invalidateSize(); }catch(_){} }, 60);
+    await refreshCwMapMarkers();
+  }
+  async function refreshCwMapMarkers(){
+    if (!cwMap || !window.L) return;
+    cwMapMarkers.forEach(m => { try{ cwMap.removeLayer(m); }catch(_){} });
+    cwMapMarkers = [];
+    /* Eigener Marker */
+    if (cwMapMyMarker){ try{ cwMap.removeLayer(cwMapMyMarker); }catch(_){} cwMapMyMarker = null; }
+    if (typeof userLat === 'number' && typeof userLng === 'number'){
+      const meHtml = '<div class="live-pin"><div class="live-pin-ava" style="border-color:#6EE7B7">' +
+        (profile.photo_url ? '<img src="'+esc(profile.photo_url)+'"/>' : esc(initials(profile.name || 'Du'))) +
+        '</div><div class="live-pin-tail" style="border-top-color:#6EE7B7"></div></div>';
+      const meIcon = L.divIcon({ html: meHtml, className: 'live-pin-wrap', iconSize: [44,50], iconAnchor: [22,50] });
+      cwMapMyMarker = L.marker([userLat, userLng], { icon: meIcon }).addTo(cwMap);
+      cwMapMyMarker.bindPopup('<strong>Du</strong><br/><small>Dein Standort</small>');
+    }
+    try{
+      const r = await sb.rpc('get_crew_live_locations');
+      const locs = (r && r.data) || [];
+      $('cwMapStatus').textContent = locs.length + ' online';
+      if (!locs.length && cwMapMyMarker){
+        cwMap.setView([userLat, userLng], 13);
+      } else if (locs.length){
+        const bounds = L.latLngBounds([]);
+        if (cwMapMyMarker) bounds.extend([userLat, userLng]);
+        locs.forEach(l => {
+          const moodObj = MOODS.find(m => m.id === l.mood);
+          const moodImg = moodObj ? '<img class="emo3d" style="width:14px;height:14px" src="'+FX[moodObj.fx]+'" alt=""/>' : '';
+          const html = '<div class="live-pin"><div class="live-pin-ava">' +
+            (l.photo_url ? '<img src="'+esc(l.photo_url)+'"/>' : esc(initials(l.display_name))) +
+            '</div>' + (moodImg ? '<div class="live-pin-status">'+moodImg+'</div>' : '') +
+            '<div class="live-pin-tail"></div></div>';
+          const icon = L.divIcon({ html, className: 'live-pin-wrap', iconSize: [44,50], iconAnchor: [22,50] });
+          const marker = L.marker([l.lat, l.lng], { icon }).addTo(cwMap);
+          const moodLbl = l.mood ? (MOODS.find(m=>m.id===l.mood)?.t || l.mood) : 'online';
+          marker.bindPopup('<strong>' + esc(l.display_name) + '</strong><br/><small>' + esc(moodLbl) + ' · ' + timeAgo(l.updated_at) + '</small>');
+          cwMapMarkers.push(marker);
+          bounds.extend([l.lat, l.lng]);
+        });
+        try{ cwMap.fitBounds(bounds, { padding: [40, 40], maxZoom: 14 }); }catch(_){}
+      }
+    }catch(e){ console.warn('cwMap markers', e); $('cwMapStatus').textContent = 'Fehler'; }
+  }
+
+  /* ============= STAMMBAUM-TOOLTIP-CARD ============= */
+  let cwTcMember = null;
+  function openTreeCard(member){
+    cwTcMember = member;
+    const card = $('cwTreeCard');
+    const ava = $('cwTreeCardAva');
+    ava.innerHTML = member.photo_url ? '<img src="'+esc(member.photo_url)+'"/>' : esc(initials(member.display_name));
+    $('cwTreeCardName').textContent = member.display_name || 'Crew';
+    /* Presence */
+    const presCls = presenceClass(member.last_seen_at);
+    const presLbl = presenceLabel(member.last_seen_at);
+    const presEl = $('cwTreeCardPresence');
+    presEl.innerHTML = '<span class="cw-presence-dot" style="background:currentColor"></span>' + esc(presLbl);
+    presEl.classList.remove('online','recent','offline');
+    presEl.classList.add(presCls);
+    $('cwTreeCardDot').className = 'cw-online-dot ' + presCls;
+    /* Mood */
+    const moodEl = $('cwTreeCardMood');
+    const moodObj = member.mood ? MOODS.find(x => x.id === member.mood) : null;
+    if (moodObj){ moodEl.querySelector('img').src = FX[moodObj.fx]; moodEl.hidden = false; }
+    else moodEl.hidden = true;
+    /* Trust */
+    const trust = parseFloat(member.trust_avg) || 0;
+    const stars = trust ? trust.toFixed(1) : '—';
+    $('cwTreeCardTrust').textContent = '★ ' + stars + (member.trust_count ? ' · ' + member.trust_count + ' Bewertung' + (member.trust_count !== 1 ? 'en' : '') : '');
+    /* Circle-Button-State */
+    const cb = $('cwTcCircle');
+    cb.className = 'cw-tc-btn circle';
+    const cs = member.circle_status || (member.is_in_safety_circle ? 'accepted' : 'none');
+    if (cs === 'accepted'){
+      cb.classList.add('in');
+      cb.innerHTML = '<img class="emo3d" src="' + FX.shield + '" alt=""/>Im Circle';
+    } else if (cs === 'pending_outgoing'){
+      cb.innerHTML = '<img class="emo3d" src="' + FX.hourglass + '" alt=""/>Angefragt';
+    } else if (cs === 'pending_incoming'){
+      cb.innerHTML = '<img class="emo3d" src="' + FX.check + '" alt=""/>Bestätigen';
+    } else {
+      cb.innerHTML = '<img class="emo3d" src="' + FX.shield + '" alt=""/>+ Circle';
+    }
+    card.hidden = false;
+    requestAnimationFrame(() => card.classList.add('show'));
+  }
+  function closeTreeCard(){
+    const card = $('cwTreeCard');
+    card.classList.remove('show');
+    setTimeout(() => { card.hidden = true; cwTcMember = null; }, 200);
+  }
+  $('cwTreeCardClose').addEventListener('click', closeTreeCard);
+  $('cwTreeCard').addEventListener('click', (e) => {
+    /* Klick außerhalb der Buttons schließt nicht — Buttons unten haben eigene Handler */
+  });
+  /* Backdrop-Click via Document */
+  document.addEventListener('click', (e) => {
+    const card = $('cwTreeCard');
+    if (card.hidden || !card.classList.contains('show')) return;
+    if (card.contains(e.target)) return;
+    /* Click auf Stammbaum-Node selbst soll nicht schließen */
+    if (e.target.closest('.cw-tree-node')) return;
+    closeTreeCard();
+  });
+  $('cwTcRate').addEventListener('click', () => {
+    if (!cwTcMember) return;
+    const m = cwTcMember;
+    closeTreeCard();
+    openTrustRate(m);
+  });
+  $('cwTcDm').addEventListener('click', () => {
+    if (!cwTcMember) return;
+    openDm(cwTcMember);
+  });
+  $('cwTcCircle').addEventListener('click', async () => {
+    if (!cwTcMember) return;
+    const m = cwTcMember;
+    $('cwTcCircle').disabled = true;
+    try{
+      const r = await sb.rpc('toggle_safety_circle', { p_user_id: m.user_id });
+      if (r.error) throw r.error;
+      const action = r.data && r.data.action;
+      const messages = {
+        invited: 'Anfrage gesendet',
+        accepted: m.display_name + ' im Safety-Circle',
+        removed: m.display_name + ' aus Circle entfernt',
+        withdrawn: 'Anfrage zurückgezogen'
+      };
+      toast(messages[action] || 'OK', null, null, action === 'removed' ? 'warning' : 'success');
+      closeTreeCard();
+      renderCircleTree();
+      refreshCrewCounts();
+    }catch(e){ toast('Fehler: ' + (e.message || e)); }
+    finally{ $('cwTcCircle').disabled = false; }
+  });
+
+  /* ============= DM-MODAL ============= */
+  let dmPartner = null, dmChannel = null, dmMessages = [];
+  async function openDm(partner){
+    dmPartner = partner;
+    /* Header */
+    $('dmAva').innerHTML = partner.photo_url ? '<img src="'+esc(partner.photo_url)+'"/>' : esc(initials(partner.display_name));
+    $('dmName').textContent = partner.display_name || 'Crew';
+    const presCls = presenceClass(partner.last_seen_at);
+    $('dmAvaDot').className = 'cw-online-dot ' + presCls;
+    const presEl = $('dmPresence');
+    presEl.textContent = presenceLabel(partner.last_seen_at);
+    presEl.classList.remove('online','recent','offline');
+    presEl.classList.add(presCls);
+    /* Thread laden */
+    $('dmThread').innerHTML = '<div class="dm-empty"><div class="spinner" style="margin:0 auto"></div></div>';
+    openModal('dmModal');
+    await loadDmThread();
+    /* Mark-as-read */
+    try{ await sb.rpc('mark_dm_read', { p_partner_id: partner.user_id }); }catch(_){}
+    /* Realtime-Channel pro Pair */
+    if (dmChannel){ try{ sb.removeChannel(dmChannel); }catch(_){} dmChannel = null; }
+    dmChannel = sb.channel('dm:' + [user.id, partner.user_id].sort().join(':'))
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'crew_messages' }, (payload) => {
+        const m = payload.new;
+        if (!m) return;
+        const isThisThread = (m.sender_id === user.id && m.receiver_id === partner.user_id) ||
+                             (m.sender_id === partner.user_id && m.receiver_id === user.id);
+        if (!isThisThread) return;
+        dmMessages.push(m);
+        renderDmMessages();
+        if (m.sender_id === partner.user_id){
+          sb.rpc('mark_dm_read', { p_partner_id: partner.user_id }).catch(()=>{});
+        }
+      })
+      .subscribe();
+    /* Input + Send wire */
+    $('dmInput').focus();
+  }
+  async function loadDmThread(){
+    if (!dmPartner) return;
+    try{
+      const r = await sb.rpc('get_dm_thread', { p_partner_id: dmPartner.user_id, p_limit: 100 });
+      dmMessages = ((r && r.data) || []).reverse(); /* RPC liefert DESC, wir brauchen ASC */
+      renderDmMessages();
+    }catch(e){ $('dmThread').innerHTML = '<div class="dm-empty">Konnte nicht geladen werden</div>'; }
+  }
+  function renderDmMessages(){
+    const host = $('dmThread');
+    if (!dmMessages.length){
+      host.innerHTML = '<div class="dm-empty">Noch keine Nachrichten — schreib die erste!</div>';
+      return;
+    }
+    let html = '';
+    let lastDay = '';
+    dmMessages.forEach(m => {
+      const d = new Date(m.created_at);
+      const day = d.toLocaleDateString('de-DE');
+      if (day !== lastDay){
+        const today = new Date().toLocaleDateString('de-DE');
+        const yesterday = new Date(Date.now() - 86400000).toLocaleDateString('de-DE');
+        const lbl = day === today ? 'Heute' : day === yesterday ? 'Gestern' : day;
+        html += '<div class="dm-day-divider">' + lbl + '</div>';
+        lastDay = day;
+      }
+      const me = m.sender_id === user.id;
+      const time = d.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+      html += '<div class="dm-msg ' + (me ? 'me' : 'them') + '">' + esc(m.body) + '<div class="dm-msg-time">' + time + '</div></div>';
+    });
+    host.innerHTML = html;
+    host.scrollTop = host.scrollHeight;
+  }
+  function closeDm(){
+    if (dmChannel){ try{ sb.removeChannel(dmChannel); }catch(_){} dmChannel = null; }
+    dmPartner = null; dmMessages = [];
+    closeModal('dmModal');
+  }
+  $$('[data-close="dmModal"]').forEach(b => b.addEventListener('click', closeDm));
+  $('dmInput').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); $('dmSend').click(); }
+  });
+  $('dmInput').addEventListener('input', (e) => {
+    const ta = e.target;
+    ta.style.height = '40px';
+    ta.style.height = Math.min(ta.scrollHeight, 120) + 'px';
+  });
+  $('dmSend').addEventListener('click', async () => {
+    if (!dmPartner) return;
+    const body = $('dmInput').value.trim();
+    if (!body) return;
+    $('dmSend').disabled = true;
+    try{
+      await sb.rpc('send_dm', { p_receiver_id: dmPartner.user_id, p_body: body });
+      $('dmInput').value = '';
+      $('dmInput').style.height = '40px';
+      /* Eigene Nachricht direkt rendern (Realtime-Echo kann delayen) */
+      dmMessages.push({
+        id: 'tmp-' + Date.now(),
+        sender_id: user.id,
+        receiver_id: dmPartner.user_id,
+        body, created_at: new Date().toISOString(), read_at: null
+      });
+      renderDmMessages();
+    }catch(e){ toast('Fehler: ' + (e.message || e)); }
+    finally{ $('dmSend').disabled = false; }
+  });
+
   /* ============= TRUST RATE ============= */
   const TR_TAGS = ['zuverlässig', 'aktiv', 'ehrlich', 'hilfsbereit', 'pünktlich', 'loyal', 'einfühlsam', 'verantwortungsvoll', 'cool', 'ruhig', 'lustig', 'vertrauensvoll'];
   let trState = { score: 0, tags: [], member: null };
@@ -5648,6 +6293,12 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
       renderTrustModal();
     }));
   }
+  $('trDmBtn').addEventListener('click', () => {
+    if (!trState.member) return;
+    const m = trState.member;
+    closeModal('trustModal');
+    setTimeout(() => openDm(m), 80);
+  });
   $('trSave').addEventListener('click', async () => {
     if (!trState.score || !trState.member) return;
     try{
