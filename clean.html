@@ -8153,13 +8153,17 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     if (id === 'hsWizard') renderWizardPills();
     if (id === 'safeplaceModal') loadSpContacts();
     const m = $(id);
+    if (!m) return;
     m.style.display = 'flex';
-    requestAnimationFrame(() => m.classList.add('on'));
+    /* Force layout flush, dann sofort .on setzen — robust gegen rAF-Edge-Cases */
+    void m.offsetHeight;
+    m.classList.add('on');
   }
   function closeModal(id){
     const m = $(id);
+    if (!m) return;
     m.classList.remove('on');
-    setTimeout(() => m.style.display = 'none', 350);
+    setTimeout(() => { m.style.display = 'none'; }, 280);
   }
   /* Backdrop click */
   $$('.modal').forEach(m => m.addEventListener('click', e => {
