@@ -269,6 +269,23 @@ a{ color: var(--c-violet-3); text-decoration: none; }
   line-height: 1.5;
 }
 .auth-success[hidden]{ display: none; }
+.auth-partner-link{
+  display: block;
+  width: 100%;
+  margin-top: var(--s-3);
+  padding: 10px 14px;
+  background: linear-gradient(135deg, rgba(255,214,10,.16), rgba(255,109,46,.1));
+  border: .5px solid rgba(255,214,10,.45);
+  border-radius: var(--r-2);
+  color: #FCD34D;
+  font-size: 12px;
+  font-weight: 800;
+  text-align: center;
+  letter-spacing: .02em;
+  transition: transform .15s var(--ease), background .2s;
+}
+.auth-partner-link:active{ transform: scale(.98); }
+.auth-partner-link:hover{ background: linear-gradient(135deg, rgba(255,214,10,.24), rgba(255,109,46,.18)); }
 .auth-tab.locked{
   position: relative;
   opacity: .7;
@@ -928,6 +945,12 @@ a{ color: var(--c-violet-3); text-decoration: none; }
   width: 18px; height: 18px;
   filter: drop-shadow(0 1px 1px rgba(0,0,0,.4));
 }
+.hs-pin-ic img.hs-pin-logo{
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #fff;
+}
 /* User-Spots */
 .hs-pin.mine .hs-pin-ic{ background: linear-gradient(135deg, #FFD60A, var(--c-violet)); }
 .hs-pin.private .hs-pin-ic{ background: linear-gradient(135deg, #6B7280, #1F2937); }
@@ -1184,16 +1207,56 @@ a{ color: var(--c-violet-3); text-decoration: none; }
 .dt-partner-card{
   display: flex;
   gap: 12px;
-  align-items: center;
+  align-items: flex-start;
   margin-top: 16px;
-  padding: 12px;
-  background: linear-gradient(135deg, rgba(255,214,10,.12), rgba(255,109,46,.08));
-  border: .5px solid rgba(255,214,10,.4);
+  padding: 14px;
+  background: linear-gradient(135deg, rgba(139,92,246,.14), rgba(99,102,241,.08));
+  border: .5px solid rgba(139,92,246,.4);
   border-radius: var(--r-3);
 }
-.dt-partner-card img.emo3d{ width: 36px; height: 36px; flex: none; }
-.dt-partner-name{ font-size: 14px; font-weight: 800; color: #fff; }
-.dt-partner-tier{ font-size: 11px; color: #FCD34D; font-weight: 700; margin-top: 2px; }
+.dt-partner-card.verified{
+  background: linear-gradient(135deg, rgba(40,200,120,.1), rgba(99,102,241,.06));
+  border-color: rgba(40,200,120,.4);
+}
+.dt-partner-card.premium{
+  background: linear-gradient(135deg, rgba(255,214,10,.16), rgba(255,109,46,.1));
+  border-color: rgba(255,214,10,.5);
+  box-shadow: 0 0 0 .5px rgba(255,214,10,.3), 0 4px 14px rgba(255,109,46,.2);
+}
+.dt-partner-logo-wrap{
+  flex: none;
+  width: 56px; height: 56px;
+  border-radius: 12px;
+  background: rgba(255,255,255,.06);
+  border: .5px solid rgba(255,255,255,.1);
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.dt-partner-logo{ width: 100%; height: 100%; object-fit: cover; }
+.dt-partner-logo-fallback{ width: 36px; height: 36px; }
+.dt-partner-info{ flex: 1; min-width: 0; }
+.dt-partner-name{ font-size: 15px; font-weight: 800; color: #fff; }
+.dt-partner-tier{ font-size: 11px; color: var(--c-violet-3); font-weight: 800; margin-top: 2px; letter-spacing: .03em; }
+.dt-partner-card.verified .dt-partner-tier{ color: #6EE7B7; }
+.dt-partner-card.premium .dt-partner-tier{ color: #FCD34D; }
+.dt-partner-perks{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 8px;
+}
+.dt-perk-chip{
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 9px;
+  font-size: 11px;
+  font-weight: 700;
+  background: rgba(139,92,246,.16);
+  color: var(--c-violet-3);
+  border-radius: 8px;
+}
+.dt-partner-card.verified .dt-perk-chip{ background: rgba(40,200,120,.16); color: #6EE7B7; }
+.dt-partner-card.premium .dt-perk-chip{ background: rgba(255,214,10,.18); color: #FCD34D; }
 
 /* Filter-Bar */
 .hs-bar{
@@ -3558,6 +3621,10 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     </div>
 
     <p class="auth-foot">EU-Server · DSGVO-konform · Verschlüsselt</p>
+    <button class="auth-partner-link" id="authPartnerLink" type="button">
+      <img class="emo3d" style="width:18px;height:18px;vertical-align:-4px;margin-right:6px" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Crown/3D/crown_3d.png" alt=""/>
+      Bar / Club / Hotel? Werde Partner →
+    </button>
   </div>
 </div>
 
@@ -3917,6 +3984,66 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     <div class="modal-actions">
       <button class="btn-sec" data-close="hsWizard">Abbrechen</button>
       <button class="btn-pri" id="wizSubmit">Anlegen</button>
+    </div>
+  </div>
+</div>
+
+<!-- PARTNER ONBOARDING MODAL -->
+<div class="modal" id="partnerModal">
+  <div class="modal-card">
+    <button class="modal-close" data-close="partnerModal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <div class="modal-hero-emo" style="margin-bottom:8px"><img class="emo3d sz-hero" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Crown/3D/crown_3d.png" alt=""/></div>
+    <h2 class="modal-h" style="text-align:center;margin-top:0">Partner werden</h2>
+    <p class="modal-sub" style="text-align:center;margin-bottom:16px">Bar, Club, Hotel, Café, sicherer Treffpunkt — wir bringen dich auf die Karte. Drei Tiers: Free, Verified, Premium.</p>
+
+    <div id="partnerSubmitted" class="auth-success" hidden>
+      <img class="emo3d" style="width:24px;height:24px;vertical-align:-6px" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Check%20mark%20button/3D/check_mark_button_3d.png" alt=""/>
+      Anfrage angekommen. Wir melden uns per Email sobald freigegeben.
+    </div>
+
+    <div id="partnerForm">
+      <div id="partnerError" class="auth-error"></div>
+      <div class="field">
+        <label>Name des Betriebs</label>
+        <input id="prtName" placeholder="z.B. Café Lila Stuttgart" maxlength="120"/>
+      </div>
+      <div class="field">
+        <label>Was ist es?</label>
+        <div class="pill-grid" id="prtKinds"></div>
+      </div>
+      <div class="field">
+        <label>Email (für Rückfrage)</label>
+        <input id="prtEmail" type="email" placeholder="kontakt@…" maxlength="120"/>
+      </div>
+      <div class="field">
+        <label>Telefon (optional)</label>
+        <input id="prtPhone" type="tel" placeholder="+49 …" maxlength="50"/>
+      </div>
+      <div class="field">
+        <label>Webseite (optional)</label>
+        <input id="prtWeb" type="url" placeholder="https://…" maxlength="200"/>
+      </div>
+      <div class="field">
+        <label>Logo-URL (optional, Premium-Pin nutzt das)</label>
+        <input id="prtLogo" type="url" placeholder="https://…/logo.png" maxlength="300"/>
+      </div>
+      <div class="field">
+        <label>Adresse</label>
+        <input id="prtAddr" placeholder="Straße + Hausnummer + PLZ + Ort" maxlength="200"/>
+      </div>
+      <div class="field">
+        <label>Beschreibung</label>
+        <textarea id="prtDesc" placeholder="Was zeichnet dich aus? Crew-Vorteile?" maxlength="500" rows="3"></textarea>
+      </div>
+      <div class="field">
+        <label>Perks für die Crew (eine pro Zeile, max 5)</label>
+        <textarea id="prtPerks" placeholder="z.B.&#10;10% Rabatt für Crew-Mitglieder&#10;Sicherer Heimweg-Treffpunkt&#10;Free Wifi" maxlength="600" rows="4"></textarea>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-sec" data-close="partnerModal">Abbrechen</button>
+        <button class="btn-pri" id="prtSubmit">Anfrage senden</button>
+      </div>
+      <p class="auth-foot" style="margin-top:14px">Wir prüfen innerhalb 48h. Free = Standard-Sichtbarkeit · Verified = Blauer Haken + Öffnungszeiten · Premium = Highlight-Pin mit Logo + Crew-Rabatte.</p>
     </div>
   </div>
 </div>
@@ -4553,6 +4680,18 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     </div>
 
     <div class="sp-section">
+      <div class="adm-wl-head">
+        <h4>Partner-Anfragen</h4>
+        <div class="adm-wl-tabs">
+          <button class="adm-wl-tab on" data-prt-tab="pending">Pending</button>
+          <button class="adm-wl-tab" data-prt-tab="approved">Approved</button>
+          <button class="adm-wl-tab" data-prt-tab="all">Alle</button>
+        </div>
+      </div>
+      <div class="adm-list" id="admPartners"></div>
+    </div>
+
+    <div class="sp-section">
       <h4>Alle Spots (neueste 50)</h4>
       <div class="adm-list" id="admHotspots"></div>
     </div>
@@ -4726,6 +4865,19 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
   color: #FCD34D;
   border-color: rgba(251,191,36,.3);
 }
+.adm-wl-tier{
+  height: 28px;
+  padding: 0 8px;
+  border-radius: var(--r-1);
+  font-size: 11px;
+  font-weight: 800;
+  background: var(--c-surface);
+  border: .5px solid var(--c-line);
+  color: var(--c-text-2);
+}
+.adm-badge.tier-free{ background: rgba(107,114,128,.2); color: var(--c-text-3); }
+.adm-badge.tier-verified{ background: rgba(40,200,120,.18); color: #6EE7B7; }
+.adm-badge.tier-premium{ background: linear-gradient(135deg, rgba(255,214,10,.25), rgba(255,109,46,.18)); color: #FCD34D; }
 .adm-row{
   display: flex;
   align-items: center;
@@ -5126,6 +5278,84 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     finally{
       $('authSubmit').disabled = false;
       $('authSubmit').textContent = origLabel;
+    }
+  });
+
+  /* ============= PARTNER ONBOARDING ============= */
+  const PARTNER_KINDS = [
+    { id: 'bar',        t: 'Bar',         fx: 'cocktail' },
+    { id: 'club',       t: 'Club',        fx: 'disco' },
+    { id: 'restaurant', t: 'Restaurant',  fx: 'fork' },
+    { id: 'cafe',       t: 'Café',        fx: 'coffee' },
+    { id: 'hotel',      t: 'Hotel',       fx: 'hotel' },
+    { id: 'venue',      t: 'Venue',       fx: 'sparkles' },
+    { id: 'shop',       t: 'Shop',        fx: 'pin' },
+    { id: 'service',    t: 'Service',     fx: 'handshake' },
+    { id: 'help_org',   t: 'Hilfe-Org',   fx: 'folded' },
+    { id: 'other',      t: 'Sonstiges',   fx: 'pin' }
+  ];
+  let prtKindSel = null;
+  function renderPartnerKinds(){
+    const host = $('prtKinds'); if (!host) return;
+    host.innerHTML = PARTNER_KINDS.map(k => `
+      <button class="pill-c ${prtKindSel === k.id ? 'on' : ''}" data-pk="${k.id}" type="button">
+        <div class="ic"><img class="emo3d" src="${FX[k.fx] || FX.pin}" alt=""/></div>
+        <div class="info"><div class="t">${k.t}</div></div>
+      </button>
+    `).join('');
+    host.querySelectorAll('[data-pk]').forEach(b => b.addEventListener('click', () => {
+      prtKindSel = b.dataset.pk;
+      renderPartnerKinds();
+    }));
+  }
+  function openPartnerModal(){
+    /* Reset state */
+    prtKindSel = null;
+    $('partnerSubmitted').hidden = true;
+    $('partnerForm').hidden = false;
+    $('partnerError').classList.remove('show');
+    ['prtName','prtEmail','prtPhone','prtWeb','prtLogo','prtAddr','prtDesc','prtPerks'].forEach(id => {
+      const el = $(id); if (el) el.value = '';
+    });
+    renderPartnerKinds();
+    openModal('partnerModal');
+  }
+  $$('[data-close="partnerModal"]').forEach(b => b.addEventListener('click', () => closeModal('partnerModal')));
+  const authPartnerLink = $('authPartnerLink');
+  if (authPartnerLink) authPartnerLink.addEventListener('click', openPartnerModal);
+  $('prtSubmit').addEventListener('click', async () => {
+    const err = $('partnerError');
+    err.classList.remove('show');
+    const name  = $('prtName').value.trim();
+    const email = $('prtEmail').value.trim().toLowerCase();
+    const phone = $('prtPhone').value.trim() || null;
+    const web   = $('prtWeb').value.trim() || null;
+    const logo  = $('prtLogo').value.trim() || null;
+    const addr  = $('prtAddr').value.trim() || null;
+    const desc  = $('prtDesc').value.trim() || null;
+    const perksRaw = $('prtPerks').value.split('\n').map(s => s.trim()).filter(Boolean).slice(0, 5);
+    const perks = perksRaw.length ? { list: perksRaw } : null;
+    if (name.length < 2){ err.textContent = 'Name fehlt'; err.classList.add('show'); return; }
+    if (!prtKindSel){ err.textContent = 'Kategorie wählen'; err.classList.add('show'); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ err.textContent = 'Email ungültig'; err.classList.add('show'); return; }
+    const btn = $('prtSubmit');
+    btn.disabled = true;
+    btn.textContent = 'Sende …';
+    try{
+      const r = await sb.rpc('submit_partner', {
+        p_name: name, p_kind: prtKindSel, p_contact_email: email,
+        p_description: desc, p_website: web, p_phone: phone,
+        p_logo_url: logo, p_address: addr, p_perks: perks
+      });
+      if (r.error) throw r.error;
+      $('partnerForm').hidden = true;
+      $('partnerSubmitted').hidden = false;
+    }catch(e){
+      err.textContent = 'Fehler: ' + (e.message || e);
+      err.classList.add('show');
+    }finally{
+      btn.disabled = false;
+      btn.textContent = 'Anfrage senden';
     }
   });
 
@@ -5644,9 +5874,15 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
       cls.push('partner');
       if (h.partner_tier === 'premium') cls.push('premium');
     }
-    const fxUrl = hsFx(h.kind, h.subcategory);
+    /* Premium-Partner mit Logo: zeigt Logo statt 3D-Emoji */
+    let inner;
+    if (h.partner_tier === 'premium' && h.partner_logo){
+      inner = '<img class="hs-pin-logo" src="' + esc(h.partner_logo) + '" alt="" loading="lazy" onerror="this.outerHTML=&apos;<img class=\\&quot;emo3d\\&quot; src=\\&quot;' + hsFx(h.kind, h.subcategory) + '\\&quot;/>&apos;"/>';
+    } else {
+      inner = '<img class="emo3d" src="' + hsFx(h.kind, h.subcategory) + '" alt="" loading="lazy"/>';
+    }
     return '<div class="' + cls.join(' ') + '">' +
-      '<div class="hs-pin-ic"><img class="emo3d" src="' + fxUrl + '" alt="" loading="lazy"/></div>' +
+      '<div class="hs-pin-ic">' + inner + '</div>' +
       (h.member_count > 0 ? '<div class="hs-pin-count">' + h.member_count + '</div>' : '') +
       '</div>';
   }
@@ -5991,12 +6227,34 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     if (kontaktBtns.length){
       descHtml += (descHtml ? '<br/><br/>' : '') + '<div class="dt-contact-row">' + kontaktBtns.join('') + '</div>';
     }
-    /* Partner-Block */
+    /* Partner-Block: Logo (wenn vorhanden) + Tier-Badge + Perks-Chips */
     if (h.partner_name){
-      descHtml += '<div class="dt-partner-card">' +
-        '<img class="emo3d" src="' + FX.crown + '" alt=""/>' +
-        '<div><div class="dt-partner-name">' + esc(h.partner_name) + '</div>' +
-        '<div class="dt-partner-tier">' + (h.partner_tier === 'premium' ? '★ Premium-Partner' : 'Partner-Stelle') + '</div></div>' +
+      const isPrem = h.partner_tier === 'premium';
+      const tierBadge = isPrem ? '★ Premium-Partner' : (h.partner_tier === 'verified' ? '✓ Verifizierter Partner' : 'Partner-Stelle');
+      const tierClass = isPrem ? 'premium' : (h.partner_tier === 'verified' ? 'verified' : '');
+      const logo = h.partner_logo
+        ? '<img class="dt-partner-logo" src="' + esc(h.partner_logo) + '" alt="" onerror="this.outerHTML=&apos;<img class=\\&quot;emo3d dt-partner-logo-fallback\\&quot; src=\\&quot;' + FX.crown + '\\&quot; alt=\\&quot;\\&quot;/>&apos;"/>'
+        : '<img class="emo3d dt-partner-logo-fallback" src="' + FX.crown + '" alt=""/>';
+      let perksHtml = '';
+      const perks = h.partner_perks;
+      if (perks){
+        let perkList = [];
+        if (Array.isArray(perks)) perkList = perks;
+        else if (perks.list && Array.isArray(perks.list)) perkList = perks.list;
+        else if (typeof perks === 'string'){ try { const p = JSON.parse(perks); perkList = p.list || (Array.isArray(p) ? p : []); } catch(_){} }
+        if (perkList.length){
+          perksHtml = '<div class="dt-partner-perks">' +
+            perkList.slice(0, 5).map(p => '<span class="dt-perk-chip">' + esc(p) + '</span>').join('') +
+            '</div>';
+        }
+      }
+      descHtml += '<div class="dt-partner-card ' + tierClass + '">' +
+        '<div class="dt-partner-logo-wrap">' + logo + '</div>' +
+        '<div class="dt-partner-info">' +
+          '<div class="dt-partner-name">' + esc(h.partner_name) + '</div>' +
+          '<div class="dt-partner-tier">' + tierBadge + '</div>' +
+          perksHtml +
+        '</div>' +
         '</div>';
     }
     $('dtDesc').innerHTML = descHtml;
@@ -7585,8 +7843,85 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     await renderAdmWaitlist();
     /* Pending Anlaufstellen */
     await renderAdmPendingHelpPoints();
+    /* Partner-Anfragen */
+    await renderAdmPartners();
     /* Hotspot-List */
     await renderAdmHotspots();
+  }
+
+  /* ============= ADMIN: PARTNERS ============= */
+  let admPrtTab = 'pending';
+  $$('.adm-wl-tab[data-prt-tab]').forEach(b => b.addEventListener('click', () => {
+    $$('.adm-wl-tab[data-prt-tab]').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    admPrtTab = b.dataset.prtTab;
+    renderAdmPartners();
+  }));
+  async function renderAdmPartners(){
+    const host = $('admPartners'); if (!host) return;
+    host.innerHTML = '<div class="empty"><div class="spinner" style="margin:20px auto"></div></div>';
+    try{
+      const status = admPrtTab === 'all' ? null : admPrtTab;
+      const r = await sb.rpc('admin_list_partners', { p_status: status });
+      const data = (r && r.data) || [];
+      if (!data.length){ host.innerHTML = '<div class="feed-empty">Keine Partner in dieser Kategorie</div>'; return; }
+      host.innerHTML = data.map(p => {
+        const isPending  = p.submission_status === 'pending';
+        const isApproved = p.submission_status === 'approved';
+        const tierBadge = '<span class="adm-badge tier-' + esc(p.tier || 'free') + '">' + esc((p.tier || 'free').toUpperCase()) + '</span>';
+        const acts = isPending
+          ? '<select class="adm-wl-tier" data-id="' + p.id + '"><option value="free">Free</option><option value="verified" selected>Verified</option><option value="premium">Premium</option></select>' +
+            '<button class="adm-wl-act approve" data-act="approve" data-id="' + p.id + '">Approve</button>' +
+            '<button class="adm-wl-act revoke" data-act="reject" data-id="' + p.id + '">Reject</button>'
+          : '<select class="adm-wl-tier" data-act="tier" data-id="' + p.id + '">' +
+              ['free','verified','premium'].map(t => '<option value="' + t + '"' + (p.tier === t ? ' selected' : '') + '>' + t + '</option>').join('') +
+            '</select>';
+        const logo = p.logo_url
+          ? '<img src="' + esc(p.logo_url) + '" style="width:38px;height:38px;border-radius:8px;object-fit:cover" alt=""/>'
+          : '<div class="hs-row-ic" style="width:38px;height:38px;border-radius:8px"><img class="emo3d" src="' + FX.crown + '" style="width:22px;height:22px"/></div>';
+        return '<div class="adm-row" data-id="' + p.id + '">' +
+          logo +
+          '<div class="info">' +
+            '<div class="name">' + esc(p.name) + ' ' + tierBadge + '</div>' +
+            '<div class="meta">' + esc(p.kind) + (p.contact_email ? ' · ' + esc(p.contact_email) : '') + (p.address ? ' · ' + esc(p.address.slice(0, 60)) : '') + '</div>' +
+          '</div>' +
+          '<div class="acts">' + acts + '</div>' +
+        '</div>';
+      }).join('');
+      host.querySelectorAll('[data-act="approve"]').forEach(b => b.addEventListener('click', async () => {
+        const id = b.dataset.id;
+        const tierSel = host.querySelector('.adm-wl-tier[data-id="' + id + '"]:not([data-act])');
+        const tier = tierSel ? tierSel.value : 'verified';
+        b.disabled = true;
+        try{
+          const r2 = await sb.rpc('admin_approve_partner', { p_partner_id: id, p_tier: tier, p_create_hotspot: true });
+          if (r2.error) throw r2.error;
+          toast('Partner approved als ' + tier, null, null, 'success');
+          renderAdmPartners();
+          if (typeof loadHotspots === 'function') loadHotspots();
+        }catch(e){ toast('Fehler: ' + (e.message || e), null, null, 'warning'); b.disabled = false; }
+      }));
+      host.querySelectorAll('[data-act="reject"]').forEach(b => b.addEventListener('click', async () => {
+        const id = b.dataset.id;
+        if (!confirm('Partner ablehnen?')) return;
+        b.disabled = true;
+        try{
+          const r2 = await sb.rpc('admin_reject_partner', { p_partner_id: id });
+          if (r2.error) throw r2.error;
+          toast('Abgelehnt', null, null, 'warning');
+          renderAdmPartners();
+        }catch(e){ toast('Fehler: ' + (e.message || e)); b.disabled = false; }
+      }));
+      host.querySelectorAll('[data-act="tier"]').forEach(s => s.addEventListener('change', async () => {
+        const id = s.dataset.id;
+        try{
+          const r2 = await sb.rpc('admin_set_partner_tier', { p_partner_id: id, p_tier: s.value });
+          if (r2.error) throw r2.error;
+          toast('Tier auf ' + s.value, null, null, 'success');
+          if (typeof loadHotspots === 'function') loadHotspots();
+        }catch(e){ toast('Fehler: ' + (e.message || e)); }
+      }));
+    }catch(e){ host.innerHTML = '<div class="feed-empty">Fehler: ' + esc(e.message || 'unbekannt') + '</div>'; }
   }
 
   /* ============= ADMIN: PENDING HELP-POINTS ============= */
