@@ -14388,4 +14388,371 @@ body:not([data-current-screen="spots"]) .quick-spot-fab{
 })();
 </script>
 
+<style id="bb-fixfinal">/* ============================================================
+   BB-FIXFINAL — Wizard-State-Cache + Crew-Status-Fix + UI-Polish
+   ============================================================ */
+
+/* ---------- 1. Legacy "Noch keine Crew" wenn User in Crew ist verstecken ---------- */
+body.bb-has-crew .crew-hub-empty,
+body.bb-has-crew #crewHubEmpty,
+body.bb-has-crew .crew-empty,
+body.bb-has-crew .v103-tile-sub-empty,
+body.bb-has-crew .v108-noti-empty,
+body.bb-has-crew .ach-empty,
+body.bb-has-crew .hss-buddy-empty,
+body.bb-has-crew .v109-hls-empty,
+body.bb-has-crew .v104-no-crew{
+  display: none !important;
+}
+
+/* "Du bist in keiner Crew" Text-Nodes generisch verstecken wenn Crew vorhanden */
+body.bb-has-crew [class*="empty"]:not(.cc-empty):not(.sm-empty-card):not(.sm-empty){
+  /* nur Elemente mit konkreter "Crew"-Bezug-Klasse */
+}
+
+/* ---------- 2. Crew-Status-Pill im Header ---------- */
+.crew-status-pill{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 10px;
+  background: rgba(40,200,120,.12);
+  border: .5px solid rgba(40,200,120,.35);
+  border-radius: 999px;
+  color: #28C878;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: -.005em;
+}
+.crew-status-pill .csp-dot{
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #28C878;
+  animation: cspPulse 2s ease-in-out infinite;
+}
+@keyframes cspPulse{ 0%,100%{ opacity:1 } 50%{ opacity:.5 } }
+body:not(.bb-has-crew) .crew-status-pill{ display: none !important; }
+
+/* ---------- 3. Wizard: Step 2 Input-Borders bei Validation-Fehler ---------- */
+.hw-input.invalid, .hw-textarea.invalid{
+  border-color: rgba(254,60,114,.6) !important;
+  animation: wizShake .3s ease-in-out;
+}
+@keyframes wizShake{
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-3px); }
+  75% { transform: translateX(3px); }
+}
+
+/* ---------- 4. Wizard-Validation-Hint ---------- */
+.hw-hint{
+  font-size: 11px;
+  color: rgba(254,60,114,.85);
+  margin-top: 6px;
+  padding-left: 4px;
+}
+</style>
+<script id="bb-fixfinal-js">
+/* ============================================================
+   BB-FIXFINAL — Robust Wizard-State + Crew-Detection
+   ============================================================ */
+(function(){
+  'use strict';
+  if (window.__bbFixFinalInit) return;
+  window.__bbFixFinalInit = true;
+
+  var sb = function(){ return window.sb || window.supabase; };
+  async function getUid(){
+    try{ var u = await sb().auth.getUser(); return u && u.data && u.data.user && u.data.user.id || null; }catch(e){ return null; }
+  }
+  function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]; }); }
+
+  /* ============= WIZARD-STATE CACHE ============= */
+  /* Bug-Fix: Wizard rendert Step-Body neu bei jedem Schritt — Inputs aus Step 2
+     sind in Step 3 weg. Wir tracken alles in einem persistenten globalen Cache. */
+  window.__wizCache = window.__wizCache || { kind:null, name:'', desc:'', vis:'public', ttl:'24h' };
+
+  function bindWizardCache(){
+    /* Delegation auf gesamten Modal-Body um Step-unabhängig zu sein */
+    document.addEventListener('input', function(e){
+      var t = e.target;
+      if (!t || !t.closest) return;
+      if (!t.closest('#bbHwModal')) return;
+      if (t.id === 'hwName'){ window.__wizCache.name = (t.value || '').trim(); }
+      if (t.id === 'hwDesc'){ window.__wizCache.desc = (t.value || '').trim(); }
+    });
+    document.addEventListener('click', function(e){
+      var t = e.target;
+      if (!t || !t.closest) return;
+      if (!t.closest('#bbHwModal')) return;
+      var kind = t.closest('.hw-kind');
+      if (kind){
+        window.__wizCache.kind = kind.getAttribute('data-id');
+      }
+      var vis = t.closest('.hw-vis');
+      if (vis){
+        window.__wizCache.vis = vis.getAttribute('data-id');
+      }
+      var ttl = t.closest('.hw-ttl');
+      if (ttl){
+        window.__wizCache.ttl = ttl.getAttribute('data-id');
+      }
+    });
+    /* Reset wenn Modal geschlossen */
+    document.addEventListener('click', function(e){
+      var t = e.target;
+      if (!t) return;
+      if (t.id === 'hwClose' || (t.classList && t.classList.contains('hw-modal'))){
+        setTimeout(function(){
+          window.__wizCache = { kind:null, name:'', desc:'', vis:'public', ttl:'24h' };
+        }, 500);
+      }
+    });
+  }
+
+  /* Validation pro Step — bevor user "Weiter" klickt */
+  function validateBeforeNext(){
+    document.addEventListener('click', function(e){
+      var btn = e.target && e.target.id === 'hwNext' ? e.target : null;
+      if (!btn) return;
+      var label = btn.textContent.trim();
+      /* Step 1 → 2 */
+      if (label === 'Weiter'){
+        /* Welcher Step ist aktiv? Prüfe Progress-Dots */
+        var dots = document.querySelectorAll('.hw-prog-dot');
+        var activeIdx = -1;
+        dots.forEach(function(d, i){ if (d.classList.contains('on')) activeIdx = i; });
+        /* Step 0 (Index 0): Kind muss gewählt sein */
+        if (activeIdx === 0){
+          if (!window.__wizCache.kind){
+            e.stopImmediatePropagation();
+            e.preventDefault();
+            if (window.bbToast) window.bbToast('Bitte einen Spot-Typ wählen');
+            return;
+          }
+        }
+        /* Step 1 (Index 1): Name muss min 2 chars */
+        if (activeIdx === 1){
+          var name = window.__wizCache.name || (document.getElementById('hwName') && document.getElementById('hwName').value.trim()) || '';
+          window.__wizCache.name = name;
+          if (name.length < 2){
+            e.stopImmediatePropagation();
+            e.preventDefault();
+            var inp = document.getElementById('hwName');
+            if (inp){ inp.classList.add('invalid'); setTimeout(function(){ inp.classList.remove('invalid'); }, 500); inp.focus(); }
+            if (window.bbToast) window.bbToast('Name muss mindestens 2 Zeichen haben');
+            return;
+          }
+        }
+      }
+    }, true);
+  }
+
+  /* OVERRIDE des Submit-Handlers aus bb-fixroutes (verbesserte Cache-Lese) */
+  function overrideSubmit(){
+    document.addEventListener('click', async function(e){
+      var btn = e.target && e.target.id === 'hwNext' ? e.target : null;
+      if (!btn) return;
+      var label = btn.textContent.trim();
+      if (label.indexOf('anlegen') === -1) return;
+      e.stopImmediatePropagation();
+      e.preventDefault();
+      e.stopPropagation();
+
+      btn.disabled = true; btn.textContent = 'Speichere …';
+      try{
+        var c = window.__wizCache;
+        /* Falls Cache leer: aus DOM lesen (für Kind/Vis/TTL die noch da sind, Name war in step 2) */
+        if (!c.kind){
+          var k = document.querySelector('.hw-kind.active');
+          if (k) c.kind = k.getAttribute('data-id');
+        }
+        if (!c.vis || c.vis === 'public'){
+          var v = document.querySelector('.hw-vis.active');
+          if (v) c.vis = v.getAttribute('data-id');
+        }
+        if (!c.ttl || c.ttl === '24h'){
+          var t = document.querySelector('.hw-ttl.active');
+          if (t) c.ttl = t.getAttribute('data-id');
+        }
+
+        if (!c.kind){ throw new Error('Spot-Typ fehlt — bitte zurück zu Schritt 1'); }
+        if (!c.name || c.name.length < 2){ throw new Error('Name fehlt oder zu kurz'); }
+
+        /* TTL → expires_at */
+        var ttlMs = { '1h': 3600000, '4h': 14400000, '24h': 86400000, '3d': 259200000, '7d': 604800000, 'rec': null }[c.ttl];
+        var isRecurring = (c.ttl === 'rec');
+        var expires = isRecurring ? new Date(Date.now() + 30*24*3600*1000).toISOString() : new Date(Date.now() + (ttlMs||86400000)).toISOString();
+
+        /* GPS */
+        var lat = window.userLat, lng = window.userLng;
+        if (!lat || !lng){
+          await new Promise(function(resolve, reject){
+            if (!navigator.geolocation){ reject(new Error('Browser hat kein GPS')); return; }
+            navigator.geolocation.getCurrentPosition(function(p){
+              window.userLat = p.coords.latitude; window.userLng = p.coords.longitude;
+              lat = p.coords.latitude; lng = p.coords.longitude;
+              resolve();
+            }, function(err){
+              reject(new Error('GPS verweigert: ' + (err.message || 'unbekannt')));
+            }, { enableHighAccuracy: true, timeout: 10000 });
+          });
+        }
+
+        var uid = await getUid();
+        if (!uid) throw new Error('Nicht eingeloggt');
+
+        var aud = (localStorage.getItem('bb-audience') || 'general');
+        var payload = {
+          owner_id: uid,
+          name: c.name.trim(),
+          description: c.desc.trim() || null,
+          kind: c.kind,
+          category: c.kind,
+          visibility: c.vis || 'public',
+          is_recurring: isRecurring,
+          expires_at: expires,
+          lat: lat, lng: lng,
+          audience: [aud]
+        };
+
+        console.log('[bb-fixfinal] Submit payload:', payload);
+
+        /* Insert (kein .single()) */
+        var ins = await sb().from('hotspots').insert(payload);
+        if (ins.error){
+          console.error('[bb-fixfinal] INSERT error:', ins.error);
+          throw ins.error;
+        }
+
+        /* Fetch zurück */
+        var newSpot = null;
+        try{
+          var r = await sb().from('hotspots').select('*').eq('owner_id', uid).order('created_at',{ascending:false}).limit(1);
+          if (r.data && r.data[0]) newSpot = r.data[0];
+        }catch(e){}
+
+        /* Auto-Join */
+        if (newSpot){
+          try{
+            await sb().from('hotspot_members').upsert({
+              hotspot_id: newSpot.id, user_id: uid, status: 'joined', joined_at: new Date().toISOString()
+            }, { onConflict: 'hotspot_id,user_id' });
+          }catch(e){ console.warn('[bb-fixfinal] auto-join warning:', e); }
+        }
+
+        /* UI-Reset */
+        var modal = document.getElementById('bbHwModal');
+        if (modal){
+          modal.classList.remove('on');
+          setTimeout(function(){ try{ modal.remove(); }catch(_){}; }, 320);
+        }
+        window.__wizCache = { kind:null, name:'', desc:'', vis:'public', ttl:'24h' };
+
+        if (window.bbToast) window.bbToast('Spot „' + payload.name + '" angelegt');
+
+        if (newSpot && window.bbHotspotV3 && window.bbHotspotV3.openDetail){
+          newSpot.is_mine = true;
+          newSpot.member_count = 1;
+          if (window.userLat){
+            newSpot.distance_km = haversine(window.userLat, window.userLng, newSpot.lat, newSpot.lng);
+          }
+          setTimeout(function(){ window.bbHotspotV3.openDetail(newSpot); }, 600);
+        }
+
+        if (typeof window.bbLoadHotspotsV2 === 'function') setTimeout(window.bbLoadHotspotsV2, 800);
+
+        /* Crew-Status updaten */
+        setTimeout(detectCrew, 1000);
+
+      }catch(err){
+        console.error('[bb-fixfinal] CREATE FAILED', err);
+        btn.disabled = false; btn.textContent = 'Spot anlegen';
+        var msg = err.message || JSON.stringify(err);
+        if (window.bbToast) window.bbToast('Fehler: ' + msg);
+      }
+    }, true);
+  }
+
+  function haversine(lat1, lng1, lat2, lng2){
+    var R = 6371;
+    var toRad = function(d){ return d * Math.PI / 180; };
+    var dLat = toRad(lat2 - lat1), dLng = toRad(lng2 - lng1);
+    var a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLng/2)**2;
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  }
+
+  /* ============= CREW-DETECTION ============= */
+  /* User ist "in einer Crew" wenn:
+     1. Safety-Circle hat mind. 1 accepted Eintrag, ODER
+     2. User ist in mind. 1 hotspot_members als joined, ODER
+     3. User ist Owner eines aktiven Hotspots */
+  async function detectCrew(){
+    try{
+      var uid = await getUid();
+      if (!uid){
+        document.body.classList.remove('bb-has-crew');
+        return;
+      }
+      var s = sb();
+      if (!s) return;
+
+      /* Schnellster Weg: get_crew_circle RPC, prüfe ob > 1 Eintrag (nicht nur self) */
+      var rpc = await s.rpc('get_crew_circle');
+      var others = ((rpc && rpc.data) || []).filter(function(m){ return m.user_id !== uid; });
+
+      if (others.length > 0){
+        document.body.classList.add('bb-has-crew');
+        injectCrewStatusPill(others.length);
+      } else {
+        document.body.classList.remove('bb-has-crew');
+        var pill = document.querySelector('.crew-status-pill');
+        if (pill) pill.remove();
+      }
+    }catch(e){
+      console.warn('[bb-fixfinal] detectCrew fail', e);
+    }
+  }
+
+  function injectCrewStatusPill(count){
+    /* Status-Pill im Header — nur wenn Hub aktiv */
+    var existing = document.querySelector('.crew-status-pill');
+    if (existing){
+      existing.querySelector('.csp-text').textContent = count + ' in deiner Crew';
+      return;
+    }
+    var hub = document.querySelector('[data-screen="hub"], #screen-hub, .hub-content');
+    if (!hub) return;
+    var pill = document.createElement('div');
+    pill.className = 'crew-status-pill';
+    pill.innerHTML = '<span class="csp-dot"></span><span class="csp-text">'+count+' in deiner Crew</span>';
+    /* Position: vor Status-Center */
+    var sc = hub.querySelector('.sc-wrap');
+    if (sc) hub.insertBefore(pill, sc);
+    else hub.insertBefore(pill, hub.firstChild);
+    pill.style.margin = '8px 16px';
+  }
+
+  /* ============= INIT ============= */
+  function init(){
+    bindWizardCache();
+    validateBeforeNext();
+    overrideSubmit();
+    setTimeout(detectCrew, 2500);
+    setInterval(detectCrew, 30000);
+    /* Bei Tab-Wechsel zu Hub: Crew-Status nochmal prüfen */
+    document.addEventListener('click', function(e){
+      var t = e.target;
+      if (!t || !t.closest) return;
+      if (t.closest('[data-tab="hub"], [data-screen="hub"], .tab-hub')){
+        setTimeout(detectCrew, 500);
+      }
+    });
+    window.bbDetectCrew = detectCrew;
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+
 </body></html>
