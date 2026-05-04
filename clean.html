@@ -1854,6 +1854,62 @@ a{ color: var(--c-violet-3); text-decoration: none; }
 .dt-rating-stat.verified{ color: #6EE7B7; }
 .dt-rating-stat.pending{ color: var(--c-gold); }
 
+/* 3D-Emoji Sticker Style — gibt Native-Emojis sanften Pop */
+.emo, .emo-lg, .emo-xl, .emo-hero{
+  display: inline-block;
+  font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,.35));
+  user-select: none;
+  -webkit-user-select: none;
+}
+.emo{ font-size: 22px; }
+.emo-lg{ font-size: 32px; }
+.emo-xl{ font-size: 56px; filter: drop-shadow(0 8px 16px rgba(0,0,0,.4)); }
+.emo-hero{
+  font-size: 72px;
+  filter: drop-shadow(0 12px 24px rgba(139,92,246,.35));
+  display: block;
+  margin: 0 auto;
+  animation: emoFloat 4s ease-in-out infinite;
+}
+@keyframes emoFloat{
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* Empty-State mit Hero-Emoji */
+.empty.with-emo{
+  padding-top: var(--s-5);
+}
+.empty.with-emo .emo-hero{
+  margin-bottom: var(--s-3);
+}
+
+/* Audience-Tile mit Emoji statt SVG */
+.aud-tile .ic.emoji{
+  background: rgba(255,255,255,.04) !important;
+  font-size: 22px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,.3));
+}
+.aud-tile.on .ic.emoji{
+  background: rgba(255,255,255,.08) !important;
+}
+
+/* SafePlace-Card mit Shield-Emoji */
+.spa-card-ic.emoji{
+  background: rgba(139,92,246,.18) !important;
+  font-size: 26px;
+}
+
+/* Heimweg-Hero, Trust-Hero, SOS-Confirm-Hero */
+.modal-hero-emo{
+  text-align: center;
+  margin: var(--s-3) 0 var(--s-4);
+}
+
 /* Reduced Motion */
 @media (prefers-reduced-motion: reduce){
   *, *::before, *::after{
@@ -1904,7 +1960,7 @@ a{ color: var(--c-violet-3); text-decoration: none; }
         <div class="status"><span class="dot"></span><span id="fyStatus">Sicher · Crew online</span></div>
       </div>
       <div class="spa-card" id="spaCard">
-        <div class="spa-card-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div class="spa-card-ic emoji"><span class="emo emo-lg">🛡️</span></div>
         <div class="spa-card-main">
           <div class="t">SafePlace-Hub</div>
           <div class="s">Notfall-Kontakte, Heimweg, Audit</div>
@@ -1915,19 +1971,19 @@ a{ color: var(--c-violet-3); text-decoration: none; }
         <div class="sec-h"><h3>Schnell-Aktionen</h3></div>
         <div class="quick">
           <button class="quick-c live" data-action="live">
-            <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div class="ic"><span class="emo emo-lg">📡</span></div>
             <div class="lbl">Live</div>
           </button>
           <button class="quick-c" data-action="home">
-            <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>
+            <div class="ic"><span class="emo emo-lg">🏠</span></div>
             <div class="lbl">Heimweg</div>
           </button>
           <button class="quick-c" data-action="spot">
-            <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s-7-7-7-12a7 7 0 0 1 14 0c0 5-7 12-7 12z"/></svg></div>
+            <div class="ic"><span class="emo emo-lg">📍</span></div>
             <div class="lbl">Spot</div>
           </button>
           <button class="quick-c urgent" data-action="sos">
-            <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg></div>
+            <div class="ic"><span class="emo emo-lg">🚨</span></div>
             <div class="lbl">SOS</div>
           </button>
         </div>
@@ -2148,6 +2204,7 @@ a{ color: var(--c-violet-3); text-decoration: none; }
 <div class="modal center" id="trustModal">
   <div class="modal-card">
     <button class="modal-close" data-close="trustModal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <div class="modal-hero-emo" style="margin-bottom:8px"><span class="emo-hero">🤝</span></div>
     <div class="pr-ava" id="trAva" style="margin: 0 auto 14px"></div>
     <h2 class="modal-h" id="trName" style="text-align:center;margin-top:0">Crew-Member</h2>
     <p class="modal-sub" style="text-align:center">Wie zuverlässig & vertrauenswürdig?</p>
@@ -2165,8 +2222,8 @@ a{ color: var(--c-violet-3); text-decoration: none; }
   <div class="modal-card">
     <button class="modal-close" data-close="sosModal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     <div class="sos-confirm">
-      <div class="sos-confirm-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
-      <h2 class="modal-h" style="text-align:center;color:var(--c-sos)">SOS auslösen?</h2>
+      <div class="modal-hero-emo"><span class="emo-hero" style="filter:drop-shadow(0 12px 24px rgba(236,72,153,.5))">🚨</span></div>
+      <h2 class="modal-h" style="text-align:center;color:var(--c-sos);margin-top:0">SOS auslösen?</h2>
       <p class="modal-sub" style="text-align:center">Halte gedrückt um zu bestätigen. Standort + Push gehen an Notfall-Kontakte.</p>
       <div class="sos-hold-track" id="sosHold">
         <div class="sos-hold-fill" id="sosHoldFill"></div>
@@ -2186,11 +2243,11 @@ a{ color: var(--c-violet-3); text-decoration: none; }
     <div class="sp-section">
       <h4>Sofort</h4>
       <button class="sp-tile" data-sp="live">
-        <div class="sp-tile-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg></div>
+        <div class="sp-tile-ic"><span class="emo emo-lg">📡</span></div>
         <div class="sp-tile-main"><div class="t">Live-Standort</div><div class="s">30 min mit Crew teilen</div></div>
       </button>
       <button class="sp-tile" data-sp="home">
-        <div class="sp-tile-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>
+        <div class="sp-tile-ic"><span class="emo emo-lg">🏠</span></div>
         <div class="sp-tile-main"><div class="t">Heimweg starten</div><div class="s">30 min Countdown · Crew kriegt Push</div></div>
       </button>
     </div>
@@ -2327,8 +2384,8 @@ a{ color: var(--c-violet-3); text-decoration: none; }
 <div class="modal center" id="homemodeModal">
   <div class="modal-card">
     <button class="modal-close" data-close="homemodeModal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-    <div class="hm-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
-    <h2 class="modal-h" style="text-align:center;margin-top:8px">Heimweg starten</h2>
+    <div class="modal-hero-emo"><span class="emo-hero">🏠</span></div>
+    <h2 class="modal-h" style="text-align:center;margin-top:0">Heimweg starten</h2>
     <p class="modal-sub" style="text-align:center">Crew kriegt Push wenn du nicht „Bin da" drückst.</p>
     <div class="field">
       <label>Wie lange brauchst du?</label>
@@ -2696,7 +2753,7 @@ a{ color: var(--c-violet-3); text-decoration: none; }
         items.push({ type: 'spot', name: h.name, time: h.created_at, body: h.description || ('Neuer ' + h.kind + '-Spot'), tag: h.kind });
       });
       if (!items.length){
-        host.innerHTML = '<div class="feed-empty">Keine neuen Aktivitäten. Lade Freunde ein damit dein Feed lebt.</div>';
+        host.innerHTML = '<div class="empty with-emo" style="background:var(--c-surface);border:.5px dashed var(--c-line);border-radius:var(--r-3);margin:0 16px"><span class="emo-hero">✨</span><h4>Hier wird\'s lebendig</h4><p>Lade Freunde ein, leg Spots an oder warte bis was passiert.</p></div>';
         return;
       }
       host.innerHTML = items.map(it => `
@@ -2716,7 +2773,7 @@ a{ color: var(--c-violet-3); text-decoration: none; }
   async function loadFeedSpots(){
     const host = $('feedSpots');
     if (!userLat){
-      host.innerHTML = '<div class="feed-empty">GPS für Spots-Liste nötig.</div>';
+      host.innerHTML = '<div class="empty with-emo" style="background:var(--c-surface);border:.5px dashed var(--c-line);border-radius:var(--r-3);margin:0 16px;padding:24px 16px"><span class="emo-xl">🗺️</span><h4 style="margin-top:12px">Standort gesucht</h4><p>Erlaube den GPS-Zugriff um Spots in deiner Nähe zu sehen.</p></div>';
       return;
     }
     try{
@@ -2934,16 +2991,16 @@ a{ color: var(--c-violet-3); text-decoration: none; }
 
   /* ============= HOTSPOT WIZARD ============= */
   const KINDS = [
-    { id: 'safe', t: 'Schutzort', s: 'Krankenhaus, Polizei', ic: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>' },
-    { id: 'trust', t: 'Vertrauensort', s: 'Zuhause, Job', ic: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>' },
-    { id: 'live', t: 'Live-Spot', s: 'Bin gerade hier', ic: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>' },
-    { id: 'community', t: 'Community', s: 'Gruppe, Verein', ic: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="7" r="4"/></svg>' }
+    { id: 'safe',      t: 'Schutzort',     s: 'Krankenhaus, Polizei', ic: '<span class="emo">🛡️</span>' },
+    { id: 'trust',     t: 'Vertrauensort', s: 'Zuhause, Job',         ic: '<span class="emo">🏠</span>' },
+    { id: 'live',      t: 'Live-Spot',     s: 'Bin gerade hier',      ic: '<span class="emo">📍</span>' },
+    { id: 'community', t: 'Community',     s: 'Gruppe, Verein',       ic: '<span class="emo">🤝</span>' }
   ];
   const VIS = [
-    { id: 'public', t: 'Öffentlich', s: 'Alle in der Nähe', ic: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>' },
-    { id: 'friends', t: 'Freunde', s: 'Nur Safety-Circle', ic: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="7" r="4"/></svg>' },
-    { id: 'circle', t: 'Crew', s: 'Nur eingeladene', ic: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/></svg>' },
-    { id: 'private', t: 'Privat', s: 'Nur du', ic: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/></svg>' }
+    { id: 'public',  t: 'Öffentlich', s: 'Alle in der Nähe',     ic: '<span class="emo">🌐</span>' },
+    { id: 'friends', t: 'Freunde',    s: 'Nur Safety-Circle',    ic: '<span class="emo">👥</span>' },
+    { id: 'circle',  t: 'Crew',       s: 'Nur eingeladene',      ic: '<span class="emo">🎯</span>' },
+    { id: 'private', t: 'Privat',     s: 'Nur du',               ic: '<span class="emo">🔒</span>' }
   ];
   /* WizState mit Persistenz: Name + Desc gehen NICHT verloren beim Re-Render */
   const wizState = { kind: 'live', vis: 'friends', name: '', desc: '', photoFile: null, photoDataUrl: null };
@@ -3362,7 +3419,7 @@ a{ color: var(--c-violet-3); text-decoration: none; }
       const search = $('cwSearch').value.toLowerCase().trim();
       if (search) members = members.filter(m => (m.display_name||'').toLowerCase().includes(search));
       if (!members.length){
-        host.innerHTML = '<div class="empty"><h4>Keine Crew hier</h4><p>Lade Freunde in deinen Safety-Circle ein oder tritt einem Hotspot bei.</p></div>';
+        host.innerHTML = '<div class="empty with-emo"><span class="emo-hero">🫂</span><h4>Keine Crew hier</h4><p>Lade Freunde in deinen Safety-Circle ein oder tritt einem Hotspot bei.</p></div>';
         return;
       }
       host.innerHTML = members.map(m => {
@@ -3465,13 +3522,13 @@ a{ color: var(--c-violet-3); text-decoration: none; }
 
   /* ============= SETTINGS ============= */
   const AUDIENCE_PROFILES = [
-    { id: 'general', t: 'Allgemein', s: 'Connection + Safety' },
-    { id: 'party', t: 'Party & Festival', s: 'Crew beim Feiern' },
-    { id: 'familie', t: 'Familie', s: 'Eltern, Kinder, Geschwister' },
-    { id: 'solo', t: 'Solo', s: 'Heimweg, Reise, Joggen' },
-    { id: 'pflege', t: 'Pflege', s: 'Angehörige betreuen' },
-    { id: 'recovery', t: 'Recovery', s: 'Mental Health & Selbsthilfe' },
-    { id: 'lgbtq', t: 'LGBTQ+', s: 'Sichere Orte & Support' }
+    { id: 'general',  t: 'Allgemein',          s: 'Connection + Safety',          emo: '🌐' },
+    { id: 'party',    t: 'Party & Festival',   s: 'Crew beim Feiern',             emo: '🪩' },
+    { id: 'familie',  t: 'Familie',            s: 'Eltern, Kinder, Geschwister',  emo: '👨‍👩‍👧' },
+    { id: 'solo',     t: 'Solo',               s: 'Heimweg, Reise, Joggen',       emo: '🚶' },
+    { id: 'pflege',   t: 'Pflege',             s: 'Angehörige betreuen',          emo: '💗' },
+    { id: 'recovery', t: 'Recovery',           s: 'Mental Health & Selbsthilfe',  emo: '🌱' },
+    { id: 'lgbtq',    t: 'LGBTQ+',             s: 'Sichere Orte & Support',       emo: '🌈' }
   ];
 
   function openSettings(){
@@ -3487,7 +3544,7 @@ a{ color: var(--c-violet-3); text-decoration: none; }
     /* Audience-Tiles */
     $('setAudGrid').innerHTML = AUDIENCE_PROFILES.map(p => `
       <button class="aud-tile ${profile.audience_profile === p.id ? 'on' : ''}" data-aud="${p.id}">
-        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M5 21v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2"/></svg></div>
+        <div class="ic emoji"><span class="emo">${p.emo}</span></div>
         <div class="info"><div class="t">${p.t}</div><div class="s">${p.s}</div></div>
       </button>
     `).join('');
