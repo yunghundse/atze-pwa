@@ -460,6 +460,37 @@ a{ color: var(--c-violet-3); text-decoration: none; }
   background: var(--c-green);
   animation: livePulse 1.6s ease-in-out infinite;
 }
+.fy-crew-btn{
+  position: absolute;
+  top: var(--s-3);
+  right: var(--s-3);
+  z-index: 2;
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(139,92,246,.5), rgba(99,102,241,.35));
+  border: .5px solid rgba(192,132,252,.5);
+  display: flex; align-items: center; justify-content: center;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 4px 16px rgba(139,92,246,.35);
+  transition: transform .15s var(--ease);
+}
+.fy-crew-btn:active{ transform: scale(.92); }
+.fy-crew-btn .emo3d{ width: 28px; height: 28px; }
+.fy-crew-count{
+  position: absolute;
+  top: -4px; right: -4px;
+  min-width: 20px; height: 20px;
+  padding: 0 6px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--c-violet), var(--c-violet-2));
+  color: #fff;
+  font-size: 11px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  border: 1.5px solid rgba(0,0,0,.4);
+  box-shadow: 0 2px 6px rgba(139,92,246,.4);
+}
+.fy-crew-count.empty{ display: none; }
 
 /* SafePlace Card */
 .spa-card{
@@ -878,15 +909,74 @@ a{ color: var(--c-violet-3); text-decoration: none; }
 }
 .cw-tab{
   flex: 1;
-  padding: 8px;
+  padding: 8px 6px;
   border-radius: var(--r-1);
   color: var(--c-text-3);
   font-size: var(--t-5);
   font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: background .25s var(--ease), color .2s var(--ease);
 }
 .cw-tab.on{
   background: linear-gradient(135deg, var(--c-violet), var(--c-violet-2));
   color: #fff;
+}
+.cw-tab-badge{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 9px;
+  background: rgba(255,255,255,.12);
+  color: var(--c-text-2);
+  font-size: 10px;
+  font-weight: 800;
+}
+.cw-tab.on .cw-tab-badge{
+  background: rgba(255,255,255,.25);
+  color: #fff;
+}
+.cw-tab-badge.empty{ display: none; }
+
+/* Summary-Cards (klickbar, führen direkt zum Tab) */
+.cw-summary{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 0 var(--s-4) var(--s-3);
+}
+.cw-sum-card{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 6px;
+  background: var(--c-surface-2);
+  border: .5px solid var(--c-violet-line);
+  border-radius: var(--r-2);
+  cursor: pointer;
+  transition: transform .15s var(--ease), border-color .2s;
+}
+.cw-sum-card:active{ transform: scale(.96); }
+.cw-sum-card:hover{ border-color: rgba(139,92,246,.5); }
+.cw-sum-card .emo3d{ width: 26px; height: 26px; }
+.cw-sum-num{
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: -.02em;
+  color: var(--c-text);
+}
+.cw-sum-lbl{
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--c-text-3);
+  text-transform: uppercase;
+  letter-spacing: .05em;
 }
 .cw-list{
   padding: 0 var(--s-4);
@@ -2580,6 +2670,10 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     <!-- HOME / FY -->
     <section class="tab active" id="tab-home">
       <div class="fy-hero">
+        <button class="fy-crew-btn" id="fyCrewBtn" aria-label="Crew öffnen">
+          <img class="emo3d" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Busts%20in%20silhouette/3D/busts_in_silhouette_3d.png" alt="" loading="lazy"/>
+          <span class="fy-crew-count" id="fyCrewCount">0</span>
+        </button>
         <div class="greet" id="fyGreet">HEY</div>
         <div class="name" id="fyName">Lade …</div>
         <div class="status"><span class="dot"></span><span id="fyStatus">Sicher · Crew online</span></div>
@@ -2651,15 +2745,32 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
         <h2>Crew Circle</h2>
         <p>Trust-Score, Aktivität, Bewertungen</p>
       </div>
+      <div class="cw-summary" id="cwSummary">
+        <div class="cw-sum-card" data-cw-tab="circle">
+          <img class="emo3d" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Shield/3D/shield_3d.png" alt=""/>
+          <div class="cw-sum-num" id="cwSumCircle">0</div>
+          <div class="cw-sum-lbl">Safety-Circle</div>
+        </div>
+        <div class="cw-sum-card" data-cw-tab="all">
+          <img class="emo3d" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Busts%20in%20silhouette/3D/busts_in_silhouette_3d.png" alt=""/>
+          <div class="cw-sum-num" id="cwSumAll">0</div>
+          <div class="cw-sum-lbl">Crew</div>
+        </div>
+        <div class="cw-sum-card" data-cw-tab="trusted">
+          <img class="emo3d" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Trophy/3D/trophy_3d.png" alt=""/>
+          <div class="cw-sum-num" id="cwSumTrust">—</div>
+          <div class="cw-sum-lbl">Trust-Ø</div>
+        </div>
+      </div>
       <input class="cw-search" id="cwSearch" placeholder="Suche Crew-Mitglied …" />
       <div class="cw-tabs">
-        <button class="cw-tab on" data-cw-tab="tree">Stammbaum</button>
-        <button class="cw-tab" data-cw-tab="all">Alle</button>
-        <button class="cw-tab" data-cw-tab="circle">Safety-Circle</button>
-        <button class="cw-tab" data-cw-tab="trusted">Top-Trust</button>
+        <button class="cw-tab on" data-cw-tab="tree"><span>Stammbaum</span></button>
+        <button class="cw-tab" data-cw-tab="circle"><span>Safety-Circle</span><span class="cw-tab-badge" id="cwBadgeCircle">0</span></button>
+        <button class="cw-tab" data-cw-tab="all"><span>Alle</span><span class="cw-tab-badge" id="cwBadgeAll">0</span></button>
+        <button class="cw-tab" data-cw-tab="trusted"><span>Top-Trust</span></button>
       </div>
       <div class="cw-tree" id="cwTree"></div>
-      <div class="cw-trust-tabs" id="cwTrustTabs" hidden>
+      <div class="cw-trust-tabs" id="cwTrustTabs">
         <button class="cw-trust-tab on" data-trust-tab="friends">Freunde</button>
         <button class="cw-trust-tab" data-trust-tab="world">Welt</button>
         <button class="cw-trust-tab" data-trust-tab="crews">Crews</button>
@@ -3530,7 +3641,16 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     warning:   FX_BASE + 'Warning/3D/warning_3d.png',
     info:      FX_BASE + 'Information/3D/information_3d.png',
     party:     FX_BASE + 'Party%20popper/3D/party_popper_3d.png',
-    bell:      FX_BASE + 'Bell/3D/bell_3d.png'
+    bell:      FX_BASE + 'Bell/3D/bell_3d.png',
+    /* Mood-Emojis */
+    sunglasses:FX_BASE + 'Smiling%20face%20with%20sunglasses/3D/smiling_face_with_sunglasses_3d.png',
+    smile:     FX_BASE + 'Smiling%20face%20with%20smiling%20eyes/3D/smiling_face_with_smiling_eyes_3d.png',
+    sad:       FX_BASE + 'Disappointed%20face/3D/disappointed_face_3d.png',
+    confused:  FX_BASE + 'Confused%20face/3D/confused_face_3d.png',
+    sosbtn:    FX_BASE + 'Sos%20button/3D/sos_button_3d.png',
+    flex:      FX_BASE + 'Flexed%20biceps/Default/3D/flexed_biceps_3d_default.png',
+    trophy:    FX_BASE + 'Trophy/3D/trophy_3d.png',
+    star:      FX_BASE + 'Star/3D/star_3d.png'
   };
   function emo3d(name, size){
     const url = FX[name] || FX.sparkles;
@@ -3702,6 +3822,23 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
   $$('.nav-btn').forEach(b => b.addEventListener('click', () => switchTab(b.dataset.tab)));
   $$('[data-tab]:not(.nav-btn):not(.tab)').forEach(b => b.addEventListener('click', () => switchTab(b.dataset.tab)));
 
+  /* FY-Hero → Crew-Quick-Button (öffnet Crew-Tab + Safety-Circle als Default) */
+  const fyCrewBtn = $('fyCrewBtn');
+  if (fyCrewBtn){
+    fyCrewBtn.addEventListener('click', () => {
+      switchTab('crew');
+      /* Safety-Circle als sinnvollster Default für Quick-Access */
+      const target = document.querySelector('.cw-tab[data-cw-tab="circle"]');
+      if (target) target.click();
+    });
+  }
+  /* Summary-Cards → springen zum jeweiligen Crew-Sub-Tab */
+  $$('.cw-sum-card').forEach(c => c.addEventListener('click', () => {
+    const which = c.dataset.cwTab;
+    const target = document.querySelector('.cw-tab[data-cw-tab="' + which + '"]');
+    if (target) target.click();
+  }));
+
   /* ============= HOME / FY-FEED ============= */
   function renderHome(){
     if (!profile) return;
@@ -3712,6 +3849,40 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     syncHeader();
     loadFeedActivity();
     loadFeedSpots();
+    refreshCrewCounts();
+  }
+
+  /* Crew-Counts (Hero-Badge + Summary-Cards + Tab-Badges) */
+  async function refreshCrewCounts(){
+    if (!user) return;
+    try{
+      const r = await sb.rpc('get_crew_circle');
+      const all = ((r && r.data) || []).filter(m => m.user_id !== user.id);
+      const circle = all.filter(m => m.is_in_safety_circle);
+      const trustVals = all.map(m => parseFloat(m.trust_avg)).filter(v => v > 0);
+      const trustAvg = trustVals.length ? (trustVals.reduce((a,b) => a+b, 0) / trustVals.length) : 0;
+
+      const setNum = (id, n) => { const el = $(id); if (el) el.textContent = n; };
+      const setBadge = (id, n) => {
+        const el = $(id); if (!el) return;
+        el.textContent = n;
+        el.classList.toggle('empty', !n);
+      };
+
+      /* Hero-Button-Badge */
+      const heroBadge = $('fyCrewCount');
+      if (heroBadge){
+        heroBadge.textContent = circle.length;
+        heroBadge.classList.toggle('empty', !circle.length);
+      }
+      /* Summary-Cards */
+      setNum('cwSumCircle', circle.length);
+      setNum('cwSumAll', all.length);
+      setNum('cwSumTrust', trustAvg ? trustAvg.toFixed(1) : '—');
+      /* Tab-Badges */
+      setBadge('cwBadgeCircle', circle.length);
+      setBadge('cwBadgeAll', all.length);
+    }catch(e){ /* silent — counts sind Bonus, dürfen scheitern */ }
   }
 
   async function loadFeedActivity(){
@@ -4748,10 +4919,11 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
       const r = await sb.rpc('get_crew_live_locations');
       const locs = (r && r.data) || [];
       locs.forEach(l => {
-        const moodEmoji = MOODS.find(m => m.id === l.mood)?.emo || l.status_emoji || '';
+        const moodObj = MOODS.find(m => m.id === l.mood);
+        const moodImg = moodObj ? '<img class="emo3d" style="width:14px;height:14px" src="'+FX[moodObj.fx]+'" alt=""/>' : (l.status_emoji ? esc(l.status_emoji) : '');
         const html = `<div class="live-pin">
           <div class="live-pin-ava">${l.photo_url ? '<img src="'+esc(l.photo_url)+'"/>' : esc(initials(l.display_name))}</div>
-          ${moodEmoji ? '<div class="live-pin-status">'+moodEmoji+'</div>' : ''}
+          ${moodImg ? '<div class="live-pin-status">'+moodImg+'</div>' : ''}
           <div class="live-pin-tail"></div>
         </div>`;
         const icon = L.divIcon({ html, className: 'live-pin-wrap', iconSize: [44, 50], iconAnchor: [22, 50] });
@@ -5720,14 +5892,14 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
 
   /* ============= MOOD-SYSTEM ============= */
   const MOODS = [
-    { id: 'party',   t: 'Party',   emo: '🪩' },
-    { id: 'chill',   t: 'Chill',   emo: '😎' },
-    { id: 'easy',    t: 'Easy',    emo: '😊' },
-    { id: 'down',    t: 'Down',    emo: '😞' },
-    { id: 'lost',    t: 'Lost',    emo: '😵' },
-    { id: 'help',    t: 'Hilfe',   emo: '🆘' },
-    { id: 'home',    t: 'Daheim',  emo: '🏠' },
-    { id: 'healthy', t: 'Healthy', emo: '💪' }
+    { id: 'party',   t: 'Party',   fx: 'disco' },
+    { id: 'chill',   t: 'Chill',   fx: 'sunglasses' },
+    { id: 'easy',    t: 'Easy',    fx: 'smile' },
+    { id: 'down',    t: 'Down',    fx: 'sad' },
+    { id: 'lost',    t: 'Lost',    fx: 'confused' },
+    { id: 'help',    t: 'Hilfe',   fx: 'sosbtn' },
+    { id: 'home',    t: 'Daheim',  fx: 'house' },
+    { id: 'healthy', t: 'Healthy', fx: 'flex' }
   ];
   let myMood = null, crewMoods = {};
   async function loadMood(){
@@ -5739,12 +5911,18 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     }catch(e){}
     renderMoodPicker();
   }
+  function moodHtml(mood, withLabel){
+    const m = typeof mood === 'string' ? MOODS.find(x => x.id === mood) : mood;
+    if (!m) return '';
+    return '<img class="emo3d" style="width:20px;height:20px" src="' + FX[m.fx] + '" alt=""/>' + (withLabel ? ' <span>' + m.t + '</span>' : '');
+  }
   function renderMoodPicker(){
     const row = $('moodRow');
     if (!row) return;
     row.innerHTML = MOODS.map(m => `
       <button class="mood-pill ${myMood === m.id ? 'on' : ''}" data-mood="${m.id}">
-        <span class="emo">${m.emo}</span><span>${m.t}</span>
+        <img class="emo3d" style="width:20px;height:20px" src="${FX[m.fx]}" alt=""/>
+        <span>${m.t}</span>
       </button>
     `).join('');
     row.querySelectorAll('.mood-pill').forEach(b => b.addEventListener('click', async () => {
@@ -5753,17 +5931,12 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
       myMood = newMood;
       await sb.rpc('set_my_mood', { p_mood: newMood || 'clear' });
       renderMoodPicker();
-      const cur = $('moodCurrent');
-      if (cur){
-        if (newMood){ const m = MOODS.find(x => x.id === newMood); cur.innerHTML = m.emo + ' ' + m.t + ' · 12h'; cur.classList.add('has'); }
-        else { cur.textContent = ''; cur.classList.remove('has'); }
-      }
       toast(newMood ? 'Mood: ' + MOODS.find(x => x.id === newMood).t : 'Mood entfernt', null, null, 'info');
     }));
     /* Current-Indicator */
     const cur = $('moodCurrent');
     if (cur){
-      if (myMood){ const m = MOODS.find(x => x.id === myMood); cur.innerHTML = m.emo + ' ' + m.t + ' · 12h'; cur.classList.add('has'); }
+      if (myMood){ cur.innerHTML = moodHtml(myMood, true) + ' · 12h'; cur.classList.add('has'); }
       else { cur.textContent = 'Tippe um zu teilen'; cur.classList.remove('has'); }
     }
   }
