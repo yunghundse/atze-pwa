@@ -1921,6 +1921,173 @@ a{ color: var(--c-violet-3); text-decoration: none; }
   margin: var(--s-3) 0 var(--s-4);
 }
 
+/* ============= STAMMBAUM (Radial Trust-Tree) ============= */
+.cw-tree{
+  display: none;
+  margin: 0 var(--s-4) var(--s-4);
+  padding: var(--s-4);
+  background: radial-gradient(ellipse at center, rgba(139,92,246,.08), rgba(10,10,20,.4));
+  border: .5px solid var(--c-violet-line);
+  border-radius: var(--r-4);
+  position: relative;
+  aspect-ratio: 1;
+  max-width: 460px;
+  max-height: 460px;
+  overflow: hidden;
+}
+.cw-tree.show{ display: block; margin-left: auto; margin-right: auto; }
+.cw-tree-svg{
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.cw-tree-ring{
+  fill: none;
+  stroke-dasharray: 2 6;
+  stroke-linecap: round;
+}
+.cw-tree-ring.tier-1{ stroke: rgba(255,214,10,.35); stroke-width: 1.5; }
+.cw-tree-ring.tier-2{ stroke: rgba(139,92,246,.3); stroke-width: 1; }
+.cw-tree-ring.tier-3{ stroke: rgba(255,255,255,.12); stroke-width: 1; }
+.cw-tree-ring-label{
+  font-size: 9px;
+  fill: rgba(255,255,255,.4);
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+.cw-tree-self{
+  fill: url(#treeGradSelf);
+  stroke: rgba(255,255,255,.3);
+  stroke-width: 2;
+}
+.cw-tree-conn{
+  stroke: rgba(139,92,246,.25);
+  stroke-width: 1;
+  stroke-dasharray: 1 3;
+  fill: none;
+}
+.cw-tree-conn.tier-1{ stroke: rgba(255,214,10,.5); stroke-width: 1.5; }
+.cw-tree-node{
+  cursor: pointer;
+  transition: transform .25s var(--ease);
+}
+.cw-tree-node:hover{ transform: scale(1.1); }
+.cw-tree-node-circle{
+  fill: var(--c-bg);
+  stroke: rgba(139,92,246,.6);
+  stroke-width: 1.5;
+}
+.cw-tree-node.tier-1 .cw-tree-node-circle{ stroke: var(--c-gold); stroke-width: 2; }
+.cw-tree-node.tier-2 .cw-tree-node-circle{ stroke: var(--c-violet); stroke-width: 1.5; }
+.cw-tree-node-init{
+  fill: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+.cw-tree-empty{
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--s-4);
+  pointer-events: none;
+}
+.cw-tree-empty .you-bubble{
+  width: 88px; height: 88px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--c-violet), var(--c-violet-2));
+  border: 3px solid rgba(255,255,255,.12);
+  box-shadow: 0 12px 32px rgba(139,92,246,.4);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px; font-weight: 900; color: #fff;
+  margin-bottom: var(--s-3);
+  overflow: hidden;
+  position: relative;
+}
+.cw-tree-empty .you-bubble img{ width: 100%; height: 100%; object-fit: cover; }
+.cw-tree-empty .you-bubble::after{
+  content:'';
+  position: absolute; inset: -10px;
+  border: 2px dashed var(--c-violet-line);
+  border-radius: 50%;
+  animation: emoFloat 6s ease-in-out infinite;
+}
+.cw-tree-empty h4{
+  font-size: var(--t-3); font-weight: 800;
+  color: #fff;
+  margin: 0 0 var(--s-1);
+}
+.cw-tree-empty p{
+  font-size: var(--t-5);
+  color: var(--c-text-2);
+  margin: 0;
+  max-width: 240px;
+}
+.cw-tree-toggle{
+  position: absolute;
+  top: var(--s-3); right: var(--s-3);
+  z-index: 2;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: rgba(15,15,28,.85);
+  border: .5px solid var(--c-violet-line);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--c-text-2);
+  pointer-events: auto;
+}
+.cw-tree-toggle svg{ width: 14px; height: 14px; }
+.cw-tree-toggle.private{ color: var(--c-text-3); opacity: .7; }
+
+/* Trust Sub-Tabs (Freunde/Welt/Crews) */
+.cw-trust-tabs{
+  display: none;
+  gap: 4px;
+  margin: 0 var(--s-4) var(--s-3);
+  padding: 4px;
+  background: rgba(139,92,246,.05);
+  border-radius: var(--r-2);
+}
+.cw-trust-tabs.show{ display: flex; }
+.cw-trust-tab{
+  flex: 1;
+  padding: 7px;
+  border-radius: var(--r-1);
+  color: var(--c-text-3);
+  font-size: var(--t-5);
+  font-weight: 700;
+}
+.cw-trust-tab.on{
+  background: linear-gradient(135deg, var(--c-violet), var(--c-violet-2));
+  color: #fff;
+}
+
+/* World-Ranking Item mit Rank-Position */
+.cw-item.world-rank::before{
+  content: attr(data-rank);
+  position: absolute;
+  top: -6px; left: -6px;
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--c-violet), var(--c-violet-2));
+  color: #fff;
+  font-size: 11px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 8px rgba(139,92,246,.4);
+}
+.cw-item.world-rank{ position: relative; }
+.cw-item.world-rank[data-rank="1"]::before{ background: linear-gradient(135deg, #FFD60A, #FF6D2E); }
+.cw-item.world-rank[data-rank="2"]::before{ background: linear-gradient(135deg, #C0C0C0, #808080); }
+.cw-item.world-rank[data-rank="3"]::before{ background: linear-gradient(135deg, #CD7F32, #8B4513); }
+
 /* Reduced Motion */
 @media (prefers-reduced-motion: reduce){
   *, *::before, *::after{
@@ -2033,9 +2200,16 @@ a{ color: var(--c-violet-3); text-decoration: none; }
       </div>
       <input class="cw-search" id="cwSearch" placeholder="Suche Crew-Mitglied …" />
       <div class="cw-tabs">
-        <button class="cw-tab on" data-cw-tab="all">Alle</button>
+        <button class="cw-tab on" data-cw-tab="tree">Stammbaum</button>
+        <button class="cw-tab" data-cw-tab="all">Alle</button>
         <button class="cw-tab" data-cw-tab="circle">Safety-Circle</button>
         <button class="cw-tab" data-cw-tab="trusted">Top-Trust</button>
+      </div>
+      <div class="cw-tree" id="cwTree"></div>
+      <div class="cw-trust-tabs" id="cwTrustTabs" hidden>
+        <button class="cw-trust-tab on" data-trust-tab="friends">Freunde</button>
+        <button class="cw-trust-tab" data-trust-tab="world">Welt</button>
+        <button class="cw-trust-tab" data-trust-tab="crews">Crews</button>
       </div>
       <div class="cw-list" id="cwList"></div>
     </section>
@@ -2341,6 +2515,14 @@ a{ color: var(--c-violet-3); text-decoration: none; }
       <div class="set-toggle-row">
         <div><div class="set-row-t">Zuletzt online verbergen</div><div class="set-row-s">Crew sieht nicht wann du zuletzt aktiv warst</div></div>
         <button class="set-toggle" id="setHideLast" type="button"></button>
+      </div>
+      <div class="set-toggle-row">
+        <div><div class="set-row-t">Stammbaum öffentlich</div><div class="set-row-s">Andere können deinen Safety-Circle-Tree sehen wenn sie auf deinem Profil sind</div></div>
+        <button class="set-toggle" id="setShowTree" type="button"></button>
+      </div>
+      <div class="set-toggle-row">
+        <div><div class="set-row-t">Im Welt-Ranking</div><div class="set-row-s">Erscheinst du im Top-Trust → Welt? (Opt-In · default aus)</div></div>
+        <button class="set-toggle" id="setWorldRank" type="button"></button>
       </div>
       <div class="set-info"><strong>EU-Server · DSGVO-konform.</strong> Alle Daten in Frankfurt. Auto-Expire auf alles. Recht auf Löschung + Datenexport (Tab Konto).</div>
     </div>
@@ -2782,7 +2964,11 @@ a{ color: var(--c-violet-3); text-decoration: none; }
     $('tab-' + name).classList.add('active');
     $$('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
     if (name === 'hotspots'){ initMap(); loadHotspots(); }
-    if (name === 'crew') renderCrew();
+    if (name === 'crew'){
+      $('cwTree').classList.toggle('show', cwTab === 'tree');
+      $('cwSearch').style.display = cwTab === 'tree' ? 'none' : '';
+      renderCrew();
+    }
     if (name === 'profile') renderProfile();
     if (name === 'home') renderHome();
     document.body.dataset.tab = name;
@@ -3459,23 +3645,202 @@ a{ color: var(--c-violet-3); text-decoration: none; }
   }));
 
   /* ============= CREW ============= */
-  let cwTab = 'all';
+  let cwTab = 'tree', cwTrustSubTab = 'friends';
   $$('.cw-tab').forEach(b => b.addEventListener('click', () => {
     $$('.cw-tab').forEach(x => x.classList.remove('on'));
     b.classList.add('on');
     cwTab = b.dataset.cwTab;
+    /* Tree-Visualisierung nur auf "tree" Tab */
+    $('cwTree').classList.toggle('show', cwTab === 'tree');
+    /* Trust-Sub-Tabs nur auf "trusted" */
+    $('cwTrustTabs').classList.toggle('show', cwTab === 'trusted');
+    /* Search hidden auf Tree */
+    $('cwSearch').style.display = cwTab === 'tree' ? 'none' : '';
+    renderCrew();
+  }));
+  $$('.cw-trust-tab').forEach(b => b.addEventListener('click', () => {
+    $$('.cw-trust-tab').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    cwTrustSubTab = b.dataset.trustTab;
     renderCrew();
   }));
   $('cwSearch').addEventListener('input', renderCrew);
 
+  /* ============= STAMMBAUM RENDER ============= */
+  async function renderCircleTree(){
+    const host = $('cwTree');
+    if (!host) return;
+    host.innerHTML = '<div class="empty"><div class="spinner" style="margin:80px auto"></div></div>';
+    try{
+      const r = await sb.rpc('get_circle_tree');
+      const members = (r && r.data) || [];
+      /* Self-Avatar */
+      const selfImg = profile.photo_url ? '<img src="'+esc(profile.photo_url)+'"/>' : esc(initials(profile.name || 'Du'));
+
+      /* Privacy-Toggle (eye / eye-off) */
+      const showTree = profile.show_circle_tree !== false;
+      const toggleSvg = showTree
+        ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>'
+        : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+
+      if (!members.length){
+        host.innerHTML = `
+          <button class="cw-tree-toggle ${showTree ? '' : 'private'}" id="cwTreeToggle" title="${showTree ? 'Stammbaum ist sichtbar für andere' : 'Stammbaum ist privat'}">${toggleSvg}</button>
+          <div class="cw-tree-empty">
+            <div class="you-bubble">${selfImg}</div>
+            <h4>Dein Safety-Stammbaum wartet</h4>
+            <p>Lade Freunde ein oder vernetze dich. Je näher die Person, desto näher im Kreis.</p>
+          </div>
+        `;
+        wireTreeToggle();
+        return;
+      }
+
+      /* SVG-Layout */
+      const SIZE = 440, CX = 0, CY = 0;
+      const RING_R = { 1: 80, 2: 140, 3: 200 };
+      /* Tier-Members gruppieren */
+      const tiers = { 1: [], 2: [], 3: [] };
+      members.forEach(m => { tiers[m.tier]?.push(m); });
+      /* Position auf Ring berechnen — verteilt rund (höchste position_score = oben/12-Uhr-Position) */
+      const placed = [];
+      [1, 2, 3].forEach(tier => {
+        const list = tiers[tier];
+        if (!list.length) return;
+        const r = RING_R[tier];
+        list.sort((a, b) => parseFloat(b.position_score) - parseFloat(a.position_score));
+        list.forEach((m, i) => {
+          const angle = -Math.PI / 2 + (i / list.length) * Math.PI * 2; /* start at top */
+          const x = CX + r * Math.cos(angle);
+          const y = CY + r * Math.sin(angle);
+          placed.push({ ...m, x, y, tier });
+        });
+      });
+
+      /* Connections + Nodes als SVG */
+      const connsHtml = placed.map(p =>
+        `<line class="cw-tree-conn tier-${p.tier}" x1="0" y1="0" x2="${p.x.toFixed(1)}" y2="${p.y.toFixed(1)}"/>`
+      ).join('');
+      const nodesHtml = placed.map(p => {
+        const r = 18;
+        const init = esc(initials(p.display_name || 'X'));
+        const photo = p.photo_url ? `<image href="${esc(p.photo_url)}" x="${(p.x-r).toFixed(1)}" y="${(p.y-r).toFixed(1)}" width="${r*2}" height="${r*2}" clip-path="circle(${r}px at ${p.x.toFixed(1)} ${p.y.toFixed(1)})" preserveAspectRatio="xMidYMid slice"/>` : '';
+        return `<g class="cw-tree-node tier-${p.tier}" data-uid="${p.user_id}" transform="translate(0 0)">
+          <circle class="cw-tree-node-circle" cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${r}"/>
+          ${photo || `<text class="cw-tree-node-init" x="${p.x.toFixed(1)}" y="${p.y.toFixed(1)}">${init}</text>`}
+        </g>`;
+      }).join('');
+
+      const selfR = 28;
+      const selfPhotoHtml = profile.photo_url
+        ? `<image href="${esc(profile.photo_url)}" x="${-selfR}" y="${-selfR}" width="${selfR*2}" height="${selfR*2}" clip-path="circle(${selfR}px at 0 0)" preserveAspectRatio="xMidYMid slice"/>`
+        : `<text class="cw-tree-node-init" x="0" y="0" style="font-size:14px">${esc(initials(profile.name || 'Du'))}</text>`;
+
+      host.innerHTML = `
+        <button class="cw-tree-toggle ${showTree ? '' : 'private'}" id="cwTreeToggle" title="${showTree ? 'Stammbaum sichtbar' : 'Stammbaum privat'}">${toggleSvg}</button>
+        <svg class="cw-tree-svg" viewBox="-220 -220 440 440">
+          <defs>
+            <radialGradient id="treeGradSelf">
+              <stop offset="0%" stop-color="#A855F7"/>
+              <stop offset="100%" stop-color="#6366F1"/>
+            </radialGradient>
+          </defs>
+          <circle class="cw-tree-ring tier-1" cx="0" cy="0" r="80"/>
+          <circle class="cw-tree-ring tier-2" cx="0" cy="0" r="140"/>
+          <circle class="cw-tree-ring tier-3" cx="0" cy="0" r="200"/>
+          <text class="cw-tree-ring-label" x="0" y="-86" text-anchor="middle">Safety-Circle</text>
+          <text class="cw-tree-ring-label" x="0" y="-146" text-anchor="middle">Crew</text>
+          <text class="cw-tree-ring-label" x="0" y="-206" text-anchor="middle">Bekannt</text>
+          ${connsHtml}
+          <circle class="cw-tree-self" cx="0" cy="0" r="${selfR}"/>
+          ${selfPhotoHtml}
+          ${nodesHtml}
+        </svg>
+      `;
+
+      /* Click auf Member → Trust-Modal */
+      host.querySelectorAll('.cw-tree-node').forEach(n => n.addEventListener('click', () => {
+        const uid = n.dataset.uid;
+        const m = members.find(x => x.user_id === uid);
+        if (m) openTrustRate({
+          user_id: m.user_id,
+          display_name: m.display_name,
+          photo_url: m.photo_url,
+          trust_avg: m.trust_avg,
+          activity_score: m.activity_score,
+          my_rating: 0
+        });
+      }));
+
+      wireTreeToggle();
+    }catch(e){
+      console.warn('renderCircleTree', e);
+      host.innerHTML = '<div class="empty"><p style="padding:40px 20px;color:var(--c-text-3)">Stammbaum konnte nicht geladen werden</p></div>';
+    }
+  }
+  function wireTreeToggle(){
+    const btn = $('cwTreeToggle');
+    if (!btn) return;
+    btn.addEventListener('click', async () => {
+      const newVal = !(profile.show_circle_tree !== false);
+      profile.show_circle_tree = newVal;
+      await sb.from('profiles').update({ show_circle_tree: newVal }).eq('user_id', user.id);
+      toast(newVal ? 'Stammbaum sichtbar für Crew' : 'Stammbaum auf privat', null, null, 'info');
+      renderCircleTree();
+    });
+  }
+
   async function renderCrew(){
+    /* Tree-Tab → eigene Render-Funktion */
+    if (cwTab === 'tree'){
+      $('cwList').innerHTML = '';
+      renderCircleTree();
+      return;
+    }
+
     const host = $('cwList');
     host.innerHTML = '<div class="empty"><div class="spinner" style="margin:20px auto"></div></div>';
+
+    /* World-Ranking Sub-Tab unter Top-Trust */
+    if (cwTab === 'trusted' && cwTrustSubTab === 'world'){
+      try{
+        const r = await sb.rpc('get_world_top_trust', { p_limit: 50 });
+        const data = (r && r.data) || [];
+        if (!data.length){
+          host.innerHTML = '<div class="empty with-emo"><img class="emo3d sz-hero" src="'+FX.crown+'" alt=""/><h4>Welt-Ranking leer</h4><p>Niemand hat sich öffentlich gestellt. In den Einstellungen → Privatsphäre kannst du dich opt-in setzen.</p></div>';
+          return;
+        }
+        host.innerHTML = data.map(m => {
+          const trust = parseFloat(m.trust_avg) || 0;
+          const stars = [1,2,3,4,5].map(i => '<span class="cw-star ' + (i <= Math.round(trust * 2)/2 ? 'on' : '') + '"></span>').join('');
+          return `<div class="cw-item world-rank" data-uid="${m.user_id}" data-rank="${m.rank_pos}">
+            <div class="ava">${m.photo_url ? '<img src="'+esc(m.photo_url)+'"/>' : initials(m.display_name)}</div>
+            <div class="info">
+              <div class="name">${esc(m.display_name)}${m.audience_profile && m.audience_profile !== 'general' ? '<span class="badge">'+esc(m.audience_profile)+'</span>' : ''}</div>
+              <div class="meta">${stars} · ${trust.toFixed(1)} · ${m.trust_count} Bewertung${m.trust_count !== 1 ? 'en' : ''}</div>
+            </div>
+          </div>`;
+        }).join('');
+        host.querySelectorAll('.cw-item').forEach(it => it.addEventListener('click', () => {
+          const member = data.find(x => x.user_id === it.dataset.uid);
+          if (member) openTrustRate(member);
+        }));
+        return;
+      }catch(e){ host.innerHTML = '<div class="empty"><p>Fehler beim Laden</p></div>'; return; }
+    }
+
     try{
       const r = await sb.rpc('get_crew_circle');
       let members = ((r && r.data) || []).filter(m => m.user_id !== user.id);
       if (cwTab === 'circle') members = members.filter(m => m.is_in_safety_circle);
-      else if (cwTab === 'trusted') members = members.filter(m => parseFloat(m.trust_avg) >= 4);
+      else if (cwTab === 'trusted'){
+        if (cwTrustSubTab === 'friends'){
+          members = members.filter(m => parseFloat(m.trust_avg) >= 4 && m.is_in_safety_circle);
+        } else if (cwTrustSubTab === 'crews'){
+          members = members.filter(m => parseFloat(m.trust_avg) >= 3.5);
+          members.sort((a,b) => parseFloat(b.trust_avg) - parseFloat(a.trust_avg));
+        }
+      }
       const search = $('cwSearch').value.toLowerCase().trim();
       if (search) members = members.filter(m => (m.display_name||'').toLowerCase().includes(search));
       if (!members.length){
@@ -3626,6 +3991,8 @@ a{ color: var(--c-violet-3); text-decoration: none; }
     /* Privacy */
     $('setShareLoc').classList.toggle('on', profile.safety_share_location !== false);
     $('setHideLast').classList.toggle('on', !!profile.hide_last_seen_from);
+    $('setShowTree').classList.toggle('on', profile.show_circle_tree !== false);
+    $('setWorldRank').classList.toggle('on', !!profile.show_in_world_ranking);
     /* Push prefs */
     const prefs = profile.notification_prefs || { sos: true, home: true, crew: true, spot: true, trust: false };
     document.querySelectorAll('[data-pref]').forEach(t => {
@@ -3725,6 +4092,20 @@ a{ color: var(--c-violet-3); text-decoration: none; }
     const on = !$('setHideLast').classList.contains('on');
     $('setHideLast').classList.toggle('on', on);
     await sb.from('profiles').update({ hide_last_seen_from: on ? [user.id] : null }).eq('user_id', user.id);
+  });
+  $('setShowTree').addEventListener('click', async () => {
+    const on = !$('setShowTree').classList.contains('on');
+    $('setShowTree').classList.toggle('on', on);
+    profile.show_circle_tree = on;
+    await sb.from('profiles').update({ show_circle_tree: on }).eq('user_id', user.id);
+    toast(on ? 'Stammbaum öffentlich' : 'Stammbaum privat', null, null, 'info');
+  });
+  $('setWorldRank').addEventListener('click', async () => {
+    const on = !$('setWorldRank').classList.contains('on');
+    $('setWorldRank').classList.toggle('on', on);
+    profile.show_in_world_ranking = on;
+    await sb.from('profiles').update({ show_in_world_ranking: on }).eq('user_id', user.id);
+    toast(on ? 'Im Welt-Ranking sichtbar' : 'Aus Welt-Ranking ausgestellt', null, null, 'info');
   });
 
   /* Push Prefs */
