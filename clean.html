@@ -918,8 +918,35 @@ a{ color: var(--c-violet-3); text-decoration: none; }
   justify-content: center;
 }
 .hs-pin-ic svg{ width: 14px; height: 14px; color: #fff; }
+.hs-pin-ic img.emo3d{ width: 22px; height: 22px; filter: drop-shadow(0 1px 2px rgba(0,0,0,.5)); }
 .hs-pin.mine .hs-pin-ic{ background: linear-gradient(135deg, var(--c-gold), var(--c-violet)); }
 .hs-pin.private .hs-pin-ic{ background: linear-gradient(135deg, #6B7280, #1F2937); }
+.hs-pin.official .hs-pin-ic{
+  background: linear-gradient(135deg, #28C878, #1ea860);
+  border-color: #6EE7B7;
+  box-shadow: 0 4px 14px rgba(40,200,120,.5), 0 0 0 2px rgba(40,200,120,.3);
+}
+.hs-pin.official.help .hs-pin-ic{
+  background: linear-gradient(135deg, #EF4444, #DC2626);
+  border-color: #FCA5A5;
+  box-shadow: 0 4px 14px rgba(239,68,68,.5), 0 0 0 2px rgba(239,68,68,.3);
+}
+.hs-pin.partner .hs-pin-ic{
+  background: linear-gradient(135deg, #FFD60A, #FF6D2E);
+  border-color: #FFE066;
+  box-shadow: 0 4px 14px rgba(255,214,10,.5);
+}
+.hs-pin.official::after{
+  content: '';
+  position: absolute;
+  top: 36px; left: 50%;
+  transform: translateX(-50%);
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  background: rgba(40,200,120,.3);
+  z-index: -1;
+  animation: livePulse 2.4s ease-in-out infinite;
+}
 .hs-pin-tail{
   position: absolute;
   bottom: 0; left: 50%;
@@ -944,6 +971,183 @@ a{ color: var(--c-violet-3); text-decoration: none; }
   align-items: center;
   justify-content: center;
 }
+
+/* View-Toggle (Map ↔ List) */
+.hs-view-toggle{
+  position: absolute;
+  top: calc(var(--safe-top) + 60px);
+  right: 12px;
+  z-index: 410;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  background: rgba(20, 16, 31, 0.95);
+  border: .5px solid var(--c-violet-line);
+  border-radius: var(--r-2);
+  overflow: hidden;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 4px 14px rgba(0,0,0,.45);
+}
+.hs-vt-btn{
+  width: 40px; height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: var(--c-text-3);
+  border: none;
+  transition: background .2s, color .2s;
+}
+.hs-vt-btn + .hs-vt-btn{ border-top: .5px solid var(--c-violet-line); }
+.hs-vt-btn.on{ background: linear-gradient(135deg, var(--c-violet), var(--c-violet-2)); color: #fff; }
+.hs-vt-btn svg{ width: 18px; height: 18px; }
+
+/* Hotspot-List-View (überlagert die Map wenn aktiv) */
+.hs-list-view{
+  position: absolute;
+  top: calc(var(--safe-top) + 56px);
+  left: 0; right: 0; bottom: var(--nav-h);
+  z-index: 405;
+  background: var(--c-bg);
+  overflow-y: auto;
+  padding: var(--s-3) var(--s-4) calc(var(--s-5) + 80px);
+}
+.hs-list-view[hidden]{ display: none; }
+.hs-list-head{
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: var(--s-3);
+}
+.hs-list-head h3{
+  font-size: 18px;
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: -.01em;
+}
+.hs-list-count{
+  font-size: 12px;
+  color: var(--c-text-3);
+  font-weight: 700;
+}
+.hs-list{
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+.hs-row{
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  padding: var(--s-3);
+  background: var(--c-surface-2);
+  border: .5px solid var(--c-violet-line);
+  border-radius: var(--r-3);
+  transition: transform .15s var(--ease);
+  cursor: pointer;
+}
+.hs-row:active{ transform: scale(.98); }
+.hs-row.official{ border-color: rgba(40,200,120,.45); background: rgba(40,200,120,.05); }
+.hs-row.official.help{ border-color: rgba(239,68,68,.45); background: rgba(239,68,68,.05); }
+.hs-row.partner{ border-color: rgba(255,214,10,.5); background: rgba(255,214,10,.05); }
+.hs-row-ic{
+  flex: none;
+  width: 48px; height: 48px;
+  border-radius: 14px;
+  background: var(--c-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: .5px solid var(--c-violet-line);
+}
+.hs-row.official .hs-row-ic{ background: rgba(40,200,120,.12); border-color: rgba(40,200,120,.4); }
+.hs-row.official.help .hs-row-ic{ background: rgba(239,68,68,.12); border-color: rgba(239,68,68,.4); }
+.hs-row.partner .hs-row-ic{ background: rgba(255,214,10,.14); border-color: rgba(255,214,10,.5); }
+.hs-row-ic img.emo3d{ width: 28px; height: 28px; filter: drop-shadow(0 1px 2px rgba(0,0,0,.4)); }
+.hs-row-info{ flex: 1; min-width: 0; }
+.hs-row-name{
+  font-size: 14px;
+  font-weight: 800;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.hs-row-meta{
+  font-size: 11px;
+  color: var(--c-text-2);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.hs-row-tag{
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 7px;
+  border-radius: 8px;
+  background: rgba(139,92,246,.16);
+  color: var(--c-violet-3);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .02em;
+}
+.hs-row-tag.official{ background: rgba(40,200,120,.18); color: #6EE7B7; }
+.hs-row-tag.help{ background: rgba(239,68,68,.18); color: #FCA5A5; }
+.hs-row-tag.partner{ background: rgba(255,214,10,.18); color: #FCD34D; }
+.hs-row-dist{
+  flex: none;
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--c-violet-3);
+  text-align: right;
+}
+.hs-list-empty{
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--c-text-3);
+}
+
+/* Hotspot-Detail: Kontakt-Buttons + Partner-Card */
+.dt-contact-row{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+.dt-contact-btn{
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 11px;
+  font-size: 12px;
+  font-weight: 700;
+  background: rgba(139,92,246,.14);
+  color: var(--c-violet-3);
+  border: .5px solid rgba(139,92,246,.4);
+  border-radius: var(--r-2);
+  text-decoration: none;
+  transition: background .15s var(--ease);
+}
+.dt-contact-btn:hover{ background: rgba(139,92,246,.25); }
+.dt-partner-card{
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-top: 16px;
+  padding: 12px;
+  background: linear-gradient(135deg, rgba(255,214,10,.12), rgba(255,109,46,.08));
+  border: .5px solid rgba(255,214,10,.4);
+  border-radius: var(--r-3);
+}
+.dt-partner-card img.emo3d{ width: 36px; height: 36px; flex: none; }
+.dt-partner-name{ font-size: 14px; font-weight: 800; color: #fff; }
+.dt-partner-tier{ font-size: 11px; color: #FCD34D; font-weight: 700; margin-top: 2px; }
 
 /* Filter-Bar */
 .hs-bar{
@@ -3401,12 +3605,27 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     <section class="tab" id="tab-hotspots">
       <div id="map"></div>
       <div class="hs-bar" id="hsBar"></div>
+      <div class="hs-view-toggle" id="hsViewToggle">
+        <button class="hs-vt-btn on" data-vt="map" aria-label="Karte">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+        </button>
+        <button class="hs-vt-btn" data-vt="list" aria-label="Liste in der Nähe">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        </button>
+      </div>
       <button class="map-mode-toggle" id="mapModeToggle" aria-label="Heatmap toggle">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="6" opacity=".5"/><circle cx="12" cy="12" r="9" opacity=".25"/></svg>
       </button>
       <button class="hs-fab" id="hsFab" aria-label="Spot anlegen">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
       </button>
+      <div class="hs-list-view" id="hsListView" hidden>
+        <div class="hs-list-head">
+          <h3>In der Nähe</h3>
+          <span class="hs-list-count" id="hsListCount">0 Treffer</span>
+        </div>
+        <div class="hs-list" id="hsList"></div>
+      </div>
       <div class="map-state" id="mapState" hidden>
         <div class="map-state-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s-7-7-7-12a7 7 0 0 1 14 0c0 5-7 12-7 12z"/><circle cx="12" cy="10" r="3"/></svg></div>
         <h4 id="mapStateTitle">Standort wird geladen …</h4>
@@ -4563,8 +4782,90 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     sosbtn:    FX_BASE + 'Sos%20button/3D/sos_button_3d.png',
     flex:      FX_BASE + 'Flexed%20biceps/Default/3D/flexed_biceps_3d_default.png',
     trophy:    FX_BASE + 'Trophy/3D/trophy_3d.png',
-    star:      FX_BASE + 'Star/3D/star_3d.png'
+    star:      FX_BASE + 'Star/3D/star_3d.png',
+    /* Hotspot-FX */
+    eye:       FX_BASE + 'Eye/3D/eye_3d.png',
+    folded:    FX_BASE + 'Folded%20hands/Default/3D/folded_hands_3d_default.png',
+    hospital:  FX_BASE + 'Hospital/3D/hospital_3d.png',
+    police:    FX_BASE + 'Police%20car/3D/police_car_3d.png',
+    pill:      FX_BASE + 'Pill/3D/pill_3d.png',
+    fire:      FX_BASE + 'Fire%20engine/3D/fire_engine_3d.png',
+    phone:     FX_BASE + 'Telephone%20receiver/3D/telephone_receiver_3d.png',
+    female:    FX_BASE + 'Female%20sign/3D/female_sign_3d.png',
+    rainbowfl: FX_BASE + 'Rainbow%20flag/3D/rainbow_flag_3d.png',
+    backpack:  FX_BASE + 'Backpack/3D/backpack_3d.png',
+    purpheart: FX_BASE + 'Purple%20heart/3D/purple_heart_3d.png',
+    train:     FX_BASE + 'Train/3D/train_3d.png',
+    fuel:      FX_BASE + 'Fuel%20pump/3D/fuel_pump_3d.png',
+    fork:      FX_BASE + 'Fork%20and%20knife%20with%20plate/3D/fork_and_knife_with_plate_3d.png',
+    cocktail:  FX_BASE + 'Cocktail%20glass/3D/cocktail_glass_3d.png',
+    hotel:     FX_BASE + 'Hotel/3D/hotel_3d.png',
+    coffee:    FX_BASE + 'Hot%20beverage/3D/hot_beverage_3d.png',
+    speech:    FX_BASE + 'Speech%20balloon/3D/speech_balloon_3d.png',
+    umbrella:  FX_BASE + 'Closed%20umbrella/3D/closed_umbrella_3d.png'
   };
+
+  /* Hotspot-Emoji-Map: zeigt welches 3D-Emoji für welche kind+subcategory */
+  const HS_KIND_FX = {
+    party:        'disco',
+    safe:         'shield',
+    trust:        'handshake',
+    live:         'satellite',
+    watch:        'eye',
+    community:    'hug',
+    safehaven:    'folded',
+    help_point:   'sosbtn',
+    partner_spot: 'crown'
+  };
+  const HS_SUB_FX = {
+    police:           'police',
+    hospital:         'hospital',
+    pharmacy:         'pill',
+    fire_station:     'fire',
+    helpline:         'phone',
+    counseling:       'speech',
+    women_shelter:    'female',
+    lgbtq_center:     'rainbowfl',
+    youth_center:     'backpack',
+    addiction_help:   'purpheart',
+    train_station:    'train',
+    gas_station_24h:  'fuel',
+    embassy:          'globe',
+    community_center: 'hug',
+    restaurant:       'fork',
+    bar:              'cocktail',
+    club:             'disco',
+    hotel:            'hotel',
+    cafe:             'coffee',
+    other:            'pin'
+  };
+  /* Helper: 3D-Emoji-URL für einen Hotspot bestimmen */
+  function hsFx(kind, subcategory){
+    const sub = subcategory && HS_SUB_FX[subcategory];
+    if (sub && FX[sub]) return FX[sub];
+    const k = kind && HS_KIND_FX[kind];
+    if (k && FX[k]) return FX[k];
+    return FX.pin;
+  }
+  function hsLabel(kind, subcategory){
+    const subLabels = {
+      police:'Polizei', hospital:'Krankenhaus', pharmacy:'Apotheke',
+      fire_station:'Feuerwehr', helpline:'Hotline', counseling:'Beratung',
+      women_shelter:'Frauenhaus', lgbtq_center:'LGBTQ+ Zentrum',
+      youth_center:'Jugendzentrum', addiction_help:'Suchthilfe',
+      train_station:'Bahnhof', gas_station_24h:'Tankstelle 24h',
+      embassy:'Botschaft', community_center:'Bürgerhaus',
+      restaurant:'Restaurant', bar:'Bar', club:'Club',
+      hotel:'Hotel', cafe:'Café', other:'Anlaufstelle'
+    };
+    if (subcategory && subLabels[subcategory]) return subLabels[subcategory];
+    const kindLabels = {
+      party:'Party', safe:'Safe-Spot', trust:'Trust',
+      live:'Live', watch:'Watch', community:'Community',
+      safehaven:'Schutzort', help_point:'Hilfe', partner_spot:'Partner'
+    };
+    return kindLabels[kind] || 'Spot';
+  }
   function emo3d(name, size){
     const url = FX[name] || FX.sparkles;
     return `<img class="emo3d ${size||''}" src="${url}" alt="" loading="lazy"/>`;
@@ -5157,30 +5458,120 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     renderHsBar();
   }
 
-  let hsFilter = null;
+  /* Hotspot-Filter-State */
+  let hsFilter = null;            /* Legacy-Single-Filter (für Kompat) */
+  let hsActiveFilter = null;      /* aktueller Kind-Filter */
+  let hsActiveSubcat = null;      /* optional Subkategorie-Filter */
+  let hsOnlyOfficial = false;
+  let hsViewMode = 'map';         /* 'map' | 'list' */
   function renderHsBar(){
     const bar = $('hsBar');
     const kinds = [
-      { id: '', t: 'Alle', ic: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>' },
-      { id: 'safe', t: 'Schutz', ic: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>' },
-      { id: 'trust', t: 'Trust', ic: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>' },
-      { id: 'live', t: 'Live', ic: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' },
-      { id: 'community', t: 'Community', ic: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>' }
+      { id: '', t: 'Alle',     fx: 'globe' },
+      { id: 'help_point',  t: 'Hilfe',     fx: 'sosbtn' },
+      { id: 'safehaven',   t: 'Schutz',    fx: 'folded' },
+      { id: 'partner_spot',t: 'Partner',   fx: 'crown' },
+      { id: 'safe',        t: 'Safe-Spot', fx: 'shield' },
+      { id: 'community',   t: 'Community', fx: 'hug' },
+      { id: 'live',        t: 'Live',      fx: 'satellite' },
+      { id: 'party',       t: 'Party',     fx: 'disco' },
+      { id: 'trust',       t: 'Trust',     fx: 'handshake' }
     ];
     bar.innerHTML = kinds.map(k => `
-      <button class="hs-chip ${k.id === (hsFilter || '') ? 'on' : ''}" data-k="${k.id}">
-        ${k.ic}<span>${k.t}</span>
+      <button class="hs-chip ${k.id === (hsActiveFilter || '') ? 'on' : ''}" data-k="${k.id}">
+        <img class="emo3d" style="width:18px;height:18px" src="${FX[k.fx] || FX.pin}" alt=""/><span>${k.t}</span>
       </button>
     `).join('');
     bar.querySelectorAll('.hs-chip').forEach(c => {
       c.addEventListener('click', () => {
-        hsFilter = c.dataset.k || null;
+        hsActiveFilter = c.dataset.k || null;
+        hsFilter = hsActiveFilter; /* Legacy-Sync */
+        hsActiveSubcat = null;     /* Subcat zurücksetzen wenn Hauptfilter wechselt */
         renderHsBar();
         loadHotspots();
       });
     });
   }
 
+  /* View-Toggle: Map ↔ List */
+  $$('.hs-vt-btn').forEach(b => b.addEventListener('click', () => {
+    $$('.hs-vt-btn').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    hsViewMode = b.dataset.vt;
+    const isList = hsViewMode === 'list';
+    $('hsListView').hidden = !isList;
+    /* Map sichtbar lassen darunter, aber Klicks blockieren wenn List aktiv */
+    if (isList) renderHsList();
+  }));
+
+  function renderHsList(){
+    const host = $('hsList');
+    const cnt  = $('hsListCount');
+    if (!host) return;
+    const spots = window._lastHsSpots || [];
+    if (cnt) cnt.textContent = spots.length + (spots.length === 1 ? ' Treffer' : ' Treffer');
+    if (!spots.length){
+      host.innerHTML = '<div class="hs-list-empty"><img class="emo3d sz-hero" src="' + FX.search + '" alt=""/><h4 style="margin:12px 0 4px">Nichts in der Nähe</h4><p style="font-size:12px">Filter ändern oder weiter rauszoomen.</p></div>';
+      return;
+    }
+    /* Sort: officials zuerst, dann nach distance */
+    const sorted = [...spots].sort((a, b) => {
+      if (a.is_official !== b.is_official) return a.is_official ? -1 : 1;
+      return (a.distance_km || 0) - (b.distance_km || 0);
+    });
+    host.innerHTML = sorted.map(h => {
+      const cls = ['hs-row'];
+      if (h.is_official){ cls.push('official'); if (h.kind === 'help_point') cls.push('help'); }
+      if (h.partner_tier === 'premium') cls.push('partner');
+      const dist = h.distance_km != null ? (h.distance_km < 1 ? Math.round(h.distance_km * 1000) + ' m' : h.distance_km.toFixed(1) + ' km') : '';
+      let tag = '';
+      if (h.is_official){
+        tag = h.kind === 'help_point'
+          ? '<span class="hs-row-tag help">Hilfe-Anlaufstelle</span>'
+          : '<span class="hs-row-tag official">Offiziell verifiziert</span>';
+      } else if (h.partner_tier === 'premium' || h.partner_name){
+        tag = '<span class="hs-row-tag partner">Partner</span>';
+      } else {
+        tag = '<span class="hs-row-tag">' + esc(hsLabel(h.kind, h.subcategory)) + '</span>';
+      }
+      const verifTick = h.hs_verified || h.is_official
+        ? '<span style="color:#6EE7B7"><svg viewBox="0 0 24 24" fill="currentColor" style="width:14px;height:14px;vertical-align:-3px"><path d="M12 1l3 3 4-1 1 4 3 3-3 3-1 4-4-1-3 3-3-3-4 1-1-4-3-3 3-3 1-4 4 1z"/><path d="M9 12l2 2 4-4" stroke="#0a0014" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>'
+        : '';
+      return '<div class="' + cls.join(' ') + '" data-id="' + h.id + '">' +
+        '<div class="hs-row-ic"><img class="emo3d" src="' + hsFx(h.kind, h.subcategory) + '" alt=""/></div>' +
+        '<div class="hs-row-info">' +
+          '<div class="hs-row-name">' + esc(h.name || hsLabel(h.kind, h.subcategory)) + verifTick + '</div>' +
+          '<div class="hs-row-meta">' + tag + (h.address ? '<span>' + esc(h.address.slice(0, 50)) + (h.address.length > 50 ? '…' : '') + '</span>' : (h.member_count > 0 ? '<span>' + h.member_count + ' dabei</span>' : '')) + '</div>' +
+        '</div>' +
+        (dist ? '<div class="hs-row-dist">' + dist + '</div>' : '') +
+        '</div>';
+    }).join('');
+    host.querySelectorAll('.hs-row').forEach(row => {
+      row.addEventListener('click', () => {
+        const h = spots.find(x => x.id === row.dataset.id);
+        if (h) openHotspotDetail(h);
+      });
+    });
+  }
+
+  /* Shared Pin-Renderer mit 3D-Emoji */
+  function buildHsPinHtml(h){
+    const cls = ['hs-pin'];
+    if (h.is_mine) cls.push('mine');
+    else if (h.visibility === 'private') cls.push('private');
+    if (h.is_official){
+      cls.push('official');
+      if (h.kind === 'help_point') cls.push('help');
+    }
+    if (h.partner_tier === 'premium') cls.push('partner');
+    const fxUrl = hsFx(h.kind, h.subcategory);
+    const inner = '<img class="emo3d" src="' + fxUrl + '" alt="" loading="lazy"/>';
+    return '<div class="' + cls.join(' ') + '">' +
+      '<div class="hs-pin-ic">' + inner + '</div>' +
+      (h.member_count > 0 ? '<div class="hs-pin-count">' + h.member_count + '</div>' : '') +
+      '<div class="hs-pin-tail"></div>' +
+      '</div>';
+  }
   async function loadHotspots(){
     if (!map) return;
     if (!userLat){
@@ -5190,28 +5581,22 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     }
     $('mapState').hidden = true;
     try{
-      const r = await sb.rpc('get_visible_hotspots_v2', {
+      const r = await sb.rpc('get_visible_hotspots_v3', {
         p_lat: userLat, p_lng: userLng, p_radius_km: 25,
-        p_kinds: hsFilter ? [hsFilter] : null, p_audience: null
+        p_kinds: hsFilter ? [hsFilter] : null, p_audience: null,
+        p_subcategories: null, p_only_official: false
       });
       const spots = (r && r.data) || [];
+      window._lastHsSpots = spots;
       mapMarkers.forEach(m => { try { map.removeLayer(m); } catch(e){} });
       mapMarkers = [];
       spots.forEach(h => {
-        const cls = h.is_mine ? 'hs-pin mine' : (h.visibility === 'private' ? 'hs-pin private' : 'hs-pin');
-        const html = `<div class="${cls}">
-          <div class="hs-pin-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="10" r="3"/></svg></div>
-          ${h.member_count > 0 ? '<div class="hs-pin-count">' + h.member_count + '</div>' : ''}
-          <div class="hs-pin-tail"></div>
-        </div>`;
+        const html = buildHsPinHtml(h);
         const icon = L.divIcon({ html, className: 'hs-pin-wrap', iconSize: [34, 42], iconAnchor: [17, 42] });
         const marker = L.marker([h.lat, h.lng], { icon }).addTo(map);
         marker.on('click', () => openHotspotDetail(h));
         mapMarkers.push(marker);
       });
-      if (!spots.length){
-        toast('Keine Spots in 25 km · Leg einen an');
-      }
     }catch(e){ console.warn('loadHotspots', e); }
   }
 
@@ -5395,12 +5780,49 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
         if (fresh && fresh.data) h = Object.assign(fresh.data, h);
       }catch(e){}
     }
-    $('dtName').textContent = h.name;
+    /* Name + Title-Sticker */
+    const titleEmo = '<img class="emo3d" style="width:24px;height:24px;vertical-align:-5px;margin-right:6px" src="' + hsFx(h.kind, h.subcategory) + '" alt=""/>';
+    $('dtName').innerHTML = titleEmo + esc(h.name || hsLabel(h.kind, h.subcategory));
     const dist = h.distance_km !== undefined && h.distance_km !== null
       ? (h.distance_km < 1 ? Math.round(h.distance_km*1000) + 'm' : h.distance_km.toFixed(1) + 'km')
       : '';
-    $('dtMeta').textContent = [h.kind, h.visibility, dist].filter(Boolean).join(' · ');
-    $('dtDesc').textContent = h.description || '';
+    /* Meta-Zeile mit Subcategory-Label statt rohem kind */
+    const kindLbl = hsLabel(h.kind, h.subcategory);
+    let metaLine = [kindLbl, h.visibility, dist].filter(Boolean).join(' · ');
+    if (h.is_official){
+      const verLbl = h.kind === 'help_point' ? 'Hilfe-Anlaufstelle' : 'Offiziell verifiziert';
+      metaLine = '✓ ' + verLbl + ' · ' + metaLine;
+    } else if (h.partner_tier === 'premium' || h.partner_name){
+      metaLine = '★ Partner · ' + metaLine;
+    }
+    $('dtMeta').textContent = metaLine;
+    /* Beschreibung + Adresse + Kontakt-Block */
+    let descHtml = '';
+    if (h.description) descHtml += esc(h.description);
+    if (h.address){
+      descHtml += (descHtml ? '<br/><br/>' : '') + '<span style="color:var(--c-violet-3);font-weight:700">📍 ' + esc(h.address) + '</span>';
+    }
+    if (h.opening_hours){
+      descHtml += (descHtml ? '<br/>' : '') + '<span style="color:var(--c-text-3);font-size:12px">🕒 ' + esc(h.opening_hours) + '</span>';
+    }
+    /* Kontakt-Buttons */
+    const kontaktBtns = [];
+    if (h.contact_phone) kontaktBtns.push('<a href="tel:' + esc(h.contact_phone) + '" class="dt-contact-btn">📞 ' + esc(h.contact_phone) + '</a>');
+    if (h.contact_website) kontaktBtns.push('<a href="' + esc(h.contact_website) + '" target="_blank" rel="noopener noreferrer" class="dt-contact-btn">🌐 Webseite</a>');
+    /* Open in Maps */
+    if (h.lat && h.lng) kontaktBtns.push('<a href="https://www.openstreetmap.org/?mlat=' + h.lat + '&mlon=' + h.lng + '#map=18/' + h.lat + '/' + h.lng + '" target="_blank" rel="noopener noreferrer" class="dt-contact-btn">🗺 Auf Karte</a>');
+    if (kontaktBtns.length){
+      descHtml += (descHtml ? '<br/><br/>' : '') + '<div class="dt-contact-row">' + kontaktBtns.join('') + '</div>';
+    }
+    /* Partner-Block */
+    if (h.partner_name){
+      descHtml += '<div class="dt-partner-card">' +
+        '<img class="emo3d" src="' + FX.crown + '" alt=""/>' +
+        '<div><div class="dt-partner-name">' + esc(h.partner_name) + '</div>' +
+        '<div class="dt-partner-tier">' + (h.partner_tier === 'premium' ? '★ Premium-Partner' : 'Partner-Stelle') + '</div></div>' +
+        '</div>';
+    }
+    $('dtDesc').innerHTML = descHtml;
 
     /* Photo */
     const photoBox = $('dtPhotoBox'), photoImg = $('dtPhotoImg'), verifBadge = $('dtVerifBadge');
@@ -7866,15 +8288,25 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     $('mapModeToggle').classList.toggle('heat', heatMode);
     loadHotspots();
   });
-  /* Override loadHotspots um Cluster + Heatmap zu nutzen */
+  /* Override loadHotspots um Cluster + Heatmap + 3D-Emoji-Pins zu nutzen */
   const _origLoad = loadHotspots;
   async function loadHotspotsEnhanced(){
     if (!map || !window.L) return;
     if (!userLat){ $('mapState').hidden = false; return; }
     $('mapState').hidden = true;
     try{
-      const r = await sb.rpc('get_visible_hotspots_v2', { p_lat: userLat, p_lng: userLng, p_radius_km: 25, p_kinds: hsFilter ? [hsFilter] : null, p_audience: null });
+      /* Radius je nach Filter: bei Officials weiter ausziehen */
+      const radius = hsActiveFilter && (hsActiveFilter === 'safehaven' || hsActiveFilter === 'help_point' || hsActiveFilter === 'partner_spot') ? 50 : 25;
+      const params = {
+        p_lat: userLat, p_lng: userLng, p_radius_km: radius,
+        p_kinds: hsActiveFilter ? [hsActiveFilter] : null,
+        p_audience: null,
+        p_subcategories: hsActiveSubcat ? [hsActiveSubcat] : null,
+        p_only_official: hsOnlyOfficial === true
+      };
+      const r = await sb.rpc('get_visible_hotspots_v3', params);
       const spots = (r && r.data) || [];
+      window._lastHsSpots = spots;
       /* Cleanup alte Marker */
       mapMarkers.forEach(m => { try { map.removeLayer(m); } catch(_){} });
       mapMarkers = [];
@@ -7892,8 +8324,7 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
       if (window.L.markerClusterGroup){
         clusterGroup = L.markerClusterGroup({ showCoverageOnHover: false, maxClusterRadius: 50 });
         spots.forEach(h => {
-          const cls = h.is_mine ? 'hs-pin mine' : (h.visibility === 'private' ? 'hs-pin private' : 'hs-pin');
-          const html = `<div class="${cls}"><div class="hs-pin-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="10" r="3"/></svg></div>${h.member_count > 0 ? '<div class="hs-pin-count">'+h.member_count+'</div>' : ''}<div class="hs-pin-tail"></div></div>`;
+          const html = buildHsPinHtml(h);
           const icon = L.divIcon({ html, className: 'hs-pin-wrap', iconSize: [34, 42], iconAnchor: [17, 42] });
           const marker = L.marker([h.lat, h.lng], { icon }).bindPopup(esc(h.name));
           marker.on('click', () => openHotspotDetail(h));
@@ -7901,16 +8332,16 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
         });
         map.addLayer(clusterGroup);
       } else {
-        /* Fallback zur Original-Funktion */
         spots.forEach(h => {
-          const cls = h.is_mine ? 'hs-pin mine' : (h.visibility === 'private' ? 'hs-pin private' : 'hs-pin');
-          const html = `<div class="${cls}"><div class="hs-pin-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="10" r="3"/></svg></div>${h.member_count > 0 ? '<div class="hs-pin-count">'+h.member_count+'</div>' : ''}<div class="hs-pin-tail"></div></div>`;
+          const html = buildHsPinHtml(h);
           const icon = L.divIcon({ html, className: 'hs-pin-wrap', iconSize: [34, 42], iconAnchor: [17, 42] });
           const marker = L.marker([h.lat, h.lng], { icon }).addTo(map);
           marker.on('click', () => openHotspotDetail(h));
           mapMarkers.push(marker);
         });
       }
+      /* Liste neu rendern wenn sichtbar */
+      if (typeof renderHsList === 'function') renderHsList();
     }catch(e){ console.warn('loadHotspotsEnhanced', e); }
   }
   loadHotspots = async function(){
