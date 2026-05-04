@@ -18812,4 +18812,464 @@ body{
 })();
 </script>
 
+<style id="bb-violetpolish">/* ============================================================
+   BB-VIOLETPOLISH — Pink-Restüberreste killen + SOS-Beacon-Rings + UX
+   ============================================================ */
+
+/* ---------- 1. AGGRESSIVE PINK → VIOLET OVERRIDE ---------- */
+/* Alle hartcodierten Pink-Hex-Werte aus alten Layern werden überschrieben */
+
+/* Buttons mit Pink-Gradient */
+[style*="linear-gradient(135deg, #FE3C72"],
+[style*="linear-gradient(135deg,#FE3C72"],
+[style*="linear-gradient(135deg, rgba(254,60,114"]{
+  background: linear-gradient(135deg, #8B5CF6, #6366F1) !important;
+}
+
+/* Border-Pink → Border-Violet */
+.priv-pill.live, .live-quick.broadcasting, .live-quick.on,
+.bb-toggle.on, .sc-switch.on,
+.cc-card.is-self, .ap-tile.active, .hw-kind.active, .hw-vis.active, .hw-ttl.active{
+  background: linear-gradient(135deg, rgba(139,92,246,.3), rgba(99,102,241,.1)) !important;
+  border-color: rgba(139,92,246,.55) !important;
+}
+
+/* SOS-Color-Picker: Pink-Swatch wird zu Violet */
+.bb-color-swatch.c-pink{
+  background: linear-gradient(135deg, #8B5CF6, #6366F1) !important;
+}
+
+/* Crew-Card Tier-Glow */
+.cc-card.tier-gold .cc-avatar{ box-shadow: 0 0 0 2px #FFD60A, 0 0 12px rgba(255,214,10,.4) !important; }
+.cc-card.tier-silver .cc-avatar{ box-shadow: 0 0 0 2px #8B5CF6, 0 0 8px rgba(139,92,246,.4) !important; }
+
+/* Old SOS-Color-Vars updaten falls Stealth aus ist */
+body:not(.sos-color-pink) .hdr-sos,
+body:not(.sos-color-pink) .hdr-btn.hdr-sos{
+  /* User wählt selber via Stealth-Settings */
+}
+
+/* Toast-Action Color */
+.tu-toast .tu-undo,
+.cc-section-action,
+.fy-section-h .more-btn,
+.contact-cta,
+.hd-act.pri,
+.bb-action-card.danger .bb-action-icon svg,
+.hd-act-join{
+  color: #C084FC !important;
+}
+
+/* Action-Cards Danger bleibt rot, aber subtiler */
+.bb-action-card.danger{
+  border-color: rgba(236,72,153,.3) !important;
+  background: rgba(236,72,153,.05) !important;
+}
+.bb-action-card.danger .bb-action-icon{ background: rgba(236,72,153,.18) !important; }
+.bb-action-card.danger .bb-action-title{ color: #EC4899 !important; }
+
+/* ---------- 2. SOS-BEACON-PULSE-RINGS ---------- */
+/* Der SOS-Knopf bekommt pulsierende konzentrische Ringe als Energie-Beacon */
+.hdr-sos, .hdr-btn.hdr-sos{
+  position: relative !important;
+  isolation: isolate;
+}
+.hdr-sos::before,
+.hdr-sos::after,
+.hdr-btn.hdr-sos::before,
+.hdr-btn.hdr-sos::after{
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  border-radius: 50% !important;
+  border: 2px solid rgba(236,72,153,.55) !important;
+  pointer-events: none !important;
+  z-index: -1 !important;
+  animation: sosBeaconRing 2.6s ease-out infinite !important;
+}
+.hdr-sos::after,
+.hdr-btn.hdr-sos::after{
+  animation-delay: 1.3s !important;
+  border-color: rgba(236,72,153,.4) !important;
+}
+@keyframes sosBeaconRing{
+  0%   { transform: scale(1);   opacity: .7; border-width: 2px; }
+  60%  { transform: scale(1.8); opacity: .3; border-width: 1.5px; }
+  100% { transform: scale(2.5); opacity: 0;  border-width: 1px; }
+}
+
+/* Stealth-Mode: Ringe verstecken */
+body.sos-stealth-active .hdr-sos::before,
+body.sos-stealth-active .hdr-sos::after,
+body.sos-stealth-active .hdr-btn.hdr-sos::before,
+body.sos-stealth-active .hdr-btn.hdr-sos::after{
+  display: none !important;
+}
+
+/* SafePlace-Nav-Button bekommt eigene subtile Pulse-Ringe (aber violet) */
+.bb-nav-final .bb-nav-btn.bb-nav-safeplace{
+  position: relative;
+  isolation: isolate;
+}
+.bb-nav-final .bb-nav-btn.bb-nav-safeplace::before{
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid rgba(139,92,246,.4);
+  pointer-events: none;
+  z-index: -1;
+  animation: spaBeacon 3.4s ease-out infinite;
+}
+@keyframes spaBeacon{
+  0%   { transform: scale(1);   opacity: .6; }
+  70%  { transform: scale(1.6); opacity: .15; }
+  100% { transform: scale(1.9); opacity: 0; }
+}
+
+/* ---------- 3. TAP-FEEDBACK Enhancement ---------- */
+button, .pmi, .bb-action-card, .cc-card, .sc-card, .qt-tile,
+.hw-kind, .hw-vis, .hw-ttl, .ap-tile, .frnd-item,
+.fy-quick-card, .fy-card, .hd-tab, .frnd-tab, .bb-help-tile{
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  transition: transform .12s cubic-bezier(.2,.7,.2,1), background .25s, border-color .25s, box-shadow .25s !important;
+}
+button:active, .pmi:active, .bb-action-card:active, .cc-card:active,
+.sc-card:active, .qt-tile:active, .hw-kind:active, .hw-vis:active, .hw-ttl:active,
+.ap-tile:active, .frnd-item:active, .fy-quick-card:active, .fy-card:active{
+  transform: scale(.97) !important;
+}
+
+/* Ripple-Effect für primary Buttons */
+.btn-pri, .ap-btn-pri, .hw-btn-pri, .ae-next, .tr-btn-save,
+.bb-help-row.sos, .hd-act.pri, .hd-act-join{
+  position: relative;
+  overflow: hidden;
+}
+.btn-pri::after, .ap-btn-pri::after, .hw-btn-pri::after,
+.ae-next::after, .tr-btn-save::after,
+.bb-help-row.sos::after, .hd-act.pri::after, .hd-act-join::after{
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at center, rgba(255,255,255,.3), transparent 70%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .35s;
+}
+.btn-pri:active::after, .ap-btn-pri:active::after, .hw-btn-pri:active::after,
+.ae-next:active::after, .tr-btn-save:active::after,
+.bb-help-row.sos:active::after{
+  opacity: 1;
+}
+
+/* ---------- 4. SMOOTH MODAL ANIMATIONS ---------- */
+.ap-modal, .hw-modal, .hd-modal, .tr-modal, .ae-modal, .set-ov, .bb-help-sheet{
+  transition: opacity .35s cubic-bezier(.2,.7,.2,1) !important;
+}
+.ap-card, .hw-card, .hd-card, .tr-card, .ae-card, .set-card, .bb-help-card{
+  transition: transform .4s cubic-bezier(.2,.7,.2,1), opacity .35s !important;
+}
+.ap-modal.on .ap-card,
+.hw-modal.on .hw-card,
+.hd-modal.on .hd-card,
+.tr-modal.on .tr-card,
+.ae-modal.on .ae-card,
+.bb-help-sheet.on .bb-help-card{
+  animation: modalIn .4s cubic-bezier(.2,.7,.2,1);
+}
+@keyframes modalIn{
+  from { transform: translateY(60px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* ---------- 5. SKELETON LOADERS ---------- */
+.bb-skeleton{
+  position: relative;
+  overflow: hidden;
+  background: rgba(139,92,246,.08);
+  border-radius: 12px;
+}
+.bb-skeleton::after{
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(139,92,246,.15), transparent);
+  animation: skeletonShimmer 1.4s linear infinite;
+}
+@keyframes skeletonShimmer{
+  to { left: 100%; }
+}
+.bb-skeleton-line{
+  height: 12px;
+  margin: 6px 0;
+  border-radius: 4px;
+  background: rgba(139,92,246,.08);
+  position: relative;
+  overflow: hidden;
+}
+.bb-skeleton-line.short{ width: 50%; }
+.bb-skeleton-line.medium{ width: 75%; }
+.bb-skeleton-line::after{
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(139,92,246,.18), transparent);
+  animation: skeletonShimmer 1.4s linear infinite;
+}
+
+/* ---------- 6. NAV-INDICATOR SMOOTH ---------- */
+.bb-nav-final .bb-nav-btn{
+  transition: color .25s, background .25s, transform .15s !important;
+}
+.bb-nav-final .bb-nav-btn:not(.active):hover{
+  color: rgba(255,255,255,.85) !important;
+}
+
+/* ---------- 7. SCROLL-Behaviour Refinement ---------- */
+.scr{
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+}
+.fy-feed, .frnd-list, .pmenu{
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ---------- 8. DEFOCUS EMPTY STATES ---------- */
+.fy-card[style*="opacity:.4"], .fy-card[style*="opacity: .4"]{
+  background: rgba(139,92,246,.03) !important;
+  border-color: rgba(139,92,246,.08) !important;
+}
+
+/* ---------- 9. INPUT FOCUS RING ---------- */
+input:focus, textarea:focus, .frnd-search:focus, .hw-input:focus, .hw-textarea:focus, .sc-input:focus{
+  outline: none !important;
+  border-color: rgba(139,92,246,.6) !important;
+  box-shadow: 0 0 0 3px rgba(139,92,246,.18) !important;
+}
+
+/* ---------- 10. ACTIVE-NAV-Pulse für Live/Heimweg ---------- */
+.bb-nav-final .bb-nav-btn.live-active::before{
+  content: '';
+  position: absolute;
+  top: 8px; right: 8px;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #28C878;
+  box-shadow: 0 0 0 0 rgba(40,200,120,.7);
+  animation: navLivePulse 1.6s ease-in-out infinite;
+}
+@keyframes navLivePulse{
+  0%, 100% { box-shadow: 0 0 0 0 rgba(40,200,120,.7); }
+  50% { box-shadow: 0 0 0 6px rgba(40,200,120,0); }
+}
+
+/* ---------- 11. POLISH FY-Cards ---------- */
+.fy-card{
+  transition: transform .2s, border-color .25s, background .25s;
+}
+.fy-card:hover{
+  border-color: rgba(139,92,246,.3);
+  background: rgba(139,92,246,.07);
+}
+.fy-card:active{ transform: scale(.99); }
+
+/* ---------- 12. Better Empty-State Typography ---------- */
+.fy-card .fy-card-content[style*="opacity"],
+.frnd-list > div[style*="text-align:center"]{
+  font-style: italic;
+  color: rgba(255,255,255,.55) !important;
+}
+
+/* ---------- 13. Header SOS-Button rosa-tönig (bleibt wie es ist) ---------- */
+.hdr-sos, .hdr-btn.hdr-sos{
+  background: linear-gradient(135deg, #EC4899, #BE185D) !important;
+  box-shadow: 0 4px 14px rgba(236,72,153,.45), inset 0 1px 0 rgba(255,255,255,.25) !important;
+  color: #fff !important;
+}
+
+/* ---------- 14. Glassmorphism Refinement ---------- */
+.fy-hero, .fy-card, .frnd-item, .pmi, .premium-cta,
+.bb-prof-quickstats, .bb-prof-quickbar > .bb-prof-quick-btn{
+  backdrop-filter: blur(10px) saturate(150%);
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
+}
+
+/* ---------- 15. Reduced Motion respektiert ---------- */
+@media (prefers-reduced-motion: reduce){
+  .hdr-sos::before, .hdr-sos::after,
+  .bb-nav-safeplace::before,
+  .bb-skeleton::after, .bb-skeleton-line::after,
+  .bb-nav-final .bb-nav-btn.live-active::before{
+    animation: none !important;
+  }
+}
+</style>
+<script id="bb-violetpolish-js">
+/* ============================================================
+   BB-VIOLETPOLISH — Inline-Style-Override + Live-State-Sync
+   ============================================================ */
+(function(){
+  'use strict';
+  if (window.__bbVioletPolishInit) return;
+  window.__bbVioletPolishInit = true;
+
+  /* ============= 1. Inline-Style Pink → Violet ============= */
+  function recolorInline(){
+    /* Walk through elements with style attribute containing pink */
+    var pinkPattern = /(#FE3C72|#FF1F5C|#FF6D2E|#D11A52|#FF3B6E|rgba\(254,\s*60,\s*114|rgba\(255,\s*109,\s*46|rgba\(209,\s*26,\s*82)/gi;
+    document.querySelectorAll('[style]').forEach(function(el){
+      if (el.dataset.bbRecolored) return;
+      var s = el.getAttribute('style');
+      if (!s) return;
+      if (!pinkPattern.test(s)) return;
+      pinkPattern.lastIndex = 0;
+      /* Replace */
+      var newStyle = s
+        .replace(/#FE3C72/gi, '#8B5CF6')
+        .replace(/#FF1F5C/gi, '#6366F1')
+        .replace(/#FF6D2E/gi, '#A855F7')
+        .replace(/#D11A52/gi, '#7C3AED')
+        .replace(/#FF3B6E/gi, '#8B5CF6')
+        .replace(/rgba\(254,\s*60,\s*114/g, 'rgba(139,92,246')
+        .replace(/rgba\(255,\s*109,\s*46/g, 'rgba(99,102,241')
+        .replace(/rgba\(209,\s*26,\s*82/g, 'rgba(124,58,237');
+      /* Don't recolor inline backgrounds of SOS elements (bleibt rosa) */
+      if (el.classList.contains('hdr-sos') || el.classList.contains('hdr-btn-sos') || el.id === 'sosBtn') return;
+      el.setAttribute('style', newStyle);
+      el.dataset.bbRecolored = '1';
+    });
+  }
+
+  /* ============= 2. Sync Live-Active in Nav ============= */
+  function syncNavLive(){
+    var nav = document.querySelector('.bb-nav-final');
+    if (!nav) return;
+    var liveOn = localStorage.getItem('bb-live-on') === '1' || localStorage.getItem('bb-homemode-active') === '1';
+    var safetyBtn = nav.querySelector('.bb-nav-safeplace');
+    if (safetyBtn){
+      safetyBtn.classList.toggle('live-active', liveOn);
+    }
+  }
+
+  /* ============= 3. Skeleton-Helper für Loaders ============= */
+  window.bbSkeleton = function(host, lines){
+    if (!host) return;
+    lines = lines || 3;
+    var html = '';
+    for (var i = 0; i < lines; i++){
+      var widthClass = i === 0 ? '' : (i === lines - 1 ? 'short' : 'medium');
+      html += '<div class="bb-skeleton-line ' + widthClass + '"></div>';
+    }
+    host.innerHTML = html;
+  };
+
+  /* ============= 4. Smooth Tab-Sync nach window.go ============= */
+  function patchGoForSync(){
+    if (typeof window.go !== 'function') return;
+    if (window.__bbGoPatched) return;
+    var origGo = window.go;
+    window.go = function(name, btn){
+      var result = origGo.apply(this, arguments);
+      /* Update Nav-Active */
+      var label = name === 'radar' ? 'hotspots'
+                : name === 'match' ? 'friends'
+                : name === 'crew' ? 'home'
+                : name === 'profile' ? 'profile'
+                : name;
+      document.body.setAttribute('data-current-screen', name);
+      var nav = document.querySelector('.bb-nav-final');
+      if (nav){
+        nav.querySelectorAll('.bb-nav-btn').forEach(function(b){
+          b.classList.toggle('active', b.getAttribute('data-target') === label);
+        });
+      }
+      return result;
+    };
+    window.__bbGoPatched = true;
+  }
+
+  /* ============= 5. Long-Press SafePlace-Nav-Button für SOS ============= */
+  function rebindSosLongPress(){
+    var btn = document.querySelector('.bb-nav-final .bb-nav-safeplace');
+    if (!btn || btn.dataset.bbSosBound) return;
+    btn.dataset.bbSosBound = '1';
+    var holdTimer = null;
+    var holdStarted = 0;
+    btn.addEventListener('touchstart', function(){
+      holdStarted = Date.now();
+      btn.classList.add('holding');
+      holdTimer = setTimeout(function(){
+        var sosBtn = document.querySelector('.hdr-sos, [data-action="sos"], #sosBtn, .hdr-btn.hdr-sos');
+        if (sosBtn) sosBtn.click();
+        try{ navigator.vibrate && navigator.vibrate([60,30,60]); }catch(e){}
+      }, 1200);
+    });
+    btn.addEventListener('touchend', function(){
+      btn.classList.remove('holding');
+      if (holdTimer) clearTimeout(holdTimer);
+      holdTimer = null;
+      holdStarted = 0;
+    });
+    btn.addEventListener('touchmove', function(){
+      btn.classList.remove('holding');
+      if (holdTimer) clearTimeout(holdTimer);
+      holdTimer = null;
+      holdStarted = 0;
+    });
+  }
+
+  /* ============= 6. Auto-Adjust Profile-Vibes (Background-Recolor) ============= */
+  function recolorLegacyProfile(){
+    var hero = document.querySelector('#screen-profile .prof-hero');
+    if (hero && !hero.dataset.bbVioletDone){
+      hero.style.background = 'linear-gradient(135deg, rgba(139,92,246,.18), rgba(99,102,241,.06))';
+      hero.style.border = '.5px solid rgba(139,92,246,.3)';
+      hero.dataset.bbVioletDone = '1';
+    }
+    var ava = document.querySelector('#screen-profile .prof-ava');
+    if (ava && !ava.dataset.bbVioletDone){
+      ava.style.background = 'linear-gradient(135deg, #8B5CF6, #6366F1)';
+      ava.dataset.bbVioletDone = '1';
+    }
+  }
+
+  /* ============= 7. Improve Map-Refresh on Tab-Switch ============= */
+  function improveMapRefresh(){
+    document.addEventListener('click', function(e){
+      var t = e.target;
+      if (!t || !t.closest) return;
+      var navBtn = t.closest('[data-target="hotspots"], [data-target="home"]');
+      if (navBtn){
+        setTimeout(function(){
+          if (typeof window.bbLoadHotspotsV2 === 'function') window.bbLoadHotspotsV2();
+          if (typeof window.bbMapRefresh === 'function') window.bbMapRefresh();
+        }, 500);
+      }
+    }, true);
+  }
+
+  /* ============= INIT ============= */
+  function init(){
+    recolorInline();
+    syncNavLive();
+    patchGoForSync();
+    rebindSosLongPress();
+    recolorLegacyProfile();
+    improveMapRefresh();
+
+    setInterval(function(){
+      recolorInline();
+      syncNavLive();
+      rebindSosLongPress();
+      recolorLegacyProfile();
+    }, 3000);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+
 </body></html>
