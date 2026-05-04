@@ -849,6 +849,212 @@ a{ color: var(--c-violet-3); text-decoration: none; }
   background: linear-gradient(135deg, var(--c-violet), var(--c-violet-2));
   color: #fff;
 }
+
+/* ============================================================
+   USER-CREWS V2 — Crews-Tab + Modals
+   ============================================================ */
+.cc-tabs{
+  display: flex;
+  gap: 4px;
+  padding: 3px;
+  background: var(--c-surface-2);
+  border-radius: var(--r-1);
+  margin-bottom: var(--s-3);
+}
+.cc-tab{
+  flex: 1;
+  padding: 8px;
+  border-radius: var(--r-1);
+  color: var(--c-text-3);
+  font-size: 12px;
+  font-weight: 800;
+}
+.cc-tab.on{
+  background: linear-gradient(135deg, var(--c-violet), var(--c-violet-2));
+  color: #fff;
+}
+.uc-list{
+  display: flex; flex-direction: column;
+  gap: var(--s-2);
+  padding: 0 var(--s-4);
+}
+.uc-item{
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  padding: var(--s-3);
+  background: var(--c-surface-2);
+  border: .5px solid var(--c-violet-line);
+  border-radius: var(--r-3);
+  cursor: pointer;
+  transition: transform .15s var(--ease);
+}
+.uc-item:active{ transform: scale(.98); }
+.uc-item-emo{
+  flex: none;
+  width: 44px; height: 44px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(139,92,246,.2), rgba(99,102,241,.12));
+  border: .5px solid var(--c-violet-line);
+  display: flex; align-items: center; justify-content: center;
+}
+.uc-item-emo img{ width: 26px; height: 26px; }
+.uc-item-info{ flex: 1; min-width: 0; }
+.uc-item-name{ font-size: 14px; font-weight: 800; color: #fff; }
+.uc-item-meta{ font-size: 11px; color: var(--c-text-3); margin-top: 2px; }
+.uc-item-badge{
+  flex: none;
+  min-width: 22px; height: 22px;
+  padding: 0 7px;
+  border-radius: 11px;
+  background: linear-gradient(135deg, var(--c-violet), var(--c-violet-2));
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+}
+.uc-item-badge.empty{ display: none; }
+.uc-empty{
+  padding: 40px 24px;
+  text-align: center;
+}
+.uc-empty img.emo3d{ width: 72px; height: 72px; }
+.uc-empty h4{ font-size: 16px; font-weight: 800; margin: 12px 0 6px; }
+.uc-empty p{ font-size: 13px; color: var(--c-text-3); margin: 0 0 14px; line-height: 1.5; }
+.uc-add-fab{
+  position: absolute;
+  right: 16px; bottom: calc(var(--nav-h) + 16px);
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--c-violet), var(--c-violet-2));
+  color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 6px 18px rgba(139,92,246,.5);
+  z-index: 100;
+}
+.uc-add-fab svg{ width: 24px; height: 24px; }
+
+/* Crew-Detail-Modal */
+.cdm-card{
+  display: flex; flex-direction: column;
+  height: min(700px, 92vh);
+  padding: 0;
+  overflow: hidden;
+}
+.cdm-head{
+  display: flex; align-items: center; gap: 12px;
+  padding: var(--s-4) var(--s-4) var(--s-3);
+  border-bottom: .5px solid var(--c-violet-line);
+}
+.cdm-emoji{
+  width: 48px; height: 48px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(139,92,246,.25), rgba(99,102,241,.15));
+  display: flex; align-items: center; justify-content: center;
+  flex: none;
+}
+.cdm-emoji img{ width: 30px; height: 30px; }
+.cdm-title-wrap{ flex: 1; min-width: 0; }
+.cdm-title{ font-size: 18px; font-weight: 900; margin: 0; letter-spacing: -.01em; }
+.cdm-meta{ font-size: 12px; color: var(--c-text-3); margin: 2px 0 0; }
+.cdm-tabs{
+  display: flex; gap: 4px;
+  padding: 6px var(--s-4);
+  background: var(--c-surface-2);
+  border-bottom: .5px solid var(--c-violet-line);
+}
+.cdm-tab{
+  flex: 1;
+  padding: 7px;
+  border-radius: var(--r-1);
+  color: var(--c-text-3);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .02em;
+}
+.cdm-tab.on{ background: linear-gradient(135deg, var(--c-violet), var(--c-violet-2)); color: #fff; }
+.cdm-pane{ display: none; flex: 1; min-height: 0; flex-direction: column; }
+.cdm-pane.on{ display: flex; }
+.cdm-thread{
+  flex: 1; overflow-y: auto;
+  padding: var(--s-3) var(--s-4);
+  display: flex; flex-direction: column;
+  gap: 4px;
+  background: var(--c-surface);
+}
+.cdm-msg{
+  max-width: 80%;
+  padding: 8px 12px;
+  border-radius: var(--r-3);
+  font-size: 13px;
+  line-height: 1.4;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+.cdm-msg.me{
+  align-self: flex-end;
+  background: linear-gradient(135deg, var(--c-violet), var(--c-violet-2));
+  color: #fff;
+  border-bottom-right-radius: 6px;
+}
+.cdm-msg.them{
+  align-self: flex-start;
+  background: var(--c-surface-2);
+  border: .5px solid var(--c-violet-line);
+  color: var(--c-text);
+  border-bottom-left-radius: 6px;
+}
+.cdm-msg-from{
+  font-size: 10px;
+  color: var(--c-violet-3);
+  font-weight: 800;
+  margin-bottom: 2px;
+}
+.cdm-msg-time{
+  font-size: 10px;
+  color: var(--c-text-3);
+  margin-top: 2px;
+  font-weight: 700;
+}
+.cdm-msg.me .cdm-msg-time{ color: rgba(255,255,255,.6); text-align: right; }
+.cdm-input-row{
+  display: flex;
+  align-items: flex-end;
+  gap: var(--s-2);
+  padding: var(--s-3);
+  border-top: .5px solid var(--c-violet-line);
+  background: var(--c-surface-2);
+}
+.cdm-map{
+  flex: 1; min-height: 280px;
+  background: var(--c-surface-2);
+}
+.cdm-map .leaflet-container{ background: #14101f; }
+.cdm-map-note{
+  font-size: 11px;
+  color: var(--c-text-3);
+  margin: 8px 12px;
+}
+.cdm-pane[data-cdm-pane="settings"]{
+  padding: var(--s-4);
+  overflow-y: auto;
+}
+.cdm-invite{
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px;
+  background: var(--c-surface-2);
+  border: .5px solid var(--c-violet-line);
+  border-radius: var(--r-2);
+}
+.cdm-invite-label{ font-size: 11px; color: var(--c-text-3); font-weight: 800; }
+.cdm-invite-code{
+  flex: 1;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: .15em;
+  color: #fff;
+}
 .fcard:active{ transform: scale(.99); }
 .fcard-head{
   display: flex;
@@ -3901,6 +4107,7 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
         <button class="cw-tab on" data-cw-tab="tree"><span>Stammbaum</span></button>
         <button class="cw-tab" data-cw-tab="circle"><span>Safety-Circle</span><span class="cw-tab-badge" id="cwBadgeCircle">0</span></button>
         <button class="cw-tab" data-cw-tab="all"><span>Alle</span><span class="cw-tab-badge" id="cwBadgeAll">0</span></button>
+        <button class="cw-tab" data-cw-tab="mycrews"><span>Crews</span><span class="cw-tab-badge" id="cwBadgeMy">0</span></button>
         <button class="cw-tab" data-cw-tab="trusted"><span>Top-Trust</span></button>
         <button class="cw-tab" data-cw-tab="map"><span>Map</span></button>
       </div>
@@ -4245,6 +4452,85 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
 </div>
 
 <!-- DIRECT-MESSAGE MODAL -->
+<!-- CREATE/JOIN CREW MODAL -->
+<div class="modal center" id="crewCreateModal">
+  <div class="modal-card">
+    <button class="modal-close" data-close="crewCreateModal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <div class="modal-hero-emo" style="margin-bottom:8px"><img class="emo3d sz-hero" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/People%20hugging/3D/people_hugging_3d.png" alt=""/></div>
+    <h2 class="modal-h" style="text-align:center;margin-top:0">Crew starten</h2>
+    <p class="modal-sub" style="text-align:center">Familie, Festival-Buddies, Uni-Klasse … private Gruppe mit Chat + Live-Map.</p>
+    <div class="cc-tabs">
+      <button class="cc-tab on" data-cc-tab="create">Erstellen</button>
+      <button class="cc-tab" data-cc-tab="join">Beitreten</button>
+    </div>
+    <div id="ccPanelCreate">
+      <div class="field"><label>Crew-Name</label><input id="ccName" placeholder="z.B. Stuttgart Squad" maxlength="60"/></div>
+      <div class="field"><label>Beschreibung (optional)</label><textarea id="ccDesc" placeholder="Was macht eure Crew aus?" maxlength="280" rows="2"></textarea></div>
+      <label class="auth-check" style="margin-top:8px"><input type="checkbox" id="ccPrivate" checked/><span>Privat (nur per Code beitreten)</span></label>
+      <div class="modal-actions">
+        <button class="btn-sec" data-close="crewCreateModal">Abbrechen</button>
+        <button class="btn-pri" id="ccCreateBtn">Crew anlegen</button>
+      </div>
+    </div>
+    <div id="ccPanelJoin" hidden>
+      <div class="field"><label>Einlade-Code</label><input id="ccCode" placeholder="z.B. ABC123" maxlength="20" style="text-transform:uppercase;font-family:ui-monospace,monospace;letter-spacing:.15em"/></div>
+      <div class="modal-actions">
+        <button class="btn-sec" data-close="crewCreateModal">Abbrechen</button>
+        <button class="btn-pri" id="ccJoinBtn">Beitreten</button>
+      </div>
+    </div>
+    <div id="ccError" class="auth-error"></div>
+  </div>
+</div>
+
+<!-- CREW DETAIL MODAL — Chat + Live-Map + Settings -->
+<div class="modal" id="crewDetailModal">
+  <div class="modal-card cdm-card">
+    <button class="modal-close" data-close="crewDetailModal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <div class="cdm-head">
+      <div class="cdm-emoji"><img class="emo3d" id="cdmEmoji" src="" alt=""/></div>
+      <div class="cdm-title-wrap">
+        <h2 class="cdm-title" id="cdmName">Crew</h2>
+        <p class="cdm-meta" id="cdmMeta">– Mitglieder</p>
+      </div>
+    </div>
+    <div class="cdm-tabs">
+      <button class="cdm-tab on" data-cdm-tab="chat">Chat</button>
+      <button class="cdm-tab" data-cdm-tab="map">Live-Map</button>
+      <button class="cdm-tab" data-cdm-tab="settings">Settings</button>
+    </div>
+    <div class="cdm-pane on" data-cdm-pane="chat">
+      <div class="cdm-thread" id="cdmThread"></div>
+      <div class="cdm-input-row">
+        <textarea class="dm-input" id="cdmInput" placeholder="Nachricht an Crew …" rows="1" maxlength="2000"></textarea>
+        <button class="dm-send" id="cdmSend"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+      </div>
+    </div>
+    <div class="cdm-pane" data-cdm-pane="map">
+      <div class="cdm-map" id="cdmMap"></div>
+      <p class="cdm-map-note" id="cdmMapStatus">Lade Live-Standorte …</p>
+    </div>
+    <div class="cdm-pane" data-cdm-pane="settings">
+      <div class="cdm-invite">
+        <div class="cdm-invite-label">Einladungs-Code</div>
+        <div class="cdm-invite-code" id="cdmInviteCode">––––––</div>
+        <button class="btn-sec" id="cdmCopyCode">Kopieren</button>
+      </div>
+      <div class="set-toggle-row" style="margin-top:14px">
+        <div><strong>Live-Standort teilen</strong><br/><span style="font-size:12px;color:var(--c-text-3)">Crew sieht meine Position auf der Crew-Map</span></div>
+        <button class="set-toggle" id="cdmShareLive"><span></span></button>
+      </div>
+      <div class="set-toggle-row">
+        <div><strong>Pings empfangen</strong><br/><span style="font-size:12px;color:var(--c-text-3)">Push-Benachrichtigungen für Crew-Nachrichten</span></div>
+        <button class="set-toggle" id="cdmReceiveAlerts"><span></span></button>
+      </div>
+      <div class="modal-actions" style="margin-top:18px">
+        <button class="btn-sec" id="cdmLeaveBtn" style="color:#F472B6">Crew verlassen</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="modal" id="dmModal">
   <div class="modal-card dm-card">
     <button class="modal-close" data-close="dmModal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
@@ -6929,6 +7215,11 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
       renderCrewMapTab();
       return;
     }
+    /* My-Crews-Tab */
+    if (cwTab === 'mycrews'){
+      renderMyCrewsList();
+      return;
+    }
 
     const host = $('cwList');
     host.innerHTML = '<div class="empty"><div class="spinner" style="margin:20px auto"></div></div>';
@@ -7365,6 +7656,253 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     }catch(e){ toast('Fehler: ' + (e.message || e)); }
     finally{ $('dmSend').disabled = false; }
   });
+
+  /* ============= MY-CREWS V2 ============= */
+  let myCrewsCache = [];
+  let cdmCurrent = null, cdmChannel = null, cdmMap = null, cdmMapMarkers = [];
+
+  async function renderMyCrewsList(){
+    const host = $('cwList');
+    if (!host) return;
+    host.innerHTML = '<div class="empty"><div class="spinner" style="margin:20px auto"></div></div>';
+    try{
+      const r = await sb.rpc('list_my_crews_v2');
+      myCrewsCache = (r && r.data) || [];
+      const badge = $('cwBadgeMy');
+      if (badge){ badge.textContent = myCrewsCache.length; badge.classList.toggle('empty', !myCrewsCache.length); }
+      if (!myCrewsCache.length){
+        host.innerHTML = '<div class="uc-empty"><img class="emo3d" src="' + FX.hug + '" alt=""/><h4>Noch keine eigenen Crews</h4><p>Starte deine erste Crew (Familie, Festival-Buddies …) — privater Chat + Live-Map nur für die Mitglieder.</p><div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap"><button class="btn-pri" id="ucCreateBtn">Crew erstellen</button><button class="btn-sec" id="ucJoinBtn">Mit Code beitreten</button></div></div>';
+        $('ucCreateBtn')?.addEventListener('click', () => openCrewCreateModal('create'));
+        $('ucJoinBtn')?.addEventListener('click', () => openCrewCreateModal('join'));
+      } else {
+        host.innerHTML = '<div class="uc-list">' + myCrewsCache.map(c => {
+          const fxKey = c.emoji && FX[c.emoji] ? c.emoji : 'crew';
+          const lastTime = c.last_msg_at ? timeAgo(c.last_msg_at) : 'noch keine Nachrichten';
+          return '<div class="uc-item" data-id="' + c.id + '">' +
+            '<div class="uc-item-emo"><img class="emo3d" src="' + FX[fxKey] + '" alt=""/></div>' +
+            '<div class="uc-item-info">' +
+              '<div class="uc-item-name">' + esc(c.name) + (c.my_role === 'owner' ? ' <span style="font-size:9px;background:rgba(255,214,10,.2);color:var(--c-gold);padding:2px 6px;border-radius:6px;font-weight:800">OWNER</span>' : '') + '</div>' +
+              '<div class="uc-item-meta">' + c.member_count + ' Mitglied' + (c.member_count !== '1' ? 'er' : '') + ' · ' + esc(lastTime) + '</div>' +
+            '</div>' +
+          '</div>';
+        }).join('') + '</div>' +
+        '<button class="uc-add-fab" id="ucAddFab" title="Neue Crew"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>';
+        host.querySelectorAll('.uc-item').forEach(it => it.addEventListener('click', () => {
+          const c = myCrewsCache.find(x => x.id === it.dataset.id);
+          if (c) openCrewDetail(c);
+        }));
+        $('ucAddFab')?.addEventListener('click', () => openCrewCreateModal('create'));
+      }
+    }catch(e){ host.innerHTML = '<div class="uc-empty"><h4>Fehler</h4><p>' + esc(e.message || e) + '</p></div>'; }
+  }
+
+  function openCrewCreateModal(mode){
+    /* Reset state */
+    ['ccName','ccDesc','ccCode'].forEach(id => { const el = $(id); if (el) el.value = ''; });
+    if ($('ccPrivate')) $('ccPrivate').checked = true;
+    $('ccError').classList.remove('show');
+    /* Tab-State */
+    $$('.cc-tab').forEach(b => b.classList.toggle('on', b.dataset.ccTab === mode));
+    $('ccPanelCreate').hidden = mode !== 'create';
+    $('ccPanelJoin').hidden = mode !== 'join';
+    openModal('crewCreateModal');
+  }
+  $$('.cc-tab').forEach(b => b.addEventListener('click', () => {
+    const mode = b.dataset.ccTab;
+    $$('.cc-tab').forEach(x => x.classList.toggle('on', x === b));
+    $('ccPanelCreate').hidden = mode !== 'create';
+    $('ccPanelJoin').hidden = mode !== 'join';
+    $('ccError').classList.remove('show');
+  }));
+  $$('[data-close="crewCreateModal"]').forEach(b => b.addEventListener('click', () => closeModal('crewCreateModal')));
+  $('ccCreateBtn').addEventListener('click', async () => {
+    const name = $('ccName').value.trim();
+    const desc = $('ccDesc').value.trim() || null;
+    const isPrivate = $('ccPrivate').checked;
+    if (name.length < 2){ const e = $('ccError'); e.textContent = 'Name fehlt (min 2 Zeichen)'; e.classList.add('show'); return; }
+    const btn = $('ccCreateBtn'); btn.disabled = true; btn.textContent = 'Lege an …';
+    try{
+      const r = await sb.rpc('create_my_crew', { p_name: name, p_description: desc, p_emoji: 'crew', p_is_private: isPrivate });
+      if (r.error) throw r.error;
+      toast('Crew „' + name + '" angelegt', null, null, 'success');
+      closeModal('crewCreateModal');
+      await renderMyCrewsList();
+      const newC = myCrewsCache.find(x => x.id === r.data);
+      if (newC) setTimeout(() => openCrewDetail(newC), 200);
+    }catch(e){ const er = $('ccError'); er.textContent = 'Fehler: ' + (e.message || e); er.classList.add('show'); }
+    finally{ btn.disabled = false; btn.textContent = 'Crew anlegen'; }
+  });
+  $('ccJoinBtn').addEventListener('click', async () => {
+    const code = $('ccCode').value.trim().toUpperCase();
+    if (code.length < 4){ const e = $('ccError'); e.textContent = 'Code zu kurz'; e.classList.add('show'); return; }
+    const btn = $('ccJoinBtn'); btn.disabled = true; btn.textContent = 'Trete bei …';
+    try{
+      const r = await sb.rpc('join_my_crew_by_code', { p_code: code });
+      if (r.error) throw r.error;
+      const data = r.data || {};
+      toast('Crew „' + (data.name || '') + '" beigetreten', null, null, 'success');
+      closeModal('crewCreateModal');
+      await renderMyCrewsList();
+    }catch(e){ const er = $('ccError'); er.textContent = (e.message || '').includes('INVALID_CODE') ? 'Code ungültig' : ('Fehler: ' + (e.message || e)); er.classList.add('show'); }
+    finally{ btn.disabled = false; btn.textContent = 'Beitreten'; }
+  });
+
+  async function openCrewDetail(crew){
+    cdmCurrent = crew;
+    /* Reset Tab-State */
+    $$('.cdm-tab').forEach(b => b.classList.toggle('on', b.dataset.cdmTab === 'chat'));
+    $$('.cdm-pane').forEach(p => p.classList.toggle('on', p.dataset.cdmPane === 'chat'));
+    /* Header */
+    $('cdmEmoji').src = FX[crew.emoji && FX[crew.emoji] ? crew.emoji : 'crew'];
+    $('cdmName').textContent = crew.name;
+    $('cdmMeta').textContent = crew.member_count + ' Mitglied' + (crew.member_count !== '1' ? 'er' : '');
+    /* Settings */
+    $('cdmInviteCode').textContent = crew.invite_code || '––––––';
+    $('cdmShareLive').classList.toggle('on', !!crew.share_live);
+    $('cdmReceiveAlerts').classList.toggle('on', !!crew.receive_alerts);
+    /* Chat laden */
+    await loadCdmThread();
+    /* Realtime-Channel */
+    if (cdmChannel){ try{ sb.removeChannel(cdmChannel); }catch(_){} cdmChannel = null; }
+    cdmChannel = sb.channel('crewmsg:' + crew.id)
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'user_crew_messages_v2', filter: 'crew_id=eq.' + crew.id }, () => loadCdmThread())
+      .subscribe();
+    openModal('crewDetailModal');
+  }
+  async function loadCdmThread(){
+    if (!cdmCurrent) return;
+    try{
+      const r = await sb.rpc('get_my_crew_messages', { p_crew_id: cdmCurrent.id, p_limit: 100 });
+      const msgs = ((r && r.data) || []).reverse();
+      const host = $('cdmThread');
+      if (!msgs.length){
+        host.innerHTML = '<div class="dm-empty">Noch keine Nachrichten — schreib die erste!</div>';
+        return;
+      }
+      let html = '', lastDay = '';
+      msgs.forEach(m => {
+        const d = new Date(m.created_at);
+        const day = d.toLocaleDateString('de-DE');
+        if (day !== lastDay){
+          const today = new Date().toLocaleDateString('de-DE');
+          const lbl = day === today ? 'Heute' : day;
+          html += '<div class="dm-day-divider">' + lbl + '</div>';
+          lastDay = day;
+        }
+        const me = m.sender_id === user.id;
+        const time = d.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+        html += '<div class="cdm-msg ' + (me ? 'me' : 'them') + '">' +
+          (!me ? '<div class="cdm-msg-from">' + esc(m.sender_name) + '</div>' : '') +
+          esc(m.body) +
+          '<div class="cdm-msg-time">' + time + '</div>' +
+        '</div>';
+      });
+      host.innerHTML = html;
+      host.scrollTop = host.scrollHeight;
+    }catch(e){ console.warn('cdm thread', e); }
+  }
+  $$('.cdm-tab').forEach(b => b.addEventListener('click', () => {
+    $$('.cdm-tab').forEach(x => x.classList.toggle('on', x === b));
+    $$('.cdm-pane').forEach(p => p.classList.toggle('on', p.dataset.cdmPane === b.dataset.cdmTab));
+    if (b.dataset.cdmTab === 'map') initCdmMap();
+  }));
+  function initCdmMap(){
+    if (!window.L || !cdmCurrent) return;
+    setTimeout(async () => {
+      if (!cdmMap){
+        try{
+          const ll = (typeof userLat === 'number') ? [userLat, userLng] : [50.5, 9.0];
+          cdmMap = L.map('cdmMap', { zoomControl: true, attributionControl: false }).setView(ll, 11);
+          L.tileLayer('https://basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { maxZoom: 19 }).addTo(cdmMap);
+        }catch(e){ console.warn('cdmMap init', e); }
+      }
+      try{ cdmMap.invalidateSize(); }catch(_){}
+      try{
+        cdmMapMarkers.forEach(m => { try{ cdmMap.removeLayer(m); }catch(_){} });
+        cdmMapMarkers = [];
+        const r = await sb.rpc('get_my_crew_locations', { p_crew_id: cdmCurrent.id });
+        const locs = (r && r.data) || [];
+        $('cdmMapStatus').textContent = locs.length ? (locs.length + ' online') : 'Niemand teilt gerade Live-Standort';
+        const bounds = window.L && L.latLngBounds ? L.latLngBounds([]) : null;
+        if (typeof userLat === 'number' && bounds) bounds.extend([userLat, userLng]);
+        locs.forEach(l => {
+          const moodObj = MOODS.find(m => m.id === l.mood);
+          const moodImg = moodObj ? '<img class="emo3d" style="width:14px;height:14px" src="'+FX[moodObj.fx]+'" alt=""/>' : '';
+          const html = '<div class="live-pin"><div class="live-pin-ava">' +
+            (l.photo_url ? '<img src="'+esc(l.photo_url)+'"/>' : esc(initials(l.display_name))) +
+            '</div>' + (moodImg ? '<div class="live-pin-status">'+moodImg+'</div>' : '') +
+            '<div class="live-pin-tail"></div></div>';
+          const icon = L.divIcon({ html, className: 'live-pin-wrap', iconSize: [44,50], iconAnchor: [22,50] });
+          const marker = L.marker([l.lat, l.lng], { icon }).addTo(cdmMap)
+            .bindPopup('<strong>' + esc(l.display_name) + '</strong><br/><small>' + timeAgo(l.updated_at) + '</small>');
+          cdmMapMarkers.push(marker);
+          if (bounds) bounds.extend([l.lat, l.lng]);
+        });
+        if (locs.length && bounds){ try{ cdmMap.fitBounds(bounds, { padding: [40,40], maxZoom: 14 }); }catch(_){} }
+      }catch(e){ console.warn('crew-map locs', e); $('cdmMapStatus').textContent = 'Fehler beim Laden'; }
+    }, 80);
+  }
+  $('cdmInput').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); $('cdmSend').click(); }
+  });
+  $('cdmInput').addEventListener('input', e => {
+    e.target.style.height = '40px';
+    e.target.style.height = Math.min(e.target.scrollHeight, 120) + 'px';
+  });
+  $('cdmSend').addEventListener('click', async () => {
+    if (!cdmCurrent) return;
+    const body = $('cdmInput').value.trim();
+    if (!body) return;
+    $('cdmSend').disabled = true;
+    try{
+      await sb.rpc('send_my_crew_message', { p_crew_id: cdmCurrent.id, p_body: body });
+      $('cdmInput').value = '';
+      $('cdmInput').style.height = '40px';
+      await loadCdmThread();
+    }catch(e){ toast('Fehler: ' + (e.message || e)); }
+    finally{ $('cdmSend').disabled = false; }
+  });
+  $('cdmCopyCode').addEventListener('click', () => {
+    const code = $('cdmInviteCode').textContent;
+    try{ navigator.clipboard.writeText(code); toast('Code kopiert: ' + code, null, null, 'success'); }
+    catch(_){ toast('Code: ' + code); }
+  });
+  $('cdmShareLive').addEventListener('click', async () => {
+    if (!cdmCurrent) return;
+    const newVal = !cdmCurrent.share_live;
+    try{
+      await sb.rpc('set_my_crew_settings', { p_crew_id: cdmCurrent.id, p_share_live: newVal });
+      cdmCurrent.share_live = newVal;
+      $('cdmShareLive').classList.toggle('on', newVal);
+      toast(newVal ? 'Live-Standort wird mit Crew geteilt' : 'Live-Sharing aus', null, null, 'info');
+    }catch(e){ toast('Fehler: ' + (e.message || e)); }
+  });
+  $('cdmReceiveAlerts').addEventListener('click', async () => {
+    if (!cdmCurrent) return;
+    const newVal = !cdmCurrent.receive_alerts;
+    try{
+      await sb.rpc('set_my_crew_settings', { p_crew_id: cdmCurrent.id, p_receive_alerts: newVal });
+      cdmCurrent.receive_alerts = newVal;
+      $('cdmReceiveAlerts').classList.toggle('on', newVal);
+    }catch(e){ toast('Fehler: ' + (e.message || e)); }
+  });
+  $('cdmLeaveBtn').addEventListener('click', async () => {
+    if (!cdmCurrent) return;
+    if (!confirm('„' + cdmCurrent.name + '" wirklich verlassen?')) return;
+    try{
+      await sb.rpc('leave_my_crew', { p_crew_id: cdmCurrent.id });
+      toast('Crew verlassen', null, null, 'warning');
+      closeModal('crewDetailModal');
+      cdmCurrent = null;
+      if (cdmChannel){ try{ sb.removeChannel(cdmChannel); }catch(_){} cdmChannel = null; }
+      renderMyCrewsList();
+    }catch(e){ toast('Fehler: ' + (e.message || e)); }
+  });
+  $$('[data-close="crewDetailModal"]').forEach(b => b.addEventListener('click', () => {
+    if (cdmChannel){ try{ sb.removeChannel(cdmChannel); }catch(_){} cdmChannel = null; }
+    cdmCurrent = null;
+    closeModal('crewDetailModal');
+  }));
 
   /* ============= TRUST RATE ============= */
   const TR_TAGS = ['zuverlässig', 'aktiv', 'ehrlich', 'hilfsbereit', 'pünktlich', 'loyal', 'einfühlsam', 'verantwortungsvoll', 'cool', 'ruhig', 'lustig', 'vertrauensvoll'];
