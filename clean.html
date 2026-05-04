@@ -113,6 +113,12 @@ a{ color: var(--c-violet-3); text-decoration: none; }
     radial-gradient(ellipse at 70% 80%, rgba(99,102,241,.18) 0%, transparent 50%);
 }
 #auth.gone{ display: none; }
+.auth-wave{
+  display: block;
+  width: 56px; height: 56px;
+  margin: 0 auto -2px;
+  animation: emoFloat 4s ease-in-out infinite;
+}
 .auth-logo{
   font-size: 56px;
   font-weight: 900;
@@ -122,6 +128,7 @@ a{ color: var(--c-violet-3); text-decoration: none; }
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  line-height: 1;
 }
 .auth-logo .dot{
   -webkit-text-fill-color: var(--c-violet);
@@ -136,11 +143,14 @@ a{ color: var(--c-violet-3); text-decoration: none; }
 .auth-card{
   width: 100%;
   max-width: 380px;
+  min-height: 540px;             /* Stabilisiert Höhe bei Tab-Wechsel — kein Sprung */
   background: var(--c-surface);
   border: .5px solid var(--c-line);
   border-radius: var(--r-4);
   padding: var(--s-5);
   backdrop-filter: blur(20px);
+  display: flex;
+  flex-direction: column;
 }
 .auth-tabs{
   display: flex;
@@ -2208,15 +2218,23 @@ a{ color: var(--c-violet-3); text-decoration: none; }
 .modal{
   position: fixed; inset: 0;
   z-index: 2000;
-  background: rgba(5,5,12,.92);
+  background: rgba(0,0,0,.78);                       /* dunkler Backdrop, falls backdrop-filter scheitert */
   backdrop-filter: blur(24px) saturate(180%);
   -webkit-backdrop-filter: blur(24px) saturate(180%);
-  display: flex;
+  display: none;                                     /* statt flex+opacity — verhindert "halb-offen"-States */
   align-items: flex-end;
   justify-content: center;
   opacity: 0;
   pointer-events: none;
-  transition: opacity .35s var(--ease);
+  transition: opacity .3s var(--ease);
+}
+.modal.on{
+  display: flex;
+  opacity: 1;
+  pointer-events: auto;
+}
+@supports (backdrop-filter: blur(1px)){
+  .modal{ background: rgba(5,5,12,.86); }
 }
 .modal.center{ align-items: center; padding: var(--s-5); }
 .modal.on{ opacity: 1; pointer-events: auto; }
@@ -3564,7 +3582,7 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
 
 <!-- AUTH SCREEN -->
 <div id="auth">
-  <img class="emo3d sz-xl" style="margin:0 auto 12px;animation:emoFloat 4s ease-in-out infinite" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Waving%20hand/Default/3D/waving_hand_3d_default.png" alt=""/>
+  <img class="emo3d sz-xl auth-wave" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Waving%20hand/Default/3D/waving_hand_3d_default.png" alt=""/>
   <div class="auth-logo">crew<span class="dot">.</span></div>
   <p class="auth-tagline">Connection + Safety Network für die, denen du vertraust.</p>
   <div class="auth-card">
@@ -5169,9 +5187,9 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     $('authPanelWaitlist').hidden = !isWl;
     /* Sign-Up-Hinweis (Locked-Note) nur im Sign-Up-Modus */
     $('authSignupNote').hidden = mode !== 'signup';
-    /* Submit-Button-Label */
-    $('authSubmit').textContent = mode === 'login' ? 'Login' : (mode === 'signup' ? 'Sign-Up' : 'Login');
     setAuthError('');
+    /* Submit-Button-State (Label + disabled wenn Tor zu) */
+    if (typeof syncAuthSubmitState === 'function') syncAuthSubmitState();
   }
   $$('.auth-tab').forEach(t => {
     t.addEventListener('click', () => {
@@ -5220,6 +5238,21 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
       note.innerHTML = signupOpen
         ? '<img class="emo3d" style="width:16px;height:16px;vertical-align:-3px" src="' + FX.locked + '" alt=""/> Sign-Up nur für freigegebene Warteliste-Mitglieder.'
         : '<img class="emo3d" style="width:16px;height:16px;vertical-align:-3px" src="' + FX.locked + '" alt=""/> Sign-Up-Tor ist gerade <strong>zu</strong>. Du kannst dich auf die Warteliste setzen — wir öffnen sobald wir bereit sind.';
+    }
+    /* Submit-Button im Sign-Up-Mode disablen wenn Tor zu */
+    syncAuthSubmitState();
+  }
+  function syncAuthSubmitState(){
+    const sub = $('authSubmit'); if (!sub) return;
+    const mode = authMode.current;
+    if (mode === 'signup' && !signupOpen){
+      sub.disabled = true;
+      sub.textContent = '🔒 Sign-Up gesperrt';
+      sub.classList.add('locked-btn');
+    } else {
+      sub.disabled = false;
+      sub.textContent = mode === 'login' ? 'Login' : 'Sign-Up';
+      sub.classList.remove('locked-btn');
     }
   }
   refreshSignupGate();
@@ -8154,16 +8187,17 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     if (id === 'safeplaceModal') loadSpContacts();
     const m = $(id);
     if (!m) return;
-    m.style.display = 'flex';
-    /* Force layout flush, dann sofort .on setzen — robust gegen rAF-Edge-Cases */
-    void m.offsetHeight;
+    /* CSS macht display: none → .on → display: flex. Inline-Style löschen falls
+       altes closeModal style.display='none' gesetzt hat */
+    m.style.display = '';
+    void m.offsetHeight; /* force reflow für clean transition */
     m.classList.add('on');
   }
   function closeModal(id){
     const m = $(id);
     if (!m) return;
     m.classList.remove('on');
-    setTimeout(() => { m.style.display = 'none'; }, 280);
+    /* display:none kommt automatisch via CSS-Regel — kein style.display manipulieren */
   }
   /* Backdrop click */
   $$('.modal').forEach(m => m.addEventListener('click', e => {
