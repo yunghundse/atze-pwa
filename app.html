@@ -12915,4 +12915,625 @@ body.spots-active{
 })();
 </script>
 
+<style id="bb-room-trust">/* ============================================================
+   BB-ROOM-TRUST — Spot-Auto-Join + Room-Entry + Crew-Circle Trust
+   ============================================================ */
+
+/* ---------- 1. SUCCESS-CONFETTI nach Spot-Anlegen ---------- */
+.spot-confetti{
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9998;
+  pointer-events: none;
+  animation: spotPop .8s cubic-bezier(.2,.7,.2,1);
+}
+.spot-confetti svg{
+  width: 80px; height: 80px;
+  color: #28C878;
+  filter: drop-shadow(0 4px 12px rgba(40,200,120,.5));
+}
+@keyframes spotPop{
+  0% { transform: translate(-50%,-50%) scale(0); opacity: 0; }
+  20% { transform: translate(-50%,-50%) scale(1.2); opacity: 1; }
+  60% { transform: translate(-50%,-50%) scale(1); opacity: 1; }
+  100% { transform: translate(-50%,-50%) scale(.6); opacity: 0; }
+}
+
+/* ---------- 2. CREW-CIRCLE Container ---------- */
+.cc-section{
+  margin: 16px 0;
+}
+.cc-section-head{
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 16px;
+  margin-bottom: 10px;
+}
+.cc-section-title{
+  font-size: 11px; font-weight: 800;
+  letter-spacing: .14em; text-transform: uppercase;
+  color: rgba(255,255,255,.5);
+  margin: 0;
+}
+.cc-section-action{
+  font-size: 11px; font-weight: 700;
+  color: #FE3C72;
+  background: none; border: 0;
+  cursor: pointer;
+}
+
+.cc-list{
+  padding: 0 16px;
+  display: flex; flex-direction: column; gap: 10px;
+}
+
+.cc-card{
+  background: rgba(255,255,255,.04);
+  border: .5px solid rgba(255,255,255,.08);
+  border-radius: 16px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  position: relative;
+  cursor: pointer;
+  transition: transform .15s, border-color .2s;
+}
+.cc-card:active{ transform: scale(.98); }
+.cc-card.is-self{
+  border-color: rgba(254,60,114,.4);
+  background: linear-gradient(135deg, rgba(254,60,114,.1), rgba(255,109,46,.04));
+}
+.cc-card.is-trusted{
+  border-color: rgba(40,200,120,.3);
+}
+
+.cc-avatar{
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FE3C72, #FF6D2E);
+  flex: none;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0;
+}
+.cc-avatar::after{
+  content:'';
+  width: 24px; height: 24px;
+  background: #fff;
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/><circle cx='12' cy='7' r='4'/></svg>") no-repeat center / contain;
+          mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/><circle cx='12' cy='7' r='4'/></svg>") no-repeat center / contain;
+}
+.cc-avatar-trust-ring{
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  background: linear-gradient(135deg, #28C878, #FFD60A) border-box;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) padding-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+}
+
+.cc-info{ flex: 1; min-width: 0; }
+.cc-name-row{ display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.cc-name{
+  font-size: 15px; font-weight: 800;
+  color: #fff;
+  margin: 0;
+  letter-spacing: -.01em;
+}
+.cc-profile-tag{
+  font-size: 9px; font-weight: 800;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: rgba(168,85,247,.15);
+  color: #C084FC;
+}
+.cc-stars{
+  display: flex; align-items: center; gap: 2px;
+  margin-top: 4px;
+}
+.cc-star{
+  width: 12px; height: 12px;
+  background: rgba(255,255,255,.15);
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'><polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/></svg>") no-repeat center / contain;
+          mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'><polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/></svg>") no-repeat center / contain;
+}
+.cc-star.on{ background: linear-gradient(135deg, #FFD60A, #FF6D2E); }
+.cc-trust-text{
+  font-size: 11px;
+  color: rgba(255,255,255,.5);
+  margin-left: 6px;
+}
+
+.cc-tags{
+  display: flex; gap: 4px; flex-wrap: wrap;
+  margin-top: 6px;
+}
+.cc-tag{
+  font-size: 10px; font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(40,200,120,.1);
+  color: #28C878;
+}
+
+.cc-meter{
+  flex: none;
+  width: 36px; height: 36px;
+  position: relative;
+}
+.cc-meter svg{ transform: rotate(-90deg); }
+.cc-meter-bg{ stroke: rgba(255,255,255,.08); fill: none; stroke-width: 3; }
+.cc-meter-fg{
+  stroke: url(#ccGrad);
+  fill: none;
+  stroke-width: 3;
+  stroke-linecap: round;
+  transition: stroke-dashoffset .5s ease;
+}
+.cc-meter-text{
+  position: absolute;
+  inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px;
+  font-weight: 800;
+  color: #fff;
+}
+
+/* ---------- 3. TRUST-RATE-MODAL ---------- */
+.tr-modal{
+  position: fixed; inset: 0; z-index: 2100;
+  background: rgba(5,5,10,.92);
+  backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px;
+  opacity: 0; pointer-events: none;
+  transition: opacity .25s;
+}
+.tr-modal.on{ opacity: 1; pointer-events: auto; }
+.tr-card{
+  width: 100%; max-width: 460px;
+  background: #0F0F18;
+  border: .5px solid rgba(255,255,255,.08);
+  border-radius: 24px;
+  padding: 28px 24px 24px;
+  text-align: center;
+  transform: translateY(20px);
+  transition: transform .3s cubic-bezier(.2,.7,.2,1);
+}
+.tr-modal.on .tr-card{ transform: translateY(0); }
+.tr-avatar-big{
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FE3C72, #FF6D2E);
+  margin: 0 auto 14px;
+  position: relative;
+}
+.tr-avatar-big::after{
+  content:'';
+  position: absolute; inset: 0;
+  width: 32px; height: 32px;
+  margin: auto;
+  background: #fff;
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/><circle cx='12' cy='7' r='4'/></svg>") no-repeat center / contain;
+          mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/><circle cx='12' cy='7' r='4'/></svg>") no-repeat center / contain;
+}
+.tr-name-big{
+  font-size: 22px; font-weight: 900;
+  color: #fff;
+  margin: 0 0 6px;
+  letter-spacing: -.02em;
+}
+.tr-sub{
+  font-size: 13px;
+  color: rgba(255,255,255,.6);
+  margin: 0 0 24px;
+}
+.tr-stars-row{
+  display: flex; justify-content: center; gap: 8px;
+  margin-bottom: 20px;
+}
+.tr-star-btn{
+  width: 40px; height: 40px;
+  background: rgba(255,255,255,.05);
+  border: 0;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform .12s, background .25s;
+}
+.tr-star-btn:active{ transform: scale(.9); }
+.tr-star-btn::after{
+  content:'';
+  width: 22px; height: 22px;
+  background: rgba(255,255,255,.25);
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'><polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/></svg>") no-repeat center / contain;
+          mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'><polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/></svg>") no-repeat center / contain;
+  transition: background .25s;
+}
+.tr-star-btn.on::after{ background: linear-gradient(135deg, #FFD60A, #FF6D2E); }
+.tr-star-btn.on{ background: rgba(255,214,10,.12); }
+
+.tr-tags-grid{
+  display: flex; flex-wrap: wrap; gap: 6px;
+  justify-content: center;
+  margin-bottom: 20px;
+  max-height: 120px;
+  overflow-y: auto;
+}
+.tr-tag-pill{
+  font-size: 12px; font-weight: 700;
+  padding: 7px 12px;
+  background: rgba(255,255,255,.04);
+  border: .5px solid rgba(255,255,255,.08);
+  border-radius: 999px;
+  color: rgba(255,255,255,.7);
+  cursor: pointer;
+  transition: all .15s;
+}
+.tr-tag-pill.on{
+  background: linear-gradient(135deg, #FE3C72, #FF6D2E);
+  border-color: transparent;
+  color: #fff;
+}
+.tr-actions{
+  display: flex; gap: 10px;
+}
+.tr-btn-cancel{
+  flex: 1; padding: 12px;
+  background: rgba(255,255,255,.04);
+  border: .5px solid rgba(255,255,255,.1);
+  border-radius: 12px;
+  color: rgba(255,255,255,.7);
+  font-weight: 700; font-size: 14px;
+  cursor: pointer;
+}
+.tr-btn-save{
+  flex: 1; padding: 12px;
+  background: linear-gradient(135deg, #FE3C72, #FF6D2E);
+  border: 0;
+  border-radius: 12px;
+  color: #fff;
+  font-weight: 800; font-size: 14px;
+  cursor: pointer;
+}
+.tr-btn-save:disabled{ opacity: .4; cursor: not-allowed; }
+
+/* ---------- 4. TRUST-RING (Avatar-Outline für hohe Scores) ---------- */
+.cc-card.tier-gold .cc-avatar{
+  box-shadow: 0 0 0 2px #FFD60A, 0 0 12px rgba(255,214,10,.3);
+}
+.cc-card.tier-silver .cc-avatar{
+  box-shadow: 0 0 0 2px #28C878, 0 0 8px rgba(40,200,120,.3);
+}
+.cc-card.tier-bronze .cc-avatar{
+  box-shadow: 0 0 0 1.5px rgba(255,255,255,.3);
+}
+
+/* ---------- 5. EMPTY-STATE ---------- */
+.cc-empty{
+  text-align: center;
+  padding: 36px 24px;
+  background: rgba(255,255,255,.03);
+  border: .5px dashed rgba(255,255,255,.1);
+  border-radius: 18px;
+  margin: 16px;
+}
+.cc-empty h4{
+  font-size: 15px; font-weight: 800;
+  color: rgba(255,255,255,.85);
+  margin: 0 0 6px;
+}
+.cc-empty p{
+  font-size: 12px;
+  color: rgba(255,255,255,.5);
+  margin: 0 0 12px;
+  line-height: 1.5;
+}
+
+/* ---------- 6. POLISH: Detail-Card weicher ---------- */
+.hd-modal, .hw-modal, .ap-modal, .tr-modal{
+  transition: opacity .35s cubic-bezier(.2,.7,.2,1) !important;
+}
+.hd-card, .hw-card, .ap-card, .tr-card{
+  transition: transform .4s cubic-bezier(.2,.7,.2,1), opacity .35s !important;
+}
+</style>
+<script id="bb-room-trust-js">
+/* ============================================================
+   BB-ROOM-TRUST — Auto-Join nach Create + Crew-Circle + Trust-System
+   ============================================================ */
+(function(){
+  'use strict';
+  if (window.__bbRoomTrustInit) return;
+  window.__bbRoomTrustInit = true;
+
+  var sb = function(){ return window.sb || window.supabase; };
+  async function getUid(){
+    try{ var u = await sb().auth.getUser(); return u && u.data && u.data.user && u.data.user.id || null; }catch(e){ return null; }
+  }
+  function escapeHtml(s){
+    if (!s) return '';
+    return String(s).replace(/[&<>"']/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]; });
+  }
+
+  /* ============= 1. WIZARD-OVERRIDE: nach Create → Auto-Join + Room ============= */
+  /* Wir hijacken den Insert-Flow durch Listener auf hotspot-INSERT-Realtime */
+  function setupCreateHook(){
+    /* Beobachte den Wizard-Submit-Button und stelle sicher dass nach erfolgreichem
+       Create der User auch sofort als Member eingetragen wird und der Room aufgeht */
+    var sbCli = sb();
+    if (!sbCli) { setTimeout(setupCreateHook, 1500); return; }
+    /* Globaler Realtime auf hotspots: wenn ICH einen Spot anlege, automatisch Auto-Join + Detail öffnen */
+    try{
+      sbCli.channel('rt-my-hotspots-create')
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'hotspots' }, async function(payload){
+          var uid = await getUid();
+          if (!uid) return;
+          var h = payload.new;
+          if (h && h.owner_id === uid){
+            /* Auto-Join */
+            try{
+              await sbCli.from('hotspot_members').upsert({
+                hotspot_id: h.id, user_id: uid, status: 'joined', joined_at: new Date().toISOString()
+              }, { onConflict: 'hotspot_id,user_id' });
+            }catch(e){ console.warn('[bb-room] auto-join fail', e); }
+            /* Confetti + Detail öffnen */
+            showSpotConfetti();
+            setTimeout(function(){
+              if (window.bbHotspotV3 && window.bbHotspotV3.openDetail){
+                /* Distance + count berechnen wenn nicht da */
+                if (!h.distance_km && window.userLat){
+                  h.distance_km = haversine(window.userLat, window.userLng, h.lat, h.lng);
+                }
+                h.is_mine = true;
+                h.member_count = 1;
+                window.bbHotspotV3.openDetail(h);
+              }
+              if (window.bbToast) window.bbToast('Spot „'+escapeHtml(h.name)+'" angelegt — Crew kann beitreten');
+            }, 600);
+            /* Map refresh */
+            if (typeof window.bbLoadHotspotsV2 === 'function') window.bbLoadHotspotsV2();
+          }
+        })
+        .subscribe();
+    }catch(e){ console.warn('[bb-room] subscribe fail', e); }
+  }
+  function haversine(lat1, lng1, lat2, lng2){
+    var R = 6371;
+    var toRad = function(d){ return d * Math.PI / 180; };
+    var dLat = toRad(lat2 - lat1);
+    var dLng = toRad(lng2 - lng1);
+    var a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLng/2)**2;
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  }
+  function showSpotConfetti(){
+    var c = document.createElement('div');
+    c.className = 'spot-confetti';
+    c.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></svg>';
+    document.body.appendChild(c);
+    setTimeout(function(){ c.remove(); }, 900);
+  }
+
+  /* ============= 2. CREW-CIRCLE UI ============= */
+  var TAG_OPTIONS = [
+    'zuverlässig', 'aktiv', 'ehrlich', 'hilfsbereit',
+    'pünktlich', 'loyal', 'einfühlsam', 'verantwortungsvoll',
+    'cool', 'ruhig', 'lustig', 'vertrauensvoll'
+  ];
+
+  async function loadCrewCircle(){
+    try{
+      var s = sb();
+      if (!s) return [];
+      var r = await s.rpc('get_crew_circle');
+      if (r.error){ console.warn('[bb-room] crew load fail', r.error); return []; }
+      return r.data || [];
+    }catch(e){ console.warn(e); return []; }
+  }
+
+  function renderStars(score, size){
+    score = Math.round((score || 0) * 2) / 2;
+    var html = '';
+    for (var i = 1; i <= 5; i++){
+      var on = i <= score;
+      html += '<span class="cc-star'+(on?' on':'')+'"'+(size?' style="width:'+size+'px;height:'+size+'px"':'')+'></span>';
+    }
+    return html;
+  }
+
+  function tierFromScores(trust, activity){
+    if (trust >= 4.5 && activity >= 80) return 'gold';
+    if (trust >= 4.0 && activity >= 60) return 'silver';
+    if (trust >= 3.0 || activity >= 40) return 'bronze';
+    return '';
+  }
+
+  async function renderCrewCircle(host){
+    if (!host) return;
+    host.innerHTML = ''+
+      '<div class="cc-section-head">'+
+        '<h3 class="cc-section-title">Crew Circle · Trust-Score</h3>'+
+        '<button class="cc-section-action" id="ccRefresh" type="button">Aktualisieren</button>'+
+      '</div>'+
+      '<div class="cc-list" id="ccList"><div class="cc-empty"><h4>Lädt …</h4></div></div>'+
+      '<svg width="0" height="0" style="position:absolute"><defs><linearGradient id="ccGrad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#FE3C72"/><stop offset="100%" style="stop-color:#FF6D2E"/></linearGradient></defs></svg>';
+    var list = host.querySelector('#ccList');
+    var members = await loadCrewCircle();
+    var uid = await getUid();
+    if (!members.length){
+      list.innerHTML = '<div class="cc-empty">'+
+        '<h4>Noch keine Crew</h4>'+
+        '<p>Lade Freunde in deinen Safety-Circle ein oder tritt einem Hotspot bei. Hier siehst du dann wer am aktivsten und vertrauenswürdigsten ist.</p>'+
+      '</div>';
+      return;
+    }
+    list.innerHTML = members.map(function(m){
+      var isSelf = m.user_id === uid;
+      var trust = parseFloat(m.trust_avg) || 0;
+      var activity = m.activity_score || 0;
+      var tier = tierFromScores(trust, activity);
+      var classes = 'cc-card';
+      if (isSelf) classes += ' is-self';
+      if (trust >= 3.5) classes += ' is-trusted';
+      if (tier) classes += ' tier-'+tier;
+      var profileTag = (m.audience_profile && m.audience_profile !== 'general') ? '<span class="cc-profile-tag">'+m.audience_profile+'</span>' : '';
+      var tagsHtml = (m.top_tags && m.top_tags.length)
+        ? '<div class="cc-tags">'+m.top_tags.map(function(t){ return '<span class="cc-tag">#'+escapeHtml(t)+'</span>'; }).join('')+'</div>'
+        : '';
+      /* Activity-Meter */
+      var circumference = 2 * Math.PI * 16;
+      var offset = circumference - (activity/100) * circumference;
+      return '<div class="'+classes+'" data-uid="'+m.user_id+'">'+
+        '<div class="cc-avatar"></div>'+
+        '<div class="cc-info">'+
+          '<div class="cc-name-row">'+
+            '<h4 class="cc-name">'+escapeHtml(m.display_name || 'Crew')+(isSelf?' (du)':'')+'</h4>'+
+            profileTag+
+          '</div>'+
+          '<div class="cc-stars">'+renderStars(trust)+
+            '<span class="cc-trust-text">'+(trust ? trust.toFixed(1) : '—')+(m.trust_count ? ' · '+m.trust_count+' Bewertungen' : ' · noch keine Bewertungen')+'</span>'+
+          '</div>'+
+          tagsHtml+
+        '</div>'+
+        '<div class="cc-meter" title="Aktivität '+activity+'/100">'+
+          '<svg width="36" height="36" viewBox="0 0 36 36">'+
+            '<circle class="cc-meter-bg" cx="18" cy="18" r="16"/>'+
+            '<circle class="cc-meter-fg" cx="18" cy="18" r="16" stroke-dasharray="'+circumference+'" stroke-dashoffset="'+offset+'"/>'+
+          '</svg>'+
+          '<div class="cc-meter-text">'+activity+'</div>'+
+        '</div>'+
+      '</div>';
+    }).join('');
+    /* Click-Handler: rate (außer self) */
+    list.querySelectorAll('.cc-card').forEach(function(card){
+      card.addEventListener('click', function(){
+        var u = card.getAttribute('data-uid');
+        if (u === uid){
+          if (window.bbToast) window.bbToast('Dich selbst kannst du nicht bewerten 😉');
+          return;
+        }
+        var member = members.find(function(x){ return x.user_id === u; });
+        if (member) openTrustRateModal(member);
+      });
+    });
+    /* Refresh-Button */
+    var refr = host.querySelector('#ccRefresh');
+    if (refr) refr.addEventListener('click', function(){ renderCrewCircle(host); });
+  }
+
+  function openTrustRateModal(member){
+    var existing = document.getElementById('trModal');
+    if (existing) existing.remove();
+    var picked = member.my_rating || 0;
+    var pickedTags = [];
+    var m = document.createElement('div');
+    m.className = 'tr-modal';
+    m.id = 'trModal';
+    function render(){
+      m.innerHTML = '<div class="tr-card">'+
+        '<div class="tr-avatar-big"></div>'+
+        '<h3 class="tr-name-big">'+escapeHtml(member.display_name || 'Crew')+'</h3>'+
+        '<p class="tr-sub">Wie zuverlässig & vertrauenswürdig findest du sie/ihn?</p>'+
+        '<div class="tr-stars-row">'+
+          [1,2,3,4,5].map(function(i){ return '<button class="tr-star-btn'+(i<=picked?' on':'')+'" data-s="'+i+'" type="button"></button>'; }).join('')+
+        '</div>'+
+        '<div class="tr-tags-grid">'+
+          TAG_OPTIONS.map(function(t){ return '<button class="tr-tag-pill'+(pickedTags.indexOf(t)>=0?' on':'')+'" data-t="'+t+'" type="button">'+t+'</button>'; }).join('')+
+        '</div>'+
+        '<div class="tr-actions">'+
+          '<button class="tr-btn-cancel" id="trCancel" type="button">Abbrechen</button>'+
+          '<button class="tr-btn-save" id="trSave" type="button"'+(!picked?' disabled':'')+'>Bewerten</button>'+
+        '</div>'+
+      '</div>';
+      m.querySelectorAll('.tr-star-btn').forEach(function(b){
+        b.addEventListener('click', function(){ picked = parseInt(b.getAttribute('data-s'),10); render(); });
+      });
+      m.querySelectorAll('.tr-tag-pill').forEach(function(b){
+        b.addEventListener('click', function(){
+          var t = b.getAttribute('data-t');
+          var i = pickedTags.indexOf(t);
+          if (i >= 0) pickedTags.splice(i, 1);
+          else if (pickedTags.length < 3) pickedTags.push(t);
+          render();
+        });
+      });
+      m.querySelector('#trCancel').addEventListener('click', close);
+      m.querySelector('#trSave').addEventListener('click', save);
+    }
+    function close(){ m.classList.remove('on'); setTimeout(function(){ m.remove(); }, 320); }
+    async function save(){
+      try{
+        var r = await sb().rpc('rate_user_trust', { p_rated_id: member.user_id, p_score: picked, p_tags: pickedTags });
+        if (r.error) throw r.error;
+        if (window.bbToast) window.bbToast('Bewertung gespeichert');
+        close();
+        /* Re-render Liste */
+        var host = document.getElementById('ccCircleHost');
+        if (host) setTimeout(function(){ renderCrewCircle(host); }, 400);
+      }catch(e){ console.warn(e); if (window.bbToast) window.bbToast('Fehler: '+(e.message||'konnte nicht speichern')); }
+    }
+    document.body.appendChild(m);
+    render();
+    setTimeout(function(){ m.classList.add('on'); }, 30);
+    m.addEventListener('click', function(e){ if (e.target === m) close(); });
+  }
+
+  /* ============= 3. INJECT in Crew-Tab ============= */
+  function injectCrewCircle(){
+    var crew = document.querySelector('#screen-crew, [data-screen="crew"], .crew-content');
+    if (!crew) return;
+    if (crew.querySelector('#ccCircleHost')) return;
+    var host = document.createElement('div');
+    host.id = 'ccCircleHost';
+    host.className = 'cc-section';
+    /* Position: ganz oben in Crew-Screen */
+    crew.insertBefore(host, crew.firstChild);
+    renderCrewCircle(host);
+  }
+
+  /* ============= 4. WIZARD-FIX: stepNext ohne select().single() ============= */
+  /* Falls bb-hotspot-v2 weiterhin den fehlerhaften Insert macht, wrap das */
+  setTimeout(function(){
+    if (window.bbHotspot && window.bbHotspot.openWizard){
+      /* Kein direkter Override möglich, da stepNext im IIFE.
+         Stattdessen: Bei Fehler-Toast keinen Schaden anrichten — Realtime-Listener fängt den
+         erfolgreichen Insert sowieso auf. */
+    }
+  }, 2000);
+
+  /* ============= INIT ============= */
+  function init(){
+    setupCreateHook();
+    setTimeout(injectCrewCircle, 2000);
+    setTimeout(injectCrewCircle, 5000);
+    /* Re-Inject bei Tab-Switch */
+    document.addEventListener('click', function(e){
+      var t = e.target;
+      if (!t || !t.closest) return;
+      if (t.closest('[data-tab="crew"], [data-screen="crew"], .tab-crew')){
+        setTimeout(injectCrewCircle, 400);
+      }
+    });
+    /* Expose */
+    window.bbCrewCircle = {
+      load: loadCrewCircle,
+      render: renderCrewCircle,
+      rateUser: openTrustRateModal
+    };
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+
 </body></html>
