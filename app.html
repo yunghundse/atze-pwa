@@ -17986,4 +17986,830 @@ body.bb-nav-hidden .bb-nav-final{
 })();
 </script>
 
+<style id="bb-violet">/* ============================================================
+   BB-VIOLET — Violet Theme + FY-Feed + Spots-Unhide + Profile-Fix + Friends-Page
+   ============================================================ */
+
+/* ---------- 0. NEW COLOR PALETTE (Violet/Indigo) ---------- */
+:root{
+  --c-primary: #8B5CF6;        /* violet-500 */
+  --c-primary-2: #6366F1;      /* indigo-500 */
+  --c-primary-3: #A855F7;      /* purple-500 */
+  --c-primary-soft: rgba(139,92,246,.18);
+  --c-primary-glow: rgba(139,92,246,.4);
+  --c-accent: #EC4899;         /* SOS only */
+  --c-bg: #0A0A14;             /* dark with violet tint */
+  --c-surface: rgba(139,92,246,.06);
+  --c-surface-2: rgba(139,92,246,.12);
+  --c-line: rgba(139,92,246,.15);
+  --c-text-1: #FAFAFA;
+  --c-text-2: rgba(255,255,255,.72);
+  --c-text-3: rgba(255,255,255,.45);
+  /* Override pink in old layers */
+  --c-pink: #8B5CF6;
+  --c-orange: #6366F1;
+  --sos-c1: #EC4899;
+  --sos-c2: #BE185D;
+  --hero-grad: linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%);
+}
+
+/* Body Background */
+body{
+  background: #0A0A14 !important;
+  background-image:
+    radial-gradient(ellipse at 30% 0%, rgba(139,92,246,.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 100%, rgba(99,102,241,.08) 0%, transparent 50%) !important;
+}
+
+/* ---------- 1. SPOTS RADAR UNHIDE (war komplett blockiert) ---------- */
+#screen-radar,
+#screen-radar.active,
+#screen-radar *{
+  display: revert !important;
+}
+#screen-radar:not(.active){ display: none !important; }
+#screen-radar.active{ display: block !important; }
+
+/* spotsMap muss füllen */
+#spotsMap, .spots-map-wrap{
+  display: block !important;
+}
+
+/* Aber Legacy radar-Banner verstecken */
+.radar-content > .ll-radar-banner,
+.radar-content > .compliance-banner-old,
+#cpInd{
+  display: none !important;
+}
+
+/* ---------- 2. PROFILE UNHIDE FIX ---------- */
+#screen-profile,
+#screen-profile.active,
+[data-screen="profile"]{
+  display: revert !important;
+  background: #0A0A14 !important;
+  color: #FAFAFA !important;
+  min-height: 100vh !important;
+}
+#screen-profile:not(.active){ display: none !important; }
+#screen-profile.active{ display: block !important; }
+#screen-profile *{
+  visibility: visible !important;
+}
+#screen-profile .prof-hero,
+#screen-profile .prof-stats,
+#screen-profile .pmenu,
+#screen-profile .premium-cta,
+#screen-profile .v104-pass-card,
+#screen-profile .pmi{
+  display: revert !important;
+}
+
+/* ---------- 3. NEUE NAV mit Violet ---------- */
+.bb-nav-final{
+  background: rgba(15,15,28,.92) !important;
+  border: .5px solid rgba(139,92,246,.25) !important;
+  box-shadow: 0 12px 40px rgba(139,92,246,.2), inset 0 1px 0 rgba(139,92,246,.1) !important;
+}
+.bb-nav-final .bb-nav-btn.active{
+  background: linear-gradient(135deg, rgba(139,92,246,.35), rgba(99,102,241,.18)) !important;
+  color: #fff !important;
+}
+.bb-nav-final .bb-nav-btn.active::after{ background: #8B5CF6 !important; }
+.bb-nav-final .bb-nav-btn.bb-nav-safeplace{
+  background: linear-gradient(135deg, #8B5CF6, #6366F1) !important;
+  box-shadow: 0 8px 22px rgba(139,92,246,.55), 0 0 0 1px rgba(139,92,246,.3) !important;
+}
+
+/* ---------- 4. HOME / FOR-YOU FEED (crew screen) ---------- */
+.fy-wrap{
+  padding: 16px 16px calc(96px + env(safe-area-inset-bottom, 0px));
+}
+
+.fy-hero{
+  background: linear-gradient(135deg, rgba(139,92,246,.3) 0%, rgba(99,102,241,.12) 100%);
+  border: .5px solid rgba(139,92,246,.4);
+  border-radius: 24px;
+  padding: 24px 20px;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.fy-hero::before{
+  content:'';
+  position: absolute;
+  top: -40%; right: -30%;
+  width: 240px; height: 240px;
+  background: radial-gradient(circle, rgba(139,92,246,.5), transparent 70%);
+  pointer-events: none;
+}
+.fy-hero-greeting{
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.5);
+  margin: 0 0 4px;
+  position: relative;
+  z-index: 1;
+}
+.fy-hero-name{
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: -.025em;
+  color: #fff;
+  margin: 0 0 8px;
+  position: relative;
+  z-index: 1;
+}
+.fy-hero-status{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: rgba(255,255,255,.8);
+  position: relative;
+  z-index: 1;
+}
+.fy-hero-status .status-dot{
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #28C878;
+  animation: fyDot 1.6s ease-in-out infinite;
+}
+@keyframes fyDot{ 0%,100%{opacity:1} 50%{opacity:.4} }
+
+/* Section-Headers */
+.fy-section{
+  margin-bottom: 24px;
+}
+.fy-section-h{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.fy-section-h h3{
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.5);
+  margin: 0;
+}
+.fy-section-h .more-btn{
+  font-size: 11px;
+  color: #8B5CF6;
+  font-weight: 700;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+/* Quick-Action Cards (4 per row) */
+.fy-quick{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.fy-quick-card{
+  background: rgba(139,92,246,.08);
+  border: .5px solid rgba(139,92,246,.2);
+  border-radius: 16px;
+  padding: 14px 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: all .2s;
+}
+.fy-quick-card:active{ transform: scale(.94); }
+.fy-quick-card.live{ background: linear-gradient(135deg, rgba(40,200,120,.18), rgba(40,200,120,.04)); border-color: rgba(40,200,120,.4); }
+.fy-quick-card.urgent{ background: linear-gradient(135deg, rgba(236,72,153,.18), rgba(190,24,93,.04)); border-color: rgba(236,72,153,.4); }
+.fy-quick-icon{
+  width: 32px; height: 32px;
+  margin: 0 auto 8px;
+  border-radius: 10px;
+  background: rgba(139,92,246,.2);
+  display: flex; align-items: center; justify-content: center;
+}
+.fy-quick-card.live .fy-quick-icon{ background: rgba(40,200,120,.25); }
+.fy-quick-card.urgent .fy-quick-icon{ background: rgba(236,72,153,.25); }
+.fy-quick-icon svg{ width: 16px; height: 16px; color: #fff; }
+.fy-quick-label{
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -.005em;
+}
+
+/* FY Story-Like Feed Cards */
+.fy-feed{
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.fy-card{
+  background: rgba(139,92,246,.05);
+  border: .5px solid rgba(139,92,246,.15);
+  border-radius: 18px;
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
+}
+.fy-card-head{
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 10px;
+}
+.fy-card-avatar{
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #8B5CF6, #6366F1);
+  flex: none;
+  position: relative;
+}
+.fy-card-avatar img{ width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+.fy-card-name{
+  flex: 1;
+  font-size: 13px;
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+}
+.fy-card-time{
+  font-size: 10px;
+  color: rgba(255,255,255,.4);
+}
+.fy-card-content{
+  font-size: 14px;
+  color: rgba(255,255,255,.85);
+  line-height: 1.55;
+}
+.fy-card-tag{
+  display: inline-block;
+  margin-top: 8px;
+  padding: 3px 10px;
+  background: rgba(139,92,246,.18);
+  color: #C084FC;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+/* ---------- 5. FRIENDS-PAGE (match screen) ---------- */
+.frnd-wrap{
+  padding: 16px 16px calc(96px + env(safe-area-inset-bottom, 0px));
+}
+.frnd-header{
+  margin-bottom: 16px;
+}
+.frnd-header h2{
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: -.025em;
+  color: #fff;
+  margin: 0 0 4px;
+}
+.frnd-header p{
+  font-size: 13px;
+  color: rgba(255,255,255,.6);
+  margin: 0;
+}
+
+.frnd-search{
+  width: 100%;
+  height: 46px;
+  background: rgba(139,92,246,.06);
+  border: .5px solid rgba(139,92,246,.2);
+  border-radius: 14px;
+  padding: 0 16px;
+  color: #fff;
+  font-size: 14px;
+  margin-bottom: 16px;
+  outline: none;
+}
+.frnd-search:focus{ border-color: rgba(139,92,246,.5); box-shadow: 0 0 0 3px rgba(139,92,246,.12); }
+
+.frnd-tabs{
+  display: flex;
+  gap: 6px;
+  margin-bottom: 14px;
+  padding: 4px;
+  background: rgba(139,92,246,.06);
+  border-radius: 12px;
+}
+.frnd-tab{
+  flex: 1;
+  padding: 8px;
+  background: transparent;
+  border: 0;
+  border-radius: 10px;
+  color: rgba(255,255,255,.6);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.frnd-tab.on{
+  background: linear-gradient(135deg, #8B5CF6, #6366F1);
+  color: #fff;
+}
+
+.frnd-list{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.frnd-item{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: rgba(139,92,246,.05);
+  border: .5px solid rgba(139,92,246,.15);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: transform .15s;
+}
+.frnd-item:active{ transform: scale(.98); }
+.frnd-item-avatar{
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #8B5CF6, #6366F1);
+  flex: none;
+  position: relative;
+  overflow: hidden;
+}
+.frnd-item-avatar img{ width: 100%; height: 100%; object-fit: cover; }
+.frnd-item-avatar::after{
+  content:'';
+  width: 22px; height: 22px;
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/><circle cx='12' cy='7' r='4'/></svg>") no-repeat center / contain;
+          mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/><circle cx='12' cy='7' r='4'/></svg>") no-repeat center / contain;
+}
+.frnd-item-avatar:has(img)::after{ display: none; }
+.frnd-item-main{ flex: 1; min-width: 0; }
+.frnd-item-name{
+  font-size: 14px;
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+  letter-spacing: -.01em;
+  display: flex; align-items: center; gap: 6px;
+}
+.frnd-item-status{
+  font-size: 11px;
+  color: rgba(255,255,255,.55);
+  margin: 2px 0 0;
+}
+.frnd-item-trust{
+  font-size: 10px;
+  font-weight: 800;
+  padding: 3px 8px;
+  background: rgba(139,92,246,.18);
+  color: #C084FC;
+  border-radius: 999px;
+}
+.frnd-item-action{
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: rgba(139,92,246,.15);
+  border: 0;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+}
+.frnd-item-action svg{ width: 16px; height: 16px; color: #C084FC; }
+
+/* ---------- 6. UNNECESSARY STUFF — HIDE ---------- */
+.v103-tile-deals,
+.v103-hub-tile.v103-tile-deals,
+.crew-vibe-header,
+.crew-weather-card,
+.daily-quest-card,
+.crew-map-mini,
+.crew-hub-empty-emoji,
+[class*="party-emoji"],
+.cb-empty-icon,
+.fy-feed-old,
+.legacy-clutter,
+.v107-tab-old,
+.v108-noti-empty,
+.activity-log-section,
+#hubActivityLog,
+.streak-banner,
+.daily-bonus-banner,
+.crew-dna-banner{
+  display: none !important;
+}
+
+/* ---------- 7. Pink → Violet override ---------- */
+.priv-pill.live, .live-quick.broadcasting,
+.bb-help-fab, .hf-fab, .quick-spot-fab{
+  background: linear-gradient(135deg, #8B5CF6, #6366F1) !important;
+}
+.priv-pill.sos, .hdr-sos, .hdr-btn.hdr-sos{
+  background: linear-gradient(135deg, #EC4899, #BE185D) !important;
+}
+
+/* Buttons */
+.btn-pri, .ap-btn-pri, .hw-btn-pri, .ae-next, .tr-btn-save{
+  background: linear-gradient(135deg, #8B5CF6, #6366F1) !important;
+}
+
+/* Pink Borders → Violet */
+[class*="border-pink"], .border-c-pink,
+.bb-color-swatch.c-pink{
+  background: linear-gradient(135deg, #8B5CF6, #6366F1) !important;
+}
+
+/* Active/Selected → Violet */
+.hw-kind.active, .hw-vis.active, .hw-ttl.active, .ap-tile.active{
+  border-color: rgba(139,92,246,.7) !important;
+  background: linear-gradient(135deg, rgba(139,92,246,.12), rgba(99,102,241,.05)) !important;
+}
+
+/* Toggle Switch */
+.bb-toggle.on, .sc-switch.on{
+  background: linear-gradient(135deg, #8B5CF6, #6366F1) !important;
+}
+
+/* Star Active */
+.cc-star.on, .bb-star.on, .tr-star-btn.on::after{
+  background: linear-gradient(135deg, #FFD60A, #8B5CF6) !important;
+}
+
+/* ---------- 8. Hide Friends-Wall + Crew-Wall on wrong screens ---------- */
+#screen-radar .friend-wall,
+#screen-radar .crew-wall,
+#screen-radar .cw-post,
+#screen-radar .friend-wall-post,
+#screen-profile .friend-wall,
+#screen-profile .crew-wall,
+#screen-profile .cw-post,
+#screen-profile .friend-wall-post{
+  display: none !important;
+}
+</style>
+<script id="bb-violet-js">
+/* ============================================================
+   BB-VIOLET — FY-Feed + Friends-Page + Profile-Force-Show
+   ============================================================ */
+(function(){
+  'use strict';
+  if (window.__bbVioletInit) return;
+  window.__bbVioletInit = true;
+
+  var sb = function(){ return window.sb || window.supabase; };
+  async function getUid(){
+    try{ var u = await sb().auth.getUser(); return u && u.data && u.data.user && u.data.user.id || null; }catch(e){ return null; }
+  }
+  function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]; }); }
+  function timeAgo(ts){
+    var d = (Date.now() - new Date(ts).getTime()) / 1000;
+    if (d < 60) return 'jetzt';
+    if (d < 3600) return Math.round(d/60) + ' min';
+    if (d < 86400) return Math.round(d/3600) + ' h';
+    return Math.round(d/86400) + ' Tg';
+  }
+
+  /* ============= 1. FY-FEED auf Crew-Screen ============= */
+  async function buildFY(){
+    var screen = document.getElementById('screen-crew');
+    if (!screen) return;
+    if (screen.querySelector('.fy-wrap')) return;
+
+    var s = sb();
+    var uid = await getUid();
+    var name = 'Crew';
+    if (uid && s){
+      try{
+        var p = await s.from('profiles').select('name,username').eq('user_id', uid).maybeSingle();
+        if (p && p.data) name = p.data.name || p.data.username || 'Crew';
+      }catch(e){}
+    }
+
+    var hour = new Date().getHours();
+    var greeting = hour < 6 ? 'Gute Nacht' : hour < 12 ? 'Guten Morgen' : hour < 18 ? 'Hey' : 'Guten Abend';
+
+    var wrap = document.createElement('div');
+    wrap.className = 'fy-wrap';
+    wrap.innerHTML = ''+
+      '<div class="fy-hero">'+
+        '<div class="fy-hero-greeting">' + greeting + '</div>'+
+        '<h1 class="fy-hero-name">' + escapeHtml(name) + '</h1>'+
+        '<div class="fy-hero-status"><span class="status-dot"></span><span id="fyStatus">Sicher · Crew online</span></div>'+
+      '</div>'+
+
+      '<div class="fy-section">'+
+        '<div class="fy-section-h"><h3>Schnell-Aktionen</h3></div>'+
+        '<div class="fy-quick">'+
+          '<button class="fy-quick-card live" data-action="live" type="button">'+
+            '<div class="fy-quick-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg></div>'+
+            '<div class="fy-quick-label">Live</div>'+
+          '</button>'+
+          '<button class="fy-quick-card" data-action="home" type="button">'+
+            '<div class="fy-quick-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>'+
+            '<div class="fy-quick-label">Heimweg</div>'+
+          '</button>'+
+          '<button class="fy-quick-card" data-action="spot" type="button">'+
+            '<div class="fy-quick-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s-7-7-7-12a7 7 0 0 1 14 0c0 5-7 12-7 12z"/></svg></div>'+
+            '<div class="fy-quick-label">Spot</div>'+
+          '</button>'+
+          '<button class="fy-quick-card urgent" data-action="sos" type="button">'+
+            '<div class="fy-quick-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg></div>'+
+            '<div class="fy-quick-label">SOS</div>'+
+          '</button>'+
+        '</div>'+
+      '</div>'+
+
+      '<div class="fy-section">'+
+        '<div class="fy-section-h"><h3>Was läuft</h3><button class="more-btn" type="button">Alle</button></div>'+
+        '<div class="fy-feed" id="fyFeed"><div class="fy-card"><div class="fy-card-content" style="opacity:.4">Lade …</div></div></div>'+
+      '</div>'+
+
+      '<div class="fy-section">'+
+        '<div class="fy-section-h"><h3>Spots in der Nähe</h3><button class="more-btn" data-action="spots-page" type="button">Map</button></div>'+
+        '<div class="fy-feed" id="fyNearby"></div>'+
+      '</div>';
+
+    /* Legacy crew-Inhalte verstecken (sanft, mit Element-IDs) */
+    Array.from(screen.children).forEach(function(c){
+      if (c.classList.contains('fy-wrap')) return;
+      c.dataset.bbHiddenByFy = '1';
+      c.style.display = 'none';
+    });
+
+    screen.insertBefore(wrap, screen.firstChild);
+
+    /* Click-Handler für Quick-Cards */
+    wrap.querySelector('.fy-quick').addEventListener('click', function(e){
+      var card = e.target.closest('.fy-quick-card');
+      if (!card) return;
+      var act = card.getAttribute('data-action');
+      if (act === 'live' && window.bbUx && window.bbUx.toggleLiveBroadcast) window.bbUx.toggleLiveBroadcast();
+      else if (act === 'home' && window.bbUx && window.bbUx.startHomemode) window.bbUx.startHomemode();
+      else if (act === 'spot' && window.bbHotspot && window.bbHotspot.openWizard) window.bbHotspot.openWizard();
+      else if (act === 'sos'){
+        var btn = document.querySelector('.hdr-sos, [data-action="sos"], #sosBtn, .hdr-btn.hdr-sos');
+        if (btn) btn.click();
+      }
+    });
+
+    /* Lade Feed-Inhalte */
+    loadFeed();
+    loadNearby();
+  }
+
+  async function loadFeed(){
+    var host = document.getElementById('fyFeed');
+    if (!host) return;
+    var s = sb();
+    if (!s) { host.innerHTML = ''; return; }
+    var uid = await getUid();
+    if (!uid) return;
+
+    var items = [];
+    /* Neueste Hotspots der Crew */
+    try{
+      var hsRes = await s.rpc('get_crew_circle');
+      var crew = ((hsRes && hsRes.data) || []).filter(function(m){ return m.user_id !== uid; }).slice(0, 3);
+      crew.forEach(function(m){
+        items.push({
+          type: 'crew',
+          name: m.display_name,
+          photo: m.photo_url,
+          time: m.joined_at,
+          content: 'Trust ' + (parseFloat(m.trust_avg) || 0).toFixed(1) + ' · Aktivität ' + (m.activity_score || 0) + '/100',
+          tag: m.audience_profile && m.audience_profile !== 'general' ? m.audience_profile : null
+        });
+      });
+    }catch(e){}
+    /* Aktive Hotspots */
+    try{
+      var spotsRes = await s.from('hotspots').select('id,name,kind,owner_id,created_at,description').order('created_at', { ascending: false }).limit(3);
+      ((spotsRes && spotsRes.data) || []).forEach(function(h){
+        items.push({
+          type: 'spot',
+          name: h.name,
+          time: h.created_at,
+          content: h.description || ('Neuer ' + h.kind + '-Spot in deiner Nähe'),
+          tag: h.kind
+        });
+      });
+    }catch(e){}
+
+    if (!items.length){
+      host.innerHTML = '<div class="fy-card"><div class="fy-card-content" style="opacity:.5">Keine neuen Aktivitäten. Lade Freunde ein damit deine Feed lebt.</div></div>';
+      return;
+    }
+    host.innerHTML = items.map(function(it){
+      return '<div class="fy-card">'+
+        '<div class="fy-card-head">'+
+          '<div class="fy-card-avatar">' + (it.photo ? '<img src="'+escapeHtml(it.photo)+'" alt=""/>' : '') + '</div>'+
+          '<h4 class="fy-card-name">' + escapeHtml(it.name || 'Crew') + '</h4>'+
+          '<span class="fy-card-time">' + timeAgo(it.time || Date.now()) + '</span>'+
+        '</div>'+
+        '<p class="fy-card-content">' + escapeHtml(it.content) + '</p>'+
+        (it.tag ? '<span class="fy-card-tag">' + escapeHtml(it.tag) + '</span>' : '')+
+      '</div>';
+    }).join('');
+  }
+
+  async function loadNearby(){
+    var host = document.getElementById('fyNearby');
+    if (!host) return;
+    var s = sb();
+    if (!s) return;
+    if (!window.userLat || !window.userLng){
+      host.innerHTML = '<div class="fy-card"><div class="fy-card-content" style="opacity:.5">GPS für Spots-Liste nötig.</div></div>';
+      return;
+    }
+    try{
+      var r = await s.rpc('get_visible_hotspots_v2', {
+        p_lat: window.userLat, p_lng: window.userLng, p_radius_km: 10, p_kinds: null, p_audience: null
+      });
+      var spots = ((r && r.data) || []).slice(0, 3);
+      if (!spots.length){
+        host.innerHTML = '<div class="fy-card"><div class="fy-card-content" style="opacity:.5">Keine Spots in 10 km.</div></div>';
+        return;
+      }
+      host.innerHTML = spots.map(function(h){
+        var dist = h.distance_km < 1 ? Math.round(h.distance_km*1000) + ' m' : h.distance_km.toFixed(1) + ' km';
+        return '<div class="fy-card" data-spot-id="' + h.id + '">'+
+          '<div class="fy-card-head">'+
+            '<div class="fy-card-avatar"></div>'+
+            '<h4 class="fy-card-name">' + escapeHtml(h.name) + '</h4>'+
+            '<span class="fy-card-time">' + dist + '</span>'+
+          '</div>'+
+          '<p class="fy-card-content">' + escapeHtml(h.description || h.kind) + '</p>'+
+          '<span class="fy-card-tag">' + escapeHtml(h.visibility) + ' · ' + escapeHtml(h.kind) + '</span>'+
+        '</div>';
+      }).join('');
+      host.addEventListener('click', function(e){
+        var card = e.target.closest('[data-spot-id]');
+        if (!card) return;
+        var sid = card.getAttribute('data-spot-id');
+        var sp = spots.find(function(x){ return x.id === sid; });
+        if (sp && window.bbHotspotV3 && window.bbHotspotV3.openDetail) window.bbHotspotV3.openDetail(sp);
+      });
+    }catch(e){ console.warn('[bb-violet] nearby fail', e); }
+  }
+
+  /* ============= 2. FRIENDS-PAGE auf match-screen ============= */
+  var friendsTab = 'all';
+  async function buildFriends(){
+    var screen = document.getElementById('screen-match');
+    if (!screen) return;
+    if (screen.querySelector('.frnd-wrap')) return;
+
+    var wrap = document.createElement('div');
+    wrap.className = 'frnd-wrap';
+    wrap.innerHTML = ''+
+      '<div class="frnd-header">'+
+        '<h2>Freunde</h2>'+
+        '<p>Deine Crew, dein Safety-Netz</p>'+
+      '</div>'+
+      '<input class="frnd-search" id="frndSearch" placeholder="Suche Freund …" type="text" />'+
+      '<div class="frnd-tabs">'+
+        '<button class="frnd-tab on" data-tab="all" type="button">Alle</button>'+
+        '<button class="frnd-tab" data-tab="circle" type="button">Safety-Circle</button>'+
+        '<button class="frnd-tab" data-tab="trusted" type="button">Top-Trust</button>'+
+      '</div>'+
+      '<div class="frnd-list" id="frndList"><div style="text-align:center;color:rgba(255,255,255,.4);padding:24px">Lade …</div></div>';
+
+    Array.from(screen.children).forEach(function(c){
+      if (c.classList.contains('frnd-wrap')) return;
+      c.dataset.bbHiddenByFy = '1';
+      c.style.display = 'none';
+    });
+    screen.insertBefore(wrap, screen.firstChild);
+
+    /* Tab-Wechsel */
+    wrap.querySelector('.frnd-tabs').addEventListener('click', function(e){
+      var t = e.target.closest('.frnd-tab');
+      if (!t) return;
+      wrap.querySelectorAll('.frnd-tab').forEach(function(x){ x.classList.remove('on'); });
+      t.classList.add('on');
+      friendsTab = t.getAttribute('data-tab');
+      loadFriends();
+    });
+    /* Search */
+    wrap.querySelector('#frndSearch').addEventListener('input', loadFriends);
+
+    loadFriends();
+  }
+
+  async function loadFriends(){
+    var host = document.getElementById('frndList');
+    if (!host) return;
+    var s = sb();
+    if (!s) return;
+    var uid = await getUid();
+    if (!uid) return;
+    var search = (document.getElementById('frndSearch') || {}).value || '';
+    search = search.toLowerCase().trim();
+
+    try{
+      var r = await s.rpc('get_crew_circle');
+      var members = ((r && r.data) || []).filter(function(m){ return m.user_id !== uid; });
+
+      if (friendsTab === 'circle'){
+        members = members.filter(function(m){ return m.is_in_safety_circle; });
+      } else if (friendsTab === 'trusted'){
+        members = members.filter(function(m){ return parseFloat(m.trust_avg) >= 4 && m.trust_count >= 1; });
+      }
+      if (search){
+        members = members.filter(function(m){
+          return (m.display_name || '').toLowerCase().indexOf(search) >= 0;
+        });
+      }
+
+      if (!members.length){
+        host.innerHTML = '<div style="text-align:center;color:rgba(255,255,255,.5);padding:36px 16px">'+
+          '<p style="font-size:14px;font-weight:700;color:#fff;margin:0 0 6px">Keine Freunde hier</p>'+
+          '<p style="font-size:12px;margin:0">Lade Freunde in deinen Safety-Circle ein oder tritt einem Hotspot bei.</p>'+
+        '</div>';
+        return;
+      }
+
+      host.innerHTML = members.map(function(m){
+        var trust = parseFloat(m.trust_avg) || 0;
+        var trustBadge = trust >= 4 ? '<span class="frnd-item-trust">★ '+trust.toFixed(1)+'</span>' : (trust > 0 ? '<span class="frnd-item-trust">'+trust.toFixed(1)+'</span>' : '');
+        return '<div class="frnd-item" data-uid="'+m.user_id+'">'+
+          '<div class="frnd-item-avatar">' + (m.photo_url ? '<img src="'+escapeHtml(m.photo_url)+'"/>' : '') + '</div>'+
+          '<div class="frnd-item-main">'+
+            '<h4 class="frnd-item-name">' + escapeHtml(m.display_name || 'Crew') + ' ' + trustBadge + '</h4>'+
+            '<p class="frnd-item-status">' + (m.is_in_safety_circle ? 'Im Safety-Circle' : 'Crew-Member') + ' · Aktivität ' + (m.activity_score || 0) + '</p>'+
+          '</div>'+
+          '<button class="frnd-item-action" type="button" title="Bewerten">'+
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>'+
+          '</button>'+
+        '</div>';
+      }).join('');
+
+      host.addEventListener('click', function(e){
+        var item = e.target.closest('.frnd-item');
+        if (!item) return;
+        var u = item.getAttribute('data-uid');
+        var member = members.find(function(x){ return x.user_id === u; });
+        if (member && window.bbCrewCircle && window.bbCrewCircle.rateUser){
+          window.bbCrewCircle.rateUser(member);
+        }
+      });
+    }catch(e){ console.warn('[bb-violet] loadFriends fail', e); }
+  }
+
+  /* ============= 3. PROFILE-FORCE-SHOW ============= */
+  function ensureProfileVisible(){
+    var screen = document.getElementById('screen-profile');
+    if (!screen) return;
+    /* Wenn aktiv aber alle Children hidden via inline-style → restore */
+    if (!screen.classList.contains('active')) return;
+    Array.from(screen.children).forEach(function(c){
+      if (c.classList.contains('fy-wrap')) return;
+      if (c.style.display === 'none' && !c.dataset.bbHiddenByFy){
+        c.style.display = '';
+      }
+    });
+    screen.style.display = 'block';
+    screen.style.background = '#0A0A14';
+    screen.style.minHeight = '100vh';
+  }
+
+  /* ============= 4. INIT ============= */
+  function init(){
+    setTimeout(buildFY, 1500);
+    setTimeout(buildFriends, 1700);
+    setInterval(ensureProfileVisible, 2000);
+
+    /* Bei Tab-Switch reload */
+    document.addEventListener('click', function(e){
+      var t = e.target;
+      if (!t || !t.closest) return;
+      if (t.closest('[data-target="home"]')){
+        setTimeout(function(){ buildFY(); loadFeed(); loadNearby(); }, 300);
+      }
+      if (t.closest('[data-target="crew"]')){
+        setTimeout(buildFY, 300);
+      }
+      if (t.closest('[data-target="profile"]')){
+        setTimeout(ensureProfileVisible, 300);
+      }
+    }, true);
+
+    /* Refresh-Loop */
+    setInterval(function(){
+      if (document.querySelector('#screen-crew.active')) loadFeed();
+      if (document.querySelector('#screen-match.active')) loadFriends();
+    }, 30000);
+
+    window.bbViolet = { buildFY: buildFY, loadFeed: loadFeed, loadFriends: loadFriends };
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+
 </body></html>
