@@ -1360,8 +1360,11 @@ a{ color: var(--c-violet-3); text-decoration: none; }
 }
 .map-state-actions{
   display: flex;
-  gap: var(--s-2);
+  gap: 6px;
   justify-content: center;
+  flex-wrap: wrap;
+  max-width: 280px;
+  margin: 0 auto;
 }
 .map-state-btn{
   padding: 10px 20px;
@@ -1375,6 +1378,21 @@ a{ color: var(--c-violet-3); text-decoration: none; }
   background: var(--c-surface-2);
   border: .5px solid var(--c-violet-line);
   color: var(--c-text-2);
+}
+.ms-city-btn{
+  padding: 7px 12px;
+  border-radius: 14px;
+  background: var(--c-surface-2);
+  border: .5px solid var(--c-violet-line);
+  color: var(--c-text);
+  font-size: 12px;
+  font-weight: 700;
+  transition: background .15s var(--ease);
+}
+.ms-city-btn:hover, .ms-city-btn:active{
+  background: linear-gradient(135deg, var(--c-violet), var(--c-violet-2));
+  color: #fff;
+  border-color: transparent;
 }
 
 /* ============================================================
@@ -5447,15 +5465,50 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
       const r2 = await sb.from('profiles').select('*').eq('user_id', u.id).maybeSingle();
       profile = (r2 && r2.data) || {};
     }
-    /* GPS */
-    if (navigator.geolocation){
-      navigator.geolocation.getCurrentPosition(
-        p => { userLat = p.coords.latitude; userLng = p.coords.longitude; refreshAll(); },
-        () => refreshAll(),
-        { enableHighAccuracy: true, timeout: 8000 }
-      );
-    } else {
+    /* GPS — mit Fallback auf Profil-Home-City oder manueller Stadt-Auswahl */
+    function setUserLocation(lat, lng, source){
+      userLat = lat; userLng = lng;
+      try{ localStorage.setItem('crew_last_loc', JSON.stringify({ lat, lng, source, t: Date.now() })); }catch(_){}
       refreshAll();
+    }
+    function tryLastKnown(){
+      try{
+        const v = JSON.parse(localStorage.getItem('crew_last_loc') || 'null');
+        if (v && typeof v.lat === 'number' && Date.now() - v.t < 7*86400e3){
+          userLat = v.lat; userLng = v.lng;
+          return true;
+        }
+      }catch(_){}
+      return false;
+    }
+    function tryHomeCity(){
+      if (profile && typeof profile.home_city_lat === 'number' && typeof profile.home_city_lng === 'number'){
+        userLat = profile.home_city_lat; userLng = profile.home_city_lng;
+        return true;
+      }
+      return false;
+    }
+    if (navigator.geolocation){
+      let resolved = false;
+      navigator.geolocation.getCurrentPosition(
+        p => { resolved = true; setUserLocation(p.coords.latitude, p.coords.longitude, 'gps'); },
+        () => {
+          resolved = true;
+          if (tryLastKnown() || tryHomeCity()){ refreshAll(); }
+          else refreshAll();
+        },
+        { enableHighAccuracy: true, timeout: 8000, maximumAge: 60000 }
+      );
+      /* Backup-Timeout falls Browser nichts liefert: probiere LastKnown / HomeCity */
+      setTimeout(() => {
+        if (!resolved){
+          if (tryLastKnown() || tryHomeCity()){ refreshAll(); }
+          else refreshAll();
+        }
+      }, 9000);
+    } else {
+      if (tryLastKnown() || tryHomeCity()){ refreshAll(); }
+      else refreshAll();
     }
     /* Initial UI */
     renderHome();
@@ -5936,6 +5989,28 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     if (!userLat){
       $('mapState').hidden = false;
       $('mapStateTitle').textContent = 'Standort wird geladen …';
+      $('mapStateMsg').textContent = 'Bitte erlaube den Zugriff falls dein Browser fragt — oder wähl eine Stadt:';
+      const acts = $('mapStateActions');
+      const cities = [
+        { t: 'Stuttgart', lat: 48.7758, lng: 9.1829 },
+        { t: 'München',   lat: 48.1372, lng: 11.5755 },
+        { t: 'Berlin',    lat: 52.5200, lng: 13.4050 },
+        { t: 'Hamburg',   lat: 53.5511, lng: 9.9937 },
+        { t: 'Köln',      lat: 50.9375, lng: 6.9603 },
+        { t: 'Frankfurt', lat: 50.1109, lng: 8.6821 }
+      ];
+      if (acts && !acts.dataset.cityWired){
+        acts.dataset.cityWired = '1';
+        acts.innerHTML = cities.map(c => '<button class="ms-city-btn" data-lat="' + c.lat + '" data-lng="' + c.lng + '">' + c.t + '</button>').join('');
+        acts.querySelectorAll('[data-lat]').forEach(b => b.addEventListener('click', () => {
+          userLat = parseFloat(b.dataset.lat);
+          userLng = parseFloat(b.dataset.lng);
+          try{ localStorage.setItem('crew_last_loc', JSON.stringify({ lat: userLat, lng: userLng, source: 'manual', t: Date.now() })); }catch(_){}
+          $('mapState').hidden = true;
+          if (window.L && map) try { map.setView([userLat, userLng], 13); } catch(_){}
+          loadHotspots();
+        }));
+      }
       return;
     }
     $('mapState').hidden = true;
