@@ -19925,4 +19925,294 @@ body:not([data-current-screen="radar"]) .hs-list-bar{ display: none !important; 
 })();
 </script>
 
+<style id="bb-fixfinal2">/* ============================================================
+   BB-FIXFINAL2 — Loading-Text + Crew-Old-Btns + Cookie-Violet + Friends/Profile
+   ============================================================ */
+
+/* ---------- 1. CREW-Screen: alle alten Buttons hard hidden ---------- */
+#screen-crew .cb-cc-actions,
+#screen-crew .cb-cc-btn,
+#screen-crew .crew-create-actions,
+#screen-crew .v107-tabs,
+#screen-crew .v107-tab,
+#screen-crew .v107-tab-content,
+#screen-crew .v107-content,
+#screen-crew .crew-hub-empty,
+#screen-crew .crew-hub-actions,
+#screen-crew .crew-hub-btn-row,
+#screen-crew .crew-banner-old,
+#screen-crew button[onclick*="openCrewCreate"],
+#screen-crew button[onclick*="openJoinByCode"],
+#screen-crew button[onclick*="openCrewBoard"],
+#screen-crew button[onclick*="openSettings"],
+#screen-crew button[onclick*="v107SwitchTab"]{
+  display: none !important;
+}
+/* Aber: meine FY-Wrap soll voll sichtbar sein */
+#screen-crew .fy-wrap{ display: block !important; }
+
+/* ---------- 2. MATCH/FRIENDS-Screen: Tinder-Match-Stack hidden ---------- */
+#screen-match .match-area,
+#screen-match .match-filter-bar,
+#screen-match .match-stack,
+#screen-match .mactions,
+#screen-match #matchStack,
+#screen-match .ma{
+  display: none !important;
+}
+#screen-match .frnd-wrap{ display: block !important; }
+
+/* ---------- 3. PROFILE: Children definitiv zeigen ---------- */
+#screen-profile{
+  background: #0A0A14 !important;
+  min-height: 100vh !important;
+  overflow-y: auto !important;
+}
+#screen-profile .prof-hero,
+#screen-profile .prof-ava-wrap,
+#screen-profile .prof-ava,
+#screen-profile .prof-ava img,
+#screen-profile .prof-stats,
+#screen-profile .premium-cta,
+#screen-profile .pmenu,
+#screen-profile .pmi,
+#screen-profile .v104-pass-card,
+#screen-profile h2,
+#screen-profile h3{
+  display: revert !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+/* Avatar Bild zeigen */
+#profAvaImg{
+  width: 100% !important; height: 100% !important;
+  object-fit: cover !important;
+  border-radius: 50% !important;
+  display: block !important;
+}
+
+/* ---------- 4. COOKIE-Banner Violet ---------- */
+.cookie-banner{
+  background: linear-gradient(180deg, rgba(15,15,28,.95), rgba(10,10,20,.96)) !important;
+  border-color: rgba(139,92,246,.3) !important;
+}
+.cookie-banner-btn{
+  background: linear-gradient(135deg, #8B5CF6, #6366F1) !important;
+  color: #fff !important;
+  border: 0 !important;
+  padding: 10px 20px !important;
+  border-radius: 12px !important;
+  font-weight: 800 !important;
+  letter-spacing: -.01em !important;
+  box-shadow: 0 8px 22px rgba(139,92,246,.4) !important;
+  cursor: pointer !important;
+}
+.cookie-banner-btn:active{ transform: scale(.97); }
+
+/* ---------- 5. FY-Hero "Hey Crew" feiner ---------- */
+.fy-hero-greeting{ color: rgba(192,132,252,.8) !important; }
+.fy-hero-name{
+  background: linear-gradient(135deg, #fff 0%, #C084FC 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ---------- 6. SOS-Status korrekt anzeigen ---------- */
+.sos-status-active{
+  background: linear-gradient(135deg, rgba(236,72,153,.2), rgba(190,24,93,.08)) !important;
+  border: .5px solid rgba(236,72,153,.5) !important;
+  color: #FBCFE8 !important;
+}
+.sos-status-active .sos-status-label{
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+/* Pink in Status-Bar/Privacy-Pill final purgieren */
+.priv-pill.sos:not(body.sos-stealth-active *){
+  background: linear-gradient(135deg, rgba(236,72,153,.30), rgba(190,24,93,.10)) !important;
+  border-color: rgba(236,72,153,.5) !important;
+}
+.priv-pill.sos .dot{ background: #EC4899 !important; }
+
+/* ---------- 7. Generelle Pink-Reste (durch :has() oder direct) ---------- */
+[style*="background:linear-gradient(135deg,#FE3C72"],
+[style*="background: linear-gradient(135deg,#FE3C72"],
+[style*="background: linear-gradient(135deg, #FE3C72"]{
+  background: linear-gradient(135deg, #8B5CF6, #6366F1) !important;
+}
+[class*="pink"]:not(.bb-color-swatch.c-pink){
+  /* generic pink utility classes — falls vorhanden */
+  background: linear-gradient(135deg, #8B5CF6, #6366F1) !important;
+}
+
+/* ---------- 8. Splash-Loader Text ---------- */
+.splash p, #splash p, .loader-text, #splash .loader + p{
+  /* CSS allein kann Text nicht ändern, JS macht das */
+}
+
+/* ---------- 9. SOS aktiv: Pulsing klar sichtbar ---------- */
+.hdr-sos.active, .hdr-btn.hdr-sos.active{
+  animation: sosActiveBounce .8s ease-in-out infinite;
+}
+@keyframes sosActiveBounce{
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+}
+
+/* ---------- 10. Bottom-Nav drüber bei Cookie-Banner ---------- */
+.cookie-banner.show{
+  z-index: 1500 !important;
+}
+body.cookie-shown .bb-nav-final{
+  bottom: calc(96px + env(safe-area-inset-bottom, 0px)) !important;
+}
+
+/* ---------- 11. v107 generelle Tab-Reste verstecken ---------- */
+.v107-tabs, .v107-tab, .v107-tab-content,
+.v108-noti-empty, .v109-hls-empty,
+.v104-no-crew{
+  display: none !important;
+}
+</style>
+<script id="bb-fixfinal2-js">
+/* ============================================================
+   BB-FIXFINAL2 — Loader-Text, SOS-Status, Cleanup-Hooks
+   ============================================================ */
+(function(){
+  'use strict';
+  if (window.__bbFixFinal2Init) return;
+  window.__bbFixFinal2Init = true;
+
+  /* ============= 1. LOADING-TEXT umschreiben ============= */
+  function updateLoadingText(){
+    /* Find loading screen p-Tag mit "Urlaub" und ersetzen */
+    document.querySelectorAll('p, span, div').forEach(function(el){
+      if (el.children.length > 0) return;
+      var text = el.textContent || '';
+      if (/urlaub startet/i.test(text)){
+        el.textContent = 'crew. lädt …';
+        el.style.color = 'rgba(192,132,252,.85)';
+        el.style.fontWeight = '700';
+        el.style.letterSpacing = '.04em';
+      }
+      if (/wird vorbereitet/i.test(text) && text.length < 50){
+        el.textContent = 'Daten werden geladen …';
+      }
+    });
+  }
+
+  /* ============= 2. SOS-Status Verify ============= */
+  function ensureSosStatus(){
+    /* Prüfe ob SOS aktiv und PrivacyPill korrekt synct */
+    var sosBtn = document.querySelector('.hdr-sos, .hdr-btn.hdr-sos');
+    if (!sosBtn) return;
+    /* SOS-Active-Klasse aus body lesen */
+    var isSosActive = document.body.classList.contains('sos-active') || document.querySelector('[data-sos-active="true"]');
+    sosBtn.classList.toggle('active', !!isSosActive);
+    /* Wenn aktiv und nicht stealth: Pill sollte SOS sein */
+    var pill = document.querySelector('.priv-pill');
+    if (pill && isSosActive){
+      pill.classList.add('sos');
+      var stealthOn = document.body.classList.contains('sos-stealth-mode-on');
+      if (!stealthOn){
+        var txt = pill.querySelector('.priv-pill-text, .ppl-text, span');
+        if (txt) txt.textContent = 'SOS aktiv';
+      }
+    }
+  }
+
+  /* ============= 3. Cookie-Banner: Body-Klasse setzen wenn angezeigt ============= */
+  function watchCookieBanner(){
+    var b = document.querySelector('.cookie-banner');
+    if (!b) return;
+    var obs = new MutationObserver(function(){
+      var visible = b.classList.contains('show');
+      document.body.classList.toggle('cookie-shown', visible);
+    });
+    obs.observe(b, { attributes: true, attributeFilter: ['class'] });
+    /* Initial */
+    document.body.classList.toggle('cookie-shown', b.classList.contains('show'));
+  }
+
+  /* ============= 4. Crew-Old-Buttons sicher entfernen ============= */
+  function killOldCrewBtns(){
+    var crew = document.getElementById('screen-crew');
+    if (!crew) return;
+    /* Old buttons */
+    crew.querySelectorAll('.cb-cc-btn, .v107-tab, .v107-tabs, .crew-hub-empty').forEach(function(el){
+      el.style.display = 'none';
+    });
+    /* Inline onclick buttons */
+    crew.querySelectorAll('button[onclick*="openCrewCreate"], button[onclick*="openJoinByCode"], button[onclick*="openCrewBoard"], button[onclick*="openSettings"], button[onclick*="v107SwitchTab"]').forEach(function(el){
+      el.style.display = 'none';
+    });
+  }
+
+  /* ============= 5. Match-Screen Tinder-UI deaktivieren ============= */
+  function killMatchUI(){
+    var match = document.getElementById('screen-match');
+    if (!match) return;
+    match.querySelectorAll('.match-area, .match-stack, .mactions, .match-filter-bar, .ma').forEach(function(el){
+      el.style.display = 'none';
+    });
+  }
+
+  /* ============= 6. Profile-Children definitiv visible ============= */
+  function ensureProfile(){
+    var p = document.getElementById('screen-profile');
+    if (!p) return;
+    p.style.background = '#0A0A14';
+    p.style.minHeight = '100vh';
+    p.style.color = '#FAFAFA';
+    /* Restore any inline display:none on children */
+    Array.from(p.children).forEach(function(c){
+      if (c.dataset.bbHiddenByFy) return; /* meine eigenen Hides bleiben */
+      if (c.style.display === 'none' && !c.classList.contains('fy-wrap')){
+        c.style.display = '';
+      }
+      if (c.style.visibility === 'hidden') c.style.visibility = '';
+      if (c.style.opacity === '0') c.style.opacity = '';
+    });
+  }
+
+  /* ============= 7. INIT ============= */
+  function init(){
+    setTimeout(function(){
+      updateLoadingText();
+      ensureSosStatus();
+      watchCookieBanner();
+      killOldCrewBtns();
+      killMatchUI();
+      ensureProfile();
+    }, 600);
+
+    setInterval(function(){
+      updateLoadingText();
+      ensureSosStatus();
+      killOldCrewBtns();
+      killMatchUI();
+      ensureProfile();
+    }, 3000);
+
+    /* Bei Tab-Switch */
+    document.addEventListener('click', function(e){
+      var t = e.target;
+      if (!t || !t.closest) return;
+      var nav = t.closest('.bb-nav-btn, [data-target]');
+      if (nav){
+        setTimeout(function(){
+          killOldCrewBtns();
+          killMatchUI();
+          ensureProfile();
+        }, 300);
+      }
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+
 </body></html>
