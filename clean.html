@@ -827,6 +827,28 @@ a{ color: var(--c-violet-3); text-decoration: none; }
   transition: all .2s var(--ease);
   cursor: pointer;
 }
+/* Feed-Tabs auf Home — Öffentlich / Freunde / Crews */
+.feed-tabs{
+  display: flex;
+  gap: 4px;
+  padding: 3px;
+  background: var(--c-surface-2);
+  border-radius: var(--r-1);
+  margin-left: auto;
+}
+.feed-tab{
+  padding: 5px 10px;
+  border-radius: var(--r-1);
+  color: var(--c-text-3);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .02em;
+  transition: background .2s, color .2s;
+}
+.feed-tab.on{
+  background: linear-gradient(135deg, var(--c-violet), var(--c-violet-2));
+  color: #fff;
+}
 .fcard:active{ transform: scale(.99); }
 .fcard-head{
   display: flex;
@@ -3741,7 +3763,14 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
         </div>
       </div>
       <div class="sec">
-        <div class="sec-h"><h3>Was läuft</h3></div>
+        <div class="sec-h">
+          <h3>Was läuft</h3>
+          <div class="feed-tabs" id="feedTabs">
+            <button class="feed-tab on" data-feed-tab="public">Öffentlich</button>
+            <button class="feed-tab" data-feed-tab="friends">Freunde</button>
+            <button class="feed-tab" data-feed-tab="crews">Crews</button>
+          </div>
+        </div>
         <div class="feed" id="feedActivity"></div>
       </div>
       <div class="sec">
@@ -5131,6 +5160,24 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     };
     return kindLabels[kind] || 'Spot';
   }
+  /* Label mit 3D-Emoji als HTML — für Tags, Listen-Headers etc. */
+  function hsLabelHtml(kind, subcategory, size){
+    const px = size || 14;
+    const url = hsFx(kind, subcategory);
+    const text = hsLabel(kind, subcategory);
+    return '<img class="emo3d" style="width:' + px + 'px;height:' + px + 'px;vertical-align:-2px;margin-right:4px" src="' + url + '" alt=""/>' + esc(text);
+  }
+  /* Kurzer Code z.B. "🚓 PW", "🚒 FW", "🏥 KH" */
+  function hsShortCode(subcategory){
+    const codes = {
+      police: 'PW', fire_station: 'FW', hospital: 'KH', pharmacy: 'AP',
+      helpline: 'HL', counseling: 'BS', women_shelter: 'FH', lgbtq_center: 'LG',
+      youth_center: 'JH', addiction_help: 'SH', train_station: 'BHF',
+      gas_station_24h: '24H', community_center: 'BÜZ',
+      restaurant: 'REST', bar: 'BAR', club: 'CLUB', hotel: 'HOT', cafe: 'CAF'
+    };
+    return codes[subcategory] || null;
+  }
   function emo3d(name, size){
     const url = FX[name] || FX.sparkles;
     return `<img class="emo3d ${size||''}" src="${url}" alt="" loading="lazy"/>`;
@@ -5662,32 +5709,54 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     }catch(e){ /* silent */ }
   }
 
+  let feedScope = 'public';
+  $$('.feed-tab').forEach(b => b.addEventListener('click', () => {
+    $$('.feed-tab').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    feedScope = b.dataset.feedTab;
+    loadFeedActivity();
+  }));
   async function loadFeedActivity(){
     const host = $('feedActivity');
     host.innerHTML = '<div class="feed-empty">Lade …</div>';
     try{
-      const items = [];
-      const sp = await sb.from('hotspots').select('id,name,kind,owner_id,created_at,description')
-        .eq('closed_at', null).order('created_at', { ascending: false }).limit(3);
-      ((sp && sp.data) || []).forEach(h => {
-        items.push({ type: 'spot', name: h.name, time: h.created_at, body: h.description || ('Neuer ' + h.kind + '-Spot'), tag: h.kind });
-      });
+      let q = sb.from('hotspots').select('id,name,kind,subcategory,owner_id,created_at,description,visibility,is_official,partner_name')
+        .is('closed_at', null);
+      if (feedScope === 'public'){
+        q = q.eq('visibility', 'public').eq('is_official', false);
+      } else if (feedScope === 'friends'){
+        q = q.eq('visibility', 'friends');
+      } else if (feedScope === 'crews'){
+        q = q.in('visibility', ['circle', 'private']);
+      }
+      const sp = await q.order('created_at', { ascending: false }).limit(8);
+      const items = ((sp && sp.data) || []).map(h => ({
+        id: h.id, name: h.name, time: h.created_at,
+        body: h.description || ('Neuer ' + (hsLabel(h.kind, h.subcategory) || 'Spot')),
+        kind: h.kind, sub: h.subcategory, scope: feedScope
+      }));
       if (!items.length){
-        host.innerHTML = '<div class="empty with-emo" style="background:var(--c-surface);border:.5px dashed var(--c-line);border-radius:var(--r-3);margin:0 16px"><img class="emo3d sz-hero" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Sparkles/3D/sparkles_3d.png" alt=""/><h4>Hier wird\'s lebendig</h4><p>Lade Freunde ein, leg Spots an oder warte bis was passiert.</p></div>';
+        const emptyMsgs = {
+          public:  { hd: 'Noch nichts Öffentliches', sub: 'Sei der/die Erste — leg einen Spot an oder warte bis was passiert.' },
+          friends: { hd: 'Keine Freunde-Spots', sub: 'Wenn deine Freunde Spots „nur Freunde" anlegen, erscheinen sie hier.' },
+          crews:   { hd: 'Keine Crew-Spots', sub: 'Spots die deine Crews privat anlegen siehst du hier.' }
+        };
+        const m = emptyMsgs[feedScope] || emptyMsgs.public;
+        host.innerHTML = '<div class="empty with-emo" style="background:var(--c-surface);border:.5px dashed var(--c-line);border-radius:var(--r-3);margin:0 16px"><img class="emo3d sz-hero" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Sparkles/3D/sparkles_3d.png" alt=""/><h4>' + esc(m.hd) + '</h4><p>' + esc(m.sub) + '</p></div>';
         return;
       }
       host.innerHTML = items.map(it => `
-        <div class="fcard">
+        <div class="fcard" data-id="${it.id}">
           <div class="fcard-head">
-            <div class="fcard-ava">${initials(it.name)}</div>
+            <div class="fcard-ava"><img class="emo3d" style="width:24px;height:24px" src="${hsFx(it.kind, it.sub)}" alt=""/></div>
             <div class="fcard-name">${esc(it.name)}</div>
             <span class="fcard-time">${timeAgo(it.time)}</span>
           </div>
           <p class="fcard-body">${esc(it.body)}</p>
-          ${it.tag ? '<span class="fcard-tag">' + esc(it.tag) + '</span>' : ''}
+          <span class="fcard-tag">${hsLabelHtml(it.kind, it.sub, 12)}</span>
         </div>
       `).join('');
-    }catch(e){ console.warn(e); }
+    }catch(e){ console.warn(e); host.innerHTML = '<div class="feed-empty">Fehler beim Laden</div>'; }
   }
 
   async function loadFeedSpots(){
@@ -5919,13 +5988,14 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
       const dist = h.distance_km != null ? (h.distance_km < 1 ? Math.round(h.distance_km * 1000) + ' m' : h.distance_km.toFixed(1) + ' km') : '';
       let tag = '';
       if (h.is_official){
+        const subEmo = hsLabelHtml(h.kind, h.subcategory, 13);
         tag = h.kind === 'help_point'
-          ? '<span class="hs-row-tag help">Hilfe-Anlaufstelle</span>'
-          : '<span class="hs-row-tag official">Offiziell verifiziert</span>';
+          ? '<span class="hs-row-tag help">' + subEmo + '</span>'
+          : '<span class="hs-row-tag official">' + subEmo + '</span>';
       } else if (h.partner_tier === 'premium' || h.partner_name){
-        tag = '<span class="hs-row-tag partner">Partner</span>';
+        tag = '<span class="hs-row-tag partner"><img class="emo3d" style="width:13px;height:13px;vertical-align:-2px;margin-right:4px" src="' + FX.crown + '" alt=""/>Partner</span>';
       } else {
-        tag = '<span class="hs-row-tag">' + esc(hsLabel(h.kind, h.subcategory)) + '</span>';
+        tag = '<span class="hs-row-tag">' + hsLabelHtml(h.kind, h.subcategory, 13) + '</span>';
       }
       const verifTick = h.hs_verified || h.is_official
         ? '<span style="color:#6EE7B7"><svg viewBox="0 0 24 24" fill="currentColor" style="width:14px;height:14px;vertical-align:-3px"><path d="M12 1l3 3 4-1 1 4 3 3-3 3-1 4-4-1-3 3-3-3-4 1-1-4-3-3 3-3 1-4 4 1z"/><path d="M9 12l2 2 4-4" stroke="#0a0014" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>'
