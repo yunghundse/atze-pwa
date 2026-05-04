@@ -4,6 +4,9 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
 <meta name="theme-color" content="#0A0A14" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="crew." />
 <meta name="description" content="crew. — Connection + Safety Network für deine Crew. Hotspots, Live-Standort, SafePlace, SOS." />
 <title>crew.</title>
 
@@ -1921,6 +1924,221 @@ a{ color: var(--c-violet-3); text-decoration: none; }
   margin: var(--s-3) 0 var(--s-4);
 }
 
+/* ============= HEADER BELL ============= */
+.hdr-bell{
+  flex: none;
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  background: rgba(139,92,246,.1);
+  border: .5px solid var(--c-violet-line);
+  color: var(--c-text-2);
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  transition: background .2s var(--ease);
+}
+.hdr-bell:active{ transform: scale(.92); }
+.hdr-bell svg{ width: 18px; height: 18px; }
+.bell-counter{
+  position: absolute;
+  top: -4px; right: -4px;
+  min-width: 18px; height: 18px;
+  padding: 0 5px;
+  background: linear-gradient(135deg, var(--c-sos), var(--c-sos-2));
+  color: #fff;
+  border-radius: 9px;
+  font-size: 10px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--c-bg);
+}
+
+/* ============= INBOX MODAL ============= */
+.inbox-list{ display: flex; flex-direction: column; gap: var(--s-2); }
+.inbox-item{
+  display: flex;
+  gap: var(--s-3);
+  padding: var(--s-3);
+  background: var(--c-surface-2);
+  border: .5px solid var(--c-violet-line);
+  border-radius: var(--r-2);
+  cursor: pointer;
+  position: relative;
+}
+.inbox-item.unread{
+  background: linear-gradient(135deg, rgba(139,92,246,.12), rgba(99,102,241,.04));
+  border-color: rgba(139,92,246,.4);
+}
+.inbox-item.unread::before{
+  content: '';
+  position: absolute;
+  top: 50%; left: -1px;
+  transform: translateY(-50%);
+  width: 4px; height: 24px;
+  background: var(--c-violet);
+  border-radius: 2px;
+}
+.inbox-ic{
+  width: 36px; height: 36px;
+  border-radius: var(--r-2);
+  background: rgba(139,92,246,.18);
+  display: flex; align-items: center; justify-content: center;
+  flex: none;
+}
+.inbox-ic.sos{ background: rgba(236,72,153,.2); }
+.inbox-ic.heimweg{ background: rgba(40,200,120,.2); }
+.inbox-ic.invite{ background: rgba(255,214,10,.2); }
+.inbox-ic img.emo3d{ width: 22px; height: 22px; }
+.inbox-main{ flex: 1; min-width: 0; }
+.inbox-title{ font-size: var(--t-4); font-weight: 800; color: #fff; margin: 0; }
+.inbox-body{ font-size: var(--t-5); color: var(--c-text-2); margin: 2px 0 4px; line-height: 1.4; word-wrap: break-word; }
+.inbox-time{ font-size: 10px; color: var(--c-text-3); }
+.inbox-mark{
+  background: none; border: 0;
+  color: var(--c-text-3);
+  font-size: 10px;
+  padding: 4px 8px;
+}
+.inbox-empty{
+  text-align: center;
+  padding: var(--s-6) var(--s-4);
+}
+
+/* ============= INVITE MODAL ============= */
+.inv-tab-row{
+  display: flex;
+  gap: 4px;
+  background: var(--c-surface-2);
+  padding: 4px;
+  border-radius: var(--r-2);
+  margin-bottom: var(--s-3);
+}
+.inv-tab{ flex: 1; padding: 8px; border-radius: var(--r-1); color: var(--c-text-3); font-size: var(--t-5); font-weight: 700; }
+.inv-tab.on{ background: linear-gradient(135deg, var(--c-violet), var(--c-violet-2)); color: #fff; }
+.inv-pane{ display: none; }
+.inv-pane.on{ display: block; }
+.inv-share-row{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--s-2);
+  margin-top: var(--s-3);
+}
+.inv-share-btn{
+  padding: var(--s-3) var(--s-2);
+  background: var(--c-surface-2);
+  border: .5px solid var(--c-violet-line);
+  border-radius: var(--r-2);
+  font-size: var(--t-5);
+  font-weight: 700;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+}
+.inv-share-btn svg{ width: 22px; height: 22px; color: var(--c-violet-3); }
+.inv-link-box{
+  display: flex;
+  gap: var(--s-2);
+  margin-top: var(--s-3);
+  padding: var(--s-2);
+  background: var(--c-surface-2);
+  border-radius: var(--r-2);
+  border: .5px solid var(--c-violet-line);
+}
+.inv-link-box input{
+  flex: 1;
+  background: transparent;
+  border: 0;
+  color: var(--c-text-2);
+  font-size: var(--t-5);
+  font-family: ui-monospace, monospace;
+}
+.inv-link-box button{
+  padding: 6px 12px;
+  background: var(--c-violet);
+  color: #fff;
+  border-radius: var(--r-1);
+  font-size: var(--t-5);
+  font-weight: 700;
+}
+.inv-list{
+  display: flex; flex-direction: column; gap: var(--s-2);
+  margin-top: var(--s-2);
+}
+.inv-item{
+  display: flex; align-items: center; gap: var(--s-3);
+  padding: var(--s-2) var(--s-3);
+  background: var(--c-surface-2);
+  border-radius: var(--r-2);
+}
+.inv-item-ava{ width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--c-violet), var(--c-violet-2)); flex: none; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: #fff; overflow: hidden; }
+.inv-item-ava img{ width: 100%; height: 100%; object-fit: cover; }
+.inv-item-info{ flex: 1; min-width: 0; }
+.inv-item-name{ font-size: var(--t-4); font-weight: 700; color: #fff; }
+.inv-item-meta{ font-size: var(--t-5); color: var(--c-text-3); margin-top: 2px; }
+.inv-item-acts{ display: flex; gap: 6px; flex: none; }
+.inv-item-acts button{ padding: 6px 10px; border-radius: var(--r-1); font-size: var(--t-5); font-weight: 700; }
+.inv-item-acts .accept{ background: linear-gradient(135deg, var(--c-green), #1ea860); color: #fff; }
+.inv-item-acts .decline{ background: var(--c-surface); border: .5px solid var(--c-violet-line); color: var(--c-text-2); }
+
+/* QR-Code-Display */
+.inv-qr{
+  width: 200px; height: 200px;
+  margin: 16px auto;
+  background: #fff;
+  border-radius: var(--r-2);
+  padding: 12px;
+}
+
+/* ============= NOTFALL-KONTAKTE ============= */
+.ec-list{ display: flex; flex-direction: column; gap: var(--s-2); }
+.ec-item{
+  display: flex; align-items: center; gap: var(--s-3);
+  padding: var(--s-3);
+  background: var(--c-surface-2);
+  border: .5px solid var(--c-violet-line);
+  border-radius: var(--r-2);
+  position: relative;
+}
+.ec-item.is-buddy{
+  border-color: var(--c-gold);
+  background: linear-gradient(135deg, rgba(255,214,10,.08), rgba(255,109,46,.04));
+}
+.ec-item.is-buddy::after{
+  content: 'BACKUP-BUDDY';
+  position: absolute;
+  top: -7px; right: 8px;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  background: linear-gradient(135deg, var(--c-gold), var(--c-violet-3));
+  color: #0A0A14;
+  padding: 2px 6px;
+  border-radius: var(--r-5);
+}
+.ec-ic{
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: rgba(139,92,246,.18);
+  display: flex; align-items: center; justify-content: center;
+  flex: none;
+  font-size: 16px; font-weight: 800; color: var(--c-violet-3);
+}
+.ec-info{ flex: 1; min-width: 0; }
+.ec-name{ font-size: var(--t-4); font-weight: 800; color: #fff; }
+.ec-meta{ font-size: var(--t-5); color: var(--c-text-3); margin-top: 2px; }
+.ec-acts{ display: flex; gap: 6px; flex: none; }
+.ec-act{ width: 32px; height: 32px; border-radius: var(--r-1); background: var(--c-surface); border: .5px solid var(--c-violet-line); color: var(--c-text-2); display: flex; align-items: center; justify-content: center; }
+.ec-act svg{ width: 14px; height: 14px; }
+.ec-act.danger{ color: var(--c-sos); }
+.ec-act.gold{ color: var(--c-gold); }
+
+.ec-add-form{
+  background: var(--c-surface-2);
+  border: .5px dashed var(--c-violet-line);
+  border-radius: var(--r-2);
+  padding: var(--s-3);
+  margin-top: var(--s-3);
+}
+
 /* ============= STAMMBAUM (Radial Trust-Tree) ============= */
 .cw-tree{
   display: none;
@@ -2125,6 +2343,10 @@ a{ color: var(--c-violet-3); text-decoration: none; }
     <div class="hdr-spacer"></div>
     <button class="hdr-pill live" id="liveBtn"><span class="dot"></span><span>Live</span></button>
     <button class="hdr-pill safe" id="safeBtn"><span class="dot"></span><span>Safe</span></button>
+    <button class="hdr-bell" id="bellBtn" aria-label="Benachrichtigungen">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <span class="bell-counter" id="bellCounter" hidden>0</span>
+    </button>
     <button class="sos-btn" id="sosBtn" aria-label="SOS">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
     </button>
@@ -2654,6 +2876,83 @@ a{ color: var(--c-violet-3); text-decoration: none; }
 .hm-banner-act{ height: 36px; padding: 0 var(--s-3); border-radius: var(--r-2); background: linear-gradient(135deg, var(--c-green), #1ea860); color: #fff; font-weight: 800; font-size: var(--t-5); flex: none; }
 </style>
 
+<!-- INBOX (Notification Center) MODAL -->
+<div class="modal" id="inboxModal">
+  <div class="modal-card">
+    <button class="modal-close" data-close="inboxModal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <h2 class="modal-h">Benachrichtigungen</h2>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <p class="modal-sub" style="margin:0">Was deine Crew & du verpasst haben.</p>
+      <button class="inbox-mark" id="inboxMarkAll">Alle als gelesen</button>
+    </div>
+    <div class="inbox-list" id="inboxList"></div>
+  </div>
+</div>
+
+<!-- FREUNDE-EINLADEN MODAL -->
+<div class="modal" id="inviteModal">
+  <div class="modal-card">
+    <button class="modal-close" data-close="inviteModal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <h2 class="modal-h">Crew einladen</h2>
+    <p class="modal-sub">Freunde mit deinem Code oder per Link einladen.</p>
+    <div class="inv-tab-row">
+      <button class="inv-tab on" data-inv-tab="invite">Einladen</button>
+      <button class="inv-tab" data-inv-tab="pending">Wartet (<span id="invPendingCnt">0</span>)</button>
+    </div>
+    <div class="inv-pane on" data-inv-pane="invite">
+      <div class="field">
+        <label>Email-Adresse</label>
+        <input id="invEmail" type="email" placeholder="freund@example.com" />
+      </div>
+      <div class="field">
+        <label>Persönliche Nachricht (optional)</label>
+        <input id="invMessage" maxlength="200" placeholder="z.B. Lass uns vernetzen" />
+      </div>
+      <div class="modal-actions"><button class="btn-pri" id="invSend">Einladung senden</button></div>
+      <div style="text-align:center;margin:20px 0;color:var(--c-text-3);font-size:var(--t-5)">— oder —</div>
+      <div class="inv-share-row">
+        <button class="inv-share-btn" id="invCopyLink">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          Link kopieren
+        </button>
+        <button class="inv-share-btn" id="invShareNative">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          Teilen
+        </button>
+        <button class="inv-share-btn" id="invShowQr">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          QR-Code
+        </button>
+      </div>
+      <div id="invQrBox" hidden></div>
+    </div>
+    <div class="inv-pane" data-inv-pane="pending">
+      <div class="inv-list" id="invList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- NOTFALL-KONTAKTE MODAL -->
+<div class="modal" id="ecModal">
+  <div class="modal-card">
+    <button class="modal-close" data-close="ecModal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <h2 class="modal-h">Notfall-Kontakte</h2>
+    <p class="modal-sub">Bei SOS gehen Standort + Push automatisch raus. Backup-Buddy bekommt alles inkl. Heimweg-Updates.</p>
+    <div class="ec-list" id="ecList"></div>
+    <button class="btn-pri" id="ecToggleAdd" style="margin-top:14px">+ Kontakt hinzufügen</button>
+    <div class="ec-add-form" id="ecAddForm" hidden>
+      <div class="field"><label>Name</label><input id="ecName" maxlength="40" placeholder="Mama, Beste Freundin, ..." /></div>
+      <div class="field"><label>Email (optional)</label><input id="ecEmail" type="email" placeholder="email@example.com" /></div>
+      <div class="field"><label>Phone (optional)</label><input id="ecPhone" type="tel" placeholder="+49 …" /></div>
+      <div class="field"><label>Beziehung (optional)</label><input id="ecRel" maxlength="30" placeholder="Familie / Freund / Partner" /></div>
+      <div class="modal-actions">
+        <button class="btn-sec" id="ecCancelAdd">Abbrechen</button>
+        <button class="btn-pri" id="ecSaveAdd">Speichern</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ADMIN PANEL MODAL -->
 <div class="modal" id="adminModal">
   <div class="modal-card">
@@ -2956,6 +3255,15 @@ a{ color: var(--c-violet-3); text-decoration: none; }
     /* Map nur init wenn Tab geöffnet */
     /* Live-State sync */
     syncHeader();
+    /* Notifications + Realtime */
+    refreshUnread();
+    setupNotifRealtime();
+    setInterval(refreshUnread, 60000);
+    /* PWA */
+    registerSW();
+    checkIosInstall();
+    /* Invite-URL-Param */
+    checkInviteParam();
   }
 
   /* ============= TAB-ROUTING ============= */
@@ -4372,9 +4680,324 @@ a{ color: var(--c-violet-3); text-decoration: none; }
     }
   });
 
+  /* ============= INBOX / NOTIFICATIONS ============= */
+  let notifChannel = null, lastUnread = 0;
+  async function refreshUnread(){
+    try{
+      const r = await sb.rpc('unread_count');
+      const n = (r && r.data) || 0;
+      const counter = $('bellCounter');
+      if (n > 0){ counter.textContent = n > 99 ? '99+' : n; counter.hidden = false; }
+      else counter.hidden = true;
+      /* Wenn neue Notif: kurzes Pulse */
+      if (n > lastUnread && lastUnread !== 0){
+        $('bellBtn').animate([{ transform: 'scale(1)' }, { transform: 'scale(1.15)' }, { transform: 'scale(1)' }], { duration: 300 });
+      }
+      lastUnread = n;
+    }catch(e){}
+  }
+  async function openInbox(){
+    openModal('inboxModal');
+    const host = $('inboxList');
+    host.innerHTML = '<div class="empty"><div class="spinner" style="margin:40px auto"></div></div>';
+    try{
+      const r = await sb.rpc('get_my_notifications', { p_limit: 50 });
+      const items = (r && r.data) || [];
+      if (!items.length){
+        host.innerHTML = '<div class="inbox-empty"><img class="emo3d sz-hero" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Closed%20mailbox%20with%20lowered%20flag/3D/closed_mailbox_with_lowered_flag_3d.png" alt=""/><h4 style="margin:12px 0 6px">Alles ruhig</h4><p style="color:var(--c-text-3);font-size:13px;margin:0">Keine neuen Benachrichtigungen.</p></div>';
+        return;
+      }
+      const ICONS = { sos: FX.sos, heimweg: FX.house, invite: FX.handshake, spot: FX.pin, trust: 'star', message: 'speech', member_join: FX.crew, system: FX.info };
+      host.innerHTML = items.map(n => {
+        const ic = ICONS[n.type] || FX.bell;
+        const unread = !n.read_at;
+        return `<div class="inbox-item ${unread ? 'unread' : ''}" data-id="${n.id}" data-link="${esc(n.link_to||'')}">
+          <div class="inbox-ic ${n.type}"><img class="emo3d" src="${ic.startsWith('http') ? ic : FX.bell}" alt=""/></div>
+          <div class="inbox-main">
+            <div class="inbox-title">${esc(n.title)}</div>
+            ${n.body ? '<div class="inbox-body">'+esc(n.body)+'</div>' : ''}
+            <div class="inbox-time">${timeAgo(n.created_at)}</div>
+          </div>
+        </div>`;
+      }).join('');
+      host.querySelectorAll('.inbox-item').forEach(el => el.addEventListener('click', async () => {
+        const id = el.dataset.id;
+        await sb.rpc('mark_notif_read', { p_id: id });
+        el.classList.remove('unread');
+        refreshUnread();
+        const link = el.dataset.link;
+        if (link && link.includes('?spot=')){
+          const spotId = link.split('?spot=')[1];
+          const r2 = await sb.from('hotspots').select('*').eq('id', spotId).maybeSingle();
+          if (r2 && r2.data){ closeModal('inboxModal'); openHotspotDetail(r2.data); }
+        } else if (link && link.includes('?invite=')){
+          const code = link.split('?invite=')[1];
+          if (confirm('Einladung annehmen?')){
+            const r3 = await sb.rpc('accept_friend_invite', { p_code: code });
+            if (r3.data) toast('Einladung angenommen · ihr seid jetzt verbunden', null, null, 'success');
+          }
+        }
+      }));
+    }catch(e){ host.innerHTML = '<div class="inbox-empty"><p>Fehler beim Laden</p></div>'; }
+  }
+  $('bellBtn').addEventListener('click', openInbox);
+  $('inboxMarkAll').addEventListener('click', async () => {
+    await sb.rpc('mark_notif_read', { p_id: null });
+    refreshUnread();
+    openInbox();
+  });
+  $$('[data-close="inboxModal"]').forEach(b => b.addEventListener('click', () => closeModal('inboxModal')));
+
+  function setupNotifRealtime(){
+    if (notifChannel) sb.removeChannel(notifChannel);
+    notifChannel = sb.channel('notif-' + user.id)
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'notifications', filter: 'user_id=eq.' + user.id }, refreshUnread)
+      .subscribe();
+  }
+
+  /* ============= INVITE FLOW ============= */
+  function openInvite(){
+    $$('.inv-tab').forEach(b => b.classList.remove('on'));
+    $$('.inv-pane').forEach(p => p.classList.remove('on'));
+    $('.inv-tab[data-inv-tab="invite"]') && document.querySelector('.inv-tab[data-inv-tab="invite"]').classList.add('on');
+    document.querySelector('.inv-pane[data-inv-pane="invite"]').classList.add('on');
+    $('invQrBox').hidden = true;
+    refreshInviteList();
+    openModal('inviteModal');
+  }
+  $$('.inv-tab').forEach(t => t.addEventListener('click', () => {
+    $$('.inv-tab').forEach(x => x.classList.remove('on'));
+    $$('.inv-pane').forEach(p => p.classList.remove('on'));
+    t.classList.add('on');
+    document.querySelector('.inv-pane[data-inv-pane="' + t.dataset.invTab + '"]').classList.add('on');
+    if (t.dataset.invTab === 'pending') refreshInviteList();
+  }));
+
+  $('invSend').addEventListener('click', async () => {
+    const email = $('invEmail').value.trim().toLowerCase();
+    const msg = $('invMessage').value.trim();
+    if (!email || !email.includes('@')){ toast('Email ungültig'); return; }
+    $('invSend').disabled = true; $('invSend').textContent = 'Sende …';
+    try{
+      const r = await sb.rpc('create_friend_invite', { p_email: email, p_message: msg || null });
+      if (r.error) throw r.error;
+      $('invEmail').value = ''; $('invMessage').value = '';
+      toast('Einladung erstellt · Code: ' + r.data, 'Link kopieren', () => copyInviteLink(r.data), 'success');
+      refreshInviteList();
+    }catch(e){ toast('Fehler: ' + e.message); }
+    finally{ $('invSend').disabled = false; $('invSend').textContent = 'Einladung senden'; }
+  });
+
+  function copyInviteLink(code){
+    const link = location.origin + '/clean.html?invite=' + code;
+    if (navigator.clipboard){
+      navigator.clipboard.writeText(link).then(() => toast('Link kopiert', null, null, 'success'));
+    } else toast(link);
+  }
+
+  $('invCopyLink').addEventListener('click', async () => {
+    const r = await sb.rpc('create_friend_invite', { p_email: null, p_user_id: null });
+    if (r.error){ toast('Fehler: ' + r.error.message); return; }
+    copyInviteLink(r.data);
+  });
+  $('invShareNative').addEventListener('click', async () => {
+    const r = await sb.rpc('create_friend_invite', { p_email: null });
+    if (r.error){ toast('Fehler: ' + r.error.message); return; }
+    const link = location.origin + '/clean.html?invite=' + r.data;
+    if (navigator.share){
+      navigator.share({ title: 'crew.', text: 'Lass uns vernetzen — Safety + Connection', url: link }).catch(()=>{});
+    } else copyInviteLink(r.data);
+  });
+  $('invShowQr').addEventListener('click', async () => {
+    const r = await sb.rpc('create_friend_invite', { p_email: null });
+    if (r.error){ toast('Fehler: ' + r.error.message); return; }
+    const link = location.origin + '/clean.html?invite=' + r.data;
+    const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=' + encodeURIComponent(link) + '&color=8B5CF6&bgcolor=FFFFFF&margin=10';
+    $('invQrBox').innerHTML = '<div class="inv-qr"><img src="'+qrUrl+'" alt="QR" style="width:100%;height:100%;object-fit:contain"/></div><p style="text-align:center;font-size:12px;color:var(--c-text-3);margin:8px 0">Code: <strong style="color:#fff">'+r.data+'</strong></p>';
+    $('invQrBox').hidden = false;
+  });
+
+  async function refreshInviteList(){
+    const host = $('invList');
+    host.innerHTML = '<div class="empty"><div class="spinner" style="margin:30px auto"></div></div>';
+    try{
+      const r = await sb.rpc('get_my_invites');
+      const items = ((r && r.data) || []).filter(i => i.status === 'pending');
+      $('invPendingCnt').textContent = items.length;
+      if (!items.length){
+        host.innerHTML = '<div class="empty" style="padding:24px"><p style="color:var(--c-text-3);margin:0">Keine offenen Einladungen.</p></div>';
+        return;
+      }
+      host.innerHTML = items.map(i => `
+        <div class="inv-item">
+          <div class="inv-item-ava">${i.other_photo ? '<img src="'+esc(i.other_photo)+'"/>' : initials(i.other_name)}</div>
+          <div class="inv-item-info">
+            <div class="inv-item-name">${esc(i.other_name || i.email || 'Unbekannt')}</div>
+            <div class="inv-item-meta">${i.direction === 'incoming' ? 'Eingang' : 'Ausgang'} · ${timeAgo(i.created_at)}${i.message ? ' · "' + esc(i.message) + '"' : ''}</div>
+          </div>
+          <div class="inv-item-acts">
+            ${i.direction === 'incoming'
+              ? '<button class="accept" data-act="accept" data-code="'+i.code+'">Annehmen</button><button class="decline" data-act="decline" data-id="'+i.id+'">Nö</button>'
+              : '<button class="decline" data-act="cancel" data-id="'+i.id+'">Stop</button>'}
+          </div>
+        </div>
+      `).join('');
+      host.querySelectorAll('button[data-act]').forEach(b => b.addEventListener('click', async () => {
+        const act = b.dataset.act;
+        if (act === 'accept'){
+          const r2 = await sb.rpc('accept_friend_invite', { p_code: b.dataset.code });
+          if (r2.error){ toast('Fehler: ' + r2.error.message); return; }
+          toast('Einladung angenommen', null, null, 'success');
+        } else {
+          const r2 = await sb.rpc('respond_friend_invite', { p_id: b.dataset.id, p_action: act });
+          if (r2.error){ toast('Fehler: ' + r2.error.message); return; }
+          toast(act === 'decline' ? 'Abgelehnt' : 'Abgebrochen', null, null, 'info');
+        }
+        refreshInviteList();
+      }));
+    }catch(e){ host.innerHTML = '<div class="empty"><p>Fehler beim Laden</p></div>'; }
+  }
+
+  $$('[data-close="inviteModal"]').forEach(b => b.addEventListener('click', () => closeModal('inviteModal')));
+
+  /* URL-Param ?invite=CODE → Auto-Accept-Prompt */
+  function checkInviteParam(){
+    const params = new URLSearchParams(location.search);
+    const code = params.get('invite');
+    if (!code) return;
+    setTimeout(async () => {
+      if (!confirm('Einladung mit Code ' + code + ' annehmen?')) return;
+      const r = await sb.rpc('accept_friend_invite', { p_code: code });
+      if (r.error){ toast('Fehler: ' + r.error.message); return; }
+      if (r.data){
+        toast('Du bist drin · Crew-Verbindung hergestellt', null, null, 'success');
+        history.replaceState({}, '', location.pathname);
+      } else toast('Einladung ungültig oder abgelaufen');
+    }, 1500);
+  }
+
+  /* ============= NOTFALL-KONTAKTE ============= */
+  async function openEcModal(){
+    $('ecAddForm').hidden = true;
+    await renderEcList();
+    openModal('ecModal');
+  }
+  async function renderEcList(){
+    const host = $('ecList');
+    host.innerHTML = '<div class="empty"><div class="spinner" style="margin:30px auto"></div></div>';
+    try{
+      const r = await sb.from('emergency_contacts').select('*').eq('user_id', user.id).order('is_backup_buddy', { ascending: false }).order('position');
+      const items = (r && r.data) || [];
+      if (!items.length){
+        host.innerHTML = '<div class="empty" style="padding:32px 16px"><img class="emo3d sz-xl" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Shield/3D/shield_3d.png" alt=""/><h4 style="margin-top:12px">Noch keine Kontakte</h4><p style="color:var(--c-text-3);max-width:280px;margin:6px auto 0;font-size:13px">Lege Notfall-Kontakte an die bei SOS automatisch benachrichtigt werden.</p></div>';
+        return;
+      }
+      host.innerHTML = items.map(c => `
+        <div class="ec-item ${c.is_backup_buddy ? 'is-buddy' : ''}">
+          <div class="ec-ic">${initials(c.name || '?')}</div>
+          <div class="ec-info">
+            <div class="ec-name">${esc(c.name || '—')}</div>
+            <div class="ec-meta">${[c.email, c.phone, c.relationship].filter(Boolean).map(esc).join(' · ')}</div>
+          </div>
+          <div class="ec-acts">
+            <button class="ec-act ${c.is_backup_buddy ? 'gold' : ''}" data-act="buddy" data-id="${c.id}" title="Backup-Buddy"><svg viewBox="0 0 24 24" fill="${c.is_backup_buddy ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2"><path d="M12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26z"/></svg></button>
+            <button class="ec-act danger" data-act="del" data-id="${c.id}" title="Löschen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button>
+          </div>
+        </div>
+      `).join('');
+      host.querySelectorAll('button[data-act]').forEach(b => b.addEventListener('click', async () => {
+        const act = b.dataset.act, id = b.dataset.id;
+        if (act === 'buddy'){
+          await sb.rpc('set_backup_buddy', { p_id: id });
+          toast('Backup-Buddy gesetzt', null, null, 'success');
+        } else if (act === 'del'){
+          if (!confirm('Kontakt löschen?')) return;
+          await sb.from('emergency_contacts').delete().eq('id', id);
+          toast('Kontakt entfernt');
+        }
+        renderEcList();
+      }));
+    }catch(e){ host.innerHTML = '<div class="empty"><p>Fehler beim Laden</p></div>'; }
+  }
+  $('ecToggleAdd').addEventListener('click', () => $('ecAddForm').hidden = !$('ecAddForm').hidden);
+  $('ecCancelAdd').addEventListener('click', () => { $('ecAddForm').hidden = true; ['ecName','ecEmail','ecPhone','ecRel'].forEach(id => $(id).value = ''); });
+  $('ecSaveAdd').addEventListener('click', async () => {
+    const name = $('ecName').value.trim();
+    const email = $('ecEmail').value.trim() || null;
+    const phone = $('ecPhone').value.trim() || null;
+    const rel = $('ecRel').value.trim() || null;
+    if (!name){ toast('Name fehlt'); return; }
+    if (!email && !phone){ toast('Email oder Phone benötigt'); return; }
+    try{
+      const r = await sb.rpc('add_emergency_contact', { p_name: name, p_email: email, p_phone: phone, p_relationship: rel });
+      if (r.error) throw r.error;
+      ['ecName','ecEmail','ecPhone','ecRel'].forEach(id => $(id).value = '');
+      $('ecAddForm').hidden = true;
+      toast('Kontakt gespeichert', null, null, 'success');
+      renderEcList();
+    }catch(e){ toast('Fehler: ' + e.message); }
+  });
+  $$('[data-close="ecModal"]').forEach(b => b.addEventListener('click', () => closeModal('ecModal')));
+
+  /* SafePlace-Hub Tile rewire */
+  document.querySelectorAll('[data-sp]').forEach(b => {
+    if (b.dataset.sp === 'live' || b.dataset.sp === 'home') return;
+  });
+  /* Add a new SafePlace tile dynamically for emergency contacts */
+
+  /* Trigger Buttons in App-Shell für Invite + EC */
+  /* Add an "Einladen"-Action zur Crew-Tab Header */
+  setTimeout(() => {
+    const cwHead = document.querySelector('.cw-head');
+    if (cwHead && !cwHead.querySelector('.cw-invite-btn')){
+      const btn = document.createElement('button');
+      btn.className = 'cw-invite-btn';
+      btn.style.cssText = 'position:absolute;top:0;right:16px;padding:8px 14px;background:linear-gradient(135deg,var(--c-violet),var(--c-violet-2));color:#fff;border-radius:var(--r-2);font-size:var(--t-5);font-weight:800;display:inline-flex;align-items:center;gap:6px';
+      btn.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Einladen';
+      btn.onclick = openInvite;
+      cwHead.style.position = 'relative';
+      cwHead.appendChild(btn);
+    }
+  }, 1500);
+
+  /* Notfall-Kontakte als zusätzliche Tile im SafePlace-Modal */
+  setTimeout(() => {
+    const sp = document.querySelector('#safeplaceModal .sp-section:nth-of-type(2)');
+    if (sp && !sp.querySelector('.sp-tile-ec')){
+      const tile = document.createElement('button');
+      tile.className = 'sp-tile sp-tile-ec';
+      tile.style.marginBottom = 'var(--s-2)';
+      tile.innerHTML = '<div class="sp-tile-ic"><img class="emo3d sz-md" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Shield/3D/shield_3d.png" alt=""/></div><div class="sp-tile-main"><div class="t">Notfall-Kontakte verwalten</div><div class="s">Wer wird bei SOS benachrichtigt</div></div>';
+      tile.addEventListener('click', () => { closeModal('safeplaceModal'); setTimeout(openEcModal, 300); });
+      sp.insertBefore(tile, sp.querySelector('div'));
+    }
+  }, 2000);
+
+  /* ============= PWA + SERVICE WORKER ============= */
+  function registerSW(){
+    if (!('serviceWorker' in navigator)) return;
+    navigator.serviceWorker.register('/sw.js').catch(e => console.warn('SW reg fail', e));
+  }
+
+  /* iOS Add-to-Home-Banner */
+  function checkIosInstall(){
+    const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    const isStandalone = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
+    if (!isIos || isStandalone) return;
+    if (localStorage.getItem('crew-ios-dismissed') === '1') return;
+    setTimeout(() => {
+      const b = document.createElement('div');
+      b.style.cssText = 'position:fixed;bottom:120px;left:12px;right:12px;z-index:2500;padding:14px 18px;background:rgba(15,15,28,.95);backdrop-filter:blur(20px);border:.5px solid var(--c-violet-line);border-radius:var(--r-3);box-shadow:var(--shadow-2);display:flex;gap:12px;align-items:center';
+      b.innerHTML = '<img class="emo3d sz-md" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Mobile%20phone/3D/mobile_phone_3d.png" alt=""/><div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:800">Aufs Home-Screen?</div><div style="font-size:11px;color:var(--c-text-3);margin-top:2px">Tippe ↗ Teilen → „Zum Home-Bildschirm"</div></div><button style="background:var(--c-violet);color:#fff;border-radius:var(--r-1);padding:8px 12px;font-size:11px;font-weight:700">OK</button>';
+      b.querySelector('button').onclick = () => { b.remove(); localStorage.setItem('crew-ios-dismissed', '1'); };
+      document.body.appendChild(b);
+    }, 5000);
+  }
+
   /* ============= INIT ============= */
   function refreshAll(){
     renderHome();
+    refreshUnread();
     if (document.body.dataset.tab === 'hotspots') loadHotspots();
   }
   /* Bestehende Session checken */
