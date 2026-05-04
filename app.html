@@ -17500,4 +17500,490 @@ body{
 })();
 </script>
 
+<style id="bb-tinderux">/* ============================================================
+   BB-TINDERUX — Swipe-Nav + Profile-Polish + Smooth Transitions
+   ============================================================ */
+
+/* ---------- 1. Smooth Screen-Transitions (Tinder-Slide) ---------- */
+.scr{
+  transition: transform .35s cubic-bezier(.2,.7,.2,1), opacity .25s !important;
+}
+.scr.bb-slide-in-right{
+  animation: scrSlideInRight .35s cubic-bezier(.2,.7,.2,1) both;
+}
+.scr.bb-slide-in-left{
+  animation: scrSlideInLeft .35s cubic-bezier(.2,.7,.2,1) both;
+}
+@keyframes scrSlideInRight{
+  from { transform: translateX(60px); opacity: 0; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+@keyframes scrSlideInLeft{
+  from { transform: translateX(-60px); opacity: 0; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+
+/* ---------- 2. Swipe-Indicator (Edge-Glow während Drag) ---------- */
+.bb-swipe-edge{
+  position: fixed;
+  top: 50%; transform: translateY(-50%);
+  width: 8px; height: 80px;
+  border-radius: 4px;
+  background: linear-gradient(135deg, var(--c-pink, #FE3C72), var(--c-orange, #FF6D2E));
+  z-index: 1500;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .15s, transform .25s;
+}
+.bb-swipe-edge.left{ left: -4px; }
+.bb-swipe-edge.right{ right: -4px; }
+.bb-swipe-edge.on{ opacity: 1; }
+
+/* ---------- 3. Tab-Indicator-Pill in Nav ---------- */
+.bb-nav-final{
+  position: fixed !important;
+}
+.bb-nav-indicator{
+  position: absolute;
+  bottom: 4px;
+  height: 3px;
+  width: 28px;
+  background: linear-gradient(90deg, #FE3C72, #FF6D2E);
+  border-radius: 2px;
+  transition: left .35s cubic-bezier(.2,.7,.2,1);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ---------- 4. Body während Swipe (kein scroll) ---------- */
+body.bb-swiping{
+  overflow: hidden !important;
+  touch-action: pan-y;
+}
+
+/* ---------- 5. PROFILE Polish — additiv über Legacy ---------- */
+#screen-profile{
+  position: relative !important;
+}
+
+.bb-prof-quickstats{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 0 16px 16px;
+  padding: 12px;
+  background: rgba(255,255,255,.04);
+  border: .5px solid rgba(255,255,255,.08);
+  border-radius: 14px;
+}
+.bb-prof-quickstat{
+  text-align: center;
+  padding: 8px 4px;
+  position: relative;
+}
+.bb-prof-quickstat:not(:last-child)::after{
+  content: '';
+  position: absolute;
+  right: 0; top: 20%;
+  width: .5px; height: 60%;
+  background: rgba(255,255,255,.08);
+}
+.bb-prof-quickstat .num{
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--c-text-1, #fff);
+  letter-spacing: -.02em;
+  display: block;
+  line-height: 1;
+}
+.bb-prof-quickstat .lbl{
+  font-size: 10px;
+  color: rgba(255,255,255,.5);
+  margin-top: 4px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+/* Profile Action Quick-Bar */
+.bb-prof-quickbar{
+  display: flex;
+  gap: 8px;
+  padding: 0 16px 16px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.bb-prof-quickbar::-webkit-scrollbar{ display: none; }
+.bb-prof-quick-btn{
+  flex: 0 0 auto;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.04);
+  border: .5px solid rgba(255,255,255,.08);
+  color: rgba(255,255,255,.85);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+.bb-prof-quick-btn svg{ width: 14px; height: 14px; }
+.bb-prof-quick-btn.primary{
+  background: linear-gradient(135deg, #FE3C72, #FF6D2E);
+  color: #fff;
+  border-color: transparent;
+}
+.bb-prof-quick-btn:active{ transform: scale(.95); }
+
+/* ---------- 6. Edge-Hint beim ersten Mal (Swipe-Anleitung) ---------- */
+.bb-swipe-hint{
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1500;
+  background: rgba(15,15,24,.92);
+  backdrop-filter: blur(20px);
+  padding: 16px 20px;
+  border-radius: 16px;
+  border: .5px solid rgba(255,255,255,.1);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s;
+}
+.bb-swipe-hint.on{ opacity: 1; }
+.bb-swipe-hint .arrows{
+  display: flex; gap: 4px;
+  color: #FE3C72;
+}
+.bb-swipe-hint svg{ width: 18px; height: 18px; animation: hintArrow 1.5s ease-in-out infinite; }
+@keyframes hintArrow{
+  0%, 100%{ transform: translateX(0); }
+  50%{ transform: translateX(8px); }
+}
+
+/* ---------- 7. Smooth Rendering ---------- */
+.scr, .bb-nav-final, .bb-prof-quickstats, .bb-prof-quickbar{
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* ---------- 8. Active-State Tap Feedback ---------- */
+.bb-nav-btn{
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+.bb-nav-btn:active{ transform: scale(.92); }
+
+/* ---------- 9. Edge-Pull-to-Show-Nav (versteckte Nav) ---------- */
+.bb-nav-final{
+  transition: transform .3s ease, opacity .3s !important;
+}
+body.bb-nav-hidden .bb-nav-final{
+  transform: translateX(-50%) translateY(120%) !important;
+}
+</style>
+<script id="bb-tinderux-js">
+/* ============================================================
+   BB-TINDERUX — Swipe-Nav, Profile-Polish, Spots-Verify
+   ============================================================ */
+(function(){
+  'use strict';
+  if (window.__bbTinderUxInit) return;
+  window.__bbTinderUxInit = true;
+
+  /* ============= 1. SCREEN-ORDER für Swipe ============= */
+  /* Reihenfolge wie in Nav: home → hotspots → safety → crew → profile */
+  /* Aber: safety ist Overlay, nicht Screen → wir überspringen es im Swipe */
+  var SCREEN_ORDER = ['radar', 'crew', 'match', 'profile']; /* 4 echte Screens */
+  var NAV_ORDER = ['home', 'hotspots', 'safety', 'crew', 'profile']; /* 5 Buttons */
+
+  function getCurrentScreenIdx(){
+    var active = document.querySelector('.scr.active');
+    if (!active) return 0;
+    var name = (active.id || '').replace('screen-', '');
+    var idx = SCREEN_ORDER.indexOf(name);
+    return idx >= 0 ? idx : 0;
+  }
+  function switchToIdx(idx, direction){
+    var name = SCREEN_ORDER[idx];
+    if (!name) return;
+    if (typeof window.go !== 'function') return;
+    try{
+      window.go(name);
+      /* Slide-Animation */
+      setTimeout(function(){
+        var screen = document.getElementById('screen-' + name);
+        if (screen){
+          screen.classList.remove('bb-slide-in-left', 'bb-slide-in-right');
+          void screen.offsetWidth; /* reflow */
+          screen.classList.add(direction > 0 ? 'bb-slide-in-right' : 'bb-slide-in-left');
+        }
+      }, 30);
+      /* Sync nav-active */
+      syncNav(name);
+    }catch(e){ console.warn('[bb-tinderux] go fail', e); }
+  }
+
+  function syncNav(screenName){
+    var nav = document.querySelector('.bb-nav-final');
+    if (!nav) return;
+    var label = screenName === 'radar' ? 'hotspots'
+              : screenName === 'match' ? 'friends'
+              : screenName === 'crew' ? 'crew'
+              : screenName === 'profile' ? 'profile'
+              : 'home';
+    nav.querySelectorAll('.bb-nav-btn').forEach(function(b){
+      b.classList.toggle('active', b.getAttribute('data-target') === label);
+    });
+  }
+
+  /* ============= 2. SWIPE-DETECTION ============= */
+  var swipeState = { x: 0, y: 0, startX: 0, startY: 0, dragging: false, startTime: 0 };
+  var SWIPE_THRESHOLD = 80;       /* Mindestens 80px swipe */
+  var SWIPE_VELOCITY = 0.4;       /* px/ms für Quick-Swipe */
+  var EDGE_THRESHOLD = 30;        /* Swipe muss am Rand starten oder gross genug sein */
+
+  function shouldIgnoreSwipe(target){
+    if (!target) return false;
+    /* Ignoriere Swipes auf Map (Leaflet braucht Drag) */
+    if (target.closest('.leaflet-container, #spotsMap, .leaflet-pane')) return true;
+    /* Ignoriere auf Modals/Sheets */
+    if (target.closest('.ap-modal, .hw-modal, .hd-modal, .tr-modal, .ae-modal, .set-ov, #safeplaceOv')) return true;
+    /* Ignoriere auf Inputs */
+    if (target.closest('input, textarea, select, [contenteditable]')) return true;
+    /* Ignoriere auf horizontal-scrollable */
+    if (target.closest('.bb-prof-quickbar, .hf-bar, .sc-row, .ae-dots')) return true;
+    return false;
+  }
+
+  function onTouchStart(e){
+    if (shouldIgnoreSwipe(e.target)) return;
+    var t = e.touches[0];
+    swipeState.startX = t.clientX;
+    swipeState.startY = t.clientY;
+    swipeState.x = t.clientX;
+    swipeState.y = t.clientY;
+    swipeState.dragging = true;
+    swipeState.startTime = Date.now();
+  }
+  function onTouchMove(e){
+    if (!swipeState.dragging) return;
+    var t = e.touches[0];
+    var dx = t.clientX - swipeState.startX;
+    var dy = t.clientY - swipeState.startY;
+    /* Wenn Vertical dominiert, abbrechen (User scrollt) */
+    if (Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > 30){
+      swipeState.dragging = false;
+      hideEdgeHints();
+      return;
+    }
+    swipeState.x = t.clientX;
+    swipeState.y = t.clientY;
+    /* Edge-Hint anzeigen */
+    if (Math.abs(dx) > 40){
+      showEdge(dx > 0 ? 'right' : 'left');
+    }
+  }
+  function onTouchEnd(){
+    if (!swipeState.dragging) return;
+    swipeState.dragging = false;
+    hideEdgeHints();
+    var dx = swipeState.x - swipeState.startX;
+    var dy = swipeState.y - swipeState.startY;
+    var dt = Date.now() - swipeState.startTime;
+    var velocity = Math.abs(dx) / dt; /* px/ms */
+    /* Vertical scroll: ignorieren */
+    if (Math.abs(dy) > Math.abs(dx)) return;
+    /* Threshold check */
+    if (Math.abs(dx) < SWIPE_THRESHOLD && velocity < SWIPE_VELOCITY) return;
+    /* Direction */
+    var direction = dx < 0 ? +1 : -1; /* swipe links → next, swipe rechts → prev */
+    var idx = getCurrentScreenIdx();
+    var newIdx = Math.max(0, Math.min(SCREEN_ORDER.length - 1, idx + direction));
+    if (newIdx !== idx){
+      switchToIdx(newIdx, direction);
+      try{ navigator.vibrate && navigator.vibrate(8); }catch(e){}
+    }
+  }
+
+  function showEdge(side){
+    var el = document.querySelector('.bb-swipe-edge.' + side);
+    if (!el){
+      el = document.createElement('div');
+      el.className = 'bb-swipe-edge ' + side;
+      document.body.appendChild(el);
+    }
+    el.classList.add('on');
+  }
+  function hideEdgeHints(){
+    document.querySelectorAll('.bb-swipe-edge').forEach(function(e){ e.classList.remove('on'); });
+  }
+
+  /* ============= 3. SWIPE-HINT (zeige beim ersten Mal) ============= */
+  function maybeShowHint(){
+    if (localStorage.getItem('bb-swipe-hint-seen') === '1') return;
+    setTimeout(function(){
+      var hint = document.createElement('div');
+      hint.className = 'bb-swipe-hint';
+      hint.innerHTML = ''+
+        '<div class="arrows"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>'+
+        '<span>Wische um zwischen Tabs zu wechseln</span>';
+      document.body.appendChild(hint);
+      setTimeout(function(){ hint.classList.add('on'); }, 100);
+      setTimeout(function(){
+        hint.classList.remove('on');
+        setTimeout(function(){ hint.remove(); }, 400);
+        try{ localStorage.setItem('bb-swipe-hint-seen', '1'); }catch(e){}
+      }, 3500);
+    }, 4500);
+  }
+
+  /* ============= 4. PROFILE-POLISH (additiv über Legacy) ============= */
+  async function polishProfile(){
+    var screen = document.getElementById('screen-profile');
+    if (!screen) return;
+    if (screen.querySelector('.bb-prof-quickstats')) return; /* schon gemacht */
+
+    /* QuickStats und QuickBar nach .prof-stats einfügen */
+    var anchor = screen.querySelector('.prof-stats');
+    if (!anchor) anchor = screen.querySelector('.prof-hero');
+    if (!anchor) return;
+
+    var s = window.sb || window.supabase;
+    var stats = { spots: 0, crew: 0, trust: '—' };
+    try{
+      if (s){
+        var u = await s.auth.getUser();
+        var uid = u && u.data && u.data.user && u.data.user.id;
+        if (uid){
+          var spotsRes = await s.from('hotspots').select('id', { count: 'exact', head: true }).eq('owner_id', uid);
+          stats.spots = spotsRes.count || 0;
+          var crewRes = await s.rpc('get_crew_circle');
+          stats.crew = ((crewRes && crewRes.data) || []).filter(function(m){ return m.user_id !== uid; }).length;
+          var trustRes = await s.from('user_trust_summary').select('*').eq('user_id', uid).maybeSingle();
+          if (trustRes && trustRes.data && trustRes.data.avg_score){
+            stats.trust = Number(trustRes.data.avg_score).toFixed(1);
+          }
+        }
+      }
+    }catch(e){ console.warn('[bb-tinderux] stats fail', e); }
+
+    /* QuickStats */
+    var statsEl = document.createElement('div');
+    statsEl.className = 'bb-prof-quickstats';
+    statsEl.innerHTML = ''+
+      '<div class="bb-prof-quickstat"><span class="num">'+stats.spots+'</span><span class="lbl">Spots</span></div>'+
+      '<div class="bb-prof-quickstat"><span class="num">'+stats.crew+'</span><span class="lbl">Crew</span></div>'+
+      '<div class="bb-prof-quickstat"><span class="num">'+stats.trust+'</span><span class="lbl">Trust</span></div>';
+    anchor.parentNode.insertBefore(statsEl, anchor.nextSibling);
+
+    /* QuickBar */
+    var bar = document.createElement('div');
+    bar.className = 'bb-prof-quickbar';
+    bar.innerHTML = ''+
+      '<button class="bb-prof-quick-btn primary" data-action="safety" type="button">'+
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>'+
+        'SafePlace'+
+      '</button>'+
+      '<button class="bb-prof-quick-btn" data-action="audience" type="button">'+
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M5 21v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2"/></svg>'+
+        'Modus wechseln'+
+      '</button>'+
+      '<button class="bb-prof-quick-btn" data-action="stealth" type="button">'+
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 7v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V7l-8-5z"/></svg>'+
+        'Stealth'+
+      '</button>'+
+      '<button class="bb-prof-quick-btn" data-action="datenschutz" type="button">'+
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>'+
+        'Datenschutz'+
+      '</button>';
+    statsEl.parentNode.insertBefore(bar, statsEl.nextSibling);
+
+    bar.addEventListener('click', function(e){
+      var b = e.target.closest('.bb-prof-quick-btn');
+      if (!b) return;
+      var act = b.getAttribute('data-action');
+      if (act === 'safety' && typeof window.openSafeplaceHub === 'function'){
+        window.openSafeplaceHub();
+      } else if (act === 'audience' && window.bbHotspot && window.bbHotspot.openAudPicker){
+        window.bbHotspot.openAudPicker();
+      } else if (act === 'stealth'){
+        var on = !document.body.classList.contains('sos-stealth-mode-on');
+        document.body.classList.toggle('sos-stealth-mode-on', on);
+        try{ localStorage.setItem('bb-sos-stealth', on ? '1' : '0'); }catch(_){}
+        if (window.bbToast) window.bbToast(on ? 'Stealth aktiv' : 'Stealth aus');
+      } else if (act === 'datenschutz'){
+        window.open('/datenschutz.html', '_blank');
+      }
+    });
+  }
+
+  /* ============= 5. SPOTS-VERIFY: Map muss laden bei Hotspot-Tab ============= */
+  function ensureSpotsMap(){
+    /* Wenn radar aktiv und keine Map: Lade-Hint */
+    var radar = document.getElementById('screen-radar');
+    if (!radar || !radar.classList.contains('active')) return;
+    var mapEl = document.getElementById('spotsMap');
+    if (!mapEl){
+      /* Map nicht da — vielleicht andere ID */
+      console.warn('[bb-tinderux] #spotsMap missing on radar screen');
+      return;
+    }
+    /* Trigger Load wenn vorhanden */
+    if (typeof window.bbLoadHotspotsV2 === 'function'){
+      try{ window.bbLoadHotspotsV2(); }catch(e){}
+    }
+    if (typeof window.bbMapRefresh === 'function'){
+      setTimeout(function(){ try{ window.bbMapRefresh(); }catch(e){} }, 200);
+    }
+  }
+
+  /* ============= 6. INIT ============= */
+  function init(){
+    /* Touch-Listener */
+    document.addEventListener('touchstart', onTouchStart, { passive: true });
+    document.addEventListener('touchmove', onTouchMove, { passive: true });
+    document.addEventListener('touchend', onTouchEnd, { passive: true });
+    document.addEventListener('touchcancel', function(){ swipeState.dragging = false; hideEdgeHints(); }, { passive: true });
+
+    /* Profile polishen wenn Profile-Tab geöffnet wird */
+    document.addEventListener('click', function(e){
+      var t = e.target;
+      if (!t || !t.closest) return;
+      if (t.closest('[data-target="profile"]')){
+        setTimeout(polishProfile, 400);
+      }
+      if (t.closest('[data-target="hotspots"], [data-target="home"]')){
+        setTimeout(ensureSpotsMap, 400);
+      }
+    }, true);
+
+    /* Polish initial wenn Profile schon offen */
+    setTimeout(polishProfile, 2000);
+    setTimeout(ensureSpotsMap, 2500);
+
+    /* Hint zeigen */
+    maybeShowHint();
+
+    /* Expose */
+    window.bbSwipeTo = function(dir){
+      var idx = getCurrentScreenIdx();
+      var newIdx = Math.max(0, Math.min(SCREEN_ORDER.length - 1, idx + dir));
+      if (newIdx !== idx) switchToIdx(newIdx, dir);
+    };
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+
 </body></html>
