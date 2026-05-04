@@ -13536,4 +13536,450 @@ body.spots-active{
 })();
 </script>
 
+<style id="bb-orchestrator">/* ============================================================
+   BB-ORCHESTRATOR — Final Routing/Buttons/Overlap-Cleanup
+   ============================================================ */
+
+/* ---------- 1. FINALE Z-INDEX-LADDER (überschreibt alle anderen) ---------- */
+:root{
+  --z-base: 1;
+  --z-screen: 5;
+  --z-content: 10;
+  --z-pill: 50;
+  --z-overlay: 400;
+  --z-floating-bar: 410;
+  --z-header: 1000;
+  --z-bottom-nav: 1100;
+  --z-fab: 1200;
+  --z-toast: 1900;
+  --z-bottom-sheet: 1950;
+  --z-modal: 2000;
+  --z-modal-stack: 2100;
+  --z-modal-top: 2200;
+  --z-tour: 2300;
+  --z-emergency: 9999;
+}
+
+/* Header darüber */
+#appHeader, .app-header, .hdr-wrap{ z-index: var(--z-header) !important; }
+
+/* Bottom-Nav darunter aber über Inhalten */
+.bottom-nav, #bottomNav, .bn-pill, .nav-pill, [data-nav="bottom"]{ z-index: var(--z-bottom-nav) !important; }
+
+/* FAB über Bottom-Nav */
+.hf-fab{ z-index: var(--z-fab) !important; }
+
+/* Modals klar getrennt */
+.ap-modal{ z-index: var(--z-modal) !important; }
+.hw-modal{ z-index: var(--z-modal-stack) !important; }
+.hd-modal{ z-index: var(--z-bottom-sheet) !important; }
+.tr-modal{ z-index: var(--z-modal-top) !important; }
+.ae-modal{ z-index: var(--z-modal-stack) !important; }
+.set-ov{ z-index: var(--z-modal) !important; }
+
+/* Map-Overlays */
+.hf-bar{ z-index: var(--z-floating-bar) !important; }
+.sm-map-state{ z-index: 415 !important; }
+.sc-no-spots-hint{ z-index: 411 !important; }
+.sm-empty-card{ z-index: 411 !important; }
+.tu-toast{ z-index: var(--z-toast) !important; }
+
+/* ---------- 2. SCREEN-VISIBILITY: nur eine Screen gleichzeitig ---------- */
+[id^="screen-"]:not(.bb-active),
+[data-screen]:not(.bb-active){
+  display: none !important;
+}
+[id^="screen-"].bb-active,
+[data-screen].bb-active{
+  display: block !important;
+}
+
+/* Spots-Screen ist Fullscreen */
+#screen-spots.bb-active,
+[data-screen="spots"].bb-active{
+  display: block !important;
+  position: fixed !important;
+  inset: 0 !important;
+}
+
+/* ---------- 3. KEINE DUPLIKATE ---------- */
+.aud-banner ~ .aud-banner,
+.sc-wrap ~ .sc-wrap,
+#ccCircleHost ~ #ccCircleHost,
+.qt-row ~ .qt-row{
+  display: none !important;
+}
+
+/* ---------- 4. MODAL-STACK Backdrop verhalten ---------- */
+.ap-modal, .hw-modal, .hd-modal, .tr-modal, .ae-modal, .set-ov{
+  -webkit-tap-highlight-color: transparent;
+}
+.ap-modal.on, .hw-modal.on, .hd-modal.on, .tr-modal.on, .ae-modal.on, .set-ov.on{
+  pointer-events: auto;
+}
+.ap-modal:not(.on), .hw-modal:not(.on), .hd-modal:not(.on),
+.tr-modal:not(.on), .ae-modal:not(.on), .set-ov:not(.on){
+  pointer-events: none !important;
+  opacity: 0 !important;
+}
+
+/* ---------- 5. CARDS NIEMALS überlaufen ---------- */
+.ap-card, .hw-card, .hd-card, .tr-card, .ae-card, .set-card,
+.cc-card, .sc-card, .qt-tile{
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  overflow-wrap: break-word !important;
+  word-wrap: break-word !important;
+}
+
+/* ---------- 6. BUTTONS einheitlich responsive ---------- */
+button, .btn{
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+button:disabled{
+  cursor: not-allowed !important;
+  opacity: .5 !important;
+}
+
+/* ---------- 7. SCROLL-LOCK wenn Modal offen ---------- */
+body.bb-modal-open{
+  overflow: hidden !important;
+  position: fixed !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* ---------- 8. BOTTOM-NAV: clamp items damit nicht überlappt ---------- */
+.bn-pill{
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-around !important;
+  gap: 4px !important;
+}
+.bn-pill .bn-item{
+  flex: 1 1 0 !important;
+  min-width: 0 !important;
+  max-width: 80px !important;
+  padding: 8px 4px !important;
+}
+.bn-pill .bn-item-label, .bn-item-label{
+  font-size: 10px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* ---------- 9. STATUS-CENTER & QT-ROW nur auf Hub ---------- */
+[data-screen="hub"].bb-active .sc-wrap,
+[data-screen="hub"].bb-active .aud-banner,
+[data-screen="hub"].bb-active .qt-row{
+  display: block !important;
+}
+[data-screen="spots"] .sc-wrap,
+[data-screen="spots"] .aud-banner,
+[data-screen="spots"] .qt-row,
+[data-screen="profile"] .sc-wrap,
+[data-screen="profile"] .aud-banner,
+[data-screen="profile"] .qt-row,
+[data-screen="crew"] .sc-wrap,
+[data-screen="crew"] .aud-banner,
+[data-screen="crew"] .qt-row{
+  display: none !important;
+}
+
+/* Crew-Circle nur auf Crew */
+[data-screen="hub"] #ccCircleHost,
+[data-screen="spots"] #ccCircleHost,
+[data-screen="profile"] #ccCircleHost{
+  display: none !important;
+}
+
+/* ---------- 10. TOAST nicht überlappen mit Bottom-Nav ---------- */
+.tu-toast{
+  bottom: calc(var(--nav-h, 76px) + var(--safe-bot, 0px) + 24px) !important;
+}
+
+/* ---------- 11. DEBUG-BANNER für unwired Buttons (dev only, hidden) ---------- */
+.bb-debug-banner{
+  display: none;
+}
+body.bb-debug .bb-debug-banner{
+  display: block;
+  position: fixed;
+  top: 60px; right: 12px;
+  background: rgba(254,60,114,.9);
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 11px;
+  z-index: var(--z-emergency);
+  max-width: 200px;
+}
+</style>
+<script id="bb-orchestrator-js">
+/* ============================================================
+   BB-ORCHESTRATOR — Routing + Modal-Stack + Cleanup + Validator
+   ============================================================ */
+(function(){
+  'use strict';
+  if (window.__bbOrchInit) return;
+  window.__bbOrchInit = true;
+
+  /* ============= 1. SCREEN-ROUTER (single source of truth) ============= */
+  var SCREENS = ['hub','spots','crew','profile','safety','friends'];
+  var currentScreen = null;
+
+  function switchToScreen(name){
+    if (!name) return;
+    /* Alle Screens ausblenden */
+    document.querySelectorAll('[data-screen], [id^="screen-"]').forEach(function(el){
+      if (el.id === 'screen-' + name || el.getAttribute('data-screen') === name){
+        el.classList.add('bb-active');
+        el.removeAttribute('hidden');
+        el.style.display = '';
+      } else {
+        el.classList.remove('bb-active');
+      }
+    });
+    currentScreen = name;
+    /* Bottom-Nav active state */
+    document.querySelectorAll('.bn-item, .nav-item, [data-tab], [data-screen-target]').forEach(function(el){
+      var isThis = el.getAttribute('data-tab') === name
+        || el.getAttribute('data-screen') === name
+        || el.getAttribute('data-screen-target') === name;
+      if (isThis){
+        document.querySelectorAll('.bn-item.active, .nav-item.active').forEach(function(x){ x.classList.remove('active'); });
+        el.classList.add('active');
+      }
+    });
+    /* Body data-screen für CSS-Selektoren */
+    document.body.setAttribute('data-current-screen', name);
+    /* Re-Init der screen-spezifischen Komponenten */
+    setTimeout(function(){
+      try{
+        if (name === 'hub'){
+          if (window.bbHotspot && window.bbHotspot.openAudPicker) {} /* nothing forced */
+        }
+        if (name === 'spots'){
+          if (typeof window.bbLoadHotspotsV2 === 'function') window.bbLoadHotspotsV2();
+          if (typeof window.bbMapRefresh === 'function') window.bbMapRefresh();
+        }
+        if (name === 'crew'){
+          if (window.bbCrewCircle && window.bbCrewCircle.render){
+            var host = document.getElementById('ccCircleHost');
+            if (host) window.bbCrewCircle.render(host);
+          }
+        }
+      }catch(e){}
+    }, 200);
+  }
+
+  function detectInitialScreen(){
+    /* Prüfe URL-Hash, sonst hub */
+    var h = (location.hash || '').replace('#','').toLowerCase();
+    if (SCREENS.indexOf(h) >= 0) return h;
+    return 'hub';
+  }
+
+  /* ============= 2. NAV-CLICK-DELEGATION ============= */
+  document.addEventListener('click', function(e){
+    var t = e.target;
+    if (!t || !t.closest) return;
+    /* Nav-Items haben data-tab, data-screen, data-screen-target oder href="#X" */
+    var navItem = t.closest('.bn-item, .nav-item, [data-tab], [data-screen-target]');
+    if (navItem){
+      var name = navItem.getAttribute('data-tab')
+              || navItem.getAttribute('data-screen-target')
+              || navItem.getAttribute('data-screen');
+      if (SCREENS.indexOf(name) >= 0){
+        e.preventDefault();
+        switchToScreen(name);
+      }
+      return;
+    }
+    /* Generische Screen-Switch-Buttons */
+    var goTo = t.closest('[data-go-screen]');
+    if (goTo){
+      var n = goTo.getAttribute('data-go-screen');
+      if (SCREENS.indexOf(n) >= 0){
+        e.preventDefault();
+        switchToScreen(n);
+      }
+    }
+  }, true);
+
+  /* ============= 3. MODAL-STACK Manager ============= */
+  function modalStack(){
+    return Array.from(document.querySelectorAll('.ap-modal.on, .hw-modal.on, .hd-modal.on, .tr-modal.on, .ae-modal.on, .set-ov.on'));
+  }
+
+  function setupModalStack(){
+    /* Escape schließt obersten */
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape'){
+        var stack = modalStack();
+        if (stack.length){
+          var top = stack[stack.length - 1];
+          top.classList.remove('on');
+          /* Nach 300ms entfernen wenn dynamic */
+          setTimeout(function(){
+            if (top.parentNode && top.id !== 'bbAudModal' && !top.classList.contains('static')){
+              try{ top.remove(); }catch(e){}
+            }
+          }, 320);
+        }
+      }
+    });
+    /* Body-Scroll-Lock wenn Modal offen */
+    var bodyLockObserver = new MutationObserver(function(){
+      var open = modalStack().length > 0;
+      document.body.classList.toggle('bb-modal-open', open);
+    });
+    bodyLockObserver.observe(document.body, { subtree: true, attributes: true, attributeFilter: ['class'] });
+  }
+
+  /* ============= 4. DUPLIKAT-CLEANUP ============= */
+  function cleanupDuplicates(){
+    var duplicateChecks = [
+      { sel: '.aud-banner', max: 1 },
+      { sel: '.sc-wrap', max: 1 },
+      { sel: '#ccCircleHost', max: 1 },
+      { sel: '.qt-row', max: 1 },
+      { sel: '.hf-bar', max: 1 },
+      { sel: '.hf-fab', max: 1 },
+      { sel: '.ptr-indicator', max: 1 },
+      { sel: '#bbAudBanner', max: 1 }
+    ];
+    duplicateChecks.forEach(function(c){
+      var els = document.querySelectorAll(c.sel);
+      if (els.length > c.max){
+        for (var i = c.max; i < els.length; i++){
+          try{ els[i].remove(); }catch(e){}
+        }
+      }
+    });
+    /* Cleanup leere Modal-Reste die noch im DOM hängen aber nicht .on haben */
+    document.querySelectorAll('.hd-modal:not(.on), .tr-modal:not(.on), .ae-modal:not(.on)').forEach(function(m){
+      /* Wenn schon länger als 5s ohne .on → entfernen */
+      if (!m.dataset.bbExpired){
+        m.dataset.bbExpired = String(Date.now() + 5000);
+      } else if (parseInt(m.dataset.bbExpired, 10) < Date.now()){
+        try{ m.remove(); }catch(e){}
+      }
+    });
+  }
+
+  /* ============= 5. BUTTON-VALIDATOR (logging) ============= */
+  function validateButtons(){
+    var buttons = document.querySelectorAll('button:not([data-bb-validated])');
+    var unwired = 0;
+    buttons.forEach(function(b){
+      b.dataset.bbValidated = '1';
+      /* Prüfe ob ein onclick-Handler existiert oder ein onClick-Event */
+      var hasOnclick = b.hasAttribute('onclick');
+      var hasInlineHandler = (b.onclick && typeof b.onclick === 'function');
+      var hasType = b.type === 'submit' || b.type === 'reset';
+      var hasDataAction = b.hasAttribute('data-action') || b.hasAttribute('data-tab') || b.hasAttribute('data-screen');
+      var hasClass = b.className && b.className.length > 0;
+      /* Wir loggen nur wenn KEINE der obigen Heuristiken zutrifft UND der Button sichtbar ist */
+      if (!hasOnclick && !hasInlineHandler && !hasType && !hasDataAction && !hasClass){
+        unwired++;
+        console.warn('[bb-orch] Unwired button?', b);
+      }
+    });
+    if (unwired > 5){
+      console.warn('[bb-orch] '+unwired+' potentially unwired buttons');
+    }
+  }
+
+  /* ============= 6. NAV-HEIGHT SYNC ============= */
+  function syncNavHeight(){
+    var nav = document.querySelector('.bottom-nav, #bottomNav, .bn-pill, .nav-pill');
+    if (!nav) return;
+    var h = nav.offsetHeight || 76;
+    document.documentElement.style.setProperty('--nav-h', h + 'px');
+  }
+
+  /* ============= 7. OVERLAP-DETECTOR (devmode) ============= */
+  function detectOverlaps(){
+    /* Prüfe kritische Elemente auf Overlap */
+    var nav = document.querySelector('.bn-pill');
+    if (!nav) return;
+    var navRect = nav.getBoundingClientRect();
+    /* Toast darf nicht hinter Nav landen */
+    document.querySelectorAll('.tu-toast').forEach(function(t){
+      var r = t.getBoundingClientRect();
+      if (r.bottom > navRect.top){
+        t.style.bottom = (window.innerHeight - navRect.top + 12) + 'px';
+      }
+    });
+  }
+
+  /* ============= 8. HASH-NAVIGATION ============= */
+  window.addEventListener('hashchange', function(){
+    var h = (location.hash || '').replace('#','').toLowerCase();
+    if (SCREENS.indexOf(h) >= 0){
+      switchToScreen(h);
+    }
+  });
+
+  /* ============= 9. ANTI-OVERFLOW SCROLLBAR ============= */
+  function preventHorizontalScroll(){
+    /* Wenn body horizontal scrollt, Element finden und auf max-width 100vw klemmen */
+    if (document.documentElement.scrollWidth > window.innerWidth){
+      document.querySelectorAll('*').forEach(function(el){
+        try{
+          if (el.scrollWidth > window.innerWidth){
+            el.style.maxWidth = '100vw';
+            el.style.overflowX = 'hidden';
+          }
+        }catch(e){}
+      });
+    }
+  }
+
+  /* ============= 10. INIT ============= */
+  function init(){
+    /* Initial Screen */
+    setTimeout(function(){
+      var initial = detectInitialScreen();
+      switchToScreen(initial);
+    }, 1500);
+
+    setupModalStack();
+
+    /* Periodische Cleanups */
+    setInterval(function(){
+      cleanupDuplicates();
+      syncNavHeight();
+      detectOverlaps();
+    }, 3000);
+
+    /* Button-Validator einmal nach 5s */
+    setTimeout(validateButtons, 5000);
+
+    /* Anti-Overflow ständig */
+    setInterval(preventHorizontalScroll, 4000);
+
+    /* Resize-Listener */
+    window.addEventListener('resize', function(){
+      syncNavHeight();
+      detectOverlaps();
+    });
+
+    /* Expose */
+    window.bbOrch = {
+      switchToScreen: switchToScreen,
+      cleanupDuplicates: cleanupDuplicates,
+      validateButtons: validateButtons,
+      currentScreen: function(){ return currentScreen; }
+    };
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+
 </body></html>
