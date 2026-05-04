@@ -3776,6 +3776,13 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
   border-color: rgba(40,200,120,.85);
 }
 .live-pin.me-pin .live-pin-tail{ border-top-color: #28C878; }
+/* Wenn Live aus: dezenter, kein grüner Glow + kein Pulse-Halo (weglassen) */
+.live-pin.me-pin.off .live-pin-ava{
+  border-color: #C084FC;
+  box-shadow: 0 4px 14px rgba(168,85,247,.4);
+}
+.live-pin.me-pin.off .live-pin-ava::after{ display: none; }
+.live-pin.me-pin.off .live-pin-tail{ border-top-color: #C084FC; }
 .live-pin-pulse{
   position: absolute;
   inset: -10px;
@@ -6234,7 +6241,12 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
       return;
     }
     try{
-      const r = await sb.rpc('get_visible_hotspots_v2', {
+      /* v3 holt auch subcategory mit damit Tag/Emoji richtig sind; Fallback auf v2 */
+      let r = await sb.rpc('get_visible_hotspots_v3', {
+        p_lat: userLat, p_lng: userLng, p_radius_km: 10,
+        p_kinds: null, p_audience: null, p_subcategories: null, p_only_official: false
+      });
+      if (r.error) r = await sb.rpc('get_visible_hotspots_v2', {
         p_lat: userLat, p_lng: userLng, p_radius_km: 10, p_kinds: null, p_audience: null
       });
       const data = (r && r.data) || [];
@@ -6242,17 +6254,22 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
         host.innerHTML = '<div class="feed-empty">Keine Spots in 10 km. Leg den ersten an!</div>';
         return;
       }
-      host.innerHTML = data.slice(0, 3).map(h => {
+      host.innerHTML = data.slice(0, 5).map(h => {
         const dist = h.distance_km < 1 ? Math.round(h.distance_km*1000) + 'm' : h.distance_km.toFixed(1) + 'km';
-        return `<div class="fcard" data-spot-id="${h.id}">
-          <div class="fcard-head">
-            <div class="fcard-ava">${initials(h.name)}</div>
-            <div class="fcard-name">${esc(h.name)}</div>
-            <span class="fcard-time">${dist}</span>
-          </div>
-          <p class="fcard-body">${esc(h.description || h.kind)}</p>
-          <span class="fcard-tag">${esc(h.visibility)} · ${esc(h.kind)}</span>
-        </div>`;
+        const kindLbl = hsLabel(h.kind, h.subcategory);
+        const fxUrl = hsFx(h.kind, h.subcategory);
+        const body = (h.description && h.description.trim()) || kindLbl;
+        const visMap = { public:'Öffentlich', friends:'Freunde', circle:'Crew', private:'Privat' };
+        const visLbl = visMap[h.visibility] || h.visibility || '';
+        return '<div class="fcard" data-spot-id="' + h.id + '">' +
+          '<div class="fcard-head">' +
+            '<div class="fcard-ava"><img class="emo3d" style="width:24px;height:24px" src="' + fxUrl + '" alt=""/></div>' +
+            '<div class="fcard-name">' + esc(h.name || kindLbl) + '</div>' +
+            '<span class="fcard-time">' + dist + '</span>' +
+          '</div>' +
+          '<p class="fcard-body">' + esc(body) + '</p>' +
+          '<span class="fcard-tag">' + hsLabelHtml(h.kind, h.subcategory, 12) + (visLbl ? ' · ' + esc(visLbl) : '') + '</span>' +
+        '</div>';
       }).join('');
       host.querySelectorAll('[data-spot-id]').forEach(c => {
         c.addEventListener('click', () => {
@@ -6286,6 +6303,9 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     }
     liveOn = !liveOn;
     localStorage.setItem('crew-live', liveOn ? '1' : '0');
+    /* Profile-Flag mitziehen damit Map-Marker + Crew-RPC den Status sehen */
+    if (profile){ profile.share_live_with_crew = liveOn; }
+    try{ await sb.from('profiles').update({ share_live_with_crew: liveOn }).eq('user_id', user.id); }catch(_){}
     syncHeader();
     if (liveOn){
       await sb.from('live_locations').upsert({
@@ -6298,6 +6318,10 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
       await sb.from('live_locations').update({ expires_at: new Date().toISOString() }).eq('user_id', user.id);
       toast('Live gestoppt');
     }
+    /* Map-Marker sofort updaten — auf beiden Maps */
+    if (typeof loadCrewLive === 'function') loadCrewLive();
+    if (typeof renderCrewMapTab === 'function' && cwTab === 'map') renderCrewMapTab();
+    if (typeof refreshSafeplaceState === 'function') refreshSafeplaceState();
   }
 
   function toggleHome(){
@@ -8205,23 +8229,26 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
   function renderMyLiveMarker(){
     if (!map || !window.L || !userLat) return;
     if (myLiveMarker){ try{ map.removeLayer(myLiveMarker); }catch(_){} myLiveMarker = null; }
-    /* Nur zeigen wenn Live-Sharing AN ist */
+    /* IMMER eigenen Marker zeigen (wie die Crew-Map auch). Live-Status nur als Visual-Variante */
     const live = !!(profile && profile.share_live_with_crew);
-    if (!live) return;
-    const photo = profile.photo_url
+    const photo = profile && profile.photo_url
       ? '<img src="'+esc(profile.photo_url)+'"/>'
-      : esc(initials(profile.name || 'Du'));
+      : esc(initials((profile && profile.name) || 'Du'));
     const moodObj = MOODS.find(m => m.id === myMood);
     const moodImg = moodObj ? '<img class="emo3d" style="width:14px;height:14px" src="'+FX[moodObj.fx]+'" alt=""/>' : '';
-    const html = '<div class="live-pin me-pin">' +
+    const cls = live ? 'live-pin me-pin' : 'live-pin me-pin off';
+    const html = '<div class="' + cls + '">' +
       '<div class="live-pin-ava">' + photo + '</div>' +
       (moodImg ? '<div class="live-pin-status">' + moodImg + '</div>' : '') +
       '<div class="live-pin-tail"></div>' +
-      '<span class="live-pin-pulse"></span>' +
+      (live ? '<span class="live-pin-pulse"></span>' : '') +
       '</div>';
     const icon = L.divIcon({ html, className: 'live-pin-wrap me-wrap', iconSize: [48, 54], iconAnchor: [24, 54] });
     myLiveMarker = L.marker([userLat, userLng], { icon, zIndexOffset: 1000 }).addTo(map);
-    myLiveMarker.bindPopup('<strong>Du · Live</strong><br/><small>Crew sieht deinen Standort</small>');
+    const popupText = live
+      ? '<strong>Du · Live</strong><br/><small>Crew sieht deinen Standort · 30 min</small>'
+      : '<strong>Du</strong><br/><small>Live ist aus — nur du siehst dich hier</small>';
+    myLiveMarker.bindPopup(popupText);
   }
   async function renderMyHomeway(){
     if (!map || !window.L) return;
