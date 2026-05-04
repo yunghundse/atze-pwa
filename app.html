@@ -20539,4 +20539,358 @@ body:not(.sos-active) #safeplaceOv .sos-status-active{
 })();
 </script>
 
+<style id="bb-routefix">/* ============================================================
+   BB-ROUTEFIX — Home≠Crew, Profile sichtbar, Pink-Clock weg
+   ============================================================ */
+
+/* ---------- 1. PROFILE: BRUTAL force-show ---------- */
+#screen-profile{
+  background: #0A0A14 !important;
+  background-image:
+    radial-gradient(ellipse at 30% 0%, rgba(139,92,246,.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 100%, rgba(99,102,241,.08) 0%, transparent 50%) !important;
+  min-height: 100vh !important;
+  height: auto !important;
+  padding-top: 60px !important;
+  padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)) !important;
+  overflow-y: auto !important;
+  display: none;
+}
+#screen-profile.active{
+  display: block !important;
+}
+#screen-profile *:not(script):not(style){
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+/* Override jeglicher display:none auf Profile-Children */
+#screen-profile.active > div,
+#screen-profile.active > section,
+#screen-profile.active > .prof-hero,
+#screen-profile.active > .prof-stats,
+#screen-profile.active > .prof-vibe,
+#screen-profile.active > .prof-socials,
+#screen-profile.active > .premium-cta,
+#screen-profile.active > .pmenu,
+#screen-profile.active > .v104-pass-card{
+  display: block !important;
+}
+#screen-profile.active .prof-hero{
+  display: block !important;
+  padding: 24px 20px;
+  margin: 0 16px 14px;
+  background: linear-gradient(135deg, rgba(139,92,246,.18), rgba(99,102,241,.06)) !important;
+  border: .5px solid rgba(139,92,246,.3) !important;
+  border-radius: 20px !important;
+  text-align: center !important;
+}
+#screen-profile.active .prof-ava-wrap{
+  width: 96px !important;
+  height: 96px !important;
+  margin: 0 auto 14px !important;
+  position: relative !important;
+}
+#screen-profile.active .prof-ava{
+  width: 96px !important;
+  height: 96px !important;
+  border-radius: 50% !important;
+  overflow: hidden !important;
+  border: 3px solid rgba(255,255,255,.12) !important;
+  box-shadow: 0 12px 32px rgba(139,92,246,.4) !important;
+  background: linear-gradient(135deg, #8B5CF6, #6366F1) !important;
+  display: flex !important;
+}
+#screen-profile.active .prof-ava img,
+#screen-profile.active #profAvaImg{
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  border-radius: 50% !important;
+  display: block !important;
+}
+#screen-profile.active .prof-ava-edit{
+  position: absolute !important;
+  bottom: 0 !important;
+  right: 0 !important;
+  width: 30px !important;
+  height: 30px !important;
+  border-radius: 50% !important;
+  background: linear-gradient(135deg, #28C878, #1ea860) !important;
+  border: 2px solid #0A0A14 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+#screen-profile.active h2,
+#screen-profile.active #profName{
+  font-size: 22px !important;
+  font-weight: 900 !important;
+  color: #fff !important;
+  letter-spacing: -.025em !important;
+  display: block !important;
+  margin: 0 !important;
+}
+#screen-profile.active .handle,
+#screen-profile.active #profHandle{
+  font-size: 13px !important;
+  color: rgba(255,255,255,.6) !important;
+  display: block !important;
+  margin-top: 4px !important;
+}
+
+#screen-profile.active .prof-stats{
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 8px !important;
+  margin: 0 16px 14px !important;
+  padding: 14px !important;
+  background: rgba(139,92,246,.04) !important;
+  border: .5px solid rgba(139,92,246,.15) !important;
+  border-radius: 16px !important;
+}
+#screen-profile.active .pstat{ text-align: center !important; }
+#screen-profile.active .pstat .pn{
+  font-size: 20px !important;
+  font-weight: 900 !important;
+  color: #fff !important;
+  display: block !important;
+}
+#screen-profile.active .pstat .pl{
+  font-size: 10px !important;
+  color: rgba(255,255,255,.5) !important;
+  margin-top: 4px !important;
+  text-transform: uppercase !important;
+  letter-spacing: .04em !important;
+}
+
+#screen-profile.active .pmenu{
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  margin: 14px 16px !important;
+}
+#screen-profile.active .pmi{
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 14px 16px !important;
+  background: rgba(139,92,246,.04) !important;
+  border: .5px solid rgba(139,92,246,.15) !important;
+  border-radius: 14px !important;
+  cursor: pointer !important;
+}
+#screen-profile.active .pmi-icon{
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 10px !important;
+  background: rgba(139,92,246,.2) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: none !important;
+}
+
+/* Force keine FY-Wrap im Profile */
+#screen-profile.active .fy-wrap,
+#screen-profile.active .frnd-wrap,
+#screen-profile.active .sc-wrap,
+#screen-profile.active .aud-banner,
+#screen-profile.active .qt-row,
+#screen-profile.active #ccCircleHost{
+  display: none !important;
+}
+
+/* ---------- 2. CREW-TAB → Friends-Members-Liste statt FY ---------- */
+/* FY-Wrap NUR auf Home-Klick zeigen, nicht auf Crew */
+body[data-current-screen="match"] #screen-crew{ display: none !important; }
+body[data-current-screen="match"] #screen-match{ display: block !important; }
+body[data-current-screen="match"] #screen-match .frnd-wrap{ display: block !important; }
+
+/* ---------- 3. PINK CLOCK-BUTTON im Header neutralisieren ---------- */
+.hdr-actions > button:not(.hdr-sos),
+#appHeader .hdr-btn:not(.hdr-sos),
+.hdr-wrap > .hdr-btn:not(.hdr-sos):not(.live-quick){
+  background: rgba(139,92,246,.12) !important;
+  border: .5px solid rgba(139,92,246,.25) !important;
+  color: rgba(255,255,255,.85) !important;
+  box-shadow: none !important;
+}
+/* Pulse-Rings um Pink-Clock entfernen */
+.hdr-actions > button:not(.hdr-sos)::before,
+.hdr-actions > button:not(.hdr-sos)::after,
+#appHeader .hdr-btn:not(.hdr-sos)::before,
+#appHeader .hdr-btn:not(.hdr-sos)::after{
+  display: none !important;
+  animation: none !important;
+}
+
+/* ---------- 4. Allgemein-Banner "Ändern"-Button violet ---------- */
+.aud-banner-edit{
+  background: rgba(139,92,246,.12) !important;
+  border: .5px solid rgba(139,92,246,.35) !important;
+  color: #C084FC !important;
+}
+
+/* ---------- 5. Live + Safe Header-Pills ---------- */
+.live-quick{
+  background: rgba(139,92,246,.06) !important;
+  border: .5px solid rgba(139,92,246,.25) !important;
+  color: rgba(255,255,255,.85) !important;
+}
+.live-quick.broadcasting{
+  background: linear-gradient(135deg, #8B5CF6, #6366F1) !important;
+  border-color: transparent !important;
+  color: #fff !important;
+}
+</style>
+<script id="bb-routefix-js">
+/* ============================================================
+   BB-ROUTEFIX — Routing korrigieren, Profile sichtbar machen
+   ============================================================ */
+(function(){
+  'use strict';
+  if (window.__bbRouteFixInit) return;
+  window.__bbRouteFixInit = true;
+
+  /* ============= 1. NAV-Routing FIX ============= */
+  function rewireNavCorrect(){
+    var nav = document.querySelector('.bb-nav-final');
+    if (!nav) return;
+
+    /* Mapping korrigieren: Crew-Btn → match (Friends-Liste), Home-Btn → crew (FY) */
+    var ROUTES = {
+      home:     'crew',     /* FY-Feed lebt auf screen-crew */
+      hub:      'crew',
+      hotspots: 'radar',    /* Map */
+      spots:    'radar',
+      crew:     'match',    /* Crew-Members = Friends-Liste auf screen-match */
+      friends:  'match',
+      profile:  'profile'
+    };
+
+    nav.querySelectorAll('.bb-nav-btn').forEach(function(btn){
+      if (btn.dataset.bbRouteFixed) return;
+      btn.dataset.bbRouteFixed = '1';
+
+      btn.addEventListener('click', function(e){
+        var target = btn.getAttribute('data-target');
+        var screenName = ROUTES[target];
+        if (!screenName) return;
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        e.stopPropagation();
+
+        /* SafePlace-Overlay schließen */
+        var spOv = document.getElementById('safeplaceOv');
+        if (spOv && spOv.classList.contains('show')){
+          spOv.classList.remove('show', 'user-opened');
+          spOv.style.display = 'none';
+        }
+
+        if (typeof window.go === 'function'){
+          try{
+            window.__bbSkipSpaAutoOpen = true;
+            window.go(screenName, btn);
+            document.body.setAttribute('data-current-screen', screenName);
+            /* Active-State sync */
+            nav.querySelectorAll('.bb-nav-btn').forEach(function(b){ b.classList.remove('active'); });
+            btn.classList.add('active');
+            /* Map-Refresh wenn radar */
+            if (screenName === 'radar'){
+              setTimeout(function(){
+                if (typeof window.bbLoadHotspotsV2 === 'function') window.bbLoadHotspotsV2();
+                if (typeof window.bbMapRefresh === 'function') window.bbMapRefresh();
+              }, 400);
+            }
+            /* Profile force-show */
+            if (screenName === 'profile'){
+              setTimeout(forceProfileVisible, 200);
+              setTimeout(forceProfileVisible, 800);
+            }
+            setTimeout(function(){ window.__bbSkipSpaAutoOpen = false; }, 500);
+          }catch(err){ console.warn('[bb-routefix] go fail', err); }
+        }
+      }, { capture: true });
+    });
+  }
+
+  /* ============= 2. PROFILE force-show ============= */
+  function forceProfileVisible(){
+    var p = document.getElementById('screen-profile');
+    if (!p) return;
+    if (!p.classList.contains('active')) return;
+
+    /* Style auf Screen */
+    p.style.background = '#0A0A14';
+    p.style.minHeight = '100vh';
+    p.style.color = '#FAFAFA';
+    p.style.display = 'block';
+    p.style.overflowY = 'auto';
+    p.style.paddingTop = '60px';
+    p.style.paddingBottom = '120px';
+
+    /* Alle Children aufdecken (außer FY/Friends-Wraps die gehören nicht hier) */
+    var skipClasses = ['fy-wrap', 'frnd-wrap', 'sc-wrap', 'aud-banner', 'qt-row'];
+    Array.from(p.children).forEach(function(c){
+      if (skipClasses.some(function(cl){ return c.classList.contains(cl); })){
+        c.style.display = 'none';
+        return;
+      }
+      if (c.id === 'ccCircleHost'){
+        c.style.display = 'none';
+        return;
+      }
+      /* Sonst: zeigen */
+      c.style.display = '';
+      c.style.visibility = 'visible';
+      c.style.opacity = '1';
+    });
+
+    /* Avatar-Image laden falls fehlend */
+    var img = p.querySelector('#profAvaImg');
+    if (img && (!img.src || img.src === '')) {
+      img.src = 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80';
+    }
+  }
+
+  /* ============= 3. PIN PINK-CLOCK-BUTTON IM HEADER weg ============= */
+  function killHeaderPinkClock(){
+    /* Suche pinken Clock-Knopf neben SOS */
+    var header = document.querySelector('#appHeader, .hdr-wrap, .app-header');
+    if (!header) return;
+    header.querySelectorAll('button').forEach(function(b){
+      if (b.classList.contains('hdr-sos') || b.classList.contains('hdr-btn-sos')) return;
+      if (b.classList.contains('live-quick')) return;
+      var s = b.style.cssText;
+      var bgPink = /(#FE3C72|#FF1F5C|#EC4899|rgba\(254,|rgba\(236,\s*72)/i.test(s);
+      var hasClockSvg = b.querySelector('svg[class*="clock"], svg circle + path[d*="M"]');
+      if (bgPink || hasClockSvg){
+        b.style.background = 'rgba(139,92,246,.12)';
+        b.style.borderColor = 'rgba(139,92,246,.25)';
+        b.style.boxShadow = 'none';
+        b.style.color = 'rgba(255,255,255,.85)';
+      }
+    });
+  }
+
+  /* ============= INIT ============= */
+  function init(){
+    setTimeout(function(){
+      rewireNavCorrect();
+      forceProfileVisible();
+      killHeaderPinkClock();
+    }, 800);
+
+    setInterval(function(){
+      rewireNavCorrect();
+      forceProfileVisible();
+      killHeaderPinkClock();
+    }, 2500);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+
 </body></html>
