@@ -20215,4 +20215,328 @@ body.cookie-shown .bb-nav-final{
 })();
 </script>
 
+<style id="bb-livefix">/* ============================================================
+   BB-LIVEFIX — Spots≠SafePlace + Bottom-Nav-Immer + SafePlace-Violet + SOS-Status-Reset
+   ============================================================ */
+
+/* ---------- 1. Bottom-Nav IMMER sichtbar (auch wenn SafePlace offen) ---------- */
+.bb-nav-final{
+  z-index: 2050 !important; /* über SafePlace-Overlay */
+  display: flex !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+body.cookie-shown .bb-nav-final{ z-index: 2050 !important; }
+
+/* SafePlace-Overlay darf Bottom-Nav nicht überdecken */
+#safeplaceOv.show{
+  z-index: 1990 !important;
+}
+#safeplaceOv .sp-card,
+#safeplaceOv .safeplace-content,
+#safeplaceOv > div{
+  padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)) !important;
+}
+
+/* ---------- 2. SafePlace VIOLET — alle Pink-Reste killen ---------- */
+#safeplaceOv .sp-tab,
+#safeplaceOv .mood-pill,
+#safeplaceOv .sp-mood-btn,
+#safeplaceOv .v109-pill,
+#safeplaceOv .ck-mood,
+#safeplaceOv [class*="mood"],
+#safeplaceOv .pill,
+#safeplaceOv button{
+  background: rgba(139,92,246,.06) !important;
+  border-color: rgba(139,92,246,.2) !important;
+  color: rgba(255,255,255,.85) !important;
+}
+#safeplaceOv .sp-tab.active,
+#safeplaceOv .mood-pill.active,
+#safeplaceOv .sp-mood-btn.active,
+#safeplaceOv .v109-pill.active{
+  background: linear-gradient(135deg, #8B5CF6, #6366F1) !important;
+  border-color: transparent !important;
+  color: #fff !important;
+}
+
+/* SOS-Aktiv-Banner: nur bei wirklicher SOS-Aktivität anzeigen */
+#safeplaceOv .sos-status-card,
+#safeplaceOv .sp-sos-banner,
+#safeplaceOv .sos-active-banner{
+  background: linear-gradient(135deg, rgba(236,72,153,.18), rgba(190,24,93,.06)) !important;
+  border: .5px solid rgba(236,72,153,.4) !important;
+}
+/* "Was machst du gerade" Cards — pink+blue → violet+green */
+#safeplaceOv [style*="background:linear-gradient"][style*="ec4899"],
+#safeplaceOv [style*="background: linear-gradient"][style*="EC4899"],
+#safeplaceOv .sp-mood-card,
+#safeplaceOv .ck-mood-card{
+  background: linear-gradient(135deg, rgba(139,92,246,.16), rgba(99,102,241,.06)) !important;
+  border: .5px solid rgba(139,92,246,.3) !important;
+}
+
+/* SafePlace-Header */
+#safeplaceOv h1,
+#safeplaceOv h2,
+#safeplaceOv .sp-title{
+  color: #fff !important;
+  letter-spacing: -.025em !important;
+}
+
+/* Settings-Gear Button ohne pink */
+#safeplaceOv .sp-close,
+#safeplaceOv .settings-btn,
+#safeplaceOv button[aria-label*="Settings"],
+#safeplaceOv button[aria-label*="schließen"]{
+  background: rgba(139,92,246,.1) !important;
+  border: .5px solid rgba(139,92,246,.25) !important;
+  color: #fff !important;
+}
+
+/* ---------- 3. Spots-Tab Logik: Hotspot-Map zeigen, NICHT SafePlace ---------- */
+/* Wenn radar.active aktiv ist, soll der ECHTE radar-Inhalt sichtbar sein, nicht SafePlace-Inject */
+#screen-radar.active .radar-content,
+#screen-radar.active #spotsMap,
+#screen-radar.active .leaflet-container{
+  display: block !important;
+  visibility: visible !important;
+}
+
+/* Wenn Spots aktiv UND SafePlace offen = SafePlace zu (User wollte Spots, nicht SafePlace) */
+body[data-current-screen="radar"] #safeplaceOv:not(.user-opened){
+  display: none !important;
+}
+
+/* SafePlace nur sichtbar wenn .show UND .user-opened (vom Klick) */
+#safeplaceOv.show.user-opened{
+  display: block !important;
+}
+
+/* ---------- 4. Pink-Pille rechts neben SOS (alter Header-Button) ---------- */
+.hdr-btn:not(.hdr-sos):not(.bb-nav-btn) [style*="background"]{
+  /* */
+}
+/* Speziell: pinker Clock-Button im Header */
+.hdr-actions > .hdr-btn:not(.hdr-sos),
+.hdr-wrap .hdr-btn:not(.hdr-sos):not(.bb-nav-btn){
+  background: rgba(139,92,246,.12) !important;
+  border-color: rgba(139,92,246,.25) !important;
+}
+
+/* ---------- 5. SOS-Aktiv-Status nur wenn DB sagt ja ---------- */
+body.sos-stale .sos-active-banner,
+body.sos-stale .sos-status-card,
+body:not(.sos-active) .sos-active-banner,
+body:not(.sos-active) #safeplaceOv .sos-status-active{
+  display: none !important;
+}
+
+/* ---------- 6. SafePlace-Body Padding für Nav ---------- */
+#safeplaceOv .sp-card,
+#safeplaceOv > .scrollable,
+.safeplace-content{
+  max-height: calc(100vh - 96px - env(safe-area-inset-bottom, 0px)) !important;
+  overflow-y: auto !important;
+  padding-bottom: 16px !important;
+}
+</style>
+<script id="bb-livefix-js">
+/* ============================================================
+   BB-LIVEFIX — Routing + Stale-SOS + UI-Fixes
+   ============================================================ */
+(function(){
+  'use strict';
+  if (window.__bbLiveFixInit) return;
+  window.__bbLiveFixInit = true;
+
+  var sb = function(){ return window.sb || window.supabase; };
+
+  /* ============= 1. SPOTS-TAB → echter Map, KEIN SafePlace ============= */
+  /* Override: Wenn Hotspot-Tab geklickt wird, NICHT SafePlace öffnen */
+  function rewireSpotsButton(){
+    var nav = document.querySelector('.bb-nav-final');
+    if (!nav) return;
+    var spotsBtn = nav.querySelector('[data-target="hotspots"], [data-target="spots"]');
+    if (!spotsBtn || spotsBtn.dataset.bbLiveFixed) return;
+    spotsBtn.dataset.bbLiveFixed = '1';
+
+    spotsBtn.addEventListener('click', function(e){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      e.stopPropagation();
+      /* SafePlace ZU machen falls offen */
+      var spOv = document.getElementById('safeplaceOv');
+      if (spOv && spOv.classList.contains('show')){
+        spOv.classList.remove('show', 'user-opened');
+        spOv.style.display = 'none';
+      }
+      /* Direkt go('radar') ohne SafePlace-Hijack */
+      if (typeof window.go === 'function'){
+        try{
+          /* Temporary: setze flag dass wir KEINE SafePlace-Auto-Öffnung wollen */
+          window.__bbSkipSpaAutoOpen = true;
+          window.go('radar', spotsBtn);
+          document.body.setAttribute('data-current-screen', 'radar');
+          /* Nav-Active sync */
+          nav.querySelectorAll('.bb-nav-btn').forEach(function(b){ b.classList.remove('active'); });
+          spotsBtn.classList.add('active');
+          /* Map-Refresh */
+          setTimeout(function(){
+            if (typeof window.bbLoadHotspotsV2 === 'function') window.bbLoadHotspotsV2();
+            if (typeof window.bbMapRefresh === 'function') window.bbMapRefresh();
+            window.__bbSkipSpaAutoOpen = false;
+          }, 400);
+        }catch(err){ console.warn('[bb-livefix] go fail', err); }
+      }
+    }, { capture: true });
+  }
+
+  /* ============= 2. SafePlace nur via expliziten User-Klick ============= */
+  /* SafePlace-Card auf Home + Profile-Action */
+  function wireSafePlaceTriggers(){
+    document.querySelectorAll('.bb-spa-card, [data-action="open-safeplace"]').forEach(function(el){
+      if (el.dataset.bbLiveSpaWired) return;
+      el.dataset.bbLiveSpaWired = '1';
+      el.addEventListener('click', function(){
+        if (typeof window.openSafeplaceHub === 'function'){
+          try{
+            var ov = document.getElementById('safeplaceOv');
+            if (ov) ov.classList.add('user-opened');
+            window.openSafeplaceHub();
+          }catch(e){ console.warn(e); }
+        }
+      });
+    });
+  }
+
+  /* SafePlace-Auto-Open verhindern wenn radar gerade aktiv ist */
+  function watchSafePlaceAutoOpen(){
+    var ov = document.getElementById('safeplaceOv');
+    if (!ov) return;
+    var obs = new MutationObserver(function(){
+      if (ov.classList.contains('show')){
+        if (window.__bbSkipSpaAutoOpen){
+          ov.classList.remove('show');
+          ov.style.display = 'none';
+        }
+      }
+    });
+    obs.observe(ov, { attributes: true, attributeFilter: ['class'] });
+  }
+
+  /* ============= 3. SOS-Aktiv-Status korrekt von DB lesen ============= */
+  async function syncSosStatusFromDb(){
+    try{
+      var s = sb();
+      if (!s) return;
+      var u = await s.auth.getUser();
+      var uid = u && u.data && u.data.user && u.data.user.id;
+      if (!uid){ document.body.classList.remove('sos-active'); return; }
+      var r = await s.from('sos_alerts')
+        .select('id, created_at, resolved')
+        .eq('user_id', uid)
+        .eq('resolved', false)
+        .gte('created_at', new Date(Date.now() - 60*60*1000).toISOString())
+        .limit(1);
+      var hasActive = r.data && r.data.length > 0;
+      document.body.classList.toggle('sos-active', hasActive);
+      document.body.classList.toggle('sos-stale', !hasActive);
+      /* SOS-Aktiv-Banner verstecken wenn keine echte SOS aktiv */
+      if (!hasActive){
+        document.querySelectorAll('.sos-active-banner, .sos-status-card, [class*="sos-active"]').forEach(function(el){
+          if (el.classList.contains('hdr-sos') || el.classList.contains('bb-nav-safeplace')) return;
+          el.style.display = 'none';
+        });
+      }
+    }catch(e){ console.warn('[bb-livefix] sos sync', e); }
+  }
+
+  /* ============= 4. Pink-Header-Buttons neutralisieren (z.B. clock-Btn) ============= */
+  function neutralizeHeaderPink(){
+    var hdr = document.querySelector('#appHeader, .hdr-wrap, .app-header');
+    if (!hdr) return;
+    hdr.querySelectorAll('button:not(.hdr-sos), [role="button"]:not(.hdr-sos)').forEach(function(el){
+      if (el.dataset.bbHdrFixed) return;
+      el.dataset.bbHdrFixed = '1';
+      var s = el.style.cssText;
+      if (/(#FE3C72|#FF1F5C|#EC4899|rgba\(254,\s*60,\s*114|rgba\(236,\s*72,\s*153)/i.test(s) && !el.classList.contains('hdr-sos')){
+        el.style.background = 'rgba(139,92,246,.15)';
+        el.style.borderColor = 'rgba(139,92,246,.3)';
+        el.style.boxShadow = 'none';
+      }
+    });
+  }
+
+  /* ============= 5. SafePlace Mood-Pills Violet ============= */
+  function violetSafePlace(){
+    var ov = document.getElementById('safeplaceOv');
+    if (!ov) return;
+    ov.querySelectorAll('button, .mood-pill, .sp-tab, [class*="mood"]').forEach(function(el){
+      if (el.dataset.bbVioletDone) return;
+      el.dataset.bbVioletDone = '1';
+      var s = el.style.cssText;
+      if (/(#FE3C72|#FF1F5C|#EC4899|rgba\(254,|rgba\(236,\s*72)/i.test(s)){
+        var hasActive = el.classList.contains('active') || el.classList.contains('on');
+        if (hasActive){
+          el.style.background = 'linear-gradient(135deg, #8B5CF6, #6366F1)';
+          el.style.color = '#fff';
+          el.style.borderColor = 'transparent';
+        } else {
+          el.style.background = 'rgba(139,92,246,.06)';
+          el.style.borderColor = 'rgba(139,92,246,.2)';
+          el.style.color = 'rgba(255,255,255,.85)';
+        }
+      }
+    });
+    /* Pink/Blue Cards "Was machst du gerade" */
+    ov.querySelectorAll('[style*="background:linear-gradient"], [style*="background: linear-gradient"]').forEach(function(el){
+      if (el.dataset.bbCardViolet) return;
+      var s = el.style.background || '';
+      if (/ec4899|#EC4899|#FE3C72|rgba\(254,|rgba\(236/i.test(s)){
+        el.dataset.bbCardViolet = '1';
+        el.style.background = 'linear-gradient(135deg, rgba(139,92,246,.16), rgba(99,102,241,.06))';
+        el.style.borderColor = 'rgba(139,92,246,.3)';
+      }
+    });
+  }
+
+  /* ============= INIT ============= */
+  function init(){
+    setTimeout(function(){
+      rewireSpotsButton();
+      wireSafePlaceTriggers();
+      watchSafePlaceAutoOpen();
+      syncSosStatusFromDb();
+      neutralizeHeaderPink();
+      violetSafePlace();
+    }, 1000);
+
+    setInterval(function(){
+      rewireSpotsButton();
+      wireSafePlaceTriggers();
+      neutralizeHeaderPink();
+      violetSafePlace();
+    }, 3000);
+
+    /* SOS-Sync alle 30s */
+    setInterval(syncSosStatusFromDb, 30000);
+
+    /* Bei jedem Tab-Switch */
+    document.addEventListener('click', function(e){
+      var t = e.target;
+      if (!t || !t.closest) return;
+      if (t.closest('.bb-nav-btn')){
+        setTimeout(function(){
+          neutralizeHeaderPink();
+          violetSafePlace();
+        }, 300);
+      }
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+
 </body></html>
