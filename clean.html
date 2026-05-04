@@ -14,6 +14,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
 <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/img/apple-touch-icon.png">
 <link rel="manifest" href="/manifest.json">
@@ -2369,6 +2371,10 @@ a{ color: var(--c-violet-3); text-decoration: none; }
         <span class="spa-card-arrow"></span>
       </div>
       <div class="sec">
+        <div class="sec-h"><h3>Wie geht's?</h3><span class="mood-current" id="moodCurrent"></span></div>
+        <div class="mood-row" id="moodRow"></div>
+      </div>
+      <div class="sec">
         <div class="sec-h"><h3>Schnell-Aktionen</h3></div>
         <div class="quick">
           <button class="quick-c live" data-action="live">
@@ -2403,6 +2409,9 @@ a{ color: var(--c-violet-3); text-decoration: none; }
     <section class="tab" id="tab-hotspots">
       <div id="map"></div>
       <div class="hs-bar" id="hsBar"></div>
+      <button class="map-mode-toggle" id="mapModeToggle" aria-label="Heatmap toggle">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="6" opacity=".5"/><circle cx="12" cy="12" r="9" opacity=".25"/></svg>
+      </button>
       <button class="hs-fab" id="hsFab" aria-label="Spot anlegen">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
       </button>
@@ -2667,7 +2676,10 @@ a{ color: var(--c-violet-3); text-decoration: none; }
 
     <div class="sp-section">
       <h4>Audit</h4>
-      <p style="font-size:12px;color:var(--c-text-3);margin:0 0 8px">Alle Aktionen werden DSGVO-konform protokolliert. Du siehst genau wer wann was wusste.</p>
+      <button class="sp-tile" id="spAuditOpen">
+        <div class="sp-tile-ic"><img class="emo3d sz-md" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Information/3D/information_3d.png" alt=""/></div>
+        <div class="sp-tile-main"><div class="t">Daten-Audit anzeigen</div><div class="s">Wer hat wann was von dir gesehen?</div></div>
+      </button>
     </div>
   </div>
 </div>
@@ -2876,6 +2888,123 @@ a{ color: var(--c-violet-3); text-decoration: none; }
 .hm-banner-act{ height: 36px; padding: 0 var(--s-3); border-radius: var(--r-2); background: linear-gradient(135deg, var(--c-green), #1ea860); color: #fff; font-weight: 800; font-size: var(--t-5); flex: none; }
 </style>
 
+<!-- ONBOARDING MODAL -->
+<div class="modal" id="obModal">
+  <div class="modal-card" style="max-height:92vh">
+    <div class="ob-progress" id="obProgress"></div>
+    <div class="ob-pane" data-ob="0">
+      <div class="modal-hero-emo"><img class="emo3d sz-hero" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Waving%20hand/Default/3D/waving_hand_3d_default.png" alt=""/></div>
+      <h2 class="modal-h" style="text-align:center">Willkommen bei crew.</h2>
+      <p class="modal-sub" style="text-align:center">Connection + Safety mit den Leuten denen du vertraust. 5 Schritte und du bist drin.</p>
+      <div class="modal-actions" style="margin-top:24px"><button class="btn-sec" id="obSkip">Überspringen</button><button class="btn-pri" data-ob-next="1">Los geht's</button></div>
+    </div>
+    <div class="ob-pane" data-ob="1" hidden>
+      <div class="modal-hero-emo"><img class="emo3d sz-hero" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Round%20pushpin/3D/round_pushpin_3d.png" alt=""/></div>
+      <h2 class="modal-h" style="text-align:center">Standort & Push</h2>
+      <p class="modal-sub" style="text-align:center">Wir brauchen Standort für Hotspots in der Nähe und Push für SOS-Alarme. Granular einstellbar in den Einstellungen.</p>
+      <div class="modal-actions" style="margin-top:24px;flex-direction:column;gap:8px"><button class="btn-pri" id="obGps">Standort erlauben</button><button class="btn-pri" id="obPush">Push erlauben</button><button class="btn-sec" data-ob-next="2">Weiter</button></div>
+    </div>
+    <div class="ob-pane" data-ob="2" hidden>
+      <div class="modal-hero-emo"><img class="emo3d sz-hero" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Camera/3D/camera_3d.png" alt="" onerror="this.src='https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Busts%20in%20silhouette/3D/busts_in_silhouette_3d.png'"/></div>
+      <h2 class="modal-h" style="text-align:center">Dein Profil</h2>
+      <p class="modal-sub" style="text-align:center">Foto und Name — damit deine Crew dich erkennt.</p>
+      <div style="text-align:center;margin:16px 0"><div class="set-avatar" id="obAva" style="margin:0 auto 12px;width:80px;height:80px"></div><input type="file" id="obPhoto" accept="image/*" hidden /><button class="btn-sec" id="obPhotoBtn" style="height:36px;font-size:12px">Foto wählen</button></div>
+      <div class="field"><label>Anzeige-Name</label><input id="obName" maxlength="40" placeholder="Wie heißt du?" /></div>
+      <div class="modal-actions"><button class="btn-pri" data-ob-next="3">Weiter</button></div>
+    </div>
+    <div class="ob-pane" data-ob="3" hidden>
+      <h2 class="modal-h" style="text-align:center">Wofür nutzt du es?</h2>
+      <p class="modal-sub" style="text-align:center">Wir passen die App an deinen Modus an.</p>
+      <div class="aud-grid" id="obAudGrid"></div>
+      <div class="modal-actions" style="margin-top:16px"><button class="btn-pri" data-ob-next="4">Weiter</button></div>
+    </div>
+    <div class="ob-pane" data-ob="4" hidden>
+      <div class="modal-hero-emo"><img class="emo3d sz-hero" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/People%20hugging/3D/people_hugging_3d.png" alt=""/></div>
+      <h2 class="modal-h" style="text-align:center">Crew einladen</h2>
+      <p class="modal-sub" style="text-align:center">Optional — du kannst auch später vernetzen.</p>
+      <div class="field"><input id="obFirstInvite" type="email" placeholder="Email einer ersten Person" /></div>
+      <div class="modal-actions" style="flex-direction:column;gap:8px"><button class="btn-pri" id="obInviteSend">Einladen</button><button class="btn-sec" data-ob-next="5">Später</button></div>
+    </div>
+    <div class="ob-pane" data-ob="5" hidden>
+      <div class="modal-hero-emo"><img class="emo3d sz-hero" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Party%20popper/3D/party_popper_3d.png" alt=""/></div>
+      <h2 class="modal-h" style="text-align:center">Du bist drin!</h2>
+      <p class="modal-sub" style="text-align:center">Lege deinen ersten Spot an, schau dir den Stammbaum an oder bleib einfach im Hub. Viel Spaß!</p>
+      <div class="modal-actions"><button class="btn-pri" id="obDone">Loslegen</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- AUDIT-LOG MODAL -->
+<div class="modal" id="auditModal">
+  <div class="modal-card">
+    <button class="modal-close" data-close="auditModal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <h2 class="modal-h">Daten-Audit</h2>
+    <p class="modal-sub">DSGVO: Wer hat wann was von dir gesehen?</p>
+    <div class="audit-filter">
+      <button class="audit-flt on" data-flt="">Alle</button>
+      <button class="audit-flt" data-flt="sos">SOS</button>
+      <button class="audit-flt" data-flt="location">Standort</button>
+      <button class="audit-flt" data-flt="heimweg">Heimweg</button>
+    </div>
+    <div class="audit-list" id="auditList"></div>
+  </div>
+</div>
+
+<style>
+.ob-progress{ display: flex; gap: 4px; margin-bottom: 20px; }
+.ob-progress .dot{ flex: 1; height: 3px; background: rgba(139,92,246,.15); border-radius: 2px; transition: background .3s; }
+.ob-progress .dot.on{ background: linear-gradient(90deg, var(--c-violet), var(--c-violet-2)); }
+.ob-pane{ animation: tabIn .3s var(--ease); }
+.audit-filter{ display: flex; gap: 6px; padding: 4px; background: var(--c-surface-2); border-radius: var(--r-2); margin-bottom: 14px; overflow-x: auto; }
+.audit-flt{ flex: none; padding: 7px 12px; border-radius: var(--r-1); color: var(--c-text-3); font-size: var(--t-5); font-weight: 700; white-space: nowrap; }
+.audit-flt.on{ background: linear-gradient(135deg, var(--c-violet), var(--c-violet-2)); color: #fff; }
+.audit-list{ display: flex; flex-direction: column; gap: 8px; }
+.audit-item{ padding: 10px 12px; background: var(--c-surface-2); border-radius: var(--r-2); font-size: var(--t-5); display: flex; gap: 10px; align-items: flex-start; }
+.audit-ic{ width: 28px; height: 28px; border-radius: 50%; background: rgba(139,92,246,.18); display: flex; align-items: center; justify-content: center; flex: none; font-size: 13px; color: var(--c-violet-3); font-weight: 800; }
+.audit-info{ flex: 1; min-width: 0; }
+.audit-action{ font-weight: 700; color: #fff; font-size: var(--t-4); }
+.audit-meta{ color: var(--c-text-3); margin-top: 2px; font-size: 10px; }
+
+/* MOOD-PICKER (im Hub) */
+.mood-row{ display: flex; gap: 6px; padding: 0 16px var(--s-3); overflow-x: auto; scrollbar-width: none; }
+.mood-row::-webkit-scrollbar{ display: none; }
+.mood-pill{ flex: 0 0 auto; display: flex; align-items: center; gap: 6px; padding: 8px 12px; background: var(--c-surface-2); border: .5px solid var(--c-violet-line); border-radius: var(--r-5); font-size: var(--t-5); font-weight: 700; color: var(--c-text-2); white-space: nowrap; }
+.mood-pill.on{ background: linear-gradient(135deg, var(--c-violet), var(--c-violet-2)); color: #fff; border-color: transparent; }
+.mood-pill .emo{ font-size: 16px; }
+.mood-current{ font-size: 11px; color: var(--c-text-3); padding: 0 16px var(--s-1); display: flex; align-items: center; gap: 6px; }
+.mood-current.has{ color: var(--c-violet-3); font-weight: 700; }
+
+/* PHOTO-GALLERY */
+.gallery{ position: relative; margin-bottom: var(--s-3); }
+.gallery-imgs{ display: flex; gap: 6px; overflow-x: auto; scroll-snap-type: x mandatory; border-radius: var(--r-3); }
+.gallery-imgs::-webkit-scrollbar{ display: none; }
+.gallery-img{ flex: 0 0 100%; aspect-ratio: 16/10; scroll-snap-align: start; background: var(--c-surface-2); position: relative; overflow: hidden; border-radius: var(--r-3); }
+.gallery-img img{ width: 100%; height: 100%; object-fit: cover; }
+.gallery-img .caption{ position: absolute; bottom: 0; left: 0; right: 0; padding: 12px; background: linear-gradient(0deg, rgba(0,0,0,.7), transparent); font-size: var(--t-5); color: #fff; }
+.gallery-dots{ display: flex; justify-content: center; gap: 4px; margin-top: 8px; }
+.gallery-dot{ width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,.2); }
+.gallery-dot.on{ background: var(--c-violet); width: 16px; border-radius: 3px; }
+.gallery-add{ display: flex; gap: 8px; margin-top: 10px; }
+.gallery-add button{ padding: 6px 12px; background: var(--c-surface-2); border: .5px solid var(--c-violet-line); border-radius: var(--r-1); font-size: var(--t-5); font-weight: 700; color: var(--c-text-2); }
+
+/* HEIMWEG-MAP im Modal */
+.hm-map{ width: 100%; height: 200px; border-radius: var(--r-2); margin-bottom: 12px; background: rgba(15,15,28,.6); }
+.hm-dest-row{ font-size: var(--t-5); color: var(--c-text-2); padding: 8px 12px; background: var(--c-surface-2); border-radius: var(--r-1); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+.hm-dest-row .emo3d{ width: 18px; height: 18px; }
+
+/* MOOD-PILL auf Avatar */
+.cw-item .ava-mood{ position: absolute; bottom: -2px; right: -2px; width: 18px; height: 18px; border-radius: 50%; background: #0F0F1F; border: 1.5px solid var(--c-bg); display: flex; align-items: center; justify-content: center; font-size: 11px; }
+.cw-item .ava{ position: relative; }
+
+/* Cluster + Heatmap Toggle */
+.map-mode-toggle{ position: absolute; bottom: calc(var(--nav-h) + var(--safe-bot) + 88px); right: 16px; z-index: 1170; width: 40px; height: 40px; border-radius: 50%; background: rgba(15,15,28,.85); backdrop-filter: blur(20px); border: .5px solid var(--c-violet-line); color: var(--c-text-2); display: flex; align-items: center; justify-content: center; }
+.map-mode-toggle svg{ width: 18px; height: 18px; }
+.map-mode-toggle.heat{ color: var(--c-gold); }
+
+.marker-cluster{ background: rgba(139,92,246,.85) !important; border: 2px solid #fff !important; color: #fff !important; font-weight: 800 !important; }
+.marker-cluster div{ background: rgba(139,92,246,.95) !important; color: #fff !important; }
+</style>
+
 <!-- INBOX (Notification Center) MODAL -->
 <div class="modal" id="inboxModal">
   <div class="modal-card">
@@ -3071,6 +3200,8 @@ a{ color: var(--c-violet-3); text-decoration: none; }
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
 <script>
 /* ================================================================
    crew. — clean baseline JS
@@ -3259,11 +3390,17 @@ a{ color: var(--c-violet-3); text-decoration: none; }
     refreshUnread();
     setupNotifRealtime();
     setInterval(refreshUnread, 60000);
+    /* Mood */
+    loadMood();
     /* PWA */
     registerSW();
     checkIosInstall();
     /* Invite-URL-Param */
     checkInviteParam();
+    /* Onboarding für neue User */
+    maybeStartOnboarding();
+    /* Heimweg-Tracking falls aktiv */
+    if (localStorage.getItem('crew-home') === '1') startHmLiveTracking();
   }
 
   /* ============= TAB-ROUTING ============= */
@@ -4994,10 +5131,410 @@ a{ color: var(--c-violet-3); text-decoration: none; }
     }, 5000);
   }
 
+  /* ============= MOOD-SYSTEM ============= */
+  const MOODS = [
+    { id: 'party',   t: 'Party',   emo: '🪩' },
+    { id: 'chill',   t: 'Chill',   emo: '😎' },
+    { id: 'easy',    t: 'Easy',    emo: '😊' },
+    { id: 'down',    t: 'Down',    emo: '😞' },
+    { id: 'lost',    t: 'Lost',    emo: '😵' },
+    { id: 'help',    t: 'Hilfe',   emo: '🆘' },
+    { id: 'home',    t: 'Daheim',  emo: '🏠' },
+    { id: 'healthy', t: 'Healthy', emo: '💪' }
+  ];
+  let myMood = null, crewMoods = {};
+  async function loadMood(){
+    try{
+      const r = await sb.rpc('get_crew_moods');
+      const data = (r && r.data) || [];
+      crewMoods = {};
+      data.forEach(m => { crewMoods[m.user_id] = m.mood; if (m.user_id === user.id) myMood = m.mood; });
+    }catch(e){}
+    renderMoodPicker();
+  }
+  function renderMoodPicker(){
+    const row = $('moodRow');
+    if (!row) return;
+    row.innerHTML = MOODS.map(m => `
+      <button class="mood-pill ${myMood === m.id ? 'on' : ''}" data-mood="${m.id}">
+        <span class="emo">${m.emo}</span><span>${m.t}</span>
+      </button>
+    `).join('');
+    row.querySelectorAll('.mood-pill').forEach(b => b.addEventListener('click', async () => {
+      const mood = b.dataset.mood;
+      const newMood = (myMood === mood) ? null : mood;
+      myMood = newMood;
+      await sb.rpc('set_my_mood', { p_mood: newMood || 'clear' });
+      renderMoodPicker();
+      const cur = $('moodCurrent');
+      if (cur){
+        if (newMood){ const m = MOODS.find(x => x.id === newMood); cur.innerHTML = m.emo + ' ' + m.t + ' · 12h'; cur.classList.add('has'); }
+        else { cur.textContent = ''; cur.classList.remove('has'); }
+      }
+      toast(newMood ? 'Mood: ' + MOODS.find(x => x.id === newMood).t : 'Mood entfernt', null, null, 'info');
+    }));
+    /* Current-Indicator */
+    const cur = $('moodCurrent');
+    if (cur){
+      if (myMood){ const m = MOODS.find(x => x.id === myMood); cur.innerHTML = m.emo + ' ' + m.t + ' · 12h'; cur.classList.add('has'); }
+      else { cur.textContent = 'Tippe um zu teilen'; cur.classList.remove('has'); }
+    }
+  }
+
+  /* ============= ONBOARDING ============= */
+  let obStep = 0, obAud = 'general', obPhotoFile = null;
+  function startOnboarding(){
+    obStep = 0; obAud = 'general'; obPhotoFile = null;
+    /* Audience-Tiles */
+    $('obAudGrid').innerHTML = AUDIENCE_PROFILES.map(p => `
+      <button class="aud-tile ${obAud === p.id ? 'on' : ''}" data-ob-aud="${p.id}">
+        <div class="ic emoji">${emo3d(p.fx)}</div>
+        <div class="info"><div class="t">${p.t}</div><div class="s">${p.s}</div></div>
+      </button>
+    `).join('');
+    $('obAudGrid').querySelectorAll('.aud-tile').forEach(t => t.addEventListener('click', () => {
+      $('obAudGrid').querySelectorAll('.aud-tile').forEach(x => x.classList.remove('on'));
+      t.classList.add('on');
+      obAud = t.dataset.obAud;
+    }));
+    obSetStep(0);
+    openModal('obModal');
+  }
+  function obSetStep(n){
+    obStep = n;
+    $$('.ob-pane').forEach(p => p.hidden = parseInt(p.dataset.ob,10) !== n);
+    /* Progress */
+    $('obProgress').innerHTML = [0,1,2,3,4,5].map(i => '<div class="dot ' + (i <= n ? 'on' : '') + '"></div>').join('');
+  }
+  document.querySelectorAll('[data-ob-next]').forEach(b => b.addEventListener('click', () => {
+    const next = parseInt(b.dataset.obNext, 10);
+    /* Step 2: Profile-Save */
+    if (obStep === 2){
+      const name = $('obName').value.trim();
+      if (name) sb.from('profiles').update({ name }).eq('user_id', user.id).then(() => { profile.name = name; renderProfile(); });
+      if (obPhotoFile){ uploadObPhoto(); }
+    }
+    /* Step 3: Audience-Save */
+    if (obStep === 3){
+      sb.from('profiles').update({ audience_profile: obAud, audience_profile_set_at: new Date().toISOString() }).eq('user_id', user.id).then(() => { profile.audience_profile = obAud; });
+    }
+    obSetStep(next);
+  }));
+  $('obSkip').addEventListener('click', () => { closeModal('obModal'); finishOnboarding(); });
+  $('obDone').addEventListener('click', () => { closeModal('obModal'); finishOnboarding(); });
+  $('obGps').addEventListener('click', () => {
+    navigator.geolocation.getCurrentPosition(p => { userLat = p.coords.latitude; userLng = p.coords.longitude; toast('GPS aktiv', null, null, 'success'); }, () => toast('GPS verweigert'));
+  });
+  $('obPush').addEventListener('click', async () => {
+    if (!('Notification' in window)){ toast('Browser kein Push'); return; }
+    const perm = await Notification.requestPermission();
+    toast(perm === 'granted' ? 'Push aktiviert' : 'Push abgelehnt', null, null, perm === 'granted' ? 'success' : 'info');
+  });
+  $('obPhotoBtn').addEventListener('click', () => $('obPhoto').click());
+  $('obPhoto').addEventListener('change', e => {
+    const f = e.target.files && e.target.files[0]; if (!f) return;
+    obPhotoFile = f;
+    const r = new FileReader();
+    r.onload = ev => $('obAva').innerHTML = '<img src="'+ev.target.result+'" style="width:100%;height:100%;object-fit:cover"/>';
+    r.readAsDataURL(f);
+  });
+  async function uploadObPhoto(){
+    try{
+      const ext = (obPhotoFile.name.split('.').pop() || 'jpg').toLowerCase();
+      const path = user.id + '/' + Date.now() + '.' + ext;
+      const up = await sb.storage.from('profile-photos').upload(path, obPhotoFile, { upsert: true });
+      if (up.error) throw up.error;
+      const url = sb.storage.from('profile-photos').getPublicUrl(path).data.publicUrl;
+      await sb.from('profiles').update({ photo_url: url }).eq('user_id', user.id);
+      profile.photo_url = url;
+      renderProfile();
+    }catch(e){ console.warn(e); }
+  }
+  $('obInviteSend').addEventListener('click', async () => {
+    const email = $('obFirstInvite').value.trim().toLowerCase();
+    if (!email || !email.includes('@')){ toast('Email ungültig'); return; }
+    const r = await sb.rpc('create_friend_invite', { p_email: email, p_message: 'Lass uns auf crew. vernetzen' });
+    if (r.error){ toast('Fehler: ' + r.error.message); return; }
+    toast('Einladung gesendet', null, null, 'success');
+    obSetStep(5);
+  });
+  function finishOnboarding(){
+    sb.from('profiles').update({ onboarding_completed_at: new Date().toISOString() }).eq('user_id', user.id);
+    profile.onboarding_completed_at = new Date().toISOString();
+  }
+  function maybeStartOnboarding(){
+    /* Wenn neu: kein onboarding_completed_at und kein name */
+    if (!profile.onboarding_completed_at && !profile.name){
+      setTimeout(startOnboarding, 1500);
+    }
+  }
+
+  /* ============= HEIMWEG-MAP IM SETUP ============= */
+  let hmMap = null, hmDestMarker = null, hmDestLat = null, hmDestLng = null;
+  function initHmMap(){
+    if (hmMap) { setTimeout(() => hmMap.invalidateSize(), 100); return; }
+    /* HM-Map nur wenn das Modal offen */
+    const card = $('homemodeModal').querySelector('.modal-card');
+    let mapEl = card.querySelector('.hm-map');
+    if (!mapEl){
+      mapEl = document.createElement('div');
+      mapEl.className = 'hm-map';
+      mapEl.id = 'hmMap';
+      const destRow = document.createElement('div');
+      destRow.className = 'hm-dest-row';
+      destRow.id = 'hmDestRow';
+      destRow.innerHTML = '<img class="emo3d" src="'+FX.pin+'" alt=""/><span id="hmDestLabel">Tippe auf die Karte um Ziel zu setzen</span>';
+      const note = card.querySelector('#hmNote');
+      note.parentElement.parentElement.insertBefore(mapEl, note.parentElement);
+      note.parentElement.parentElement.insertBefore(destRow, note.parentElement);
+    }
+    if (!window.L) return;
+    const center = userLat ? [userLat, userLng] : [48.137, 11.575];
+    hmMap = L.map(mapEl, { zoomControl: false }).setView(center, 13);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { subdomains: 'abcd' }).addTo(hmMap);
+    hmMap.on('click', e => {
+      hmDestLat = e.latlng.lat; hmDestLng = e.latlng.lng;
+      if (hmDestMarker) hmMap.removeLayer(hmDestMarker);
+      hmDestMarker = L.marker([hmDestLat, hmDestLng]).addTo(hmMap);
+      $('hmDestLabel').textContent = 'Ziel: ' + hmDestLat.toFixed(4) + ', ' + hmDestLng.toFixed(4);
+    });
+    /* User-Marker */
+    if (userLat) L.circleMarker([userLat, userLng], { radius: 8, color: '#8B5CF6', fillColor: '#8B5CF6', fillOpacity: .8 }).addTo(hmMap);
+    setTimeout(() => hmMap.invalidateSize(), 200);
+  }
+
+  /* HM-Start mit Destination */
+  const origHmStart = $('hmStart').onclick;
+  $('hmStart').onclick = null;
+  $('hmStart').addEventListener('click', async () => {
+    const note = $('hmNote').value.trim();
+    const eta = Date.now() + hmEta * 60 * 1000;
+    try{
+      localStorage.setItem('crew-home', '1');
+      localStorage.setItem('crew-home-eta', String(eta));
+      try{
+        await sb.from('home_routes').insert({
+          user_id: user.id, eta: new Date(eta).toISOString(), note: note || null, status: 'active',
+          dest_lat: hmDestLat, dest_lng: hmDestLng,
+          current_lat: userLat, current_lng: userLng
+        });
+      }catch(e){}
+      homeOn = true;
+      syncHeader();
+      showHmBanner();
+      closeModal('homemodeModal');
+      toast('Heimweg läuft · ' + hmEta + ' min', null, null, 'success');
+      startHmLiveTracking();
+    }catch(e){ toast('Fehler: ' + e.message); }
+  });
+  let hmTrackInterval = null;
+  function startHmLiveTracking(){
+    if (hmTrackInterval) clearInterval(hmTrackInterval);
+    hmTrackInterval = setInterval(() => {
+      if (!localStorage.getItem('crew-home')){ clearInterval(hmTrackInterval); return; }
+      navigator.geolocation.getCurrentPosition(async p => {
+        userLat = p.coords.latitude; userLng = p.coords.longitude;
+        await sb.rpc('update_home_route_position', { p_lat: userLat, p_lng: userLng });
+        /* Auto-Arrived: wenn Distance zur Dest < 50m */
+        const eta = parseInt(localStorage.getItem('crew-home-eta')||'0', 10);
+        const r = await sb.from('home_routes').select('dest_lat,dest_lng').eq('user_id', user.id).eq('status','active').limit(1);
+        if (r.data && r.data[0] && r.data[0].dest_lat){
+          const d = haversine(userLat, userLng, r.data[0].dest_lat, r.data[0].dest_lng);
+          if (d < 0.05){
+            $('hmBannerArrived').click();
+          }
+        }
+      }, () => {}, { enableHighAccuracy: true, maximumAge: 30000, timeout: 15000 });
+    }, 30000);
+  }
+
+  /* Setup-Modal Init Map wenn geöffnet */
+  const origOpenModal = openModal;
+  /* Override openModal um Map zu initialisieren */
+  function openModalWithMap(id){
+    openModal(id);
+    if (id === 'homemodeModal'){ setTimeout(initHmMap, 250); }
+  }
+  /* Re-bind home-quick-action */
+  document.querySelector('[data-action="home"]').addEventListener('click', () => {
+    if (!homeOn) setTimeout(initHmMap, 250);
+  });
+
+  /* ============= SPOT-PHOTO-GALLERY ============= */
+  async function renderSpotGallery(spotId){
+    try{
+      const r = await sb.rpc('get_hotspot_photos', { p_hotspot_id: spotId });
+      const photos = (r && r.data) || [];
+      if (!photos.length){
+        return `<div class="gallery-add">
+          <button id="dtPhotoAdd" data-spot="${spotId}">+ Foto beisteuern</button>
+        </div>`;
+      }
+      const imgs = photos.map((p, i) => `
+        <div class="gallery-img">
+          <img src="${esc(p.photo_url)}" loading="lazy"/>
+          ${p.caption ? '<div class="caption">'+esc(p.caption)+'</div>' : ''}
+        </div>`).join('');
+      const dots = photos.map((_, i) => '<span class="gallery-dot ' + (i === 0 ? 'on' : '') + '"></span>').join('');
+      return `<div class="gallery">
+        <div class="gallery-imgs">${imgs}</div>
+        <div class="gallery-dots">${dots}</div>
+        <div class="gallery-add">
+          <button id="dtPhotoAdd" data-spot="${spotId}">+ Foto beisteuern</button>
+          <span style="margin-left:auto;color:var(--c-text-3);font-size:11px">${photos.length} Foto${photos.length !== 1 ? 's' : ''}</span>
+        </div>
+      </div>`;
+    }catch(e){ return ''; }
+  }
+
+  /* Photo-Upload-Helper für Detail-Modal */
+  async function uploadPhotoForSpot(spotId, file, caption){
+    try{
+      const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
+      const path = user.id + '/' + spotId + '_' + Date.now() + '.' + ext;
+      const up = await sb.storage.from('hotspot-photos').upload(path, file, { upsert: false });
+      if (up.error) throw up.error;
+      const url = sb.storage.from('hotspot-photos').getPublicUrl(path).data.publicUrl;
+      const ins = await sb.from('hotspot_photos').insert({ hotspot_id: spotId, user_id: user.id, photo_url: url, caption: caption || null });
+      if (ins.error) throw ins.error;
+      toast('Foto beigetragen', null, null, 'success');
+      return true;
+    }catch(e){ toast('Fehler: ' + e.message); return false; }
+  }
+
+  /* Hotspot-Detail erweitern um Gallery */
+  document.addEventListener('click', async e => {
+    if (e.target.id === 'dtPhotoAdd' || e.target.closest('#dtPhotoAdd')){
+      const spotId = e.target.dataset.spot || e.target.closest('#dtPhotoAdd').dataset.spot;
+      const inp = document.createElement('input');
+      inp.type = 'file'; inp.accept = 'image/*';
+      inp.onchange = async ev => {
+        const f = ev.target.files[0]; if (!f) return;
+        const cap = prompt('Bildunterschrift (optional)') || null;
+        await uploadPhotoForSpot(spotId, f, cap);
+        if (currentDetailSpot && currentDetailSpot.id === spotId){
+          /* Re-render gallery */
+          const galleryHtml = await renderSpotGallery(spotId);
+          const desc = $('dtDesc');
+          let g = document.getElementById('dtGalleryWrap');
+          if (g) g.outerHTML = '<div id="dtGalleryWrap">'+galleryHtml+'</div>';
+          else if (desc) desc.insertAdjacentHTML('beforebegin', '<div id="dtGalleryWrap">'+galleryHtml+'</div>');
+        }
+      };
+      inp.click();
+    }
+  });
+
+  /* Override openHotspotDetail um Gallery hinzuzufügen */
+  const _origOpenDetail = openHotspotDetail;
+  openHotspotDetail = async function(h){
+    await _origOpenDetail(h);
+    const galleryHtml = await renderSpotGallery(h.id);
+    if (galleryHtml){
+      const desc = $('dtDesc');
+      const existing = document.getElementById('dtGalleryWrap');
+      if (existing) existing.remove();
+      if (desc) desc.insertAdjacentHTML('beforebegin', '<div id="dtGalleryWrap">'+galleryHtml+'</div>');
+    }
+  };
+
+  /* ============= AUDIT-LOG ============= */
+  $('spAuditOpen').addEventListener('click', () => {
+    closeModal('safeplaceModal');
+    setTimeout(() => openAudit(''), 350);
+  });
+  let auditFilter = '';
+  document.querySelectorAll('.audit-flt').forEach(b => b.addEventListener('click', () => {
+    document.querySelectorAll('.audit-flt').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    auditFilter = b.dataset.flt;
+    openAudit(auditFilter);
+  }));
+  async function openAudit(filter){
+    openModal('auditModal');
+    const host = $('auditList');
+    host.innerHTML = '<div class="empty"><div class="spinner" style="margin:30px auto"></div></div>';
+    try{
+      const r = await sb.rpc('get_my_audit_log', { p_limit: 50, p_filter: filter || null });
+      const items = (r && r.data) || [];
+      if (!items.length){
+        host.innerHTML = '<div class="empty" style="padding:32px"><img class="emo3d sz-xl" src="'+FX.info+'" alt=""/><h4 style="margin-top:12px">Noch keine Daten-Zugriffe</h4><p style="color:var(--c-text-3)">Hier siehst du wer wann was von dir gesehen hat.</p></div>';
+        return;
+      }
+      host.innerHTML = items.map(a => `
+        <div class="audit-item">
+          <div class="audit-ic">${initials(a.actor_name || '?')}</div>
+          <div class="audit-info">
+            <div class="audit-action">${esc(a.actor_name || 'System')} · ${esc(a.action)}</div>
+            <div class="audit-meta">${timeAgo(a.created_at)}</div>
+          </div>
+        </div>
+      `).join('');
+    }catch(e){ host.innerHTML = '<div class="empty"><p>Fehler beim Laden</p></div>'; }
+  }
+  $$('[data-close="auditModal"]').forEach(b => b.addEventListener('click', () => closeModal('auditModal')));
+
+  /* ============= SPOTS-CLUSTER + HEATMAP ============= */
+  let clusterGroup = null, heatLayer = null, heatMode = false;
+  $('mapModeToggle').addEventListener('click', () => {
+    heatMode = !heatMode;
+    $('mapModeToggle').classList.toggle('heat', heatMode);
+    loadHotspots();
+  });
+  /* Override loadHotspots um Cluster + Heatmap zu nutzen */
+  const _origLoad = loadHotspots;
+  async function loadHotspotsEnhanced(){
+    if (!map || !window.L) return;
+    if (!userLat){ $('mapState').hidden = false; return; }
+    $('mapState').hidden = true;
+    try{
+      const r = await sb.rpc('get_visible_hotspots_v2', { p_lat: userLat, p_lng: userLng, p_radius_km: 25, p_kinds: hsFilter ? [hsFilter] : null, p_audience: null });
+      const spots = (r && r.data) || [];
+      /* Cleanup alte Marker */
+      mapMarkers.forEach(m => { try { map.removeLayer(m); } catch(_){} });
+      mapMarkers = [];
+      if (clusterGroup) { try { map.removeLayer(clusterGroup); } catch(_){} clusterGroup = null; }
+      if (heatLayer) { try { map.removeLayer(heatLayer); } catch(_){} heatLayer = null; }
+
+      if (heatMode && window.L.heatLayer){
+        const points = spots.map(h => [h.lat, h.lng, 0.6]);
+        heatLayer = L.heatLayer(points, { radius: 35, blur: 25, maxZoom: 18, gradient: { 0.4: '#6366F1', 0.65: '#8B5CF6', 1.0: '#EC4899' } });
+        heatLayer.addTo(map);
+        return;
+      }
+
+      /* Cluster-Modus (default) */
+      if (window.L.markerClusterGroup){
+        clusterGroup = L.markerClusterGroup({ showCoverageOnHover: false, maxClusterRadius: 50 });
+        spots.forEach(h => {
+          const cls = h.is_mine ? 'hs-pin mine' : (h.visibility === 'private' ? 'hs-pin private' : 'hs-pin');
+          const html = `<div class="${cls}"><div class="hs-pin-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="10" r="3"/></svg></div>${h.member_count > 0 ? '<div class="hs-pin-count">'+h.member_count+'</div>' : ''}<div class="hs-pin-tail"></div></div>`;
+          const icon = L.divIcon({ html, className: 'hs-pin-wrap', iconSize: [34, 42], iconAnchor: [17, 42] });
+          const marker = L.marker([h.lat, h.lng], { icon }).bindPopup(esc(h.name));
+          marker.on('click', () => openHotspotDetail(h));
+          clusterGroup.addLayer(marker);
+        });
+        map.addLayer(clusterGroup);
+      } else {
+        /* Fallback zur Original-Funktion */
+        spots.forEach(h => {
+          const cls = h.is_mine ? 'hs-pin mine' : (h.visibility === 'private' ? 'hs-pin private' : 'hs-pin');
+          const html = `<div class="${cls}"><div class="hs-pin-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="10" r="3"/></svg></div>${h.member_count > 0 ? '<div class="hs-pin-count">'+h.member_count+'</div>' : ''}<div class="hs-pin-tail"></div></div>`;
+          const icon = L.divIcon({ html, className: 'hs-pin-wrap', iconSize: [34, 42], iconAnchor: [17, 42] });
+          const marker = L.marker([h.lat, h.lng], { icon }).addTo(map);
+          marker.on('click', () => openHotspotDetail(h));
+          mapMarkers.push(marker);
+        });
+      }
+    }catch(e){ console.warn('loadHotspotsEnhanced', e); }
+  }
+  loadHotspots = loadHotspotsEnhanced;
+
   /* ============= INIT ============= */
   function refreshAll(){
     renderHome();
     refreshUnread();
+    loadMood();
     if (document.body.dataset.tab === 'hotspots') loadHotspots();
   }
   /* Bestehende Session checken */

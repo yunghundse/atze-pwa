@@ -1,5 +1,5 @@
 /* crew. Service Worker v2 — PWA + Push */
-const CACHE = 'crew-v2-2026-05-04';
+const CACHE = 'crew-v3-' + Date.now();
 const ASSETS = ['/clean.html', '/manifest.json', '/img/icon-192.png', '/img/icon-512.png'];
 
 self.addEventListener('install', e => {
