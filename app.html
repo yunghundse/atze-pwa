@@ -17289,4 +17289,215 @@ html{ scroll-behavior: smooth; }
 })();
 </script>
 
+<style id="bb-navfix3">/* ============================================================
+   BB-NAVFIX3 — Alte navBar killen + Nav direkt mit window.go() verdrahten
+   ============================================================ */
+
+/* ---------- 1. ALTE NAV WEG (kein Overlap mehr) ---------- */
+#navBar,
+nav#navBar,
+.bottom-nav,
+.bn-pill,
+.nav-pill,
+[data-nav="bottom"]:not(.bb-nav-final){
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+}
+
+/* ---------- 2. NEUE NAV — bb-nav-final stärker, klar sichtbar ---------- */
+.bb-nav-final{
+  display: flex !important;
+  position: fixed !important;
+  bottom: calc(8px + env(safe-area-inset-bottom, 0px)) !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 1100 !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 6px !important;
+  background: rgba(15,15,24,.92) !important;
+  backdrop-filter: blur(28px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(180%) !important;
+  border: .5px solid rgba(255,255,255,.1) !important;
+  border-radius: 999px !important;
+  box-shadow: 0 12px 40px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.06) !important;
+  width: calc(100% - 24px) !important;
+  max-width: 480px !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  height: auto !important;
+}
+
+/* Sichergehen dass Doubles nicht entstehen */
+.bb-nav-final ~ .bb-nav-final{ display: none !important; }
+
+/* Body-Padding für die Nav */
+body{
+  padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)) !important;
+}
+
+/* ---------- 3. ALLE .scr ohne .active sind hidden ---------- */
+.scr{
+  display: none !important;
+}
+.scr.active{
+  display: block !important;
+}
+
+/* ---------- 4. SafePlace Overlay zeigt sich nur mit .show ---------- */
+#safeplaceOv:not(.show){
+  display: none !important;
+}
+#safeplaceOv.show{
+  display: block !important;
+  z-index: 1990 !important;
+}
+</style>
+<script id="bb-navfix3-js">
+/* ============================================================
+   BB-NAVFIX3 — Nav neu verdrahten mit window.go() + Anti-Overlap
+   ============================================================ */
+(function(){
+  'use strict';
+  if (window.__bbNavfix3Init) return;
+  window.__bbNavfix3Init = true;
+
+  /* Kill old #navBar wenn er nochmal hochkommt */
+  function killOldNav(){
+    var ids = ['#navBar', 'nav#navBar', '.bn-pill'];
+    ids.forEach(function(sel){
+      document.querySelectorAll(sel).forEach(function(el){
+        if (el.classList.contains('bb-nav-final')) return;
+        el.style.display = 'none';
+        el.style.visibility = 'hidden';
+        el.setAttribute('aria-hidden', 'true');
+      });
+    });
+  }
+
+  /* Echte Nav-Buttons verdrahten mit window.go() */
+  function rewireNav(){
+    var nav = document.querySelector('.bb-nav-final');
+    if (!nav) return;
+
+    /* Mapping: neue Button-Targets → Legacy-Screen-Namen */
+    var ROUTE_MAP = {
+      home:     { go: 'radar' },     /* Home zeigt die Hotspot-Map als Default */
+      hub:      { go: 'radar' },
+      spots:    { go: 'radar' },     /* Hotspots-Tab → radar (hat den Map-Container) */
+      hotspots: { go: 'radar' },
+      radar:    { go: 'radar' },
+      crew:     { go: 'crew' },
+      friends:  { go: 'match' },     /* Friends → match-Screen (Connections) */
+      match:    { go: 'match' },
+      profile:  { go: 'profile' },
+      safety:   { sp: true },         /* SafePlace-Overlay */
+      safeplace:{ sp: true }
+    };
+
+    /* Alle Buttons in bb-nav-final */
+    nav.querySelectorAll('.bb-nav-btn').forEach(function(btn){
+      if (btn.dataset.bbWired3) return;
+      btn.dataset.bbWired3 = '1';
+      btn.addEventListener('click', function(e){
+        var target = btn.getAttribute('data-target') || '';
+        var route = ROUTE_MAP[target];
+        if (!route) return;
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        if (route.sp){
+          /* SafePlace-Overlay */
+          if (typeof window.openSafeplaceHub === 'function'){
+            try{ window.openSafeplaceHub(); }catch(err){ console.warn('[bb-navfix3] sp-open fail', err); }
+          }
+        } else {
+          /* Legacy-Screen-Switch */
+          if (typeof window.go === 'function'){
+            try{
+              window.go(route.go, btn);
+              document.body.setAttribute('data-current-screen', route.go);
+              setActiveNav(target);
+            }catch(err){ console.warn('[bb-navfix3] go fail', err); }
+          } else {
+            /* Fallback: .scr.active manuell toggeln */
+            document.querySelectorAll('.scr').forEach(function(s){ s.classList.remove('active'); });
+            var screen = document.getElementById('screen-' + route.go);
+            if (screen){
+              screen.classList.add('active');
+              document.body.setAttribute('data-current-screen', route.go);
+              setActiveNav(target);
+            }
+          }
+        }
+      }, { capture: true });
+    });
+  }
+
+  function setActiveNav(target){
+    var nav = document.querySelector('.bb-nav-final');
+    if (!nav) return;
+    nav.querySelectorAll('.bb-nav-btn').forEach(function(b){
+      b.classList.toggle('active', b.getAttribute('data-target') === target);
+    });
+  }
+
+  /* Update nav-Labels: "Spots" → "Hotspots" für Klarheit */
+  function relabelNav(){
+    var nav = document.querySelector('.bb-nav-final');
+    if (!nav) return;
+    var spotsBtn = nav.querySelector('[data-target="spots"], [data-target="hotspots"]');
+    if (spotsBtn){
+      spotsBtn.setAttribute('data-target', 'hotspots');
+      var lbl = spotsBtn.querySelector('.bb-nav-label');
+      if (lbl) lbl.textContent = 'Hotspots';
+    }
+    /* Home: "Home" bleibt, aber führt zu radar wo die Map ist */
+    var homeBtn = nav.querySelector('[data-target="hub"]');
+    if (homeBtn){
+      homeBtn.setAttribute('data-target', 'home');
+    }
+    /* Crew label */
+    var crewBtn = nav.querySelector('[data-target="crew"]');
+    if (crewBtn){
+      var lbl = crewBtn.querySelector('.bb-nav-label');
+      if (lbl) lbl.textContent = 'Crew';
+    }
+  }
+
+  /* Initial Screen via go('crew') wenn nichts aktiv ist */
+  function ensureInitialScreen(){
+    var any = document.querySelector('.scr.active');
+    if (!any){
+      if (typeof window.go === 'function'){
+        try{ window.go('crew'); document.body.setAttribute('data-current-screen', 'crew'); setActiveNav('home'); }catch(e){}
+      }
+    } else {
+      var name = any.id.replace('screen-', '');
+      document.body.setAttribute('data-current-screen', name);
+      /* Map zurück: radar→hotspots, crew→home, match→friends */
+      var label = name === 'radar' ? 'hotspots' : name === 'match' ? 'friends' : name === 'crew' ? 'home' : name;
+      setActiveNav(label);
+    }
+  }
+
+  /* Init */
+  function init(){
+    killOldNav();
+    relabelNav();
+    rewireNav();
+    setTimeout(ensureInitialScreen, 800);
+    setInterval(function(){
+      killOldNav();
+      relabelNav();
+      rewireNav();
+    }, 3000);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+
 </body></html>
