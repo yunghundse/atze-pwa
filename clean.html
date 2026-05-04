@@ -2308,6 +2308,228 @@ a{ color: var(--c-violet-3); text-decoration: none; }
 .cw-item.world-rank[data-rank="2"]::before{ background: linear-gradient(135deg, #C0C0C0, #808080); }
 .cw-item.world-rank[data-rank="3"]::before{ background: linear-gradient(135deg, #CD7F32, #8B4513); }
 
+/* ============= LIGHT-MODE (Theme-Toggle) ============= */
+body.light{
+  --c-bg: #FAFAFA;
+  --c-surface: rgba(0,0,0,.04);
+  --c-surface-2: rgba(139,92,246,.08);
+  --c-text-1: #0A0A14;
+  --c-text-2: rgba(0,0,0,.7);
+  --c-text-3: rgba(0,0,0,.5);
+  --c-line: rgba(0,0,0,.1);
+  --c-line-2: rgba(0,0,0,.16);
+  background-image:
+    radial-gradient(ellipse at 30% 0%, rgba(139,92,246,.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 100%, rgba(99,102,241,.06) 0%, transparent 50%) !important;
+}
+body.light #header{ background: rgba(255,255,255,.85); }
+body.light .modal-card{ background: #FFFFFF; }
+body.light #nav{ background: rgba(255,255,255,.92); }
+body.light .leaflet-container{ background: #E5E7EB !important; }
+
+/* ============= ACHIEVEMENTS ============= */
+.ach-grid{ display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-2); margin-top: var(--s-3); }
+.ach-card{
+  padding: var(--s-3);
+  background: var(--c-surface-2);
+  border: .5px solid var(--c-violet-line);
+  border-radius: var(--r-2);
+  text-align: center;
+  position: relative;
+}
+.ach-card.locked{ opacity: .35; filter: grayscale(.7); }
+.ach-card .emo3d{ width: 48px; height: 48px; margin: 0 auto var(--s-2); }
+.ach-card .ach-t{ font-size: var(--t-4); font-weight: 800; color: #fff; letter-spacing: -.01em; }
+.ach-card .ach-s{ font-size: 10px; color: var(--c-text-3); margin-top: 2px; }
+.ach-card .ach-when{ font-size: 9px; color: var(--c-violet-3); margin-top: 4px; }
+
+/* Avatar mit Achievement-Badge */
+.ava-with-badge{ position: relative; }
+.ava-badge{
+  position: absolute;
+  bottom: -3px; right: -3px;
+  width: 22px; height: 22px;
+  background: linear-gradient(135deg, var(--c-gold), var(--c-violet-3));
+  border: 2px solid var(--c-bg);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+/* ============= LIVE-CREW-MAP MARKER ============= */
+.live-pin{
+  width: 44px; height: 50px;
+  position: relative;
+  transform: translate(-50%, -100%);
+}
+.live-pin-ava{
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--c-violet), var(--c-violet-2));
+  border: 2px solid #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,.4);
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 800;
+  color: #fff;
+}
+.live-pin-ava img{ width: 100%; height: 100%; object-fit: cover; }
+.live-pin-ava::after{
+  content: '';
+  position: absolute; inset: -4px;
+  border: 2px solid var(--c-green);
+  border-radius: 50%;
+  animation: livePinPulse 1.6s ease-out infinite;
+}
+@keyframes livePinPulse{
+  0%   { transform: scale(.95); opacity: 1; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+.live-pin-status{
+  position: absolute;
+  bottom: -4px; right: -4px;
+  width: 22px; height: 22px;
+  background: var(--c-bg);
+  border-radius: 50%;
+  border: 1.5px solid #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+}
+.live-pin-tail{
+  position: absolute;
+  bottom: -2px; left: 50%;
+  transform: translateX(-50%);
+  width: 0; height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid #fff;
+}
+
+/* ============= VOICE-MESSAGE ============= */
+.chat-msg.audio{ padding: var(--s-2) var(--s-3); }
+.audio-msg{
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: 6px 8px;
+  background: rgba(0,0,0,.2);
+  border-radius: var(--r-5);
+  min-width: 180px;
+}
+.audio-play{
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--c-violet), var(--c-violet-2));
+  display: flex; align-items: center; justify-content: center;
+  color: #fff;
+  flex: none;
+}
+.audio-play svg{ width: 14px; height: 14px; margin-left: 2px; }
+.audio-wave{
+  flex: 1;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.audio-wave-bar{
+  flex: 1;
+  background: rgba(255,255,255,.4);
+  border-radius: 1px;
+  min-width: 2px;
+}
+.audio-msg.playing .audio-wave-bar{ background: rgba(255,255,255,.85); }
+.audio-time{ font-size: 10px; color: rgba(255,255,255,.6); flex: none; }
+
+/* Voice-Recording Button im Chat-Input */
+.chat-voice{
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: rgba(139,92,246,.12);
+  border: .5px solid var(--c-violet-line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--c-violet-3);
+}
+.chat-voice.recording{
+  background: linear-gradient(135deg, var(--c-sos), var(--c-sos-2));
+  color: #fff;
+  animation: recPulse 1s ease-in-out infinite;
+}
+@keyframes recPulse{ 0%,100%{ opacity:1 } 50%{ opacity:.7 } }
+.chat-voice svg{ width: 18px; height: 18px; }
+
+.recording-overlay{
+  position: fixed;
+  bottom: calc(var(--nav-h) + var(--safe-bot) + 100px);
+  left: 50%; transform: translateX(-50%);
+  background: linear-gradient(135deg, rgba(236,72,153,.95), rgba(190,24,93,.9));
+  color: #fff;
+  padding: 14px 20px;
+  border-radius: var(--r-5);
+  font-weight: 800;
+  font-size: var(--t-4);
+  z-index: 3000;
+  display: flex; align-items: center; gap: var(--s-2);
+  box-shadow: var(--shadow-2);
+}
+.recording-overlay .dot{
+  width: 10px; height: 10px;
+  background: #fff;
+  border-radius: 50%;
+  animation: recPulse 0.6s ease-in-out infinite;
+}
+
+/* ============= DISCOVER ============= */
+.disc-list{ display: flex; flex-direction: column; gap: var(--s-2); }
+.disc-item{
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  padding: var(--s-3);
+  background: var(--c-surface-2);
+  border: .5px solid var(--c-violet-line);
+  border-radius: var(--r-2);
+}
+.disc-item .ava{ width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, var(--c-violet), var(--c-violet-2)); flex: none; overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: #fff; }
+.disc-item .ava img{ width: 100%; height: 100%; object-fit: cover; }
+.disc-info{ flex: 1; min-width: 0; }
+.disc-name{ font-size: var(--t-4); font-weight: 800; }
+.disc-meta{ font-size: var(--t-5); color: var(--c-text-3); margin-top: 2px; }
+.disc-mutual{ font-size: 10px; color: var(--c-violet-3); font-weight: 700; }
+.disc-act{
+  padding: 7px 12px;
+  border-radius: var(--r-1);
+  background: linear-gradient(135deg, var(--c-violet), var(--c-violet-2));
+  color: #fff;
+  font-size: var(--t-5);
+  font-weight: 700;
+  flex: none;
+}
+
+/* ============= FIND-CREW Quick-Action ============= */
+.find-crew-fab{
+  position: absolute;
+  right: 16px;
+  top: var(--s-3);
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--c-surface-2);
+  border: .5px solid var(--c-violet-line);
+  color: var(--c-text-2);
+  display: flex; align-items: center; justify-content: center;
+}
+.find-crew-fab svg{ width: 16px; height: 16px; }
+
 /* Reduced Motion */
 @media (prefers-reduced-motion: reduce){
   *, *::before, *::after{
@@ -2472,6 +2694,16 @@ a{ color: var(--c-violet-3); text-decoration: none; }
 
       <div class="pr-section-h">Einstellungen</div>
       <div class="pr-actions">
+        <button class="pr-act" data-pr-act="achievements">
+          <div class="pr-act-ic" style="background:linear-gradient(135deg,rgba(255,214,10,.25),rgba(255,109,46,.1))"><img class="emo3d" style="width:22px;height:22px" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Trophy/3D/trophy_3d.png" alt=""/></div>
+          <div class="pr-act-main"><div class="t">Achievements <span id="prAchCnt" style="font-size:11px;font-weight:700;color:var(--c-violet-3)"></span></div><div class="s">Was du erreicht hast</div></div>
+          <span class="pr-act-arrow"></span>
+        </button>
+        <button class="pr-act" data-pr-act="discover">
+          <div class="pr-act-ic"><img class="emo3d" style="width:22px;height:22px" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Magnifying%20glass%20tilted%20left/3D/magnifying_glass_tilted_left_3d.png" alt=""/></div>
+          <div class="pr-act-main"><div class="t">Crew finden</div><div class="s">Match nach Modus + Stadt</div></div>
+          <span class="pr-act-arrow"></span>
+        </button>
         <button class="pr-act" data-pr-act="settings">
           <div class="pr-act-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
           <div class="pr-act-main"><div class="t">Einstellungen</div><div class="s">Profil, Modus, SOS, Privatsphäre, Push, Konto</div></div>
@@ -2610,6 +2842,7 @@ a{ color: var(--c-violet-3); text-decoration: none; }
       <div class="chat-msgs" id="dtMessages"></div>
       <div class="chat-input-row" id="dtInputRow">
         <input class="chat-input" id="dtInput" placeholder="Nachricht …" maxlength="280" />
+        <button class="chat-voice" id="dtVoice" title="Push-to-Talk halten"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></button>
         <button class="chat-send" id="dtSend" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
       </div>
     </div>
@@ -2758,6 +2991,19 @@ a{ color: var(--c-violet-3); text-decoration: none; }
         <div><div class="set-row-t">Im Welt-Ranking</div><div class="set-row-s">Erscheinst du im Top-Trust → Welt? (Opt-In · default aus)</div></div>
         <button class="set-toggle" id="setWorldRank" type="button"></button>
       </div>
+      <div class="set-toggle-row">
+        <div><div class="set-row-t">Live-Standort mit Crew</div><div class="set-row-s">Crew sieht dich auf der Live-Karte (nur Safety-Circle)</div></div>
+        <button class="set-toggle" id="setShareLive" type="button"></button>
+      </div>
+      <div class="set-toggle-row">
+        <div><div class="set-row-t">In Discovery</div><div class="set-row-s">Andere mit gleichem Modus können dich finden</div></div>
+        <button class="set-toggle" id="setDiscovery" type="button"></button>
+      </div>
+      <div class="field" style="margin-top:14px"><label>Stadt (für Discovery)</label><input id="setCity" maxlength="40" placeholder="z.B. Berlin" /></div>
+      <div class="set-toggle-row">
+        <div><div class="set-row-t">Light-Mode</div><div class="set-row-s">Heller Theme statt dunkel</div></div>
+        <button class="set-toggle" id="setLightMode" type="button"></button>
+      </div>
       <div class="set-info"><strong>EU-Server · DSGVO-konform.</strong> Alle Daten in Frankfurt. Auto-Expire auf alles. Recht auf Löschung + Datenexport (Tab Konto).</div>
     </div>
 
@@ -2887,6 +3133,35 @@ a{ color: var(--c-violet-3); text-decoration: none; }
 .hm-banner-main .s{ font-size: var(--t-5); color: #6EE7B7; margin: 2px 0 0; }
 .hm-banner-act{ height: 36px; padding: 0 var(--s-3); border-radius: var(--r-2); background: linear-gradient(135deg, var(--c-green), #1ea860); color: #fff; font-weight: 800; font-size: var(--t-5); flex: none; }
 </style>
+
+<!-- ACHIEVEMENTS MODAL -->
+<div class="modal" id="achModal">
+  <div class="modal-card">
+    <button class="modal-close" data-close="achModal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <h2 class="modal-h">Achievements</h2>
+    <p class="modal-sub">Was du in der crew. erreicht hast</p>
+    <div class="ach-grid" id="achGrid"></div>
+  </div>
+</div>
+
+<!-- DISCOVER MODAL -->
+<div class="modal" id="discModal">
+  <div class="modal-card">
+    <button class="modal-close" data-close="discModal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <h2 class="modal-h">Crew finden</h2>
+    <p class="modal-sub">Andere User mit deinem Modus, Stadt oder über mutual friends.</p>
+    <div class="field">
+      <label>Modus</label>
+      <select id="discAud" class="auth-input" style="margin-bottom:8px"><option value="">Alle</option></select>
+    </div>
+    <div class="field">
+      <label>Stadt (optional)</label>
+      <input id="discCity" placeholder="z.B. Berlin, München" />
+    </div>
+    <div class="modal-actions"><button class="btn-pri" id="discSearch">Suchen</button></div>
+    <div class="disc-list" id="discList" style="margin-top:14px"></div>
+  </div>
+</div>
 
 <!-- ONBOARDING MODAL -->
 <div class="modal" id="obModal">
@@ -3401,6 +3676,12 @@ a{ color: var(--c-violet-3); text-decoration: none; }
     maybeStartOnboarding();
     /* Heimweg-Tracking falls aktiv */
     if (localStorage.getItem('crew-home') === '1') startHmLiveTracking();
+    /* Theme */
+    if (localStorage.getItem('crew-theme') === 'light') document.body.classList.add('light');
+    /* Achievements */
+    loadAchievements();
+    /* Live-Crew-Broadcast wenn aktiv */
+    if (profile.share_live_with_crew) startMyLiveBroadcast();
   }
 
   /* ============= TAB-ROUTING ============= */
@@ -3828,6 +4109,7 @@ a{ color: var(--c-violet-3); text-decoration: none; }
       closeModal('hsWizard');
       resetWizard();
       toast('Spot „' + name + '" angelegt', null, null, 'success');
+      checkClientAchievements('spot_created');
       if (newSpot){
         newSpot.is_mine = true; newSpot.member_count = 1;
         if (userLat) newSpot.distance_km = haversine(userLat, userLng, newSpot.lat, newSpot.lng);
@@ -4383,12 +4665,313 @@ a{ color: var(--c-violet-3); text-decoration: none; }
     else if (a === 'safeplace') openModal('safeplaceModal');
     else if (a === 'legal') window.open('/datenschutz.html', '_blank');
     else if (a === 'admin') openAdminPanel();
+    else if (a === 'achievements') openAchievements();
+    else if (a === 'discover') openDiscover();
     else if (a === 'logout'){
       if (confirm('Wirklich abmelden?')){
         sb.auth.signOut().then(() => location.reload());
       }
     }
   }));
+
+  /* ============= ACHIEVEMENTS ============= */
+  const ACHIEVEMENTS = [
+    { id: 'first_crew',     t: 'Erste Crew',       s: 'Ersten Member im Safety-Circle',  emo: 'people-hugging' },
+    { id: 'first_rating',   t: 'Bewertet',          s: 'Erste Trust-Bewertung erhalten',  emo: 'star' },
+    { id: 'trusted_10',     t: 'Vertraut',          s: '10 Trust-Bewertungen erhalten',   emo: 'trophy' },
+    { id: 'trusted_veteran',t: 'Veteran',           s: '50 Trust-Bewertungen erhalten',    emo: 'crown' },
+    { id: 'first_spot',     t: 'Spot-Pioneer',      s: 'Ersten Hotspot angelegt',          emo: 'pin' },
+    { id: 'sos_helper',     t: 'SOS-Helfer',        s: 'Auf SOS reagiert',                  emo: 'shield' },
+    { id: 'photo_contrib',  t: 'Foto-Beitrag',      s: 'Erstes Foto zu Spot beigetragen',  emo: 'camera' },
+    { id: 'invite_3',       t: 'Connector',         s: '3 Freunde eingeladen',              emo: 'handshake' }
+  ];
+  const ACH_EMO = {
+    'people-hugging': 'https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/People%20hugging/3D/people_hugging_3d.png',
+    'star': 'https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Star/3D/star_3d.png',
+    'trophy': 'https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Trophy/3D/trophy_3d.png',
+    'crown': 'https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Crown/3D/crown_3d.png',
+    'pin': FX.pin,
+    'shield': FX.shield,
+    'camera': 'https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Camera/3D/camera_3d.png',
+    'handshake': FX.handshake
+  };
+  let myAchs = [];
+  async function loadAchievements(){
+    try{
+      const r = await sb.rpc('get_my_achievements');
+      myAchs = (r && r.data) || [];
+      const cnt = myAchs.filter(a => a.unlocked_at).length;
+      const cntEl = $('prAchCnt');
+      if (cntEl) cntEl.textContent = cnt + '/' + ACHIEVEMENTS.length;
+    }catch(e){}
+  }
+  async function openAchievements(){
+    await loadAchievements();
+    const grid = $('achGrid');
+    grid.innerHTML = ACHIEVEMENTS.map(a => {
+      const unlocked = myAchs.find(x => x.achievement_id === a.id && x.unlocked_at);
+      return `<div class="ach-card ${unlocked ? '' : 'locked'}">
+        <img class="emo3d" src="${ACH_EMO[a.emo] || FX.sparkles}" alt=""/>
+        <div class="ach-t">${a.t}</div>
+        <div class="ach-s">${a.s}</div>
+        ${unlocked ? '<div class="ach-when">'+timeAgo(unlocked.unlocked_at)+'</div>' : ''}
+      </div>`;
+    }).join('');
+    openModal('achModal');
+  }
+  $$('[data-close="achModal"]').forEach(b => b.addEventListener('click', () => closeModal('achModal')));
+
+  /* Trigger-Helper für Client-side achievements */
+  async function checkClientAchievements(event){
+    if (event === 'spot_created'){
+      await sb.rpc('unlock_achievement', { p_id: 'first_spot' });
+      loadAchievements();
+    }
+    if (event === 'photo_uploaded'){
+      await sb.rpc('unlock_achievement', { p_id: 'photo_contrib' });
+      loadAchievements();
+    }
+    if (event === 'invite_sent'){
+      const r = await sb.from('friend_invites').select('id', {count:'exact', head:true}).eq('sender_id', user.id);
+      if ((r.count || 0) >= 3) await sb.rpc('unlock_achievement', { p_id: 'invite_3' });
+      loadAchievements();
+    }
+  }
+
+  /* ============= LIVE-CREW-MAP ============= */
+  let crewLiveMarkers = [];
+  async function loadCrewLive(){
+    if (!map || !window.L) return;
+    crewLiveMarkers.forEach(m => { try { map.removeLayer(m); } catch(_){} });
+    crewLiveMarkers = [];
+    try{
+      const r = await sb.rpc('get_crew_live_locations');
+      const locs = (r && r.data) || [];
+      locs.forEach(l => {
+        const moodEmoji = MOODS.find(m => m.id === l.mood)?.emo || l.status_emoji || '';
+        const html = `<div class="live-pin">
+          <div class="live-pin-ava">${l.photo_url ? '<img src="'+esc(l.photo_url)+'"/>' : esc(initials(l.display_name))}</div>
+          ${moodEmoji ? '<div class="live-pin-status">'+moodEmoji+'</div>' : ''}
+          <div class="live-pin-tail"></div>
+        </div>`;
+        const icon = L.divIcon({ html, className: 'live-pin-wrap', iconSize: [44, 50], iconAnchor: [22, 50] });
+        const marker = L.marker([l.lat, l.lng], { icon }).addTo(map);
+        marker.bindPopup(`<strong>${esc(l.display_name)}</strong><br/><small>${l.mood ? MOODS.find(m=>m.id===l.mood)?.t || l.mood : 'online'} · ${timeAgo(l.updated_at)}</small>`);
+        crewLiveMarkers.push(marker);
+      });
+    }catch(e){ console.warn('crew-live', e); }
+  }
+
+  /* Live-Standort periodisch hochladen wenn share_live_with_crew aktiv */
+  let myLiveInterval = null;
+  function startMyLiveBroadcast(){
+    if (myLiveInterval) clearInterval(myLiveInterval);
+    if (!profile.share_live_with_crew) return;
+    const tick = () => {
+      navigator.geolocation.getCurrentPosition(async p => {
+        userLat = p.coords.latitude; userLng = p.coords.longitude;
+        try{
+          await sb.from('live_locations').upsert({
+            user_id: user.id, lat: userLat, lng: userLng,
+            expires_at: new Date(Date.now() + 5*60*1000).toISOString(),
+            updated_at: new Date().toISOString()
+          });
+        }catch(e){}
+      }, () => {}, { enableHighAccuracy: true, maximumAge: 60000, timeout: 15000 });
+    };
+    tick();
+    myLiveInterval = setInterval(tick, 60000);
+  }
+
+  /* ============= VOICE-MESSAGES ============= */
+  let recorder = null, recChunks = [], recStart = 0, recOverlay = null;
+  $('dtVoice').addEventListener('mousedown', startRec);
+  $('dtVoice').addEventListener('touchstart', startRec);
+  $('dtVoice').addEventListener('mouseup', stopRec);
+  $('dtVoice').addEventListener('touchend', stopRec);
+  $('dtVoice').addEventListener('mouseleave', stopRec);
+  async function startRec(e){
+    if (e) e.preventDefault();
+    if (recorder) return;
+    try{
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      recorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+      recChunks = [];
+      recorder.ondataavailable = ev => { if (ev.data.size > 0) recChunks.push(ev.data); };
+      recorder.onstop = async () => {
+        stream.getTracks().forEach(t => t.stop());
+        const dur = Date.now() - recStart;
+        if (dur < 500){ recorder = null; return; }
+        const blob = new Blob(recChunks, { type: 'audio/webm' });
+        await uploadVoice(blob, dur);
+        recorder = null;
+      };
+      recorder.start();
+      recStart = Date.now();
+      $('dtVoice').classList.add('recording');
+      /* Overlay anzeigen */
+      recOverlay = document.createElement('div');
+      recOverlay.className = 'recording-overlay';
+      recOverlay.innerHTML = '<span class="dot"></span> Aufnahme · halten zum Sprechen';
+      document.body.appendChild(recOverlay);
+      /* Auto-Stop bei 30s */
+      setTimeout(() => { if (recorder) stopRec(); }, 30000);
+    }catch(err){ toast('Mikrofon-Zugriff verweigert'); recorder = null; }
+  }
+  function stopRec(e){
+    if (e) e.preventDefault();
+    if (!recorder) return;
+    if (recorder.state === 'recording') recorder.stop();
+    $('dtVoice').classList.remove('recording');
+    if (recOverlay){ recOverlay.remove(); recOverlay = null; }
+  }
+  async function uploadVoice(blob, durMs){
+    if (!currentDetailSpot) return;
+    try{
+      const path = user.id + '/' + Date.now() + '.webm';
+      const up = await sb.storage.from('voice-messages').upload(path, blob, { contentType: 'audio/webm', upsert: false });
+      if (up.error) throw up.error;
+      const url = sb.storage.from('voice-messages').getPublicUrl(path).data.publicUrl;
+      await sb.from('hotspot_messages').insert({
+        hotspot_id: currentDetailSpot.id, user_id: user.id, body: '🎤 Voice', audio_url: url, audio_duration_ms: Math.round(durMs)
+      });
+      await refreshDetailData();
+    }catch(e){ toast('Voice-Upload Fehler: ' + e.message); }
+  }
+
+  /* Voice-Player für Inline-Playback */
+  function renderAudioMessage(url, durMs){
+    const sec = Math.round((durMs||1000)/1000);
+    const bars = Array.from({length: 22}).map(() => `<div class="audio-wave-bar" style="height:${20 + Math.random()*60}%"></div>`).join('');
+    return `<div class="audio-msg" data-url="${esc(url)}" data-dur="${durMs}">
+      <button class="audio-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></button>
+      <div class="audio-wave">${bars}</div>
+      <div class="audio-time">${sec}s</div>
+    </div>`;
+  }
+  /* Override renderDetailMessages um Voice-Messages zu rendern */
+  const _origRender = renderDetailMessages;
+  renderDetailMessages = function(){
+    _origRender();
+    const host = $('dtMessages');
+    if (!host) return;
+    /* Voice-Messages mit eigenem Render */
+    dtMessages.forEach(m => {
+      if (m.audio_url){
+        const el = host.querySelector('.chat-msg[data-msgid="'+m.id+'"]');
+        const target = Array.from(host.querySelectorAll('.chat-msg')).find(x => {
+          const body = x.querySelector('.chat-body');
+          return body && body.textContent === m.body;
+        });
+        if (target && !target.querySelector('.audio-msg')){
+          const body = target.querySelector('.chat-body');
+          if (body) body.outerHTML = renderAudioMessage(m.audio_url, m.audio_duration_ms);
+        }
+      }
+    });
+    /* Audio-Click handlers */
+    host.querySelectorAll('.audio-msg').forEach(el => {
+      if (el.dataset.bound) return;
+      el.dataset.bound = '1';
+      el.querySelector('.audio-play').addEventListener('click', () => {
+        const url = el.dataset.url;
+        if (window.__currentAudio){ window.__currentAudio.pause(); document.querySelectorAll('.audio-msg.playing').forEach(x => x.classList.remove('playing')); }
+        const audio = new Audio(url);
+        audio.onended = () => el.classList.remove('playing');
+        audio.play();
+        window.__currentAudio = audio;
+        el.classList.add('playing');
+      });
+    });
+  };
+
+  /* ============= DISCOVER ============= */
+  async function openDiscover(){
+    const sel = $('discAud');
+    sel.innerHTML = '<option value="">Alle Modi</option>' + AUDIENCE_PROFILES.map(p => '<option value="'+p.id+'">'+p.t+'</option>').join('');
+    sel.value = profile.audience_profile || '';
+    $('discCity').value = profile.city || '';
+    openModal('discModal');
+    runDiscover();
+  }
+  $('discSearch').addEventListener('click', runDiscover);
+  async function runDiscover(){
+    const aud = $('discAud').value || null;
+    const city = $('discCity').value.trim() || null;
+    const host = $('discList');
+    host.innerHTML = '<div class="empty"><div class="spinner" style="margin:30px auto"></div></div>';
+    try{
+      const r = await sb.rpc('discover_crew', { p_audience: aud, p_city: city, p_limit: 30 });
+      const data = (r && r.data) || [];
+      if (!data.length){
+        host.innerHTML = '<div class="empty" style="padding:24px"><img class="emo3d sz-xl" src="'+ACH_EMO['people-hugging']+'" alt=""/><h4 style="margin-top:12px">Niemand passend</h4><p style="color:var(--c-text-3)">Probier andere Filter oder andere Modi.</p></div>';
+        return;
+      }
+      host.innerHTML = data.map(d => `
+        <div class="disc-item" data-uid="${d.user_id}">
+          <div class="ava">${d.photo_url ? '<img src="'+esc(d.photo_url)+'"/>' : initials(d.display_name)}</div>
+          <div class="disc-info">
+            <div class="disc-name">${esc(d.display_name)}</div>
+            <div class="disc-meta">${esc(d.audience_profile||'general')}${d.city ? ' · '+esc(d.city) : ''}${d.tagline ? ' · '+esc(d.tagline) : ''}</div>
+            ${d.mutual_count > 0 ? '<div class="disc-mutual">'+d.mutual_count+' gemeinsame Freunde</div>' : ''}
+          </div>
+          <button class="disc-act" data-invite="${d.user_id}">Einladen</button>
+        </div>
+      `).join('');
+      host.querySelectorAll('[data-invite]').forEach(b => b.addEventListener('click', async () => {
+        const uid = b.dataset.invite;
+        const r2 = await sb.rpc('create_friend_invite', { p_user_id: uid, p_message: 'Lass uns vernetzen' });
+        if (r2.error) toast('Fehler: '+r2.error.message);
+        else { toast('Einladung gesendet', null, null, 'success'); checkClientAchievements('invite_sent'); }
+      }));
+    }catch(e){ host.innerHTML = '<div class="empty"><p>Fehler: '+esc(e.message)+'</p></div>'; }
+  }
+  $$('[data-close="discModal"]').forEach(b => b.addEventListener('click', () => closeModal('discModal')));
+
+  /* ============= LIGHT-MODE TOGGLE ============= */
+  function applyTheme(){
+    const light = profile.lang === 'light' || localStorage.getItem('crew-theme') === 'light';
+    document.body.classList.toggle('light', light);
+  }
+  /* ============= I18N ============= */
+  const I18N = {
+    de: {
+      hey: 'HEY', sicher: 'Sicher · Crew online', schnell: 'Schnell-Aktionen', live: 'Live', heimweg: 'Heimweg', spot: 'Spot', sos: 'SOS',
+      home: 'Home', hotspots: 'Hotspots', crew: 'Crew', profile: 'Profil', login: 'Login', signup: 'Sign-Up'
+    },
+    en: {
+      hey: 'HEY', sicher: 'Safe · Crew online', schnell: 'Quick Actions', live: 'Live', heimweg: 'Way home', spot: 'Spot', sos: 'SOS',
+      home: 'Home', hotspots: 'Hotspots', crew: 'Crew', profile: 'Profile', login: 'Login', signup: 'Sign-Up'
+    }
+  };
+  function t(key){ return (I18N[profile.lang || 'de'] || I18N.de)[key] || key; }
+
+  /* Privacy Toggles für Live + Discovery */
+  if ($('setShareLive')) $('setShareLive').addEventListener('click', async () => {
+    const on = !$('setShareLive').classList.contains('on');
+    $('setShareLive').classList.toggle('on', on);
+    profile.share_live_with_crew = on;
+    await sb.from('profiles').update({ share_live_with_crew: on }).eq('user_id', user.id);
+    if (on) startMyLiveBroadcast(); else if (myLiveInterval) clearInterval(myLiveInterval);
+    toast(on ? 'Live-Standort aktiv für Crew' : 'Live-Standort aus', null, null, 'info');
+  });
+  if ($('setDiscovery')) $('setDiscovery').addEventListener('click', async () => {
+    const on = !$('setDiscovery').classList.contains('on');
+    $('setDiscovery').classList.toggle('on', on);
+    profile.show_in_discovery = on;
+    await sb.from('profiles').update({ show_in_discovery: on }).eq('user_id', user.id);
+  });
+  if ($('setLightMode')) $('setLightMode').addEventListener('click', () => {
+    const on = !$('setLightMode').classList.contains('on');
+    $('setLightMode').classList.toggle('on', on);
+    document.body.classList.toggle('light', on);
+    localStorage.setItem('crew-theme', on ? 'light' : 'dark');
+  });
+  if ($('setCity')) $('setCity').addEventListener('blur', async () => {
+    const c = $('setCity').value.trim() || null;
+    profile.city = c;
+    await sb.from('profiles').update({ city: c }).eq('user_id', user.id);
+  });
 
   /* ============= SETTINGS ============= */
   const AUDIENCE_PROFILES = [
@@ -4438,6 +5021,10 @@ a{ color: var(--c-violet-3); text-decoration: none; }
     $('setHideLast').classList.toggle('on', !!profile.hide_last_seen_from);
     $('setShowTree').classList.toggle('on', profile.show_circle_tree !== false);
     $('setWorldRank').classList.toggle('on', !!profile.show_in_world_ranking);
+    if ($('setShareLive')) $('setShareLive').classList.toggle('on', !!profile.share_live_with_crew);
+    if ($('setDiscovery')) $('setDiscovery').classList.toggle('on', !!profile.show_in_discovery);
+    if ($('setCity')) $('setCity').value = profile.city || '';
+    if ($('setLightMode')) $('setLightMode').classList.toggle('on', document.body.classList.contains('light'));
     /* Push prefs */
     const prefs = profile.notification_prefs || { sos: true, home: true, crew: true, spot: true, trust: false };
     document.querySelectorAll('[data-pref]').forEach(t => {
@@ -5528,7 +6115,11 @@ a{ color: var(--c-violet-3); text-decoration: none; }
       }
     }catch(e){ console.warn('loadHotspotsEnhanced', e); }
   }
-  loadHotspots = loadHotspotsEnhanced;
+  loadHotspots = async function(){
+    await loadHotspotsEnhanced();
+    /* Live-Crew zusätzlich anzeigen */
+    await loadCrewLive();
+  };
 
   /* ============= INIT ============= */
   function refreshAll(){
