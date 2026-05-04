@@ -19272,4 +19272,657 @@ input:focus, textarea:focus, .frnd-search:focus, .hw-input:focus, .hw-textarea:f
 })();
 </script>
 
+<style id="bb-reset">/* ============================================================
+   BB-RESET — 4-Button-Nav + Hotspot V4 + Crew-Reset + Pink-Purge
+   ============================================================ */
+
+/* ---------- 0. NEUE 4-BUTTON-NAV (SafePlace raus) ---------- */
+.bb-nav-final{
+  background: rgba(15,15,28,.92) !important;
+  border: .5px solid rgba(139,92,246,.28) !important;
+  box-shadow: 0 12px 40px rgba(139,92,246,.22), inset 0 1px 0 rgba(139,92,246,.1) !important;
+  padding: 6px !important;
+  gap: 4px !important;
+}
+
+/* SafePlace-Center-Button verstecken in Nav (kommt jetzt auf Home + Profile als Action) */
+.bb-nav-final .bb-nav-btn.bb-nav-safeplace{
+  display: none !important;
+}
+
+/* 4 Buttons gleich verteilt */
+.bb-nav-final .bb-nav-btn{
+  flex: 1 !important;
+  height: 52px !important;
+  border-radius: 16px !important;
+  position: relative !important;
+}
+.bb-nav-final .bb-nav-btn svg{
+  width: 22px !important;
+  height: 22px !important;
+}
+.bb-nav-final .bb-nav-btn .bb-nav-label{
+  font-size: 9px !important;
+  margin-top: 2px !important;
+}
+
+/* ---------- 1. ALTE HOTSPOT-Wizards deaktivieren ---------- */
+/* Wir resetten: bb-hotspot-v2, bb-spots, bb-hotspot-v3 wizard-DOM deaktivieren */
+.hw-modal,
+.ap-modal,
+#bbHwModal,
+#bbAudModal{
+  /* Bleiben aber neue v4 hat eigenen Pfad */
+}
+
+/* Alle alten FABs weg */
+.hf-fab,
+.quick-spot-fab,
+.bb-help-fab,
+button[onclick*="bbCreateHotspot"]:not(.hs-fab),
+.fab,
+.floating-btn,
+.create-hotspot-btn{
+  display: none !important;
+}
+
+/* ---------- 2. HOTSPOT V4 — sauberes neues System ---------- */
+.hs-fab{
+  position: fixed;
+  bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+  right: 16px;
+  z-index: 1190;
+  width: 60px; height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #8B5CF6, #6366F1);
+  border: 0;
+  color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 12px 32px rgba(139,92,246,.5), 0 4px 12px rgba(0,0,0,.3);
+  transition: transform .15s, box-shadow .25s;
+}
+.hs-fab:active{ transform: scale(.92); }
+.hs-fab svg{ width: 26px; height: 26px; }
+/* Nur auf Spots/Hotspots-Screen */
+body:not([data-current-screen="radar"]) .hs-fab{ display: none !important; }
+
+/* HS-Wizard V4 (neu) */
+.hsw-modal{
+  position: fixed; inset: 0; z-index: 2050;
+  background: rgba(10,10,20,.92);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  display: flex; align-items: flex-end; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity .3s cubic-bezier(.2,.7,.2,1);
+}
+.hsw-modal.on{ opacity: 1; pointer-events: auto; }
+.hsw-card{
+  width: 100%; max-width: 540px;
+  background: #0F0F1F;
+  border-top-left-radius: 28px; border-top-right-radius: 28px;
+  border-top: .5px solid rgba(139,92,246,.3);
+  padding: 28px 22px calc(28px + env(safe-area-inset-bottom, 0px));
+  max-height: 90vh; overflow-y: auto;
+  transform: translateY(40px);
+  transition: transform .4s cubic-bezier(.2,.7,.2,1);
+  position: relative;
+}
+.hsw-card::before{
+  content: '';
+  position: absolute;
+  top: 8px; left: 50%; transform: translateX(-50%);
+  width: 42px; height: 4px;
+  background: rgba(139,92,246,.4);
+  border-radius: 2px;
+}
+.hsw-modal.on .hsw-card{ transform: translateY(0); }
+
+.hsw-h{
+  font-size: 22px; font-weight: 900;
+  letter-spacing: -.025em;
+  color: #fff;
+  margin: 12px 0 4px;
+}
+.hsw-sub{
+  font-size: 13px;
+  color: rgba(255,255,255,.6);
+  margin: 0 0 20px;
+  line-height: 1.45;
+}
+
+.hsw-field{
+  margin-bottom: 16px;
+}
+.hsw-label{
+  font-size: 11px; font-weight: 800;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: rgba(255,255,255,.5);
+  margin-bottom: 8px;
+  display: block;
+}
+.hsw-input, .hsw-textarea{
+  width: 100%; box-sizing: border-box;
+  padding: 14px 16px;
+  background: rgba(139,92,246,.06);
+  border: .5px solid rgba(139,92,246,.2);
+  border-radius: 14px;
+  color: #fff;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color .25s, box-shadow .25s;
+}
+.hsw-input:focus, .hsw-textarea:focus{
+  border-color: rgba(139,92,246,.6);
+  box-shadow: 0 0 0 3px rgba(139,92,246,.12);
+}
+.hsw-textarea{ resize: vertical; min-height: 60px; }
+
+.hsw-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.hsw-pill{
+  padding: 12px 10px;
+  background: rgba(139,92,246,.05);
+  border: .5px solid rgba(139,92,246,.15);
+  border-radius: 12px;
+  color: rgba(255,255,255,.85);
+  cursor: pointer;
+  text-align: left;
+  transition: all .2s;
+  display: flex; align-items: center; gap: 10px;
+}
+.hsw-pill.on{
+  background: linear-gradient(135deg, rgba(139,92,246,.25), rgba(99,102,241,.08));
+  border-color: rgba(139,92,246,.6);
+}
+.hsw-pill:active{ transform: scale(.97); }
+.hsw-pill .ic{
+  width: 28px; height: 28px;
+  border-radius: 8px;
+  background: rgba(139,92,246,.15);
+  display: flex; align-items: center; justify-content: center;
+  flex: none;
+}
+.hsw-pill .ic svg{ width: 14px; height: 14px; color: #C084FC; }
+.hsw-pill .info{ flex: 1; min-width: 0; }
+.hsw-pill .info .t{
+  font-size: 13px; font-weight: 800;
+  color: #fff; margin: 0;
+  letter-spacing: -.01em;
+}
+.hsw-pill .info .s{
+  font-size: 11px;
+  color: rgba(255,255,255,.55);
+  margin: 2px 0 0;
+}
+
+.hsw-actions{
+  display: flex; gap: 10px;
+  margin-top: 8px;
+}
+.hsw-btn{
+  flex: 1;
+  height: 50px;
+  border-radius: 14px;
+  border: 0;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: -.01em;
+  cursor: pointer;
+}
+.hsw-btn.cancel{
+  background: rgba(255,255,255,.05);
+  color: rgba(255,255,255,.7);
+  border: .5px solid rgba(255,255,255,.1);
+}
+.hsw-btn.submit{
+  background: linear-gradient(135deg, #8B5CF6, #6366F1);
+  color: #fff;
+  box-shadow: 0 8px 22px rgba(139,92,246,.45);
+}
+.hsw-btn:active{ transform: scale(.97); }
+.hsw-btn:disabled{ opacity: .4; cursor: not-allowed; }
+
+/* ---------- 3. CREW RESET ---------- */
+/* Alte Crew-Komponenten verstecken — nur die saubere FY-Variante zeigen */
+#screen-crew .v107-tab,
+#screen-crew .v107-tabs,
+#screen-crew .crew-vibe-header,
+#screen-crew .crew-weather-card,
+#screen-crew .daily-quest-card,
+#screen-crew .crew-map-mini,
+#screen-crew #hubActivityLog,
+#screen-crew .v104-pass-card,
+#screen-crew .v108-noti-empty{
+  display: none !important;
+}
+
+/* ---------- 4. PINK-PURGE FINAL ---------- */
+/* Suche nach allen verbleibenden Pink-Schimmern und neutralisiere */
+[style*="rgba(254,60,114"],
+[style*="#FE3C72"],
+[style*="#FF6D2E"]{
+  background: linear-gradient(135deg, #8B5CF6, #6366F1) !important;
+  border-color: rgba(139,92,246,.3) !important;
+  color: #fff !important;
+}
+.hdr-sos[style*="rgba(254,60,114"],
+.hdr-btn-sos[style*="#FE3C72"],
+#sosBtn[style*="#FE3C72"]{
+  background: linear-gradient(135deg, #EC4899, #BE185D) !important;
+}
+
+/* Pink-Borders → Violet */
+[style*="border-color: rgba(254,60,114"],
+[style*="border:1px solid #FE3C72"],
+[style*="border:.5px solid #FE3C72"],
+[style*="border:1px solid rgba(254,60,114"]{
+  border-color: rgba(139,92,246,.5) !important;
+}
+
+/* Pink-Color (text) → Violet */
+[style*="color: #FE3C72"],
+[style*="color:#FE3C72"],
+[style*="color: rgba(254,60,114"]{
+  color: #C084FC !important;
+}
+
+/* Box-Shadows */
+[style*="box-shadow: 0 4px 14px rgba(254"],
+[style*="box-shadow: 0 8px 22px rgba(254"],
+[style*="box-shadow: 0 12px 32px rgba(254"]{
+  box-shadow: 0 8px 22px rgba(139,92,246,.4) !important;
+}
+
+/* Override aller alten ::after und ::before pulse animations die rosa nutzen */
+.hdr-btn.hdr-sos .sos-pulse,
+.sos-active-pulse{
+  background: rgba(236,72,153,.55) !important;
+  box-shadow: 0 0 0 0 rgba(236,72,153,.55) !important;
+}
+
+/* ---------- 5. SafePlace ALS HOME-CARD-BUTTON ---------- */
+.bb-spa-card{
+  background: linear-gradient(135deg, rgba(139,92,246,.18), rgba(99,102,241,.06));
+  border: .5px solid rgba(139,92,246,.4);
+  border-radius: 18px;
+  padding: 16px;
+  margin: 0 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  transition: transform .15s, border-color .25s;
+}
+.bb-spa-card:active{ transform: scale(.98); }
+.bb-spa-card .ic{
+  width: 48px; height: 48px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #8B5CF6, #6366F1);
+  display: flex; align-items: center; justify-content: center;
+  flex: none;
+  box-shadow: 0 8px 22px rgba(139,92,246,.5);
+}
+.bb-spa-card .ic svg{ width: 24px; height: 24px; color: #fff; }
+.bb-spa-card .main{ flex: 1; min-width: 0; }
+.bb-spa-card .t{
+  font-size: 15px; font-weight: 800;
+  color: #fff; margin: 0;
+  letter-spacing: -.01em;
+}
+.bb-spa-card .s{
+  font-size: 12px;
+  color: rgba(255,255,255,.65);
+  margin: 2px 0 0;
+}
+.bb-spa-card::after{
+  content: '';
+  width: 14px; height: 14px;
+  background: rgba(255,255,255,.4);
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='9 18 15 12 9 6'/></svg>") no-repeat center / contain;
+          mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='9 18 15 12 9 6'/></svg>") no-repeat center / contain;
+  flex: none;
+}
+
+/* ---------- 6. Hotspot-Liste auf Spots-Screen (zusätzlich zur Map) ---------- */
+.hs-list-bar{
+  position: fixed;
+  bottom: 96px;
+  left: 50%; transform: translateX(-50%);
+  width: calc(100% - 32px);
+  max-width: 480px;
+  z-index: 1180;
+  display: flex; gap: 6px;
+  padding: 6px;
+  background: rgba(15,15,28,.85);
+  backdrop-filter: blur(20px);
+  border: .5px solid rgba(139,92,246,.25);
+  border-radius: 14px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.hs-list-bar::-webkit-scrollbar{ display: none; }
+body:not([data-current-screen="radar"]) .hs-list-bar{ display: none !important; }
+.hs-list-chip{
+  flex: 0 0 auto;
+  padding: 8px 14px;
+  background: rgba(139,92,246,.05);
+  border: .5px solid rgba(139,92,246,.15);
+  color: rgba(255,255,255,.75);
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 10px;
+  cursor: pointer;
+  white-space: nowrap;
+  display: flex; align-items: center; gap: 6px;
+}
+.hs-list-chip svg{ width: 14px; height: 14px; }
+.hs-list-chip.on{
+  background: linear-gradient(135deg, #8B5CF6, #6366F1);
+  border-color: transparent;
+  color: #fff;
+}
+
+/* Hide alte Filter-Bar */
+.hf-bar{ display: none !important; }
+</style>
+<script id="bb-reset-js">
+/* ============================================================
+   BB-RESET — 4-Nav, Hotspot V4, Crew-Reset, SafePlace-Card
+   ============================================================ */
+(function(){
+  'use strict';
+  if (window.__bbResetInit) return;
+  window.__bbResetInit = true;
+
+  var sb = function(){ return window.sb || window.supabase; };
+  async function getUid(){
+    try{ var u = await sb().auth.getUser(); return u && u.data && u.data.user && u.data.user.id || null; }catch(e){ return null; }
+  }
+  function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]; }); }
+
+  /* ============= 1. HOTSPOT V4 WIZARD (sauberes neues System) ============= */
+  var hsKinds = [
+    { id: 'safe', t: 'Schutzort', s: 'Krankenhaus, Polizei, 24/7', ic: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>' },
+    { id: 'trust', t: 'Vertrauensort', s: 'Zuhause, Job, Stamm-Café', ic: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>' },
+    { id: 'live', t: 'Live-Spot', s: 'Bin gerade hier (zeitlich)', ic: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' },
+    { id: 'community', t: 'Community', s: 'Verein, Gruppe, Recovery', ic: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>' }
+  ];
+  var hsVis = [
+    { id: 'public', t: 'Öffentlich', s: 'Alle in der Nähe', ic: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>' },
+    { id: 'friends', t: 'Freunde', s: 'Nur Safety-Circle', ic: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>' },
+    { id: 'circle', t: 'Crew', s: 'Nur eingeladene', ic: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>' },
+    { id: 'private', t: 'Privat', s: 'Nur du', ic: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>' }
+  ];
+
+  var hsState = { kind: 'live', vis: 'friends', name: '', desc: '' };
+
+  function openHsWizard(){
+    closeHsWizard();
+    var m = document.createElement('div');
+    m.className = 'hsw-modal';
+    m.id = 'hswModal';
+    render();
+    function render(){
+      m.innerHTML = '<div class="hsw-card">'+
+        '<h2 class="hsw-h">Spot anlegen</h2>'+
+        '<p class="hsw-sub">Drei Sachen — fertig. Du kannst alles später ändern.</p>'+
+
+        '<div class="hsw-field">'+
+          '<label class="hsw-label">Was ist es?</label>'+
+          '<div class="hsw-grid" id="hswKinds">'+
+            hsKinds.map(function(k){
+              return '<button class="hsw-pill'+(hsState.kind===k.id?' on':'')+'" data-k="'+k.id+'" type="button">'+
+                '<div class="ic">'+k.ic+'</div>'+
+                '<div class="info"><div class="t">'+k.t+'</div><div class="s">'+k.s+'</div></div>'+
+              '</button>';
+            }).join('')+
+          '</div>'+
+        '</div>'+
+
+        '<div class="hsw-field">'+
+          '<label class="hsw-label">Name</label>'+
+          '<input class="hsw-input" id="hswName" placeholder="z.B. Festival-Treffpunkt, Mein Zuhause" maxlength="60" value="'+escapeHtml(hsState.name)+'"/>'+
+        '</div>'+
+
+        '<div class="hsw-field">'+
+          '<label class="hsw-label">Wer sieht es?</label>'+
+          '<div class="hsw-grid" id="hswVis">'+
+            hsVis.map(function(v){
+              return '<button class="hsw-pill'+(hsState.vis===v.id?' on':'')+'" data-v="'+v.id+'" type="button">'+
+                '<div class="ic">'+v.ic+'</div>'+
+                '<div class="info"><div class="t">'+v.t+'</div><div class="s">'+v.s+'</div></div>'+
+              '</button>';
+            }).join('')+
+          '</div>'+
+        '</div>'+
+
+        '<div class="hsw-actions">'+
+          '<button class="hsw-btn cancel" id="hswCancel" type="button">Abbrechen</button>'+
+          '<button class="hsw-btn submit" id="hswSubmit" type="button">Anlegen</button>'+
+        '</div>'+
+      '</div>';
+
+      m.querySelector('#hswKinds').addEventListener('click', function(e){
+        var b = e.target.closest('.hsw-pill');
+        if (!b) return;
+        hsState.kind = b.getAttribute('data-k');
+        m.querySelectorAll('#hswKinds .hsw-pill').forEach(function(x){ x.classList.toggle('on', x.getAttribute('data-k') === hsState.kind); });
+      });
+      m.querySelector('#hswVis').addEventListener('click', function(e){
+        var b = e.target.closest('.hsw-pill');
+        if (!b) return;
+        hsState.vis = b.getAttribute('data-v');
+        m.querySelectorAll('#hswVis .hsw-pill').forEach(function(x){ x.classList.toggle('on', x.getAttribute('data-v') === hsState.vis); });
+      });
+      m.querySelector('#hswName').addEventListener('input', function(e){ hsState.name = e.target.value; });
+      m.querySelector('#hswCancel').addEventListener('click', closeHsWizard);
+      m.querySelector('#hswSubmit').addEventListener('click', submitHs);
+    }
+    document.body.appendChild(m);
+    setTimeout(function(){ m.classList.add('on'); setTimeout(function(){ var i = m.querySelector('#hswName'); if (i) i.focus(); }, 350); }, 30);
+  }
+
+  function closeHsWizard(){
+    var m = document.getElementById('hswModal');
+    if (!m) return;
+    m.classList.remove('on');
+    setTimeout(function(){ try{ m.remove(); }catch(e){} }, 350);
+  }
+
+  async function submitHs(){
+    var btn = document.querySelector('#hswSubmit');
+    var name = (document.querySelector('#hswName') || {}).value || '';
+    name = name.trim();
+    if (name.length < 2){
+      var inp = document.querySelector('#hswName');
+      if (inp){ inp.style.borderColor = '#EC4899'; setTimeout(function(){ inp.style.borderColor = ''; inp.focus(); }, 200); }
+      if (window.bbToast) window.bbToast('Name fehlt');
+      return;
+    }
+    btn.disabled = true; btn.textContent = 'Lege an …';
+    try{
+      var s = sb();
+      if (!s) throw new Error('Backend nicht verfügbar');
+      var lat = window.userLat, lng = window.userLng;
+      if (!lat || !lng){
+        await new Promise(function(res, rej){
+          if (!navigator.geolocation){ rej(new Error('GPS nicht unterstützt')); return; }
+          navigator.geolocation.getCurrentPosition(function(p){
+            window.userLat = p.coords.latitude; window.userLng = p.coords.longitude;
+            lat = p.coords.latitude; lng = p.coords.longitude; res();
+          }, function(err){ rej(new Error('GPS verweigert')); }, { enableHighAccuracy: true, timeout: 8000 });
+        });
+      }
+      var uid = await getUid();
+      if (!uid) throw new Error('Nicht eingeloggt');
+      /* TTL nach Kind: live=4h, andere=30 Tage */
+      var expiresAt = new Date(Date.now() + (hsState.kind === 'live' ? 4 : 30*24) * 3600000).toISOString();
+      var payload = {
+        owner_id: uid,
+        name: name,
+        kind: hsState.kind,
+        category: hsState.kind,
+        visibility: hsState.vis,
+        is_recurring: hsState.kind !== 'live',
+        expires_at: expiresAt,
+        lat: lat, lng: lng,
+        audience: [(localStorage.getItem('bb-audience') || 'general')]
+      };
+      console.log('[bb-reset] HS V4 payload:', payload);
+      var ins = await s.from('hotspots').insert(payload);
+      if (ins.error) throw ins.error;
+      /* Fetch zurück */
+      var newSpot = null;
+      try{
+        var r = await s.from('hotspots').select('*').eq('owner_id', uid).order('created_at',{ascending:false}).limit(1);
+        if (r.data && r.data[0]) newSpot = r.data[0];
+      }catch(e){}
+      /* Auto-Join */
+      if (newSpot){
+        try{
+          await s.from('hotspot_members').upsert({ hotspot_id: newSpot.id, user_id: uid, status: 'joined' }, { onConflict: 'hotspot_id,user_id' });
+        }catch(e){ console.warn('[bb-reset] auto-join warn', e); }
+      }
+      closeHsWizard();
+      hsState = { kind: 'live', vis: 'friends', name: '', desc: '' };
+      if (window.bbToast) window.bbToast('Spot „' + name + '" angelegt');
+      if (newSpot && window.bbHotspotV3 && window.bbHotspotV3.openDetail){
+        newSpot.is_mine = true; newSpot.member_count = 1;
+        setTimeout(function(){ window.bbHotspotV3.openDetail(newSpot); }, 600);
+      }
+      if (typeof window.bbLoadHotspotsV2 === 'function') setTimeout(window.bbLoadHotspotsV2, 800);
+    }catch(err){
+      console.error('[bb-reset] HS V4 fail', err);
+      if (window.bbToast) window.bbToast('Fehler: ' + (err.message || err));
+      btn.disabled = false; btn.textContent = 'Anlegen';
+    }
+  }
+
+  /* ============= 2. HOTSPOT-FAB injizieren ============= */
+  function injectHsFab(){
+    if (document.querySelector('.hs-fab')) return;
+    var fab = document.createElement('button');
+    fab.className = 'hs-fab';
+    fab.type = 'button';
+    fab.title = 'Spot anlegen';
+    fab.setAttribute('aria-label', 'Spot anlegen');
+    fab.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>';
+    fab.addEventListener('click', openHsWizard);
+    document.body.appendChild(fab);
+  }
+
+  /* ============= 3. HOTSPOT-FILTER-BAR (Kind-Filter) ============= */
+  function injectHsFilterBar(){
+    if (document.querySelector('.hs-list-bar')) return;
+    var bar = document.createElement('div');
+    bar.className = 'hs-list-bar';
+    bar.innerHTML = ''+
+      '<button class="hs-list-chip on" data-k="" type="button">Alle</button>'+
+      hsKinds.map(function(k){
+        return '<button class="hs-list-chip" data-k="'+k.id+'" type="button">'+k.ic+'<span>'+k.t+'</span></button>';
+      }).join('');
+    document.body.appendChild(bar);
+    bar.addEventListener('click', function(e){
+      var c = e.target.closest('.hs-list-chip');
+      if (!c) return;
+      bar.querySelectorAll('.hs-list-chip').forEach(function(x){ x.classList.remove('on'); });
+      c.classList.add('on');
+      var kind = c.getAttribute('data-k');
+      window.__bbHsFilter = kind || null;
+      if (typeof window.bbLoadHotspotsV2 === 'function') window.bbLoadHotspotsV2();
+    });
+  }
+
+  /* ============= 4. SAFEPLACE-CARD im FY-Feed (Home) ============= */
+  function injectSpaCard(){
+    var fy = document.querySelector('#screen-crew .fy-wrap');
+    if (!fy) return;
+    if (fy.querySelector('.bb-spa-card')) return;
+    var card = document.createElement('div');
+    card.className = 'bb-spa-card';
+    card.innerHTML = ''+
+      '<div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>'+
+      '<div class="main">'+
+        '<h4 class="t">SafePlace-Hub</h4>'+
+        '<p class="s">Notfall-Kontakte, Heimweg, Audit-Log</p>'+
+      '</div>';
+    /* Position: nach dem Hero, vor Quick-Cards */
+    var hero = fy.querySelector('.fy-hero');
+    if (hero && hero.nextSibling) fy.insertBefore(card, hero.nextSibling);
+    else fy.insertBefore(card, fy.firstChild);
+    card.addEventListener('click', function(){
+      if (typeof window.openSafeplaceHub === 'function'){
+        try{ window.openSafeplaceHub(); }catch(e){ console.warn(e); }
+      }
+    });
+  }
+
+  /* ============= 5. CREW RESET — Crew-Tab zeigt nur FY-Members ============= */
+  function resetCrewView(){
+    var screen = document.getElementById('screen-crew');
+    if (!screen) return;
+    /* Sicherstellen dass die FY-Wrap aus bb-violet sichtbar ist */
+    var wrap = screen.querySelector('.fy-wrap');
+    if (wrap) wrap.style.display = '';
+    /* Andere Crew-Inhalte verstecken */
+    Array.from(screen.children).forEach(function(c){
+      if (c.classList.contains('fy-wrap')) return;
+      if (!c.dataset.bbCrewReset){
+        c.dataset.bbCrewReset = '1';
+        c.style.display = 'none';
+      }
+    });
+  }
+
+  /* ============= 6. NAV: Verstecke SafePlace-Button ============= */
+  function tweakNav(){
+    var nav = document.querySelector('.bb-nav-final');
+    if (!nav) return;
+    var spaBtn = nav.querySelector('.bb-nav-safeplace, [data-target="safety"]');
+    if (spaBtn){
+      spaBtn.style.display = 'none';
+    }
+  }
+
+  /* ============= INIT ============= */
+  function init(){
+    setTimeout(function(){
+      tweakNav();
+      injectHsFab();
+      injectHsFilterBar();
+      injectSpaCard();
+      resetCrewView();
+    }, 1500);
+    setInterval(function(){
+      tweakNav();
+      injectHsFab();
+      injectHsFilterBar();
+      injectSpaCard();
+      resetCrewView();
+    }, 4000);
+
+    /* Bei Tab-Switch zu home/crew: Card sicherstellen */
+    document.addEventListener('click', function(e){
+      var t = e.target;
+      if (!t || !t.closest) return;
+      if (t.closest('[data-target="home"], [data-target="crew"]')){
+        setTimeout(injectSpaCard, 400);
+      }
+    });
+
+    /* Expose */
+    window.bbHsV4 = { open: openHsWizard, close: closeHsWizard };
+    window.bbCreateHotspot = openHsWizard; /* Override alte Funktion */
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+
 </body></html>
