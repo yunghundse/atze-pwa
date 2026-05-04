@@ -1196,6 +1196,143 @@ a{ color: var(--c-violet-3); text-decoration: none; }
 .cw-item .ava img{ width: 100%; height: 100%; object-fit: cover; }
 .cw-item.tier-gold .ava{ box-shadow: 0 0 0 2px var(--c-gold), 0 0 12px rgba(255,214,10,.4); }
 .cw-item.tier-silver .ava{ box-shadow: 0 0 0 2px var(--c-violet), 0 0 8px rgba(139,92,246,.4); }
+/* Avatar mit Online-Dot + Mood-Pill */
+.cw-ava-wrap{ position: relative; flex: none; }
+.cw-online-dot{
+  position: absolute;
+  top: 1px; right: 1px;
+  width: 11px; height: 11px;
+  border-radius: 50%;
+  background: var(--c-text-3);
+  border: 2px solid var(--c-surface-2);
+  z-index: 2;
+}
+.cw-online-dot.online{
+  background: var(--c-green);
+  box-shadow: 0 0 6px rgba(40,200,120,.6);
+  animation: livePulse 2.2s ease-in-out infinite;
+}
+.cw-online-dot.recent{ background: #FCD34D; }
+.cw-online-dot.offline{ background: #6B7280; }
+.cw-mood-pill{
+  position: absolute;
+  bottom: -3px; right: -4px;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--c-surface);
+  border: 1.5px solid var(--c-violet-line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+  box-shadow: 0 2px 4px rgba(0,0,0,.4);
+}
+.cw-mood-pill img{ width: 14px; height: 14px; }
+.cw-mood-pill.mood-help, .cw-mood-pill.mood-lost{
+  border-color: rgba(236,72,153,.55);
+  background: rgba(236,72,153,.18);
+  animation: livePulse 1.5s ease-in-out infinite;
+}
+.cw-verified-tick{
+  font-size: 11px;
+  color: var(--c-violet-3);
+  display: inline-flex;
+  align-items: center;
+}
+.cw-verified-tick svg{ width: 14px; height: 14px; }
+
+/* Circle-Status-Button (klein, am Item-Ende) */
+.cw-circle-btn{
+  flex: none;
+  height: 30px;
+  padding: 0 10px;
+  border-radius: 15px;
+  font-size: 11px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(139,92,246,.16);
+  color: var(--c-violet-3);
+  border: .5px solid rgba(139,92,246,.4);
+  white-space: nowrap;
+  transition: transform .15s var(--ease);
+}
+.cw-circle-btn:active{ transform: scale(.94); }
+.cw-circle-btn.in{
+  background: rgba(40,200,120,.18);
+  color: #6EE7B7;
+  border-color: rgba(40,200,120,.5);
+}
+.cw-circle-btn.pending-out{
+  background: rgba(251,191,36,.14);
+  color: #FCD34D;
+  border-color: rgba(251,191,36,.4);
+}
+.cw-circle-btn.pending-in{
+  background: linear-gradient(135deg, var(--c-violet), var(--c-violet-2));
+  color: #fff;
+  border-color: transparent;
+  animation: livePulse 1.8s ease-in-out infinite;
+}
+.cw-circle-btn svg{ width: 12px; height: 12px; }
+
+/* Last-Seen / Online-Status-Text */
+.cw-presence{
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .02em;
+}
+.cw-presence.online{ color: #6EE7B7; }
+.cw-presence.recent{ color: #FCD34D; }
+.cw-presence.offline{ color: var(--c-text-3); }
+.cw-presence-dot{
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* Filter-Chips */
+.cw-filters{
+  display: flex;
+  gap: 6px;
+  margin: 0 var(--s-4) var(--s-3);
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.cw-filters::-webkit-scrollbar{ display: none; }
+.cw-filters[hidden]{ display: none; }
+.cw-filter-chip{
+  flex: 0 0 auto;
+  height: 30px;
+  padding: 0 12px;
+  border-radius: 15px;
+  background: var(--c-surface-2);
+  border: .5px solid var(--c-violet-line);
+  color: var(--c-text-2);
+  font-size: 11px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+  transition: background .2s, color .2s, border-color .2s;
+}
+.cw-filter-chip:active{ transform: scale(.95); }
+.cw-filter-chip.on{
+  background: linear-gradient(135deg, var(--c-violet), var(--c-violet-2));
+  color: #fff;
+  border-color: transparent;
+}
+.cw-filter-chip img.emo3d{ width: 14px; height: 14px; }
+.cw-filter-chip .count{
+  font-size: 10px;
+  opacity: .75;
+}
 .cw-item .info{ flex: 1; min-width: 0; }
 .cw-item .name{
   font-size: var(--t-3);
@@ -3016,6 +3153,21 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
         <button class="cw-trust-tab" data-trust-tab="world">Welt</button>
         <button class="cw-trust-tab" data-trust-tab="crews">Crews</button>
       </div>
+      <div class="cw-filters" id="cwFilters" hidden>
+        <button class="cw-filter-chip on" data-filter="all">Alle <span class="count" id="cwFCAll">0</span></button>
+        <button class="cw-filter-chip" data-filter="online">
+          <span class="cw-presence-dot" style="background:#6EE7B7"></span>Online <span class="count" id="cwFCOnline">0</span>
+        </button>
+        <button class="cw-filter-chip" data-filter="verified">
+          <img class="emo3d" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Check%20mark%20button/3D/check_mark_button_3d.png" alt=""/>Verifiziert <span class="count" id="cwFCVerified">0</span>
+        </button>
+        <button class="cw-filter-chip" data-filter="mood">
+          <img class="emo3d" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Mirror%20ball/3D/mirror_ball_3d.png" alt=""/>Mood <span class="count" id="cwFCMood">0</span>
+        </button>
+        <button class="cw-filter-chip" data-filter="pending">
+          <img class="emo3d" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Hourglass%20not%20done/3D/hourglass_not_done_3d.png" alt=""/>Pending <span class="count" id="cwFCPending">0</span>
+        </button>
+      </div>
       <div class="cw-list" id="cwList"></div>
     </section>
 
@@ -4336,6 +4488,12 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     loadAchievements();
     /* Live-Crew-Broadcast wenn aktiv */
     if (profile.share_live_with_crew) startMyLiveBroadcast();
+    /* Online-Heartbeat: einmal sofort + alle 60s */
+    sendHeartbeat();
+    setInterval(sendHeartbeat, 60000);
+  }
+  async function sendHeartbeat(){
+    try{ await sb.rpc('heartbeat'); }catch(_){}
   }
 
   /* ============= TAB-ROUTING ============= */
@@ -5112,17 +5270,25 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
   }));
 
   /* ============= CREW ============= */
-  let cwTab = 'tree', cwTrustSubTab = 'friends';
-  $$('.cw-tab').forEach(b => b.addEventListener('click', () => {
-    $$('.cw-tab').forEach(x => x.classList.remove('on'));
-    b.classList.add('on');
-    cwTab = b.dataset.cwTab;
+  let cwTab = 'tree', cwTrustSubTab = 'friends', cwFilter = 'all';
+  function syncCwUi(){
     /* Tree-Visualisierung nur auf "tree" Tab */
     $('cwTree').classList.toggle('show', cwTab === 'tree');
     /* Trust-Sub-Tabs nur auf "trusted" */
     $('cwTrustTabs').classList.toggle('show', cwTab === 'trusted');
     /* Search hidden auf Tree */
     $('cwSearch').style.display = cwTab === 'tree' ? 'none' : '';
+    /* Filter-Chips: nur auf Alle / Safety-Circle */
+    const showFilters = cwTab === 'all' || cwTab === 'circle';
+    $('cwFilters').hidden = !showFilters;
+  }
+  $$('.cw-tab').forEach(b => b.addEventListener('click', () => {
+    $$('.cw-tab').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    cwTab = b.dataset.cwTab;
+    cwFilter = 'all';
+    $$('.cw-filter-chip').forEach(x => x.classList.toggle('on', x.dataset.filter === 'all'));
+    syncCwUi();
     renderCrew();
   }));
   $$('.cw-trust-tab').forEach(b => b.addEventListener('click', () => {
@@ -5131,7 +5297,28 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     cwTrustSubTab = b.dataset.trustTab;
     renderCrew();
   }));
+  $$('.cw-filter-chip').forEach(b => b.addEventListener('click', () => {
+    $$('.cw-filter-chip').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    cwFilter = b.dataset.filter;
+    renderCrew();
+  }));
   $('cwSearch').addEventListener('input', renderCrew);
+
+  /* Online-Status-Helpers */
+  function presenceClass(lastSeenAt){
+    if (!lastSeenAt) return 'offline';
+    const ms = Date.now() - new Date(lastSeenAt).getTime();
+    if (ms < 5 * 60 * 1000) return 'online';
+    if (ms < 30 * 60 * 1000) return 'recent';
+    return 'offline';
+  }
+  function presenceLabel(lastSeenAt){
+    const cls = presenceClass(lastSeenAt);
+    if (cls === 'online') return 'Online';
+    if (!lastSeenAt) return 'Offline';
+    return 'vor ' + timeAgo(lastSeenAt);
+  }
 
   /* ============= STAMMBAUM RENDER ============= */
   async function renderCircleTree(){
@@ -5156,10 +5343,20 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
           <div class="cw-tree-empty">
             <div class="you-bubble">${selfImg}</div>
             <h4>Dein Safety-Stammbaum wartet</h4>
-            <p>Lade Freunde ein oder vernetze dich. Je näher die Person, desto näher im Kreis.</p>
+            <p>Lade Menschen ein denen du vertraust — sie erscheinen als Kreis um dich herum. Je höher der Trust, desto näher.</p>
+            <div style="display:flex;gap:8px;justify-content:center;margin-top:16px;flex-wrap:wrap">
+              <button class="btn-pri" data-cw-empty="invite">Freunde einladen</button>
+              <button class="btn-sec" data-cw-empty="discover">Crew entdecken</button>
+            </div>
           </div>
         `;
         wireTreeToggle();
+        host.querySelectorAll('[data-cw-empty]').forEach(b => b.addEventListener('click', () => {
+          const a = b.dataset.cwEmpty;
+          if (a === 'invite' && typeof openInviteModal === 'function') openInviteModal();
+          else if (a === 'invite') openModal('inviteModal');
+          else if (a === 'discover' && typeof openDiscover === 'function') openDiscover();
+        }));
         return;
       }
 
@@ -5299,6 +5496,8 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     try{
       const r = await sb.rpc('get_crew_circle');
       let members = ((r && r.data) || []).filter(m => m.user_id !== user.id);
+
+      /* Tab-Filter */
       if (cwTab === 'circle') members = members.filter(m => m.is_in_safety_circle);
       else if (cwTab === 'trusted'){
         if (cwTrustSubTab === 'friends'){
@@ -5308,29 +5507,118 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
           members.sort((a,b) => parseFloat(b.trust_avg) - parseFloat(a.trust_avg));
         }
       }
+      /* Filter-Chip-Counts (vor dem Filter-Apply) — nur für Alle/Circle Tabs sichtbar */
+      const showFilters = cwTab === 'all' || cwTab === 'circle';
+      if (showFilters){
+        const setCount = (id, n) => { const el = $(id); if (el) el.textContent = n; };
+        setCount('cwFCAll',      members.length);
+        setCount('cwFCOnline',   members.filter(m => presenceClass(m.last_seen_at) === 'online').length);
+        setCount('cwFCVerified', members.filter(m => m.is_verified).length);
+        setCount('cwFCMood',     members.filter(m => !!m.mood).length);
+        setCount('cwFCPending',  members.filter(m => m.circle_status === 'pending_outgoing' || m.circle_status === 'pending_incoming').length);
+      }
+      /* Filter-Chip-Apply */
+      if (showFilters && cwFilter !== 'all'){
+        if (cwFilter === 'online')   members = members.filter(m => presenceClass(m.last_seen_at) === 'online');
+        if (cwFilter === 'verified') members = members.filter(m => m.is_verified);
+        if (cwFilter === 'mood')     members = members.filter(m => !!m.mood);
+        if (cwFilter === 'pending')  members = members.filter(m => m.circle_status === 'pending_outgoing' || m.circle_status === 'pending_incoming');
+      }
+      /* Search */
       const search = $('cwSearch').value.toLowerCase().trim();
       if (search) members = members.filter(m => (m.display_name||'').toLowerCase().includes(search));
+      /* Empty-State mit echten CTAs */
       if (!members.length){
-        host.innerHTML = '<div class="empty with-emo"><img class="emo3d sz-hero" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/People%20hugging/3D/people_hugging_3d.png" alt=""/><h4>Keine Crew hier</h4><p>Lade Freunde in deinen Safety-Circle ein oder tritt einem Hotspot bei.</p></div>';
+        const isFiltered = !!search || (cwFilter !== 'all' && showFilters);
+        if (isFiltered){
+          host.innerHTML = '<div class="empty with-emo"><img class="emo3d sz-hero" src="' + FX.search + '" alt=""/><h4>Keine Treffer</h4><p>Filter oder Suche zurücksetzen?</p><button class="btn-pri" id="cwClearFilters" style="margin-top:12px">Filter zurücksetzen</button></div>';
+          const btn = $('cwClearFilters');
+          if (btn) btn.addEventListener('click', () => {
+            cwFilter = 'all';
+            $('cwSearch').value = '';
+            $$('.cw-filter-chip').forEach(x => x.classList.toggle('on', x.dataset.filter === 'all'));
+            renderCrew();
+          });
+        } else if (cwTab === 'circle'){
+          host.innerHTML = '<div class="empty with-emo"><img class="emo3d sz-hero" src="' + FX.shield + '" alt=""/><h4>Dein Safety-Circle ist leer</h4><p>Lade Menschen ein denen du vertraust — sie bekommen deinen SOS, sehen deinen Heimweg, kümmern sich.</p><div style="display:flex;gap:8px;justify-content:center;margin-top:14px;flex-wrap:wrap"><button class="btn-pri" data-cw-empty="invite">Freunde einladen</button><button class="btn-sec" data-cw-empty="discover">Crew entdecken</button></div></div>';
+        } else {
+          host.innerHTML = '<div class="empty with-emo"><img class="emo3d sz-hero" src="' + FX.hug + '" alt=""/><h4>Noch keine Crew</h4><p>Lade deine erste Person ein oder finde Leute über Discovery + Spots.</p><div style="display:flex;gap:8px;justify-content:center;margin-top:14px;flex-wrap:wrap"><button class="btn-pri" data-cw-empty="invite">Freunde einladen</button><button class="btn-sec" data-cw-empty="discover">Crew entdecken</button></div></div>';
+        }
+        host.querySelectorAll('[data-cw-empty]').forEach(b => b.addEventListener('click', () => {
+          const a = b.dataset.cwEmpty;
+          if (a === 'invite' && typeof openInviteModal === 'function') openInviteModal();
+          else if (a === 'invite') openModal('inviteModal');
+          else if (a === 'discover' && typeof openDiscover === 'function') openDiscover();
+        }));
         return;
       }
+      /* Liste rendern */
       host.innerHTML = members.map(m => {
         const trust = parseFloat(m.trust_avg) || 0;
         const tier = trust >= 4.5 && m.activity_score >= 80 ? 'tier-gold' :
                      trust >= 4.0 && m.activity_score >= 60 ? 'tier-silver' : '';
         const stars = [1,2,3,4,5].map(i => '<span class="cw-star ' + (i <= Math.round(trust * 2)/2 ? 'on' : '') + '"></span>').join('');
+        const presCls = presenceClass(m.last_seen_at);
+        const presLbl = presenceLabel(m.last_seen_at);
+        const moodObj = m.mood ? MOODS.find(x => x.id === m.mood) : null;
+        const moodPill = moodObj
+          ? '<span class="cw-mood-pill mood-' + moodObj.id + '" title="Mood: ' + esc(moodObj.t) + '"><img src="' + FX[moodObj.fx] + '" alt=""/></span>'
+          : '';
+        const verifTick = m.is_verified
+          ? '<span class="cw-verified-tick" title="Verifiziert"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L9 4H5v4L1 12l4 4v4h4l3 3 3-3h4v-4l4-4-4-4V4h-4z"/><path d="M9 12l2 2 4-4" stroke="#0a0014" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>'
+          : '';
+        /* Circle-Status-Button */
+        const cs = m.circle_status || 'none';
+        let circleBtn = '';
+        if (cs === 'accepted'){
+          circleBtn = '<button class="cw-circle-btn in" data-cw-act="circle" title="Aus Safety-Circle entfernen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Im Circle</button>';
+        } else if (cs === 'pending_outgoing'){
+          circleBtn = '<button class="cw-circle-btn pending-out" data-cw-act="circle" title="Anfrage zurückziehen">Angefragt</button>';
+        } else if (cs === 'pending_incoming'){
+          circleBtn = '<button class="cw-circle-btn pending-in" data-cw-act="circle" title="Anfrage annehmen">Bestätigen</button>';
+        } else {
+          circleBtn = '<button class="cw-circle-btn" data-cw-act="circle" title="In Safety-Circle einladen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Circle</button>';
+        }
         return `<div class="cw-item ${tier}" data-uid="${m.user_id}">
-          <div class="ava">${m.photo_url ? '<img src="'+esc(m.photo_url)+'"/>' : initials(m.display_name)}</div>
-          <div class="info">
-            <div class="name">${esc(m.display_name)}${m.audience_profile && m.audience_profile !== 'general' ? '<span class="badge">'+esc(m.audience_profile)+'</span>' : ''}</div>
-            <div class="meta">${stars} · ${trust ? trust.toFixed(1) : '—'} · Aktivität ${m.activity_score || 0}</div>
+          <div class="cw-ava-wrap">
+            <div class="ava">${m.photo_url ? '<img src="'+esc(m.photo_url)+'"/>' : initials(m.display_name)}</div>
+            <span class="cw-online-dot ${presCls}" title="${presLbl}"></span>
+            ${moodPill}
           </div>
-          <button class="act" aria-label="Bewerten"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></button>
+          <div class="info">
+            <div class="name">${esc(m.display_name)}${verifTick}${m.audience_profile && m.audience_profile !== 'general' ? '<span class="badge">'+esc(m.audience_profile)+'</span>' : ''}</div>
+            <div class="meta">${stars} · ${trust ? trust.toFixed(1) : '—'} <span class="cw-presence ${presCls}"><span class="cw-presence-dot"></span>${presLbl}</span></div>
+          </div>
+          ${circleBtn}
         </div>`;
       }).join('');
       host.querySelectorAll('.cw-item').forEach(it => {
+        const member = members.find(x => x.user_id === it.dataset.uid);
+        /* Circle-Button: nicht zu Trust-Rate durchpropagieren */
+        const cb = it.querySelector('[data-cw-act="circle"]');
+        if (cb){
+          cb.addEventListener('click', async (e) => {
+            e.stopPropagation();
+            cb.disabled = true;
+            try{
+              const r2 = await sb.rpc('toggle_safety_circle', { p_user_id: member.user_id });
+              if (r2.error) throw r2.error;
+              const action = r2.data && r2.data.action;
+              const messages = {
+                invited:   'Anfrage gesendet · ' + member.display_name,
+                accepted:  member.display_name + ' im Safety-Circle',
+                removed:   member.display_name + ' aus Safety-Circle entfernt',
+                withdrawn: 'Anfrage zurückgezogen'
+              };
+              toast(messages[action] || 'OK', null, null, action === 'removed' ? 'warning' : 'success');
+              renderCrew();
+              refreshCrewCounts();
+            }catch(e){ toast('Fehler: ' + (e.message || e), null, null, 'warning'); }
+            finally{ cb.disabled = false; }
+          });
+        }
+        /* Item-Klick → Trust-Rate */
         it.addEventListener('click', () => {
-          const member = members.find(x => x.user_id === it.dataset.uid);
           if (member) openTrustRate(member);
         });
       });
