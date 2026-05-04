@@ -16690,4 +16690,287 @@ body{
 })();
 </script>
 
+<style id="bb-recovery">/* ============================================================
+   BB-RECOVERY — Legacy-Profil zurück + Senior-Team-Polish
+   STRATEGIE: subtraktiv statt destruktiv. Keine blanket-hides.
+   ============================================================ */
+
+/* ---------- 0. Recovery: Profile-Children wieder sichtbar machen ---------- */
+/* Override aller meiner vorherigen blanket-hide rules */
+#screen-profile > div,
+[data-screen="profile"] > div{
+  display: revert !important;
+}
+#screen-profile > div.bb-profile-wrap,
+[data-screen="profile"] > div.bb-profile-wrap{
+  display: none !important; /* Mein zerstörter Wrapper komplett raus */
+}
+
+/* Aber: Ducplikate (sc-wrap, aud-banner, qt-row, ccCircleHost, crew-status-pill) bleiben hidden */
+#screen-profile .sc-wrap,
+#screen-profile .aud-banner,
+#screen-profile .qt-row,
+#screen-profile .crew-status-pill,
+#screen-profile #ccCircleHost,
+#screen-profile .ptr-indicator,
+[data-screen="profile"] .sc-wrap,
+[data-screen="profile"] .aud-banner,
+[data-screen="profile"] .qt-row,
+[data-screen="profile"] .crew-status-pill,
+[data-screen="profile"] #ccCircleHost{
+  display: none !important;
+}
+
+/* ---------- 1. DESIGN-TOKENS (Senior-Team-Pattern) ---------- */
+:root{
+  /* Typography */
+  --t-1: 22px;  --t-2: 18px;  --t-3: 15px;  --t-4: 13px;  --t-5: 11px;
+  /* Spacing */
+  --s-1: 4px;  --s-2: 8px;  --s-3: 12px;  --s-4: 16px;  --s-5: 24px;  --s-6: 32px;
+  /* Colors */
+  --c-pink: #FE3C72;
+  --c-orange: #FF6D2E;
+  --c-gold: #FFD60A;
+  --c-green: #28C878;
+  --c-blue: #3B82F6;
+  --c-purple: #A855F7;
+  --c-bg: #05050A;
+  --c-surface: rgba(255,255,255,.04);
+  --c-surface-2: rgba(255,255,255,.08);
+  --c-text-1: #FAFAFA;
+  --c-text-2: rgba(255,255,255,.7);
+  --c-text-3: rgba(255,255,255,.45);
+  --c-line: rgba(255,255,255,.08);
+  /* Radius */
+  --r-1: 8px;  --r-2: 12px;  --r-3: 16px;  --r-4: 20px;  --r-5: 999px;
+}
+
+/* ---------- 2. POLISH für Legacy Profile-Elemente ---------- */
+.prof-hero{
+  background: linear-gradient(135deg, rgba(254,60,114,.12), rgba(255,109,46,.04)) !important;
+  border: .5px solid rgba(254,60,114,.2) !important;
+  border-radius: var(--r-4) !important;
+  padding: var(--s-5) var(--s-4) !important;
+  margin: var(--s-3) var(--s-4) !important;
+  text-align: center !important;
+}
+.prof-ava-wrap{
+  margin: 0 auto var(--s-3) !important;
+  position: relative !important;
+}
+.prof-ava{
+  width: 96px !important;
+  height: 96px !important;
+  border-radius: 50% !important;
+  border: 3px solid rgba(255,255,255,.12) !important;
+  box-shadow: 0 12px 32px rgba(254,60,114,.4) !important;
+  background: linear-gradient(135deg, var(--c-pink), var(--c-orange)) !important;
+  margin: 0 auto !important;
+  overflow: hidden !important;
+}
+.prof-ava img{
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+.prof-ava-edit{
+  position: absolute !important;
+  bottom: 0 !important; right: 0 !important;
+  width: 28px !important; height: 28px !important;
+  border-radius: 50% !important;
+  background: linear-gradient(135deg, var(--c-green), #1ea860) !important;
+  border: 2px solid var(--c-bg) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  z-index: 2 !important;
+}
+.prof-ava-edit::after{
+  content: '';
+  width: 14px; height: 14px;
+  background: #fff;
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><path d='M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z'/><circle cx='12' cy='13' r='4'/></svg>") no-repeat center / contain;
+          mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><path d='M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z'/><circle cx='12' cy='13' r='4'/></svg>") no-repeat center / contain;
+}
+.prof-ava-edit > *{ display: none !important; } /* Verstecke Original-Children */
+
+#profHandle, .handle{
+  font-size: var(--t-2) !important;
+  font-weight: 800 !important;
+  color: var(--c-text-1) !important;
+  letter-spacing: -.01em !important;
+  margin: 0 0 var(--s-1) !important;
+}
+
+.prof-badges-row{
+  display: flex !important;
+  justify-content: center !important;
+  gap: var(--s-2) !important;
+  flex-wrap: wrap !important;
+  margin: var(--s-2) 0 !important;
+}
+
+.prof-vibe{
+  font-size: var(--t-4) !important;
+  color: var(--c-text-2) !important;
+  font-style: italic !important;
+  margin: var(--s-2) 0 !important;
+}
+
+.prof-socials{
+  display: flex !important;
+  justify-content: center !important;
+  gap: var(--s-3) !important;
+  margin-top: var(--s-3) !important;
+}
+
+/* Stats-Grid Legacy */
+.prof-stats{
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: var(--s-2) !important;
+  margin: var(--s-3) var(--s-4) !important;
+  padding: var(--s-3) !important;
+  background: var(--c-surface) !important;
+  border: .5px solid var(--c-line) !important;
+  border-radius: var(--r-3) !important;
+}
+.pstat{
+  text-align: center !important;
+}
+.pstat .pn{
+  font-size: 18px !important;
+  font-weight: 900 !important;
+  color: var(--c-text-1) !important;
+  letter-spacing: -.02em !important;
+  display: block !important;
+  line-height: 1 !important;
+}
+.pstat .pl{
+  font-size: var(--t-5) !important;
+  color: var(--c-text-3) !important;
+  margin-top: 4px !important;
+  letter-spacing: .04em !important;
+  text-transform: uppercase !important;
+}
+
+/* Premium-CTA */
+.premium-cta{
+  margin: var(--s-3) var(--s-4) !important;
+  padding: var(--s-4) !important;
+  background: linear-gradient(135deg, rgba(255,214,10,.15), rgba(255,109,46,.06)) !important;
+  border: .5px solid rgba(255,214,10,.35) !important;
+  border-radius: var(--r-3) !important;
+  cursor: pointer !important;
+}
+
+/* Profile-Menu */
+.pmenu{
+  display: flex !important;
+  flex-direction: column !important;
+  gap: var(--s-2) !important;
+  margin: var(--s-3) var(--s-4) !important;
+}
+.pmi{
+  display: flex !important;
+  align-items: center !important;
+  gap: var(--s-3) !important;
+  padding: var(--s-3) var(--s-4) !important;
+  background: var(--c-surface) !important;
+  border: .5px solid var(--c-line) !important;
+  border-radius: var(--r-2) !important;
+  cursor: pointer !important;
+  transition: transform .15s, border-color .2s !important;
+  color: inherit !important;
+}
+.pmi:active{ transform: scale(.98) !important; }
+.pmi-icon{
+  width: 32px !important; height: 32px !important;
+  border-radius: var(--r-1) !important;
+  background: var(--c-surface-2) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: none !important;
+}
+.pmi-icon svg{
+  width: 16px !important; height: 16px !important;
+  color: var(--c-text-1) !important;
+}
+.pmi-text, .pmi-content{
+  flex: 1 !important;
+  min-width: 0 !important;
+}
+.pmi-title, .pmi-text > strong{
+  font-size: var(--t-4) !important;
+  font-weight: 700 !important;
+  color: var(--c-text-1) !important;
+  display: block !important;
+  margin: 0 !important;
+}
+.pmi-sub, .pmi-text > small{
+  font-size: var(--t-5) !important;
+  color: var(--c-text-3) !important;
+  margin-top: 2px !important;
+  display: block !important;
+}
+
+/* v104-pass-card kompakter */
+.v104-pass-card{
+  margin: var(--s-3) var(--s-4) !important;
+  padding: var(--s-4) !important;
+  background: linear-gradient(135deg, rgba(168,85,247,.15), rgba(99,102,241,.06)) !important;
+  border: .5px solid rgba(168,85,247,.35) !important;
+  border-radius: var(--r-3) !important;
+}
+
+/* ---------- 3. Body-Padding für neue Nav ---------- */
+body{
+  padding-bottom: calc(96px + var(--safe-bot, 0px)) !important;
+}
+#screen-profile, [data-screen="profile"]{
+  padding-bottom: calc(96px + var(--safe-bot, 0px)) !important;
+}
+
+/* ---------- 4. Premium-CTA hidden falls schon premium ---------- */
+body.is-premium .premium-cta{ display: none !important; }
+
+/* ---------- 5. Anti-Party im Profile ---------- */
+#screen-profile .crew-hub-empty-emoji{ display: none !important; }
+</style>
+<script id="bb-recovery-js">
+/* ============================================================
+   BB-RECOVERY — Legacy zurückbringen + sanft polieren
+   ============================================================ */
+(function(){
+  'use strict';
+  if (window.__bbRecoveryInit) return;
+  window.__bbRecoveryInit = true;
+
+  /* Mein zerstörter Wrapper aus dem DOM entfernen falls noch drin */
+  function removeBrokenWrapper(){
+    document.querySelectorAll('.bb-profile-wrap').forEach(function(w){
+      try{ w.remove(); }catch(e){}
+    });
+    /* Profile-Children mit display:none aus inline-style befreien */
+    var screen = document.querySelector('#screen-profile, [data-screen="profile"]');
+    if (!screen) return;
+    Array.from(screen.children).forEach(function(c){
+      if (c.style && c.style.display === 'none' && !c.classList.contains('sc-wrap') && !c.classList.contains('aud-banner') && !c.classList.contains('qt-row') && c.id !== 'ccCircleHost' && !c.classList.contains('crew-status-pill')){
+        c.style.display = '';
+      }
+    });
+  }
+
+  /* Cleanup-Loop */
+  function init(){
+    removeBrokenWrapper();
+    setInterval(removeBrokenWrapper, 3000);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+
 </body></html>
