@@ -2909,6 +2909,72 @@ a{ color: var(--c-violet-3); text-decoration: none; }
   color: var(--c-text-3);
   margin: 0 0 var(--s-2);
 }
+.sp-sec-head{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--s-2);
+}
+.sp-sec-head h4{ margin: 0; }
+.sp-add-btn{
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--c-violet-3);
+  padding: 5px 10px;
+  border-radius: var(--r-1);
+  background: rgba(139,92,246,.16);
+  border: .5px solid rgba(139,92,246,.3);
+}
+.sp-status-grid{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: var(--s-4);
+}
+.sp-status-card{
+  padding: 12px 8px;
+  background: var(--c-surface-2);
+  border: .5px solid var(--c-violet-line);
+  border-radius: var(--r-2);
+  text-align: center;
+  transition: border-color .2s;
+}
+.sp-status-card.on{
+  background: linear-gradient(135deg, rgba(40,200,120,.18), rgba(40,200,120,.08));
+  border-color: rgba(40,200,120,.5);
+}
+.sp-status-card img.emo3d{ width: 28px; height: 28px; display: block; margin: 0 auto 6px; }
+.sp-status-lbl{ font-size: 10px; color: var(--c-text-3); font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
+.sp-status-val{ font-size: 13px; font-weight: 900; color: var(--c-text); margin-top: 2px; }
+.sp-status-card.on .sp-status-val{ color: #6EE7B7; }
+.sp-quick-grid{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+.sp-quick-btn{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 14px 12px;
+  background: var(--c-surface-2);
+  border: .5px solid var(--c-violet-line);
+  border-radius: var(--r-3);
+  text-align: left;
+  transition: transform .15s var(--ease), border-color .2s;
+}
+.sp-quick-btn:active{ transform: scale(.97); }
+.sp-quick-btn:hover{ border-color: rgba(139,92,246,.5); }
+.sp-quick-btn img.emo3d{ width: 32px; height: 32px; margin-bottom: 6px; }
+.sp-q-t{ font-size: 14px; font-weight: 800; color: #fff; }
+.sp-q-s{ font-size: 11px; color: var(--c-text-3); margin-top: 2px; }
+.sp-quick-btn.urgent{
+  background: linear-gradient(135deg, rgba(236,72,153,.18), rgba(99,102,241,.05));
+  border-color: rgba(236,72,153,.4);
+}
+.sp-quick-btn.urgent .sp-q-t{ color: #FBCFE8; }
+.sp-contacts{ /* Container for renderEcContacts list */ }
 .sp-tile{
   display: flex;
   align-items: center;
@@ -4574,28 +4640,65 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
 <div class="modal" id="safeplaceModal">
   <div class="modal-card">
     <button class="modal-close" data-close="safeplaceModal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-    <h2 class="modal-h">SafePlace-Hub</h2>
-    <p class="modal-sub">Deine Notfall-Tools. Alles an einem Ort.</p>
+    <div class="modal-hero-emo" style="margin-bottom:6px"><img class="emo3d sz-hero" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Shield/3D/shield_3d.png" alt=""/></div>
+    <h2 class="modal-h" style="text-align:center;margin-top:0">SafePlace-Hub</h2>
+    <p class="modal-sub" style="text-align:center">Dein Sicherheits-Cockpit. Live · Heimweg · Notfall-Kontakte · Audit.</p>
 
-    <div class="sp-section">
-      <h4>Sofort</h4>
-      <button class="sp-tile" data-sp="live">
-        <div class="sp-tile-ic"><img class="emo3d sz-md" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Satellite%20antenna/3D/satellite_antenna_3d.png" alt=""/></div>
-        <div class="sp-tile-main"><div class="t">Live-Standort</div><div class="s">30 min mit Crew teilen</div></div>
-      </button>
-      <button class="sp-tile" data-sp="home">
-        <div class="sp-tile-ic"><img class="emo3d sz-md" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/House/3D/house_3d.png" alt=""/></div>
-        <div class="sp-tile-main"><div class="t">Heimweg starten</div><div class="s">30 min Countdown · Crew kriegt Push</div></div>
-      </button>
+    <!-- STATUS-DASHBOARD oben -->
+    <div class="sp-status-grid" id="spStatusGrid">
+      <div class="sp-status-card" data-sp-status="live">
+        <img class="emo3d" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Satellite%20antenna/3D/satellite_antenna_3d.png" alt=""/>
+        <div class="sp-status-lbl">Live</div>
+        <div class="sp-status-val" id="spStatusLive">aus</div>
+      </div>
+      <div class="sp-status-card" data-sp-status="home">
+        <img class="emo3d" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/House/3D/house_3d.png" alt=""/>
+        <div class="sp-status-lbl">Heimweg</div>
+        <div class="sp-status-val" id="spStatusHome">aus</div>
+      </div>
+      <div class="sp-status-card" data-sp-status="contacts">
+        <img class="emo3d" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Telephone%20receiver/3D/telephone_receiver_3d.png" alt=""/>
+        <div class="sp-status-lbl">Kontakte</div>
+        <div class="sp-status-val" id="spStatusContacts">0</div>
+      </div>
+    </div>
+
+    <div class="sp-section sp-quick">
+      <h4>Schnell-Aktionen</h4>
+      <div class="sp-quick-grid">
+        <button class="sp-quick-btn" data-sp="live">
+          <img class="emo3d" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Satellite%20antenna/3D/satellite_antenna_3d.png" alt=""/>
+          <span class="sp-q-t">Live an</span>
+          <span class="sp-q-s">30 min · Crew sieht dich</span>
+        </button>
+        <button class="sp-quick-btn" data-sp="home">
+          <img class="emo3d" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/House/3D/house_3d.png" alt=""/>
+          <span class="sp-q-t">Heimweg</span>
+          <span class="sp-q-s">Countdown + Push</span>
+        </button>
+        <button class="sp-quick-btn" data-sp="checkin">
+          <img class="emo3d" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Check%20mark%20button/3D/check_mark_button_3d.png" alt=""/>
+          <span class="sp-q-t">Check-in</span>
+          <span class="sp-q-s">Bin angekommen</span>
+        </button>
+        <button class="sp-quick-btn urgent" data-sp="sos">
+          <img class="emo3d" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Police%20car%20light/3D/police_car_light_3d.png" alt=""/>
+          <span class="sp-q-t">SOS</span>
+          <span class="sp-q-s">Halt 2s · Alarm</span>
+        </button>
+      </div>
     </div>
 
     <div class="sp-section">
-      <h4>Notfall-Kontakte</h4>
-      <div id="spContacts" style="font-size:13px;color:var(--c-text-3);text-align:center;padding:18px">Lade …</div>
+      <div class="sp-sec-head">
+        <h4>Notfall-Kontakte</h4>
+        <button class="sp-add-btn" id="spOpenEcModal" type="button">+ Hinzufügen</button>
+      </div>
+      <div id="spContacts" class="sp-contacts" style="font-size:13px;color:var(--c-text-3);text-align:center;padding:14px">Lade …</div>
     </div>
 
     <div class="sp-section">
-      <h4>Audit</h4>
+      <h4>Mehr</h4>
       <button class="sp-tile" id="spAuditOpen">
         <div class="sp-tile-ic"><img class="emo3d sz-md" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Information/3D/information_3d.png" alt=""/></div>
         <div class="sp-tile-main"><div class="t">Daten-Audit anzeigen</div><div class="s">Wer hat wann was von dir gesehen?</div></div>
@@ -6053,6 +6156,24 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
       if (safeBtn) safeBtn.hidden = !isSetUp;
       /* SafePlace-Card auf Home ausblenden wenn schon eingerichtet — der Mini-Button reicht dann */
       if (spaCard) spaCard.style.display = isSetUp ? 'none' : '';
+      /* SafePlace-Status-Grid im Modal */
+      const sLive = $('spStatusLive');
+      const sHome = $('spStatusHome');
+      const sCont = $('spStatusContacts');
+      if (sLive){
+        const live = !!(profile && profile.share_live_with_crew);
+        sLive.textContent = live ? 'AN · 30 min' : 'aus';
+        sLive.closest('.sp-status-card')?.classList.toggle('on', live);
+      }
+      if (sHome){
+        const homeOn = (typeof window !== 'undefined') && (window.homeOn || localStorage.getItem('crew-home') === '1');
+        sHome.textContent = homeOn ? 'läuft' : 'aus';
+        sHome.closest('.sp-status-card')?.classList.toggle('on', !!homeOn);
+      }
+      if (sCont){
+        sCont.textContent = String(count);
+        sCont.closest('.sp-status-card')?.classList.toggle('on', count > 0);
+      }
     }catch(e){ /* silent */ }
   }
 
@@ -8973,9 +9094,25 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
   $$('[data-close="safeplaceModal"]').forEach(b => b.addEventListener('click', () => closeModal('safeplaceModal')));
   $$('[data-sp]').forEach(b => b.addEventListener('click', () => {
     const a = b.dataset.sp;
+    if (a === 'live'){ closeModal('safeplaceModal'); toggleLive(); }
+    else if (a === 'home'){ closeModal('safeplaceModal'); toggleHome(); }
+    else if (a === 'checkin'){
+      closeModal('safeplaceModal');
+      if (typeof toast === 'function') toast('Sicher angekommen — Crew bekommt Bescheid', null, null, 'success');
+      try{ sb.from('home_routes').update({ status: 'arrived', arrived_at: new Date().toISOString() }).eq('user_id', user.id).eq('status', 'active'); }catch(_){}
+    }
+    else if (a === 'sos'){ closeModal('safeplaceModal'); openModal('sosModal'); }
+  }));
+  $('spOpenEcModal')?.addEventListener('click', () => {
     closeModal('safeplaceModal');
-    if (a === 'live') toggleLive();
-    else if (a === 'home') toggleHome();
+    setTimeout(() => openModal('ecModal'), 250);
+  });
+  /* Statusgrid-Klick → Schnell-Action triggern */
+  $$('.sp-status-card').forEach(c => c.addEventListener('click', () => {
+    const k = c.dataset.spStatus;
+    if (k === 'live'){ closeModal('safeplaceModal'); toggleLive(); }
+    else if (k === 'home'){ closeModal('safeplaceModal'); toggleHome(); }
+    else if (k === 'contacts'){ closeModal('safeplaceModal'); setTimeout(() => openModal('ecModal'), 250); }
   }));
   async function loadSpContacts(){
     try{
