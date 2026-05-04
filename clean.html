@@ -1704,6 +1704,156 @@ a{ color: var(--c-violet-3); text-decoration: none; }
 }
 @keyframes spin{ to{ transform: rotate(360deg); } }
 
+/* Photo-Upload im Wizard */
+.wiz-photo{ position: relative; }
+.wiz-photo-btn{
+  width: 100%;
+  padding: var(--s-3);
+  background: var(--c-surface-2);
+  border: .5px dashed var(--c-violet-line);
+  border-radius: var(--r-2);
+  color: var(--c-text-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-2);
+  font-size: var(--t-4);
+  font-weight: 700;
+}
+.wiz-photo-btn svg{ width: 18px; height: 18px; }
+.wiz-photo-btn:active{ transform: scale(.98); }
+.wiz-photo-preview{
+  position: relative;
+  width: 100%;
+  height: 160px;
+  border-radius: var(--r-2);
+  overflow: hidden;
+  background: var(--c-surface-2);
+}
+.wiz-photo-preview img{
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+.wiz-photo-remove{
+  position: absolute;
+  top: 6px; right: 6px;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: rgba(0,0,0,.7);
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+}
+.wiz-photo-hint{
+  font-size: 11px;
+  color: var(--c-text-3);
+  margin: 6px 0 0;
+  font-style: italic;
+}
+
+/* Verification-Badge */
+.verif-badge{
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: var(--r-5);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.verif-badge.approved{ background: rgba(40,200,120,.18); color: #6EE7B7; }
+.verif-badge.pending{ background: rgba(255,214,10,.15); color: var(--c-gold); }
+.verif-badge.flagged{ background: rgba(236,72,153,.15); color: #F472B6; }
+.verif-badge svg{ width: 10px; height: 10px; }
+
+/* Hotspot-Photo in Detail */
+.dt-photo{
+  width: 100%;
+  height: 200px;
+  border-radius: var(--r-3);
+  overflow: hidden;
+  background: var(--c-surface-2);
+  margin: 0 0 var(--s-3);
+  position: relative;
+}
+.dt-photo img{
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+.dt-photo .verif-badge{
+  position: absolute;
+  top: 12px; right: 12px;
+}
+
+/* Rating-Buttons */
+.dt-rating{
+  display: flex;
+  gap: var(--s-2);
+  padding: var(--s-3);
+  background: var(--c-surface-2);
+  border: .5px solid var(--c-violet-line);
+  border-radius: var(--r-3);
+  margin: 0 0 var(--s-3);
+}
+.dt-rate-btn{
+  flex: 1;
+  padding: var(--s-3);
+  background: var(--c-surface);
+  border: .5px solid var(--c-line);
+  border-radius: var(--r-2);
+  color: var(--c-text-2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--t-5);
+  font-weight: 700;
+  transition: all .2s var(--ease);
+}
+.dt-rate-btn svg{ width: 18px; height: 18px; }
+.dt-rate-btn:active{ transform: scale(.96); }
+.dt-rate-btn.up.on{
+  background: rgba(40,200,120,.18);
+  border-color: rgba(40,200,120,.4);
+  color: #6EE7B7;
+}
+.dt-rate-btn.down.on{
+  background: rgba(236,72,153,.15);
+  border-color: rgba(236,72,153,.4);
+  color: #F472B6;
+}
+.dt-rate-btn.verify.on{
+  background: linear-gradient(135deg, var(--c-violet), var(--c-violet-2));
+  border-color: transparent;
+  color: #fff;
+}
+.dt-rate-btn .num{
+  font-size: var(--t-3);
+  font-weight: 900;
+  letter-spacing: -.02em;
+  color: #fff;
+}
+
+/* Rating-Stats */
+.dt-rating-stats{
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-size: var(--t-5);
+  color: var(--c-text-3);
+  margin-top: var(--s-2);
+}
+.dt-rating-stat{
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.dt-rating-stat svg{ width: 12px; height: 12px; }
+.dt-rating-stat.verified{ color: #6EE7B7; }
+.dt-rating-stat.pending{ color: var(--c-gold); }
+
 /* Reduced Motion */
 @media (prefers-reduced-motion: reduce){
   *, *::before, *::after{
@@ -1894,7 +2044,7 @@ a{ color: var(--c-violet-3); text-decoration: none; }
   <div class="modal-card">
     <button class="modal-close" data-close="hsWizard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     <h2 class="modal-h">Spot anlegen</h2>
-    <p class="modal-sub">Drei Sachen — fertig. Du kannst alles später ändern.</p>
+    <p class="modal-sub">Vier Sachen — fertig. Du kannst alles später ändern.</p>
     <div class="field">
       <label>Was ist es?</label>
       <div class="pill-grid" id="wizKinds"></div>
@@ -1902,6 +2052,25 @@ a{ color: var(--c-violet-3); text-decoration: none; }
     <div class="field">
       <label>Name</label>
       <input id="wizName" placeholder="z.B. Festival-Treffpunkt, Mein Zuhause" maxlength="60" />
+    </div>
+    <div class="field">
+      <label>Beschreibung (optional)</label>
+      <textarea id="wizDesc" placeholder="Was ist hier los? Treffpunkt-Hinweis?" maxlength="280" rows="2"></textarea>
+    </div>
+    <div class="field">
+      <label>Foto (optional)</label>
+      <div class="wiz-photo" id="wizPhotoBox">
+        <input type="file" id="wizPhoto" accept="image/*" hidden />
+        <button class="wiz-photo-btn" type="button" id="wizPhotoBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          <span>Foto hinzufügen</span>
+        </button>
+        <div class="wiz-photo-preview" id="wizPhotoPreview" hidden>
+          <img id="wizPhotoImg" alt=""/>
+          <button class="wiz-photo-remove" id="wizPhotoRemove" type="button">×</button>
+        </div>
+      </div>
+      <p class="wiz-photo-hint">Wird von der Crew geprüft & bewertet. Approved nach 3 Verifikationen.</p>
     </div>
     <div class="field">
       <label>Wer sieht es?</label>
@@ -1926,8 +2095,30 @@ a{ color: var(--c-violet-3); text-decoration: none; }
       <button class="detail-tab" data-dt-tab="chat">Chat <span id="dtMsgCount"></span></button>
     </div>
     <div class="detail-pane on" data-dt-pane="info">
+      <div class="dt-photo" id="dtPhotoBox" hidden>
+        <img id="dtPhotoImg" alt=""/>
+        <span class="verif-badge" id="dtVerifBadge"></span>
+      </div>
       <p id="dtDesc" style="font-size:14px;color:var(--c-text-2);line-height:1.5;margin:0 0 12px"></p>
       <div class="detail-info" id="dtStats"></div>
+      <div class="dt-rating" id="dtRating">
+        <button class="dt-rate-btn up" data-rate="1">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H7l-4-1V10l8-7"/></svg>
+          <span class="num" id="dtUpCount">0</span>
+          <span>Cool</span>
+        </button>
+        <button class="dt-rate-btn down" data-rate="-1">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 14V2"/><path d="M9 18.12 10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H17l4 1v11l-8 7"/></svg>
+          <span class="num" id="dtDownCount">0</span>
+          <span>Nö</span>
+        </button>
+        <button class="dt-rate-btn verify" data-verify="1">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <span class="num" id="dtVerifCount">0</span>
+          <span>Verifiziert</span>
+        </button>
+      </div>
+      <div class="dt-rating-stats" id="dtRatingStats"></div>
     </div>
     <div class="detail-pane" data-dt-pane="members">
       <div class="mb-list" id="dtMembers"></div>
@@ -2438,31 +2629,99 @@ a{ color: var(--c-violet-3); text-decoration: none; }
     { id: 'circle', t: 'Crew', s: 'Nur eingeladene', ic: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/></svg>' },
     { id: 'private', t: 'Privat', s: 'Nur du', ic: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/></svg>' }
   ];
-  const wizState = { kind: 'live', vis: 'friends' };
-  function renderWizard(){
+  /* WizState mit Persistenz: Name + Desc gehen NICHT verloren beim Re-Render */
+  const wizState = { kind: 'live', vis: 'friends', name: '', desc: '', photoFile: null, photoDataUrl: null };
+
+  function renderWizardPills(){
     $('wizKinds').innerHTML = KINDS.map(k => `
-      <button class="pill-c ${wizState.kind === k.id ? 'on' : ''}" data-k="${k.id}">
+      <button class="pill-c ${wizState.kind === k.id ? 'on' : ''}" data-k="${k.id}" type="button">
         <div class="ic">${k.ic}</div>
         <div class="info"><div class="t">${k.t}</div><div class="s">${k.s}</div></div>
       </button>
     `).join('');
     $('wizVis').innerHTML = VIS.map(v => `
-      <button class="pill-c ${wizState.vis === v.id ? 'on' : ''}" data-v="${v.id}">
+      <button class="pill-c ${wizState.vis === v.id ? 'on' : ''}" data-v="${v.id}" type="button">
         <div class="ic">${v.ic}</div>
         <div class="info"><div class="t">${v.t}</div><div class="s">${v.s}</div></div>
       </button>
     `).join('');
     $('wizKinds').querySelectorAll('.pill-c').forEach(b => b.addEventListener('click', () => {
-      wizState.kind = b.dataset.k; renderWizard();
+      wizState.kind = b.dataset.k;
+      renderWizardPills(); /* Nur Pills, nicht Inputs! */
     }));
     $('wizVis').querySelectorAll('.pill-c').forEach(b => b.addEventListener('click', () => {
-      wizState.vis = b.dataset.v; renderWizard();
+      wizState.vis = b.dataset.v;
+      renderWizardPills();
     }));
   }
 
+  function renderWizardPhotoPreview(){
+    const box = $('wizPhotoBtn'), prev = $('wizPhotoPreview'), img = $('wizPhotoImg');
+    if (wizState.photoDataUrl){
+      box.hidden = true;
+      prev.hidden = false;
+      img.src = wizState.photoDataUrl;
+    } else {
+      box.hidden = false;
+      prev.hidden = true;
+      img.src = '';
+    }
+  }
+
+  function resetWizard(){
+    wizState.kind = 'live';
+    wizState.vis = 'friends';
+    wizState.name = '';
+    wizState.desc = '';
+    wizState.photoFile = null;
+    wizState.photoDataUrl = null;
+    $('wizName').value = '';
+    $('wizDesc').value = '';
+    $('wizPhoto').value = '';
+    renderWizardPills();
+    renderWizardPhotoPreview();
+  }
+
+  /* Inputs trackken Cache */
+  $('wizName').addEventListener('input', e => wizState.name = e.target.value);
+  $('wizDesc').addEventListener('input', e => wizState.desc = e.target.value);
+
+  /* Photo-Upload */
+  $('wizPhotoBtn').addEventListener('click', () => $('wizPhoto').click());
+  $('wizPhoto').addEventListener('change', e => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024){ toast('Foto zu groß (max 5 MB)'); return; }
+    wizState.photoFile = file;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      wizState.photoDataUrl = ev.target.result;
+      renderWizardPhotoPreview();
+    };
+    reader.readAsDataURL(file);
+  });
+  $('wizPhotoRemove').addEventListener('click', () => {
+    wizState.photoFile = null;
+    wizState.photoDataUrl = null;
+    $('wizPhoto').value = '';
+    renderWizardPhotoPreview();
+  });
+
   $$('[data-close="hsWizard"]').forEach(b => b.addEventListener('click', () => closeModal('hsWizard')));
+
+  async function uploadHotspotPhoto(file){
+    const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
+    const path = user.id + '/' + Date.now() + '_' + Math.random().toString(36).slice(2, 8) + '.' + ext;
+    const up = await sb.storage.from('hotspot-photos').upload(path, file, {
+      cacheControl: '3600', upsert: false
+    });
+    if (up.error) throw up.error;
+    const pub = sb.storage.from('hotspot-photos').getPublicUrl(path);
+    return pub.data.publicUrl;
+  }
+
   $('wizSubmit').addEventListener('click', async () => {
-    const name = $('wizName').value.trim();
+    const name = (wizState.name || $('wizName').value || '').trim();
     if (name.length < 2){ toast('Name fehlt'); $('wizName').focus(); return; }
     $('wizSubmit').disabled = true; $('wizSubmit').textContent = 'Speichere …';
     try{
@@ -2472,59 +2731,108 @@ a{ color: var(--c-violet-3); text-decoration: none; }
           () => rej(new Error('GPS verweigert'))
         ));
       }
+      /* Photo erst hochladen */
+      let photoUrl = null;
+      if (wizState.photoFile){
+        $('wizSubmit').textContent = 'Foto wird hochgeladen …';
+        try{
+          photoUrl = await uploadHotspotPhoto(wizState.photoFile);
+        }catch(e){
+          console.warn('Photo upload failed', e);
+          toast('Foto-Upload fehlgeschlagen — Spot wird ohne Foto angelegt');
+        }
+      }
       const ttl = wizState.kind === 'live' ? 4 : 30 * 24;
+      const desc = (wizState.desc || $('wizDesc').value || '').trim();
       const payload = {
-        owner_id: user.id, name, kind: wizState.kind, category: wizState.kind,
+        owner_id: user.id, name,
+        description: desc || null,
+        photo_url: photoUrl,
+        kind: wizState.kind, category: wizState.kind,
         visibility: wizState.vis, is_recurring: wizState.kind !== 'live',
         expires_at: new Date(Date.now() + ttl * 3600 * 1000).toISOString(),
-        lat: userLat, lng: userLng, audience: ['general']
+        lat: userLat, lng: userLng, audience: ['general'],
+        verification_status: 'pending'
       };
-      const ins = await sb.from('hotspots').insert(payload);
+      $('wizSubmit').textContent = 'Speichere Spot …';
+      const ins = await sb.from('hotspots').insert(payload).select().limit(1);
       if (ins.error) throw ins.error;
-      const r = await sb.from('hotspots').select('*').eq('owner_id', user.id).order('created_at', { ascending: false }).limit(1);
-      const newSpot = (r && r.data && r.data[0]) || null;
+      const newSpot = (ins.data && ins.data[0]) || null;
       if (newSpot){
         await sb.from('hotspot_members').upsert({ hotspot_id: newSpot.id, user_id: user.id, status: 'joined' }, { onConflict: 'hotspot_id,user_id' });
       }
-      $('wizName').value = '';
       closeModal('hsWizard');
+      resetWizard();
       toast('Spot „' + name + '" angelegt');
       if (newSpot){
         newSpot.is_mine = true; newSpot.member_count = 1;
+        if (userLat) newSpot.distance_km = haversine(userLat, userLng, newSpot.lat, newSpot.lng);
         setTimeout(() => openHotspotDetail(newSpot), 500);
       }
       loadHotspots();
     }catch(e){
-      console.error(e);
-      toast('Fehler: ' + (e.message || 'Spot konnte nicht angelegt werden'));
+      console.error('Hotspot create failed', e);
+      const msg = e.message || e.error_description || (typeof e === 'string' ? e : JSON.stringify(e));
+      toast('Fehler: ' + msg);
     }finally{
       $('wizSubmit').disabled = false; $('wizSubmit').textContent = 'Anlegen';
     }
   });
 
-  $('hsFab').addEventListener('click', () => openModal('hsWizard'));
+  $('hsFab').addEventListener('click', () => {
+    resetWizard();
+    openModal('hsWizard');
+  });
 
   /* ============= HOTSPOT DETAIL ============= */
   let dtIsMember = false, dtMembers = [], dtMessages = [];
   async function openHotspotDetail(h){
     currentDetailSpot = h;
+    /* Frische Daten holen damit photo_url und ratings da sind */
+    if (!h.photo_url && !h.verification_status){
+      try{
+        const fresh = await sb.from('hotspots').select('*').eq('id', h.id).maybeSingle();
+        if (fresh && fresh.data) h = Object.assign(fresh.data, h);
+      }catch(e){}
+    }
     $('dtName').textContent = h.name;
     const dist = h.distance_km !== undefined && h.distance_km !== null
       ? (h.distance_km < 1 ? Math.round(h.distance_km*1000) + 'm' : h.distance_km.toFixed(1) + 'km')
       : '';
     $('dtMeta').textContent = [h.kind, h.visibility, dist].filter(Boolean).join(' · ');
     $('dtDesc').textContent = h.description || '';
+
+    /* Photo */
+    const photoBox = $('dtPhotoBox'), photoImg = $('dtPhotoImg'), verifBadge = $('dtVerifBadge');
+    if (h.photo_url){
+      photoBox.hidden = false;
+      photoImg.src = h.photo_url;
+      const status = h.verification_status || 'pending';
+      verifBadge.className = 'verif-badge ' + status;
+      verifBadge.innerHTML = ({
+        approved: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Verifiziert',
+        pending: 'In Prüfung',
+        flagged: 'Gemeldet'
+      })[status] || 'In Prüfung';
+    } else {
+      photoBox.hidden = true;
+    }
+
     $('dtStats').innerHTML = `
       <div class="detail-stat"><span class="num">${h.member_count || 0}</span><span class="lbl">Mitglieder</span></div>
       <div class="detail-stat"><span class="num">${h.is_recurring ? '∞' : (h.expires_at ? Math.max(0, Math.round((new Date(h.expires_at) - Date.now()) / 3600000)) + 'h' : '—')}</span><span class="lbl">Verbleibend</span></div>
       <div class="detail-stat"><span class="num">${esc((h.kind || '').toUpperCase())}</span><span class="lbl">Typ</span></div>
     `;
+
+    /* Rating-Buttons */
+    renderRating(h);
+
     /* Tabs */
     $$('.detail-tab').forEach(b => b.classList.remove('on'));
     $$('.detail-pane').forEach(p => p.classList.remove('on'));
     $$('.detail-tab')[0].classList.add('on');
     $$('.detail-pane')[0].classList.add('on');
-    /* Fetch */
+    /* Fetch members + messages */
     const [mRes, msgRes] = await Promise.all([
       sb.rpc('get_hotspot_members', { p_hotspot_id: h.id }),
       sb.rpc('get_hotspot_messages', { p_hotspot_id: h.id, p_limit: 50 })
@@ -2540,6 +2848,75 @@ a{ color: var(--c-violet-3); text-decoration: none; }
     setupDetailRealtime(h.id);
     openModal('hsDetail');
   }
+
+  function renderRating(h){
+    /* Zähler aktualisieren — wir lesen aus h.rating_count etc. */
+    $('dtUpCount').textContent = h.rating_count ? Math.round((h.rating_avg || 0) >= 3 ? (h.rating_count - 0) : 0) : '0';
+    $('dtVerifCount').textContent = h.verified_count || '0';
+    /* Aktueller User-Vote */
+    const myVote = h.my_vote;
+    const myVerif = h.my_verified;
+    document.querySelectorAll('.dt-rate-btn').forEach(b => b.classList.remove('on'));
+    if (myVote === 1) document.querySelector('.dt-rate-btn.up').classList.add('on');
+    if (myVote === -1) document.querySelector('.dt-rate-btn.down').classList.add('on');
+    if (myVerif) document.querySelector('.dt-rate-btn.verify').classList.add('on');
+    /* Stats */
+    const status = h.verification_status || 'pending';
+    let statsHtml = '';
+    if (h.rating_count){
+      statsHtml += '<div class="dt-rating-stat">' +
+        ((h.rating_avg || 0) >= 3.5 ? 'Crew findet\'s gut' : (h.rating_avg || 0) >= 2 ? 'Gemischt' : 'Crew-Warnung') +
+        ' · ' + h.rating_count + ' Stimme' + (h.rating_count !== 1 ? 'n' : '') + '</div>';
+    }
+    if (status === 'approved'){
+      statsHtml += '<div class="dt-rating-stat verified"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Approved</div>';
+    } else if (status === 'flagged'){
+      statsHtml += '<div class="dt-rating-stat" style="color:#F472B6">Gemeldet — Vorsicht</div>';
+    } else if (h.photo_url){
+      statsHtml += '<div class="dt-rating-stat pending">Wird geprüft</div>';
+    }
+    $('dtRatingStats').innerHTML = statsHtml;
+  }
+
+  /* Rating-Buttons-Click */
+  document.querySelectorAll('.dt-rate-btn').forEach(b => b.addEventListener('click', async () => {
+    if (!currentDetailSpot) return;
+    const h = currentDetailSpot;
+    if (h.is_mine){ toast('Eigene Spots kannst du nicht bewerten'); return; }
+    const isVerify = b.classList.contains('verify');
+    const vote = parseInt(b.dataset.rate || '1', 10);
+    try{
+      let v, ver;
+      if (isVerify){
+        ver = !b.classList.contains('on');
+        v = h.my_vote || 1;
+      } else {
+        v = b.classList.contains('on') ? null : vote;
+        ver = !!h.my_verified;
+        if (v === null){
+          /* Lösche Rating */
+          await sb.from('hotspot_ratings').delete().eq('hotspot_id', h.id).eq('user_id', user.id);
+          h.my_vote = null;
+          renderRating(h);
+          /* Refresh Spot-Stats */
+          const fresh = await sb.from('hotspots').select('*').eq('id', h.id).maybeSingle();
+          if (fresh && fresh.data) Object.assign(h, fresh.data);
+          renderRating(h);
+          toast('Bewertung entfernt');
+          return;
+        }
+      }
+      const r = await sb.rpc('rate_hotspot', { p_hotspot_id: h.id, p_vote: v, p_verify: ver });
+      if (r.error) throw r.error;
+      h.my_vote = v;
+      h.my_verified = ver;
+      const fresh = await sb.from('hotspots').select('*').eq('id', h.id).maybeSingle();
+      if (fresh && fresh.data) Object.assign(h, fresh.data);
+      renderRating(h);
+      if (isVerify) toast(ver ? 'Verifiziert · 3 nötig für Approved' : 'Verifikation entfernt');
+      else toast(v === 1 ? 'Cool — Crew sieht das' : 'Nö — als kritisch markiert');
+    }catch(e){ console.warn(e); toast('Fehler: ' + (e.message || 'konnte nicht bewerten')); }
+  }));
   function renderDetailMembers(){
     if (!dtMembers.length){
       $('dtMembers').innerHTML = '<div class="empty"><h4>Noch keine Mitglieder</h4><p>Sei die/der Erste!</p></div>';
@@ -2791,7 +3168,7 @@ a{ color: var(--c-violet-3); text-decoration: none; }
 
   /* ============= MODAL HELPER ============= */
   function openModal(id){
-    if (id === 'hsWizard') renderWizard();
+    if (id === 'hsWizard') renderWizardPills();
     if (id === 'safeplaceModal') loadSpContacts();
     const m = $(id);
     m.style.display = 'flex';
