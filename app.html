@@ -13982,4 +13982,410 @@ body.bb-debug .bb-debug-banner{
 })();
 </script>
 
+<style id="bb-fixroutes">/* ============================================================
+   BB-FIXROUTES — Radar/SafePlace Routing-Fix + Hotspot-Create-Debug
+   ============================================================ */
+
+/* ---------- 1. Aggressive screen-hide aus Orchestrator KILLEN ---------- */
+[id^="screen-"]:not(.bb-active),
+[data-screen]:not(.bb-active){
+  display: revert !important;
+}
+/* Aber verstecke Legacy-Screens die nicht mehr genutzt werden */
+#screen-deals,
+#screen-match,
+#screen-radar{
+  display: none !important;
+}
+
+/* ---------- 2. SafePlace Overlay korrekt verhalten ---------- */
+.sp-ov{
+  z-index: 1950 !important;
+}
+.sp-ov:not(.on){
+  display: none !important;
+  pointer-events: none !important;
+}
+.sp-ov.on{
+  display: block !important;
+  pointer-events: auto !important;
+}
+
+/* ---------- 3. Hotspot-Create Error-Detail-Toast ---------- */
+.hc-err-toast{
+  position: fixed;
+  top: 80px;
+  left: 16px;
+  right: 16px;
+  z-index: 2300;
+  background: #2a1218;
+  border: 1px solid rgba(254,60,114,.5);
+  color: #fff;
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-family: ui-monospace, Menlo, monospace;
+  max-height: 40vh;
+  overflow-y: auto;
+  box-shadow: 0 12px 32px rgba(0,0,0,.5);
+}
+.hc-err-toast .hc-err-title{
+  font-weight: 800;
+  color: #FE3C72;
+  margin: 0 0 6px;
+  letter-spacing: -.01em;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+}
+.hc-err-toast .hc-err-close{
+  position: absolute;
+  top: 6px; right: 6px;
+  background: none;
+  border: 0;
+  color: rgba(255,255,255,.6);
+  font-size: 18px;
+  cursor: pointer;
+}
+
+/* ---------- 4. Quick-Spot-Floating-Button (Fallback) ---------- */
+.quick-spot-fab{
+  position: fixed;
+  bottom: calc(var(--nav-h, 76px) + var(--safe-bot, 0px) + 92px);
+  right: 16px;
+  z-index: 1190;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(40,200,120,.18);
+  border: .5px solid rgba(40,200,120,.5);
+  color: #28C878;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(40,200,120,.3);
+}
+.quick-spot-fab svg{ width: 22px; height: 22px; }
+body:not([data-current-screen="spots"]) .quick-spot-fab{
+  display: none !important;
+}
+</style>
+<script id="bb-fixroutes-js">
+/* ============================================================
+   BB-FIXROUTES — Routes + Hotspot-Create Robust + Debug
+   ============================================================ */
+(function(){
+  'use strict';
+  if (window.__bbFixRoutesInit) return;
+  window.__bbFixRoutesInit = true;
+
+  var sb = function(){ return window.sb || window.supabase; };
+  async function getUid(){
+    try{ var u = await sb().auth.getUser(); return u && u.data && u.data.user && u.data.user.id || null; }catch(e){ return null; }
+  }
+
+  /* ============= 1. ORCHESTRATOR-OVERRIDE: switchToScreen safer ============= */
+  var origSwitchToScreen = window.bbOrch && window.bbOrch.switchToScreen;
+  function safeSwitchToScreen(name){
+    if (!name) return;
+
+    /* Spezialfälle: safety/radar → öffnen SafePlace-Overlay */
+    if (name === 'safety' || name === 'radar' || name === 'safeplace'){
+      openSafePlace();
+      return;
+    }
+    /* Nur tatsächliche Screen-Targets switchen */
+    var target = document.querySelector('#screen-' + name + ', [data-screen="' + name + '"]');
+    if (!target){
+      console.warn('[bb-fixroutes] Screen "' + name + '" not found — keeping current');
+      return;
+    }
+    /* Original-Switch */
+    if (typeof origSwitchToScreen === 'function'){
+      origSwitchToScreen(name);
+    } else {
+      /* Fallback */
+      document.querySelectorAll('[data-screen], [id^="screen-"]').forEach(function(el){
+        var match = (el.id === 'screen-' + name) || (el.getAttribute('data-screen') === name);
+        el.classList.toggle('bb-active', match);
+      });
+      document.body.setAttribute('data-current-screen', name);
+    }
+  }
+  /* Ersetze bbOrch.switchToScreen */
+  if (window.bbOrch){
+    window.bbOrch.switchToScreen = safeSwitchToScreen;
+  }
+
+  function openSafePlace(){
+    /* Versuche existierende Trigger zu klicken */
+    var triggers = ['[data-action="open-safeplace"]', '[data-action="open-safety"]', '#openSafeplace', '.sp-trigger'];
+    for (var i=0;i<triggers.length;i++){
+      var t = document.querySelector(triggers[i]);
+      if (t){ t.click(); return; }
+    }
+    /* Direkt via .sp-ov */
+    var ov = document.querySelector('.sp-ov');
+    if (ov){
+      ov.classList.add('on');
+      ov.style.display = 'block';
+    }
+  }
+
+  /* ============= 2. Click-Delegation für Radar/Safety/SafePlace-Tabs ============= */
+  document.addEventListener('click', function(e){
+    var t = e.target;
+    if (!t || !t.closest) return;
+    /* Suche nach data-tab oder data-screen mit safety/radar/safeplace */
+    var navItem = t.closest('[data-tab], [data-screen], [data-screen-target]');
+    if (!navItem) return;
+    var name = navItem.getAttribute('data-tab')
+            || navItem.getAttribute('data-screen-target')
+            || navItem.getAttribute('data-screen');
+    if (name === 'safety' || name === 'radar' || name === 'safeplace'){
+      e.preventDefault();
+      e.stopPropagation();
+      openSafePlace();
+    }
+  }, true);
+
+  /* ============= 3. HOTSPOT CREATE: Robust + Debug ============= */
+  /* Wir hooken den Wizard-Submit indem wir den Insert proxy'en */
+  function showErrorToast(title, errObj){
+    document.querySelectorAll('.hc-err-toast').forEach(function(t){ t.remove(); });
+    var msg = '';
+    if (errObj){
+      try{
+        if (errObj.message) msg += 'Message: ' + errObj.message + '\n\n';
+        if (errObj.code) msg += 'Code: ' + errObj.code + '\n';
+        if (errObj.details) msg += 'Details: ' + errObj.details + '\n';
+        if (errObj.hint) msg += 'Hint: ' + errObj.hint + '\n';
+        if (!msg) msg = JSON.stringify(errObj, null, 2);
+      }catch(e){ msg = String(errObj); }
+    }
+    var toast = document.createElement('div');
+    toast.className = 'hc-err-toast';
+    toast.innerHTML = '<button class="hc-err-close" type="button">×</button>'+
+      '<div class="hc-err-title">' + title + '</div>'+
+      '<pre style="white-space:pre-wrap;margin:0;font-size:11px;color:#fff;line-height:1.45;">' + msg + '</pre>';
+    document.body.appendChild(toast);
+    toast.querySelector('.hc-err-close').addEventListener('click', function(){ toast.remove(); });
+    setTimeout(function(){ if (toast.parentNode) toast.remove(); }, 12000);
+  }
+
+  /* Robust Hotspot-Create: alternative Implementation */
+  async function robustCreateHotspot(payload){
+    var s = sb();
+    if (!s) throw new Error('Supabase nicht initialisiert');
+    /* Schritt 1: Insert ohne select() */
+    var ins = await s.from('hotspots').insert(payload);
+    if (ins.error){
+      console.error('[bb-fixroutes] INSERT error:', ins.error);
+      throw ins.error;
+    }
+    /* Schritt 2: Insert OK — fetch danach */
+    var uid = await getUid();
+    var r = await s.from('hotspots')
+      .select('*')
+      .eq('owner_id', uid)
+      .order('created_at', { ascending: false })
+      .limit(1);
+    if (r.error){
+      console.warn('[bb-fixroutes] SELECT after insert error:', r.error);
+      /* Geht trotzdem — Insert war erfolgreich */
+      return null;
+    }
+    return (r.data && r.data[0]) || null;
+  }
+
+  /* ============= 4. Eigener Wizard-Submit-Override ============= */
+  /* Wir injizieren einen Click-Handler der den V2-Submit-Knopf abfängt */
+  /* Dabei nutzen wir den state aus bb-hotspot-v2 wenn er exposed ist (window.bbHotspot) */
+  function patchWizardSubmit(){
+    document.addEventListener('click', async function(e){
+      var btn = e.target && e.target.id === 'hwNext' ? e.target : null;
+      if (!btn) return;
+      /* Nur wenn label "Spot anlegen" */
+      if (btn.textContent.trim().indexOf('anlegen') === -1) return;
+      /* Verhindere Original-Handler */
+      e.stopImmediatePropagation();
+      e.stopPropagation();
+      e.preventDefault();
+      /* Eigener Submit */
+      await ourSubmitFromWizardDOM(btn);
+    }, true); /* capture: läuft VOR original */
+  }
+
+  async function ourSubmitFromWizardDOM(btn){
+    var modal = document.getElementById('bbHwModal');
+    if (!modal){ return; }
+    btn.disabled = true; btn.textContent = 'Speichere …';
+
+    try{
+      /* State aus DOM lesen (oder window.bbHotspot wenn exposed) */
+      var kind = (modal.querySelector('.hw-kind.active') || {}).getAttribute && modal.querySelector('.hw-kind.active').getAttribute('data-id') || null;
+      var name = (modal.querySelector('#hwName') || {}).value || '';
+      var desc = (modal.querySelector('#hwDesc') || {}).value || '';
+      var vis = (modal.querySelector('.hw-vis.active') || {}).getAttribute && modal.querySelector('.hw-vis.active').getAttribute('data-id') || 'public';
+      var ttl = (modal.querySelector('.hw-ttl.active') || {}).getAttribute && modal.querySelector('.hw-ttl.active').getAttribute('data-id') || '24h';
+
+      if (!kind || !name || name.length < 2){
+        throw new Error('Name oder Typ fehlt');
+      }
+
+      /* TTL parsen */
+      var ttlMs = { '1h': 3600000, '4h': 14400000, '24h': 86400000, '3d': 259200000, '7d': 604800000, 'rec': null }[ttl];
+      var isRecurring = (ttl === 'rec');
+      var expires = isRecurring ? new Date(Date.now() + 30*24*3600*1000).toISOString() : new Date(Date.now() + (ttlMs||86400000)).toISOString();
+
+      /* GPS */
+      var lat = window.userLat, lng = window.userLng;
+      if (!lat || !lng){
+        await new Promise(function(resolve, reject){
+          if (!navigator.geolocation){ reject(new Error('Browser hat kein GPS')); return; }
+          navigator.geolocation.getCurrentPosition(function(p){
+            window.userLat = p.coords.latitude; window.userLng = p.coords.longitude;
+            lat = p.coords.latitude; lng = p.coords.longitude;
+            resolve();
+          }, function(err){
+            reject(new Error('GPS verweigert: ' + (err.message || err.code)));
+          }, { enableHighAccuracy: true, timeout: 10000 });
+        });
+      }
+
+      var uid = await getUid();
+      if (!uid) throw new Error('Nicht eingeloggt');
+
+      var aud = (localStorage.getItem('bb-audience') || 'general');
+      var payload = {
+        owner_id: uid,
+        name: name.trim(),
+        description: desc.trim() || null,
+        kind: kind,
+        category: kind,
+        visibility: vis,
+        is_recurring: isRecurring,
+        expires_at: expires,
+        lat: lat,
+        lng: lng,
+        audience: [aud]
+      };
+
+      console.log('[bb-fixroutes] Submitting hotspot:', payload);
+      var newSpot = await robustCreateHotspot(payload);
+      console.log('[bb-fixroutes] Created:', newSpot);
+
+      /* Auto-Join in members-Tabelle */
+      if (newSpot && newSpot.id){
+        try{
+          var join = await sb().from('hotspot_members').upsert({
+            hotspot_id: newSpot.id, user_id: uid, status: 'joined', joined_at: new Date().toISOString()
+          }, { onConflict: 'hotspot_id,user_id' });
+          if (join.error) console.warn('[bb-fixroutes] auto-join warning:', join.error);
+        }catch(e){ console.warn(e); }
+      }
+
+      /* UI: Modal schließen, Detail öffnen, Map refresh */
+      modal.classList.remove('on');
+      setTimeout(function(){
+        try{ modal.remove(); }catch(e){}
+      }, 320);
+
+      if (window.bbToast) window.bbToast('Spot „' + payload.name + '" angelegt');
+
+      if (newSpot && window.bbHotspotV3 && window.bbHotspotV3.openDetail){
+        newSpot.is_mine = true;
+        newSpot.member_count = 1;
+        if (window.userLat){
+          newSpot.distance_km = haversine(window.userLat, window.userLng, newSpot.lat, newSpot.lng);
+        }
+        setTimeout(function(){ window.bbHotspotV3.openDetail(newSpot); }, 600);
+      }
+
+      if (typeof window.bbLoadHotspotsV2 === 'function') setTimeout(window.bbLoadHotspotsV2, 800);
+
+    }catch(err){
+      console.error('[bb-fixroutes] CREATE FAILED', err);
+      btn.disabled = false; btn.textContent = 'Spot anlegen';
+      showErrorToast('Spot konnte nicht angelegt werden', err);
+    }
+  }
+
+  function haversine(lat1, lng1, lat2, lng2){
+    var R = 6371;
+    var toRad = function(d){ return d * Math.PI / 180; };
+    var dLat = toRad(lat2 - lat1), dLng = toRad(lng2 - lng1);
+    var a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLng/2)**2;
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  }
+
+  /* ============= 5. Quick-Spot-FAB als Notausgang ============= */
+  function injectQuickSpotFab(){
+    if (document.querySelector('.quick-spot-fab')) return;
+    var btn = document.createElement('button');
+    btn.className = 'quick-spot-fab';
+    btn.type = 'button';
+    btn.title = 'Schnell-Spot hier anlegen';
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>';
+    btn.addEventListener('click', quickSpot);
+    document.body.appendChild(btn);
+  }
+  async function quickSpot(){
+    /* Sofort einen 4h Live-Spot anlegen ohne Wizard */
+    try{
+      var lat = window.userLat, lng = window.userLng;
+      if (!lat || !lng){
+        await new Promise(function(res, rej){
+          navigator.geolocation.getCurrentPosition(function(p){
+            window.userLat = p.coords.latitude; window.userLng = p.coords.longitude;
+            lat = p.coords.latitude; lng = p.coords.longitude; res();
+          }, rej, { enableHighAccuracy: true, timeout: 10000 });
+        });
+      }
+      var uid = await getUid();
+      if (!uid) throw new Error('Nicht eingeloggt');
+      var aud = (localStorage.getItem('bb-audience') || 'general');
+      var defaultName = 'Bin gerade hier — ' + new Date().toLocaleTimeString('de-DE', {hour:'2-digit',minute:'2-digit'});
+      var payload = {
+        owner_id: uid,
+        name: defaultName,
+        description: null,
+        kind: 'live',
+        category: 'live',
+        visibility: 'friends',
+        is_recurring: false,
+        expires_at: new Date(Date.now() + 4*3600000).toISOString(),
+        lat: lat, lng: lng,
+        audience: [aud]
+      };
+      console.log('[bb-fixroutes] Quick-Spot:', payload);
+      var sp = await robustCreateHotspot(payload);
+      if (sp){
+        await sb().from('hotspot_members').upsert({ hotspot_id: sp.id, user_id: uid, status: 'joined' }, { onConflict: 'hotspot_id,user_id' });
+        if (window.bbToast) window.bbToast('Quick-Spot · 4h aktiv · Crew sieht dich');
+        if (window.bbHotspotV3 && window.bbHotspotV3.openDetail){
+          sp.is_mine = true; sp.member_count = 1;
+          window.bbHotspotV3.openDetail(sp);
+        }
+        if (typeof window.bbLoadHotspotsV2 === 'function') window.bbLoadHotspotsV2();
+      }
+    }catch(err){
+      console.error('[bb-fixroutes] Quick-Spot fail:', err);
+      showErrorToast('Quick-Spot Fehler', err);
+    }
+  }
+
+  /* ============= INIT ============= */
+  function init(){
+    patchWizardSubmit();
+    setTimeout(injectQuickSpotFab, 2000);
+    /* Expose */
+    window.bbQuickSpot = quickSpot;
+    window.bbDebugCreate = robustCreateHotspot;
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+
 </body></html>
