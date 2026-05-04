@@ -14755,4 +14755,657 @@ body:not(.bb-has-crew) .crew-status-pill{ display: none !important; }
 })();
 </script>
 
+<style id="bb-saveprofile">/* ============================================================
+   BB-SAVEPROFILE — SafePlace re-enable + Profile-Redesign + Overlap-Cleanup
+   ============================================================ */
+
+/* ---------- 1. SafePlace: aggressive bb-fixroutes-Regel zurueckziehen ---------- */
+.sp-ov{
+  z-index: 1950 !important;
+}
+/* Display nur via .on ausschalten — pointer-events lassen wir frei,
+   damit das Overlay sich öffnen kann auch wenn .on noch nicht gesetzt ist */
+.sp-ov:not(.on):not([style*="display: block"]):not([style*="display:block"]){
+  /* Kein display:none mehr global — die Original-Logik handhabt das */
+}
+/* WICHTIG: Wenn sp-ov sichtbar ist (entweder via .on oder Inline-Style) → display:block */
+.sp-ov.on,
+.sp-ov[style*="display: block"],
+.sp-ov[style*="display:block"]{
+  display: block !important;
+  pointer-events: auto !important;
+  opacity: 1 !important;
+}
+
+/* ---------- 2. PROFILE-SCREEN sauber: kein Hub-Zeug überlappend ---------- */
+#screen-profile .sc-wrap,
+#screen-profile .aud-banner,
+#screen-profile .qt-row,
+#screen-profile #ccCircleHost,
+#screen-profile .crew-status-pill,
+[data-screen="profile"] .sc-wrap,
+[data-screen="profile"] .aud-banner,
+[data-screen="profile"] .qt-row,
+[data-screen="profile"] #ccCircleHost,
+[data-screen="profile"] .crew-status-pill{
+  display: none !important;
+}
+
+/* ---------- 3. NEUES PROFIL-DESIGN ---------- */
+.bb-profile-wrap{
+  padding: 16px 16px calc(var(--nav-h, 76px) + var(--safe-bot, 0px) + 24px);
+}
+
+.bb-profile-hero{
+  background: linear-gradient(135deg, rgba(254,60,114,.18), rgba(255,109,46,.06));
+  border: .5px solid rgba(254,60,114,.3);
+  border-radius: 24px;
+  padding: 24px 20px;
+  text-align: center;
+  margin-bottom: 14px;
+  position: relative;
+  overflow: hidden;
+}
+.bb-profile-hero::before{
+  content: '';
+  position: absolute;
+  top: -40%; right: -20%;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(254,60,114,.4), transparent 70%);
+  pointer-events: none;
+}
+.bb-profile-avatar{
+  width: 88px; height: 88px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FE3C72, #FF6D2E);
+  margin: 0 auto 14px;
+  position: relative;
+  border: 3px solid rgba(255,255,255,.1);
+  box-shadow: 0 12px 32px rgba(254,60,114,.4);
+}
+.bb-profile-avatar::after{
+  content: '';
+  position: absolute; inset: 0;
+  width: 44px; height: 44px;
+  margin: auto;
+  background: #fff;
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/><circle cx='12' cy='7' r='4'/></svg>") no-repeat center / contain;
+          mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/><circle cx='12' cy='7' r='4'/></svg>") no-repeat center / contain;
+}
+.bb-profile-name{
+  font-size: 22px;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: -.02em;
+  margin: 0 0 4px;
+}
+.bb-profile-handle{
+  font-size: 12px;
+  color: rgba(255,255,255,.6);
+  margin: 0 0 12px;
+}
+.bb-profile-mode-pill{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 11px;
+  background: rgba(168,85,247,.15);
+  color: #C084FC;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+/* Trust-Badge groß im Hero */
+.bb-profile-trust{
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: .5px solid rgba(255,255,255,.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 12px;
+}
+.bb-trust-stat{
+  flex: 1;
+  text-align: center;
+}
+.bb-trust-stat-num{
+  font-size: 20px;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: -.02em;
+  line-height: 1;
+}
+.bb-trust-stat-label{
+  font-size: 10px;
+  color: rgba(255,255,255,.55);
+  margin-top: 4px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.bb-trust-stat .bb-stars{
+  display: inline-flex;
+  gap: 2px;
+  margin-top: 2px;
+  justify-content: center;
+}
+.bb-trust-stat .bb-star{
+  width: 11px; height: 11px;
+  background: rgba(255,255,255,.15);
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'><polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/></svg>") no-repeat center / contain;
+          mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'><polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/></svg>") no-repeat center / contain;
+}
+.bb-trust-stat .bb-star.on{ background: linear-gradient(135deg, #FFD60A, #FF6D2E); }
+
+/* Stats-Grid */
+.bb-profile-stats{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.bb-stat-tile{
+  background: rgba(255,255,255,.04);
+  border: .5px solid rgba(255,255,255,.08);
+  border-radius: 14px;
+  padding: 14px 10px;
+  text-align: center;
+}
+.bb-stat-num{
+  font-size: 18px; font-weight: 900;
+  color: #fff;
+  letter-spacing: -.02em;
+}
+.bb-stat-label{
+  font-size: 10px;
+  color: rgba(255,255,255,.55);
+  margin-top: 3px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+/* Activity-Bar */
+.bb-activity-bar{
+  background: rgba(255,255,255,.04);
+  border: .5px solid rgba(255,255,255,.08);
+  border-radius: 16px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+}
+.bb-activity-head{
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 8px;
+}
+.bb-activity-head h4{
+  font-size: 11px; font-weight: 800;
+  color: rgba(255,255,255,.5);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  margin: 0;
+}
+.bb-activity-head .num{
+  font-size: 18px; font-weight: 900;
+  color: #fff;
+}
+.bb-activity-track{
+  height: 6px;
+  background: rgba(255,255,255,.06);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.bb-activity-fill{
+  height: 100%;
+  background: linear-gradient(90deg, #FE3C72, #FF6D2E, #FFD60A);
+  border-radius: 3px;
+  transition: width .8s ease;
+}
+
+/* Action-Cards */
+.bb-profile-actions{
+  display: flex; flex-direction: column;
+  gap: 10px;
+}
+.bb-action-card{
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  background: rgba(255,255,255,.04);
+  border: .5px solid rgba(255,255,255,.08);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: transform .15s, border-color .2s;
+  text-align: left;
+  width: 100%;
+  color: inherit;
+}
+.bb-action-card:active{ transform: scale(.98); }
+.bb-action-card:hover{ border-color: rgba(255,255,255,.18); }
+.bb-action-icon{
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  background: rgba(255,255,255,.06);
+  display: flex; align-items: center; justify-content: center;
+  flex: none;
+}
+.bb-action-icon svg{ width: 18px; height: 18px; color: #fff; }
+.bb-action-main{ flex: 1; min-width: 0; }
+.bb-action-title{
+  font-size: 14px; font-weight: 800;
+  color: #fff;
+  margin: 0;
+  letter-spacing: -.01em;
+}
+.bb-action-sub{
+  font-size: 11px; color: rgba(255,255,255,.55);
+  margin: 2px 0 0;
+}
+.bb-action-arrow{
+  width: 14px; height: 14px;
+  background: rgba(255,255,255,.4);
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='9 18 15 12 9 6'/></svg>") no-repeat center / contain;
+          mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='9 18 15 12 9 6'/></svg>") no-repeat center / contain;
+  flex: none;
+}
+
+.bb-action-card.danger{
+  border-color: rgba(254,60,114,.3);
+  background: rgba(254,60,114,.05);
+}
+.bb-action-card.danger .bb-action-icon{ background: rgba(254,60,114,.18); }
+.bb-action-card.danger .bb-action-icon svg{ color: #FE3C72; }
+.bb-action-card.danger .bb-action-title{ color: #FE3C72; }
+
+/* Section-Header */
+.bb-profile-section-h{
+  font-size: 11px; font-weight: 800;
+  color: rgba(255,255,255,.5);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  margin: 18px 0 8px;
+  padding: 0 4px;
+}
+
+/* Edit-Button im Hero */
+.bb-profile-edit-btn{
+  position: absolute;
+  top: 16px; right: 16px;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.08);
+  border: .5px solid rgba(255,255,255,.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: rgba(255,255,255,.7);
+  z-index: 2;
+}
+.bb-profile-edit-btn svg{ width: 14px; height: 14px; }
+
+/* SafePlace Tab Content (wenn als is-tab) — re-enable */
+.sp-ov.is-tab{
+  position: fixed !important;
+  inset: 0 !important;
+  background: #05050A !important;
+  z-index: 999 !important;
+}
+.sp-ov.is-tab .sp-card{
+  position: relative !important;
+  margin: 0 !important;
+  max-width: none !important;
+  height: 100% !important;
+  border-radius: 0 !important;
+  overflow-y: auto !important;
+  padding-top: calc(var(--safe-top, 0px) + 56px) !important;
+  padding-bottom: calc(var(--nav-h, 76px) + var(--safe-bot, 0px) + 24px) !important;
+}
+
+/* ---------- 4. Hide Hub-Components on alle Nicht-Hub Screens ---------- */
+[data-screen="spots"] .sc-wrap,
+[data-screen="spots"] .aud-banner,
+[data-screen="spots"] .qt-row,
+[data-screen="spots"] #ccCircleHost,
+[data-screen="spots"] .crew-status-pill,
+[data-screen="crew"] .sc-wrap,
+[data-screen="crew"] .aud-banner,
+[data-screen="crew"] .qt-row,
+[data-screen="crew"] .crew-status-pill,
+[data-screen="profile"] .sc-wrap,
+[data-screen="profile"] .aud-banner,
+[data-screen="profile"] .qt-row,
+[data-screen="profile"] .crew-status-pill,
+.sp-ov.on .sc-wrap,
+.sp-ov.on .aud-banner,
+.sp-ov.on .qt-row,
+.sp-ov.on .crew-status-pill{
+  display: none !important;
+}
+
+/* Body[data-current-screen] auch beachten */
+body[data-current-screen="profile"] .sc-wrap,
+body[data-current-screen="profile"] .aud-banner,
+body[data-current-screen="profile"] .qt-row,
+body[data-current-screen="profile"] .crew-status-pill,
+body[data-current-screen="profile"] #ccCircleHost{
+  display: none !important;
+}
+</style>
+<script id="bb-saveprofile-js">
+/* ============================================================
+   BB-SAVEPROFILE — SafePlace robust öffnen + Profile-Inject
+   ============================================================ */
+(function(){
+  'use strict';
+  if (window.__bbSaveProfileInit) return;
+  window.__bbSaveProfileInit = true;
+
+  var sb = function(){ return window.sb || window.supabase; };
+  async function getUid(){
+    try{ var u = await sb().auth.getUser(); return u && u.data && u.data.user && u.data.user.id || null; }catch(e){ return null; }
+  }
+  function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]; }); }
+
+  /* ============= SAFEPLACE robust öffnen ============= */
+  function openSafePlaceRobust(){
+    /* 1. Versuche bekannte JS-Funktions-Namen */
+    var fns = ['openSafePlace', 'bbOpenSafeplace', 'openSafeplace', 'showSafeplace', 'bbSafeplaceOpen', 'spOpen'];
+    for (var i = 0; i < fns.length; i++){
+      if (typeof window[fns[i]] === 'function'){
+        try{ window[fns[i]](); return true; }catch(e){ console.warn('[bb-sp] fn '+fns[i]+' fail', e); }
+      }
+    }
+    /* 2. Versuche existierende Trigger-Buttons */
+    var sels = [
+      '[data-action="open-safeplace"]',
+      '[data-action="open-safety"]',
+      '[data-tab="safety"]',
+      '[data-tab="safeplace"]',
+      '[data-tab="radar"]',
+      '#openSafeplace',
+      '#bbSafeplaceTrigger',
+      '.sp-trigger',
+      '.tab-radar',
+      '.tab-safeplace',
+      '.bn-item[data-screen-target="safety"]'
+    ];
+    for (var j = 0; j < sels.length; j++){
+      var t = document.querySelector(sels[j]);
+      if (t){
+        /* Click programmatisch — nicht via Click-Event damit kein Endlosschleifen */
+        try{
+          var ev = new MouseEvent('click', { bubbles: true, cancelable: true, view: window });
+          t.dispatchEvent(ev);
+          return true;
+        }catch(e){ console.warn('[bb-sp] dispatch fail', e); }
+      }
+    }
+    /* 3. Direkt sp-ov manipulieren */
+    var ov = document.querySelector('.sp-ov');
+    if (ov){
+      ov.classList.add('on', 'is-tab');
+      ov.style.display = 'block';
+      ov.style.opacity = '1';
+      ov.style.pointerEvents = 'auto';
+      return true;
+    }
+    return false;
+  }
+
+  /* Override bbOrch.switchToScreen falls vorhanden */
+  if (window.bbOrch){
+    var origSwitch = window.bbOrch.switchToScreen;
+    window.bbOrch.switchToScreen = function(name){
+      if (name === 'safety' || name === 'radar' || name === 'safeplace'){
+        if (!openSafePlaceRobust()){
+          /* Fallback: zeige Hub */
+          if (origSwitch) origSwitch('hub');
+        }
+        return;
+      }
+      if (origSwitch) return origSwitch(name);
+    };
+  }
+
+  /* Click-Handler für Safety-Nav */
+  document.addEventListener('click', function(e){
+    var t = e.target;
+    if (!t || !t.closest) return;
+    var n = t.closest('[data-tab="safety"], [data-tab="safeplace"], [data-tab="radar"], [data-screen-target="safety"], [data-screen-target="safeplace"], [data-screen-target="radar"]');
+    if (n){
+      e.preventDefault();
+      e.stopPropagation();
+      openSafePlaceRobust();
+    }
+  }, true);
+
+  /* ============= PROFILE-SCREEN bauen ============= */
+  async function injectProfile(){
+    var screen = document.querySelector('#screen-profile, [data-screen="profile"]');
+    if (!screen) return;
+    if (screen.querySelector('.bb-profile-wrap')) return;
+
+    var wrap = document.createElement('div');
+    wrap.className = 'bb-profile-wrap';
+    wrap.innerHTML = ''+
+      '<div class="bb-profile-hero">'+
+        '<button class="bb-profile-edit-btn" type="button" id="bbProfileEdit" title="Bearbeiten"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>'+
+        '<div class="bb-profile-avatar"></div>'+
+        '<h2 class="bb-profile-name" id="bbProfileName">Lade …</h2>'+
+        '<p class="bb-profile-handle" id="bbProfileHandle"></p>'+
+        '<span class="bb-profile-mode-pill" id="bbProfilePill">Allgemein</span>'+
+
+        '<div class="bb-profile-trust">'+
+          '<div class="bb-trust-stat">'+
+            '<div class="bb-trust-stat-num" id="bbTrustScore">—</div>'+
+            '<div class="bb-stars" id="bbTrustStars"></div>'+
+            '<div class="bb-trust-stat-label">Trust-Score</div>'+
+          '</div>'+
+          '<div class="bb-trust-stat">'+
+            '<div class="bb-trust-stat-num" id="bbActScore">—</div>'+
+            '<div class="bb-trust-stat-label">Aktivität</div>'+
+          '</div>'+
+          '<div class="bb-trust-stat">'+
+            '<div class="bb-trust-stat-num" id="bbRatingCount">—</div>'+
+            '<div class="bb-trust-stat-label">Bewertungen</div>'+
+          '</div>'+
+        '</div>'+
+      '</div>'+
+
+      '<div class="bb-profile-stats">'+
+        '<div class="bb-stat-tile"><div class="bb-stat-num" id="bbStatSpots">—</div><div class="bb-stat-label">Spots</div></div>'+
+        '<div class="bb-stat-tile"><div class="bb-stat-num" id="bbStatCrew">—</div><div class="bb-stat-label">Crew</div></div>'+
+        '<div class="bb-stat-tile"><div class="bb-stat-num" id="bbStatPosts">—</div><div class="bb-stat-label">Posts</div></div>'+
+      '</div>'+
+
+      '<div class="bb-activity-bar">'+
+        '<div class="bb-activity-head">'+
+          '<h4>Aktivitäts-Score</h4>'+
+          '<span class="num" id="bbActBarNum">0</span>'+
+        '</div>'+
+        '<div class="bb-activity-track"><div class="bb-activity-fill" id="bbActBarFill" style="width:0%"></div></div>'+
+      '</div>'+
+
+      '<div class="bb-profile-section-h">Schnell-Aktionen</div>'+
+      '<div class="bb-profile-actions">'+
+        '<button class="bb-action-card" id="bbActSafety" type="button">'+
+          '<div class="bb-action-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>'+
+          '<div class="bb-action-main"><h4 class="bb-action-title">SafePlace</h4><p class="bb-action-sub">Notfall-Kontakte, Check-ins, Heimweg</p></div>'+
+          '<span class="bb-action-arrow"></span>'+
+        '</button>'+
+        '<button class="bb-action-card" id="bbActMode" type="button">'+
+          '<div class="bb-action-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>'+
+          '<div class="bb-action-main"><h4 class="bb-action-title">Profil-Modus wechseln</h4><p class="bb-action-sub" id="bbActModeSub">Allgemein</p></div>'+
+          '<span class="bb-action-arrow"></span>'+
+        '</button>'+
+        '<button class="bb-action-card" id="bbActStealth" type="button">'+
+          '<div class="bb-action-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 7v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V7l-8-5z"/></svg></div>'+
+          '<div class="bb-action-main"><h4 class="bb-action-title">SOS & Stealth</h4><p class="bb-action-sub" id="bbActStealthSub">Aus</p></div>'+
+          '<span class="bb-action-arrow"></span>'+
+        '</button>'+
+        '<button class="bb-action-card" id="bbActPrivacy" type="button">'+
+          '<div class="bb-action-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>'+
+          '<div class="bb-action-main"><h4 class="bb-action-title">Privatsphäre & DSGVO</h4><p class="bb-action-sub">Daten-Export, Löschung, Audit-Log</p></div>'+
+          '<span class="bb-action-arrow"></span>'+
+        '</button>'+
+        '<button class="bb-action-card" id="bbActLegal" type="button">'+
+          '<div class="bb-action-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg></div>'+
+          '<div class="bb-action-main"><h4 class="bb-action-title">AGB · Datenschutz · Impressum</h4><p class="bb-action-sub">Rechtliches</p></div>'+
+          '<span class="bb-action-arrow"></span>'+
+        '</button>'+
+        '<button class="bb-action-card danger" id="bbActLogout" type="button">'+
+          '<div class="bb-action-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></div>'+
+          '<div class="bb-action-main"><h4 class="bb-action-title">Abmelden</h4><p class="bb-action-sub">Beendet die Session lokal</p></div>'+
+          '<span class="bb-action-arrow"></span>'+
+        '</button>'+
+      '</div>';
+
+    /* Vorhandene Profil-Inhalte ans Ende verschieben (legacy) */
+    Array.from(screen.children).forEach(function(c){
+      if (c !== wrap) c.style.display = 'none'; /* Erstmal alt verstecken */
+    });
+    screen.insertBefore(wrap, screen.firstChild);
+
+    /* Daten laden */
+    loadProfileData(wrap);
+
+    /* Click-Handler */
+    wrap.querySelector('#bbActSafety').addEventListener('click', openSafePlaceRobust);
+    wrap.querySelector('#bbActMode').addEventListener('click', function(){
+      if (window.bbHotspot && window.bbHotspot.openAudPicker) window.bbHotspot.openAudPicker();
+    });
+    wrap.querySelector('#bbActStealth').addEventListener('click', function(){
+      var on = !document.body.classList.contains('sos-stealth-mode-on');
+      document.body.classList.toggle('sos-stealth-mode-on', on);
+      try{ localStorage.setItem('bb-sos-stealth', on ? '1' : '0'); }catch(_){}
+      var sub = wrap.querySelector('#bbActStealthSub');
+      if (sub) sub.textContent = on ? 'Aktiv' : 'Aus';
+      if (window.bbToast) window.bbToast(on ? 'Stealth aktiv' : 'Stealth aus');
+    });
+    wrap.querySelector('#bbActPrivacy').addEventListener('click', function(){
+      var openers = ['[data-action="open-privacy"]', '[data-action="open-settings"]', '#openSettings', '.privacy-modal-trigger'];
+      for (var i=0;i<openers.length;i++){
+        var t = document.querySelector(openers[i]);
+        if (t){ t.click(); return; }
+      }
+      if (window.bbToast) window.bbToast('Privacy-Hub nicht verfügbar');
+    });
+    wrap.querySelector('#bbActLegal').addEventListener('click', function(){
+      window.open('/datenschutz.html', '_blank');
+    });
+    wrap.querySelector('#bbActLogout').addEventListener('click', async function(){
+      if (!confirm('Wirklich abmelden?')) return;
+      try{
+        await sb().auth.signOut();
+        location.reload();
+      }catch(e){ console.warn(e); }
+    });
+    wrap.querySelector('#bbProfileEdit').addEventListener('click', function(){
+      var openers = ['[data-action="edit-profile"]', '#editProfile', '.profile-edit-btn'];
+      for (var i=0;i<openers.length;i++){
+        var t = document.querySelector(openers[i]);
+        if (t){ t.click(); return; }
+      }
+      if (window.bbToast) window.bbToast('Profil-Edit kommt bald');
+    });
+  }
+
+  async function loadProfileData(wrap){
+    try{
+      var s = sb();
+      if (!s) return;
+      var uid = await getUid();
+      if (!uid) return;
+
+      /* Profile fetchen */
+      var pRes = await s.from('profiles').select('*').eq('user_id', uid).maybeSingle();
+      var profile = (pRes && pRes.data) || {};
+      var name = profile.display_name || 'Du';
+      var email = (await s.auth.getUser()).data.user.email || '';
+      var aud = profile.audience_profile || (localStorage.getItem('bb-audience') || 'general');
+      var stealth = !!profile.safety_sos_stealth || (localStorage.getItem('bb-sos-stealth') === '1');
+
+      wrap.querySelector('#bbProfileName').textContent = name;
+      wrap.querySelector('#bbProfileHandle').textContent = email;
+      var pill = wrap.querySelector('#bbProfilePill');
+      var modeLabels = {
+        general:'Allgemein', party:'Party', familie:'Familie', solo:'Solo',
+        pflege:'Pflege', recovery:'Recovery', lgbtq:'LGBTQ+'
+      };
+      pill.textContent = modeLabels[aud] || 'Allgemein';
+      var modeSub = wrap.querySelector('#bbActModeSub');
+      if (modeSub) modeSub.textContent = modeLabels[aud] || 'Allgemein';
+      var stealthSub = wrap.querySelector('#bbActStealthSub');
+      if (stealthSub) stealthSub.textContent = stealth ? 'Aktiv' : 'Aus';
+
+      /* Trust + Activity */
+      var actScore = await s.rpc('calc_activity_score', { p_user_id: uid });
+      var actVal = (actScore && actScore.data) || 0;
+      wrap.querySelector('#bbActScore').textContent = actVal;
+      wrap.querySelector('#bbActBarNum').textContent = actVal + '/100';
+      wrap.querySelector('#bbActBarFill').style.width = actVal + '%';
+
+      var trustRes = await s.from('user_trust_summary').select('*').eq('user_id', uid).maybeSingle();
+      var trust = (trustRes && trustRes.data) || { avg_score: 0, rating_count: 0 };
+      wrap.querySelector('#bbTrustScore').textContent = trust.avg_score ? Number(trust.avg_score).toFixed(1) : '—';
+      wrap.querySelector('#bbRatingCount').textContent = trust.rating_count || 0;
+      var stars = wrap.querySelector('#bbTrustStars');
+      var avg = Math.round((trust.avg_score || 0) * 2) / 2;
+      stars.innerHTML = '';
+      for (var i = 1; i <= 5; i++){
+        var el = document.createElement('span');
+        el.className = 'bb-star' + (i <= avg ? ' on' : '');
+        stars.appendChild(el);
+      }
+
+      /* Counts */
+      var spotsRes = await s.from('hotspots').select('id', { count: 'exact', head: true }).eq('owner_id', uid);
+      wrap.querySelector('#bbStatSpots').textContent = spotsRes.count || 0;
+
+      var crewRes = await s.rpc('get_crew_circle');
+      var crewOthers = ((crewRes && crewRes.data) || []).filter(function(m){ return m.user_id !== uid; });
+      wrap.querySelector('#bbStatCrew').textContent = crewOthers.length;
+
+      /* Posts: optional — versuche crew_posts oder friend_posts */
+      try{
+        var postsRes = await s.from('crew_posts').select('id', { count: 'exact', head: true }).eq('user_id', uid);
+        wrap.querySelector('#bbStatPosts').textContent = postsRes.count || 0;
+      }catch(e){
+        wrap.querySelector('#bbStatPosts').textContent = '—';
+      }
+    }catch(e){
+      console.warn('[bb-saveprofile] load fail', e);
+    }
+  }
+
+  /* Re-Inject bei Tab-Switch zu Profile */
+  function watchProfileTab(){
+    document.addEventListener('click', function(e){
+      var t = e.target;
+      if (!t || !t.closest) return;
+      if (t.closest('[data-tab="profile"], [data-screen="profile"], .tab-profile, [data-screen-target="profile"]')){
+        setTimeout(injectProfile, 350);
+        setTimeout(function(){
+          var w = document.querySelector('.bb-profile-wrap');
+          if (w) loadProfileData(w);
+        }, 800);
+      }
+    });
+  }
+
+  /* ============= INIT ============= */
+  function init(){
+    setTimeout(injectProfile, 2500);
+    watchProfileTab();
+    /* Expose */
+    window.bbOpenSafePlace = openSafePlaceRobust;
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+
 </body></html>
