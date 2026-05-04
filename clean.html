@@ -1934,6 +1934,7 @@ a{ color: var(--c-violet-3); text-decoration: none; }
 
 <!-- AUTH SCREEN -->
 <div id="auth">
+  <img class="emo3d sz-xl" style="margin:0 auto 12px;animation:emoFloat 4s ease-in-out infinite" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Waving%20hand/Default/3D/waving_hand_3d_default.png" alt=""/>
   <div class="auth-logo">crew<span class="dot">.</span></div>
   <p class="auth-tagline">Connection + Safety Network für die, denen du vertraust.</p>
   <div class="auth-card">
@@ -2072,7 +2073,7 @@ a{ color: var(--c-violet-3); text-decoration: none; }
           <span class="pr-act-arrow"></span>
         </button>
         <button class="pr-act admin-only" data-pr-act="admin" id="prAdminBtn" hidden>
-          <div class="pr-act-ic" style="background: linear-gradient(135deg, #FFD60A, #FF6D2E)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg></div>
+          <div class="pr-act-ic" style="background: linear-gradient(135deg, rgba(255,214,10,.25), rgba(255,109,46,.1))"><img class="emo3d" style="width:24px;height:24px" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Crown/3D/crown_3d.png" alt=""/></div>
           <div class="pr-act-main"><div class="t">Admin-Panel</div><div class="s">Stats, Spot-Moderation, User-Liste</div></div>
           <span class="pr-act-arrow"></span>
         </button>
@@ -2630,7 +2631,19 @@ a{ color: var(--c-violet-3); text-decoration: none; }
     seedling:  FX_BASE + 'Seedling/3D/seedling_3d.png',
     rainbow:   FX_BASE + 'Rainbow/3D/rainbow_3d.png',
     heart:     FX_BASE + 'Red%20heart/3D/red_heart_3d.png',
-    keys:      FX_BASE + 'Old%20key/3D/old_key_3d.png'
+    keys:      FX_BASE + 'Old%20key/3D/old_key_3d.png',
+    /* V5 — strategische Ergänzungen (sparsam eingesetzt) */
+    waving:    FX_BASE + 'Waving%20hand/Default/3D/waving_hand_3d_default.png',
+    check:     FX_BASE + 'Check%20mark%20button/3D/check_mark_button_3d.png',
+    hourglass: FX_BASE + 'Hourglass%20not%20done/3D/hourglass_not_done_3d.png',
+    flag:      FX_BASE + 'Triangular%20flag/3D/triangular_flag_3d.png',
+    search:    FX_BASE + 'Magnifying%20glass%20tilted%20left/3D/magnifying_glass_tilted_left_3d.png',
+    crown:     FX_BASE + 'Crown/3D/crown_3d.png',
+    alarm:     FX_BASE + 'Alarm%20clock/3D/alarm_clock_3d.png',
+    warning:   FX_BASE + 'Warning/3D/warning_3d.png',
+    info:      FX_BASE + 'Information/3D/information_3d.png',
+    party:     FX_BASE + 'Party%20popper/3D/party_popper_3d.png',
+    bell:      FX_BASE + 'Bell/3D/bell_3d.png'
   };
   function emo3d(name, size){
     const url = FX[name] || FX.sparkles;
@@ -2664,10 +2677,16 @@ a{ color: var(--c-violet-3); text-decoration: none; }
 
   /* ============= TOAST ============= */
   let toastTimer = null;
-  function toast(msg, undoLabel, undoFn){
+  const TOAST_ICONS = {
+    success: 'check', warning: 'warning', info: 'info', notif: 'bell'
+  };
+  function toast(msg, undoLabel, undoFn, type){
     const t = $('toast'), m = $('toastMsg'), u = $('toastUndo');
     if (toastTimer) clearTimeout(toastTimer);
-    m.textContent = msg;
+    /* Type-Icon mit kleinem 3D-Sticker */
+    const fxKey = TOAST_ICONS[type];
+    const iconHtml = fxKey && FX[fxKey] ? '<img class="emo3d" style="width:18px;height:18px;margin-right:4px;vertical-align:-3px" src="'+FX[fxKey]+'" alt=""/>' : '';
+    m.innerHTML = iconHtml + msg;
     if (undoLabel && undoFn){
       u.textContent = undoLabel;
       u.hidden = false;
@@ -2814,7 +2833,7 @@ a{ color: var(--c-violet-3); text-decoration: none; }
   async function loadFeedSpots(){
     const host = $('feedSpots');
     if (!userLat){
-      host.innerHTML = '<div class="empty with-emo" style="background:var(--c-surface);border:.5px dashed var(--c-line);border-radius:var(--r-3);margin:0 16px;padding:24px 16px"><img class="emo3d sz-xl" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/World%20map/3D/world_map_3d.png" alt=""/><h4 style="margin-top:12px">Standort gesucht</h4><p>Erlaube den GPS-Zugriff um Spots in deiner Nähe zu sehen.</p></div>';
+      host.innerHTML = '<div class="empty with-emo" style="background:var(--c-surface);border:.5px dashed var(--c-line);border-radius:var(--r-3);margin:0 16px;padding:24px 16px"><img class="emo3d sz-xl" src="'+FX.search+'" alt=""/><h4 style="margin-top:12px">Standort gesucht</h4><p>Erlaube den GPS-Zugriff um Spots in deiner Nähe zu sehen.</p></div>';
       return;
     }
     try{
@@ -3177,7 +3196,7 @@ a{ color: var(--c-violet-3); text-decoration: none; }
       }
       closeModal('hsWizard');
       resetWizard();
-      toast('Spot „' + name + '" angelegt');
+      toast('Spot „' + name + '" angelegt', null, null, 'success');
       if (newSpot){
         newSpot.is_mine = true; newSpot.member_count = 1;
         if (userLat) newSpot.distance_km = haversine(userLat, userLng, newSpot.lat, newSpot.lng);
@@ -3224,9 +3243,9 @@ a{ color: var(--c-violet-3); text-decoration: none; }
       const status = h.verification_status || 'pending';
       verifBadge.className = 'verif-badge ' + status;
       verifBadge.innerHTML = ({
-        approved: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Verifiziert',
-        pending: 'In Prüfung',
-        flagged: 'Gemeldet'
+        approved: '<img class="emo3d" style="width:14px;height:14px" src="'+FX.check+'" alt=""/> Verifiziert',
+        pending:  '<img class="emo3d" style="width:14px;height:14px" src="'+FX.hourglass+'" alt=""/> In Prüfung',
+        flagged:  '<img class="emo3d" style="width:14px;height:14px" src="'+FX.flag+'" alt=""/> Gemeldet'
       })[status] || 'In Prüfung';
     } else {
       photoBox.hidden = true;
@@ -3797,12 +3816,16 @@ a{ color: var(--c-violet-3); text-decoration: none; }
     const update = () => {
       const remain = Math.max(0, eta - Date.now());
       const min = Math.ceil(remain / 60000);
+      const banner = $('hmBanner');
+      const ic = banner.querySelector('.hm-banner-ic');
       if (remain <= 0){
-        $('hmBannerSub').textContent = 'Zeit ist um · Bin da?';
+        $('hmBannerSub').innerHTML = '<img class="emo3d" style="width:14px;height:14px;vertical-align:-2px" src="'+FX.alarm+'" alt=""/> Zeit ist um · Bin da?';
         $('hmBannerSub').style.color = '#FBBF24';
+        if (ic) ic.style.background = 'rgba(251,191,36,.25)';
       } else {
         $('hmBannerSub').textContent = 'Noch ' + min + ' min';
         $('hmBannerSub').style.color = '';
+        if (ic) ic.style.background = '';
       }
     };
     update();
@@ -3818,7 +3841,7 @@ a{ color: var(--c-violet-3); text-decoration: none; }
     $('hmBanner').hidden = true;
     try{ await sb.from('home_routes').update({ status: 'arrived', arrived_at: new Date().toISOString() }).eq('user_id', user.id).eq('status', 'active'); }catch(e){}
     syncHeader();
-    toast('Bin da · Crew benachrichtigt');
+    toast('Bin da · Crew benachrichtigt', null, null, 'success');
   });
   $$('[data-close="homemodeModal"]').forEach(b => b.addEventListener('click', () => closeModal('homemodeModal')));
 
