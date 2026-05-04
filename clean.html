@@ -902,75 +902,121 @@ a{ color: var(--c-violet-3); text-decoration: none; }
 }
 
 /* Hotspot Pin */
+/* ============================================================
+   HOTSPOT-PIN — V4 sauber, kompakt, farb-codiert pro Subkategorie
+   ============================================================ */
 .hs-pin{
-  width: 34px; height: 42px;
   position: relative;
+  width: 30px; height: 30px;
   transform: translate(-50%, -100%);
+  filter: drop-shadow(0 3px 6px rgba(0,0,0,.45));
 }
 .hs-pin-ic{
-  width: 34px; height: 34px;
-  border-radius: 50%;
+  width: 30px; height: 30px;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
   background: linear-gradient(135deg, var(--c-violet), var(--c-violet-2));
-  border: 2px solid #fff;
-  box-shadow: 0 4px 12px rgba(0,0,0,.4);
+  border: 1.5px solid rgba(255,255,255,.9);
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
+.hs-pin-ic > *{ transform: rotate(45deg); }
 .hs-pin-ic svg{ width: 14px; height: 14px; color: #fff; }
-.hs-pin-ic img.emo3d{ width: 22px; height: 22px; filter: drop-shadow(0 1px 2px rgba(0,0,0,.5)); }
-.hs-pin.mine .hs-pin-ic{ background: linear-gradient(135deg, var(--c-gold), var(--c-violet)); }
+.hs-pin-ic img.emo3d{
+  width: 18px; height: 18px;
+  filter: drop-shadow(0 1px 1px rgba(0,0,0,.4));
+}
+/* User-Spots */
+.hs-pin.mine .hs-pin-ic{ background: linear-gradient(135deg, #FFD60A, var(--c-violet)); }
 .hs-pin.private .hs-pin-ic{ background: linear-gradient(135deg, #6B7280, #1F2937); }
+/* Officials – distinkte Farbe pro Subkategorie für sofortige Scan-Bar­keit */
 .hs-pin.official .hs-pin-ic{
   background: linear-gradient(135deg, #28C878, #1ea860);
-  border-color: #6EE7B7;
-  box-shadow: 0 4px 14px rgba(40,200,120,.5), 0 0 0 2px rgba(40,200,120,.3);
 }
-.hs-pin.official.help .hs-pin-ic{
-  background: linear-gradient(135deg, #EF4444, #DC2626);
-  border-color: #FCA5A5;
-  box-shadow: 0 4px 14px rgba(239,68,68,.5), 0 0 0 2px rgba(239,68,68,.3);
+.hs-pin.official.sub-hospital .hs-pin-ic{
+  background: linear-gradient(135deg, #EF4444, #B91C1C);
 }
+.hs-pin.official.sub-police .hs-pin-ic{
+  background: linear-gradient(135deg, #3B82F6, #1E40AF);
+}
+.hs-pin.official.sub-fire_station .hs-pin-ic{
+  background: linear-gradient(135deg, #F97316, #C2410C);
+}
+.hs-pin.official.sub-pharmacy .hs-pin-ic{
+  background: linear-gradient(135deg, #10B981, #047857);
+}
+.hs-pin.official.sub-helpline .hs-pin-ic{
+  background: linear-gradient(135deg, #FBBF24, #D97706);
+}
+.hs-pin.official.sub-women_shelter .hs-pin-ic,
+.hs-pin.official.sub-counseling .hs-pin-ic,
+.hs-pin.official.sub-addiction_help .hs-pin-ic{
+  background: linear-gradient(135deg, #A855F7, #6D28D9);
+}
+.hs-pin.official.sub-lgbtq_center .hs-pin-ic{
+  background: linear-gradient(135deg, #EC4899, #BE185D);
+}
+/* Partner — gold/orange */
 .hs-pin.partner .hs-pin-ic{
   background: linear-gradient(135deg, #FFD60A, #FF6D2E);
   border-color: #FFE066;
-  box-shadow: 0 4px 14px rgba(255,214,10,.5);
 }
-.hs-pin.official::after{
-  content: '';
-  position: absolute;
-  top: 36px; left: 50%;
-  transform: translateX(-50%);
-  width: 38px; height: 38px;
-  border-radius: 50%;
-  background: rgba(40,200,120,.3);
-  z-index: -1;
-  animation: livePulse 2.4s ease-in-out infinite;
+.hs-pin.partner.premium .hs-pin-ic{
+  border-width: 2px;
+  border-color: #FFD60A;
+  box-shadow: 0 0 12px rgba(255,214,10,.6);
 }
-.hs-pin-tail{
-  position: absolute;
-  bottom: 0; left: 50%;
-  transform: translateX(-50%);
-  width: 0; height: 0;
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-  border-top: 8px solid #fff;
-}
+/* Tail entfällt — Pin selbst ist tropfen-förmig */
+.hs-pin-tail{ display: none; }
 .hs-pin-count{
   position: absolute;
   top: -4px; right: -4px;
-  min-width: 18px; height: 18px;
+  min-width: 16px; height: 16px;
   padding: 0 4px;
   background: var(--c-bg);
   border: 1.5px solid #fff;
-  border-radius: 9px;
-  font-size: 10px;
+  border-radius: 8px;
+  font-size: 9px;
   font-weight: 800;
   color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 2;
 }
+
+/* Cluster-Marker — sauberes violet statt default blau */
+.hs-cluster-wrap{ background: transparent; border: 0; }
+.hs-cluster{
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(168,85,247,.95), rgba(99,102,241,.85));
+  border: 2px solid rgba(255,255,255,.85);
+  color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 800;
+  box-shadow: 0 4px 12px rgba(99,102,241,.5);
+  position: relative;
+}
+.hs-cluster::before{
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  background: rgba(168,85,247,.18);
+  z-index: -1;
+}
+.hs-cluster.md{ width: 46px; height: 46px; font-size: 14px; border-width: 2.5px; }
+.hs-cluster.md::before{ inset: -8px; }
+.hs-cluster.lg{
+  width: 56px; height: 56px; font-size: 16px; border-width: 3px;
+  background: radial-gradient(circle at 30% 30%, rgba(236,72,153,.95), rgba(168,85,247,.85));
+  box-shadow: 0 6px 18px rgba(168,85,247,.6);
+}
+.hs-cluster.lg::before{ inset: -10px; background: rgba(236,72,153,.18); }
+.hs-cluster span{ line-height: 1; }
 
 /* View-Toggle (Map ↔ List) */
 .hs-view-toggle{
@@ -3818,6 +3864,10 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
       <label>Was ist es?</label>
       <div class="pill-grid" id="wizKinds"></div>
     </div>
+    <div class="field" id="wizSubcatField" hidden>
+      <label>Welcher Typ?</label>
+      <div class="pill-grid" id="wizSubcats"></div>
+    </div>
     <div class="field">
       <label>Name</label>
       <input id="wizName" placeholder="z.B. Festival-Treffpunkt, Mein Zuhause" maxlength="60" />
@@ -3825,6 +3875,25 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     <div class="field">
       <label>Beschreibung (optional)</label>
       <textarea id="wizDesc" placeholder="Was ist hier los? Treffpunkt-Hinweis?" maxlength="280" rows="2"></textarea>
+    </div>
+    <div id="wizContactBlock" hidden>
+      <div class="field">
+        <label>Adresse (optional)</label>
+        <input id="wizAddr" placeholder="Straße + Hausnummer + PLZ + Ort" maxlength="200" />
+      </div>
+      <div class="field">
+        <label>Telefon (optional)</label>
+        <input id="wizPhone" type="tel" placeholder="+49 …" maxlength="50" />
+      </div>
+      <div class="field">
+        <label>Webseite (optional)</label>
+        <input id="wizWeb" type="url" placeholder="https://…" maxlength="200" />
+      </div>
+      <div class="field">
+        <label>Öffnungszeiten (optional)</label>
+        <input id="wizHours" placeholder="z.B. 24/7 oder Mo-Fr 09-18" maxlength="200" />
+      </div>
+      <p class="auth-note" style="margin-bottom:8px"><img class="emo3d" style="width:16px;height:16px;vertical-align:-3px" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Hourglass%20not%20done/3D/hourglass_not_done_3d.png" alt=""/> Geht in die Admin-Approval-Queue. Erscheint öffentlich nach Freigabe.</p>
     </div>
     <div class="field">
       <label>Foto (optional)</label>
@@ -4473,6 +4542,14 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
         </div>
       </div>
       <div class="adm-list" id="admWaitlist"></div>
+    </div>
+
+    <div class="sp-section">
+      <div class="adm-wl-head">
+        <h4>Anlaufstellen-Approval</h4>
+        <button class="adm-wl-tab" id="admPendingRefresh" type="button">Neu laden</button>
+      </div>
+      <div class="adm-list" id="admPending"></div>
     </div>
 
     <div class="sp-section">
@@ -5554,23 +5631,36 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     });
   }
 
-  /* Shared Pin-Renderer mit 3D-Emoji */
+  /* Shared Pin-Renderer mit 3D-Emoji + farb-codiert pro Subkategorie */
   function buildHsPinHtml(h){
     const cls = ['hs-pin'];
     if (h.is_mine) cls.push('mine');
     else if (h.visibility === 'private') cls.push('private');
     if (h.is_official){
       cls.push('official');
-      if (h.kind === 'help_point') cls.push('help');
+      if (h.subcategory) cls.push('sub-' + h.subcategory);
     }
-    if (h.partner_tier === 'premium') cls.push('partner');
+    if (h.partner_id || h.partner_name){
+      cls.push('partner');
+      if (h.partner_tier === 'premium') cls.push('premium');
+    }
     const fxUrl = hsFx(h.kind, h.subcategory);
-    const inner = '<img class="emo3d" src="' + fxUrl + '" alt="" loading="lazy"/>';
     return '<div class="' + cls.join(' ') + '">' +
-      '<div class="hs-pin-ic">' + inner + '</div>' +
+      '<div class="hs-pin-ic"><img class="emo3d" src="' + fxUrl + '" alt="" loading="lazy"/></div>' +
       (h.member_count > 0 ? '<div class="hs-pin-count">' + h.member_count + '</div>' : '') +
-      '<div class="hs-pin-tail"></div>' +
       '</div>';
+  }
+  /* Custom Cluster-Icon (statt blau-default) */
+  function buildClusterIcon(cluster){
+    const count = cluster.getChildCount();
+    let size = 'sm', sizeNum = 36;
+    if (count >= 100){ size = 'lg'; sizeNum = 56; }
+    else if (count >= 25){ size = 'md'; sizeNum = 46; }
+    return L.divIcon({
+      html: '<div class="hs-cluster ' + size + '"><span>' + count + '</span></div>',
+      className: 'hs-cluster-wrap',
+      iconSize: [sizeNum, sizeNum]
+    });
   }
   async function loadHotspots(){
     if (!map) return;
@@ -5602,10 +5692,25 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
 
   /* ============= HOTSPOT WIZARD ============= */
   const KINDS = [
-    { id: 'safe',      t: 'Schutzort',     s: 'Krankenhaus, Polizei', fx: 'shield' },
-    { id: 'trust',     t: 'Vertrauensort', s: 'Zuhause, Job',         fx: 'house' },
-    { id: 'live',      t: 'Live-Spot',     s: 'Bin gerade hier',      fx: 'pin' },
-    { id: 'community', t: 'Community',     s: 'Gruppe, Verein',       fx: 'handshake' }
+    { id: 'live',       t: 'Live-Spot',          s: 'Bin gerade hier',      fx: 'pin' },
+    { id: 'safe',       t: 'Eigener Safe-Spot',  s: 'Treffpunkt für Crew',  fx: 'shield' },
+    { id: 'trust',      t: 'Vertrauensort',      s: 'Zuhause, Job',         fx: 'house' },
+    { id: 'community',  t: 'Community',          s: 'Gruppe, Verein',       fx: 'handshake' },
+    { id: 'safehaven',  t: 'Schutzort melden',   s: '24h Tankstelle, Frauenhaus', fx: 'folded', submission: true },
+    { id: 'help_point', t: 'Hilfe-Stelle melden',s: 'Beratung, Notruf, Klinik', fx: 'sosbtn', submission: true }
+  ];
+  const HS_SUBCATS = [
+    { id: 'gas_station_24h',  t: 'Tankstelle 24h',   fx: 'fuel' },
+    { id: 'train_station',    t: 'Bahnhof',          fx: 'train' },
+    { id: 'community_center', t: 'Bürgerhaus',       fx: 'hug' },
+    { id: 'women_shelter',    t: 'Frauenhaus',       fx: 'female' },
+    { id: 'lgbtq_center',     t: 'LGBTQ+ Zentrum',   fx: 'rainbowfl' },
+    { id: 'youth_center',     t: 'Jugendzentrum',    fx: 'backpack' },
+    { id: 'helpline',         t: 'Hotline / Telefonseelsorge', fx: 'phone' },
+    { id: 'counseling',       t: 'Beratungsstelle',  fx: 'speech' },
+    { id: 'addiction_help',   t: 'Suchthilfe',       fx: 'purpheart' },
+    { id: 'pharmacy',         t: 'Apotheke (24h)',   fx: 'pill' },
+    { id: 'other',            t: 'Sonstiges',        fx: 'pin' }
   ];
   const VIS = [
     { id: 'public',  t: 'Öffentlich', s: 'Alle in der Nähe',     fx: 'globe' },
@@ -5614,15 +5719,39 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     { id: 'private', t: 'Privat',     s: 'Nur du',               fx: 'locked' }
   ];
   /* WizState mit Persistenz: Name + Desc gehen NICHT verloren beim Re-Render */
-  const wizState = { kind: 'live', vis: 'friends', name: '', desc: '', photoFile: null, photoDataUrl: null };
+  const wizState = { kind: 'live', vis: 'friends', name: '', desc: '', subcategory: null, address: '', phone: '', website: '', hours: '', photoFile: null, photoDataUrl: null };
+  function isSubmissionKind(k){
+    const m = KINDS.find(x => x.id === k);
+    return !!(m && m.submission);
+  }
 
   function renderWizardPills(){
     $('wizKinds').innerHTML = KINDS.map(k => `
-      <button class="pill-c ${wizState.kind === k.id ? 'on' : ''}" data-k="${k.id}" type="button">
+      <button class="pill-c ${wizState.kind === k.id ? 'on' : ''} ${k.submission ? 'is-submission' : ''}" data-k="${k.id}" type="button">
         <div class="ic">${emo3d(k.fx)}</div>
         <div class="info"><div class="t">${k.t}</div><div class="s">${k.s}</div></div>
       </button>
     `).join('');
+    /* Subkategorie-Picker nur sichtbar bei Submission-Kinds */
+    const isSub = isSubmissionKind(wizState.kind);
+    $('wizSubcatField').hidden = !isSub;
+    $('wizContactBlock').hidden = !isSub;
+    /* Bei Submission ist visibility immer public — VIS ausblenden */
+    document.querySelector('label[for="wizVis"]')?.parentElement;
+    const visField = $('wizVis').closest('.field');
+    if (visField) visField.hidden = isSub;
+    if (isSub){
+      $('wizSubcats').innerHTML = HS_SUBCATS.map(s => `
+        <button class="pill-c ${wizState.subcategory === s.id ? 'on' : ''}" data-sc="${s.id}" type="button">
+          <div class="ic">${emo3d(s.fx)}</div>
+          <div class="info"><div class="t">${s.t}</div></div>
+        </button>
+      `).join('');
+      $('wizSubcats').querySelectorAll('.pill-c').forEach(b => b.addEventListener('click', () => {
+        wizState.subcategory = b.dataset.sc;
+        renderWizardPills();
+      }));
+    }
     $('wizVis').innerHTML = VIS.map(v => `
       <button class="pill-c ${wizState.vis === v.id ? 'on' : ''}" data-v="${v.id}" type="button">
         <div class="ic">${emo3d(v.fx)}</div>
@@ -5631,12 +5760,15 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     `).join('');
     $('wizKinds').querySelectorAll('.pill-c').forEach(b => b.addEventListener('click', () => {
       wizState.kind = b.dataset.k;
-      renderWizardPills(); /* Nur Pills, nicht Inputs! */
+      /* Bei Submission: subcat reset wenn keine gewählt */
+      renderWizardPills();
     }));
     $('wizVis').querySelectorAll('.pill-c').forEach(b => b.addEventListener('click', () => {
       wizState.vis = b.dataset.v;
       renderWizardPills();
     }));
+    /* Submit-Button-Label */
+    const sub = $('wizSubmit'); if (sub) sub.textContent = isSub ? 'Zur Prüfung melden' : 'Anlegen';
   }
 
   function renderWizardPhotoPreview(){
@@ -5657,11 +5789,17 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     wizState.vis = 'friends';
     wizState.name = '';
     wizState.desc = '';
+    wizState.subcategory = null;
+    wizState.address = '';
+    wizState.phone = '';
+    wizState.website = '';
+    wizState.hours = '';
     wizState.photoFile = null;
     wizState.photoDataUrl = null;
     $('wizName').value = '';
     $('wizDesc').value = '';
     $('wizPhoto').value = '';
+    ['wizAddr','wizPhone','wizWeb','wizHours'].forEach(id => { const el = $(id); if (el) el.value = ''; });
     renderWizardPills();
     renderWizardPhotoPreview();
   }
@@ -5669,6 +5807,11 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
   /* Inputs trackken Cache */
   $('wizName').addEventListener('input', e => wizState.name = e.target.value);
   $('wizDesc').addEventListener('input', e => wizState.desc = e.target.value);
+  ['wizAddr','wizPhone','wizWeb','wizHours'].forEach(id => {
+    const el = $(id); if (!el) return;
+    const map = { wizAddr:'address', wizPhone:'phone', wizWeb:'website', wizHours:'hours' };
+    el.addEventListener('input', e => wizState[map[id]] = e.target.value);
+  });
 
   /* Photo-Upload */
   $('wizPhotoBtn').addEventListener('click', () => $('wizPhoto').click());
@@ -5707,6 +5850,40 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
   $('wizSubmit').addEventListener('click', async () => {
     const name = (wizState.name || $('wizName').value || '').trim();
     if (name.length < 2){ toast('Name fehlt'); $('wizName').focus(); return; }
+    /* Submission-Flow: SafeHaven oder HelpPoint einreichen */
+    if (isSubmissionKind(wizState.kind)){
+      if (!wizState.subcategory){ toast('Bitte Typ auswählen'); return; }
+      $('wizSubmit').disabled = true;
+      $('wizSubmit').textContent = 'Wird eingereicht …';
+      try{
+        if (!userLat){
+          await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(
+            p => { userLat = p.coords.latitude; userLng = p.coords.longitude; res(); },
+            () => rej(new Error('GPS verweigert'))
+          ));
+        }
+        const r = await sb.rpc('submit_help_location', {
+          p_kind: wizState.kind,
+          p_subcategory: wizState.subcategory,
+          p_name: name,
+          p_description: wizState.desc || '',
+          p_lat: userLat, p_lng: userLng,
+          p_address: wizState.address || null,
+          p_phone:   wizState.phone   || null,
+          p_website: wizState.website || null,
+          p_hours:   wizState.hours   || null
+        });
+        if (r.error) throw r.error;
+        closeModal('hsWizard');
+        resetWizard();
+        toast('Eingereicht — Admin prüft das', null, null, 'success');
+      }catch(e){
+        toast('Fehler: ' + (e.message || e), null, null, 'warning');
+      }finally{
+        $('wizSubmit').disabled = false;
+      }
+      return;
+    }
     $('wizSubmit').disabled = true; $('wizSubmit').textContent = 'Speichere …';
     try{
       if (!userLat){
@@ -7406,9 +7583,68 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     /* Sign-Up-Tor + Waitlist */
     await renderAdmGate();
     await renderAdmWaitlist();
+    /* Pending Anlaufstellen */
+    await renderAdmPendingHelpPoints();
     /* Hotspot-List */
     await renderAdmHotspots();
   }
+
+  /* ============= ADMIN: PENDING HELP-POINTS ============= */
+  async function renderAdmPendingHelpPoints(){
+    const host = $('admPending'); if (!host) return;
+    host.innerHTML = '<div class="empty"><div class="spinner" style="margin:20px auto"></div></div>';
+    try{
+      const r = await sb.from('hotspots')
+        .select('id, name, kind, subcategory, lat, lng, address, contact_phone, contact_website, opening_hours, description, owner_id, created_at, verification_status, is_official')
+        .in('kind', ['safehaven','help_point'])
+        .eq('is_official', false)
+        .eq('verification_status', 'pending')
+        .order('created_at', { ascending: false })
+        .limit(50);
+      const data = (r && r.data) || [];
+      if (!data.length){
+        host.innerHTML = '<div class="feed-empty">Keine offenen Einreichungen</div>';
+        return;
+      }
+      host.innerHTML = data.map(h => {
+        const sub = hsLabel(h.kind, h.subcategory);
+        return `<div class="adm-row" data-id="${h.id}">
+          <div class="hs-row-ic" style="width:38px;height:38px;border-radius:10px"><img class="emo3d" src="${hsFx(h.kind, h.subcategory)}" alt="" style="width:24px;height:24px"/></div>
+          <div class="info">
+            <div class="name">${esc(h.name)}</div>
+            <div class="meta">${esc(sub)}${h.address ? ' · ' + esc(h.address.slice(0, 60)) : ''} · ${timeAgo(h.created_at)}</div>
+          </div>
+          <div class="acts">
+            <button class="adm-wl-act approve" data-act="approve">Approve</button>
+            <button class="adm-wl-act revoke" data-act="reject">Ablehnen</button>
+          </div>
+        </div>`;
+      }).join('');
+      host.querySelectorAll('[data-act]').forEach(b => b.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        const row = b.closest('.adm-row');
+        const id = row.dataset.id;
+        const act = b.dataset.act;
+        b.disabled = true;
+        try{
+          if (act === 'approve'){
+            const r2 = await sb.rpc('admin_mark_official', { p_hotspot_id: id, p_official: true });
+            if (r2.error) throw r2.error;
+            toast('Approved & als offiziell markiert', null, null, 'success');
+          } else {
+            const r2 = await sb.from('hotspots').update({ verification_status: 'rejected' }).eq('id', id);
+            if (r2.error) throw r2.error;
+            toast('Abgelehnt', null, null, 'warning');
+          }
+          await renderAdmPendingHelpPoints();
+          if (typeof loadHotspots === 'function') loadHotspots();
+        }catch(e){ toast('Fehler: ' + (e.message || e), null, null, 'warning'); b.disabled = false; }
+      }));
+    }catch(e){ host.innerHTML = '<div class="feed-empty">Fehler: ' + esc(e.message || 'unbekannt') + '</div>'; }
+  }
+  /* Refresh-Button */
+  const admPendingBtn = document.getElementById('admPendingRefresh');
+  if (admPendingBtn) admPendingBtn.addEventListener('click', () => renderAdmPendingHelpPoints());
 
   /* ============= ADMIN: SIGNUP-GATE ============= */
   async function renderAdmGate(){
@@ -8322,7 +8558,13 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
 
       /* Cluster-Modus (default) */
       if (window.L.markerClusterGroup){
-        clusterGroup = L.markerClusterGroup({ showCoverageOnHover: false, maxClusterRadius: 50 });
+        clusterGroup = L.markerClusterGroup({
+          showCoverageOnHover: false,
+          maxClusterRadius: 80,
+          spiderfyOnMaxZoom: true,
+          chunkedLoading: true,
+          iconCreateFunction: buildClusterIcon
+        });
         spots.forEach(h => {
           const html = buildHsPinHtml(h);
           const icon = L.divIcon({ html, className: 'hs-pin-wrap', iconSize: [34, 42], iconAnchor: [17, 42] });
