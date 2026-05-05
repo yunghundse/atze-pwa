@@ -197,14 +197,11 @@ form.partner-form[hidden]{display:none !important}
 /* Emoji */
 .trust-icon{width:52px;height:52px;filter:drop-shadow(0 8px 16px rgba(168,140,255,.3));transition:transform .35s cubic-bezier(.34,1.56,.64,1),filter .35s;opacity:0;transform:scale(.4) translateY(20px)}
 @media (max-width:680px){.trust-icon{width:42px;height:42px}}
-.trust-strip.is-visible .trust-icon{animation:emojiPop .7s cubic-bezier(.34,1.56,.64,1) forwards}
-.trust-strip.is-visible > .trust-strip-grid > .trust-item:nth-child(1) .trust-icon{animation-delay:.05s}
-.trust-strip.is-visible > .trust-strip-grid > .trust-item:nth-child(2) .trust-icon{animation-delay:.20s}
-.trust-strip.is-visible > .trust-strip-grid > .trust-item:nth-child(3) .trust-icon{animation-delay:.35s}
-/* Idle-Wackeln (nur wenn nicht offen, sequentiell, dezent) */
-.trust-strip.is-visible .trust-item:not(.is-open) .trust-icon{animation:emojiPop .7s cubic-bezier(.34,1.56,.64,1) forwards,trustWiggle 5s ease-in-out 1.5s infinite}
-.trust-strip.is-visible > .trust-strip-grid > .trust-item:nth-child(2):not(.is-open) .trust-icon{animation-delay:.20s,2.0s}
-.trust-strip.is-visible > .trust-strip-grid > .trust-item:nth-child(3):not(.is-open) .trust-icon{animation-delay:.35s,2.5s}
+/* Pop on scroll-into-view, dann sanftes Idle-Wackeln (nur wenn Card nicht offen) */
+.trust-strip.is-visible > .trust-strip-grid > .trust-item:nth-child(1) .trust-icon{animation:emojiPop .7s cubic-bezier(.34,1.56,.64,1) .05s forwards,trustWiggle 6s ease-in-out 2s infinite}
+.trust-strip.is-visible > .trust-strip-grid > .trust-item:nth-child(2) .trust-icon{animation:emojiPop .7s cubic-bezier(.34,1.56,.64,1) .20s forwards,trustWiggle 6s ease-in-out 3.2s infinite}
+.trust-strip.is-visible > .trust-strip-grid > .trust-item:nth-child(3) .trust-icon{animation:emojiPop .7s cubic-bezier(.34,1.56,.64,1) .35s forwards,trustWiggle 6s ease-in-out 4.4s infinite}
+.trust-strip.is-visible > .trust-strip-grid > .trust-item.is-open .trust-icon{animation:emojiPop .7s cubic-bezier(.34,1.56,.64,1) forwards}
 .trust-item:hover .trust-icon{transform:translateY(-4px) scale(1.12);filter:drop-shadow(0 14px 24px rgba(168,140,255,.5))}
 @keyframes emojiPop{0%{opacity:0;transform:scale(.4) translateY(20px)}70%{opacity:1;transform:scale(1.15) translateY(-3px)}100%{opacity:1;transform:scale(1) translateY(0)}}
 @keyframes trustWiggle{0%,88%,100%{transform:rotate(0)}90%{transform:rotate(-7deg) scale(1.05)}94%{transform:rotate(6deg) scale(1.05)}97%{transform:rotate(-3deg) scale(1.03)}}
@@ -1305,7 +1302,7 @@ body::after{
     <div class="hero-floating-lockup">
       <img class="hero-hugging-sticker"
            src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/People%20hugging/3D/people_hugging_3d.png"
-           alt="" loading="eager" width="88" height="88"/>
+           alt="" loading="eager" width="108" height="108"/>
       <span class="hero-floating-word">crew<span class="dot">.</span></span>
     </div>
     <div class="hero-eyebrow">Pioneer-Phase &middot; 50 Codes</div>
