@@ -6472,18 +6472,47 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     if (typeof refreshSafeplaceState === 'function') refreshSafeplaceState();
   }
 
-  function toggleHome(){
+  async function toggleHome(){
     homeOn = !homeOn;
     if (homeOn){
       localStorage.setItem('crew-home', '1');
-      localStorage.setItem('crew-home-eta', String(Date.now() + 30*60*1000));
-      toast('Heimweg läuft · 30 min', 'Stop', toggleHome);
+      /* 1-Klick-Flow: wenn Home-City im Profil → direkt Route anlegen, sonst Setup-Modal öffnen */
+      const hasHome = profile && typeof profile.home_city_lat === 'number' && typeof profile.home_city_lng === 'number';
+      if (hasHome && userLat){
+        try{
+          const distKm = haversine(userLat, userLng, profile.home_city_lat, profile.home_city_lng);
+          const minutes = Math.max(8, Math.round(distKm * 12));
+          const eta = new Date(Date.now() + minutes * 60 * 1000);
+          localStorage.setItem('crew-home-eta', String(eta.getTime()));
+          await sb.from('home_routes').insert({
+            user_id: user.id,
+            dest_lat: profile.home_city_lat, dest_lng: profile.home_city_lng,
+            dest_name: profile.home_city_name || profile.home_address || 'Zuhause',
+            started_at: new Date().toISOString(),
+            expected_arrival_at: eta.toISOString(),
+            status: 'active'
+          });
+          toast('Heimweg läuft · ' + minutes + ' min', 'Stop', toggleHome);
+        }catch(e){
+          /* Fallback: Setup-Modal öffnen */
+          openHomemodeSetup && openHomemodeSetup();
+        }
+      } else {
+        /* Kein Home-City gesetzt → Setup-Modal */
+        if (typeof openHomemodeSetup === 'function') openHomemodeSetup();
+        else { localStorage.setItem('crew-home-eta', String(Date.now() + 30*60*1000)); toast('Heimweg läuft · 30 min', 'Stop', toggleHome); }
+      }
+      /* Map sofort updaten — Heimweg-Linie + Restzeit-Badge */
+      if (typeof loadCrewLive === 'function') loadCrewLive();
     } else {
       localStorage.removeItem('crew-home');
       localStorage.removeItem('crew-home-eta');
+      try{ await sb.from('home_routes').update({ status: 'arrived', arrived_at: new Date().toISOString() }).eq('user_id', user.id).eq('status', 'active'); }catch(_){}
       toast('Heimweg beendet');
+      if (typeof loadCrewLive === 'function') loadCrewLive();
     }
     syncHeader();
+    if (typeof refreshSafeplaceState === 'function') refreshSafeplaceState();
   }
 
   function syncHeader(){
