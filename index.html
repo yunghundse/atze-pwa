@@ -52,6 +52,19 @@ a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer;border:0
 .hero-sticker{display:block;width:120px;height:120px;margin:0 auto 28px;filter:drop-shadow(0 24px 50px rgba(168,140,255,.45));opacity:0;transform:translateY(30px);animation:rise .9s cubic-bezier(.2,.8,.2,1) .05s forwards}
 @media (max-width:520px){.hero-sticker{width:96px;height:96px;margin-bottom:22px}}
 
+/* Hero-Logo (animiertes SVG ersetzt Sticker) */
+.hero-logo{display:block;width:100%;max-width:520px;height:auto;margin:0 auto 18px;opacity:0;transform:translateY(30px);animation:rise .9s cubic-bezier(.2,.8,.2,1) .05s forwards}
+@media (max-width:520px){.hero-logo{max-width:380px;margin-bottom:14px}}
+/* Hero-Mission als One-Line Sub-Hook (statt 4-Zeilen-Hook) */
+.hero-mission{display:flex;flex-wrap:wrap;justify-content:center;gap:.25em;font-size:clamp(28px,5.5vw,52px);font-weight:900;line-height:1.05;letter-spacing:-1.5px;margin:0 0 14px;color:#F5F3FF}
+.hero-mission .word{display:inline-block;opacity:0;transform:translateY(20px);animation:rise .6s cubic-bezier(.2,.8,.2,1) forwards}
+.hero-mission .word:nth-child(1){animation-delay:.4s}.hero-mission .word:nth-child(2){animation-delay:.5s}
+.hero-mission .word:nth-child(3){animation-delay:.6s}.hero-mission .word:nth-child(4){animation-delay:.7s;color:#A88CFF}
+
+/* Fix-2: Hero Pioneer-Counter */
+.hero-pioneer-count{margin:14px auto 4px;padding:10px 18px;display:inline-block;background:rgba(168,140,255,.08);border:.5px solid rgba(168,140,255,.22);border-radius:999px;font-size:13px;color:rgba(245,243,255,.75);letter-spacing:.2px}
+.hero-pioneer-count strong{color:#F5F3FF;font-weight:700}
+
 /* Schritt 3: Drei-Pillar-Section — Crew / Safety-Circle / Heimweg */
 .pillars{position:relative;padding:80px 24px 60px;max-width:1080px;margin:0 auto}
 .pillars-head{text-align:center;margin-bottom:48px}
@@ -86,9 +99,10 @@ a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer;border:0
 .trust-strip-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;max-width:780px;margin:0 auto 28px}
 @media (max-width:680px){.trust-strip-grid{grid-template-columns:1fr;max-width:380px}}
 .trust-item{padding:18px 14px;background:rgba(168,140,255,.04);border:.5px solid rgba(168,140,255,.14);border-radius:14px;display:flex;flex-direction:column;align-items:center;gap:8px}
-.trust-icon{width:36px;height:36px;filter:drop-shadow(0 6px 12px rgba(168,140,255,.25))}
-.trust-h{font-size:13px;font-weight:700;color:#F5F3FF;letter-spacing:-.2px}
-.trust-d{font-size:11.5px;line-height:1.45;color:rgba(245,243,255,.6)}
+.trust-icon{width:48px;height:48px;filter:drop-shadow(0 8px 16px rgba(168,140,255,.3))}
+.trust-h{font-size:14px;font-weight:700;color:#F5F3FF;letter-spacing:-.2px}
+.trust-d{font-size:12.5px;line-height:1.55;color:rgba(245,243,255,.7)}
+.trust-badge{display:inline-block;margin:8px auto 18px;padding:8px 18px;background:rgba(139,92,246,.14);border:.5px solid rgba(168,140,255,.32);border-radius:999px;font-size:11.5px;font-weight:600;letter-spacing:.5px;color:#A88CFF;text-transform:uppercase}
 .trust-meta{font-size:12.5px;line-height:1.7;color:rgba(245,243,255,.55);max-width:560px;margin:0 auto}
 .trust-meta strong{color:#A88CFF;font-weight:600}
 
@@ -1159,31 +1173,24 @@ body::after{
   <a href="#wl" class="nav-pill"><span class="pulse-dot"></span>Warteliste · Stuttgart-Pioneer</a>
 </header>
 
-<!-- HERO + WAITLIST -->
+<!-- HERO + WAITLIST (rebuild: Logo als Hero-Element, Hook als Sub-Tagline) -->
 <section class="hero">
   <div class="hero-bg"></div>
   <div class="hero-inner">
-    <!-- Schritt 2: 3D People-Hugging-Sticker als Hero (matcht Onboarding-Slide-0) -->
-    <img class="hero-sticker"
-         src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/People%20hugging/3D/people_hugging_3d.png"
-         alt="" loading="eager"/>
+    <!-- Animiertes Brand-Logo (ersetzt People-Hugging-Sticker) -->
+    <img class="hero-logo"
+         src="/img/brand/crew-logo-hero-animated.svg"
+         alt="crew. — Connection + Safety. Für deine Crew." loading="eager"/>
     <div class="hero-eyebrow">Connection + Safety · Für deine Crew · DSGVO-konform</div>
-    <div class="hook">
+    <h1 class="hero-mission">
       <span class="word">Niemand</span>
-    </div>
-    <div class="hook" style="margin-top:.05em">
       <span class="word">geht</span>
-    </div>
-    <div class="hook" style="margin-top:.05em">
       <span class="word">alleine</span>
-    </div>
-    <div class="hook" style="margin-top:.05em">
       <span class="word">heim.</span>
-    </div>
-    <div class="hook" style="margin-top:.05em">
-      <span class="word brand">crew<span class="dot">.</span></span>
-    </div>
+    </h1>
     <p class="hero-sub">Deine echte Crew, plus eine Live-Schutz-Schicht. Standort, Heimweg, SOS — alles opt-in, alles gewählt. Kein Massen-Tracking, kein Doom-Scroll. EU-Server in Frankfurt, Daten gehören dir.</p>
+    <!-- Fix-2: Live Pioneer-Counter (Social Proof + Scarcity) -->
+    <div class="hero-pioneer-count" id="heroPioneerCount" style="opacity:0;transition:opacity .8s ease 1.4s">Lade …</div>
     <form class="wl-card" id="wlForm" novalidate>
       <input type="text" name="website" id="wlHp" class="hp-trap" tabindex="-1" autocomplete="off" aria-hidden="true">
       <h2>Trag dich in die Warteliste ein</h2>
@@ -1276,6 +1283,29 @@ body::after{
   </div>
 </section>
 
+<!-- Fix-1: Trust-Strip direkt nach Hero (war ganz unten) — Trust early statt spät -->
+<section class="trust-strip">
+  <div class="trust-strip-grid">
+    <div class="trust-item">
+      <img class="trust-icon" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Locked%20with%20key/3D/locked_with_key_3d.png" alt=""/>
+      <div class="trust-h">EU-Server Frankfurt</div>
+      <div class="trust-d">DSGVO-konform. Daten bleiben in Deutschland — nicht in den USA.</div>
+    </div>
+    <div class="trust-item">
+      <img class="trust-icon" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Hourglass%20not%20done/3D/hourglass_not_done_3d.png" alt=""/>
+      <div class="trust-h">Wir löschen automatisch</div>
+      <div class="trust-d">Standort nach 30 Min weg. Mood nach 12 h. Heimweg-Daten nach 24 h.</div>
+    </div>
+    <div class="trust-item">
+      <img class="trust-icon" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Folded%20hands/Default/3D/folded_hands_3d_default.png" alt=""/>
+      <div class="trust-h">Du bestimmst</div>
+      <div class="trust-d">Datenexport + Löschung in 2 Klicks. Keine Werbung, kein Tracking.</div>
+    </div>
+  </div>
+  <div class="trust-badge">Kein VC &middot; Kein Tracking &middot; Kein Verkauf an Dritte</div>
+  <p class="trust-meta">crew. ist gemacht von Menschen in <strong>Stuttgart</strong>. Du bekommst, was du siehst — und nichts dahinter.</p>
+</section>
+
 <!-- Schritt 3: Drei-Pillar-Section (Brand-konsistent zu Onboarding-Slide-1) -->
 <section class="pillars">
   <div class="pillars-head">
@@ -1285,16 +1315,16 @@ body::after{
   </div>
   <div class="pillars-grid">
     <div class="pillar-card">
-      <img class="pillar-icon" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Busts%20in%20silhouette/3D/busts_in_silhouette_3d.png" alt="" loading="lazy"/>
-      <div class="pillar-h">Deine Crew</div>
-      <p class="pillar-desc">Die Leute, denen du vertraust. Mutual + opt-in — niemand drängt sich auf.</p>
-      <div class="pillar-detail">Crew = Echte-Welt-Gruppe (3–15 Leute). Festival-Crew, Studi-WG, Späti-Stammgäste. Du wählst.</div>
-    </div>
-    <div class="pillar-card">
       <img class="pillar-icon" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Shield/3D/shield_3d.png" alt="" loading="lazy"/>
       <div class="pillar-h">Safety-Circle</div>
       <p class="pillar-desc">1–3 Leute, die dich im Notfall rausholen. Sehen sonst <strong>nichts</strong> von dir.</p>
       <div class="pillar-detail">Kein Standort, keine Aktivität, keine Mood. Nur wenn du SOS auslöst oder Heimweg-Modus startest, wird's relevant.</div>
+    </div>
+    <div class="pillar-card">
+      <img class="pillar-icon" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Busts%20in%20silhouette/3D/busts_in_silhouette_3d.png" alt="" loading="lazy"/>
+      <div class="pillar-h">Deine Crew</div>
+      <p class="pillar-desc">Die Leute, denen du vertraust. Mutual + opt-in — niemand drängt sich auf.</p>
+      <div class="pillar-detail">Crew = Echte-Welt-Gruppe (3–15 Leute). Festival-Crew, Studi-WG, Späti-Stammgäste. Du wählst.</div>
     </div>
     <div class="pillar-card">
       <img class="pillar-icon" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Person%20walking/Default/3D/person_walking_3d_default.png" alt="" loading="lazy"/>
@@ -1480,27 +1510,7 @@ body::after{
   </div>
 </section>
 
-<!-- Schritt 5: Trust-Strip — DSGVO + Werte sichtbar machen -->
-<section class="trust-strip">
-  <div class="trust-strip-grid">
-    <div class="trust-item">
-      <img class="trust-icon" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Locked%20with%20key/3D/locked_with_key_3d.png" alt=""/>
-      <div class="trust-h">EU-Server in Frankfurt</div>
-      <div class="trust-d">DSGVO-konform. Daten bleiben in Deutschland.</div>
-    </div>
-    <div class="trust-item">
-      <img class="trust-icon" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Hourglass%20not%20done/3D/hourglass_not_done_3d.png" alt=""/>
-      <div class="trust-h">Auto-Expire auf alles</div>
-      <div class="trust-d">Standort 30 Min. Mood 12h. Heimweg-Daten 24h. Dann weg.</div>
-    </div>
-    <div class="trust-item">
-      <img class="trust-icon" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Folded%20hands/Default/3D/folded_hands_3d_default.png" alt=""/>
-      <div class="trust-h">Du bestimmst</div>
-      <div class="trust-d">Datenexport + Löschung in 2 Klicks. Keine Werbung, kein Tracking.</div>
-    </div>
-  </div>
-  <p class="trust-meta">crew. ist gemacht von Menschen in <strong>Stuttgart</strong>. Kein VC, keine Werbung, keine Daten an Dritte. Du bekommst, was du siehst — und nichts dahinter.</p>
-</section>
+
 
 <!-- FOOTER -->
 <footer>
@@ -1766,6 +1776,33 @@ async function loadWaitlistCount(){
   } catch(e){}
 }
 loadWaitlistCount();
+
+/* Fix-2: Pioneer-Stats live in Hero + Nav-Pill (Social Proof + Scarcity) */
+async function loadPioneerStats(){
+  try {
+    var {data} = await sb.rpc('get_pioneer_stats_public');
+    if (!data) return;
+    var total = data.total || 0;
+    var remaining = data.remaining || 0;
+    var used = total - remaining;
+    /* Hero-Counter */
+    var hc = document.getElementById('heroPioneerCount');
+    if (hc) {
+      if (remaining > 0) {
+        hc.innerHTML = '<strong>' + used + '</strong> von <strong>' + total + '</strong> Pioneer-Codes vergeben &middot; nur noch <strong style="color:#A88CFF">' + remaining + '</strong> frei';
+      } else {
+        hc.innerHTML = '<strong>Alle ' + total + ' Pioneer-Codes vergeben.</strong> Komm auf die Warteliste für Welle 2.';
+      }
+      hc.style.opacity = '1';
+    }
+    /* Nav-Pill Scarcity-Text */
+    var np = document.querySelector('.nav-pill');
+    if (np && remaining > 0) {
+      np.innerHTML = '<span class="pulse-dot"></span>Nur noch ' + remaining + ' Codes';
+    }
+  } catch(e){}
+}
+loadPioneerStats();
 
 // Scroll-Reveal — fügt is-visible Klasse zu Cards beim Scroll-In
 (function(){

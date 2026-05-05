@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 220" role="img" aria-label="crew.">
+  <title>crew. — Connection + Safety</title>
+  <defs>
+    <linearGradient id="cg" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#6B3FE6"/>
+      <stop offset="50%" stop-color="#8B5CF6"/>
+      <stop offset="100%" stop-color="#A88CFF"/>
+    </linearGradient>
+    <radialGradient id="cd" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#E9DEFF"/>
+      <stop offset="60%" stop-color="#A88CFF"/>
+      <stop offset="100%" stop-color="#7C3AED"/>
+    </radialGradient>
+    <filter id="sg" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="dg" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="12" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <text x="300" y="138" text-anchor="middle"
+        font-family="'Geist','Inter','Avenir Next',system-ui,sans-serif"
+        font-weight="900" font-size="160" letter-spacing="-6"
+        fill="url(#cg)" filter="url(#sg)">crew</text>
+  <circle cx="465" cy="135" r="14" fill="url(#cd)" filter="url(#dg)"/>
+  <text x="300" y="190" text-anchor="middle"
+        font-family="'Geist','Inter',system-ui,sans-serif"
+        font-weight="500" font-size="14" letter-spacing="6"
+        fill="#A88CFF" opacity=".55">p a r t y c r e w . a p p</text>
+</svg>
