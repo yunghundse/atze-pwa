@@ -850,6 +850,90 @@ a{ color: var(--c-violet-3); text-decoration: none; }
   color: #fff;
 }
 
+/* Erste-Schritte-Card auf Home */
+.onboard-card{
+  margin: 0 var(--s-4) var(--s-4);
+  padding: var(--s-4);
+  background: linear-gradient(135deg, rgba(139,92,246,.15), rgba(192,132,252,.08));
+  border: .5px solid rgba(192,132,252,.4);
+  border-radius: var(--r-3);
+  position: relative;
+}
+.onboard-card[hidden]{ display: none; }
+.onboard-head{
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: var(--s-3);
+}
+.onboard-head h3{
+  font-size: 14px;
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--c-violet-3);
+}
+.onboard-skip{
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.06);
+  color: var(--c-text-3);
+  font-size: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 600;
+}
+.onboard-steps{
+  display: flex; flex-direction: column;
+  gap: 6px;
+}
+.onboard-step{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: var(--c-surface-2);
+  border: .5px solid var(--c-violet-line);
+  border-radius: var(--r-2);
+  cursor: pointer;
+  transition: transform .15s var(--ease);
+}
+.onboard-step:active{ transform: scale(.98); }
+.onboard-step.done{
+  background: rgba(40,200,120,.08);
+  border-color: rgba(40,200,120,.4);
+  cursor: default;
+}
+.onboard-step .ic{
+  flex: none;
+  width: 36px; height: 36px;
+  border-radius: 12px;
+  background: rgba(139,92,246,.2);
+  display: flex; align-items: center; justify-content: center;
+}
+.onboard-step .ic img{ width: 22px; height: 22px; }
+.onboard-step.done .ic{ background: rgba(40,200,120,.18); }
+.onboard-step .info{ flex: 1; min-width: 0; }
+.onboard-step .t{ font-size: 13px; font-weight: 800; color: #fff; }
+.onboard-step .s{ font-size: 11px; color: var(--c-text-3); margin-top: 2px; }
+.onboard-step .check{
+  flex: none;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.06);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--c-text-3);
+}
+.onboard-step.done .check{
+  background: var(--c-green);
+  color: #fff;
+}
+.onboard-step .check svg{ width: 12px; height: 12px; }
+.onboard-step .arrow{
+  flex: none;
+  color: var(--c-violet-3);
+  font-size: 18px;
+  font-weight: 600;
+}
+
 /* ============================================================
    USER-CREWS V2 — Crews-Tab + Modals
    ============================================================ */
@@ -4069,6 +4153,14 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
         </div>
         <div class="status"><span class="dot"></span><span id="fyStatus">Sicher · Crew online</span></div>
       </div>
+      <!-- Erste-Schritte-Card (verschwindet wenn alle 3 Steps erledigt) -->
+      <div class="onboard-card" id="onboardCard" hidden>
+        <div class="onboard-head">
+          <h3>Erste Schritte</h3>
+          <button class="onboard-skip" id="onboardSkip" type="button" aria-label="Ausblenden">×</button>
+        </div>
+        <div class="onboard-steps" id="onboardSteps"></div>
+      </div>
       <div class="spa-card" id="spaCard">
         <div class="spa-card-ic emoji"><img class="emo3d sz-lg" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Shield/3D/shield_3d.png" alt="" loading="lazy"/></div>
         <div class="spa-card-main">
@@ -6104,6 +6196,56 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
   }
 
   /* ============= HOME / FY-FEED ============= */
+  /* ============= ERSTE-SCHRITTE-CARD ============= */
+  async function renderOnboardCard(){
+    const card = $('onboardCard');
+    if (!card) return;
+    /* Wenn manuell geskippt → nicht zeigen */
+    if (localStorage.getItem('crew_onboard_skipped') === '1'){ card.hidden = true; return; }
+    /* Status der 3 Steps prüfen */
+    let hasContacts = false, hasCircle = false, hasMood = !!myMood;
+    try{
+      const r1 = await sb.from('emergency_contacts').select('id', { count: 'exact', head: true }).eq('user_id', user.id);
+      hasContacts = (r1 && r1.count) > 0;
+    }catch(_){}
+    try{
+      const r2 = await sb.from('safety_circle').select('id', { count: 'exact', head: true })
+        .eq('status', 'accepted')
+        .or('user_a.eq.' + user.id + ',user_b.eq.' + user.id);
+      hasCircle = (r2 && r2.count) > 0;
+    }catch(_){}
+    const allDone = hasContacts && hasCircle && hasMood;
+    if (allDone){ card.hidden = true; return; }
+    const steps = [
+      { id: 'contacts', t: 'Notfall-Kontakte anlegen', s: 'Wer wird bei SOS benachrichtigt?', fx: 'phone',     done: hasContacts, action: 'ec' },
+      { id: 'circle',   t: 'Safety-Circle aufbauen',   s: 'Lade Vertrauenspersonen ein',   fx: 'shield',     done: hasCircle,   action: 'invite' },
+      { id: 'mood',     t: 'Erste Stimmung teilen',    s: 'Lass die Crew wissen wie\'s dir geht', fx: 'disco',  done: hasMood,     action: 'mood' }
+    ];
+    const checkSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+    $('onboardSteps').innerHTML = steps.map(st => `
+      <div class="onboard-step ${st.done ? 'done' : ''}" data-action="${st.action}">
+        <div class="ic"><img class="emo3d" src="${FX[st.fx] || FX.pin}" alt=""/></div>
+        <div class="info"><div class="t">${st.t}</div><div class="s">${st.s}</div></div>
+        ${st.done ? '<div class="check">' + checkSvg + '</div>' : '<div class="arrow">›</div>'}
+      </div>
+    `).join('');
+    $('onboardSteps').querySelectorAll('[data-action]').forEach(el => el.addEventListener('click', () => {
+      if (el.classList.contains('done')) return;
+      const a = el.dataset.action;
+      if (a === 'ec') openModal('ecModal');
+      else if (a === 'invite') openModal('inviteModal');
+      else if (a === 'mood'){
+        const moodSec = $('moodSec'); if (moodSec) moodSec.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }));
+    card.hidden = false;
+  }
+  $('onboardSkip')?.addEventListener('click', () => {
+    localStorage.setItem('crew_onboard_skipped', '1');
+    $('onboardCard').hidden = true;
+    toast('Erste-Schritte ausgeblendet — kannst du im Profil wieder anzeigen', null, null, 'info');
+  });
+
   function renderHome(){
     if (!profile) return;
     const hour = new Date().getHours();
@@ -6116,6 +6258,7 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     refreshCrewCounts();
     refreshSafeplaceState();
     refreshMoodBubble();
+    renderOnboardCard();
   }
 
   /* Crew-Counts (Hero-Badge + Summary-Cards + Tab-Badges) */
