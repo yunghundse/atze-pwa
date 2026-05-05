@@ -5693,6 +5693,11 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+<!-- Sprint 1.1: Code-Split — Konstanten + Helpers in Module ausgelagert -->
+<script src="src/utils.js"></script>
+<script src="src/fx.js"></script>
+<script src="src/hsfx.js"></script>
+<script src="src/moods.js"></script>
 <script>
 /* ================================================================
    crew. — clean baseline JS
@@ -5712,180 +5717,27 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
   let liveOn = localStorage.getItem('crew-live') === '1';
   let homeOn = localStorage.getItem('crew-home') === '1';
 
-  /* ============= FLUENT 3D EMOJI URLs ============= */
-  const FX_BASE = 'https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/';
-  const FX = {
-    shield:    FX_BASE + 'Shield/3D/shield_3d.png',
-    house:     FX_BASE + 'House/3D/house_3d.png',
-    satellite: FX_BASE + 'Satellite%20antenna/3D/satellite_antenna_3d.png',
-    pin:       FX_BASE + 'Round%20pushpin/3D/round_pushpin_3d.png',
-    sos:       FX_BASE + 'Police%20car%20light/3D/police_car_light_3d.png',
-    sparkles:  FX_BASE + 'Sparkles/3D/sparkles_3d.png',
-    map:       FX_BASE + 'World%20map/3D/world_map_3d.png',
-    hug:       FX_BASE + 'People%20hugging/3D/people_hugging_3d.png',
-    disco:     FX_BASE + 'Mirror%20ball/3D/mirror_ball_3d.png',
-    crew:      FX_BASE + 'Busts%20in%20silhouette/3D/busts_in_silhouette_3d.png',
-    target:    FX_BASE + 'Bullseye/3D/bullseye_3d.png',
-    locked:    FX_BASE + 'Locked/3D/locked_3d.png',
-    globe:     FX_BASE + 'Globe%20with%20meridians/3D/globe_with_meridians_3d.png',
-    handshake: FX_BASE + 'Handshake/3D/handshake_3d.png',
-    walking:   FX_BASE + 'Person%20walking/Default/3D/person_walking_3d_default.png',
-    twohearts: FX_BASE + 'Two%20hearts/3D/two_hearts_3d.png',
-    seedling:  FX_BASE + 'Seedling/3D/seedling_3d.png',
-    rainbow:   FX_BASE + 'Rainbow/3D/rainbow_3d.png',
-    heart:     FX_BASE + 'Red%20heart/3D/red_heart_3d.png',
-    keys:      FX_BASE + 'Old%20key/3D/old_key_3d.png',
-    /* V5 — strategische Ergänzungen (sparsam eingesetzt) */
-    waving:    FX_BASE + 'Waving%20hand/Default/3D/waving_hand_3d_default.png',
-    check:     FX_BASE + 'Check%20mark%20button/3D/check_mark_button_3d.png',
-    hourglass: FX_BASE + 'Hourglass%20not%20done/3D/hourglass_not_done_3d.png',
-    flag:      FX_BASE + 'Triangular%20flag/3D/triangular_flag_3d.png',
-    search:    FX_BASE + 'Magnifying%20glass%20tilted%20left/3D/magnifying_glass_tilted_left_3d.png',
-    crown:     FX_BASE + 'Crown/3D/crown_3d.png',
-    alarm:     FX_BASE + 'Alarm%20clock/3D/alarm_clock_3d.png',
-    warning:   FX_BASE + 'Warning/3D/warning_3d.png',
-    info:      FX_BASE + 'Information/3D/information_3d.png',
-    party:     FX_BASE + 'Party%20popper/3D/party_popper_3d.png',
-    bell:      FX_BASE + 'Bell/3D/bell_3d.png',
-    /* Mood-Emojis */
-    sunglasses:FX_BASE + 'Smiling%20face%20with%20sunglasses/3D/smiling_face_with_sunglasses_3d.png',
-    smile:     FX_BASE + 'Smiling%20face%20with%20smiling%20eyes/3D/smiling_face_with_smiling_eyes_3d.png',
-    sad:       FX_BASE + 'Disappointed%20face/3D/disappointed_face_3d.png',
-    confused:  FX_BASE + 'Confused%20face/3D/confused_face_3d.png',
-    sosbtn:    FX_BASE + 'Sos%20button/3D/sos_button_3d.png',
-    flex:      FX_BASE + 'Flexed%20biceps/Default/3D/flexed_biceps_3d_default.png',
-    trophy:    FX_BASE + 'Trophy/3D/trophy_3d.png',
-    star:      FX_BASE + 'Star/3D/star_3d.png',
-    /* Hotspot-FX */
-    eye:       FX_BASE + 'Eye/3D/eye_3d.png',
-    folded:    FX_BASE + 'Folded%20hands/Default/3D/folded_hands_3d_default.png',
-    hospital:  FX_BASE + 'Hospital/3D/hospital_3d.png',
-    police:    FX_BASE + 'Police%20car/3D/police_car_3d.png',
-    pill:      FX_BASE + 'Pill/3D/pill_3d.png',
-    fire:      FX_BASE + 'Fire%20engine/3D/fire_engine_3d.png',
-    phone:     FX_BASE + 'Telephone%20receiver/3D/telephone_receiver_3d.png',
-    female:    FX_BASE + 'Female%20sign/3D/female_sign_3d.png',
-    rainbowfl: FX_BASE + 'Rainbow%20flag/3D/rainbow_flag_3d.png',
-    backpack:  FX_BASE + 'Backpack/3D/backpack_3d.png',
-    purpheart: FX_BASE + 'Purple%20heart/3D/purple_heart_3d.png',
-    train:     FX_BASE + 'Train/3D/train_3d.png',
-    fuel:      FX_BASE + 'Fuel%20pump/3D/fuel_pump_3d.png',
-    fork:      FX_BASE + 'Fork%20and%20knife%20with%20plate/3D/fork_and_knife_with_plate_3d.png',
-    cocktail:  FX_BASE + 'Cocktail%20glass/3D/cocktail_glass_3d.png',
-    hotel:     FX_BASE + 'Hotel/3D/hotel_3d.png',
-    coffee:    FX_BASE + 'Hot%20beverage/3D/hot_beverage_3d.png',
-    speech:    FX_BASE + 'Speech%20balloon/3D/speech_balloon_3d.png',
-    umbrella:  FX_BASE + 'Closed%20umbrella/3D/closed_umbrella_3d.png'
-  };
-
-  /* Hotspot-Emoji-Map: zeigt welches 3D-Emoji für welche kind+subcategory */
-  const HS_KIND_FX = {
-    party:        'disco',
-    safe:         'shield',
-    trust:        'handshake',
-    live:         'satellite',
-    watch:        'eye',
-    community:    'hug',
-    safehaven:    'folded',
-    help_point:   'sosbtn',
-    partner_spot: 'crown'
-  };
-  const HS_SUB_FX = {
-    police:           'police',
-    hospital:         'hospital',
-    pharmacy:         'pill',
-    fire_station:     'fire',
-    helpline:         'phone',
-    counseling:       'speech',
-    women_shelter:    'female',
-    lgbtq_center:     'rainbowfl',
-    youth_center:     'backpack',
-    addiction_help:   'purpheart',
-    train_station:    'train',
-    gas_station_24h:  'fuel',
-    embassy:          'globe',
-    community_center: 'hug',
-    restaurant:       'fork',
-    bar:              'cocktail',
-    club:             'disco',
-    hotel:            'hotel',
-    cafe:             'coffee',
-    other:            'pin'
-  };
-  /* Helper: 3D-Emoji-URL für einen Hotspot bestimmen */
-  function hsFx(kind, subcategory){
-    const sub = subcategory && HS_SUB_FX[subcategory];
-    if (sub && FX[sub]) return FX[sub];
-    const k = kind && HS_KIND_FX[kind];
-    if (k && FX[k]) return FX[k];
-    return FX.pin;
-  }
-  function hsLabel(kind, subcategory){
-    const subLabels = {
-      police:'Polizei', hospital:'Krankenhaus', pharmacy:'Apotheke',
-      fire_station:'Feuerwehr', helpline:'Hotline', counseling:'Beratung',
-      women_shelter:'Frauenhaus', lgbtq_center:'LGBTQ+ Zentrum',
-      youth_center:'Jugendzentrum', addiction_help:'Suchthilfe',
-      train_station:'Bahnhof', gas_station_24h:'Tankstelle 24h',
-      embassy:'Botschaft', community_center:'Bürgerhaus',
-      restaurant:'Restaurant', bar:'Bar', club:'Club',
-      hotel:'Hotel', cafe:'Café', other:'Anlaufstelle'
-    };
-    if (subcategory && subLabels[subcategory]) return subLabels[subcategory];
-    const kindLabels = {
-      party:'Party', safe:'Safe-Spot', trust:'Trust',
-      live:'Live', watch:'Watch', community:'Community',
-      safehaven:'Schutzort', help_point:'Hilfe', partner_spot:'Partner'
-    };
-    return kindLabels[kind] || 'Spot';
-  }
-  /* Label mit 3D-Emoji als HTML — für Tags, Listen-Headers etc. */
-  function hsLabelHtml(kind, subcategory, size){
-    const px = size || 14;
-    const url = hsFx(kind, subcategory);
-    const text = hsLabel(kind, subcategory);
-    return '<img class="emo3d" style="width:' + px + 'px;height:' + px + 'px;vertical-align:-2px;margin-right:4px" src="' + url + '" alt=""/>' + esc(text);
-  }
-  /* Kurzer Code z.B. "🚓 PW", "🚒 FW", "🏥 KH" */
-  function hsShortCode(subcategory){
-    const codes = {
-      police: 'PW', fire_station: 'FW', hospital: 'KH', pharmacy: 'AP',
-      helpline: 'HL', counseling: 'BS', women_shelter: 'FH', lgbtq_center: 'LG',
-      youth_center: 'JH', addiction_help: 'SH', train_station: 'BHF',
-      gas_station_24h: '24H', community_center: 'BÜZ',
-      restaurant: 'REST', bar: 'BAR', club: 'CLUB', hotel: 'HOT', cafe: 'CAF'
-    };
-    return codes[subcategory] || null;
-  }
-  function emo3d(name, size){
-    const url = FX[name] || FX.sparkles;
-    return `<img class="emo3d ${size||''}" src="${url}" alt="" loading="lazy"/>`;
-  }
-  window.FX = FX;
-
-  /* ============= UTILS ============= */
-  const $ = id => document.getElementById(id);
-  const $$ = sel => document.querySelectorAll(sel);
-  const esc = s => String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
-  const initials = name => {
-    if (!name) return '?';
-    const p = name.trim().split(/\s+/);
-    if (p.length >= 2) return (p[0][0] + p[1][0]).toUpperCase();
-    return name.slice(0, 2).toUpperCase();
-  };
-  const timeAgo = ts => {
-    const d = (Date.now() - new Date(ts).getTime()) / 1000;
-    if (d < 60) return 'jetzt';
-    if (d < 3600) return Math.round(d/60) + 'm';
-    if (d < 86400) return Math.round(d/3600) + 'h';
-    return Math.round(d/86400) + 'd';
-  };
-  const haversine = (lat1, lng1, lat2, lng2) => {
-    const R = 6371, toRad = d => d * Math.PI / 180;
-    const dLat = toRad(lat2 - lat1), dLng = toRad(lng2 - lng1);
-    const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLng/2)**2;
-    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-  };
+  /* ============= MODUL-IMPORTS (siehe src/) =============
+     Sprint 1.1: FX, HS_*, hsFx, hsLabel, hsLabelHtml, hsShortCode, emo3d
+     stehen jetzt aus src/fx.js + src/hsfx.js auf window bereit.
+     $, $$, esc, initials, timeAgo, haversine kommen aus src/utils.js.
+     Hier nur lokale Aliasse damit der bestehende IIFE-Code weiter
+     ohne Änderung läuft. */
+  const FX_BASE   = window.FX_BASE;
+  const FX        = window.FX;
+  const HS_KIND_FX = window.HS_KIND_FX;
+  const HS_SUB_FX  = window.HS_SUB_FX;
+  const hsFx        = window.hsFx;
+  const hsLabel     = window.hsLabel;
+  const hsLabelHtml = window.hsLabelHtml;
+  const hsShortCode = window.hsShortCode;
+  const emo3d       = window.emo3d;
+  const $         = window.$;
+  const $$        = window.$$;
+  const esc       = window.esc;
+  const initials  = window.initials;
+  const timeAgo   = window.timeAgo;
+  const haversine = window.haversine;
 
   /* ============= TOAST ============= */
   let toastTimer = null;
@@ -9949,16 +9801,8 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
   }
 
   /* ============= MOOD-SYSTEM ============= */
-  const MOODS = [
-    { id: 'party',   t: 'Party',   fx: 'disco' },
-    { id: 'chill',   t: 'Chill',   fx: 'sunglasses' },
-    { id: 'easy',    t: 'Easy',    fx: 'smile' },
-    { id: 'down',    t: 'Down',    fx: 'sad' },
-    { id: 'lost',    t: 'Lost',    fx: 'confused' },
-    { id: 'help',    t: 'Hilfe',   fx: 'sosbtn' },
-    { id: 'home',    t: 'Daheim',  fx: 'house' },
-    { id: 'healthy', t: 'Healthy', fx: 'flex' }
-  ];
+  /* MOODS jetzt aus src/moods.js (Sprint 1.1 Code-Split) */
+  const MOODS = window.MOODS;
   let myMood = null, crewMoods = {};
   async function loadMood(){
     try{
