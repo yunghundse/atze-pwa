@@ -3,11 +3,26 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
-<meta name="theme-color" content="#0A0A14" />
+<meta name="theme-color" content="#8B5CF6" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="apple-mobile-web-app-title" content="crew." />
 <meta name="description" content="crew. — Connection + Safety. Für deine Crew. Niemand geht alleine heim. DSGVO-konform, EU-Server, opt-in." />
+
+<!-- Open Graph + Twitter Card (Sprint 3.6) -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content="crew. — Niemand geht alleine heim." />
+<meta property="og:description" content="Connection + Safety. Für deine Crew. DSGVO-konform, EU-Server, opt-in." />
+<meta property="og:image" content="/img/brand/og-card.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:locale" content="de_DE" />
+<meta property="og:site_name" content="crew." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="crew. — Niemand geht alleine heim." />
+<meta name="twitter:description" content="Connection + Safety. Für deine Crew." />
+<meta name="twitter:image" content="/img/brand/og-card.png" />
+
 <title>crew.</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,8 +31,13 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
-<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/img/apple-touch-icon.png">
+<!-- Favicons (Sprint 3.6) -->
+<link rel="icon" type="image/x-icon" href="/img/brand/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="/img/brand/favicon-16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/img/brand/favicon-32.png" />
+<link rel="icon" type="image/png" sizes="48x48" href="/img/brand/favicon-48.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/img/brand/apple-touch-icon-180.png" />
+<link rel="mask-icon" href="/img/brand/crew-symbol.svg" color="#8B5CF6" />
 <link rel="manifest" href="/manifest.json">
 
 <style>
@@ -4110,7 +4130,10 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
 
 <!-- AUTH SCREEN -->
 <div id="auth">
-  <img class="emo3d sz-xl auth-wave" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Waving%20hand/Default/3D/waving_hand_3d_default.png" alt=""/>
+  <!-- Sprint 3.6: Crew-Ring-Symbol als Auth-Hero statt Waving-Hand -->
+  <img class="auth-symbol" src="/img/brand/crew-symbol.svg" alt="crew."
+       style="width:96px;height:96px;margin-bottom:14px;filter:drop-shadow(0 14px 32px rgba(139,92,246,.35))"
+       onerror="this.onerror=null;this.src='/img/brand/crew-symbol.png'"/>
   <div class="auth-logo">crew<span class="dot">.</span></div>
   <p class="auth-tagline">Connection + Safety. Für deine Crew.</p>
   <div class="auth-card">

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 256" role="img" aria-label="crew. wordmark">
+
+  <style>
+    :root {
+      --violet: #8B5CF6;
+      --violet-deep: #1A1130;
+      --violet-glow: #A88CFF;
+      --off-white: #F5F3FF;
+      --sos-pink: #EC4899;
+    }
+    .violet { fill: var(--violet, #8B5CF6); }
+    .deep { fill: var(--violet-deep, #1A1130); }
+    .glow-fill { fill: var(--violet-glow, #A88CFF); }
+    .offwhite { fill: var(--off-white, #F5F3FF); }
+    .stroke-violet { stroke: var(--violet, #8B5CF6); }
+    .stroke-glow { stroke: var(--violet-glow, #A88CFF); }
+    .word { font-family: "Avenir Next", "Inter Display", Inter, Geist, system-ui, sans-serif; font-weight: 600; letter-spacing: 0; }
+    .tag { font-family: "Avenir Next", Inter, Geist, system-ui, sans-serif; font-weight: 500; letter-spacing: 0; }
+  </style>
+
+  <text x="72" y="184" class="word offwhite" font-size="174">crew</text>
+  <circle cx="526" cy="168" r="15.5" class="violet"/>
+</svg>

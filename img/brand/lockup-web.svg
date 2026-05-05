@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 120" role="img" aria-label="crew. web header lockup">
+
+  <style>
+    :root {
+      --violet: #8B5CF6;
+      --violet-deep: #1A1130;
+      --violet-glow: #A88CFF;
+      --off-white: #F5F3FF;
+      --sos-pink: #EC4899;
+    }
+    .violet { fill: var(--violet, #8B5CF6); }
+    .deep { fill: var(--violet-deep, #1A1130); }
+    .glow-fill { fill: var(--violet-glow, #A88CFF); }
+    .offwhite { fill: var(--off-white, #F5F3FF); }
+    .stroke-violet { stroke: var(--violet, #8B5CF6); }
+    .stroke-glow { stroke: var(--violet-glow, #A88CFF); }
+    .word { font-family: "Avenir Next", "Inter Display", Inter, Geist, system-ui, sans-serif; font-weight: 600; letter-spacing: 0; }
+    .tag { font-family: "Avenir Next", Inter, Geist, system-ui, sans-serif; font-weight: 500; letter-spacing: 0; }
+  </style>
+
+  <rect width="1024" height="120" class="deep"/>
+  <g transform="translate(44 28) scale(.0625)">
+    <path d="M 765.94 689.81 L 755.42 703.95 L 744.12 717.48 L 732.06 730.34 L 719.29 742.50 L 705.86 753.91 L 691.80 764.53 L 677.15 774.35 L 661.97 783.31 L 646.31 791.39 L 630.21 798.58 L 613.73 804.83 L 596.92 810.14 L 579.84 814.49 L 562.54 817.85 L 545.07 820.23 L 527.50 821.61 L 509.87 821.99 L 492.26 821.37 L 474.70 819.75 L 457.27 817.13 L 440.02 813.53 L 422.99 808.95 L 406.26 803.41 L 389.87 796.93 L 373.87 789.52 L 358.32 781.22 L 343.26 772.05 L 328.76 762.04 L 314.84 751.22 L 301.56 739.63 L 288.96 727.30 L 277.09 714.27 L 265.97 700.60 L 255.65 686.31 L 246.15 671.45 L 237.52 656.08 L 229.77 640.25 L 222.94 624.00 L 217.04 607.39 L 212.10 590.47 L 208.12 573.30 L 205.13 555.93 L 203.13 538.41 L 202.13 520.81 L 202.13 503.19 L 203.13 485.59 L 205.13 468.07 L 208.12 450.70 L 212.10 433.53 L 217.04 416.61 L 222.94 400.00 L 229.77 383.75 L 237.52 367.92 L 246.15 352.55 L 255.65 337.69 L 265.97 323.40 L 277.09 309.73 L 288.96 296.70 L 301.56 284.37 L 314.84 272.78 L 328.76 261.96 L 343.26 251.95 L 358.32 242.78 L 373.87 234.48 L 389.87 227.07 L 406.26 220.59 L 422.99 215.05 L 440.02 210.47 L 457.27 206.87 L 474.70 204.25 L 492.26 202.63 L 509.87 202.01 L 527.50 202.39 L 545.07 203.77 L 562.54 206.15 L 579.84 209.51 L 596.92 213.86 L 613.73 219.17 L 630.21 225.42 L 646.31 232.61 L 661.97 240.69 L 677.15 249.65 L 691.80 259.47 L 705.86 270.09 L 719.29 281.50 L 732.06 293.66 L 744.12 306.52 L 755.42 320.05 L 765.94 334.19" fill="none" class="stroke-violet" stroke-width="112" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="512" cy="512" r="84" class="glow-fill"/>
+  </g>
+  <text x="132" y="63" class="word offwhite" font-size="58">crew</text>
+  <circle cx="282" cy="58" r="5.1" class="violet"/>
+  <text x="135" y="94" class="tag offwhite" font-size="19">Connection + Safety. Für deine Crew.</text>
+</svg>
