@@ -4626,7 +4626,8 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     <p class="modal-sub" style="text-align:center">Familie, Festival-Buddies, Uni-Klasse … private Gruppe mit Chat + Live-Map.</p>
     <div class="cc-tabs">
       <button class="cc-tab on" data-cc-tab="create">Erstellen</button>
-      <button class="cc-tab" data-cc-tab="join">Beitreten</button>
+      <button class="cc-tab" data-cc-tab="join">Code</button>
+      <button class="cc-tab" data-cc-tab="discover">Entdecken</button>
     </div>
     <div id="ccPanelCreate">
       <div class="field"><label>Crew-Name</label><input id="ccName" placeholder="z.B. Stuttgart Squad" maxlength="60"/></div>
@@ -4643,6 +4644,10 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
         <button class="btn-sec" data-close="crewCreateModal">Abbrechen</button>
         <button class="btn-pri" id="ccJoinBtn">Beitreten</button>
       </div>
+    </div>
+    <div id="ccPanelDiscover" hidden>
+      <div class="field"><input id="ccDiscoverQ" placeholder="Suche öffentliche Crews …" maxlength="60"/></div>
+      <div id="ccDiscoverList" class="uc-list" style="padding:0;max-height:340px;overflow-y:auto"></div>
     </div>
     <div id="ccError" class="auth-error"></div>
   </div>
@@ -8013,8 +8018,52 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     $$('.cc-tab').forEach(x => x.classList.toggle('on', x === b));
     $('ccPanelCreate').hidden = mode !== 'create';
     $('ccPanelJoin').hidden = mode !== 'join';
+    $('ccPanelDiscover').hidden = mode !== 'discover';
     $('ccError').classList.remove('show');
+    if (mode === 'discover') loadDiscoverCrews();
   }));
+  let discoverQTimer = null;
+  $('ccDiscoverQ')?.addEventListener('input', () => {
+    if (discoverQTimer) clearTimeout(discoverQTimer);
+    discoverQTimer = setTimeout(loadDiscoverCrews, 250);
+  });
+  async function loadDiscoverCrews(){
+    const host = $('ccDiscoverList'); if (!host) return;
+    host.innerHTML = '<div class="empty"><div class="spinner" style="margin:20px auto"></div></div>';
+    try{
+      const q = $('ccDiscoverQ')?.value || '';
+      const r = await sb.rpc('discover_public_crews', { p_query: q || null, p_limit: 30 });
+      const data = (r && r.data) || [];
+      if (!data.length){
+        host.innerHTML = '<div class="uc-empty" style="padding:20px"><img class="emo3d" style="width:40px;height:40px" src="' + FX.search + '" alt=""/><h4 style="margin-top:8px;font-size:14px">Nichts gefunden</h4><p style="font-size:12px">Probier einen anderen Suchbegriff oder erstell deine eigene Crew.</p></div>';
+        return;
+      }
+      host.innerHTML = data.map(c => {
+        const fxKey = c.emoji && FX[c.emoji] ? c.emoji : 'crew';
+        const inLabel = c.is_member ? '✓ Drin' : 'Beitreten';
+        const inCls = c.is_member ? 'in' : '';
+        return '<div class="uc-item">' +
+          '<div class="uc-item-emo"><img class="emo3d" src="' + FX[fxKey] + '" alt=""/></div>' +
+          '<div class="uc-item-info">' +
+            '<div class="uc-item-name">' + esc(c.name) + '</div>' +
+            '<div class="uc-item-meta">' + c.member_count + ' Mitglied' + (c.member_count !== '1' ? 'er' : '') + (c.description ? ' · ' + esc(c.description.slice(0, 40)) : '') + '</div>' +
+          '</div>' +
+          '<button class="cw-circle-btn ' + inCls + '" data-join-id="' + c.id + '"' + (c.is_member ? ' disabled' : '') + '>' + inLabel + '</button>' +
+        '</div>';
+      }).join('');
+      host.querySelectorAll('[data-join-id]').forEach(b => b.addEventListener('click', async () => {
+        const id = b.dataset.joinId;
+        b.disabled = true; b.textContent = 'Trete bei …';
+        try{
+          const r2 = await sb.rpc('join_public_crew', { p_crew_id: id });
+          if (r2.error) throw r2.error;
+          toast('Crew beigetreten', null, null, 'success');
+          closeModal('crewCreateModal');
+          await renderMyCrewsList();
+        }catch(e){ toast('Fehler: ' + (e.message || e)); b.disabled = false; b.textContent = 'Beitreten'; }
+      }));
+    }catch(e){ host.innerHTML = '<div class="uc-empty"><h4>Fehler</h4></div>'; }
+  }
   $$('[data-close="crewCreateModal"]').forEach(b => b.addEventListener('click', () => closeModal('crewCreateModal')));
   $('ccCreateBtn').addEventListener('click', async () => {
     const name = $('ccName').value.trim();
