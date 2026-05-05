@@ -5793,6 +5793,22 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
 (function(){
   'use strict';
 
+  /* QW-3: Console-Silencer für Production. ?debug=1 oder localhost
+     reaktiviert. Verhindert dass interne Errors / State-Objekte im
+     Devtools für Pioneer-User leaken. */
+  (function(){
+    const isDev = location.hostname === 'localhost'
+               || location.hostname === '127.0.0.1'
+               || location.search.includes('debug=1');
+    if (!isDev) {
+      ['log','debug','info','warn','error'].forEach(m => {
+        const original = console[m].bind(console);
+        console[m] = function(){ /* silenced in prod */ };
+        console['__' + m + '__'] = original;  /* recover via console.__warn__('foo') */
+      });
+    }
+  })();
+
   const SUPABASE_URL = 'https://mzggdhowhyoytnvwtvpc.supabase.co';
   const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im16Z2dkaG93aHlveXRudnd0dnBjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNzc0NTUsImV4cCI6MjA5MTc1MzQ1NX0.eHZNiXtG6xO5occz2oA2U271trclqwmA-t3R3JkGOU8';
 
@@ -6199,10 +6215,14 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     function tryLastKnown(){
       try{
         const v = JSON.parse(localStorage.getItem('crew_last_loc') || 'null');
-        if (v && typeof v.lat === 'number' && Date.now() - v.t < 7*86400e3){
+        /* QW-4: TTL auf 24h verschärft (war 7 Tage). Standort-Daten
+           sind DSGVO-relevant und sollen nicht unbegrenzt cachen. */
+        if (v && typeof v.lat === 'number' && Date.now() - v.t < 24*3600e3){
           userLat = v.lat; userLng = v.lng;
           return true;
         }
+        /* Stale-Daten bewusst entfernen statt nur ignorieren */
+        if (v) localStorage.removeItem('crew_last_loc');
       }catch(_){}
       return false;
     }
