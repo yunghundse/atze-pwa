@@ -66,12 +66,14 @@ a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer;border:0
 /* Legacy class kept for compat */
 .hero-logo{display:block;width:100%;max-width:520px;height:auto;margin:0 auto 18px}
 
-/* Logo v2 — animated WebM mit PNG-Fallback */
-.hero-logo-wrap{position:relative;width:100%;max-width:580px;margin:0 auto 18px;aspect-ratio:1920/1080;opacity:0;transform:translateY(30px);animation:rise .9s cubic-bezier(.2,.8,.2,1) .05s forwards}
+/* Logo v2 — dezenter, kleiner, mit subtiler Glow-Pulse statt brachialer Animation */
+.hero-logo-wrap{position:relative;width:100%;max-width:340px;margin:0 auto 12px;aspect-ratio:1920/1080;opacity:0;transform:translateY(20px);animation:rise .9s cubic-bezier(.2,.8,.2,1) .05s forwards}
 .hero-logo-video,.hero-logo-fallback{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
-.hero-logo-video{display:block;z-index:2}
-.hero-logo-fallback{z-index:1}
-@media (max-width:520px){.hero-logo-wrap{max-width:380px}}
+.hero-logo-video{display:none}/* WebM ausgeschaltet — zu auffällig im Hero. Statisches PNG bleibt. */
+.hero-logo-fallback{z-index:1;animation:logoBreath 6s ease-in-out infinite}
+@keyframes logoBreath{0%,100%{filter:drop-shadow(0 0 18px rgba(168,140,255,.25))}50%{filter:drop-shadow(0 0 32px rgba(168,140,255,.45))}}
+@media (max-width:520px){.hero-logo-wrap{max-width:260px}}
+@media (prefers-reduced-motion:reduce){.hero-logo-fallback{animation:none}}
 
 /* Pillar-Cards mit Lifestyle-Bildern als Background */
 .pillar-card{overflow:hidden}
@@ -1434,15 +1436,15 @@ body::after{
   </div>
 </section>
 
-<!-- MANIFESTO — Wofür wir stehen -->
-<section class="manifesto">
+<!-- MANIFESTO — Warum wir das bauen -->
+<section class="manifesto" style="background:linear-gradient(180deg,rgba(15,10,31,.94),rgba(15,10,31,.96)),url(/img/lifestyle/05_wg_kueche.jpg) #0F0A1F;background-size:cover;background-position:center">
   <div class="manifesto-inner">
-    <div class="section-tag">Wofür wir stehen</div>
-    <h2>Kein Startup-Gelaber.<br>Nur Leute mit <span class="hl">einer Mission.</span></h2>
-    <p>crew. wurde nicht gegründet, um reich zu werden. Sondern weil wir selbst wissen, wie es sich anfühlt, auf einem Festival oder in einer fremden Stadt zu landen und nicht die richtige Crew zu haben.</p>
-    <p>crew. ist kein Produkt. Es ist eine Bewegung. Der beste Urlaub hängt nicht vom Hotel ab, sondern von den Menschen um dich rum. Und genau dafür bauen wir das hier — mit euch, für euch, von Anfang an.</p>
-    <p>Jede Idee, jedes Feature, jede Entscheidung — ihr seid dabei. Weil crew. euch gehört, nicht uns.</p>
-    <div class="sig"><span>crew.</span></div>
+    <div class="section-tag" style="color:#A88CFF">Warum wir das bauen</div>
+    <h2 style="color:#F5F3FF">Niemand sollte allein heim&shy;gehen.<br/>Auch <span class="hl">du nicht.</span></h2>
+    <p>Wir kennen das Gefühl, wenn der Heimweg um 3 Uhr leiser ist als der Club zwei Stunden vorher. Wenn die Crew weg ist und das Handy zu hell. Wenn man eigentlich schon fast da ist — aber eben nur fast.</p>
+    <p>crew. ist keine App, die mit dir reich werden will. Es ist eine kleine Schutz-Schicht für die Leute, denen du sowieso vertraust. Mehr nicht. Du wählst, wer dabei ist. Wir verkaufen niemandem deine Daten. Niemals.</p>
+    <p style="color:#A88CFF">Gemacht in Stuttgart, getestet auf echten Heimwegen.</p>
+    <div class="sig"><span style="color:#F5F3FF">crew<span style="color:#8B5CF6">.</span></span></div>
   </div>
 </section>
 
@@ -1497,11 +1499,11 @@ body::after{
   </div>
 </section>
 
-<!-- COMMUNITY CTA -->
+<!-- COMMUNITY CTA — neue Brand-Voice -->
 <section class="community-cta">
   <div class="community-cta-inner">
-    <h3>Sei Teil der Crew. Von Tag 1.</h3>
-    <p>Folg uns, bleib dran und bring deine Leute mit. Je größer die Crew, desto geiler wird der Sommer.</p>
+    <h3>Wir bauen das öffentlich.</h3>
+    <p>Jede Woche siehst du, was reinkommt — Features, Bug-Fixes, was die ersten Pioniere gefunden haben. Auf WhatsApp und Instagram, ohne Marketing-Blabla.</p>
     <div class="community-socials">
       <a href="https://whatsapp.com/channel/0029VbD10Vg3GJOtfhXJDG2e" target="_blank" rel="noopener" class="csocial wa">
         <svg viewBox="0 0 24 24" fill="none"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" fill="currentColor"/><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.832-1.438A9.955 9.955 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a7.96 7.96 0 01-4.107-1.138l-.293-.176-2.862.852.852-2.862-.176-.293A7.96 7.96 0 014 12c0-4.411 3.589-8 8-8s8 3.589 8 8-3.589 8-8 8z" fill="currentColor"/></svg>
