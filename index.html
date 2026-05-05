@@ -4,19 +4,26 @@
 <meta http-equiv="X-Frame-Options" content="DENY">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<title>crew. — Allein hin, zusammen safe.</title>
-<meta name="description" content="crew. — Safety + Connection für deine Freundesgruppe. SOS, Live-Standort, Mood, Safety-Circle. Wisst gegenseitig wo ihr seid und ob alles ok ist. Vom Festival bis zum Heimweg.">
-<meta name="theme-color" content="#050507">
-<meta property="og:title" content="crew. — Allein hin, zusammen safe.">
-<meta property="og:description" content="Connection + Safety App für Freundesgruppen. SOS, Live-Standort, Safety-Circle, gegenseitige Status-Updates.">
+<title>crew. — Niemand geht alleine heim.</title>
+<meta name="description" content="crew. — Connection + Safety. Für deine Crew. Niemand geht alleine heim. DSGVO-konform, EU-Server in Frankfurt, opt-in.">
+<meta name="theme-color" content="#8B5CF6">
+<meta property="og:title" content="crew. — Niemand geht alleine heim.">
+<meta property="og:description" content="Connection + Safety. Für deine Crew. DSGVO-konform, EU-Server, opt-in.">
 <meta property="og:type" content="website">
-<meta property="og:image" content="https://partycrew.app/og.jpg">
+<meta property="og:image" content="https://partycrew.app/img/brand/og-card.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:url" content="https://partycrew.app">
+<meta property="og:site_name" content="crew.">
 <meta property="og:locale" content="de_DE">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://partycrew.app/og.jpg">
+<meta name="twitter:title" content="crew. — Niemand geht alleine heim.">
+<meta name="twitter:description" content="Connection + Safety. Für deine Crew.">
+<meta name="twitter:image" content="https://partycrew.app/img/brand/og-card.png">
+<link rel="icon" type="image/x-icon" href="/img/brand/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/img/brand/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/img/brand/apple-touch-icon-180.png">
+<link rel="mask-icon" href="/img/brand/crew-symbol.svg" color="#8B5CF6">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -24,14 +31,14 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
-body{background:#050507;color:#FAFAFA;font-family:'Inter',system-ui,sans-serif;font-weight:400;line-height:1.55;overflow-x:hidden}
+body{background:#0F0A1F;color:#F5F3FF;font-family:'Inter',system-ui,sans-serif;font-weight:400;line-height:1.55;overflow-x:hidden}
 a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
-:root{--bg:#050507;--fg:#FAFAFA;--muted:#888;--o:#FF6D2E;--gold:linear-gradient(135deg,#FF6D2E,#FFD60A);--line:rgba(255,255,255,.06);--r:18px}
+:root{--bg:#0F0A1F;--fg:#F5F3FF;--muted:#A88CFF;--o:#8B5CF6;--gold:linear-gradient(135deg,#8B5CF6,#A88CFF);--line:rgba(168,140,255,.12);--r:18px}
 .hp-trap{position:absolute !important;left:-9999px !important;top:-9999px !important;width:1px !important;height:1px !important;opacity:0 !important;pointer-events:none !important;}
 
 /* NAV */
 .nav{position:fixed;top:0;left:0;right:0;z-index:50;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);background:rgba(5,5,7,.65);border-bottom:1px solid var(--line)}
-.logo{font-size:28px;font-weight:900;letter-spacing:-1px}.logo .dot{background:var(--gold);-webkit-background-clip:text;background-clip:text;color:transparent}
+.logo{font-size:28px;font-weight:900;letter-spacing:-1px;color:#F5F3FF}.logo .dot{color:#8B5CF6}
 .nav-pill{display:flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;border:1px solid rgba(255,109,46,.3);padding:8px 16px;border-radius:999px;color:var(--o);transition:all .2s}
 .nav-pill:hover{background:rgba(255,109,46,.08);border-color:rgba(255,109,46,.5)}
 .pulse-dot{width:7px;height:7px;background:var(--o);border-radius:999px;animation:pulse 1.6s infinite}
@@ -1107,30 +1114,30 @@ body::after{
 <!-- NAV -->
 <header class="nav">
   <a href="#" class="logo">crew<span class="dot">.</span></a>
-  <a href="#wl" class="nav-pill"><span class="pulse-dot"></span>Warteliste offen</a>
+  <a href="#wl" class="nav-pill"><span class="pulse-dot"></span>Warteliste · Stuttgart-Pioneer</a>
 </header>
 
 <!-- HERO + WAITLIST -->
 <section class="hero">
   <div class="hero-bg"></div>
   <div class="hero-inner">
-    <div class="hero-eyebrow">Die Event-App für deine Crew · Europa · 2026</div>
+    <div class="hero-eyebrow">Connection + Safety · Für deine Crew · DSGVO-konform</div>
     <div class="hook">
-      <span class="word">Allein</span>
+      <span class="word">Niemand</span>
     </div>
     <div class="hook" style="margin-top:.05em">
-      <span class="word">hin,</span>
+      <span class="word">geht</span>
     </div>
     <div class="hook" style="margin-top:.05em">
-      <span class="word">zusammen</span>
+      <span class="word">alleine</span>
     </div>
     <div class="hook" style="margin-top:.05em">
-      <span class="word">safe.</span>
+      <span class="word">heim.</span>
     </div>
     <div class="hook" style="margin-top:.05em">
       <span class="word brand">crew<span class="dot">.</span></span>
     </div>
-    <p class="hero-sub">Connection + Safety für deine Freundesgruppe. SOS, Live-Standort, Mood-Status — wisst gegenseitig wo ihr seid und ob alles ok ist. Vom Festival bis zum Heimweg.</p>
+    <p class="hero-sub">Deine echte Crew, plus eine Live-Schutz-Schicht. Standort, Heimweg, SOS — alles opt-in, alles gewählt. Kein Massen-Tracking, kein Doom-Scroll. EU-Server in Frankfurt, Daten gehören dir.</p>
     <form class="wl-card" id="wlForm" novalidate>
       <input type="text" name="website" id="wlHp" class="hp-trap" tabindex="-1" autocomplete="off" aria-hidden="true">
       <h2>Trag dich in die Warteliste ein</h2>
