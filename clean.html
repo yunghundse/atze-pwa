@@ -1506,26 +1506,41 @@ a{ color: var(--c-violet-3); text-decoration: none; }
 
 /* Hotspot-Detail: Kontakt-Buttons + Partner-Card */
 .dt-contact-row{
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
   margin-top: 4px;
 }
-.dt-contact-btn{
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 7px 11px;
-  font-size: 12px;
-  font-weight: 700;
-  background: rgba(139,92,246,.14);
-  color: var(--c-violet-3);
-  border: .5px solid rgba(139,92,246,.4);
-  border-radius: var(--r-2);
-  text-decoration: none;
-  transition: background .15s var(--ease);
+.dt-contact-row:has(.dt-contact-btn:nth-child(2):last-child){
+  grid-template-columns: repeat(2, 1fr);
 }
-.dt-contact-btn:hover{ background: rgba(139,92,246,.25); }
+.dt-contact-row:has(.dt-contact-btn:first-child:last-child){
+  grid-template-columns: 1fr;
+}
+.dt-contact-btn{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 12px 8px;
+  font-size: 11px;
+  font-weight: 800;
+  background: var(--c-surface-2);
+  color: var(--c-text);
+  border: .5px solid var(--c-violet-line);
+  border-radius: var(--r-3);
+  text-decoration: none;
+  transition: background .15s var(--ease), border-color .2s;
+}
+.dt-contact-btn:hover{ background: rgba(139,92,246,.14); border-color: rgba(139,92,246,.5); }
+.dt-contact-btn img.emo3d{ width: 28px; height: 28px; margin-bottom: 4px; }
+.dt-contact-btn .dt-cb-t{ font-size: 12px; color: #fff; font-weight: 800; }
+.dt-contact-btn .dt-cb-s{ font-size: 10px; color: var(--c-text-3); margin-top: 2px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dt-contact-btn.primary{
+  background: linear-gradient(135deg, rgba(40,200,120,.15), rgba(40,200,120,.06));
+  border-color: rgba(40,200,120,.4);
+}
+.dt-contact-btn.primary .dt-cb-t{ color: #6EE7B7; }
 .dt-partner-card{
   display: flex;
   gap: 12px;
@@ -7130,12 +7145,23 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     if (h.opening_hours){
       descHtml += (descHtml ? '<br/>' : '') + '<span style="color:var(--c-text-3);font-size:12px">🕒 ' + esc(h.opening_hours) + '</span>';
     }
-    /* Kontakt-Buttons */
+    /* Kontakt-Buttons (Telefon, Webseite, Maps) */
     const kontaktBtns = [];
-    if (h.contact_phone) kontaktBtns.push('<a href="tel:' + esc(h.contact_phone) + '" class="dt-contact-btn">📞 ' + esc(h.contact_phone) + '</a>');
-    if (h.contact_website) kontaktBtns.push('<a href="' + esc(h.contact_website) + '" target="_blank" rel="noopener noreferrer" class="dt-contact-btn">🌐 Webseite</a>');
-    /* Open in Maps */
-    if (h.lat && h.lng) kontaktBtns.push('<a href="https://www.openstreetmap.org/?mlat=' + h.lat + '&mlon=' + h.lng + '#map=18/' + h.lat + '/' + h.lng + '" target="_blank" rel="noopener noreferrer" class="dt-contact-btn">🗺 Auf Karte</a>');
+    if (h.contact_phone){
+      kontaktBtns.push('<a href="tel:' + esc(h.contact_phone) + '" class="dt-contact-btn primary"><img class="emo3d" src="' + FX.phone + '" alt=""/><span class="dt-cb-t">Anrufen</span><span class="dt-cb-s">' + esc(h.contact_phone) + '</span></a>');
+    }
+    if (h.contact_website){
+      const niceWeb = (h.contact_website || '').replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '').slice(0, 30);
+      kontaktBtns.push('<a href="' + esc(h.contact_website) + '" target="_blank" rel="noopener noreferrer" class="dt-contact-btn"><img class="emo3d" src="' + FX.globe + '" alt=""/><span class="dt-cb-t">Webseite</span><span class="dt-cb-s">' + esc(niceWeb) + '</span></a>');
+    }
+    /* Open in Maps — auto-pick zwischen Apple Maps (iOS) und Google Maps */
+    if (h.lat && h.lng){
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent || '');
+      const mapUrl = isIOS
+        ? 'https://maps.apple.com/?ll=' + h.lat + ',' + h.lng + '&q=' + encodeURIComponent(h.name || '')
+        : 'https://www.google.com/maps/dir/?api=1&destination=' + h.lat + ',' + h.lng + '&destination_place_id=' + encodeURIComponent(h.name || '');
+      kontaktBtns.push('<a href="' + mapUrl + '" target="_blank" rel="noopener noreferrer" class="dt-contact-btn"><img class="emo3d" src="' + FX.map + '" alt=""/><span class="dt-cb-t">Route</span><span class="dt-cb-s">' + (isIOS ? 'Apple Maps' : 'Google Maps') + '</span></a>');
+    }
     if (kontaktBtns.length){
       descHtml += (descHtml ? '<br/><br/>' : '') + '<div class="dt-contact-row">' + kontaktBtns.join('') + '</div>';
     }
