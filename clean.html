@@ -998,6 +998,23 @@ a{ color: var(--c-violet-3); text-decoration: none; }
   display: flex; align-items: center; justify-content: center;
 }
 .uc-item-badge.empty{ display: none; }
+.uc-item.pinned{
+  border-color: rgba(255,214,10,.4);
+  background: linear-gradient(135deg, rgba(255,214,10,.08), rgba(139,92,246,.04));
+}
+.uc-pin-btn{
+  flex: none;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.04);
+  color: var(--c-text-3);
+  display: flex; align-items: center; justify-content: center;
+  transition: background .15s, color .15s, transform .15s;
+}
+.uc-pin-btn svg{ width: 18px; height: 18px; }
+.uc-pin-btn:hover{ background: rgba(255,214,10,.14); color: var(--c-gold); }
+.uc-pin-btn.on{ background: rgba(255,214,10,.2); color: var(--c-gold); }
+.uc-pin-mark{ font-size: 12px; }
 .uc-empty{
   padding: 40px 24px;
   text-align: center;
@@ -8132,18 +8149,38 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
         host.innerHTML = '<div class="uc-list">' + myCrewsCache.map(c => {
           const fxKey = c.emoji && FX[c.emoji] ? c.emoji : 'crew';
           const lastTime = c.last_msg_at ? timeAgo(c.last_msg_at) : 'noch keine Nachrichten';
-          return '<div class="uc-item" data-id="' + c.id + '">' +
+          const pinIcon = c.pinned
+            ? '<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="17" x2="12" y2="22"/><path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79L16 12.5V8h.5a.5.5 0 0 0 .5-.5v-2a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v2a.5.5 0 0 0 .5.5H8v4.5l-1.89.95A2 2 0 0 0 5 15.24V17z"/></svg>'
+            : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="17" x2="12" y2="22"/><path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79L16 12.5V8h.5a.5.5 0 0 0 .5-.5v-2a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v2a.5.5 0 0 0 .5.5H8v4.5l-1.89.95A2 2 0 0 0 5 15.24V17z"/></svg>';
+          return '<div class="uc-item ' + (c.pinned ? 'pinned' : '') + '" data-id="' + c.id + '">' +
             '<div class="uc-item-emo"><img class="emo3d" src="' + FX[fxKey] + '" alt=""/></div>' +
             '<div class="uc-item-info">' +
-              '<div class="uc-item-name">' + esc(c.name) + (c.my_role === 'owner' ? ' <span style="font-size:9px;background:rgba(255,214,10,.2);color:var(--c-gold);padding:2px 6px;border-radius:6px;font-weight:800">OWNER</span>' : '') + '</div>' +
+              '<div class="uc-item-name">' + esc(c.name) +
+                (c.pinned ? ' <span class="uc-pin-mark">📌</span>' : '') +
+                (c.my_role === 'owner' ? ' <span style="font-size:9px;background:rgba(255,214,10,.2);color:var(--c-gold);padding:2px 6px;border-radius:6px;font-weight:800">OWNER</span>' : '') +
+              '</div>' +
               '<div class="uc-item-meta">' + c.member_count + ' Mitglied' + (c.member_count !== '1' ? 'er' : '') + ' · ' + esc(lastTime) + '</div>' +
             '</div>' +
+            '<button class="uc-pin-btn ' + (c.pinned ? 'on' : '') + '" data-pin="' + c.id + '" title="' + (c.pinned ? 'Pin lösen' : 'Anheften') + '">' + pinIcon + '</button>' +
           '</div>';
         }).join('') + '</div>' +
         '<button class="uc-add-fab" id="ucAddFab" title="Neue Crew"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>';
-        host.querySelectorAll('.uc-item').forEach(it => it.addEventListener('click', () => {
+        host.querySelectorAll('.uc-item').forEach(it => it.addEventListener('click', (e) => {
+          if (e.target.closest('.uc-pin-btn')) return;
           const c = myCrewsCache.find(x => x.id === it.dataset.id);
           if (c) openCrewDetail(c);
+        }));
+        host.querySelectorAll('[data-pin]').forEach(b => b.addEventListener('click', async (e) => {
+          e.stopPropagation();
+          const id = b.dataset.pin;
+          b.disabled = true;
+          try{
+            const r = await sb.rpc('toggle_crew_pin', { p_crew_id: id });
+            if (r.error) throw r.error;
+            const pinned = r.data && r.data.pinned;
+            toast(pinned ? 'Crew angeheftet' : 'Pin gelöst', null, null, 'info');
+            await renderMyCrewsList();
+          }catch(e){ toast('Fehler: ' + (e.message || e)); b.disabled = false; }
         }));
         $('ucAddFab')?.addEventListener('click', () => openCrewCreateModal('create'));
       }
