@@ -140,18 +140,18 @@ a{ color: var(--c-violet-3); text-decoration: none; }
   animation: emoFloat 4s ease-in-out infinite;
 }
 .auth-logo{
+  /* Bug-Fix E2E #5: Wortmarke jetzt off-white statt komplett-violet,
+     damit sie zum GPT-Brand-Lockup matcht. Punkt bleibt violet als
+     Brand-Element (siehe BRAND_MANIFESTO). */
   font-size: 56px;
   font-weight: 900;
   letter-spacing: -.04em;
   margin-bottom: var(--s-2);
-  background: linear-gradient(135deg, var(--c-violet), var(--c-violet-3));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #F5F3FF;
   line-height: 1;
 }
 .auth-logo .dot{
-  -webkit-text-fill-color: var(--c-violet);
+  color: var(--c-violet);
 }
 .auth-tagline{
   font-size: var(--t-3);
@@ -8980,9 +8980,10 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     });
     /* Stealth */
     $('setStealthTog').classList.toggle('on', !!profile.safety_sos_stealth);
-    /* Privacy */
-    $('setShareLoc').classList.toggle('on', profile.safety_share_location !== false);
-    $('setHideLast').classList.toggle('on', !!profile.hide_last_seen_from);
+    /* Privacy — Bug-Fix E2E #7: setShareLoc existiert nicht (heißt jetzt
+       setShareLive). Null-checks für alle Privacy-Toggles. */
+    if ($('setShareLoc')) $('setShareLoc').classList.toggle('on', profile.safety_share_location !== false);
+    if ($('setHideLast')) $('setHideLast').classList.toggle('on', !!profile.hide_last_seen_from);
     $('setShowTree').classList.toggle('on', profile.show_circle_tree !== false);
     $('setWorldRank').classList.toggle('on', !!profile.show_in_world_ranking);
     if ($('setShareLive')) $('setShareLive').classList.toggle('on', !!profile.share_live_with_crew);
@@ -9119,14 +9120,10 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     toast(on ? 'Stealth-Mode aktiv' : 'Stealth-Mode aus');
   });
 
-  /* Privacy Toggles */
-  $('setShareLoc').addEventListener('click', async () => {
-    const on = !$('setShareLoc').classList.contains('on');
-    $('setShareLoc').classList.toggle('on', on);
-    await sb.from('profiles').update({ safety_share_location: on }).eq('user_id', user.id);
-    profile.safety_share_location = on;
-  });
-  $('setHideLast').addEventListener('click', async () => {
+  /* Privacy Toggles — Bug-Fix E2E #7: setShareLoc-Element existiert nicht
+     mehr (heißt jetzt setShareLive, schon weiter oben verdrahtet). Block
+     entfernt damit init nicht crasht. */
+  if ($('setHideLast')) $('setHideLast').addEventListener('click', async () => {
     const on = !$('setHideLast').classList.contains('on');
     $('setHideLast').classList.toggle('on', on);
     await sb.from('profiles').update({ hide_last_seen_from: on ? [user.id] : null }).eq('user_id', user.id);
@@ -10248,8 +10245,12 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     profile.onboarding_completed_at = new Date().toISOString();
   }
   function maybeStartOnboarding(){
-    /* Wenn neu: kein onboarding_completed_at und kein name */
-    if (!profile.onboarding_completed_at && !profile.name){
+    /* Bug-Fix E2E #2: DB-Trigger handle_new_user setzt name='Neuer User'
+       als Default — dadurch war !profile.name immer false und Tour
+       lief nie. Jetzt nur noch onboarding_completed_at als Gate, plus
+       Default-Name als zusätzliches Signal dass Setup fehlt. */
+    const hasNoRealName = !profile.name || profile.name === 'Neuer User' || profile.name === 'Neuer Atze';
+    if (!profile.onboarding_completed_at && hasNoRealName){
       setTimeout(startOnboarding, 1500);
     }
   }
