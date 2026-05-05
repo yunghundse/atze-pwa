@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 360" role="img" aria-labelledby="title desc">
+  <title id="title">crew.</title>
+  <desc id="desc">Lowercase crew wordmark with a prominent glowing violet point.</desc>
+  <style>
+    :root{--violet-mid:#8B5CF6;--violet-hell:#A88CFF;--violet-tief:#6B3FE6;--violet-deep:#1A1130;--off-white:#F5F3FF}
+    .word{font:700 220px "Avenir Next","Inter Display","Inter",system-ui,sans-serif;letter-spacing:-.045em;fill:var(--violet-mid)}
+    .halo{filter:url(#soft);opacity:.6}.point{fill:var(--violet-hell);filter:url(#point)}
+  </style>
+  <defs>
+    <filter id="soft" x="-20%" y="-60%" width="140%" height="220%"><feGaussianBlur stdDeviation="9" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="point" x="-240%" y="-240%" width="580%" height="580%"><feGaussianBlur stdDeviation="16" result="g"/><feColorMatrix in="g" values="0 0 0 0 .658 0 0 0 0 .549 0 0 0 0 1 0 0 0 .95 0" result="c"/><feMerge><feMergeNode in="c"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <text class="word halo" x="162" y="238">crew</text>
+  <text class="word" x="162" y="238">crew</text>
+  <circle class="point" cx="921" cy="223" r="24"/>
+</svg>

@@ -46,7 +46,8 @@ a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer;border:0
 
 /* HERO — fullscreen, centered (Schritt 2: 3D-Sticker + Aura statt Unsplash) */
 .hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:100px 24px 60px;overflow:hidden;background:#0F0A1F}
-.hero-bg{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse at 30% 20%, rgba(139,92,246,.18) 0%, transparent 45%), radial-gradient(ellipse at 75% 70%, rgba(168,140,255,.12) 0%, transparent 50%), #0F0A1F}
+.hero-bg{position:absolute;inset:0;z-index:0;background:linear-gradient(180deg,rgba(15,10,31,.94),rgba(15,10,31,.96)),url(/img/lifestyle/04_festival_crew.jpg) #0F0A1F;background-size:cover;background-position:center}
+.hero-bg::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%, rgba(139,92,246,.18) 0%, transparent 45%), radial-gradient(ellipse at 75% 70%, rgba(168,140,255,.12) 0%, transparent 50%);pointer-events:none}
 .hero::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 0%,rgba(15,10,31,.4) 70%,#0F0A1F 100%);z-index:1;pointer-events:none}
 .hero-inner{position:relative;z-index:2;max-width:680px;width:100%}
 .hero-sticker{display:block;width:120px;height:120px;margin:0 auto 28px;filter:drop-shadow(0 24px 50px rgba(168,140,255,.45));opacity:0;transform:translateY(30px);animation:rise .9s cubic-bezier(.2,.8,.2,1) .05s forwards}
@@ -64,6 +65,20 @@ a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer;border:0
 .hero-wordmark .dot{color:#8B5CF6;display:inline-block;margin-left:-2px}
 /* Legacy class kept for compat */
 .hero-logo{display:block;width:100%;max-width:520px;height:auto;margin:0 auto 18px}
+
+/* Logo v2 — animated WebM mit PNG-Fallback */
+.hero-logo-wrap{position:relative;width:100%;max-width:580px;margin:0 auto 18px;aspect-ratio:1920/1080;opacity:0;transform:translateY(30px);animation:rise .9s cubic-bezier(.2,.8,.2,1) .05s forwards}
+.hero-logo-video,.hero-logo-fallback{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.hero-logo-video{display:block;z-index:2}
+.hero-logo-fallback{z-index:1}
+@media (max-width:520px){.hero-logo-wrap{max-width:380px}}
+
+/* Pillar-Cards mit Lifestyle-Bildern als Background */
+.pillar-card{overflow:hidden}
+.pillar-card-bg{position:absolute;inset:0;z-index:0;background-size:cover;background-position:center;opacity:.18;filter:saturate(.7) contrast(1.1);transition:opacity .4s,filter .4s}
+.pillar-card:hover .pillar-card-bg{opacity:.28;filter:saturate(.9) contrast(1.15)}
+.pillar-card>*:not(.pillar-card-bg){position:relative;z-index:1}
+.pillar-card::after{content:"";position:absolute;inset:0;z-index:0;background:linear-gradient(180deg,rgba(15,10,31,.65) 0%,rgba(15,10,31,.92) 80%);pointer-events:none}
 /* Hero-Mission als One-Line Sub-Hook (statt 4-Zeilen-Hook) */
 .hero-mission{display:flex;flex-wrap:wrap;justify-content:center;gap:.25em;font-size:clamp(28px,5.5vw,52px);font-weight:900;line-height:1.05;letter-spacing:-1.5px;margin:0 0 14px;color:#F5F3FF}
 .hero-mission .word{display:inline-block;opacity:0;transform:translateY(20px);animation:rise .6s cubic-bezier(.2,.8,.2,1) forwards}
@@ -1186,10 +1201,16 @@ body::after{
 <section class="hero">
   <div class="hero-bg"></div>
   <div class="hero-inner">
-    <!-- Animiertes Brand-Logo (SVG mit Violet-Gradient + Glow + Pulse) -->
-    <img class="hero-logo"
-         src="/img/brand/crew-logo-hero-animated.svg"
-         alt="crew. — Connection + Safety. Für deine Crew." loading="eager"/>
+    <!-- Logo v2 (off-white Wortmark + glühender violetter Punkt, animated breath) -->
+    <div class="hero-logo-wrap">
+      <video class="hero-logo-video" autoplay loop muted playsinline preload="metadata"
+             poster="/img/brand/v2/crew-logo-hero.png" aria-hidden="true">
+        <source src="/img/brand/v2/crew-logo-breathe.webm" type="video/webm"/>
+      </video>
+      <img class="hero-logo-fallback" src="/img/brand/v2/crew-logo-hero.png"
+           alt="crew. — Connection + Safety. Für deine Crew."
+           width="600" height="338" loading="eager"/>
+    </div>
     <div class="hero-eyebrow">Connection + Safety · Für deine Crew · DSGVO-konform</div>
     <h1 class="hero-mission">
       <span class="word">Niemand</span>
@@ -1324,18 +1345,21 @@ body::after{
   </div>
   <div class="pillars-grid">
     <div class="pillar-card">
+      <div class="pillar-card-bg" style="background-image:url(/img/lifestyle/01_sbahn_hoodie.jpg)"></div>
       <img class="pillar-icon" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Shield/3D/shield_3d.png" alt="" loading="lazy"/>
       <div class="pillar-h">Safety-Circle</div>
       <p class="pillar-desc">1–3 Leute, die dich im Notfall rausholen. Sehen sonst <strong>nichts</strong> von dir.</p>
       <div class="pillar-detail">Kein Standort, keine Aktivität, keine Mood. Nur wenn du SOS auslöst oder Heimweg-Modus startest, wird's relevant.</div>
     </div>
     <div class="pillar-card">
+      <div class="pillar-card-bg" style="background-image:url(/img/lifestyle/02_speti_crew.jpg)"></div>
       <img class="pillar-icon" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Busts%20in%20silhouette/3D/busts_in_silhouette_3d.png" alt="" loading="lazy"/>
       <div class="pillar-h">Deine Crew</div>
       <p class="pillar-desc">Die Leute, denen du vertraust. Mutual + opt-in — niemand drängt sich auf.</p>
       <div class="pillar-detail">Crew = Echte-Welt-Gruppe (3–15 Leute). Festival-Crew, Studi-WG, Späti-Stammgäste. Du wählst.</div>
     </div>
     <div class="pillar-card">
+      <div class="pillar-card-bg" style="background-image:url(/img/lifestyle/03_heimweg_frau.jpg)"></div>
       <img class="pillar-icon" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Person%20walking/Default/3D/person_walking_3d_default.png" alt="" loading="lazy"/>
       <div class="pillar-h">Heimweg-Modus</div>
       <p class="pillar-desc">Sag der Crew, wann du losgehst. Sie hören nur, wenn du <strong>nicht</strong> ankommst.</p>
