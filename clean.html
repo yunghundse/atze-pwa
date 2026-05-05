@@ -4527,7 +4527,7 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     <div class="field">
       <label>Foto (optional)</label>
       <div class="wiz-photo" id="wizPhotoBox">
-        <input type="file" id="wizPhoto" accept="image/*" hidden />
+        <input type="file" id="wizPhoto" accept="image/*" capture="environment" hidden />
         <button class="wiz-photo-btn" type="button" id="wizPhotoBtn">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
           <span>Foto hinzufügen</span>
@@ -4786,6 +4786,9 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
         <div class="dm-name" id="dmName">Crew-Member</div>
         <div class="dm-presence" id="dmPresence">Offline</div>
       </div>
+      <button id="dmSafetyBtn" aria-label="Aktionen" style="background:transparent;border:none;color:#aaa;padding:8px;border-radius:50%;cursor:pointer">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>
+      </button>
     </div>
     <div class="dm-thread" id="dmThread"></div>
     <div class="dm-input-row">
@@ -4990,6 +4993,13 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
           <button class="set-toggle" id="setDiscovery" type="button"></button>
         </div>
         <div class="field" style="margin-top:10px"><label>Stadt (für Discovery)</label><input id="setCity" maxlength="40" placeholder="z.B. Berlin"/></div>
+      </div>
+      <div class="priv-section">
+        <div class="priv-sec-h">Blockierte User</div>
+        <div id="blockedListHost" style="background:rgba(168,140,255,.04);border:.5px solid rgba(168,140,255,.12);border-radius:12px;padding:12px;min-height:60px"></div>
+        <div style="display:flex;gap:10px;margin-top:10px">
+          <button class="btn-sec" id="refreshBlockedBtn" type="button">Liste aktualisieren</button>
+        </div>
       </div>
       <div class="priv-section">
         <div class="priv-sec-h">Darstellung</div>
@@ -5435,6 +5445,23 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
       <div class="adm-list" id="admPartners"></div>
     </div>
 
+    <!-- Sprint 2.4: Trust-Layer Reports-Queue -->
+    <div class="sp-section">
+      <div class="adm-wl-head">
+        <h4>
+          <img class="emo3d" style="width:20px;height:20px;vertical-align:-4px" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Warning/3D/warning_3d.png" alt=""/>
+          Reports
+        </h4>
+        <div class="adm-wl-tabs">
+          <button class="adm-wl-tab on" data-rep-tab="pending">Offen</button>
+          <button class="adm-wl-tab" data-rep-tab="strike">Strike</button>
+          <button class="adm-wl-tab" data-rep-tab="dismissed">Verworfen</button>
+          <button class="adm-wl-tab" data-rep-tab="all">Alle</button>
+        </div>
+      </div>
+      <div class="adm-list" id="admReports"><div style="color:#888;padding:14px;text-align:center;font-size:12px">Lade …</div></div>
+    </div>
+
     <div class="sp-section">
       <h4>Alle Spots (neueste 50)</h4>
       <div class="adm-list" id="admHotspots"></div>
@@ -5698,6 +5725,8 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
 <script src="src/fx.js"></script>
 <script src="src/hsfx.js"></script>
 <script src="src/moods.js"></script>
+<!-- Sprint 2: Trust-Layer (Report + Block + Suspend-UI) -->
+<script src="src/trust.js"></script>
 <script>
 /* ================================================================
    crew. — clean baseline JS
@@ -5710,6 +5739,9 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
 
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
   let user = null, profile = null;
+  /* Sprint 2: Trust-Layer braucht sb + user als globals damit src/trust.js
+     Modale auf RPCs zugreifen und auf den eigenen User checken kann. */
+  window.sb = sb;
   let userLat = null, userLng = null;
   let map = null, mapMarkers = [];
   let currentDetailSpot = null;
@@ -6032,6 +6064,37 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
 
   async function onAuth(u){
     user = u;
+    /* Sprint 2: Trust-Layer braucht user als window-global */
+    window.user = u;
+    /* Sprint 2.5: Email-Verify Hard-Enforcement */
+    if (!u.email_confirmed_at && !u.confirmed_at) {
+      $('auth').classList.remove('gone');
+      $('app').hidden = true;
+      const authBox = $('auth');
+      let banner = document.getElementById('emailVerifyBanner');
+      if (!banner) {
+        banner = document.createElement('div');
+        banner.id = 'emailVerifyBanner';
+        banner.style.cssText = 'margin:18px auto 0;padding:18px 16px;max-width:380px;background:rgba(255,180,0,.12);border:.5px solid rgba(255,180,0,.4);border-radius:14px;color:#fff;font-size:14px;line-height:1.5;text-align:center';
+        banner.innerHTML = '<div style="font-size:30px;margin-bottom:8px">📧</div>'
+          + '<div style="font-weight:700;margin-bottom:6px">E-Mail bestätigen</div>'
+          + '<div style="color:#ddd;font-size:13px;margin-bottom:14px">Wir haben dir eine Mail an <b>'+esc(u.email)+'</b> geschickt. Klick den Link drin, dann gehts weiter.</div>'
+          + '<button id="resendVerifyBtn" style="padding:10px 18px;background:rgba(168,140,255,.18);border:.5px solid rgba(168,140,255,.4);border-radius:999px;color:#fff;font-size:13px;cursor:pointer">Mail erneut senden</button> '
+          + '<button id="signoutVerifyBtn" style="padding:10px 18px;background:transparent;border:.5px solid rgba(168,140,255,.18);border-radius:999px;color:#aaa;font-size:13px;cursor:pointer;margin-left:8px">Abmelden</button>';
+        authBox.appendChild(banner);
+        document.getElementById('resendVerifyBtn').onclick = async () => {
+          try {
+            await sb.auth.resend({ type: 'signup', email: u.email });
+            toast('Mail nochmal raus', null, null, 'success');
+          } catch(e) { toast('Konnte nicht senden', null, null, 'warning'); }
+        };
+        document.getElementById('signoutVerifyBtn').onclick = async () => {
+          await sb.auth.signOut();
+          location.reload();
+        };
+      }
+      return;
+    }
     $('auth').classList.add('gone');
     $('app').hidden = false;
     /* Profile laden */
@@ -6043,6 +6106,31 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
       const r2 = await sb.from('profiles').select('*').eq('user_id', u.id).maybeSingle();
       profile = (r2 && r2.data) || {};
     }
+    /* Sprint 2.3: Suspend-Check nach Login. Wenn account gesperrt → App ausblenden,
+       Sperr-Banner zeigen. */
+    if (profile.suspended_until && new Date(profile.suspended_until) > new Date()) {
+      $('app').hidden = true;
+      $('auth').classList.remove('gone');
+      const dt = new Date(profile.suspended_until);
+      const isPerma = dt.getFullYear() >= 9000;
+      const lbl = isPerma ? 'dauerhaft gesperrt' : 'gesperrt bis ' + dt.toLocaleDateString('de-DE') + ' ' + dt.toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'});
+      const reason = profile.suspended_reason || 'Verstoß gegen die Community-Regeln';
+      let s = document.getElementById('suspendBanner');
+      if (!s) {
+        s = document.createElement('div');
+        s.id = 'suspendBanner';
+        s.style.cssText = 'margin:18px auto 0;padding:22px 18px;max-width:380px;background:rgba(255,90,90,.12);border:.5px solid rgba(255,90,90,.4);border-radius:14px;color:#fff;text-align:center';
+        s.innerHTML = '<div style="font-size:36px;margin-bottom:10px">🚫</div>'
+          + '<div style="font-weight:700;font-size:18px;margin-bottom:8px">Account ' + esc(lbl) + '</div>'
+          + '<div style="color:#ddd;font-size:13px;line-height:1.5;margin-bottom:14px">Grund: ' + esc(reason) + '<br/>Bei Fragen: <b>support@partycrew.app</b></div>'
+          + '<button id="suspSignOutBtn" style="padding:10px 18px;background:rgba(168,140,255,.18);border:.5px solid rgba(168,140,255,.4);border-radius:999px;color:#fff;font-size:13px;cursor:pointer">Abmelden</button>';
+        $('auth').appendChild(s);
+        document.getElementById('suspSignOutBtn').onclick = async () => { await sb.auth.signOut(); location.reload(); };
+      }
+      return;
+    }
+    /* Sprint 2.2: Block-IDs einmalig vorladen damit Filter sofort greift */
+    if (window.trustLayer) { window.trustLayer.refreshBlockedIds().catch(()=>{}); }
     /* GPS — mit Fallback auf Profil-Home-City oder manueller Stadt-Auswahl */
     function setUserLocation(lat, lng, source){
       userLat = lat; userLng = lng;
@@ -7909,6 +7997,18 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
         }
       })
       .subscribe();
+    /* Sprint 2: Trust-Layer-Button im DM-Header */
+    const sb_btn = $('dmSafetyBtn');
+    if (sb_btn) {
+      sb_btn.onclick = () => {
+        if (window.trustLayer) {
+          window.trustLayer.openSafetyMenu(partner.user_id, {
+            targetName: partner.display_name,
+            onBlocked: () => { closeDm(); refreshAll && refreshAll(); }
+          });
+        }
+      };
+    }
     /* Input + Send wire */
     $('dmInput').focus();
   }
@@ -7922,13 +8022,18 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
   }
   function renderDmMessages(){
     const host = $('dmThread');
-    if (!dmMessages.length){
+    /* Sprint 2.2: Blockierte User → Messages clientseitig ausblenden */
+    const tl = window.trustLayer;
+    const visible = (dmMessages || []).filter(m =>
+      !tl || !tl.isBlocked(m.sender_id) || m.sender_id === user.id
+    );
+    if (!visible.length){
       host.innerHTML = '<div class="dm-empty">Noch keine Nachrichten — schreib die erste!</div>';
       return;
     }
     let html = '';
     let lastDay = '';
-    dmMessages.forEach(m => {
+    visible.forEach(m => {
       const d = new Date(m.created_at);
       const day = d.toLocaleDateString('de-DE');
       if (day !== lastDay){
@@ -7963,6 +8068,12 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     if (!dmPartner) return;
     const body = $('dmInput').value.trim();
     if (!body) return;
+    /* Sprint 2.2: Block-Check vor Send. Wer den anderen blockiert hat, soll ihm
+       auch keine Nachricht mehr schicken können. */
+    if (window.trustLayer && window.trustLayer.isBlocked(dmPartner.user_id)) {
+      toast('User blockiert — Unblock in Einstellungen → Blockierte', null, null, 'warning');
+      return;
+    }
     $('dmSend').disabled = true;
     try{
       await sb.rpc('send_dm', { p_receiver_id: dmPartner.user_id, p_body: body });
@@ -8160,7 +8271,12 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     if (!cdmCurrent) return;
     try{
       const r = await sb.rpc('get_my_crew_messages', { p_crew_id: cdmCurrent.id, p_limit: 100 });
-      const msgs = ((r && r.data) || []).reverse();
+      const allMsgs = ((r && r.data) || []).reverse();
+      /* Sprint 2.2: Blockierte User → Crew-Chat-Messages clientseitig ausblenden */
+      const tl = window.trustLayer;
+      const msgs = tl
+        ? allMsgs.filter(m => !tl.isBlocked(m.sender_id) || m.sender_id === user.id)
+        : allMsgs;
       const host = $('cdmThread');
       if (!msgs.length){
         host.innerHTML = '<div class="dm-empty">Noch keine Nachrichten — schreib die erste!</div>';
@@ -8178,7 +8294,9 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
         }
         const me = m.sender_id === user.id;
         const time = d.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
-        html += '<div class="cdm-msg ' + (me ? 'me' : 'them') + '">' +
+        /* Sprint 2: Lang gedrückt = Safety-Menu */
+        const dataAttrs = !me ? ' data-sender="'+esc(m.sender_id)+'" data-sender-name="'+esc(m.sender_name||'')+'"' : '';
+        html += '<div class="cdm-msg ' + (me ? 'me' : 'them') + '"' + dataAttrs + '>' +
           (!me ? '<div class="cdm-msg-from">' + esc(m.sender_name) + '</div>' : '') +
           esc(m.body) +
           '<div class="cdm-msg-time">' + time + '</div>' +
@@ -8186,6 +8304,27 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
       });
       host.innerHTML = html;
       host.scrollTop = host.scrollHeight;
+      /* Sprint 2: Long-Press auf fremde Message → Safety-Menu */
+      host.querySelectorAll('.cdm-msg.them[data-sender]').forEach(el => {
+        let pressTimer = null;
+        const start = (e) => {
+          pressTimer = setTimeout(() => {
+            if (window.trustLayer) {
+              window.trustLayer.openSafetyMenu(el.dataset.sender, {
+                targetName: el.dataset.senderName,
+                onBlocked: () => loadCdmThread()
+              });
+            }
+          }, 600);
+        };
+        const stop = () => { if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; } };
+        el.addEventListener('touchstart', start, { passive: true });
+        el.addEventListener('touchend', stop);
+        el.addEventListener('touchmove', stop, { passive: true });
+        el.addEventListener('mousedown', start);
+        el.addEventListener('mouseup', stop);
+        el.addEventListener('mouseleave', stop);
+      });
     }catch(e){ console.warn('cdm thread', e); }
   }
   $$('.cdm-tab').forEach(b => b.addEventListener('click', () => {
@@ -8819,7 +8958,49 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     $$('.set-pane').forEach(p => p.classList.remove('on'));
     t.classList.add('on');
     document.querySelector('.set-pane[data-set-pane="' + t.dataset.setTab + '"]').classList.add('on');
+    /* Sprint 2.2: Block-Liste lazy-load wenn privacy-Tab aktiv */
+    if (t.dataset.setTab === 'privacy') renderBlockedList();
   }));
+
+  /* Sprint 2.2: Render der Block-Liste mit Unblock-Button */
+  async function renderBlockedList(){
+    const host = $('blockedListHost');
+    if (!host) return;
+    host.innerHTML = '<div style="color:#888;font-size:12px;text-align:center;padding:14px">Wird geladen …</div>';
+    try{
+      const r = await sb.rpc('list_my_blocks');
+      const rows = (r && r.data) || [];
+      if (!rows.length){
+        host.innerHTML = '<div style="color:#888;font-size:12px;text-align:center;padding:14px">Keine blockierten User</div>';
+        return;
+      }
+      host.innerHTML = rows.map(b => {
+        const ava = b.photo_url
+          ? '<img src="'+esc(b.photo_url)+'" style="width:36px;height:36px;border-radius:50%;object-fit:cover"/>'
+          : '<div style="width:36px;height:36px;border-radius:50%;background:rgba(168,140,255,.18);display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff">'+esc(initials(b.name||b.username||'?'))+'</div>';
+        return '<div style="display:flex;gap:12px;align-items:center;padding:8px 0;border-bottom:.5px solid rgba(168,140,255,.08)">'
+          +   ava
+          +   '<div style="flex:1;min-width:0"><div style="font-size:14px;color:#fff">'+esc(b.name||b.username||'User')+'</div>'
+          +     '<div style="font-size:11px;color:#888">blockiert seit '+(b.blocked_at ? new Date(b.blocked_at).toLocaleDateString('de-DE') : '')+'</div></div>'
+          +   '<button class="unblock-btn" data-uid="'+esc(b.blocked_id)+'" style="padding:7px 14px;background:rgba(168,140,255,.12);border:.5px solid rgba(168,140,255,.3);border-radius:999px;color:#fff;font-size:12px;cursor:pointer">Unblock</button>'
+          + '</div>';
+      }).join('');
+      host.querySelectorAll('.unblock-btn').forEach(btn => {
+        btn.onclick = async () => {
+          btn.disabled = true; btn.textContent = '…';
+          if (window.trustLayer) {
+            const ok = await window.trustLayer.unblock(btn.dataset.uid);
+            if (ok) renderBlockedList();
+            else { btn.disabled = false; btn.textContent = 'Unblock'; }
+          }
+        };
+      });
+    }catch(e){
+      host.innerHTML = '<div style="color:#f88;font-size:12px;text-align:center;padding:14px">Fehler beim Laden</div>';
+    }
+  }
+  const refreshBlockedBtn = $('refreshBlockedBtn');
+  if (refreshBlockedBtn) refreshBlockedBtn.addEventListener('click', renderBlockedList);
 
   /* Save Profile */
   $('setSaveProfile').addEventListener('click', async () => {
@@ -9090,6 +9271,84 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     await renderAdmPartners();
     /* Hotspot-List */
     await renderAdmHotspots();
+    /* Sprint 2.4: Reports-Queue */
+    await renderAdmReports();
+  }
+
+  /* ============= ADMIN: REPORTS (Sprint 2.4) ============= */
+  let admRepTab = 'pending';
+  $$('.adm-wl-tab[data-rep-tab]').forEach(b => b.addEventListener('click', () => {
+    $$('.adm-wl-tab[data-rep-tab]').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    admRepTab = b.dataset.repTab;
+    renderAdmReports();
+  }));
+  async function renderAdmReports(){
+    const host = $('admReports'); if (!host) return;
+    host.innerHTML = '<div class="empty"><div class="spinner" style="margin:20px auto"></div></div>';
+    try{
+      const status = admRepTab === 'all' ? null : admRepTab;
+      const r = await sb.rpc('admin_list_reports', { p_status: status, p_limit: 100 });
+      const rows = (r && r.data) || [];
+      if (!rows.length){
+        host.innerHTML = '<div class="feed-empty" style="padding:18px;color:#888;text-align:center;font-size:13px">Keine Reports</div>';
+        return;
+      }
+      const REASON_DE = {
+        harassment: 'Belästigung', spam: 'Spam', fake: 'Fake-Profil',
+        violence: 'Gewalt', minor: 'Minderjährig', other: 'Anderes'
+      };
+      host.innerHTML = rows.map(rep => {
+        const suspendedHint = rep.reported_suspended_until && new Date(rep.reported_suspended_until) > new Date()
+          ? '<span style="color:#f88;font-size:11px;margin-left:6px">⛔ gesperrt</span>'
+          : '';
+        const strikeBadge = (rep.reported_strikes || 0) > 0
+          ? '<span style="background:rgba(255,90,90,.18);color:#fca;font-size:11px;padding:2px 7px;border-radius:8px;margin-left:6px">'+rep.reported_strikes+' Strikes</span>'
+          : '';
+        const ageMin = Math.round((Date.now() - new Date(rep.created_at).getTime()) / 60000);
+        const age = ageMin < 60 ? ageMin + 'm' : ageMin < 1440 ? Math.round(ageMin/60) + 'h' : Math.round(ageMin/1440) + 'd';
+        const reasonLbl = REASON_DE[rep.reason] || rep.reason;
+        const detailsHtml = rep.details
+          ? '<div style="font-size:13px;color:#ddd;background:rgba(168,140,255,.04);border-left:3px solid rgba(168,140,255,.4);padding:8px 10px;margin:8px 0;border-radius:0 8px 8px 0">'+esc(rep.details)+'</div>'
+          : '';
+        const actions = rep.status === 'pending'
+          ? '<div style="display:flex;gap:8px;margin-top:10px"><button class="rep-act" data-rep="'+rep.id+'" data-act="strike" style="flex:1;padding:9px;background:rgba(255,90,90,.2);border:.5px solid rgba(255,90,90,.4);border-radius:10px;color:#fff;font-size:12px;font-weight:600;cursor:pointer">Strike geben</button>'
+          + '<button class="rep-act" data-rep="'+rep.id+'" data-act="dismiss" style="flex:1;padding:9px;background:transparent;border:.5px solid rgba(168,140,255,.3);border-radius:10px;color:#aaa;font-size:12px;cursor:pointer">Verwerfen</button></div>'
+          : '<div style="font-size:11px;color:#888;margin-top:8px;text-align:right">Status: <b>'+esc(rep.status)+'</b></div>';
+        return '<div style="background:rgba(168,140,255,.04);border:.5px solid rgba(168,140,255,.12);border-radius:14px;padding:12px;margin-bottom:10px">'
+          + '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:6px">'
+          +   '<div><div style="font-size:14px;color:#fff"><b>'+esc(rep.reported_name||rep.reported_username||'?')+'</b>'+strikeBadge+suspendedHint+'</div>'
+          +     '<div style="font-size:11px;color:#888">gemeldet von '+esc(rep.reporter_name||rep.reporter_username||'?')+' · vor '+age+'</div></div>'
+          +   '<span style="background:rgba(255,90,90,.14);color:#fca;font-size:11px;padding:3px 8px;border-radius:8px;font-weight:600">'+esc(reasonLbl)+'</span>'
+          + '</div>'
+          + detailsHtml
+          + actions
+          + '</div>';
+      }).join('');
+      host.querySelectorAll('.rep-act').forEach(btn => {
+        btn.onclick = async () => {
+          btn.disabled = true; btn.textContent = '…';
+          try{
+            const r = await sb.rpc('admin_resolve_report', {
+              p_report_id: parseInt(btn.dataset.rep),
+              p_action: btn.dataset.act
+            });
+            if (r && r.data && r.data.ok){
+              toast(btn.dataset.act === 'strike' ? 'Strike verteilt' : 'Verworfen', null, null, 'success');
+              renderAdmReports();
+            } else {
+              toast('Fehler: ' + ((r && r.data && r.data.err) || 'unbekannt'), null, null, 'warning');
+              btn.disabled = false; btn.textContent = btn.dataset.act === 'strike' ? 'Strike geben' : 'Verwerfen';
+            }
+          }catch(e){
+            btn.disabled = false; btn.textContent = btn.dataset.act === 'strike' ? 'Strike geben' : 'Verwerfen';
+            toast('Netzwerkfehler', null, null, 'warning');
+          }
+        };
+      });
+    }catch(e){
+      host.innerHTML = '<div class="feed-empty" style="color:#f88">Fehler: '+esc(e.message||'unbekannt')+'</div>';
+    }
   }
 
   /* ============= ADMIN: PARTNERS ============= */
@@ -10089,8 +10348,21 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
       const spotId = e.target.dataset.spot || e.target.closest('#dtPhotoAdd').dataset.spot;
       const inp = document.createElement('input');
       inp.type = 'file'; inp.accept = 'image/*';
+      /* Sprint 2.6: Foto-Aufnahme-Pflicht — capture="environment" zwingt iOS/Android,
+         die Live-Kamera zu öffnen statt der Galerie. Stock-Photos kommen so nicht
+         mehr durch (Gallery-Bypass nur über Desktop möglich, da prüft EXIF-Filter). */
+      inp.capture = 'environment';
       inp.onchange = async ev => {
         const f = ev.target.files[0]; if (!f) return;
+        /* EXIF-DateTime-Check: Foto darf nicht älter als 5 min sein */
+        try{
+          const lm = f.lastModified ? new Date(f.lastModified) : null;
+          const ageMin = lm ? (Date.now() - lm.getTime()) / 60000 : 0;
+          if (ageMin > 5) {
+            toast('Foto zu alt — bitte direkt aus der Kamera aufnehmen', null, null, 'warning');
+            return;
+          }
+        }catch(_){}
         const cap = prompt('Bildunterschrift (optional)') || null;
         await uploadPhotoForSpot(spotId, f, cap);
         if (currentDetailSpot && currentDetailSpot.id === spotId){
