@@ -66,9 +66,20 @@ a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer;border:0
 /* Legacy class kept for compat */
 .hero-logo{display:block;width:100%;max-width:520px;height:auto;margin:0 auto 18px}
 
-/* Hero Hugging-Sticker (3D Emoji als Hero-Element, statt Logo-Lockup) */
-.hero-hugging-sticker{display:block;width:120px;height:120px;margin:0 auto 18px;filter:drop-shadow(0 24px 50px rgba(168,140,255,.45));opacity:0;transform:translateY(20px);animation:rise .9s cubic-bezier(.2,.8,.2,1) .05s forwards}
-@media (max-width:520px){.hero-hugging-sticker{width:96px;height:96px;margin-bottom:14px}}
+/* Hero Brand-Stack: Wortmarke "crew." als blasses BG-Echo + Sticker im Pill-Frame davor */
+.hero-brand-stack{position:relative;display:flex;align-items:center;justify-content:center;height:160px;margin:0 auto 14px;opacity:0;transform:translateY(20px);animation:rise .9s cubic-bezier(.2,.8,.2,1) .05s forwards}
+.hero-wordmark-bg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:clamp(72px,15vw,140px);font-weight:900;letter-spacing:-4px;color:rgba(245,243,255,.08);line-height:1;pointer-events:none;user-select:none;z-index:0}
+.hero-wordmark-bg .dot{color:rgba(168,140,255,.35)}
+.hero-sticker-pill{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle at 50% 40%,rgba(168,140,255,.18),rgba(139,92,246,.06) 60%,transparent 80%);border:.5px solid rgba(168,140,255,.22);box-shadow:0 16px 50px rgba(139,92,246,.35),0 0 0 .5px rgba(168,140,255,.18) inset;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.hero-hugging-sticker{display:block;width:100px;height:100px;filter:drop-shadow(0 12px 28px rgba(168,140,255,.5));animation:stickerFloat 5s ease-in-out infinite}
+@keyframes stickerFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+@media (max-width:520px){
+  .hero-brand-stack{height:130px}
+  .hero-sticker-pill{width:114px;height:114px}
+  .hero-hugging-sticker{width:80px;height:80px}
+  .hero-wordmark-bg{font-size:80px;letter-spacing:-3px}
+}
+@media (prefers-reduced-motion:reduce){.hero-hugging-sticker{animation:none}}
 
 /* Hero-Crew-Definition (kurzer Sub-Sub-Text) */
 .hero-crew-def{font-size:13px;color:#A88CFF;font-weight:600;letter-spacing:.2px;margin:8px 0 18px;opacity:0;animation:fade .8s ease 1.1s forwards}
@@ -1228,11 +1239,16 @@ body::after{
 <section class="hero">
   <div class="hero-bg"></div>
   <div class="hero-inner">
-    <!-- Hugging-Sticker (kommt besser als das Logo-Lockup) -->
-    <img class="hero-hugging-sticker"
-         src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/People%20hugging/3D/people_hugging_3d.png"
-         alt="" loading="eager" width="120" height="120"/>
-    <div class="hero-eyebrow">crew<span style="color:#A88CFF">.</span> &middot; Pioneer-Phase</div>
+    <!-- Hugging-Sticker im abgerundeten Frame + Wortmarke dahinter -->
+    <div class="hero-brand-stack">
+      <span class="hero-wordmark-bg">crew<span class="dot">.</span></span>
+      <div class="hero-sticker-pill">
+        <img class="hero-hugging-sticker"
+             src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/People%20hugging/3D/people_hugging_3d.png"
+             alt="" loading="eager" width="100" height="100"/>
+      </div>
+    </div>
+    <div class="hero-eyebrow">Pioneer-Phase &middot; 50 Codes</div>
     <h1 class="hero-mission">
       <span class="word">Niemand</span>
       <span class="word">geht</span>
@@ -1428,44 +1444,8 @@ body::after{
   </div>
 </section>
 
-<!-- SOCIAL FOLLOW CTA -->
-<section class="social-follow">
-  <div class="social-follow-inner">
-    <h3>Folgt dem Prozess — live.</h3>
-    <p>Auf WhatsApp und Instagram zeigen wir euch jeden Schritt: neue Features, Behind the Scenes, Community-Entscheidungen. Alles passiert dort — seid dabei.</p>
-    <div class="social-follow-btns">
-      <a href="https://whatsapp.com/channel/0029VbD10Vg3GJOtfhXJDG2e" target="_blank" rel="noopener" class="sf-btn wa">
-        <svg viewBox="0 0 24 24" fill="none"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" fill="currentColor"/><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.832-1.438A9.955 9.955 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a7.96 7.96 0 01-4.107-1.138l-.293-.176-2.862.852.852-2.862-.176-.293A7.96 7.96 0 014 12c0-4.411 3.589-8 8-8s8 3.589 8 8-3.589 8-8 8z" fill="currentColor"/></svg>
-        WhatsApp-Kanal folgen
-      </a>
-      <a href="https://www.instagram.com/playa.crew" target="_blank" rel="noopener" class="sf-btn ig">
-        <svg viewBox="0 0 24 24" fill="none"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.17.054 1.97.24 2.43.403a4.088 4.088 0 011.523.99 4.088 4.088 0 01.99 1.524c.163.46.349 1.26.403 2.43.058 1.265.07 1.645.07 4.849s-.012 3.584-.07 4.85c-.054 1.17-.24 1.97-.403 2.43a4.088 4.088 0 01-.99 1.523 4.088 4.088 0 01-1.524.99c-.46.163-1.26.349-2.43.403-1.265.058-1.645.07-4.849.07s-3.584-.012-4.85-.07c-1.17-.054-1.97-.24-2.43-.403a4.088 4.088 0 01-1.523-.99 4.088 4.088 0 01-.99-1.524c-.163-.46-.349-1.26-.403-2.43C2.175 15.584 2.163 15.204 2.163 12s.012-3.584.07-4.85c.054-1.17.24-1.97.403-2.43a4.088 4.088 0 01.99-1.523A4.088 4.088 0 015.15 2.207c.46-.163 1.26-.349 2.43-.403C8.845 1.746 9.225 1.734 12 1.734" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="3.5" stroke="currentColor" stroke-width="1.5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
-        Instagram folgen
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- FEEDBACK — Was braucht eure App? -->
-<section class="feedback-section" id="feedback">
-  <div class="feedback-inner">
-    <h3>Was muss crew. können? 💬</h3>
-    <p class="fb-sub">Ihr baut diese App mit. Sagt uns, welches Feature euch fehlt, was ihr euch wünscht oder was euch nervt. Jede Nachricht kommt direkt bei uns an.</p>
-    <form class="fb-form" id="fbForm" onsubmit="return false">
-      <textarea id="fbMessage" placeholder="Eure Idee, euer Wunsch, euer Feedback..." required></textarea>
-      <div class="fb-row">
-        <input type="text" id="fbHp" class="hp-trap" tabindex="-1" autocomplete="off" aria-hidden="true">
-        <input type="text" id="fbName" placeholder="Name (optional)" maxlength="80">
-        <input type="email" id="fbEmail" placeholder="E-Mail (optional)" maxlength="120">
-      </div>
-      <button type="submit" class="fb-btn" id="fbBtn">Feedback senden &rarr;</button>
-    </form>
-    <div class="fb-success" id="fbSuccess">Danke! Euer Feedback ist angekommen. Wir lesen alles. 🙌</div>
-  </div>
-</section>
-
 <!-- MANIFESTO — Warum wir das bauen -->
-<section class="manifesto" style="background:linear-gradient(180deg,rgba(15,10,31,.88),rgba(15,10,31,.96)),url(/img/lifestyle/10_tuerrahmen_umarmung.jpg) #0F0A1F;background-size:cover;background-position:center">
+<section class="manifesto" style="background:linear-gradient(180deg,rgba(15,10,31,.62),rgba(15,10,31,.85)),url(/img/lifestyle/09_taxi_nachts.jpg) #0F0A1F;background-size:cover;background-position:center">
   <div class="manifesto-inner">
     <div class="section-tag" style="color:#A88CFF">Warum wir das bauen</div>
     <h2 style="color:#F5F3FF">Niemand sollte allein heim&shy;gehen.<br/>Auch <span class="hl">du nicht.</span></h2>
@@ -1528,7 +1508,7 @@ body::after{
 </section>
 
 <!-- COMMUNITY CTA — neue Brand-Voice + Doppel-Portrait-BG -->
-<section class="community-cta" style="background:linear-gradient(180deg,rgba(15,10,31,.76),rgba(15,10,31,.92)),url(/img/lifestyle/06_doppel_portrait_couch.jpg) #0F0A1F;background-size:cover;background-position:center">
+<section class="community-cta" style="background:linear-gradient(180deg,rgba(15,10,31,.58),rgba(15,10,31,.82)),url(/img/lifestyle/06_doppel_portrait_couch.jpg) #0F0A1F;background-size:cover;background-position:center">
   <div class="community-cta-inner">
     <h3>Wir bauen das öffentlich.</h3>
     <p>Jede Woche siehst du, was reinkommt — Features, Bug-Fixes, was die ersten Pioniere gefunden haben. Auf WhatsApp und Instagram, ohne Marketing-Blabla.</p>
