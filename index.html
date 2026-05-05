@@ -66,14 +66,23 @@ a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer;border:0
 /* Legacy class kept for compat */
 .hero-logo{display:block;width:100%;max-width:520px;height:auto;margin:0 auto 18px}
 
-/* Logo v2 — dezenter, kleiner, mit subtiler Glow-Pulse statt brachialer Animation */
-.hero-logo-wrap{position:relative;width:100%;max-width:340px;margin:0 auto 12px;aspect-ratio:1920/1080;opacity:0;transform:translateY(20px);animation:rise .9s cubic-bezier(.2,.8,.2,1) .05s forwards}
-.hero-logo-video,.hero-logo-fallback{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
-.hero-logo-video{display:none}/* WebM ausgeschaltet — zu auffällig im Hero. Statisches PNG bleibt. */
-.hero-logo-fallback{z-index:1;animation:logoBreath 6s ease-in-out infinite}
-@keyframes logoBreath{0%,100%{filter:drop-shadow(0 0 18px rgba(168,140,255,.25))}50%{filter:drop-shadow(0 0 32px rgba(168,140,255,.45))}}
-@media (max-width:520px){.hero-logo-wrap{max-width:260px}}
-@media (prefers-reduced-motion:reduce){.hero-logo-fallback{animation:none}}
+/* Hero-Lockup — Squircle-App-Icon + Wortmark nebeneinander (kompakt, premium) */
+.hero-lockup{display:inline-flex;align-items:center;gap:18px;margin:0 auto 14px;padding:10px 22px 10px 12px;background:rgba(168,140,255,.06);border:.5px solid rgba(168,140,255,.22);border-radius:999px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);opacity:0;transform:translateY(20px);animation:rise .9s cubic-bezier(.2,.8,.2,1) .05s forwards}
+.hero-lockup-icon{width:64px;height:64px;border-radius:18px;box-shadow:0 8px 24px rgba(139,92,246,.35),0 0 0 .5px rgba(168,140,255,.5) inset;animation:logoBreath 6s ease-in-out infinite}
+.hero-lockup-word{font-size:54px;font-weight:900;letter-spacing:-2px;line-height:1;color:#F5F3FF}
+.hero-lockup-word .dot{color:#A88CFF;display:inline-block;text-shadow:0 0 18px rgba(168,140,255,.7)}
+@keyframes logoBreath{0%,100%{box-shadow:0 8px 24px rgba(139,92,246,.35),0 0 0 .5px rgba(168,140,255,.5) inset}50%{box-shadow:0 12px 36px rgba(139,92,246,.55),0 0 0 .5px rgba(168,140,255,.7) inset}}
+@media (max-width:520px){.hero-lockup{gap:12px;padding:8px 18px 8px 10px}.hero-lockup-icon{width:48px;height:48px;border-radius:14px}.hero-lockup-word{font-size:38px;letter-spacing:-1.5px}}
+@media (prefers-reduced-motion:reduce){.hero-lockup-icon{animation:none}}
+
+/* Partner-Toggle-Button (klappbares Akkordeon) */
+.partner-toggle-btn{display:inline-flex;align-items:center;gap:10px;padding:14px 26px;background:linear-gradient(135deg,#8B5CF6,#A88CFF);color:#fff;border:none;border-radius:999px;font-size:14px;font-weight:700;letter-spacing:.3px;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 8px 24px rgba(139,92,246,.35)}
+.partner-toggle-btn:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(139,92,246,.5)}
+.partner-toggle-btn .ptb-chevron{transition:transform .3s ease}
+.partner-toggle-btn[aria-expanded="true"] .ptb-chevron{transform:rotate(180deg)}
+.partner-form[hidden]{display:none !important}
+.partner-form{animation:fadeSlideIn .4s cubic-bezier(.2,.8,.2,1)}
+@keyframes fadeSlideIn{0%{opacity:0;transform:translateY(-10px)}100%{opacity:1;transform:translateY(0)}}
 
 /* Pillar-Cards mit Lifestyle-Bildern als Background */
 .pillar-card{overflow:hidden}
@@ -285,9 +294,9 @@ footer{padding:32px 24px;border-top:1px solid var(--line);text-align:center}
 .social-follow h3{font-size:16px;font-weight:800;margin-bottom:6px}
 .social-follow p{font-size:13px;color:#888;line-height:1.6;margin-bottom:18px}
 .social-follow-btns{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
-.sf-btn{display:flex;align-items:center;gap:8px;padding:14px 24px;border-radius:14px;font-size:13px;font-weight:700;transition:all .25s;text-decoration:none}
-.sf-btn.wa{background:rgba(37,211,102,.1);color:#25D366;border:1px solid rgba(37,211,102,.2)}.sf-btn.wa:hover{background:rgba(37,211,102,.18);transform:translateY(-2px)}
-.sf-btn.ig{background:rgba(225,48,108,.1);color:#E1306C;border:1px solid rgba(225,48,108,.2)}.sf-btn.ig:hover{background:rgba(225,48,108,.18);transform:translateY(-2px)}
+.sf-btn{display:flex;align-items:center;gap:8px;padding:14px 24px;border-radius:14px;font-size:13px;font-weight:700;transition:all .25s;text-decoration:none;background:rgba(168,140,255,.08);color:#A88CFF;border:.5px solid rgba(168,140,255,.25)}
+.sf-btn.wa,.sf-btn.ig{background:rgba(168,140,255,.08);color:#A88CFF;border:.5px solid rgba(168,140,255,.25)}
+.sf-btn.wa:hover,.sf-btn.ig:hover{background:rgba(168,140,255,.18);border-color:rgba(168,140,255,.45);color:#F5F3FF;transform:translateY(-2px)}
 .sf-btn svg{width:20px;height:20px}
 
 /* FEEDBACK */
@@ -378,8 +387,8 @@ footer{padding:32px 24px;border-top:1px solid var(--line);text-align:center}
 .csocial{display:flex;align-items:center;gap:8px;padding:12px 20px;border-radius:14px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);font-size:12px;font-weight:700;color:#ccc;transition:all .25s;text-decoration:none}
 .csocial:hover{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.15);transform:translateY(-2px)}
 .csocial svg{width:18px;height:18px;flex-shrink:0}
-.csocial.wa{border-color:rgba(37,211,102,.15);color:#25D366}.csocial.wa:hover{background:rgba(37,211,102,.08);border-color:rgba(37,211,102,.3)}
-.csocial.ig{border-color:rgba(225,48,108,.15);color:#E1306C}.csocial.ig:hover{background:rgba(225,48,108,.08);border-color:rgba(225,48,108,.3)}
+.csocial.wa,.csocial.ig{border-color:rgba(168,140,255,.25);color:#A88CFF;background:rgba(168,140,255,.06)}
+.csocial.wa:hover,.csocial.ig:hover{background:rgba(168,140,255,.16);border-color:rgba(168,140,255,.45);color:#F5F3FF}
 
 /* MOBILE */
 @media(max-width:599px){
@@ -1203,15 +1212,11 @@ body::after{
 <section class="hero">
   <div class="hero-bg"></div>
   <div class="hero-inner">
-    <!-- Logo v2 (off-white Wortmark + glühender violetter Punkt, animated breath) -->
-    <div class="hero-logo-wrap">
-      <video class="hero-logo-video" autoplay loop muted playsinline preload="metadata"
-             poster="/img/brand/v2/crew-logo-hero.png" aria-hidden="true">
-        <source src="/img/brand/v2/crew-logo-breathe.webm" type="video/webm"/>
-      </video>
-      <img class="hero-logo-fallback" src="/img/brand/v2/crew-logo-hero.png"
-           alt="crew. — Connection + Safety. Für deine Crew."
-           width="600" height="338" loading="eager"/>
+    <!-- Hero-Lockup: Squircle-App-Icon + Wortmarke nebeneinander (kompakt, "umranded") -->
+    <div class="hero-lockup">
+      <img class="hero-lockup-icon" src="/img/brand/icon-1024.png"
+           alt="crew. App-Icon" width="80" height="80" loading="eager"/>
+      <span class="hero-lockup-word">crew<span class="dot">.</span></span>
     </div>
     <div class="hero-eyebrow">Connection + Safety · Für deine Crew · DSGVO-konform</div>
     <h1 class="hero-mission">
@@ -1315,29 +1320,6 @@ body::after{
   </div>
 </section>
 
-<!-- Fix-1: Trust-Strip direkt nach Hero (war ganz unten) — Trust early statt spät -->
-<section class="trust-strip" style="background:linear-gradient(180deg,rgba(15,10,31,.92),rgba(15,10,31,.97)),url(/img/lifestyle/07_haende_tuerklinke.jpg) #0F0A1F;background-size:cover;background-position:center">
-  <div class="trust-strip-grid">
-    <div class="trust-item">
-      <img class="trust-icon" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Locked%20with%20key/3D/locked_with_key_3d.png" alt=""/>
-      <div class="trust-h">EU-Server Frankfurt</div>
-      <div class="trust-d">DSGVO-konform. Daten bleiben in Deutschland — nicht in den USA.</div>
-    </div>
-    <div class="trust-item">
-      <img class="trust-icon" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Hourglass%20not%20done/3D/hourglass_not_done_3d.png" alt=""/>
-      <div class="trust-h">Wir löschen automatisch</div>
-      <div class="trust-d">Standort nach 30 Min weg. Mood nach 12 h. Heimweg-Daten nach 24 h.</div>
-    </div>
-    <div class="trust-item">
-      <img class="trust-icon" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Folded%20hands/Default/3D/folded_hands_3d_default.png" alt=""/>
-      <div class="trust-h">Du bestimmst</div>
-      <div class="trust-d">Datenexport + Löschung in 2 Klicks. Keine Werbung, kein Tracking.</div>
-    </div>
-  </div>
-  <div class="trust-badge">Kein VC &middot; Kein Tracking &middot; Kein Verkauf an Dritte</div>
-  <p class="trust-meta">crew. ist gemacht von Menschen in <strong>Stuttgart</strong>. Du bekommst, was du siehst — und nichts dahinter.</p>
-</section>
-
 <!-- Schritt 3: Drei-Pillar-Section (Brand-konsistent zu Onboarding-Slide-1) -->
 <section class="pillars">
   <div class="pillars-head">
@@ -1368,6 +1350,29 @@ body::after{
       <div class="pillar-detail">Auto-Stop wenn du daheim bist. Keine Live-Verfolgung. Eine Push wenn die ETA überschritten ist — sonst Stille.</div>
     </div>
   </div>
+</section>
+
+<!-- Fix-1: Trust-Strip direkt nach Hero (war ganz unten) — Trust early statt spät -->
+<section class="trust-strip" style="background:linear-gradient(180deg,rgba(15,10,31,.92),rgba(15,10,31,.97)),url(/img/lifestyle/07_haende_tuerklinke.jpg) #0F0A1F;background-size:cover;background-position:center">
+  <div class="trust-strip-grid">
+    <div class="trust-item">
+      <img class="trust-icon" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Locked%20with%20key/3D/locked_with_key_3d.png" alt=""/>
+      <div class="trust-h">EU-Server Frankfurt</div>
+      <div class="trust-d">DSGVO-konform. Daten bleiben in Deutschland — nicht in den USA.</div>
+    </div>
+    <div class="trust-item">
+      <img class="trust-icon" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Hourglass%20not%20done/3D/hourglass_not_done_3d.png" alt=""/>
+      <div class="trust-h">Wir löschen automatisch</div>
+      <div class="trust-d">Standort nach 30 Min weg. Mood nach 12 h. Heimweg-Daten nach 24 h.</div>
+    </div>
+    <div class="trust-item">
+      <img class="trust-icon" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Folded%20hands/Default/3D/folded_hands_3d_default.png" alt=""/>
+      <div class="trust-h">Du bestimmst</div>
+      <div class="trust-d">Datenexport + Löschung in 2 Klicks. Keine Werbung, kein Tracking.</div>
+    </div>
+  </div>
+  <div class="trust-badge">Kein VC &middot; Kein Tracking &middot; Kein Verkauf an Dritte</div>
+  <p class="trust-meta">crew. ist gemacht von Menschen in <strong>Stuttgart</strong>. Du bekommst, was du siehst — und nichts dahinter.</p>
 </section>
 
 <!-- Schritt 4: So funktioniert's — 3-Step-Flow -->
@@ -1517,13 +1522,19 @@ body::after{
   </div>
 </section>
 
-<!-- PARTNER PROGRAM -->
+<!-- PARTNER PROGRAM (klappbar — per default zu) -->
 <section class="partner-section" id="partner">
   <div class="partner-inner">
-    <div class="section-tag" style="font-size:11px;letter-spacing:.35em;text-transform:uppercase;color:var(--o);font-weight:700;margin-bottom:8px;text-align:center">Partnerprogramm</div>
-    <h2 style="font-size:clamp(20px,3.5vw,32px);font-weight:900;letter-spacing:-1px;text-align:center;margin-bottom:8px">Werde crew. Partner</h2>
-    <p style="font-size:13px;color:#888;text-align:center;margin-bottom:32px;line-height:1.6;max-width:460px;margin-left:auto;margin-right:auto">Du hast eine Location, organisierst Events oder Festivals — egal wo in Europa? Werde Teil des crew.-Netzwerks und erreiche tausende Event-Crews direkt in der App.</p>
-    <form class="partner-form" id="partnerForm" novalidate>
+    <div class="section-tag" style="font-size:11px;letter-spacing:.35em;text-transform:uppercase;color:#A88CFF;font-weight:700;margin-bottom:8px;text-align:center">Partnerprogramm</div>
+    <h2 style="font-size:clamp(20px,3.5vw,32px);font-weight:900;letter-spacing:-1px;text-align:center;margin-bottom:8px;color:#F5F3FF">Werde crew. Partner</h2>
+    <p style="font-size:13px;color:rgba(245,243,255,.65);text-align:center;margin-bottom:24px;line-height:1.6;max-width:460px;margin-left:auto;margin-right:auto">Du hast eine Location, organisierst Events oder Festivals — egal wo in Europa? Werde Teil des crew.-Netzwerks.</p>
+    <div style="text-align:center;margin-bottom:18px">
+      <button type="button" id="partnerToggle" class="partner-toggle-btn" aria-expanded="false" aria-controls="partnerForm">
+        <span class="ptb-label">Partner-Anfrage öffnen</span>
+        <svg class="ptb-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+    </div>
+    <form class="partner-form" id="partnerForm" novalidate hidden>
       <input type="text" id="pfHp" class="hp-trap" tabindex="-1" autocomplete="off" aria-hidden="true">
       <div class="pf-row">
         <div class="pf-field"><label>Firmenname *</label><input type="text" id="pfBusiness" placeholder="z.B. Club, Bar, Festival..." required maxlength="120"></div>
@@ -1838,6 +1849,29 @@ async function loadPioneerStats(){
   } catch(e){}
 }
 loadPioneerStats();
+
+/* Partner-Form Toggle (klappbares Akkordeon) */
+(function(){
+  var btn = document.getElementById('partnerToggle');
+  var form = document.getElementById('partnerForm');
+  var label = btn && btn.querySelector('.ptb-label');
+  if (!btn || !form) return;
+  btn.addEventListener('click', function(){
+    var open = form.hasAttribute('hidden') === false;
+    if (open) {
+      form.setAttribute('hidden', '');
+      btn.setAttribute('aria-expanded', 'false');
+      if (label) label.textContent = 'Partner-Anfrage öffnen';
+    } else {
+      form.removeAttribute('hidden');
+      btn.setAttribute('aria-expanded', 'true');
+      if (label) label.textContent = 'Schließen';
+      setTimeout(function(){
+        form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 100);
+    }
+  });
+})();
 
 // Scroll-Reveal — fügt is-visible Klasse zu Cards beim Scroll-In
 (function(){
