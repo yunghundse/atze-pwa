@@ -66,6 +66,22 @@ a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer;border:0
 /* Legacy class kept for compat */
 .hero-logo{display:block;width:100%;max-width:520px;height:auto;margin:0 auto 18px}
 
+/* Hero Hugging-Sticker (3D Emoji als Hero-Element, statt Logo-Lockup) */
+.hero-hugging-sticker{display:block;width:120px;height:120px;margin:0 auto 18px;filter:drop-shadow(0 24px 50px rgba(168,140,255,.45));opacity:0;transform:translateY(20px);animation:rise .9s cubic-bezier(.2,.8,.2,1) .05s forwards}
+@media (max-width:520px){.hero-hugging-sticker{width:96px;height:96px;margin-bottom:14px}}
+
+/* Hero-Crew-Definition (kurzer Sub-Sub-Text) */
+.hero-crew-def{font-size:13px;color:#A88CFF;font-weight:600;letter-spacing:.2px;margin:8px 0 18px;opacity:0;animation:fade .8s ease 1.1s forwards}
+
+/* Hero CTA-Buttons (Audit-Fix-2) */
+.hero-cta-row{display:flex;gap:14px;justify-content:center;align-items:center;flex-wrap:wrap;margin:18px auto 0;opacity:0;animation:fade .8s ease 1.3s forwards}
+.hero-cta-primary{display:inline-flex;flex-direction:column;align-items:center;gap:2px;padding:14px 32px;background:linear-gradient(135deg,#8B5CF6,#A88CFF);color:#fff;border-radius:14px;text-decoration:none;font-weight:800;letter-spacing:.2px;box-shadow:0 12px 36px rgba(139,92,246,.4);transition:transform .2s,box-shadow .2s}
+.hero-cta-primary:hover{transform:translateY(-2px);box-shadow:0 18px 48px rgba(139,92,246,.55)}
+.hero-cta-label{font-size:15px;line-height:1}
+.hero-cta-meta{font-size:11px;opacity:.85;font-weight:500;letter-spacing:.4px;text-transform:uppercase;margin-top:2px}
+.hero-cta-secondary{font-size:13px;color:#A88CFF;text-decoration:none;font-weight:500;letter-spacing:.2px;padding:14px 8px}
+.hero-cta-secondary:hover{color:#F5F3FF}
+
 /* Hero-Lockup — Squircle-App-Icon + Wortmark nebeneinander (kompakt, premium) */
 .hero-lockup{display:inline-flex;align-items:center;gap:18px;margin:0 auto 14px;padding:10px 22px 10px 12px;background:rgba(168,140,255,.06);border:.5px solid rgba(168,140,255,.22);border-radius:999px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);opacity:0;transform:translateY(20px);animation:rise .9s cubic-bezier(.2,.8,.2,1) .05s forwards}
 .hero-lockup-icon{width:64px;height:64px;border-radius:18px;box-shadow:0 8px 24px rgba(139,92,246,.35),0 0 0 .5px rgba(168,140,255,.5) inset;animation:logoBreath 6s ease-in-out infinite}
@@ -86,8 +102,8 @@ a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer;border:0
 
 /* Pillar-Cards mit Lifestyle-Bildern als Background */
 .pillar-card{overflow:hidden}
-.pillar-card-bg{position:absolute;inset:0;z-index:0;background-size:cover;background-position:center;opacity:.18;filter:saturate(.7) contrast(1.1);transition:opacity .4s,filter .4s}
-.pillar-card:hover .pillar-card-bg{opacity:.28;filter:saturate(.9) contrast(1.15)}
+.pillar-card-bg{position:absolute;inset:0;z-index:0;background-size:cover;background-position:center;opacity:.38;filter:saturate(.85) contrast(1.05);transition:opacity .4s,filter .4s}
+.pillar-card:hover .pillar-card-bg{opacity:.55;filter:saturate(1) contrast(1.1)}
 .pillar-card>*:not(.pillar-card-bg){position:relative;z-index:1}
 .pillar-card::after{content:"";position:absolute;inset:0;z-index:0;background:linear-gradient(180deg,rgba(15,10,31,.65) 0%,rgba(15,10,31,.92) 80%);pointer-events:none}
 /* Hero-Mission als One-Line Sub-Hook (statt 4-Zeilen-Hook) */
@@ -1212,20 +1228,27 @@ body::after{
 <section class="hero">
   <div class="hero-bg"></div>
   <div class="hero-inner">
-    <!-- Hero-Lockup: Squircle-App-Icon + Wortmarke nebeneinander (kompakt, "umranded") -->
-    <div class="hero-lockup">
-      <img class="hero-lockup-icon" src="/img/brand/icon-1024.png"
-           alt="crew. App-Icon" width="80" height="80" loading="eager"/>
-      <span class="hero-lockup-word">crew<span class="dot">.</span></span>
-    </div>
-    <div class="hero-eyebrow">Connection + Safety · Für deine Crew · DSGVO-konform</div>
+    <!-- Hugging-Sticker (kommt besser als das Logo-Lockup) -->
+    <img class="hero-hugging-sticker"
+         src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/People%20hugging/3D/people_hugging_3d.png"
+         alt="" loading="eager" width="120" height="120"/>
+    <div class="hero-eyebrow">crew<span style="color:#A88CFF">.</span> &middot; Pioneer-Phase</div>
     <h1 class="hero-mission">
       <span class="word">Niemand</span>
       <span class="word">geht</span>
       <span class="word">alleine</span>
       <span class="word">heim.</span>
     </h1>
-    <p class="hero-sub">Deine echte Crew, plus eine Live-Schutz-Schicht. Standort, Heimweg, SOS — alles opt-in, alles gewählt. Kein Massen-Tracking, kein Doom-Scroll. EU-Server in Frankfurt, Daten gehören dir.</p>
+    <p class="hero-sub"><strong style="color:#F5F3FF">Sag echten Freunden, wann du losgehst.</strong> Sie hören nur Alarm, wenn du nicht ankommst. Sonst Stille — kein Tracking, kein Massen-Feed.</p>
+    <p class="hero-crew-def">Crew = deine 3–15 echten Freunde. Nicht Insta-Follower.</p>
+    <!-- Audit-Fix-2: Primary CTA-Button mit Pioneer-Counter -->
+    <div class="hero-cta-row">
+      <a href="#wl" class="hero-cta-primary">
+        <span class="hero-cta-label">Pioneer werden</span>
+        <span class="hero-cta-meta" id="heroCtaMeta">50 Codes frei</span>
+      </a>
+      <a href="/clean.html" class="hero-cta-secondary">Schon dabei? Login →</a>
+    </div>
     <!-- Fix-2: Live Pioneer-Counter (Social Proof + Scarcity) -->
     <div class="hero-pioneer-count" id="heroPioneerCount" style="opacity:0;transition:opacity .8s ease 1.4s">Lade …</div>
     <form class="wl-card" id="wlForm" novalidate>
@@ -1353,7 +1376,7 @@ body::after{
 </section>
 
 <!-- Fix-1: Trust-Strip direkt nach Hero (war ganz unten) — Trust early statt spät -->
-<section class="trust-strip" style="background:linear-gradient(180deg,rgba(15,10,31,.92),rgba(15,10,31,.97)),url(/img/lifestyle/07_haende_tuerklinke.jpg) #0F0A1F;background-size:cover;background-position:center">
+<section class="trust-strip" style="background:linear-gradient(180deg,rgba(15,10,31,.78),rgba(15,10,31,.92)),url(/img/lifestyle/07_haende_tuerklinke.jpg) #0F0A1F;background-size:cover;background-position:center">
   <div class="trust-strip-grid">
     <div class="trust-item">
       <img class="trust-icon" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Locked%20with%20key/3D/locked_with_key_3d.png" alt=""/>
@@ -1454,7 +1477,7 @@ body::after{
 </section>
 
 <!-- ROADMAP — Community-Meilensteine -->
-<section class="roadmap" id="roadmap">
+<section class="roadmap" id="roadmap" style="background:linear-gradient(180deg,rgba(15,10,31,.84),rgba(15,10,31,.94)),url(/img/lifestyle/08_buehne_silhouette.jpg) #0F0A1F;background-size:cover;background-position:center">
   <div class="roadmap-inner">
     <div class="section-tag">Unsere Roadmap</div>
     <h2>Gemeinsam unterwegs. Gemeinsam safe.</h2>
@@ -1505,7 +1528,7 @@ body::after{
 </section>
 
 <!-- COMMUNITY CTA — neue Brand-Voice + Doppel-Portrait-BG -->
-<section class="community-cta" style="background:linear-gradient(180deg,rgba(15,10,31,.90),rgba(15,10,31,.96)),url(/img/lifestyle/06_doppel_portrait_couch.jpg) #0F0A1F;background-size:cover;background-position:center">
+<section class="community-cta" style="background:linear-gradient(180deg,rgba(15,10,31,.76),rgba(15,10,31,.92)),url(/img/lifestyle/06_doppel_portrait_couch.jpg) #0F0A1F;background-size:cover;background-position:center">
   <div class="community-cta-inner">
     <h3>Wir bauen das öffentlich.</h3>
     <p>Jede Woche siehst du, was reinkommt — Features, Bug-Fixes, was die ersten Pioniere gefunden haben. Auf WhatsApp und Instagram, ohne Marketing-Blabla.</p>
@@ -1522,8 +1545,8 @@ body::after{
   </div>
 </section>
 
-<!-- PARTNER PROGRAM (klappbar — per default zu) -->
-<section class="partner-section" id="partner">
+<!-- PARTNER PROGRAM (klappbar — per default zu, mit Stammtisch-BG) -->
+<section class="partner-section" id="partner" style="background:linear-gradient(180deg,rgba(15,10,31,.82),rgba(15,10,31,.94)),url(/img/lifestyle/11_stammtisch_kneipe.jpg) #0F0A1F;background-size:cover;background-position:center">
   <div class="partner-inner">
     <div class="section-tag" style="font-size:11px;letter-spacing:.35em;text-transform:uppercase;color:#A88CFF;font-weight:700;margin-bottom:8px;text-align:center">Partnerprogramm</div>
     <h2 style="font-size:clamp(20px,3.5vw,32px);font-weight:900;letter-spacing:-1px;text-align:center;margin-bottom:8px;color:#F5F3FF">Werde crew. Partner</h2>
@@ -1845,6 +1868,12 @@ async function loadPioneerStats(){
     var np = document.querySelector('.nav-pill');
     if (np && remaining > 0) {
       np.innerHTML = '<span class="pulse-dot"></span>Nur noch ' + remaining + ' Codes';
+    }
+    /* Hero CTA-Meta */
+    var hcm = document.getElementById('heroCtaMeta');
+    if (hcm) {
+      if (remaining > 0) hcm.textContent = remaining + ' von ' + total + ' Codes frei';
+      else hcm.textContent = 'Welle 2 — auf Warteliste';
     }
   } catch(e){}
 }
