@@ -66,20 +66,18 @@ a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer;border:0
 /* Legacy class kept for compat */
 .hero-logo{display:block;width:100%;max-width:520px;height:auto;margin:0 auto 18px}
 
-/* Hero Brand-Stack: Wortmarke "crew." als blasses BG-Echo + Sticker im Pill-Frame davor */
-.hero-brand-stack{position:relative;display:flex;align-items:center;justify-content:center;height:160px;margin:0 auto 14px;opacity:0;transform:translateY(20px);animation:rise .9s cubic-bezier(.2,.8,.2,1) .05s forwards}
-.hero-wordmark-bg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:clamp(72px,15vw,140px);font-weight:900;letter-spacing:-4px;color:rgba(245,243,255,.08);line-height:1;pointer-events:none;user-select:none;z-index:0}
-.hero-wordmark-bg .dot{color:rgba(168,140,255,.35)}
-.hero-sticker-pill{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle at 50% 40%,rgba(168,140,255,.18),rgba(139,92,246,.06) 60%,transparent 80%);border:.5px solid rgba(168,140,255,.22);box-shadow:0 16px 50px rgba(139,92,246,.35),0 0 0 .5px rgba(168,140,255,.18) inset;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
-.hero-hugging-sticker{display:block;width:100px;height:100px;filter:drop-shadow(0 12px 28px rgba(168,140,255,.5));animation:stickerFloat 5s ease-in-out infinite}
-@keyframes stickerFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+/* Hero-Lockup: Hugging-Sticker + crew. Wortmark schweben zusammen */
+.hero-floating-lockup{display:inline-flex;align-items:center;gap:18px;margin:0 auto 18px;padding:14px 28px 14px 18px;background:rgba(168,140,255,.06);border:.5px solid rgba(168,140,255,.22);border-radius:999px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 16px 50px rgba(139,92,246,.28);opacity:0;transform:translateY(20px);animation:rise .9s cubic-bezier(.2,.8,.2,1) .05s forwards,lockupFloat 5s ease-in-out 1s infinite}
+.hero-hugging-sticker{display:block;width:88px;height:88px;filter:drop-shadow(0 10px 24px rgba(168,140,255,.55))}
+.hero-floating-word{font-size:64px;font-weight:900;letter-spacing:-2.5px;line-height:1;color:#F5F3FF}
+.hero-floating-word .dot{color:#A88CFF;display:inline-block;text-shadow:0 0 18px rgba(168,140,255,.7)}
+@keyframes lockupFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
 @media (max-width:520px){
-  .hero-brand-stack{height:130px}
-  .hero-sticker-pill{width:114px;height:114px}
-  .hero-hugging-sticker{width:80px;height:80px}
-  .hero-wordmark-bg{font-size:80px;letter-spacing:-3px}
+  .hero-floating-lockup{gap:12px;padding:10px 22px 10px 12px}
+  .hero-hugging-sticker{width:64px;height:64px}
+  .hero-floating-word{font-size:44px;letter-spacing:-1.8px}
 }
-@media (prefers-reduced-motion:reduce){.hero-hugging-sticker{animation:none}}
+@media (prefers-reduced-motion:reduce){.hero-floating-lockup{animation:rise .9s cubic-bezier(.2,.8,.2,1) .05s forwards}}
 
 /* Hero-Crew-Definition (kurzer Sub-Sub-Text) */
 .hero-crew-def{font-size:13px;color:#A88CFF;font-weight:600;letter-spacing:.2px;margin:8px 0 18px;opacity:0;animation:fade .8s ease 1.1s forwards}
@@ -155,6 +153,33 @@ a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer;border:0
 .howto-step-title{font-size:15px;font-weight:700;color:#F5F3FF;margin-bottom:6px}
 .howto-step-desc{font-size:13px;line-height:1.5;color:rgba(245,243,255,.65)}
 .howto-arrow{align-self:center;color:rgba(168,140,255,.4);font-size:22px;margin-top:60px}
+
+/* Roadmap v2 — 3 Phasen schlank statt 6-Stufen-Festival */
+.roadmap-v2{padding:80px 24px;text-align:center}
+.rmv2-inner{max-width:980px;margin:0 auto}
+.rmv2-eyebrow{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:#A88CFF;font-weight:700;margin-bottom:14px}
+.rmv2-title{font-size:clamp(28px,4.5vw,42px);font-weight:800;letter-spacing:-1px;color:#F5F3FF;margin-bottom:14px}
+.rmv2-sub{font-size:clamp(14px,1.5vw,16px);color:rgba(245,243,255,.65);line-height:1.55;max-width:520px;margin:0 auto 48px}
+.rmv2-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media (max-width:880px){.rmv2-grid{grid-template-columns:1fr;max-width:480px;margin:0 auto}}
+.rmv2-step{position:relative;padding:28px 22px;background:rgba(168,140,255,.05);border:.5px solid rgba(168,140,255,.18);border-radius:18px;text-align:left;transition:transform .3s,border-color .3s}
+.rmv2-step:hover{transform:translateY(-4px);border-color:rgba(168,140,255,.32)}
+.rmv2-step.rmv2-active{background:linear-gradient(135deg,rgba(139,92,246,.18),rgba(168,140,255,.06));border-color:rgba(168,140,255,.45);box-shadow:0 16px 40px rgba(139,92,246,.18)}
+.rmv2-num{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;background:rgba(139,92,246,.22);color:#A88CFF;font-size:14px;font-weight:700;margin-bottom:14px}
+.rmv2-step.rmv2-active .rmv2-num{background:#8B5CF6;color:#fff}
+.rmv2-h{font-size:17px;font-weight:700;color:#F5F3FF;margin-bottom:8px;letter-spacing:-.3px}
+.rmv2-d{font-size:13px;line-height:1.55;color:rgba(245,243,255,.7);margin-bottom:14px}
+.rmv2-status{font-size:11px;font-weight:600;color:#A88CFF;letter-spacing:.4px;text-transform:uppercase;padding-top:12px;border-top:.5px solid rgba(168,140,255,.14)}
+
+/* Klapp-Cards (details/summary) für How-to-Steps + Trust-Strip-Items */
+.expand-wrap{margin-top:12px;text-align:left}
+.expand-wrap summary{display:inline-flex;align-items:center;gap:6px;cursor:pointer;font-size:11.5px;font-weight:600;color:#A88CFF;letter-spacing:.3px;text-transform:uppercase;padding:6px 14px;border:.5px solid rgba(168,140,255,.22);border-radius:999px;transition:background .2s,border-color .2s,color .2s;list-style:none;-webkit-user-select:none;user-select:none}
+.expand-wrap summary::-webkit-details-marker{display:none}
+.expand-wrap summary::after{content:"+";font-weight:700;font-size:14px;transition:transform .25s;line-height:1}
+.expand-wrap[open] summary::after{content:"\2212"}
+.expand-wrap summary:hover{background:rgba(168,140,255,.1);border-color:rgba(168,140,255,.4)}
+.expand-wrap[open] summary{background:rgba(139,92,246,.18);border-color:rgba(139,92,246,.4);color:#F5F3FF}
+.expand-body{margin-top:10px;padding:12px 14px;background:rgba(168,140,255,.04);border-left:2px solid rgba(168,140,255,.4);border-radius:0 8px 8px 0;font-size:12.5px;line-height:1.6;color:rgba(245,243,255,.78)}
 
 /* Schritt 5: Trust-Strip + Footer-Polish */
 .trust-strip{position:relative;padding:48px 24px 60px;max-width:980px;margin:0 auto;border-top:.5px solid rgba(168,140,255,.08);text-align:center}
@@ -1239,14 +1264,12 @@ body::after{
 <section class="hero">
   <div class="hero-bg"></div>
   <div class="hero-inner">
-    <!-- Hugging-Sticker im abgerundeten Frame + Wortmarke dahinter -->
-    <div class="hero-brand-stack">
-      <span class="hero-wordmark-bg">crew<span class="dot">.</span></span>
-      <div class="hero-sticker-pill">
-        <img class="hero-hugging-sticker"
-             src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/People%20hugging/3D/people_hugging_3d.png"
-             alt="" loading="eager" width="100" height="100"/>
-      </div>
+    <!-- Hero-Lockup: Sticker + Wortmark schweben zusammen -->
+    <div class="hero-floating-lockup">
+      <img class="hero-hugging-sticker"
+           src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/People%20hugging/3D/people_hugging_3d.png"
+           alt="" loading="eager" width="88" height="88"/>
+      <span class="hero-floating-word">crew<span class="dot">.</span></span>
     </div>
     <div class="hero-eyebrow">Pioneer-Phase &middot; 50 Codes</div>
     <h1 class="hero-mission">
@@ -1398,16 +1421,28 @@ body::after{
       <img class="trust-icon" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Locked%20with%20key/3D/locked_with_key_3d.png" alt=""/>
       <div class="trust-h">EU-Server Frankfurt</div>
       <div class="trust-d">DSGVO-konform. Daten bleiben in Deutschland — nicht in den USA.</div>
+      <details class="expand-wrap">
+        <summary>Details</summary>
+        <div class="expand-body">Hosting bei Supabase Frankfurt (AWS eu-central-1). Auch Backups bleiben EU-only. Kein Cloud-Transfer in die USA, kein „US-Subprocessor". Auftragsverarbeitungs-Vertrag (AVV) für Geschäfts-Partner verfügbar.</div>
+      </details>
     </div>
     <div class="trust-item">
       <img class="trust-icon" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Hourglass%20not%20done/3D/hourglass_not_done_3d.png" alt=""/>
       <div class="trust-h">Wir löschen automatisch</div>
       <div class="trust-d">Standort nach 30 Min weg. Mood nach 12 h. Heimweg-Daten nach 24 h.</div>
+      <details class="expand-wrap">
+        <summary>Details</summary>
+        <div class="expand-body">Vollständige Löschung, kein „soft-delete" mit Archiv. SOS-Logs maximal 90 Tage (gesetzliche Aufbewahrung). Crew-Chats bei Inaktivität nach 6 Monaten. Du kannst alles früher manuell löschen.</div>
+      </details>
     </div>
     <div class="trust-item">
       <img class="trust-icon" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Folded%20hands/Default/3D/folded_hands_3d_default.png" alt=""/>
       <div class="trust-h">Du bestimmst</div>
       <div class="trust-d">Datenexport + Löschung in 2 Klicks. Keine Werbung, kein Tracking.</div>
+      <details class="expand-wrap">
+        <summary>Details</summary>
+        <div class="expand-body">Account-Löschung sofort, alle Daten weg innerhalb 30 Tage (Backup-Cleanup). Datenexport als JSON enthält alles über dich. Keine Werbenetzwerke, keine Tracker-Pixel, kein Pixel-Sharing mit Meta/Google.</div>
+      </details>
     </div>
   </div>
   <div class="trust-badge">Kein VC &middot; Kein Tracking &middot; Kein Verkauf an Dritte</div>
@@ -1426,6 +1461,10 @@ body::after{
       <img class="howto-step-icon" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Sparkles/3D/sparkles_3d.png" alt=""/>
       <div class="howto-step-title">Pioneer-Code holen</div>
       <p class="howto-step-desc">Trag dich auf die Warteliste oder hol dir einen Code von einem Pionier deines Vertrauens.</p>
+      <details class="expand-wrap">
+        <summary>Wie genau?</summary>
+        <div class="expand-body">Welle 1: 50 Codes für Stuttgart-Pioniere, handverlesen. Code direkt von Jan oder einem aktiven Pionier per WhatsApp. Welle 2: Berlin/Wien/Hamburg/München, je 100 Codes — Warteliste-Reihenfolge zählt.</div>
+      </details>
     </div>
     <div class="howto-arrow">&#x2192;</div>
     <div class="howto-step">
@@ -1433,6 +1472,10 @@ body::after{
       <img class="howto-step-icon" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Handshake/3D/handshake_3d.png" alt=""/>
       <div class="howto-step-title">Crew einladen</div>
       <p class="howto-step-desc">Wähl 3 bis 8 Leute denen du vertraust. Mutual + opt-in. Keine Friend-Requests von Fremden.</p>
+      <details class="expand-wrap">
+        <summary>Wie genau?</summary>
+        <div class="expand-body">Per WhatsApp-Link (mit Vorschau auf dein Profil), per Phone-Kontakte (mit Consent), oder per Username. Mutual heißt: beide müssen bestätigen. Wenn jemand pausiert oder geht — siehst du sofort, ohne Drama.</div>
+      </details>
     </div>
     <div class="howto-arrow">&#x2192;</div>
     <div class="howto-step">
@@ -1440,6 +1483,10 @@ body::after{
       <img class="howto-step-icon" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/House/3D/house_3d.png" alt=""/>
       <div class="howto-step-title">Sicher heim.</div>
       <p class="howto-step-desc">Heimweg-Modus an, Crew bekommt Push wenn du nicht ankommst. Sonst Stille.</p>
+      <details class="expand-wrap">
+        <summary>Wie genau?</summary>
+        <div class="expand-body">Du gibst ETA + Heim-Adresse ein (1× speicherbar). Crew sieht nur „Lisa ist auf dem Heimweg, ankunft 02:30". Wenn ETA + 15 Min ohne Check-In → Push an Safety-Circle. Du kommst an → Auto-Check-In → Stille. Datenfree am nächsten Tag.</div>
+      </details>
     </div>
   </div>
 </section>
@@ -1456,52 +1503,30 @@ body::after{
   </div>
 </section>
 
-<!-- ROADMAP — Community-Meilensteine -->
-<section class="roadmap" id="roadmap" style="background:linear-gradient(180deg,rgba(15,10,31,.84),rgba(15,10,31,.94)),url(/img/lifestyle/08_buehne_silhouette.jpg) #0F0A1F;background-size:cover;background-position:center">
-  <div class="roadmap-inner">
-    <div class="section-tag">Unsere Roadmap</div>
-    <h2>Gemeinsam unterwegs. Gemeinsam safe.</h2>
-    <p class="roadmap-sub">Jeder einzelne von euch bringt uns näher ans Ziel. Das sind keine leeren Versprechen — das ist der Plan. Und ihr entscheidet, wie schnell wir da hinkommen.</p>
-    <div class="roadmap-progress">
-      <div class="roadmap-progress-bar"><div class="roadmap-progress-fill" id="rmProgressFill" style="width:0%"></div></div>
-      <div class="roadmap-progress-label" id="rmProgressLabel">0 / 50.000</div>
-    </div>
-    <div class="rm-timeline">
-      <div class="rm-step" id="rmStep1" data-target="250">
-        <div class="rm-dot">💬</div>
-        <div class="rm-head"><span class="rm-members">250 Mitglieder</span></div>
-        <div class="rm-title">Sagt uns, was eure App können muss</div>
-        <div class="rm-desc">Ab 250 Mitgliedern entscheidet ihr selbst, was wir als Nächstes bauen. Schickt uns euer Feedback direkt hier auf der Seite oder über WhatsApp und Instagram — wir setzen es um.</div>
+<!-- ROADMAP — 3 Phasen (gekürzt von alter Festival-Roadmap) -->
+<section class="roadmap roadmap-v2" id="roadmap" style="background:linear-gradient(180deg,rgba(15,10,31,.78),rgba(15,10,31,.92)),url(/img/lifestyle/08_buehne_silhouette.jpg) #0F0A1F;background-size:cover;background-position:center">
+  <div class="rmv2-inner">
+    <div class="rmv2-eyebrow">Roadmap</div>
+    <h2 class="rmv2-title">In drei Phasen.</h2>
+    <p class="rmv2-sub">Wir gehen langsam — damit es richtig wird. Pioneer-Phase zuerst, dann öffnen wir Stück für Stück.</p>
+    <div class="rmv2-grid">
+      <div class="rmv2-step rmv2-active">
+        <div class="rmv2-num">1</div>
+        <div class="rmv2-h">Pioneer-Phase Stuttgart</div>
+        <div class="rmv2-d">50 handverlesene Pioniere testen die App. Bug-Reports per WhatsApp. Du bist hier.</div>
+        <div class="rmv2-status">Live · jetzt</div>
       </div>
-      <div class="rm-step" id="rmStep2" data-target="1000">
-        <div class="rm-dot">🔓</div>
-        <div class="rm-head"><span class="rm-members">1.000 Mitglieder</span></div>
-        <div class="rm-title">Exklusiver Community-Chat</div>
-        <div class="rm-desc">Die innere crew. wird freigeschaltet — direkter Draht zu uns, Sneak Peeks und die Möglichkeit, aktiv an der Entwicklung mitzuwirken.</div>
+      <div class="rmv2-step">
+        <div class="rmv2-num">2</div>
+        <div class="rmv2-h">Welle 2 — DACH</div>
+        <div class="rmv2-d">Berlin, Wien, Hamburg, München. Pro Stadt 100 Pioniere — gleicher Prozess, gleiche Sorgfalt.</div>
+        <div class="rmv2-status">Wenn Welle 1 stabil</div>
       </div>
-      <div class="rm-step" id="rmStep3" data-target="5000">
-        <div class="rm-dot">🚀</div>
-        <div class="rm-head"><span class="rm-members">5.000 Mitglieder</span></div>
-        <div class="rm-title">Closed Beta startet</div>
-        <div class="rm-desc">Die App geht in die Hände der Community. Ihr testet, ihr gebt Feedback, ihr macht sie besser. Founding Members bekommen als Erste Zugang.</div>
-      </div>
-      <div class="rm-step" id="rmStep4" data-target="10000">
-        <div class="rm-dot">🏝️</div>
-        <div class="rm-head"><span class="rm-members">10.000 Mitglieder</span></div>
-        <div class="rm-title">Erstes crew. Meetup</div>
-        <div class="rm-desc">Vom Bildschirm aufs Festival-Gelände. Das erste offizielle crew. Treffen — Stadt oder Festival, von der Community gewählt, von allen gefeiert.</div>
-      </div>
-      <div class="rm-step" id="rmStep5" data-target="25000">
-        <div class="rm-dot">👑</div>
-        <div class="rm-head"><span class="rm-members">25.000 Mitglieder</span></div>
-        <div class="rm-title">Offizieller Launch</div>
-        <div class="rm-desc">Die App geht live — mit den Features, die ihr gewählt habt. Founding Members behalten ihren Status für immer. Ihr habt das hier möglich gemacht.</div>
-      </div>
-      <div class="rm-step" id="rmStep6" data-target="50000">
-        <div class="rm-dot">🌍</div>
-        <div class="rm-head"><span class="rm-members">50.000 Mitglieder</span></div>
-        <div class="rm-title">Expansion — neue Inseln, neue Crews</div>
-        <div class="rm-desc">crew. wächst weiter. Wohin als Nächstes? Das entscheidet ihr. Tomorrowland, Sziget, Hurricane, Berlin, Wien, Amsterdam — die Community zeigt den Weg.</div>
+      <div class="rmv2-step">
+        <div class="rmv2-num">3</div>
+        <div class="rmv2-h">Public Launch</div>
+        <div class="rmv2-d">Apple App Store + Google Play. Erst wenn die Pioniere sagen: jetzt ist sie bereit.</div>
+        <div class="rmv2-status">Wenn ihr sagt: jetzt</div>
       </div>
     </div>
   </div>
