@@ -4162,9 +4162,15 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     <div id="authPanelAuth" class="auth-panel">
       <input class="auth-input" id="authEmail" type="email" placeholder="Email" autocomplete="email" />
       <input class="auth-input" id="authPass" type="password" placeholder="Passwort" autocomplete="current-password" />
+      <!-- Sprint B.1: Invite-Code-Feld nur im Sign-Up-Mode sichtbar -->
+      <input class="auth-input" id="authInviteCode" type="text" placeholder="Pioneer-Code (optional)" autocomplete="off" maxlength="20" hidden style="text-transform:uppercase;letter-spacing:.5px" />
+      <p class="auth-note" id="authInviteHint" hidden style="color:#A88CFF;margin-top:-6px;margin-bottom:8px">
+        <img class="emo3d" style="width:14px;height:14px;vertical-align:-3px" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Sparkles/3D/sparkles_3d.png" alt=""/>
+        Pionier? Code überschreibt das Warteliste-Gate.
+      </p>
       <p class="auth-note" id="authSignupNote" hidden>
         <img class="emo3d" style="width:16px;height:16px;vertical-align:-3px" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Locked/3D/locked_3d.png" alt=""/>
-        Sign-Up nur für freigegebene Warteliste-Mitglieder.
+        Sign-Up nur für freigegebene Warteliste-Mitglieder oder Pionier-Code.
       </p>
       <button class="auth-btn" id="authSubmit">Login</button>
     </div>
@@ -5504,6 +5510,19 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
       <div class="adm-list" id="admPartners"></div>
     </div>
 
+    <!-- Sprint B.3: Pioneer-Dashboard -->
+    <div class="sp-section">
+      <div class="adm-wl-head">
+        <h4>
+          <img class="emo3d" style="width:20px;height:20px;vertical-align:-4px" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Sparkles/3D/sparkles_3d.png" alt=""/>
+          Pioneer-Programm
+        </h4>
+        <button class="adm-wl-tab" id="admPioneerRefresh" type="button">Neu laden</button>
+      </div>
+      <div class="admin-stats" id="admPioneerStats" style="margin-bottom:14px"></div>
+      <div class="adm-list" id="admPioneerList"><div style="color:#888;padding:14px;text-align:center;font-size:12px">Lade …</div></div>
+    </div>
+
     <!-- Sprint 2.4: Trust-Layer Reports-Queue -->
     <div class="sp-section">
       <div class="adm-wl-head">
@@ -5892,6 +5911,10 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     $('authPanelWaitlist').hidden = !isWl;
     /* Sign-Up-Hinweis (Locked-Note) nur im Sign-Up-Modus */
     $('authSignupNote').hidden = mode !== 'signup';
+    /* Sprint B.1: Invite-Code-Feld nur im Sign-Up-Mode sichtbar */
+    const ic = $('authInviteCode'), ih = $('authInviteHint');
+    if (ic) ic.hidden = mode !== 'signup';
+    if (ih) ih.hidden = mode !== 'signup';
     setAuthError('');
     /* Submit-Button-State (Label + disabled wenn Tor zu) */
     if (typeof syncAuthSubmitState === 'function') syncAuthSubmitState();
@@ -5950,16 +5973,25 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
   function syncAuthSubmitState(){
     const sub = $('authSubmit'); if (!sub) return;
     const mode = authMode.current;
-    if (mode === 'signup' && !signupOpen){
+    /* Sprint B.1: Pioneer-Code im Feld → Submit erlauben auch wenn Tor zu */
+    const ic = $('authInviteCode');
+    const hasInviteCode = ic && (ic.value || '').trim().length >= 4;
+    if (mode === 'signup' && !signupOpen && !hasInviteCode){
       sub.disabled = true;
       sub.textContent = '🔒 Sign-Up gesperrt';
       sub.classList.add('locked-btn');
     } else {
       sub.disabled = false;
-      sub.textContent = mode === 'login' ? 'Login' : 'Sign-Up';
+      sub.textContent = mode === 'login' ? 'Login'
+                       : (hasInviteCode ? 'Pioneer einloggen' : 'Sign-Up');
       sub.classList.remove('locked-btn');
     }
   }
+  /* Sprint B.1: Live-Sync wenn Code-Feld editiert wird */
+  setTimeout(() => {
+    const ic = $('authInviteCode');
+    if (ic) ic.addEventListener('input', syncAuthSubmitState);
+  }, 0);
   refreshSignupGate();
   $('authSubmit').addEventListener('click', async () => {
     const email = $('authEmail').value.trim().toLowerCase();
@@ -5972,29 +6004,65 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     try{
       let r;
       if (authMode.current === 'signup'){
-        /* Pre-check 1: Tor offen? */
-        try{
-          const g = await sb.rpc('is_signup_open');
-          if (g && g.data === false){
-            setAuthError('Sign-Up-Tor ist gerade <strong>zu</strong>. Trag dich auf die Warteliste — wir öffnen sobald wir bereit sind.', 'warn');
+        /* Sprint B.1: Pioneer-Code überschreibt Tor + Waitlist */
+        const inviteCode = ($('authInviteCode').value || '').trim().toUpperCase();
+        let inviteValid = false;
+        let inviteIsPioneer = false;
+        if (inviteCode) {
+          try {
+            const v = await sb.rpc('validate_invite_code', { p_code: inviteCode });
+            const d = v && v.data;
+            if (d && d.ok) {
+              inviteValid = true;
+              inviteIsPioneer = !!d.pioneer;
+            } else {
+              const errMsg = (d && d.err) || 'invalid_code';
+              const txt = errMsg === 'expired' ? 'Code abgelaufen.'
+                        : errMsg === 'exhausted' ? 'Code wurde schon verwendet.'
+                        : 'Pioneer-Code ungültig.';
+              setAuthError(txt, 'warn');
+              return;
+            }
+          } catch(e) {
+            setAuthError('Pioneer-Code konnte nicht geprüft werden. Bitte später erneut.', 'warn');
             return;
           }
-        }catch(_){ /* server-trigger fängt's notfalls */ }
-        /* Pre-check 2: Warteliste + freigegeben? */
-        try{
-          const chk = await sb.rpc('is_email_waitlisted', { p_email: email });
-          const data = chk && chk.data;
-          if (data){
-            if (!data.found){
-              setAuthError('Diese Email ist nicht auf der Warteliste. Trag dich erst auf der Warteliste ein — Tab "Warteliste" oben.', 'warn');
+        }
+        /* Pre-check 1: Tor offen? — bei valid Pioneer-Code skip */
+        if (!inviteValid) {
+          try{
+            const g = await sb.rpc('is_signup_open');
+            if (g && g.data === false){
+              setAuthError('Sign-Up-Tor ist gerade <strong>zu</strong>. Trag dich auf die Warteliste — oder nutze deinen Pioneer-Code.', 'warn');
               return;
             }
-            if (!data.approved){
-              setAuthError('Du stehst auf der Warteliste, bist aber noch nicht freigegeben. Wir melden uns sobald es losgeht.', 'warn');
-              return;
+          }catch(_){ /* server-trigger fängt's notfalls */ }
+          /* Pre-check 2: Warteliste + freigegeben? — bei valid Pioneer-Code skip */
+          try{
+            const chk = await sb.rpc('is_email_waitlisted', { p_email: email });
+            const data = chk && chk.data;
+            if (data){
+              if (!data.found){
+                setAuthError('Diese Email ist nicht auf der Warteliste. Trag dich erst auf der Warteliste ein — oder nutze einen Pioneer-Code.', 'warn');
+                return;
+              }
+              if (!data.approved){
+                setAuthError('Du stehst auf der Warteliste, bist aber noch nicht freigegeben. Wir melden uns sobald es losgeht.', 'warn');
+                return;
+              }
             }
-          }
-        }catch(_){ /* fall-through — server-trigger fängt's notfalls */ }
+          }catch(_){ /* fall-through — server-trigger fängt's notfalls */ }
+        }
+        /* Pioneer-Code → temporär in waitlist eintragen damit der Server-Trigger
+           (enforce_waitlist_gate) durchläuft. Wird sofort danach durch redeem
+           als is_pioneer markiert. */
+        if (inviteValid) {
+          try {
+            await sb.from('waitlist').insert({
+              email, name: email.split('@')[0], approved: true, approved_at: new Date().toISOString()
+            });
+          } catch(_){ /* duplicate key OK */ }
+        }
         r = await sb.auth.signUp({ email, password: pass });
         if (r.error){
           setAuthError(translateAuthError(r.error.message));
@@ -6148,6 +6216,17 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
       window.crewTelemetry.identify(u.id);
       window.crewTelemetry.captureEvent('auth:login', { method: 'password' });
     }
+    /* Sprint B.1: Wenn Sign-Up mit Pioneer-Code → redeemen */
+    try {
+      const inviteFld = $('authInviteCode');
+      const code = inviteFld ? (inviteFld.value || '').trim().toUpperCase() : '';
+      if (code) {
+        const rr = await sb.rpc('redeem_invite_code', { p_code: code });
+        if (rr && rr.data && rr.data.ok && rr.data.pioneer) {
+          if (window.crewTelemetry) window.crewTelemetry.captureEvent('pioneer:joined', { label: rr.data.label });
+        }
+      }
+    } catch(_){}
     /* Sprint 2.5: Email-Verify Hard-Enforcement */
     if (!u.email_confirmed_at && !u.confirmed_at) {
       $('auth').classList.remove('gone');
@@ -9356,7 +9435,60 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     await renderAdmHotspots();
     /* Sprint 2.4: Reports-Queue */
     await renderAdmReports();
+    /* Sprint B.3: Pioneer-Dashboard */
+    await renderAdmPioneer();
   }
+
+  /* ============= ADMIN: PIONEER (Sprint B.3) ============= */
+  async function renderAdmPioneer(){
+    const stats = $('admPioneerStats'), list = $('admPioneerList');
+    if (!stats || !list) return;
+    list.innerHTML = '<div class="empty"><div class="spinner" style="margin:20px auto"></div></div>';
+    try{
+      const sumR = await sb.rpc('admin_pioneer_stats_summary');
+      const s = (sumR && sumR.data) || {};
+      stats.innerHTML = `
+        <div class="adm-stat-card"><span class="num">${s.redeemed || 0}/${s.total_codes || 0}</span><span class="lbl">Codes eingelöst</span></div>
+        <div class="adm-stat-card"><span class="num">${s.active_7d || 0}</span><span class="lbl">Aktiv 7d</span></div>
+        <div class="adm-stat-card"><span class="num">${s.with_safety_circle || 0}</span><span class="lbl">Mit Circle</span></div>
+        <div class="adm-stat-card"><span class="num">${s.with_crew || 0}</span><span class="lbl">In einer Crew</span></div>
+      `;
+      const r = await sb.rpc('admin_pioneer_overview');
+      const rows = (r && r.data) || [];
+      if (!rows.length){
+        list.innerHTML = '<div class="feed-empty" style="padding:14px;color:#888;text-align:center;font-size:12px">Keine Pioneer-Codes</div>';
+        return;
+      }
+      list.innerHTML = rows.map(p => {
+        const used = p.redeemed_user_id != null;
+        const ageMin = p.last_seen_at ? Math.round((Date.now() - new Date(p.last_seen_at).getTime()) / 60000) : null;
+        const lastSeen = ageMin === null ? '—'
+                       : ageMin < 60 ? ageMin + 'm'
+                       : ageMin < 1440 ? Math.round(ageMin/60) + 'h'
+                       : Math.round(ageMin/1440) + 'd';
+        const dotsHtml = used
+          ? `<span style="color:${p.has_safety_circle?'#5cf':'#666'};font-size:14px">●</span>`
+            + `<span style="color:${p.has_crew?'#5cf':'#666'};font-size:14px">●</span>`
+            + `<span style="color:${p.last_seen_at && (Date.now() - new Date(p.last_seen_at).getTime()) < 7*86400e3 ?'#5fc':'#666'};font-size:14px">●</span>`
+          : '<span style="color:#666;font-size:11px">offen</span>';
+        const strikeBadge = (p.strike_count || 0) > 0
+          ? `<span style="background:rgba(255,90,90,.2);color:#fca;font-size:10px;padding:1px 6px;border-radius:6px;margin-left:4px">${p.strike_count} Strikes</span>`
+          : '';
+        return '<div style="background:rgba(168,140,255,.04);border:.5px solid rgba(168,140,255,.12);border-radius:10px;padding:10px 12px;margin-bottom:6px;display:flex;align-items:center;gap:10px">'
+          + `<div style="font-family:monospace;font-size:12px;color:#fff;min-width:110px">${esc(p.code)}</div>`
+          + `<div style="flex:1;font-size:13px;color:#ddd;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">`
+          +   (used ? esc(p.redeemed_name || p.redeemed_username || p.redeemed_email || '?') + strikeBadge : '<span style="color:#888">noch nicht eingelöst</span>')
+          + `</div>`
+          + `<div style="display:flex;gap:4px;align-items:center;font-size:11px">${dotsHtml}</div>`
+          + `<div style="color:#888;font-size:11px;min-width:40px;text-align:right">${lastSeen}</div>`
+          + '</div>';
+      }).join('');
+    }catch(e){
+      list.innerHTML = '<div class="feed-empty" style="color:#f88">Fehler: '+esc(e.message||'unbekannt')+'</div>';
+    }
+  }
+  const refreshPioneerBtn = $('admPioneerRefresh');
+  if (refreshPioneerBtn) refreshPioneerBtn.addEventListener('click', renderAdmPioneer);
 
   /* ============= ADMIN: REPORTS (Sprint 2.4) ============= */
   let admRepTab = 'pending';
