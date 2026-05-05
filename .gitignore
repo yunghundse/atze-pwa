@@ -22,3 +22,4 @@ _backup-*
 dist/
 build/node_modules/
 build/package-lock.json
+_legacy/

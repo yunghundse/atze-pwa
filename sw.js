@@ -1,6 +1,6 @@
-/* crew. Service Worker v2 — PWA + Push */
-const CACHE = 'crew-v3-' + Date.now();
-const ASSETS = ['/clean.html', '/manifest.json', '/img/icon-192.png', '/img/icon-512.png'];
+/* crew. Service Worker v3 — PWA + Push (QW-N2: Icon-Pfade auf /img/brand/) */
+const CACHE = 'crew-v4-' + Date.now();
+const ASSETS = ['/clean.html', '/manifest.json', '/img/brand/icon-192.png', '/img/brand/icon-512.png'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS).catch(() => null)).then(() => self.skipWaiting()));
@@ -35,8 +35,8 @@ self.addEventListener('push', e => {
   const title = data.title || 'crew.';
   const opts = {
     body: data.body || '',
-    icon: '/img/icon-192.png',
-    badge: '/img/favicon-32.png',
+    icon: '/img/brand/icon-192.png',
+    badge: '/img/brand/favicon-32.png',
     data: data.payload || {},
     tag: data.tag || 'crew',
     requireInteraction: data.urgent || false,
