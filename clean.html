@@ -8434,6 +8434,31 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
   let crewLiveMarkers = [];
   let myLiveMarker = null;
   let homewayLine = null, homewayDestMarker = null, homewayBadge = null;
+
+  /* ============= SHARED LIVE-PIN-RENDERER ============= */
+  /* Erzeugt einen Leaflet-DivIcon für Live-Pins — wiederverwendet auf
+     Hotspot-Map, Crew-Map, Crew-Detail-Map. Macht Pflege simpel. */
+  function buildLivePinIcon(opts){
+    const { photoUrl, displayName, mood, isMe, live, size } = opts || {};
+    const sz = size || (isMe ? 48 : 44);
+    const tail = isMe ? '6' : '5';
+    const moodObj = mood ? MOODS.find(m => m.id === mood) : null;
+    const moodImg = moodObj ? '<img class="emo3d" style="width:14px;height:14px" src="' + FX[moodObj.fx] + '" alt=""/>' : '';
+    const cls = 'live-pin' + (isMe ? ' me-pin' : '') + (isMe && !live ? ' off' : '');
+    const photo = photoUrl
+      ? '<img src="' + esc(photoUrl) + '"/>'
+      : esc((displayName || '?').slice(0, 2).toUpperCase());
+    const html = '<div class="' + cls + '">' +
+      '<div class="live-pin-ava">' + photo + '</div>' +
+      (moodImg ? '<div class="live-pin-status">' + moodImg + '</div>' : '') +
+      '<div class="live-pin-tail"></div>' +
+      (isMe && live ? '<span class="live-pin-pulse"></span>' : '') +
+      '</div>';
+    return L.divIcon({
+      html, className: 'live-pin-wrap' + (isMe ? ' me-wrap' : ''),
+      iconSize: [sz, sz + tail], iconAnchor: [sz/2, sz + tail]
+    });
+  }
   async function loadCrewLive(){
     if (!map || !window.L) return;
     crewLiveMarkers.forEach(m => { try { map.removeLayer(m); } catch(_){} });
@@ -8442,16 +8467,12 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
       const r = await sb.rpc('get_crew_live_locations');
       const locs = (r && r.data) || [];
       locs.forEach(l => {
-        const moodObj = MOODS.find(m => m.id === l.mood);
-        const moodImg = moodObj ? '<img class="emo3d" style="width:14px;height:14px" src="'+FX[moodObj.fx]+'" alt=""/>' : (l.status_emoji ? esc(l.status_emoji) : '');
-        const html = `<div class="live-pin">
-          <div class="live-pin-ava">${l.photo_url ? '<img src="'+esc(l.photo_url)+'"/>' : esc(initials(l.display_name))}</div>
-          ${moodImg ? '<div class="live-pin-status">'+moodImg+'</div>' : ''}
-          <div class="live-pin-tail"></div>
-        </div>`;
-        const icon = L.divIcon({ html, className: 'live-pin-wrap', iconSize: [44, 50], iconAnchor: [22, 50] });
+        const icon = buildLivePinIcon({
+          photoUrl: l.photo_url, displayName: l.display_name,
+          mood: l.mood, isMe: false, live: true
+        });
         const marker = L.marker([l.lat, l.lng], { icon }).addTo(map);
-        marker.bindPopup(`<strong>${esc(l.display_name)}</strong><br/><small>${l.mood ? MOODS.find(m=>m.id===l.mood)?.t || l.mood : 'online'} · ${timeAgo(l.updated_at)}</small>`);
+        marker.bindPopup('<strong>' + esc(l.display_name) + '</strong><br/><small>' + (l.mood ? (MOODS.find(m=>m.id===l.mood)?.t || l.mood) : 'online') + ' · ' + timeAgo(l.updated_at) + '</small>');
         crewLiveMarkers.push(marker);
       });
     }catch(e){ console.warn('crew-live', e); }
@@ -8463,26 +8484,16 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
   function renderMyLiveMarker(){
     if (!map || !window.L || !userLat) return;
     if (myLiveMarker){ try{ map.removeLayer(myLiveMarker); }catch(_){} myLiveMarker = null; }
-    /* IMMER eigenen Marker zeigen (wie die Crew-Map auch). Live-Status nur als Visual-Variante */
     const live = !!(profile && profile.share_live_with_crew);
-    const photo = profile && profile.photo_url
-      ? '<img src="'+esc(profile.photo_url)+'"/>'
-      : esc(initials((profile && profile.name) || 'Du'));
-    const moodObj = MOODS.find(m => m.id === myMood);
-    const moodImg = moodObj ? '<img class="emo3d" style="width:14px;height:14px" src="'+FX[moodObj.fx]+'" alt=""/>' : '';
-    const cls = live ? 'live-pin me-pin' : 'live-pin me-pin off';
-    const html = '<div class="' + cls + '">' +
-      '<div class="live-pin-ava">' + photo + '</div>' +
-      (moodImg ? '<div class="live-pin-status">' + moodImg + '</div>' : '') +
-      '<div class="live-pin-tail"></div>' +
-      (live ? '<span class="live-pin-pulse"></span>' : '') +
-      '</div>';
-    const icon = L.divIcon({ html, className: 'live-pin-wrap me-wrap', iconSize: [48, 54], iconAnchor: [24, 54] });
+    const icon = buildLivePinIcon({
+      photoUrl: profile && profile.photo_url,
+      displayName: (profile && profile.name) || 'Du',
+      mood: myMood, isMe: true, live: live
+    });
     myLiveMarker = L.marker([userLat, userLng], { icon, zIndexOffset: 1000 }).addTo(map);
-    const popupText = live
+    myLiveMarker.bindPopup(live
       ? '<strong>Du · Live</strong><br/><small>Crew sieht deinen Standort · 30 min</small>'
-      : '<strong>Du</strong><br/><small>Live ist aus — nur du siehst dich hier</small>';
-    myLiveMarker.bindPopup(popupText);
+      : '<strong>Du</strong><br/><small>Live ist aus — nur du siehst dich hier</small>');
   }
   async function renderMyHomeway(){
     if (!map || !window.L) return;
