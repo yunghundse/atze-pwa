@@ -68,13 +68,13 @@ a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer;border:0
 
 /* Hero-Lockup: Hugging-Sticker + crew. Wortmark schweben zusammen */
 .hero-floating-lockup{display:inline-flex;align-items:center;gap:18px;margin:0 auto 18px;padding:14px 28px 14px 18px;background:rgba(168,140,255,.06);border:.5px solid rgba(168,140,255,.22);border-radius:999px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 16px 50px rgba(139,92,246,.28);opacity:0;transform:translateY(20px);animation:rise .9s cubic-bezier(.2,.8,.2,1) .05s forwards,lockupFloat 5s ease-in-out 1s infinite}
-.hero-hugging-sticker{display:block;width:88px;height:88px;filter:drop-shadow(0 10px 24px rgba(168,140,255,.55))}
+.hero-hugging-sticker{display:block;width:108px;height:108px;filter:drop-shadow(0 12px 28px rgba(168,140,255,.55))}
 .hero-floating-word{font-size:64px;font-weight:900;letter-spacing:-2.5px;line-height:1;color:#F5F3FF}
 .hero-floating-word .dot{color:#A88CFF;display:inline-block;text-shadow:0 0 18px rgba(168,140,255,.7)}
 @keyframes lockupFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
 @media (max-width:520px){
   .hero-floating-lockup{gap:12px;padding:10px 22px 10px 12px}
-  .hero-hugging-sticker{width:64px;height:64px}
+  .hero-hugging-sticker{width:80px;height:80px}
   .hero-floating-word{font-size:44px;letter-spacing:-1.8px}
 }
 @media (prefers-reduced-motion:reduce){.hero-floating-lockup{animation:rise .9s cubic-bezier(.2,.8,.2,1) .05s forwards}}
@@ -117,11 +117,14 @@ form.partner-form[hidden]{display:none !important}
 .pillar-card:hover .pillar-card-bg{opacity:.55;filter:saturate(1) contrast(1.1)}
 .pillar-card>*:not(.pillar-card-bg){position:relative;z-index:1}
 .pillar-card::after{content:"";position:absolute;inset:0;z-index:0;background:linear-gradient(180deg,rgba(15,10,31,.65) 0%,rgba(15,10,31,.92) 80%);pointer-events:none}
-/* Hero-Mission als One-Line Sub-Hook (statt 4-Zeilen-Hook) */
-.hero-mission{display:flex;flex-wrap:wrap;justify-content:center;gap:.25em;font-size:clamp(28px,5.5vw,52px);font-weight:900;line-height:1.05;letter-spacing:-1.5px;margin:0 0 14px;color:#F5F3FF}
-.hero-mission .word{display:inline-block;opacity:0;transform:translateY(20px);animation:rise .6s cubic-bezier(.2,.8,.2,1) forwards}
-.hero-mission .word:nth-child(1){animation-delay:.4s}.hero-mission .word:nth-child(2){animation-delay:.5s}
-.hero-mission .word:nth-child(3){animation-delay:.6s}.hero-mission .word:nth-child(4){animation-delay:.7s;color:#A88CFF}
+/* Hero-Mission Wortspiel — 3 Sätze cyclen mit Crossfade (Grid-Stack-Trick: alle Lines occupy gleiche Grid-Zelle) */
+.hero-mission{display:grid;text-align:center;font-size:clamp(28px,5.5vw,52px);font-weight:900;line-height:1.1;letter-spacing:-1.5px;margin:0 0 14px;color:#F5F3FF}
+.hero-mission .mission-line{grid-area:1/1;display:block;opacity:0;transform:translateY(10px);transition:opacity .6s cubic-bezier(.4,0,.2,1),transform .6s cubic-bezier(.4,0,.2,1);will-change:opacity,transform}
+.hero-mission .mission-line.is-active{opacity:1;transform:translateY(0)}
+.hero-mission .mission-em{color:#A88CFF;text-shadow:0 0 24px rgba(168,140,255,.45)}
+@media (prefers-reduced-motion:reduce){
+  .hero-mission .mission-line{transition:none}
+}
 
 /* Fix-2: Hero Pioneer-Counter */
 .hero-pioneer-count{margin:14px auto 4px;padding:10px 18px;display:inline-block;background:rgba(168,140,255,.08);border:.5px solid rgba(168,140,255,.22);border-radius:999px;font-size:13px;color:rgba(245,243,255,.75);letter-spacing:.2px}
@@ -184,33 +187,45 @@ form.partner-form[hidden]{display:none !important}
 .expand-body{margin-top:10px;padding:12px 14px;background:rgba(168,140,255,.04);border-left:2px solid rgba(168,140,255,.4);border-radius:0 8px 8px 0;font-size:12.5px;line-height:1.6;color:rgba(245,243,255,.78)}
 
 /* Schritt 5: Trust-Strip + Footer-Polish */
-.trust-strip{position:relative;padding:48px 24px 60px;max-width:980px;margin:0 auto;border-top:.5px solid rgba(168,140,255,.08);text-align:center}
-.trust-strip-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:780px;margin:0 auto 28px}
-@media (max-width:680px){.trust-strip-grid{grid-template-columns:repeat(3,1fr);max-width:100%;gap:10px}}
-.trust-item{padding:18px 12px;background:rgba(168,140,255,.04);border:.5px solid rgba(168,140,255,.14);border-radius:14px;display:flex;flex-direction:column;align-items:center;gap:8px}
-@media (max-width:680px){.trust-item{padding:14px 8px;gap:6px}}
-/* Trust-Strip Emojis nebeneinander mit Hover-Pop + Scroll-Triggered-Bounce */
-.trust-icon{width:56px;height:56px;filter:drop-shadow(0 8px 16px rgba(168,140,255,.3));transition:transform .35s cubic-bezier(.34,1.56,.64,1),filter .35s;opacity:0;transform:scale(.4) translateY(20px)}
-@media (max-width:680px){.trust-icon{width:46px;height:46px}}
+.trust-strip{position:relative;padding:36px 18px 48px;max-width:980px;margin:0 auto;border-top:.5px solid rgba(168,140,255,.08);text-align:center}
+.trust-strip-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:540px;margin:0 auto 22px}
+@media (max-width:680px){.trust-strip-grid{max-width:100%;gap:8px}}
+/* Trust-Item = Emoji-only Pille; Text + Details poppen nur bei Tap */
+.trust-item{position:relative;padding:14px 8px 12px;background:rgba(168,140,255,.04);border:.5px solid rgba(168,140,255,.14);border-radius:16px;display:flex;flex-direction:column;align-items:center;gap:0;cursor:pointer;transition:background .25s,border-color .25s,transform .25s cubic-bezier(.34,1.56,.64,1)}
+.trust-item:hover{background:rgba(168,140,255,.08);border-color:rgba(168,140,255,.28);transform:translateY(-2px)}
+.trust-item.is-open{background:rgba(168,140,255,.10);border-color:rgba(168,140,255,.38);grid-column:1/-1;padding:18px 16px 16px}
+/* Emoji */
+.trust-icon{width:52px;height:52px;filter:drop-shadow(0 8px 16px rgba(168,140,255,.3));transition:transform .35s cubic-bezier(.34,1.56,.64,1),filter .35s;opacity:0;transform:scale(.4) translateY(20px)}
+@media (max-width:680px){.trust-icon{width:42px;height:42px}}
 .trust-strip.is-visible .trust-icon{animation:emojiPop .7s cubic-bezier(.34,1.56,.64,1) forwards}
 .trust-strip.is-visible > .trust-strip-grid > .trust-item:nth-child(1) .trust-icon{animation-delay:.05s}
 .trust-strip.is-visible > .trust-strip-grid > .trust-item:nth-child(2) .trust-icon{animation-delay:.20s}
 .trust-strip.is-visible > .trust-strip-grid > .trust-item:nth-child(3) .trust-icon{animation-delay:.35s}
-.trust-item:hover .trust-icon{transform:translateY(-4px) scale(1.08);filter:drop-shadow(0 14px 24px rgba(168,140,255,.5))}
+/* Idle-Wackeln (nur wenn nicht offen, sequentiell, dezent) */
+.trust-strip.is-visible .trust-item:not(.is-open) .trust-icon{animation:emojiPop .7s cubic-bezier(.34,1.56,.64,1) forwards,trustWiggle 5s ease-in-out 1.5s infinite}
+.trust-strip.is-visible > .trust-strip-grid > .trust-item:nth-child(2):not(.is-open) .trust-icon{animation-delay:.20s,2.0s}
+.trust-strip.is-visible > .trust-strip-grid > .trust-item:nth-child(3):not(.is-open) .trust-icon{animation-delay:.35s,2.5s}
+.trust-item:hover .trust-icon{transform:translateY(-4px) scale(1.12);filter:drop-shadow(0 14px 24px rgba(168,140,255,.5))}
 @keyframes emojiPop{0%{opacity:0;transform:scale(.4) translateY(20px)}70%{opacity:1;transform:scale(1.15) translateY(-3px)}100%{opacity:1;transform:scale(1) translateY(0)}}
-@media (prefers-reduced-motion:reduce){.trust-icon{opacity:1;transform:none;animation:none}.trust-item:hover .trust-icon{transform:none}}
+@keyframes trustWiggle{0%,88%,100%{transform:rotate(0)}90%{transform:rotate(-7deg) scale(1.05)}94%{transform:rotate(6deg) scale(1.05)}97%{transform:rotate(-3deg) scale(1.03)}}
+/* Mini-Label unter Emoji (nur 1 Wort) — sichtbar im default state */
+.trust-mini{font-size:10px;font-weight:700;letter-spacing:.6px;color:#A88CFF;text-transform:uppercase;margin-top:4px;opacity:.75;transition:opacity .25s}
+.trust-item:hover .trust-mini{opacity:1}
+.trust-item.is-open .trust-mini{display:none}
+/* Details-Body (versteckt bis is-open) */
+.trust-reveal{display:none;width:100%;text-align:center;animation:revealIn .35s cubic-bezier(.2,.8,.2,1)}
+.trust-item.is-open .trust-reveal{display:block;margin-top:10px}
+@keyframes revealIn{0%{opacity:0;transform:translateY(-6px);max-height:0}100%{opacity:1;transform:translateY(0);max-height:300px}}
+@media (prefers-reduced-motion:reduce){.trust-icon{opacity:1;transform:none;animation:none}.trust-item:hover .trust-icon{transform:none}.trust-strip.is-visible .trust-item:not(.is-open) .trust-icon{animation:none}}
 
 /* Smooth Aufklappen für details (Trust + How-to) */
 .expand-wrap[open] .expand-body{animation:expandIn .35s cubic-bezier(.2,.8,.2,1)}
 @keyframes expandIn{0%{opacity:0;transform:translateY(-6px);max-height:0}100%{opacity:1;transform:translateY(0);max-height:500px}}
-.trust-h{font-size:14px;font-weight:700;color:#F5F3FF;letter-spacing:-.2px}
-.trust-d{font-size:12.5px;line-height:1.55;color:rgba(245,243,255,.7)}
-@media (max-width:680px){
-  .trust-h{font-size:11.5px;line-height:1.3}
-  .trust-d{font-size:10.5px;line-height:1.45}
-  .trust-item .expand-wrap{font-size:10px}
-  .trust-item .expand-wrap summary{padding:6px 10px}
-}
+.trust-h{font-size:15px;font-weight:800;color:#F5F3FF;letter-spacing:-.2px;margin-bottom:4px}
+.trust-d{font-size:13px;line-height:1.55;color:rgba(245,243,255,.78)}
+.trust-tap-hint{font-size:11px;color:rgba(168,140,255,.55);letter-spacing:.4px;text-transform:uppercase;margin:0 0 16px;font-weight:600}
+.trust-item button.trust-item, button.trust-item{font:inherit;color:inherit;border:0;cursor:pointer}
+button.trust-item{appearance:none;-webkit-appearance:none}
 .trust-badge{display:inline-block;margin:8px auto 18px;padding:8px 18px;background:rgba(139,92,246,.14);border:.5px solid rgba(168,140,255,.32);border-radius:999px;font-size:11.5px;font-weight:600;letter-spacing:.5px;color:#A88CFF;text-transform:uppercase}
 .trust-meta{font-size:12.5px;line-height:1.7;color:rgba(245,243,255,.55);max-width:560px;margin:0 auto}
 .trust-meta strong{color:#A88CFF;font-weight:600}
@@ -1294,11 +1309,10 @@ body::after{
       <span class="hero-floating-word">crew<span class="dot">.</span></span>
     </div>
     <div class="hero-eyebrow">Pioneer-Phase &middot; 50 Codes</div>
-    <h1 class="hero-mission">
-      <span class="word">Niemand</span>
-      <span class="word">geht</span>
-      <span class="word">alleine</span>
-      <span class="word">heim.</span>
+    <h1 class="hero-mission" aria-label="Niemand geht alleine heim. Heim geht alleine niemand. Alleine geht niemand heim.">
+      <span class="mission-line is-active">Niemand geht alleine <span class="mission-em">heim.</span></span>
+      <span class="mission-line">Heim geht alleine <span class="mission-em">niemand.</span></span>
+      <span class="mission-line">Alleine geht niemand <span class="mission-em">heim.</span></span>
     </h1>
     <p class="hero-sub"><strong style="color:#F5F3FF">Sag echten Freunden, wann du losgehst.</strong> Sie hören nur Alarm, wenn du nicht ankommst. Sonst Stille — kein Tracking, kein Druck.</p>
     <p class="hero-crew-def">Crew = deine 3–15 echten Freunde. Nicht Insta-Follower.</p>
@@ -1308,7 +1322,6 @@ body::after{
         <span class="hero-cta-label">Pioneer werden</span>
         <span class="hero-cta-meta" id="heroCtaMeta">50 Codes frei</span>
       </a>
-      <a href="/clean.html" class="hero-cta-secondary">Schon dabei? Login →</a>
     </div>
     <!-- Fix-2: Live Pioneer-Counter (Social Proof + Scarcity) -->
     <div class="hero-pioneer-count" id="heroPioneerCount" style="opacity:0;transition:opacity .8s ease 1.4s">Lade …</div>
@@ -1439,34 +1452,35 @@ body::after{
 <!-- Fix-1: Trust-Strip direkt nach Hero (war ganz unten) — Trust early statt spät -->
 <section class="trust-strip" style="background:linear-gradient(180deg,rgba(15,10,31,.78),rgba(15,10,31,.92)),url(/img/lifestyle/07_haende_tuerklinke.jpg) #0F0A1F;background-size:cover;background-position:center">
   <div class="trust-strip-grid">
-    <div class="trust-item">
-      <img class="trust-icon" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Locked%20with%20key/3D/locked_with_key_3d.png" alt=""/>
-      <div class="trust-h">EU-Server Frankfurt</div>
-      <div class="trust-d">DSGVO-konform. Daten bleiben in Deutschland — nicht in den USA.</div>
-      <details class="expand-wrap">
-        <summary>Details</summary>
-        <div class="expand-body">Hosting bei Supabase Frankfurt (AWS eu-central-1). Auch Backups bleiben EU-only. Kein Cloud-Transfer in die USA, kein „US-Subprocessor". Auftragsverarbeitungs-Vertrag (AVV) für Geschäfts-Partner verfügbar.</div>
-      </details>
-    </div>
-    <div class="trust-item">
-      <img class="trust-icon" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Hourglass%20not%20done/3D/hourglass_not_done_3d.png" alt=""/>
-      <div class="trust-h">Wir löschen automatisch</div>
-      <div class="trust-d">Standort nach 30 Min weg. Mood nach 12 h. Heimweg-Daten nach 24 h.</div>
-      <details class="expand-wrap">
-        <summary>Details</summary>
-        <div class="expand-body">Vollständige Löschung, kein „soft-delete" mit Archiv. SOS-Logs maximal 90 Tage (gesetzliche Aufbewahrung). Crew-Chats bei Inaktivität nach 6 Monaten. Du kannst alles früher manuell löschen.</div>
-      </details>
-    </div>
-    <div class="trust-item">
-      <img class="trust-icon" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Folded%20hands/Default/3D/folded_hands_3d_default.png" alt=""/>
-      <div class="trust-h">Du bestimmst</div>
-      <div class="trust-d">Datenexport + Löschung in 2 Klicks. Keine Werbung, kein Tracking.</div>
-      <details class="expand-wrap">
-        <summary>Details</summary>
-        <div class="expand-body">Account-Löschung sofort, alle Daten weg innerhalb 30 Tage (Backup-Cleanup). Datenexport als JSON enthält alles über dich. Keine Werbenetzwerke, keine Tracker-Pixel, kein Pixel-Sharing mit Meta/Google.</div>
-      </details>
-    </div>
+    <button type="button" class="trust-item" data-trust-toggle aria-expanded="false">
+      <img class="trust-icon" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Locked%20with%20key/3D/locked_with_key_3d.png" alt="EU-Server"/>
+      <div class="trust-mini">EU</div>
+      <div class="trust-reveal">
+        <div class="trust-h">EU-Server Frankfurt</div>
+        <div class="trust-d">DSGVO-konform. Daten bleiben in Deutschland — nicht in den USA.</div>
+        <div class="expand-body" style="margin-top:8px;font-size:11.5px;line-height:1.55;color:rgba(245,243,255,.6)">Hosting bei Supabase Frankfurt (AWS eu-central-1). Auch Backups bleiben EU-only. Kein Cloud-Transfer in die USA, kein „US-Subprocessor". AVV für Partner verfügbar.</div>
+      </div>
+    </button>
+    <button type="button" class="trust-item" data-trust-toggle aria-expanded="false">
+      <img class="trust-icon" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Hourglass%20not%20done/3D/hourglass_not_done_3d.png" alt="Auto-Löschung"/>
+      <div class="trust-mini">Löscht</div>
+      <div class="trust-reveal">
+        <div class="trust-h">Wir löschen automatisch</div>
+        <div class="trust-d">Standort nach 30 Min weg. Mood nach 12 h. Heimweg-Daten nach 24 h.</div>
+        <div class="expand-body" style="margin-top:8px;font-size:11.5px;line-height:1.55;color:rgba(245,243,255,.6)">Vollständige Löschung, kein „soft-delete" mit Archiv. SOS-Logs maximal 90 Tage (gesetzliche Aufbewahrung). Crew-Chats bei Inaktivität nach 6 Monaten. Manuelles Löschen früher jederzeit.</div>
+      </div>
+    </button>
+    <button type="button" class="trust-item" data-trust-toggle aria-expanded="false">
+      <img class="trust-icon" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Folded%20hands/Default/3D/folded_hands_3d_default.png" alt="Du bestimmst"/>
+      <div class="trust-mini">Du</div>
+      <div class="trust-reveal">
+        <div class="trust-h">Du bestimmst</div>
+        <div class="trust-d">Datenexport + Löschung in 2 Klicks. Keine Werbung, kein Tracking.</div>
+        <div class="expand-body" style="margin-top:8px;font-size:11.5px;line-height:1.55;color:rgba(245,243,255,.6)">Account-Löschung sofort, alle Daten weg innerhalb 30 Tage (Backup-Cleanup). Datenexport als JSON enthält alles über dich. Keine Werbenetzwerke, keine Tracker-Pixel, kein Pixel-Sharing mit Meta/Google.</div>
+      </div>
+    </button>
   </div>
+  <p class="trust-tap-hint">Tippen für Details</p>
   <div class="trust-badge">Kein VC &middot; Kein Tracking &middot; Kein Verkauf an Dritte</div>
   <p class="trust-meta">crew. ist gemacht von Menschen in <strong>Stuttgart</strong>. Du bekommst, was du siehst — und nichts dahinter.</p>
 </section>
@@ -1909,6 +1923,39 @@ async function loadPioneerStats(){
   } catch(e){}
 }
 loadPioneerStats();
+
+/* Trust-Strip — Tap-to-Reveal (single-open accordion + spielerischer Bounce beim Öffnen) */
+(function(){
+  var items = document.querySelectorAll('.trust-strip [data-trust-toggle]');
+  if (!items.length) return;
+  items.forEach(function(item){
+    item.addEventListener('click', function(){
+      var willOpen = !item.classList.contains('is-open');
+      // close all
+      items.forEach(function(other){
+        other.classList.remove('is-open');
+        other.setAttribute('aria-expanded', 'false');
+      });
+      if (willOpen){
+        item.classList.add('is-open');
+        item.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+})();
+
+/* Hero-Wortspiel — cyclen 3 Sätze (Niemand geht alleine heim. → Heim geht alleine niemand. → Alleine geht niemand heim.) */
+(function(){
+  var lines = document.querySelectorAll('.hero-mission .mission-line');
+  if (lines.length < 2) return;
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var i = 0;
+  setInterval(function(){
+    lines[i].classList.remove('is-active');
+    i = (i + 1) % lines.length;
+    lines[i].classList.add('is-active');
+  }, 3200);
+})();
 
 /* Partner-Form Toggle (klappbares Akkordeon) */
 (function(){
