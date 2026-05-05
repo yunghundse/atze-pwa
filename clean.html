@@ -4869,36 +4869,63 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     </div>
 
     <div class="set-pane" data-set-pane="privacy">
-      <div class="set-toggle-row">
-        <div><div class="set-row-t">Standort mit Crew teilen</div><div class="set-row-s">Live-Standort + Heimweg-Modus</div></div>
-        <button class="set-toggle" id="setShareLoc" type="button"></button>
+      <div class="priv-hero">
+        <img class="emo3d" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Locked%20with%20key/3D/locked_with_key_3d.png" alt=""/>
+        <div>
+          <div class="priv-hero-t">Wer sieht mich?</div>
+          <div class="priv-hero-s">Du bestimmst genau wer was über dich weiß.</div>
+        </div>
       </div>
-      <div class="set-toggle-row">
-        <div><div class="set-row-t">Zuletzt online verbergen</div><div class="set-row-s">Crew sieht nicht wann du zuletzt aktiv warst</div></div>
-        <button class="set-toggle" id="setHideLast" type="button"></button>
+      <div class="priv-section">
+        <div class="priv-sec-h">Standort & Online-Status</div>
+        <div class="set-toggle-row prominent">
+          <div>
+            <div class="set-row-t">📡 Live-Standort mit Crew teilen</div>
+            <div class="set-row-s">Safety-Circle sieht dich auf der Live-Karte für 30 min</div>
+          </div>
+          <button class="set-toggle" id="setShareLive" type="button"></button>
+        </div>
+        <div class="set-toggle-row">
+          <div>
+            <div class="set-row-t">Online-Status verbergen</div>
+            <div class="set-row-s">Crew sieht nicht wann du zuletzt aktiv warst</div>
+          </div>
+          <button class="set-toggle" id="setHideLast" type="button"></button>
+        </div>
       </div>
-      <div class="set-toggle-row">
-        <div><div class="set-row-t">Stammbaum öffentlich</div><div class="set-row-s">Andere können deinen Safety-Circle-Tree sehen wenn sie auf deinem Profil sind</div></div>
-        <button class="set-toggle" id="setShowTree" type="button"></button>
+      <div class="priv-section">
+        <div class="priv-sec-h">Profil-Sichtbarkeit</div>
+        <div class="set-toggle-row">
+          <div>
+            <div class="set-row-t">Stammbaum sichtbar</div>
+            <div class="set-row-s">Andere sehen deinen Safety-Circle-Tree auf deinem Profil</div>
+          </div>
+          <button class="set-toggle" id="setShowTree" type="button"></button>
+        </div>
+        <div class="set-toggle-row">
+          <div>
+            <div class="set-row-t">Im Welt-Ranking erscheinen</div>
+            <div class="set-row-s">Top-Trust → Welt-Tab (Opt-In, default aus)</div>
+          </div>
+          <button class="set-toggle" id="setWorldRank" type="button"></button>
+        </div>
+        <div class="set-toggle-row">
+          <div>
+            <div class="set-row-t">In Discovery auffindbar</div>
+            <div class="set-row-s">Andere mit gleichem Modus + Stadt finden dich</div>
+          </div>
+          <button class="set-toggle" id="setDiscovery" type="button"></button>
+        </div>
+        <div class="field" style="margin-top:10px"><label>Stadt (für Discovery)</label><input id="setCity" maxlength="40" placeholder="z.B. Berlin"/></div>
       </div>
-      <div class="set-toggle-row">
-        <div><div class="set-row-t">Im Welt-Ranking</div><div class="set-row-s">Erscheinst du im Top-Trust → Welt? (Opt-In · default aus)</div></div>
-        <button class="set-toggle" id="setWorldRank" type="button"></button>
+      <div class="priv-section">
+        <div class="priv-sec-h">Darstellung</div>
+        <div class="set-toggle-row">
+          <div><div class="set-row-t">Light-Mode</div><div class="set-row-s">Heller Theme statt dunkel</div></div>
+          <button class="set-toggle" id="setLightMode" type="button"></button>
+        </div>
       </div>
-      <div class="set-toggle-row">
-        <div><div class="set-row-t">Live-Standort mit Crew</div><div class="set-row-s">Crew sieht dich auf der Live-Karte (nur Safety-Circle)</div></div>
-        <button class="set-toggle" id="setShareLive" type="button"></button>
-      </div>
-      <div class="set-toggle-row">
-        <div><div class="set-row-t">In Discovery</div><div class="set-row-s">Andere mit gleichem Modus können dich finden</div></div>
-        <button class="set-toggle" id="setDiscovery" type="button"></button>
-      </div>
-      <div class="field" style="margin-top:14px"><label>Stadt (für Discovery)</label><input id="setCity" maxlength="40" placeholder="z.B. Berlin" /></div>
-      <div class="set-toggle-row">
-        <div><div class="set-row-t">Light-Mode</div><div class="set-row-s">Heller Theme statt dunkel</div></div>
-        <button class="set-toggle" id="setLightMode" type="button"></button>
-      </div>
-      <div class="set-info"><strong>EU-Server · DSGVO-konform.</strong> Alle Daten in Frankfurt. Auto-Expire auf alles. Recht auf Löschung + Datenexport (Tab Konto).</div>
+      <div class="set-info"><strong>EU-Server · DSGVO-konform.</strong> Alle Daten in Frankfurt. Auto-Expire auf alles. Datenexport + Löschung im Tab „Konto".</div>
     </div>
 
     <div class="set-pane" data-set-pane="push">
@@ -4992,6 +5019,31 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
 .set-photo-actions button{ height: 38px; padding: 0 var(--s-3); border-radius: var(--r-2); font-size: var(--t-5); font-weight: 700; }
 .set-toggle-row{ display: flex; align-items: center; gap: var(--s-3); padding: var(--s-3) 0; border-bottom: .5px solid var(--c-line); }
 .set-toggle-row:last-child{ border-bottom: 0; }
+.set-toggle-row.prominent{
+  padding: var(--s-3);
+  background: linear-gradient(135deg, rgba(40,200,120,.1), rgba(40,200,120,.04));
+  border: .5px solid rgba(40,200,120,.3);
+  border-radius: var(--r-2);
+  margin-bottom: 8px;
+}
+.set-toggle-row.prominent .set-row-t{ color: #6EE7B7; }
+.priv-hero{
+  display: flex; gap: 12px; align-items: center;
+  padding: 14px;
+  background: linear-gradient(135deg, rgba(139,92,246,.18), rgba(168,85,247,.08));
+  border: .5px solid rgba(192,132,252,.4);
+  border-radius: var(--r-3);
+  margin-bottom: var(--s-4);
+}
+.priv-hero img.emo3d{ width: 44px; height: 44px; flex: none; }
+.priv-hero-t{ font-size: 16px; font-weight: 800; color: #fff; }
+.priv-hero-s{ font-size: 12px; color: var(--c-text-3); margin-top: 2px; }
+.priv-section{ margin-bottom: var(--s-4); }
+.priv-sec-h{
+  font-size: 11px; font-weight: 800; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--c-text-3);
+  margin-bottom: var(--s-2);
+}
 .set-toggle-row > div:first-child{ flex: 1; min-width: 0; }
 .set-row-t{ font-size: var(--t-4); font-weight: 700; color: #fff; margin-bottom: 2px; }
 .set-row-s{ font-size: var(--t-5); color: var(--c-text-3); line-height: 1.4; }
