@@ -185,23 +185,32 @@ form.partner-form[hidden]{display:none !important}
 
 /* Schritt 5: Trust-Strip + Footer-Polish */
 .trust-strip{position:relative;padding:48px 24px 60px;max-width:980px;margin:0 auto;border-top:.5px solid rgba(168,140,255,.08);text-align:center}
-.trust-strip-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;max-width:780px;margin:0 auto 28px}
-@media (max-width:680px){.trust-strip-grid{grid-template-columns:1fr;max-width:380px}}
-.trust-item{padding:18px 14px;background:rgba(168,140,255,.04);border:.5px solid rgba(168,140,255,.14);border-radius:14px;display:flex;flex-direction:column;align-items:center;gap:8px}
-/* Trust-Strip Emojis nebeneinander mit Hover-Pop + Boot-Bounce */
-.trust-icon{width:56px;height:56px;filter:drop-shadow(0 8px 16px rgba(168,140,255,.3));transition:transform .35s cubic-bezier(.34,1.56,.64,1),filter .35s;animation:emojiPop .7s cubic-bezier(.34,1.56,.64,1) backwards}
-.trust-strip-grid > .trust-item:nth-child(1) .trust-icon{animation-delay:.1s}
-.trust-strip-grid > .trust-item:nth-child(2) .trust-icon{animation-delay:.22s}
-.trust-strip-grid > .trust-item:nth-child(3) .trust-icon{animation-delay:.34s}
+.trust-strip-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:780px;margin:0 auto 28px}
+@media (max-width:680px){.trust-strip-grid{grid-template-columns:repeat(3,1fr);max-width:100%;gap:10px}}
+.trust-item{padding:18px 12px;background:rgba(168,140,255,.04);border:.5px solid rgba(168,140,255,.14);border-radius:14px;display:flex;flex-direction:column;align-items:center;gap:8px}
+@media (max-width:680px){.trust-item{padding:14px 8px;gap:6px}}
+/* Trust-Strip Emojis nebeneinander mit Hover-Pop + Scroll-Triggered-Bounce */
+.trust-icon{width:56px;height:56px;filter:drop-shadow(0 8px 16px rgba(168,140,255,.3));transition:transform .35s cubic-bezier(.34,1.56,.64,1),filter .35s;opacity:0;transform:scale(.4) translateY(20px)}
+@media (max-width:680px){.trust-icon{width:46px;height:46px}}
+.trust-strip.is-visible .trust-icon{animation:emojiPop .7s cubic-bezier(.34,1.56,.64,1) forwards}
+.trust-strip.is-visible > .trust-strip-grid > .trust-item:nth-child(1) .trust-icon{animation-delay:.05s}
+.trust-strip.is-visible > .trust-strip-grid > .trust-item:nth-child(2) .trust-icon{animation-delay:.20s}
+.trust-strip.is-visible > .trust-strip-grid > .trust-item:nth-child(3) .trust-icon{animation-delay:.35s}
 .trust-item:hover .trust-icon{transform:translateY(-4px) scale(1.08);filter:drop-shadow(0 14px 24px rgba(168,140,255,.5))}
-@keyframes emojiPop{0%{opacity:0;transform:scale(.4) translateY(20px)}70%{opacity:1;transform:scale(1.1) translateY(-2px)}100%{opacity:1;transform:scale(1) translateY(0)}}
-@media (prefers-reduced-motion:reduce){.trust-icon{animation:none}.trust-item:hover .trust-icon{transform:none}}
+@keyframes emojiPop{0%{opacity:0;transform:scale(.4) translateY(20px)}70%{opacity:1;transform:scale(1.15) translateY(-3px)}100%{opacity:1;transform:scale(1) translateY(0)}}
+@media (prefers-reduced-motion:reduce){.trust-icon{opacity:1;transform:none;animation:none}.trust-item:hover .trust-icon{transform:none}}
 
 /* Smooth Aufklappen für details (Trust + How-to) */
 .expand-wrap[open] .expand-body{animation:expandIn .35s cubic-bezier(.2,.8,.2,1)}
 @keyframes expandIn{0%{opacity:0;transform:translateY(-6px);max-height:0}100%{opacity:1;transform:translateY(0);max-height:500px}}
 .trust-h{font-size:14px;font-weight:700;color:#F5F3FF;letter-spacing:-.2px}
 .trust-d{font-size:12.5px;line-height:1.55;color:rgba(245,243,255,.7)}
+@media (max-width:680px){
+  .trust-h{font-size:11.5px;line-height:1.3}
+  .trust-d{font-size:10.5px;line-height:1.45}
+  .trust-item .expand-wrap{font-size:10px}
+  .trust-item .expand-wrap summary{padding:6px 10px}
+}
 .trust-badge{display:inline-block;margin:8px auto 18px;padding:8px 18px;background:rgba(139,92,246,.14);border:.5px solid rgba(168,140,255,.32);border-radius:999px;font-size:11.5px;font-weight:600;letter-spacing:.5px;color:#A88CFF;text-transform:uppercase}
 .trust-meta{font-size:12.5px;line-height:1.7;color:rgba(245,243,255,.55);max-width:560px;margin:0 auto}
 .trust-meta strong{color:#A88CFF;font-weight:600}
@@ -1760,31 +1769,35 @@ function copyRefLink(){
   });
 }
 
-// Feedback form
-document.getElementById('fbForm').addEventListener('submit', async function(e){
-  e.preventDefault();
-  if (isHoneypotTriggered('fbForm')) { return; }
-  if (isRateLimited('fbForm')) { return; }
-  var message = document.getElementById('fbMessage').value.trim().substring(0,2000);
-  var name = document.getElementById('fbName').value.trim().substring(0,80);
-  var email = document.getElementById('fbEmail').value.trim().toLowerCase();
-  if(!message){alert('Bitte schreib uns was du dir wünschst.');return}
-  if(email && !isValidEmail(email)){alert('Die E-Mail-Adresse ist ungültig.');return}
-  var btn = document.getElementById('fbBtn');
-  btn.textContent = 'Senden...';btn.disabled = true;
-  try {
-    var insertData = {message: message};
-    if(name) insertData.name = name;
-    if(email) insertData.email = email;
-    var {error} = await sb.from('feedback').insert(insertData);
-    if(error) throw error;
-    document.getElementById('fbForm').style.display = 'none';
-    document.getElementById('fbSuccess').style.display = 'block';
-  } catch(err){
-    btn.textContent = 'Feedback senden →';btn.disabled = false;
-    alert('Fehler: ' + (err.message || 'Versuche es erneut.'));
-  }
-});
+// Feedback form (entfernt — Section wurde aus Landing rausgenommen, Block bleibt als no-op falls #fbForm fehlt)
+(function(){
+  var fbForm = document.getElementById('fbForm');
+  if (!fbForm) return;
+  fbForm.addEventListener('submit', async function(e){
+    e.preventDefault();
+    if (isHoneypotTriggered('fbForm')) { return; }
+    if (isRateLimited('fbForm')) { return; }
+    var message = document.getElementById('fbMessage').value.trim().substring(0,2000);
+    var name = document.getElementById('fbName').value.trim().substring(0,80);
+    var email = document.getElementById('fbEmail').value.trim().toLowerCase();
+    if(!message){alert('Bitte schreib uns was du dir wünschst.');return}
+    if(email && !isValidEmail(email)){alert('Die E-Mail-Adresse ist ungültig.');return}
+    var btn = document.getElementById('fbBtn');
+    btn.textContent = 'Senden...';btn.disabled = true;
+    try {
+      var insertData = {message: message};
+      if(name) insertData.name = name;
+      if(email) insertData.email = email;
+      var {error} = await sb.from('feedback').insert(insertData);
+      if(error) throw error;
+      document.getElementById('fbForm').style.display = 'none';
+      document.getElementById('fbSuccess').style.display = 'block';
+    } catch(err){
+      btn.textContent = 'Feedback senden →';btn.disabled = false;
+      alert('Fehler: ' + (err.message || 'Versuche es erneut.'));
+    }
+  });
+})();
 
 // Code lookup
 async function lookupCode(){
@@ -1922,7 +1935,7 @@ loadPioneerStats();
 
 // Scroll-Reveal — fügt is-visible Klasse zu Cards beim Scroll-In
 (function(){
-  var els = document.querySelectorAll('.feat-card, .rm-step, .feat-more-item, .social-link');
+  var els = document.querySelectorAll('.feat-card, .rm-step, .feat-more-item, .social-link, .trust-strip');
   if (!('IntersectionObserver' in window)) {
     els.forEach(function(el){ el.classList.add('is-visible'); });
     return;
