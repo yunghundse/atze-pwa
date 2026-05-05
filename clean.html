@@ -5786,6 +5786,8 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
 <script src="src/moods.js"></script>
 <!-- Sprint 2: Trust-Layer (Report + Block + Suspend-UI) -->
 <script src="src/trust.js"></script>
+<!-- Sprint S-1: Telemetry (Sentry + PostHog) — DSGVO-konform mit PII-Scrub -->
+<script src="src/telemetry.js"></script>
 <script>
 /* ================================================================
    crew. — clean baseline JS
@@ -6141,6 +6143,11 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     user = u;
     /* Sprint 2: Trust-Layer braucht user als window-global */
     window.user = u;
+    /* Sprint S-1: Telemetry identify (anonymisiert via user-id only) */
+    if (window.crewTelemetry) {
+      window.crewTelemetry.identify(u.id);
+      window.crewTelemetry.captureEvent('auth:login', { method: 'password' });
+    }
     /* Sprint 2.5: Email-Verify Hard-Enforcement */
     if (!u.email_confirmed_at && !u.confirmed_at) {
       $('auth').classList.remove('gone');
