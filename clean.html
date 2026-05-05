@@ -9575,35 +9575,82 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
         host.innerHTML = '<div class="inbox-empty"><img class="emo3d sz-hero" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Closed%20mailbox%20with%20lowered%20flag/3D/closed_mailbox_with_lowered_flag_3d.png" alt=""/><h4 style="margin:12px 0 6px">Alles ruhig</h4><p style="color:var(--c-text-3);font-size:13px;margin:0">Keine neuen Benachrichtigungen.</p></div>';
         return;
       }
-      const ICONS = { sos: FX.sos, heimweg: FX.house, invite: FX.handshake, spot: FX.pin, trust: 'star', message: 'speech', member_join: FX.crew, system: FX.info };
+      const ICONS = {
+        sos:           FX.sos,
+        heimweg:       FX.house,
+        invite:        FX.handshake,
+        spot:          FX.pin,
+        trust:         FX.star,
+        trust_rating:  FX.star,
+        message:       FX.speech,
+        dm:            FX.speech,
+        crew_msg:      FX.crew,
+        crew_invite:   FX.crew,
+        circle_invite: FX.shield,
+        member_join:   FX.crew,
+        achievement:   FX.trophy,
+        system:        FX.info
+      };
       host.innerHTML = items.map(n => {
         const ic = ICONS[n.type] || FX.bell;
         const unread = !n.read_at;
-        return `<div class="inbox-item ${unread ? 'unread' : ''}" data-id="${n.id}" data-link="${esc(n.link_to||'')}">
-          <div class="inbox-ic ${n.type}"><img class="emo3d" src="${ic.startsWith('http') ? ic : FX.bell}" alt=""/></div>
-          <div class="inbox-main">
-            <div class="inbox-title">${esc(n.title)}</div>
-            ${n.body ? '<div class="inbox-body">'+esc(n.body)+'</div>' : ''}
-            <div class="inbox-time">${timeAgo(n.created_at)}</div>
-          </div>
-        </div>`;
+        return '<div class="inbox-item ' + (unread ? 'unread' : '') + '" data-id="' + n.id + '" data-type="' + esc(n.type || '') + '" data-link="' + esc(n.link_to||'') + '">' +
+          '<div class="inbox-ic ' + esc(n.type || '') + '"><img class="emo3d" src="' + ic + '" alt=""/></div>' +
+          '<div class="inbox-main">' +
+            '<div class="inbox-title">' + esc(n.title) + '</div>' +
+            (n.body ? '<div class="inbox-body">' + esc(n.body) + '</div>' : '') +
+            '<div class="inbox-time">' + timeAgo(n.created_at) + '</div>' +
+          '</div>' +
+        '</div>';
       }).join('');
       host.querySelectorAll('.inbox-item').forEach(el => el.addEventListener('click', async () => {
         const id = el.dataset.id;
         await sb.rpc('mark_notif_read', { p_id: id });
         el.classList.remove('unread');
         refreshUnread();
-        const link = el.dataset.link;
-        if (link && link.includes('?spot=')){
+        const link = el.dataset.link || '';
+        const type = el.dataset.type || '';
+        /* Smart-Routing pro Notif-Typ */
+        if (link.includes('?spot=')){
           const spotId = link.split('?spot=')[1];
           const r2 = await sb.from('hotspots').select('*').eq('id', spotId).maybeSingle();
           if (r2 && r2.data){ closeModal('inboxModal'); openHotspotDetail(r2.data); }
-        } else if (link && link.includes('?invite=')){
+        } else if (link.includes('?dm=')){
+          const senderId = link.split('?dm=')[1];
+          try{
+            const pr = await sb.from('profiles').select('user_id, name, photo_url, last_seen_at').eq('user_id', senderId).maybeSingle();
+            if (pr && pr.data){
+              closeModal('inboxModal');
+              setTimeout(() => openDm({
+                user_id: pr.data.user_id,
+                display_name: pr.data.name || 'Crew',
+                photo_url: pr.data.photo_url,
+                last_seen_at: pr.data.last_seen_at
+              }), 250);
+            }
+          }catch(_){}
+        } else if (link.includes('?crew=')){
+          const crewId = link.split('?crew=')[1];
+          closeModal('inboxModal');
+          setTimeout(async () => {
+            try{
+              const cr = await sb.rpc('list_my_crews_v2');
+              const crew = ((cr && cr.data) || []).find(c => c.id === crewId);
+              if (crew) openCrewDetail(crew);
+            }catch(_){}
+          }, 250);
+        } else if (link.includes('?invite=')){
           const code = link.split('?invite=')[1];
           if (confirm('Einladung annehmen?')){
             const r3 = await sb.rpc('accept_friend_invite', { p_code: code });
             if (r3.data) toast('Einladung angenommen · ihr seid jetzt verbunden', null, null, 'success');
           }
+        } else if (link.includes('?circle=invite') || type === 'circle_invite'){
+          closeModal('inboxModal');
+          setTimeout(() => switchTab('crew'), 250);
+        } else if (type === 'trust_rating'){
+          closeModal('inboxModal');
+          setTimeout(() => switchTab('profile'), 250);
         }
       }));
     }catch(e){ host.innerHTML = '<div class="inbox-empty"><p>Fehler beim Laden</p></div>'; }
