@@ -5959,13 +5959,14 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     const tab = document.querySelector('.auth-tab[data-mode="signup"]');
     const note = $('authSignupNote');
     if (tab){
-      tab.classList.toggle('locked', !signupOpen);
-      tab.title = signupOpen ? 'Sign-Up' : 'Sign-Up-Tor ist zu — bitte später';
+      /* Sprint B.1: Pioneer-Codes überschreiben — Tab nicht mehr „locked" */
+      tab.classList.remove('locked');
+      tab.title = signupOpen ? 'Sign-Up' : 'Pioneer-Code? Im Sign-Up-Tab eintragen.';
     }
     if (note){
       note.innerHTML = signupOpen
-        ? '<img class="emo3d" style="width:16px;height:16px;vertical-align:-3px" src="' + FX.locked + '" alt=""/> Sign-Up nur für freigegebene Warteliste-Mitglieder.'
-        : '<img class="emo3d" style="width:16px;height:16px;vertical-align:-3px" src="' + FX.locked + '" alt=""/> Sign-Up-Tor ist gerade <strong>zu</strong>. Du kannst dich auf die Warteliste setzen — wir öffnen sobald wir bereit sind.';
+        ? '<img class="emo3d" style="width:16px;height:16px;vertical-align:-3px" src="' + FX.locked + '" alt=""/> Sign-Up nur für freigegebene Warteliste-Mitglieder oder Pionier-Code.'
+        : '<img class="emo3d" style="width:16px;height:16px;vertical-align:-3px" src="' + FX.sparkles + '" alt=""/> Tor ist <strong>zu</strong> — aber mit <strong>Pioneer-Code</strong> kommst du rein. Code im Feld unten eintragen.';
     }
     /* Submit-Button im Sign-Up-Mode disablen wenn Tor zu */
     syncAuthSubmitState();
@@ -5978,12 +5979,12 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     const hasInviteCode = ic && (ic.value || '').trim().length >= 4;
     if (mode === 'signup' && !signupOpen && !hasInviteCode){
       sub.disabled = true;
-      sub.textContent = '🔒 Sign-Up gesperrt';
+      sub.textContent = '🔒 Pioneer-Code eintragen';
       sub.classList.add('locked-btn');
     } else {
       sub.disabled = false;
       sub.textContent = mode === 'login' ? 'Login'
-                       : (hasInviteCode ? 'Pioneer einloggen' : 'Sign-Up');
+                       : (hasInviteCode ? 'Account anlegen (Pioneer)' : 'Sign-Up');
       sub.classList.remove('locked-btn');
     }
   }
