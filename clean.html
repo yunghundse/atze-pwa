@@ -2940,6 +2940,38 @@ a{ color: var(--c-violet-3); text-decoration: none; }
   color: #fff;
 }
 
+/* Trust-Modal Help-Disclosure */
+.tr-help{
+  margin-top: var(--s-3);
+  padding: 10px 12px;
+  background: var(--c-surface-2);
+  border: .5px solid var(--c-violet-line);
+  border-radius: var(--r-2);
+}
+.tr-help summary{
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--c-violet-3);
+  letter-spacing: .02em;
+  cursor: pointer;
+  padding: 4px 0;
+  list-style: none;
+}
+.tr-help summary::after{ content: '›'; float: right; transition: transform .2s; font-size: 14px; }
+.tr-help[open] summary::after{ transform: rotate(90deg); }
+.tr-help summary::-webkit-details-marker{ display: none; }
+.tr-help-body{
+  font-size: 12px;
+  color: var(--c-text-2);
+  line-height: 1.5;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: .5px solid var(--c-line);
+}
+.tr-help-body p{ margin: 0 0 8px; }
+.tr-help-body p:last-child{ margin-bottom: 0; }
+.tr-help-body strong{ color: var(--c-violet-3); font-weight: 800; }
+
 /* SOS Confirm */
 .sos-confirm{
   text-align: center;
@@ -4623,6 +4655,15 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     <p class="modal-sub" style="text-align:center">Wie zuverlässig & vertrauenswürdig?</p>
     <div class="tr-stars" id="trStars"></div>
     <div class="tr-tags" id="trTags"></div>
+    <details class="tr-help">
+      <summary>Wie funktioniert der Trust-Score?</summary>
+      <div class="tr-help-body">
+        <p><strong>Was ist das?</strong> Der Trust-Score ist der Durchschnitt aller Bewertungen die jemand bekommt. 1 ★ = unzuverlässig, 5 ★ = top-vertrauenswürdig.</p>
+        <p><strong>Wer sieht meinen Vote?</strong> Anonym aggregiert. Die Person sieht den Durchschnitt aber nicht wer wieviel gegeben hat.</p>
+        <p><strong>Wo wirkt sich das aus?</strong> Im Stammbaum (Position im Ring), im Top-Trust-Welt-Ranking, und als Reputation für SafeHaven-Submissions. Plus: Crew sieht das Sterne-Total auf dem Profil.</p>
+        <p><strong>Tags:</strong> Wähl 0–3 Tags die zur Bewertung passen. Hilft dem Empfänger zu verstehen worauf andere achten.</p>
+      </div>
+    </details>
     <div class="modal-actions">
       <button class="btn-sec" data-close="trustModal">Abbrechen</button>
       <button class="btn-sec" id="trDmBtn" style="background:rgba(139,92,246,.15);color:var(--c-violet-3);border-color:rgba(139,92,246,.4);display:flex;align-items:center;gap:6px;justify-content:center"><img class="emo3d" style="width:16px;height:16px" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Speech%20balloon/3D/speech_balloon_3d.png" alt=""/>Nachricht</button>
