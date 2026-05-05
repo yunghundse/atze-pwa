@@ -105,8 +105,10 @@ a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer;border:0
 .partner-toggle-btn:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(139,92,246,.5)}
 .partner-toggle-btn .ptb-chevron{transition:transform .3s ease}
 .partner-toggle-btn[aria-expanded="true"] .ptb-chevron{transform:rotate(180deg)}
-.partner-form[hidden]{display:none !important}
-.partner-form{animation:fadeSlideIn .4s cubic-bezier(.2,.8,.2,1)}
+/* Partner-Toggle Fix: höhere Spezifität gegen spätere display:flex Regeln */
+.partner-section .partner-form[hidden],
+form.partner-form[hidden]{display:none !important}
+.partner-form:not([hidden]){animation:fadeSlideIn .4s cubic-bezier(.2,.8,.2,1)}
 @keyframes fadeSlideIn{0%{opacity:0;transform:translateY(-10px)}100%{opacity:1;transform:translateY(0)}}
 
 /* Pillar-Cards mit Lifestyle-Bildern als Background */
@@ -186,7 +188,18 @@ a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer;border:0
 .trust-strip-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;max-width:780px;margin:0 auto 28px}
 @media (max-width:680px){.trust-strip-grid{grid-template-columns:1fr;max-width:380px}}
 .trust-item{padding:18px 14px;background:rgba(168,140,255,.04);border:.5px solid rgba(168,140,255,.14);border-radius:14px;display:flex;flex-direction:column;align-items:center;gap:8px}
-.trust-icon{width:48px;height:48px;filter:drop-shadow(0 8px 16px rgba(168,140,255,.3))}
+/* Trust-Strip Emojis nebeneinander mit Hover-Pop + Boot-Bounce */
+.trust-icon{width:56px;height:56px;filter:drop-shadow(0 8px 16px rgba(168,140,255,.3));transition:transform .35s cubic-bezier(.34,1.56,.64,1),filter .35s;animation:emojiPop .7s cubic-bezier(.34,1.56,.64,1) backwards}
+.trust-strip-grid > .trust-item:nth-child(1) .trust-icon{animation-delay:.1s}
+.trust-strip-grid > .trust-item:nth-child(2) .trust-icon{animation-delay:.22s}
+.trust-strip-grid > .trust-item:nth-child(3) .trust-icon{animation-delay:.34s}
+.trust-item:hover .trust-icon{transform:translateY(-4px) scale(1.08);filter:drop-shadow(0 14px 24px rgba(168,140,255,.5))}
+@keyframes emojiPop{0%{opacity:0;transform:scale(.4) translateY(20px)}70%{opacity:1;transform:scale(1.1) translateY(-2px)}100%{opacity:1;transform:scale(1) translateY(0)}}
+@media (prefers-reduced-motion:reduce){.trust-icon{animation:none}.trust-item:hover .trust-icon{transform:none}}
+
+/* Smooth Aufklappen für details (Trust + How-to) */
+.expand-wrap[open] .expand-body{animation:expandIn .35s cubic-bezier(.2,.8,.2,1)}
+@keyframes expandIn{0%{opacity:0;transform:translateY(-6px);max-height:0}100%{opacity:1;transform:translateY(0);max-height:500px}}
 .trust-h{font-size:14px;font-weight:700;color:#F5F3FF;letter-spacing:-.2px}
 .trust-d{font-size:12.5px;line-height:1.55;color:rgba(245,243,255,.7)}
 .trust-badge{display:inline-block;margin:8px auto 18px;padding:8px 18px;background:rgba(139,92,246,.14);border:.5px solid rgba(168,140,255,.32);border-radius:999px;font-size:11.5px;font-weight:600;letter-spacing:.5px;color:#A88CFF;text-transform:uppercase}
@@ -1278,7 +1291,7 @@ body::after{
       <span class="word">alleine</span>
       <span class="word">heim.</span>
     </h1>
-    <p class="hero-sub"><strong style="color:#F5F3FF">Sag echten Freunden, wann du losgehst.</strong> Sie hören nur Alarm, wenn du nicht ankommst. Sonst Stille — kein Tracking, kein Massen-Feed.</p>
+    <p class="hero-sub"><strong style="color:#F5F3FF">Sag echten Freunden, wann du losgehst.</strong> Sie hören nur Alarm, wenn du nicht ankommst. Sonst Stille — kein Tracking, kein Druck.</p>
     <p class="hero-crew-def">Crew = deine 3–15 echten Freunde. Nicht Insta-Follower.</p>
     <!-- Audit-Fix-2: Primary CTA-Button mit Pioneer-Counter -->
     <div class="hero-cta-row">
