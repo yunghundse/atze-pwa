@@ -6055,7 +6055,7 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     $$('.tab').forEach(t => t.classList.remove('active'));
     $('tab-' + name).classList.add('active');
     $$('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
-    if (name === 'hotspots'){ initMap(); loadHotspots(); }
+    if (name === 'hotspots'){ initMap(); loadHotspots(); forceMapResize(); }
     if (name === 'crew'){
       $('cwTree').classList.toggle('show', cwTab === 'tree');
       $('cwSearch').style.display = cwTab === 'tree' ? 'none' : '';
@@ -6397,8 +6397,13 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
   $('sosBtn').addEventListener('click', openSosConfirm);
 
   /* ============= MAP ============= */
+  function forceMapResize(){
+    if (!map) return;
+    /* Mehrere Versuche mit aufsteigender Verzögerung — fixt invalidateSize-Race-Conditions */
+    [50, 150, 350, 700].forEach(d => setTimeout(() => { try { map.invalidateSize(); } catch(_){} }, d));
+  }
   function initMap(){
-    if (map) { setTimeout(() => { try { map.invalidateSize(); } catch(e){} }, 100); return; }
+    if (map) { forceMapResize(); return; }
     if (typeof L === 'undefined') return;
     const center = userLat ? [userLat, userLng] : [48.137, 11.575];
     map = L.map('map', { zoomControl: true, attributionControl: true }).setView(center, 14);
@@ -6407,7 +6412,15 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
       subdomains: 'abcd',
       maxZoom: 20
     }).addTo(map);
-    setTimeout(() => map.invalidateSize(), 200);
+    forceMapResize();
+    /* ResizeObserver für Container-Größen-Änderungen (Tab-Switch, Window-Resize) */
+    if (window.ResizeObserver){
+      const ro = new ResizeObserver(() => { try { map.invalidateSize(); } catch(_){} });
+      ro.observe(document.getElementById('map'));
+    }
+    /* Window-Resize + Orientation-Change als Backup */
+    window.addEventListener('resize', forceMapResize);
+    window.addEventListener('orientationchange', forceMapResize);
     /* Filter-Bar */
     renderHsBar();
   }
