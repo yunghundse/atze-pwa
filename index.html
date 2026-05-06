@@ -139,6 +139,20 @@ form.partner-form[hidden]{display:none !important}
 .pillars-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
 @media (max-width:880px){.pillars-grid{grid-template-columns:1fr;gap:14px;max-width:480px;margin:0 auto}}
 
+/* Vision-Strip — crew+ Netzwerk-Andeutung (Investor-Signal) */
+.vision-strip{position:relative;padding:72px 24px 80px;max-width:720px;margin:0 auto;text-align:center;overflow:hidden}
+.vision-strip::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(139,92,246,.18) 0%,transparent 60%);pointer-events:none;z-index:0}
+.vision-inner{position:relative;z-index:1}
+.vision-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:#A88CFF;font-weight:700;margin-bottom:18px;padding:6px 14px;background:rgba(139,92,246,.10);border:.5px solid rgba(168,140,255,.28);border-radius:999px}
+.vision-title{font-size:clamp(56px,10vw,96px);font-weight:900;letter-spacing:-3.5px;line-height:.95;color:#F5F3FF;margin:0 0 6px;display:inline-block}
+.vision-plus{display:inline-block;color:#A88CFF;text-shadow:0 0 32px rgba(168,140,255,.6);animation:visionPulse 3s ease-in-out infinite;margin-left:-2px}
+@keyframes visionPulse{0%,100%{transform:scale(1);text-shadow:0 0 32px rgba(168,140,255,.6)}50%{transform:scale(1.06);text-shadow:0 0 48px rgba(168,140,255,.85)}}
+.vision-tag{font-size:clamp(18px,2.6vw,24px);font-weight:700;letter-spacing:-.4px;color:#A88CFF;margin:0 0 18px;line-height:1.3}
+.vision-body{font-size:14.5px;line-height:1.7;color:rgba(245,243,255,.75);max-width:560px;margin:0 auto 20px}
+.vision-meta{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:rgba(168,140,255,.55);font-weight:600;margin:0}
+@media (prefers-reduced-motion:reduce){.vision-plus{animation:none}}
+@media (max-width:520px){.vision-strip{padding:56px 22px 64px}}
+
 /* Kontakt-Section — direkt an Admin-Dashboard */
 .contact-section{position:relative;padding:64px 24px 72px;max-width:600px;margin:0 auto;text-align:center}
 .contact-eyebrow{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:#A88CFF;font-weight:700;margin-bottom:10px}
@@ -1604,7 +1618,7 @@ body::after{
     </button>
   </div>
   <p class="trust-tap-hint">Tippen für Details</p>
-  <div class="trust-badge">Kein VC &middot; Kein Tracking &middot; Kein Verkauf an Dritte</div>
+  <div class="trust-badge">Kein VC &middot; Kein Tracking &middot; Kein Cookie-Banner &middot; Kein Verkauf an Dritte</div>
   <p class="trust-meta">crew. wird gebaut von einem jungen Team in <strong>Baden-Württemberg</strong>. Du bekommst, was du siehst — und nichts dahinter.</p>
 </section>
 
@@ -1694,6 +1708,17 @@ body::after{
         <div class="rmv2-status">Wenn ihr sagt: jetzt</div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- VISION — crew+ Netzwerk-Erweiterung als Andeutung -->
+<section class="vision-strip" aria-labelledby="visionTitle">
+  <div class="vision-inner">
+    <div class="vision-eyebrow">Was später kommt</div>
+    <h2 class="vision-title" id="visionTitle">crew<span class="vision-plus">+</span></h2>
+    <p class="vision-tag">Wenn Crews sich vernetzen.</p>
+    <p class="vision-body">Aus deiner Crew wird ein Knoten in einem größeren Netz — wenn du willst. Crews verbinden sich gegenseitig (mutual + opt-in, immer), Locations werden Sicherheits-Anker, aus 50 Pionieren wird ein Late-Night-Netzwerk Stadt für Stadt. Aus echten Beziehungen, nicht aus Algorithmus.</p>
+    <p class="vision-meta">Nicht jetzt. Später. Erst wenn die Basis steht.</p>
   </div>
 </section>
 
