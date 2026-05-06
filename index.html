@@ -139,13 +139,32 @@ form.partner-form[hidden]{display:none !important}
 .pillars-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
 @media (max-width:880px){.pillars-grid{grid-template-columns:1fr;gap:14px;max-width:480px;margin:0 auto}}
 
+/* Kontakt-Section — direkt an Admin-Dashboard */
+.contact-section{position:relative;padding:64px 24px 72px;max-width:600px;margin:0 auto;text-align:center}
+.contact-eyebrow{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:#A88CFF;font-weight:700;margin-bottom:10px}
+.contact-title{font-size:clamp(24px,3.4vw,34px);font-weight:900;letter-spacing:-1px;color:#F5F3FF;margin:0 0 12px}
+.contact-sub{font-size:14px;line-height:1.6;color:rgba(245,243,255,.7);max-width:460px;margin:0 auto 28px}
+.contact-form{display:flex;flex-direction:column;gap:14px;text-align:left}
+.contact-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:520px){.contact-row{grid-template-columns:1fr}}
+.contact-field label{display:block;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(168,140,255,.75);margin-bottom:6px}
+.contact-field input,.contact-field textarea{width:100%;background:rgba(255,255,255,.06);color:#fff;border:1px solid rgba(168,140,255,.18);padding:13px 16px;border-radius:14px;font:inherit;font-size:14px;outline:none;transition:border-color .2s,background .2s;-webkit-appearance:none;appearance:none}
+.contact-field input:focus,.contact-field textarea:focus{border-color:#A88CFF;background:rgba(255,255,255,.08)}
+.contact-field input::placeholder,.contact-field textarea::placeholder{color:rgba(245,243,255,.35)}
+.contact-field textarea{resize:vertical;min-height:120px;line-height:1.5}
+.contact-btn{align-self:flex-end;background:linear-gradient(135deg,#8B5CF6,#A88CFF);color:#fff;border:0;padding:12px 28px;border-radius:14px;font-weight:800;font-size:14px;letter-spacing:.2px;cursor:pointer;box-shadow:0 8px 24px rgba(139,92,246,.32);transition:transform .2s,box-shadow .2s}
+.contact-btn:hover{transform:translateY(-1px);box-shadow:0 12px 32px rgba(139,92,246,.45)}
+.contact-btn:disabled{opacity:.5;cursor:not-allowed}
+.contact-success{font-size:13px;color:#A88CFF;text-align:center;margin:8px 0 0}
+
 /* Diff-Strip — "Aber WhatsApp macht das doch?" */
 .diff-strip{position:relative;padding:56px 24px 60px;max-width:920px;margin:0 auto;text-align:center}
 .diff-eyebrow{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:#A88CFF;font-weight:700;margin-bottom:10px}
 .diff-title{font-size:clamp(22px,3.4vw,32px);font-weight:800;line-height:1.2;letter-spacing:-.6px;color:#F5F3FF;margin:0 0 28px}
 .diff-title .em{color:#A88CFF}
 .diff-rows{display:flex;flex-direction:column;gap:12px;max-width:680px;margin:0 auto;text-align:left}
-.diff-row{display:grid;grid-template-columns:130px 1fr;gap:18px;align-items:start;padding:14px 18px;background:rgba(168,140,255,.04);border:.5px solid rgba(168,140,255,.14);border-radius:14px}
+.diff-row{display:grid;grid-template-columns:130px 1fr;gap:18px;align-items:start;padding:14px 18px;background:rgba(168,140,255,.04);border:.5px solid rgba(168,140,255,.14);border-radius:14px;transition:transform .25s cubic-bezier(.34,1.56,.64,1),background .25s,border-color .25s,box-shadow .25s}
+.diff-row:hover{transform:translateX(4px);background:rgba(168,140,255,.08);border-color:rgba(168,140,255,.32);box-shadow:0 8px 24px rgba(139,92,246,.18)}
 .diff-row-name{font-size:13px;font-weight:800;color:#A88CFF;letter-spacing:-.2px;line-height:1.4}
 .diff-row-text{font-size:14px;line-height:1.55;color:rgba(245,243,255,.78)}
 .diff-row-text strong{color:#F5F3FF;font-weight:700}
@@ -186,6 +205,10 @@ form.partner-form[hidden]{display:none !important}
 .rmv2-step{position:relative;padding:28px 22px;background:rgba(168,140,255,.05);border:.5px solid rgba(168,140,255,.18);border-radius:18px;text-align:left;transition:transform .3s,border-color .3s}
 .rmv2-step:hover{transform:translateY(-4px);border-color:rgba(168,140,255,.32)}
 .rmv2-step.rmv2-active{background:linear-gradient(135deg,rgba(139,92,246,.18),rgba(168,140,255,.06));border-color:rgba(168,140,255,.45);box-shadow:0 16px 40px rgba(139,92,246,.18)}
+.rmv2-here-badge{position:absolute;top:-12px;left:18px;display:inline-flex;align-items:center;gap:6px;padding:5px 12px;background:linear-gradient(135deg,#8B5CF6,#A88CFF);color:#fff;font-size:10px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;border-radius:999px;box-shadow:0 6px 18px rgba(139,92,246,.55);animation:hereFloat 3s ease-in-out infinite}
+.rmv2-here-dot{width:6px;height:6px;background:#fff;border-radius:999px;animation:pulse 1.4s infinite}
+@keyframes hereFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@media (prefers-reduced-motion:reduce){.rmv2-here-badge{animation:none}.rmv2-here-dot{animation:none}}
 .rmv2-num{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;background:rgba(139,92,246,.22);color:#A88CFF;font-size:14px;font-weight:700;margin-bottom:14px}
 .rmv2-step.rmv2-active .rmv2-num{background:#8B5CF6;color:#fff}
 .rmv2-h{font-size:17px;font-weight:700;color:#F5F3FF;margin-bottom:8px;letter-spacing:-.3px}
@@ -1346,7 +1369,7 @@ body::after{
            alt="" loading="eager" width="108" height="108"/>
       <span class="hero-floating-word">crew<span class="dot">.</span></span>
     </div>
-    <div class="hero-eyebrow">Pioneer-Phase &middot; 50 Codes</div>
+    <div class="hero-eyebrow">Pioneer-Phase &middot; Handverlesen</div>
     <h1 class="hero-mission" aria-label="Niemand geht alleine heim. Heim geht alleine niemand. Alleine geht niemand heim.">
       <span class="mission-line is-active">Niemand geht alleine <span class="mission-em">heim.</span></span>
       <span class="mission-line">Heim geht alleine <span class="mission-em">niemand.</span></span>
@@ -1358,7 +1381,7 @@ body::after{
     <div class="hero-cta-row">
       <a href="#wl" class="hero-cta-primary">
         <span class="hero-cta-label">Pioneer werden</span>
-        <span class="hero-cta-meta" id="heroCtaMeta">50 Codes frei</span>
+        <span class="hero-cta-meta" id="heroCtaMeta">Handverlesen · noch frei</span>
       </a>
     </div>
     <!-- Fix-2: Live Pioneer-Counter (Social Proof + Scarcity) -->
@@ -1455,6 +1478,44 @@ body::after{
   </div>
 </section>
 
+<!-- App-Stores: "Bald verfügbar" — Pre-Launch-Indikation, direkt nach Hero -->
+<section class="app-stores" aria-labelledby="storesTitle">
+  <div class="app-stores-inner">
+    <div class="stores-eyebrow"><span class="pulse-dot"></span>Bald verfügbar</div>
+    <h2 class="stores-title" id="storesTitle">crew. kommt <span class="em">in den App Store</span> &amp; auf <span class="em">Google Play</span>.</h2>
+    <p class="stores-sub">Pioneer-Phase läuft mit einer handverlesenen Crew aus Baden-Württemberg. Public-Launch im App Store + Play Store, sobald sie sagen: <strong style="color:#F5F3FF">jetzt ist sie bereit</strong>.</p>
+    <div class="stores-badges">
+      <a href="#wl" class="store-badge store-badge--apple" aria-label="Bald im App Store verfügbar — auf die Warteliste">
+        <svg class="sb-icon" viewBox="0 0 384 512" xmlns="http://www.w3.org/2000/svg" fill="currentColor" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>
+        <div class="sb-text">
+          <span class="sb-pre">Bald im</span>
+          <span class="sb-name">App Store</span>
+        </div>
+        <span class="sb-soon">Soon</span>
+      </a>
+      <a href="#wl" class="store-badge store-badge--google" aria-label="Bald auf Google Play verfügbar — auf die Warteliste">
+        <svg class="sb-icon" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="gp-grad" x1="0" x2="1" y1="0" y2="1">
+              <stop offset="0%" stop-color="#A88CFF"/>
+              <stop offset="100%" stop-color="#8B5CF6"/>
+            </linearGradient>
+          </defs>
+          <path d="M48 32L304 256 48 480c-8 4-16 0-16-12V44c0-12 8-16 16-12z" fill="url(#gp-grad)"/>
+          <path d="M304 256l112-64c12-7 12-25 0-32L304 96l-48 48 48 112z" fill="#F5F3FF" opacity=".88"/>
+          <path d="M304 256L256 304l48 112 112-64c12-7 12-25 0-32l-112-64z" fill="url(#gp-grad)" opacity=".75"/>
+        </svg>
+        <div class="sb-text">
+          <span class="sb-pre">Bald auf</span>
+          <span class="sb-name">Google Play</span>
+        </div>
+        <span class="sb-soon">Soon</span>
+      </a>
+    </div>
+    <a href="#wl" class="stores-fallback">Nicht warten wollen? Auf die Warteliste →</a>
+  </div>
+</section>
+
 <!-- Schritt 3: Drei-Pillar-Section (Brand-konsistent zu Onboarding-Slide-1) -->
 <section class="pillars">
   <div class="pillars-head">
@@ -1544,45 +1605,7 @@ body::after{
   </div>
   <p class="trust-tap-hint">Tippen für Details</p>
   <div class="trust-badge">Kein VC &middot; Kein Tracking &middot; Kein Verkauf an Dritte</div>
-  <p class="trust-meta">crew. ist gemacht von Menschen in <strong>Stuttgart</strong>. Du bekommst, was du siehst — und nichts dahinter.</p>
-</section>
-
-<!-- App-Stores: "Bald verfügbar" — Pre-Launch-Indikation für iOS + Android -->
-<section class="app-stores" aria-labelledby="storesTitle">
-  <div class="app-stores-inner">
-    <div class="stores-eyebrow"><span class="pulse-dot"></span>Bald verfügbar</div>
-    <h2 class="stores-title" id="storesTitle">crew. kommt <span class="em">in den App Store</span> &amp; auf <span class="em">Google Play</span>.</h2>
-    <p class="stores-sub">Pioneer-Phase läuft jetzt mit 50 handverlesenen Stuttgartern. Public-Launch im App Store + Play Store, sobald die ersten Pioniere sagen: <strong style="color:#F5F3FF">jetzt ist sie bereit</strong>.</p>
-    <div class="stores-badges">
-      <a href="#wl" class="store-badge store-badge--apple" aria-label="Bald im App Store verfügbar — auf die Warteliste">
-        <svg class="sb-icon" viewBox="0 0 384 512" xmlns="http://www.w3.org/2000/svg" fill="currentColor" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>
-        <div class="sb-text">
-          <span class="sb-pre">Bald im</span>
-          <span class="sb-name">App Store</span>
-        </div>
-        <span class="sb-soon">Soon</span>
-      </a>
-      <a href="#wl" class="store-badge store-badge--google" aria-label="Bald auf Google Play verfügbar — auf die Warteliste">
-        <svg class="sb-icon" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <defs>
-            <linearGradient id="gp-grad" x1="0" x2="1" y1="0" y2="1">
-              <stop offset="0%" stop-color="#A88CFF"/>
-              <stop offset="100%" stop-color="#8B5CF6"/>
-            </linearGradient>
-          </defs>
-          <path d="M48 32L304 256 48 480c-8 4-16 0-16-12V44c0-12 8-16 16-12z" fill="url(#gp-grad)"/>
-          <path d="M304 256l112-64c12-7 12-25 0-32L304 96l-48 48 48 112z" fill="#F5F3FF" opacity=".88"/>
-          <path d="M304 256L256 304l48 112 112-64c12-7 12-25 0-32l-112-64z" fill="url(#gp-grad)" opacity=".75"/>
-        </svg>
-        <div class="sb-text">
-          <span class="sb-pre">Bald auf</span>
-          <span class="sb-name">Google Play</span>
-        </div>
-        <span class="sb-soon">Soon</span>
-      </a>
-    </div>
-    <a href="#wl" class="stores-fallback">Nicht warten wollen? Auf die Warteliste →</a>
-  </div>
+  <p class="trust-meta">crew. wird gebaut von einem jungen Team in <strong>Baden-Württemberg</strong>. Du bekommst, was du siehst — und nichts dahinter.</p>
 </section>
 
 <!-- Schritt 4: So funktioniert's — 3-Step-Flow -->
@@ -1635,10 +1658,10 @@ body::after{
     <p>Wir kennen das Gefühl, wenn der Heimweg um 3 Uhr leiser ist als der Club zwei Stunden vorher. Wenn die Crew weg ist und das Handy zu hell. Wenn man eigentlich schon fast da ist — aber eben nur fast.</p>
     <p>crew. ist keine App, die mit dir reich werden will. Es ist ein Push, der ankommt wenn du nicht zu Hause bist. Mehr nicht. Du wählst, wer ihn bekommt. Wir verkaufen niemandem deine Daten. Niemals.</p>
     <p style="color:#A88CFF">Gemacht in Stuttgart, getestet auf echten Heimwegen.</p>
-    <div style="margin-top:32px;padding:20px 24px;background:rgba(168,140,255,.05);border:.5px solid rgba(168,140,255,.16);border-radius:14px;max-width:520px;margin-left:auto;margin-right:auto;text-align:left">
+    <div style="margin-top:32px;padding:22px 26px;background:rgba(168,140,255,.05);border:.5px solid rgba(168,140,255,.16);border-radius:14px;max-width:560px;margin-left:auto;margin-right:auto;text-align:left">
       <div style="font-size:10.5px;letter-spacing:.32em;text-transform:uppercase;color:rgba(168,140,255,.7);font-weight:700;margin-bottom:8px">Wer baut das?</div>
-      <p style="font-size:13.5px;line-height:1.65;color:rgba(245,243,255,.8);margin:0">Jan, Stuttgart. Hat selber zu oft den Heimweg um 3 Uhr alleine gemacht und sich gefragt warum es dafür keine App gibt, die nicht gleich Tracking-Hölle ist. Kein VC. Kein Exit-Plan. Nur die Frage: kann man eine App bauen, die der Crew vertraut statt einem Algorithmus?</p>
-      <p style="font-size:12px;line-height:1.5;color:rgba(168,140,255,.6);margin:10px 0 0;font-style:italic">Hi auf <a href="https://www.instagram.com/playa.crew" target="_blank" rel="noopener" style="color:#A88CFF;text-decoration:underline">@playa.crew</a> · Kontakt direkt: <a href="mailto:hi@partycrew.app" style="color:#A88CFF;text-decoration:underline">hi@partycrew.app</a></p>
+      <p style="font-size:13.5px;line-height:1.65;color:rgba(245,243,255,.85);margin:0">Wir — Jan und ein junges Team aus Baden-Württemberg. Haben selber zu oft den Heimweg um 3 Uhr alleine gemacht und uns gefragt, warum es dafür keine App gibt, die nicht gleich Tracking-Hölle ist. Kein VC. Kein Exit-Plan. Nur die Frage: kann man eine App bauen, die der Crew vertraut — statt einem Algorithmus?</p>
+      <p style="font-size:12px;line-height:1.5;color:rgba(168,140,255,.7);margin:12px 0 0">Folg uns auf <a href="https://www.instagram.com/playa.crew" target="_blank" rel="noopener" style="color:#A88CFF;text-decoration:underline;text-underline-offset:2px">@playa.crew</a> &middot; <a href="#kontakt" style="color:#A88CFF;text-decoration:underline;text-underline-offset:2px">Schreib uns direkt &rarr;</a></p>
     </div>
     <div class="sig" style="margin-top:24px"><span style="color:#F5F3FF">crew<span style="color:#8B5CF6">.</span></span></div>
   </div>
@@ -1652,9 +1675,10 @@ body::after{
     <p class="rmv2-sub">Wir gehen langsam — damit es richtig wird. Pioneer-Phase zuerst, dann öffnen wir Stück für Stück.</p>
     <div class="rmv2-grid">
       <div class="rmv2-step rmv2-active">
+        <div class="rmv2-here-badge"><span class="rmv2-here-dot"></span>Du bist hier</div>
         <div class="rmv2-num">1</div>
         <div class="rmv2-h">Pioneer-Phase Stuttgart</div>
-        <div class="rmv2-d">50 handverlesene Pioniere testen die App. Bug-Reports per WhatsApp. Du bist hier.</div>
+        <div class="rmv2-d">Eine handverlesene Crew testet die App. Persönlich angesprochen, Bug-Reports per WhatsApp. Wir gehen jeden Heimweg mit.</div>
         <div class="rmv2-status">Live · jetzt</div>
       </div>
       <div class="rmv2-step">
@@ -1696,7 +1720,7 @@ body::after{
   <div class="partner-inner">
     <div class="section-tag" style="font-size:11px;letter-spacing:.35em;text-transform:uppercase;color:#A88CFF;font-weight:700;margin-bottom:8px;text-align:center">Für Locations + Events</div>
     <h2 style="font-size:clamp(20px,3.5vw,32px);font-weight:900;letter-spacing:-1px;text-align:center;margin-bottom:8px;color:#F5F3FF">Du machst Nightlife.<br>Wir machen Heimweg.</h2>
-    <p style="font-size:13px;color:rgba(245,243,255,.7);text-align:center;margin-bottom:14px;line-height:1.6;max-width:520px;margin-left:auto;margin-right:auto">Stuttgart zuerst, dann DACH. Wenn du eine Bar, einen Club, ein Festival oder ein Hotel hier hast — lass uns reden.</p>
+    <p style="font-size:13px;color:rgba(245,243,255,.7);text-align:center;margin-bottom:14px;line-height:1.6;max-width:520px;margin-left:auto;margin-right:auto">Baden-Württemberg zuerst, dann DACH. Wenn du eine Bar, einen Club, ein Festival oder ein Hotel im Raum Stuttgart, Karlsruhe oder Heidelberg hast — lass uns reden.</p>
     <p style="font-size:12px;color:rgba(168,140,255,.7);text-align:center;margin-bottom:24px;line-height:1.7;max-width:560px;margin-left:auto;margin-right:auto">Was du bekommst: Pioneer-Crew als Test-Gruppe vor Ort · QR-Code an der Tür der zur App führt · Co-Branding für Heimweg-Sicherheit · Aggregierte Heimweg-Daten anonym (nur wenn du willst)</p>
     <div style="text-align:center;margin-bottom:18px">
       <button type="button" id="partnerToggle" class="partner-toggle-btn" aria-expanded="false" aria-controls="partnerForm">
@@ -1726,18 +1750,38 @@ body::after{
   </div>
 </section>
 
-
+<!-- KONTAKT-Section: schreibt zu Supabase feedback -> Admin-Dashboard -->
+<section id="kontakt" class="contact-section">
+  <div class="contact-inner">
+    <div class="contact-eyebrow">Schreib uns</div>
+    <h2 class="contact-title">Direkt an's Team.</h2>
+    <p class="contact-sub">Presse, Partner-Anfragen, Investoren, Bug-Reports oder ein Daumen hoch — alles kommt direkt bei uns im Dashboard an. Keine Helpdesk-Maschine, kein Marketing-Filter.</p>
+    <form class="contact-form" id="contactForm" novalidate>
+      <input type="text" name="website" id="ctHp" class="hp-trap" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <div class="contact-row">
+        <div class="contact-field"><label>Name</label><input type="text" id="ctName" placeholder="Wer schreibt?" maxlength="80"></div>
+        <div class="contact-field"><label>E-Mail (optional)</label><input type="email" id="ctEmail" placeholder="für eine Antwort"></div>
+      </div>
+      <div class="contact-field">
+        <label>Nachricht *</label>
+        <textarea id="ctMessage" placeholder="Was hast du auf dem Herzen?" required maxlength="2000" rows="5"></textarea>
+      </div>
+      <button type="submit" class="contact-btn" id="ctBtn">Senden →</button>
+      <p class="contact-success" id="ctSuccess" style="display:none">Angekommen. Wir lesen jede Nachricht — und melden uns wenn nötig.</p>
+    </form>
+  </div>
+</section>
 
 <!-- FOOTER -->
 <footer>
   <div class="foot-brand">crew<span class="dot">.</span></div>
   <div class="foot-tagline" style="font-size:12px;color:rgba(168,140,255,.7);margin-bottom:14px">Für die Crew, die wirklich da ist.</div>
   <div class="foot-links">
-    <a href="mailto:hi@partycrew.app">Kontakt</a>
+    <a href="#kontakt">Kontakt</a>
     <a onclick="openLegalPage('datenschutz')">Datenschutz</a>
     <a onclick="openLegalPage('impressum')">Impressum</a>
   </div>
-  <div class="foot-copy">&copy; 2026 crew. — Made in Stuttgart with <span style="color:#A88CFF">care</span></div>
+  <div class="foot-copy">&copy; 2026 crew. — Made in Baden-Württemberg with <span style="color:#A88CFF">care</span></div>
 </footer>
 
 <!-- LEGAL MODALS -->
@@ -1762,7 +1806,7 @@ var SUBMIT_COOLDOWN_MS = 8000;
 var lastSubmitAt = {};
 
 function isHoneypotTriggered(formId) {
-  var hpMap = { wlForm: 'wlHp', clEmail: 'clHp', fbForm: 'fbHp', partnerForm: 'pfHp' };
+  var hpMap = { wlForm: 'wlHp', clEmail: 'clHp', fbForm: 'fbHp', partnerForm: 'pfHp', contactForm: 'ctHp' };
   var hpId = hpMap[formId];
   if (!hpId) return false;
   var hp = document.getElementById(hpId);
@@ -1919,6 +1963,40 @@ function copyRefLink(){
   });
 })();
 
+// Kontakt-Form (schreibt in feedback table, sichtbar im Admin-Dashboard)
+(function(){
+  var ctForm = document.getElementById('contactForm');
+  if (!ctForm) return;
+  ctForm.addEventListener('submit', async function(e){
+    e.preventDefault();
+    if (isHoneypotTriggered('contactForm')) { return; }
+    if (isRateLimited('contactForm')) { return; }
+    var msgEl = document.getElementById('ctMessage');
+    var nameEl = document.getElementById('ctName');
+    var emailEl = document.getElementById('ctEmail');
+    var btn = document.getElementById('ctBtn');
+    var success = document.getElementById('ctSuccess');
+    var message = (msgEl.value || '').trim().substring(0,2000);
+    var name = (nameEl.value || '').trim().substring(0,80);
+    var email = (emailEl.value || '').trim().toLowerCase();
+    if (!message) { alert('Bitte schreib uns kurz was los ist.'); return; }
+    if (email && !isValidEmail(email)) { alert('Die E-Mail-Adresse ist ungültig.'); return; }
+    btn.textContent = 'Wird gesendet …'; btn.disabled = true;
+    try {
+      var insertData = { message: message + '\n\n[Kontakt-Form Landing]' };
+      if (name) insertData.name = name;
+      if (email) insertData.email = email;
+      var { error } = await sb.from('feedback').insert(insertData);
+      if (error) throw error;
+      ctForm.style.display = 'none';
+      success.style.display = 'block';
+    } catch(err){
+      btn.textContent = 'Senden →'; btn.disabled = false;
+      alert('Fehler: ' + (err.message || 'Versuche es erneut.'));
+    }
+  });
+})();
+
 // Code lookup
 async function lookupCode(){
   if (isHoneypotTriggered('clEmail')) { return; }
@@ -2009,7 +2087,7 @@ async function loadPioneerStats(){
     var hc = document.getElementById('heroPioneerCount');
     if (hc) {
       if (remaining > 0) {
-        hc.innerHTML = '<strong>' + used + '</strong> von <strong>' + total + '</strong> Pioneer-Codes vergeben &middot; nur noch <strong style="color:#A88CFF">' + remaining + '</strong> frei';
+        hc.innerHTML = '<strong>' + used + '</strong> handverlesene Pioniere bestätigt &middot; <strong style="color:#A88CFF">' + remaining + '</strong> Plätze noch offen';
       } else {
         hc.innerHTML = '<strong>Alle ' + total + ' Pioneer-Codes vergeben.</strong> Komm auf die Warteliste für Welle 2.';
       }
@@ -2018,12 +2096,12 @@ async function loadPioneerStats(){
     /* Nav-Pill Scarcity-Text */
     var np = document.querySelector('.nav-pill');
     if (np && remaining > 0) {
-      np.innerHTML = '<span class="pulse-dot"></span>Nur noch ' + remaining + ' Codes';
+      np.innerHTML = '<span class="pulse-dot"></span>Handverlesen · ' + remaining + ' frei';
     }
     /* Hero CTA-Meta */
     var hcm = document.getElementById('heroCtaMeta');
     if (hcm) {
-      if (remaining > 0) hcm.textContent = remaining + ' von ' + total + ' Codes frei';
+      if (remaining > 0) hcm.textContent = 'Handverlesen · ' + remaining + ' Plätze frei';
       else hcm.textContent = 'Welle 2 — auf Warteliste';
     }
   } catch(e){}
