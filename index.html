@@ -139,19 +139,33 @@ form.partner-form[hidden]{display:none !important}
 .pillars-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
 @media (max-width:880px){.pillars-grid{grid-template-columns:1fr;gap:14px;max-width:480px;margin:0 auto}}
 
-/* Vision-Strip — crew+ Netzwerk-Andeutung (Investor-Signal) */
-.vision-strip{position:relative;padding:72px 24px 80px;max-width:720px;margin:0 auto;text-align:center;overflow:hidden}
-.vision-strip::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(139,92,246,.18) 0%,transparent 60%);pointer-events:none;z-index:0}
+/* sr-only utility (Screen-Reader Accessibility) */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* Vision-Strip — crew+ Netzwerk-Andeutung mit ". → +" Morph */
+.vision-strip{position:relative;padding:80px 24px 88px;max-width:720px;margin:0 auto;text-align:center;overflow:hidden}
+.vision-strip::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at center,rgba(139,92,246,.10) 0%,transparent 70%);pointer-events:none;z-index:0}
 .vision-inner{position:relative;z-index:1}
-.vision-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:#A88CFF;font-weight:700;margin-bottom:18px;padding:6px 14px;background:rgba(139,92,246,.10);border:.5px solid rgba(168,140,255,.28);border-radius:999px}
-.vision-title{font-size:clamp(56px,10vw,96px);font-weight:900;letter-spacing:-3.5px;line-height:.95;color:#F5F3FF;margin:0 0 6px;display:inline-block}
-.vision-plus{display:inline-block;color:#A88CFF;text-shadow:0 0 32px rgba(168,140,255,.6);animation:visionPulse 3s ease-in-out infinite;margin-left:-2px}
-@keyframes visionPulse{0%,100%{transform:scale(1);text-shadow:0 0 32px rgba(168,140,255,.6)}50%{transform:scale(1.06);text-shadow:0 0 48px rgba(168,140,255,.85)}}
-.vision-tag{font-size:clamp(18px,2.6vw,24px);font-weight:700;letter-spacing:-.4px;color:#A88CFF;margin:0 0 18px;line-height:1.3}
-.vision-body{font-size:14.5px;line-height:1.7;color:rgba(245,243,255,.75);max-width:560px;margin:0 auto 20px}
-.vision-meta{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:rgba(168,140,255,.55);font-weight:600;margin:0}
-@media (prefers-reduced-motion:reduce){.vision-plus{animation:none}}
-@media (max-width:520px){.vision-strip{padding:56px 22px 64px}}
+.vision-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:rgba(168,140,255,.7);font-weight:700;margin-bottom:22px;padding:6px 14px;background:rgba(139,92,246,.06);border:.5px solid rgba(168,140,255,.18);border-radius:999px}
+.vision-title{font-size:clamp(56px,10vw,96px);font-weight:900;letter-spacing:-3.5px;line-height:.95;color:#F5F3FF;margin:0 0 14px;display:inline-block}
+
+/* The "." → "+" Morph — geheimnisvoll, subtle Atmung statt aggressives Pulsen */
+.vision-mark{position:relative;display:inline-block;width:.55em;height:1em;vertical-align:baseline;margin-left:-.04em}
+.vision-mark .dot,.vision-mark .plus{position:absolute;left:0;right:0;bottom:0;display:flex;align-items:flex-end;justify-content:flex-start;line-height:1;color:#A88CFF;transition:opacity .8s ease,transform .8s cubic-bezier(.4,0,.2,1)}
+.vision-mark .dot{opacity:1;transform:scale(1);text-shadow:0 0 18px rgba(168,140,255,.45);animation:dotBreathe 9s ease-in-out infinite}
+.vision-mark .plus{opacity:0;transform:scale(.6) rotate(-90deg);font-weight:300;text-shadow:0 0 32px rgba(168,140,255,.6);animation:plusReveal 9s ease-in-out infinite}
+@keyframes dotBreathe{0%,55%,100%{opacity:1;transform:scale(1)}65%,90%{opacity:0;transform:scale(.5)}}
+@keyframes plusReveal{0%,55%,100%{opacity:0;transform:scale(.6) rotate(-90deg)}65%,90%{opacity:.85;transform:scale(1) rotate(0deg)}}
+
+.vision-tag{font-size:clamp(16px,2.2vw,20px);font-weight:600;letter-spacing:-.2px;color:rgba(168,140,255,.75);margin:0 0 22px;line-height:1.4;font-style:italic}
+.vision-body{font-size:14.5px;line-height:1.75;color:rgba(245,243,255,.7);max-width:560px;margin:0 auto 22px}
+.vision-meta{font-size:11.5px;letter-spacing:.22em;text-transform:uppercase;color:rgba(168,140,255,.45);font-weight:600;margin:0}
+@media (prefers-reduced-motion:reduce){
+  .vision-mark .dot,.vision-mark .plus{animation:none}
+  .vision-mark .dot{opacity:1}
+  .vision-mark .plus{opacity:.4}
+}
+@media (max-width:520px){.vision-strip{padding:60px 22px 68px}}
 
 /* Kontakt-Section — direkt an Admin-Dashboard */
 .contact-section{position:relative;padding:64px 24px 72px;max-width:600px;margin:0 auto;text-align:center}
@@ -1665,7 +1679,7 @@ body::after{
 </section>
 
 <!-- MANIFESTO — Warum wir das bauen -->
-<section class="manifesto" style="background:linear-gradient(180deg,rgba(15,10,31,.62),rgba(15,10,31,.85)),url(/img/lifestyle/09_taxi_nachts.jpg) #0F0A1F;background-size:cover;background-position:center">
+<section class="manifesto" style="background:linear-gradient(180deg,rgba(15,10,31,.82),rgba(15,10,31,.94)),url(/img/lifestyle/09_taxi_nachts.jpg) #0F0A1F;background-size:cover;background-position:center">
   <div class="manifesto-inner">
     <div class="section-tag" style="color:#A88CFF">Warum wir das bauen</div>
     <h2 style="color:#F5F3FF">Niemand sollte allein heim&shy;gehen.<br/>Auch <span class="hl">du nicht.</span></h2>
@@ -1714,16 +1728,16 @@ body::after{
 <!-- VISION — crew+ Netzwerk-Erweiterung als Andeutung -->
 <section class="vision-strip" aria-labelledby="visionTitle">
   <div class="vision-inner">
-    <div class="vision-eyebrow">Was später kommt</div>
-    <h2 class="vision-title" id="visionTitle">crew<span class="vision-plus">+</span></h2>
-    <p class="vision-tag">Wenn Crews sich vernetzen.</p>
-    <p class="vision-body">Aus deiner Crew wird ein Knoten in einem größeren Netz — wenn du willst. Crews verbinden sich gegenseitig (mutual + opt-in, immer), Locations werden Sicherheits-Anker, aus 50 Pionieren wird ein Late-Night-Netzwerk Stadt für Stadt. Aus echten Beziehungen, nicht aus Algorithmus.</p>
-    <p class="vision-meta">Nicht jetzt. Später. Erst wenn die Basis steht.</p>
+    <div class="vision-eyebrow">Und später&hellip;</div>
+    <h2 class="vision-title" id="visionTitle">crew<span class="vision-mark" aria-hidden="true"><span class="dot">.</span><span class="plus">+</span></span><span class="sr-only">crew. wird zu crew+</span></h2>
+    <p class="vision-tag">Wenn der Punkt nicht mehr reicht.</p>
+    <p class="vision-body">Wir bauen erst die Crew, die du wirklich kennst. Was danach kommt, deuten wir nicht auf Pitch-Decks an — aber: Crews könnten sich verbinden. Locations könnten zu Knoten werden. Heimwege könnten zu einem Netz, das aus echten Beziehungen besteht statt aus Algorithmus. Alles mutual, alles opt-in. Wir haben Zeit.</p>
+    <p class="vision-meta">Nicht jetzt. Wenn die Basis steht.</p>
   </div>
 </section>
 
 <!-- COMMUNITY CTA — neue Brand-Voice + Doppel-Portrait-BG -->
-<section class="community-cta" style="background:linear-gradient(180deg,rgba(15,10,31,.58),rgba(15,10,31,.82)),url(/img/lifestyle/06_doppel_portrait_couch.jpg) #0F0A1F;background-size:cover;background-position:center">
+<section class="community-cta" style="background:linear-gradient(180deg,rgba(15,10,31,.78),rgba(15,10,31,.92)),url(/img/lifestyle/06_doppel_portrait_couch.jpg) #0F0A1F;background-size:cover;background-position:center">
   <div class="community-cta-inner">
     <h3>Wir bauen das öffentlich.</h3>
     <p>Jede Woche siehst du, was reinkommt — Features, Bug-Fixes, was die ersten Pioniere gefunden haben. Auf WhatsApp und Instagram, ohne Marketing-Blabla.</p>
