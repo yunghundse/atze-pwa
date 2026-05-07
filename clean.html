@@ -6295,6 +6295,14 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     }
     /* Sprint 2.2: Block-IDs einmalig vorladen damit Filter sofort greift */
     if (window.trustLayer) { window.trustLayer.refreshBlockedIds().catch(()=>{}); }
+    /* Sprint Native-1: Push-Token registrieren (no-op auf Web, fragt auf iOS Permission) */
+    if (window.crew && window.crew.native && window.crew.native.isApp) {
+      window.crew.native.registerPush(sb, u.id).then(token => {
+        if (token && window.crewTelemetry) {
+          window.crewTelemetry.captureEvent('push:registered', { platform: window.crew.native.platform });
+        }
+      }).catch(e => console.warn('[push.register]', e));
+    }
     /* GPS — mit Fallback auf Profil-Home-City oder manueller Stadt-Auswahl */
     function setUserLocation(lat, lng, source){
       userLat = lat; userLng = lng;
