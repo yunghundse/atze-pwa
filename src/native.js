@@ -166,12 +166,54 @@
   }
 
   /* -------------------------------------------------------------------- */
-  /* Boot — auto-hide splash + apply Capacitor-only body class            */
+  /* Native-only CSS-Polish (injected at boot, no clean.html mutation)    */
   /* -------------------------------------------------------------------- */
+  function injectNativeStyles() {
+    const css = [
+      '/* Native iOS polish — only active when running inside the Capacitor shell */',
+      '.cap-ios body, .cap-android body { overscroll-behavior: none; -webkit-touch-callout: none; }',
+      '.cap-ios { -webkit-tap-highlight-color: transparent; }',
+      '/* Re-allow text selection inside actual text inputs */',
+      '.cap-ios input, .cap-ios textarea, .cap-ios [contenteditable="true"] { -webkit-user-select: text; user-select: text; -webkit-touch-callout: default; }',
+      '/* Hide PWA-only UI when running native (no "Install App" banner inside the app) */',
+      '.cap-app .pwa-install-banner, .cap-app .pwa-install-prompt, .cap-app [data-pwa-only] { display: none !important; }',
+      '/* Subtle press feedback (replaces missing :hover on touch) */',
+      '.cap-ios button:active, .cap-ios a:active, .cap-ios [role="button"]:active { transform: scale(.97); transition: transform .08s ease-out; }',
+      '/* Bottom-Padding für Home-Indicator wenn Bottom-Nav vorhanden */',
+      '.cap-ios .bottom-nav, .cap-ios [data-bottom-nav] { padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px)); }',
+    ].join('\n');
+    const style = document.createElement('style');
+    style.id = 'cap-native-polish';
+    style.textContent = css;
+    document.head.appendChild(style);
+  }
+
+  /* -------------------------------------------------------------------- */
+  /* Auto-Wire Haptics — any element with [data-haptic] gets feedback     */
+  /* on tap. Use: <button data-haptic="medium">Heimweg starten</button>   */
+  /* -------------------------------------------------------------------- */
+  function wireAutoHaptics() {
+    document.addEventListener('click', (e) => {
+      const target = e.target && e.target.closest && e.target.closest('[data-haptic]');
+      if (target) haptic(target.getAttribute('data-haptic') || 'medium');
+    }, { passive: true, capture: true });
+  }
+
+  /* -------------------------------------------------------------------- */
+  /* Boot — auto-hide splash + apply Capacitor-only body classes          */
+  /* -------------------------------------------------------------------- */
+  function applyClass(cls) {
+    document.documentElement.classList.add(cls);
+    if (document.body) document.body.classList.add(cls);
+    else document.addEventListener('DOMContentLoaded', () => document.body && document.body.classList.add(cls));
+  }
+
   if (isApp) {
-    document.documentElement.classList.add('cap-app');
-    document.documentElement.classList.add(`cap-${platform}`);
+    applyClass('cap-app');
+    applyClass(`cap-${platform}`);
     setStatusBarStyle('dark');
+    injectNativeStyles();
+    wireAutoHaptics();
     // Auto-hide splash after first paint + idle (~1s)
     if (document.readyState === 'complete') {
       setTimeout(hideSplash, 800);
@@ -179,6 +221,17 @@
       global.addEventListener('load', () => setTimeout(hideSplash, 800));
     }
   }
+
+  /* -------------------------------------------------------------------- */
+  /* TODO for next iteration:                                             */
+  /* In the auth-flow (after successful login or Supabase                 */
+  /* onAuthStateChange === 'SIGNED_IN'), call:                            */
+  /*                                                                      */
+  /*   crew.native.registerPush(sb, user.id);                             */
+  /*                                                                      */
+  /* This silently no-ops on web — only fires Push-Permission and saves   */
+  /* the device-token to Supabase device_tokens when running native.      */
+  /* -------------------------------------------------------------------- */
 
   /* -------------------------------------------------------------------- */
   /* Public namespace                                                     */
