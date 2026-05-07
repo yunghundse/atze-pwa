@@ -37,6 +37,8 @@
   const App = Plugins.App;
   const Browser = Plugins.Browser;
   const Share = Plugins.Share;
+  const Preferences = Plugins.Preferences;
+  const BiometricAuth = Plugins.BiometricAuth;
 
   /* -------------------------------------------------------------------- */
   /* Haptics — silent no-op on web                                        */
@@ -157,6 +159,132 @@
   }
 
   /* -------------------------------------------------------------------- */
+  /* Quick-Auth: Face ID / Touch ID + PIN-Fallback                        */
+  /*                                                                      */
+  /* Storage:                                                             */
+  /*   crew_pin_hash      : SHA-256 hex of (pin + salt)                   */
+  /*   crew_pin_salt      : 16 random bytes hex                           */
+  /*   crew_pin_enabled   : '1' if user has set up PIN                    */
+  /*   crew_biometric_on  : '1' if user opted into Face/Touch ID          */
+  /*                                                                      */
+  /* Web fallback uses localStorage (less secure but no crash on PWA).    */
+  /* Native uses Capacitor Preferences (Keychain on iOS).                 */
+  /* -------------------------------------------------------------------- */
+
+  // ----- Storage abstraction -----
+  async function prefSet(key, value) {
+    if (Preferences) return Preferences.set({ key, value });
+    try { localStorage.setItem(key, value); } catch (_) {}
+  }
+  async function prefGet(key) {
+    if (Preferences) {
+      const r = await Preferences.get({ key });
+      return r && r.value;
+    }
+    try { return localStorage.getItem(key); } catch (_) { return null; }
+  }
+  async function prefRemove(key) {
+    if (Preferences) return Preferences.remove({ key });
+    try { localStorage.removeItem(key); } catch (_) {}
+  }
+
+  // ----- PIN hashing (Web Crypto, available in WKWebView) -----
+  async function hashPin(pin, saltHex) {
+    if (!global.crypto || !global.crypto.subtle) throw new Error('Web Crypto unavailable');
+    const enc = new TextEncoder().encode(pin + ':' + saltHex);
+    const buf = await global.crypto.subtle.digest('SHA-256', enc);
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+  function randomSalt() {
+    const a = new Uint8Array(16);
+    if (global.crypto && global.crypto.getRandomValues) global.crypto.getRandomValues(a);
+    else for (let i = 0; i < a.length; i++) a[i] = Math.floor(Math.random() * 256);
+    return Array.from(a).map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  async function pinIsEnabled() {
+    return (await prefGet('crew_pin_enabled')) === '1';
+  }
+
+  async function pinSetup(pin) {
+    if (!/^\d{4,6}$/.test(pin)) throw new Error('PIN muss 4–6 Ziffern haben');
+    const salt = randomSalt();
+    const hash = await hashPin(pin, salt);
+    await prefSet('crew_pin_salt', salt);
+    await prefSet('crew_pin_hash', hash);
+    await prefSet('crew_pin_enabled', '1');
+    return true;
+  }
+
+  async function pinVerify(pin) {
+    if (!/^\d{4,6}$/.test(pin)) return false;
+    const salt = await prefGet('crew_pin_salt');
+    const expected = await prefGet('crew_pin_hash');
+    if (!salt || !expected) return false;
+    const got = await hashPin(pin, salt);
+    return got === expected;
+  }
+
+  async function pinDisable() {
+    await prefRemove('crew_pin_enabled');
+    await prefRemove('crew_pin_hash');
+    await prefRemove('crew_pin_salt');
+    await prefRemove('crew_biometric_on');
+  }
+
+  // ----- Biometric (Face ID / Touch ID, native-only) -----
+  async function biometricAvailable() {
+    if (!isApp || !BiometricAuth) return { available: false, reason: 'not-native' };
+    try {
+      const r = await BiometricAuth.checkBiometry();
+      // r: { isAvailable, biometryType, reason }
+      return {
+        available: !!(r && r.isAvailable),
+        biometryType: r && r.biometryType,
+        reason: r && r.reason,
+      };
+    } catch (e) {
+      return { available: false, reason: e && e.message };
+    }
+  }
+
+  async function biometricEnable() {
+    const a = await biometricAvailable();
+    if (!a.available) return false;
+    await prefSet('crew_biometric_on', '1');
+    return true;
+  }
+
+  async function biometricDisable() {
+    await prefRemove('crew_biometric_on');
+  }
+
+  async function biometricIsOptedIn() {
+    return (await prefGet('crew_biometric_on')) === '1';
+  }
+
+  /**
+   * Verify the user via Face ID / Touch ID. Returns true on success.
+   * Falls back to false on any error — caller should show the PIN screen.
+   */
+  async function biometricVerify(reason) {
+    if (!isApp || !BiometricAuth) return false;
+    if (!(await biometricIsOptedIn())) return false;
+    try {
+      await BiometricAuth.authenticate({
+        reason: reason || 'crew. entsperren',
+        cancelTitle: 'Mit PIN entsperren',
+        allowDeviceCredential: false,
+        iosFallbackTitle: 'PIN verwenden',
+      });
+      return true; // No throw = success
+    } catch (e) {
+      // user-cancelled, biometry-not-enrolled, biometry-locked, etc.
+      return false;
+    }
+  }
+
+  /* -------------------------------------------------------------------- */
   /* App-State events (background / foreground)                           */
   /* -------------------------------------------------------------------- */
   function onAppState(handler /* (isActive: bool) => void */) {
@@ -271,6 +399,16 @@
     share: share,
     onAppState: onAppState,
     onQuickAction: onQuickAction,
+    // Quick-Auth
+    pinIsEnabled: pinIsEnabled,
+    pinSetup: pinSetup,
+    pinVerify: pinVerify,
+    pinDisable: pinDisable,
+    biometricAvailable: biometricAvailable,
+    biometricEnable: biometricEnable,
+    biometricDisable: biometricDisable,
+    biometricIsOptedIn: biometricIsOptedIn,
+    biometricVerify: biometricVerify,
   };
 
   if (isApp) {

@@ -5131,6 +5131,99 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
   <button class="hm-banner-act" id="hmBannerArrived">Bin da</button>
 </div>
 
+<!-- LOCK-SCREEN — Face ID / PIN beim App-Start (nur native, wenn PIN aktiv) -->
+<div id="lockScreen" class="lock-screen" hidden>
+  <div class="lock-card">
+    <div class="lock-brand">
+      <span class="lock-mark">crew<span class="lock-dot">.</span></span>
+    </div>
+    <div class="lock-title" id="lockTitle">Tippe deine PIN</div>
+    <div class="lock-dots" id="lockDots">
+      <span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <div class="lock-error" id="lockError"></div>
+    <div class="lock-pad">
+      <button class="lock-key" data-key="1">1</button>
+      <button class="lock-key" data-key="2">2</button>
+      <button class="lock-key" data-key="3">3</button>
+      <button class="lock-key" data-key="4">4</button>
+      <button class="lock-key" data-key="5">5</button>
+      <button class="lock-key" data-key="6">6</button>
+      <button class="lock-key" data-key="7">7</button>
+      <button class="lock-key" data-key="8">8</button>
+      <button class="lock-key" data-key="9">9</button>
+      <button class="lock-key lock-key-bio" id="lockBioBtn" type="button" aria-label="Face ID">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V5a1 1 0 0 1 1-1h2"/><path d="M17 4h2a1 1 0 0 1 1 1v2"/><path d="M20 17v2a1 1 0 0 1-1 1h-2"/><path d="M7 20H5a1 1 0 0 1-1-1v-2"/><circle cx="9" cy="10" r="1"/><circle cx="15" cy="10" r="1"/><path d="M9 15s1 1.5 3 1.5S15 15 15 15"/></svg>
+      </button>
+      <button class="lock-key" data-key="0">0</button>
+      <button class="lock-key lock-key-del" id="lockDelBtn" type="button" aria-label="Löschen">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 5H7L3 12l4 7h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2z"/><line x1="18" y1="9" x2="12" y2="15"/><line x1="12" y1="9" x2="18" y2="15"/></svg>
+      </button>
+    </div>
+    <button class="lock-fallback" id="lockSignOutBtn">PIN vergessen? Abmelden</button>
+  </div>
+</div>
+
+<!-- PIN-SETUP-MODAL — wird einmalig nach erstem Login angeboten (native only) -->
+<div class="modal center" id="pinSetupModal">
+  <div class="modal-card">
+    <button class="modal-close" data-close="pinSetupModal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <div class="modal-hero-emo"><img class="emo3d sz-hero" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Locked%20with%20key/3D/locked_with_key_3d.png" alt=""/></div>
+    <h2 class="modal-h" style="text-align:center;margin-top:0">Schnell-Login einrichten</h2>
+    <p class="modal-sub" style="text-align:center" id="pinSetupSub">4–6 Ziffern, nur lokal auf deinem Gerät gespeichert. Kein Magic-Link mehr beim Öffnen.</p>
+    <div class="lock-dots" id="pinSetupDots" style="margin:18px auto">
+      <span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <div class="lock-error" id="pinSetupError"></div>
+    <div class="lock-pad" id="pinSetupPad" style="max-width:300px;margin:0 auto">
+      <button class="lock-key" data-key="1">1</button>
+      <button class="lock-key" data-key="2">2</button>
+      <button class="lock-key" data-key="3">3</button>
+      <button class="lock-key" data-key="4">4</button>
+      <button class="lock-key" data-key="5">5</button>
+      <button class="lock-key" data-key="6">6</button>
+      <button class="lock-key" data-key="7">7</button>
+      <button class="lock-key" data-key="8">8</button>
+      <button class="lock-key" data-key="9">9</button>
+      <span></span>
+      <button class="lock-key" data-key="0">0</button>
+      <button class="lock-key lock-key-del" data-key="del" type="button" aria-label="Löschen">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 5H7L3 12l4 7h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2z"/><line x1="18" y1="9" x2="12" y2="15"/><line x1="12" y1="9" x2="18" y2="15"/></svg>
+      </button>
+    </div>
+    <div class="modal-actions" style="margin-top:14px">
+      <button class="btn-sec" data-close="pinSetupModal" id="pinSetupSkip">Später</button>
+      <button class="btn-pri" id="pinSetupConfirm" disabled>Weiter</button>
+    </div>
+  </div>
+</div>
+
+<style>
+/* Quick-Auth: Lock-Screen + PIN-Pad */
+.lock-screen{position:fixed;inset:0;z-index:9999;background:#0F0A1F;display:flex;align-items:center;justify-content:center;padding:calc(var(--safe-top)+24px) 22px calc(var(--safe-bot)+24px)}
+.lock-screen[hidden]{display:none}
+.lock-card{width:100%;max-width:360px;text-align:center}
+.lock-brand{margin-bottom:34px}
+.lock-mark{font-size:42px;font-weight:900;letter-spacing:-2px;color:#F5F3FF;line-height:1}
+.lock-dot{color:#A88CFF;text-shadow:0 0 18px rgba(168,140,255,.7)}
+.lock-title{font-size:14px;color:rgba(245,243,255,.7);font-weight:500;letter-spacing:.2px;margin-bottom:18px}
+.lock-dots{display:flex;justify-content:center;gap:14px;margin-bottom:14px;height:14px}
+.lock-dots span{width:14px;height:14px;border-radius:50%;border:1.5px solid rgba(168,140,255,.45);background:transparent;transition:background .15s,transform .15s,border-color .15s}
+.lock-dots span.fill{background:#A88CFF;border-color:#A88CFF;transform:scale(1.05)}
+.lock-error{min-height:18px;font-size:13px;color:#FF6B6B;margin-bottom:6px}
+.lock-error.shake{animation:lockShake .35s ease-in-out}
+@keyframes lockShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.lock-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:300px;margin:18px auto 0}
+.lock-key{height:64px;border-radius:18px;background:rgba(168,140,255,.07);border:.5px solid rgba(168,140,255,.18);color:#F5F3FF;font-size:24px;font-weight:600;letter-spacing:.2px;cursor:pointer;transition:transform .08s,background .15s,border-color .15s;-webkit-tap-highlight-color:transparent}
+.lock-key:active{transform:scale(.96);background:rgba(168,140,255,.18);border-color:rgba(168,140,255,.4)}
+.lock-key svg{width:24px;height:24px;stroke:#A88CFF}
+.lock-key-bio svg{stroke:#A88CFF}
+.lock-key-del{color:rgba(245,243,255,.55)}
+.lock-fallback{margin-top:22px;font-size:12px;color:rgba(168,140,255,.5);background:transparent;border:0;cursor:pointer;padding:8px;letter-spacing:.2px}
+.lock-fallback:hover{color:#A88CFF}
+@media (prefers-reduced-motion:reduce){.lock-key:active{transform:none}.lock-error.shake{animation:none}}
+</style>
+
 <style>
 .set-tabs{ display: flex; gap: 4px; padding: 4px; background: var(--c-surface-2); border-radius: var(--r-2); margin-bottom: var(--s-4); overflow-x: auto; scrollbar-width: none; }
 .set-tabs::-webkit-scrollbar{ display: none; }
@@ -6318,6 +6411,15 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
             window.crewTelemetry.captureEvent('quickAction:tapped', { action });
           }
         } catch(e) { console.warn('[quickAction]', e); }
+      });
+
+      /* Sprint Native-3: PIN-Setup-Anbieten nach erstem Login (native only) */
+      window.crew.native.pinIsEnabled().then(enabled => {
+        if (!enabled) {
+          /* User hat noch kein Schnell-Login → einmalig Setup-Modal anbieten.
+             Wir zeigen es 1.5s verzögert damit Onboarding-Flow erst settlet. */
+          setTimeout(() => { try { openModal('pinSetupModal'); } catch(_){} }, 1500);
+        }
       });
     }
     /* GPS — mit Fallback auf Profil-Home-City oder manueller Stadt-Auswahl */
@@ -10756,6 +10858,168 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     loadMood();
     if (document.body.dataset.tab === 'hotspots') loadHotspots();
   }
+  /* ================================================================
+     Sprint Native-3 — Quick-Auth Lock-Screen + PIN-Setup
+     ================================================================ */
+  (function setupQuickAuth(){
+    if (!window.crew || !window.crew.native || !window.crew.native.isApp) return;
+
+    /* ---- Lock-Screen (zeigen bei App-Start wenn PIN aktiv) ---- */
+    const ls = $('lockScreen');
+    const lsTitle = $('lockTitle');
+    const lsErr = $('lockError');
+    const lsDots = $('lockDots');
+    const lsBio = $('lockBioBtn');
+    let lsBuf = '';
+
+    function lsRenderDots(buf, host){
+      const dots = host.querySelectorAll('span');
+      dots.forEach((d, i) => d.classList.toggle('fill', i < buf.length));
+    }
+    function lsShowError(msg){
+      lsErr.textContent = msg || '';
+      lsErr.classList.remove('shake');
+      void lsErr.offsetWidth;
+      lsErr.classList.add('shake');
+      window.crew.native.haptic('error');
+    }
+    function lsClear(){ lsBuf = ''; lsRenderDots(lsBuf, lsDots); }
+    function lsHide(){ ls.hidden = true; }
+    function lsShow(){
+      ls.hidden = false;
+      lsClear();
+      lsErr.textContent = '';
+      window.crew.native.biometricIsOptedIn().then(on => {
+        lsBio.style.visibility = on ? 'visible' : 'hidden';
+        if (on) tryBiometric();
+      });
+    }
+    async function tryBiometric(){
+      const ok = await window.crew.native.biometricVerify('crew. entsperren');
+      if (ok) lsHide();
+    }
+    async function tryPin(pin){
+      const ok = await window.crew.native.pinVerify(pin);
+      if (ok) { lsHide(); window.crew.native.haptic('success'); }
+      else lsShowError('Falsche PIN');
+      lsClear();
+    }
+
+    /* PIN-Pad clicks */
+    ls.querySelectorAll('.lock-key[data-key]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const k = btn.dataset.key;
+        if (lsBuf.length >= 6) return;
+        lsBuf += k;
+        lsRenderDots(lsBuf, lsDots);
+        window.crew.native.haptic('light');
+        if (lsBuf.length >= 4) {
+          /* Auto-verify ab 4 Stellen, weil typische PIN-Länge */
+          tryPin(lsBuf);
+        }
+      });
+    });
+    $('lockDelBtn').addEventListener('click', () => {
+      lsBuf = lsBuf.slice(0, -1);
+      lsRenderDots(lsBuf, lsDots);
+      window.crew.native.haptic('light');
+    });
+    lsBio.addEventListener('click', tryBiometric);
+    $('lockSignOutBtn').addEventListener('click', async () => {
+      await window.crew.native.pinDisable();
+      await sb.auth.signOut();
+      location.reload();
+    });
+
+    /* ---- PIN-Setup-Modal logic (Pad-Eingabe + Bestätigen-Schritt) ---- */
+    const psDots = $('pinSetupDots');
+    const psErr = $('pinSetupError');
+    const psSub = $('pinSetupSub');
+    const psConfirmBtn = $('pinSetupConfirm');
+    const psPad = $('pinSetupPad');
+    let psBuf = '';
+    let psFirst = ''; /* erste Eingabe für Confirm-Schritt */
+
+    function psSetSub(text){ psSub.textContent = text; }
+    function psError(msg){ psErr.textContent = msg || ''; psErr.classList.toggle('shake', !!msg); window.crew.native.haptic('warning'); }
+    function psClear(){ psBuf = ''; lsRenderDots(psBuf, psDots); psConfirmBtn.disabled = true; }
+
+    psPad.querySelectorAll('.lock-key[data-key]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const k = btn.dataset.key;
+        if (k === 'del'){ psBuf = psBuf.slice(0, -1); }
+        else if (psBuf.length < 6){ psBuf += k; }
+        lsRenderDots(psBuf, psDots);
+        psErr.textContent = '';
+        psConfirmBtn.disabled = psBuf.length < 4;
+        window.crew.native.haptic('light');
+      });
+    });
+
+    psConfirmBtn.addEventListener('click', async () => {
+      if (!psFirst){
+        /* Schritt 1 → speichern + zur Bestätigung */
+        psFirst = psBuf;
+        psBuf = '';
+        lsRenderDots(psBuf, psDots);
+        psSetSub('Nochmal zur Bestätigung');
+        psConfirmBtn.disabled = true;
+        return;
+      }
+      /* Schritt 2 → match check */
+      if (psBuf !== psFirst){
+        psError('Stimmt nicht überein. Nochmal von vorn.');
+        psFirst = '';
+        psBuf = '';
+        lsRenderDots(psBuf, psDots);
+        psSetSub('4–6 Ziffern, nur lokal auf deinem Gerät gespeichert.');
+        psConfirmBtn.disabled = true;
+        return;
+      }
+      /* Match → speichern + Biometric anbieten */
+      try {
+        await window.crew.native.pinSetup(psFirst);
+        const bio = await window.crew.native.biometricAvailable();
+        if (bio.available){
+          /* Biometric-Permission anbieten */
+          if (confirm('Möchtest du auch ' + (bio.biometryType || 'Face ID') + ' nutzen?')){
+            await window.crew.native.biometricEnable();
+          }
+        }
+        document.querySelector('[data-close="pinSetupModal"]').click();
+        toast && toast('Schnell-Login eingerichtet', null, null, 'success');
+      } catch(e){
+        psError(e.message || 'Konnte nicht speichern');
+        psFirst = '';
+        psBuf = '';
+        lsRenderDots(psBuf, psDots);
+      }
+    });
+
+    /* ---- App-State: Bei Background → Lock aktivieren (wenn PIN an) ---- */
+    let lastBackgroundAt = 0;
+    window.crew.native.onAppState(async (isActive) => {
+      if (!isActive){
+        lastBackgroundAt = Date.now();
+        return;
+      }
+      /* Bei Foreground: wenn länger als 60s im Background, Lock zeigen */
+      const enabled = await window.crew.native.pinIsEnabled();
+      if (enabled && (Date.now() - lastBackgroundAt) > 60000){
+        lsShow();
+      }
+    });
+
+    /* ---- Beim Laden: wenn PIN aktiv UND Session da → erst Lock-Screen ---- */
+    window.crew.native.pinIsEnabled().then(enabled => {
+      if (enabled){
+        sb.auth.getSession().then(r => {
+          if (r.data && r.data.session){ lsShow(); }
+        });
+      }
+    });
+  })();
+
   /* Bestehende Session checken */
   sb.auth.getSession().then(r => {
     if (r.data && r.data.session) onAuth(r.data.session.user);
