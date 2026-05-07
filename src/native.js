@@ -189,6 +189,27 @@
   }
 
   /* -------------------------------------------------------------------- */
+  /* Quick Actions Bridge                                                 */
+  /* AppDelegate.swift fires `window.dispatchEvent('crew:quickAction')`   */
+  /* when the user long-presses the home-screen icon and picks an item.   */
+  /* We re-dispatch into a stable namespaced API so clean.html stays      */
+  /* unaware of native-vs-web specifics.                                  */
+  /* -------------------------------------------------------------------- */
+  const quickActionHandlers = new Set();
+  function onQuickAction(handler) {
+    quickActionHandlers.add(handler);
+    return () => quickActionHandlers.delete(handler);
+  }
+  global.addEventListener('crew:quickAction', (e) => {
+    const action = (e && e.detail && e.detail.action) || null;
+    if (!action) return;
+    haptic('medium'); // small tactile confirmation
+    quickActionHandlers.forEach((fn) => {
+      try { fn(action); } catch (err) { console.warn('[quickAction handler]', err); }
+    });
+  });
+
+  /* -------------------------------------------------------------------- */
   /* Auto-Wire Haptics — any element with [data-haptic] gets feedback     */
   /* on tap. Use: <button data-haptic="medium">Heimweg starten</button>   */
   /* -------------------------------------------------------------------- */
@@ -249,6 +270,7 @@
     openUrl: openUrl,
     share: share,
     onAppState: onAppState,
+    onQuickAction: onQuickAction,
   };
 
   if (isApp) {

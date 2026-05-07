@@ -6302,6 +6302,23 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
           window.crewTelemetry.captureEvent('push:registered', { platform: window.crew.native.platform });
         }
       }).catch(e => console.warn('[push.register]', e));
+
+      /* Sprint Native-2: Quick Actions (Long-Press am App-Icon) routen */
+      window.crew.native.onQuickAction((action) => {
+        try {
+          if (action === 'homeway') {
+            switchTab('home');
+            setTimeout(() => openModal('homemodeModal'), 80);
+          } else if (action === 'sos') {
+            openModal('sosModal');
+          } else if (action === 'crew') {
+            switchTab('crew');
+          }
+          if (window.crewTelemetry) {
+            window.crewTelemetry.captureEvent('quickAction:tapped', { action });
+          }
+        } catch(e) { console.warn('[quickAction]', e); }
+      });
     }
     /* GPS — mit Fallback auf Profil-Home-City oder manueller Stadt-Auswahl */
     function setUserLocation(lat, lng, source){
