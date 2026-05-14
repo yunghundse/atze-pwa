@@ -76,6 +76,12 @@
   --c-sos: #EC4899;
   --c-sos-2: #BE185D;
   --c-green: #28C878;
+  --c-safety: #2DD4BF;
+  --c-safety-2: #0F766E;
+  --c-homeway: #60A5FA;
+  --c-homeway-2: #2563EB;
+  --c-crew: #F59E0B;
+  --c-crew-2: #B45309;
   --c-gold: #FFD60A;
   --c-bg: #0A0A14;
   --c-surface: rgba(255,255,255,.04);
@@ -237,6 +243,265 @@ a{ color: var(--c-violet-3); text-decoration: none; }
 }
 .auth-btn:active{ transform: scale(.97); }
 .auth-btn:disabled{ opacity: .5; cursor: not-allowed; }
+
+/* Sign in with Apple — nur in der nativen iOS-App sichtbar (durch .cap-ios body class) */
+.auth-apple-only { display: none; }
+.cap-ios .auth-apple-only { display: block; }
+
+/* ─── App-Only-Cut ───────────────────────────────────────────
+   Default body-class = mode-web. Native-App setzt zusätzlich
+   mode-native (siehe src/native.js). Wir nutzen das um die
+   Auth-UI sauber in zwei Welten zu trennen:
+   • Web (Browser/PWA): nur "Hol dir die App" + Warteliste-Form.
+   • Native iOS: voller Login + Sign-Up + Apple-Sign-in.
+   ────────────────────────────────────────────────────────────── */
+.app-only { display: none; }
+.web-only { display: revert; }
+body.mode-native .app-only { display: revert; }
+body.mode-native .web-only { display: none !important; }
+
+/* App-Holen Hero (nur web-only) */
+.auth-app-hero {
+  background: linear-gradient(180deg, rgba(139,92,246,.12) 0%, rgba(168,140,255,.04) 100%);
+  border: .5px solid rgba(168,140,255,.22);
+  border-radius: 18px;
+  padding: 22px 18px;
+  margin-bottom: 18px;
+  text-align: center;
+}
+.auth-app-hero-emo {
+  width: 64px; height: 64px;
+  display: block; margin: 0 auto 10px;
+  filter: drop-shadow(0 14px 30px rgba(168,140,255,.35));
+}
+.auth-app-hero-title {
+  font-size: 19px; font-weight: 700;
+  color: #fff; margin: 0 0 6px;
+  letter-spacing: -.01em;
+}
+.auth-app-hero-sub {
+  font-size: 13.5px; line-height: 1.5;
+  color: rgba(255,255,255,.7);
+  margin: 0 0 14px;
+}
+.auth-app-hero-cta {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 22px;
+  background: #000;
+  color: #fff;
+  font-size: 14px; font-weight: 600;
+  border: .5px solid rgba(255,255,255,.18);
+  border-radius: 999px;
+  text-decoration: none;
+}
+.auth-app-hero-cta:active { transform: scale(.97); }
+.auth-app-hero-or {
+  font-size: 11.5px; letter-spacing: .12em;
+  color: rgba(255,255,255,.4);
+  margin: 14px 0 4px;
+  text-transform: uppercase;
+}
+
+/* ───────────── ONBOARDING-SCREEN ───────────── */
+.ob-screen {
+  position: fixed; inset: 0; z-index: 9000;
+  background: radial-gradient(1200px 600px at 50% -10%, rgba(139,92,246,.18), transparent 60%), #0F0A1F;
+  overflow-y: auto;
+  padding: max(20px, env(safe-area-inset-top)) 20px max(20px, env(safe-area-inset-bottom));
+  display: flex; align-items: flex-start; justify-content: center;
+}
+.ob-card {
+  width: 100%; max-width: 460px;
+  margin: 24px auto;
+  padding: 28px 22px;
+  background: rgba(20,15,40,.76);
+  border: .5px solid rgba(168,140,255,.18);
+  border-radius: 22px;
+  backdrop-filter: blur(24px) saturate(1.2);
+  -webkit-backdrop-filter: blur(24px) saturate(1.2);
+  color: #fff;
+}
+.ob-symbol {
+  width: 64px; height: 64px;
+  display: block; margin: 0 auto 14px;
+  filter: drop-shadow(0 14px 32px rgba(139,92,246,.35));
+}
+.ob-title { font-size: 26px; font-weight: 800; text-align: center; margin: 0 0 6px; letter-spacing: -.02em; }
+.ob-title .dot { color: #A88CFF; }
+.ob-sub { color: rgba(255,255,255,.7); font-size: 14px; text-align: center; margin: 0 0 22px; line-height: 1.45; }
+.ob-error {
+  background: rgba(236,72,153,.12);
+  border: .5px solid rgba(236,72,153,.4);
+  color: #FBCFE8;
+  padding: 10px 14px; border-radius: 12px;
+  font-size: 13px; margin-bottom: 14px;
+}
+.ob-step-num {
+  font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+  color: rgba(168,140,255,.85); margin-bottom: 12px; text-align: center;
+}
+.ob-field { margin-bottom: 14px; }
+.ob-field label { display: block; font-size: 12px; color: rgba(255,255,255,.7); margin-bottom: 6px; letter-spacing: .04em; }
+.ob-field input, .ob-field select {
+  width: 100%; box-sizing: border-box;
+  padding: 13px 14px;
+  background: rgba(255,255,255,.05);
+  border: .5px solid rgba(255,255,255,.14);
+  border-radius: 12px;
+  color: #fff; font-size: 16px; /* 16+ damit iOS nicht zoom-rein */
+  outline: none;
+  transition: border-color .15s;
+}
+.ob-field input:focus, .ob-field select:focus { border-color: rgba(168,140,255,.6); }
+.ob-hint { font-size: 11.5px; color: rgba(255,255,255,.45); margin-top: 6px; line-height: 1.4; }
+.ob-handle-wrap {
+  display: flex; align-items: center;
+  background: rgba(255,255,255,.05);
+  border: .5px solid rgba(255,255,255,.14);
+  border-radius: 12px;
+  padding: 0 14px;
+  transition: border-color .15s;
+}
+.ob-handle-wrap:focus-within { border-color: rgba(168,140,255,.6); }
+.ob-handle-wrap .ob-at { color: rgba(168,140,255,.9); font-size: 16px; font-weight: 700; padding-right: 4px; }
+.ob-handle-wrap input {
+  flex: 1; background: transparent; border: 0; padding: 13px 0; color: #fff; font-size: 16px; outline: none;
+}
+.ob-handle-status { font-size: 12px; padding-left: 8px; min-width: 18px; }
+.ob-handle-status[data-state="ok"] { color: #6EE7B7; }
+.ob-handle-status[data-state="bad"] { color: #FBCFE8; }
+.ob-handle-status[data-state="check"] { color: rgba(255,255,255,.4); }
+.ob-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.ob-check {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 12px 14px;
+  background: rgba(255,255,255,.04);
+  border: .5px solid rgba(255,255,255,.1);
+  border-radius: 12px;
+  margin-bottom: 10px;
+  font-size: 13px; line-height: 1.45; cursor: pointer;
+}
+.ob-check input { width: 18px; height: 18px; margin-top: 1px; flex-shrink: 0; accent-color: #A88CFF; }
+.ob-check a { color: #A88CFF; text-decoration: underline; }
+.ob-actions { display: flex; gap: 10px; margin-top: 14px; }
+
+/* Header-Bild (Codex-generiert) — über jeder Stage. Bei fehlendem Bild
+   verschwindet der img-Tag via onerror, kein layout-shift. */
+.ob-stage-image {
+  display: block;
+  width: calc(100% + 44px);
+  margin: -28px -22px 18px;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border-radius: 22px 22px 12px 12px;
+  box-shadow: 0 12px 30px rgba(0,0,0,.35);
+}
+
+/* Welcome-Stage (Stage 0) */
+.ob-welcome { text-align: center; }
+.ob-hero-emo {
+  width: 120px; height: 120px;
+  display: block; margin: 0 auto 18px;
+  filter: drop-shadow(0 18px 40px rgba(168,140,255,.4));
+  animation: ob-hero-breathe 4s ease-in-out infinite;
+}
+@keyframes ob-hero-breathe {
+  0%,100% { transform: scale(1); }
+  50%     { transform: scale(1.04); }
+}
+.ob-welcome-promise {
+  font-size: 17px; line-height: 1.5;
+  color: rgba(255,255,255,.92);
+  margin: 0 0 22px;
+  font-weight: 500;
+}
+.ob-trust-row {
+  display: flex; justify-content: center; gap: 8px;
+  margin-bottom: 22px; flex-wrap: wrap;
+}
+.ob-trust-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 13px;
+  background: rgba(168,140,255,.1);
+  border: .5px solid rgba(168,140,255,.25);
+  border-radius: 999px;
+  font-size: 12px; color: rgba(255,255,255,.85); font-weight: 500;
+}
+.ob-trust-emo { font-size: 14px; }
+.ob-fine {
+  font-size: 11.5px; color: rgba(255,255,255,.45);
+  text-align: center; margin: 14px 0 0;
+}
+
+/* Stage-Headlines (Stage 1+) */
+.ob-stage-title {
+  font-size: 22px; font-weight: 700;
+  margin: 4px 0 6px;
+  letter-spacing: -.01em;
+  color: #fff;
+}
+.ob-stage-sub {
+  font-size: 14px; line-height: 1.5;
+  color: rgba(255,255,255,.65);
+  margin: 0 0 20px;
+}
+.ob-emo-row {
+  text-align: center; margin: -4px 0 4px;
+}
+.ob-mini-emo {
+  width: 56px; height: 56px;
+  filter: drop-shadow(0 10px 24px rgba(168,140,255,.32));
+}
+.ob-skip {
+  display: block; width: 100%;
+  margin: 12px 0 0; padding: 10px;
+  background: transparent; border: 0;
+  color: rgba(255,255,255,.45); font-size: 13px;
+  cursor: pointer; text-decoration: underline;
+}
+.ob-skip:active { color: rgba(255,255,255,.7); }
+.ob-btn-pri {
+  width: 100%; padding: 14px; margin-top: 8px;
+  background: linear-gradient(135deg, #8B5CF6 0%, #A88CFF 100%);
+  color: #fff; font-size: 15px; font-weight: 700;
+  border: 0; border-radius: 12px;
+  cursor: pointer;
+  transition: transform .15s, opacity .15s;
+}
+.ob-btn-pri:active { transform: scale(.98); }
+.ob-btn-pri:disabled { opacity: .4; cursor: not-allowed; }
+.ob-btn-sec {
+  flex: 1; padding: 14px;
+  background: rgba(255,255,255,.06);
+  color: rgba(255,255,255,.85); font-size: 15px; font-weight: 600;
+  border: .5px solid rgba(255,255,255,.14); border-radius: 12px;
+  cursor: pointer;
+}
+.ob-actions .ob-btn-pri { flex: 2; margin-top: 0; }
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 14px 0 10px;
+  color: rgba(255,255,255,.45);
+  font-size: var(--t-5, 12px);
+  text-transform: uppercase;
+  letter-spacing: .12em;
+}
+.auth-divider::before, .auth-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: rgba(255,255,255,.12);
+}
+.auth-btn-apple {
+  background: #000 !important;
+  color: #fff !important;
+  border: .5px solid rgba(255,255,255,.18) !important;
+  display: flex; align-items: center; justify-content: center;
+  gap: 4px;
+}
+.auth-btn-apple:active { transform: scale(.97); }
 .auth-error{
   background: rgba(236,72,153,.1);
   border: .5px solid rgba(236,72,153,.4);
@@ -381,6 +646,185 @@ a{ color: var(--c-violet-3); text-decoration: none; }
   -webkit-text-fill-color: var(--c-violet);
 }
 .hdr-spacer{ flex: 1; }
+
+/* ───────────── Crew-Avatar (44px Kreis mit Initiale + State-Badge) ───────────── */
+.crew-avatar{
+  position: relative;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #8B5CF6, #A88CFF);
+  border: 2px solid rgba(168,140,255,.55);
+  color: #fff; font-family: Inter, system-ui, sans-serif;
+  font-size: 16px; font-weight: 700;
+  letter-spacing: -.01em;
+  flex-shrink: 0;
+  user-select: none;
+}
+.crew-avatar.size-32{ width: 32px; height: 32px; font-size: 13px; border-width: 1.5px; }
+.crew-avatar.size-56{ width: 56px; height: 56px; font-size: 20px; border-width: 2.5px; }
+.crew-avatar.state-out{
+  border-color: rgba(168,140,255,.95);
+  box-shadow: 0 0 0 0 rgba(168,140,255,.6);
+  animation: crew-pulse 2.4s ease-out infinite;
+}
+.crew-avatar.state-open{ border-color: rgba(255,157,110,.95); }
+.crew-avatar.state-home{ border-color: rgba(168,140,255,.35); opacity: .85; }
+.crew-avatar.state-private{ border-color: rgba(255,255,255,.18); opacity: .55; filter: grayscale(.6); }
+.crew-avatar-badge{
+  position: absolute; bottom: -3px; right: -3px;
+  width: 18px; height: 18px;
+  background: #0F0A1F; border: 1.5px solid rgba(168,140,255,.55);
+  border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 11px; line-height: 1;
+}
+@keyframes crew-pulse{
+  0%   { box-shadow: 0 0 0 0 rgba(168,140,255,.55); }
+  70%  { box-shadow: 0 0 0 10px rgba(168,140,255,0); }
+  100% { box-shadow: 0 0 0 0 rgba(168,140,255,0); }
+}
+
+/* ───────────── Heimatort-Haus-Marker (auf der Karte) ───────────── */
+.home-marker{
+  width: 28px; height: 28px;
+  background: rgba(255,157,110,.25);
+  border: 1.5px solid rgba(255,157,110,.7);
+  border-radius: 8px;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 14px;
+}
+
+/* ───────────── Karten-Layer-Pill (3-Layer-Toggle unter der Karte) ───────────── */
+.map-layer-pill{
+  position: absolute; left: 50%; transform: translateX(-50%);
+  bottom: 16px;
+  display: inline-flex; gap: 4px;
+  padding: 4px;
+  background: rgba(15,10,31,.85);
+  border: .5px solid rgba(168,140,255,.22);
+  border-radius: 999px;
+  backdrop-filter: blur(12px) saturate(1.2);
+  -webkit-backdrop-filter: blur(12px) saturate(1.2);
+  z-index: 600;
+}
+.map-layer-tab{
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 14px;
+  background: transparent; border: 0;
+  color: rgba(255,255,255,.65);
+  font-size: 12.5px; font-weight: 600;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+}
+.map-layer-tab.active{
+  background: rgba(168,140,255,.25);
+  color: #fff;
+}
+.map-layer-tab:active{ transform: scale(.96); }
+
+/* ───────────── Sag-Hi-Sheet (Bottom-Sheet mit 3 Ice-Breakers) ───────────── */
+.hi-sheet-target{
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px;
+  background: rgba(168,140,255,.08);
+  border: .5px solid rgba(168,140,255,.22);
+  border-radius: 14px;
+  margin-bottom: 14px;
+}
+.hi-sheet-target-info{ display: flex; flex-direction: column; gap: 2px; }
+.hi-sheet-target-name{ font-size: 16px; font-weight: 700; color: #fff; }
+.hi-sheet-target-dist{ font-size: 12px; color: rgba(255,255,255,.55); }
+.hi-icebreakers{ display: flex; flex-direction: column; gap: 8px; margin: 0 0 14px; }
+.hi-ib{
+  display: flex; flex-direction: column; gap: 4px;
+  text-align: left;
+  padding: 14px 16px;
+  background: rgba(255,255,255,.05);
+  border: .5px solid rgba(255,255,255,.12);
+  border-radius: 12px;
+  color: #fff;
+  cursor: pointer;
+  transition: background .12s, border-color .12s;
+}
+.hi-ib:hover{ background: rgba(168,140,255,.1); border-color: rgba(168,140,255,.32); }
+.hi-ib:active{ transform: scale(.98); }
+.hi-ib-text{ font-size: 14.5px; font-weight: 600; }
+.hi-ib-mood{ font-size: 11px; color: rgba(255,255,255,.45); }
+
+/* ───────────── State-Picker-Sheet (4 Karten, Single-Tap pro Karte) ───────────── */
+.state-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 0 0 16px;
+}
+.state-card{
+  position: relative;
+  display: flex; flex-direction: column; align-items: flex-start;
+  text-align: left;
+  padding: 16px 14px;
+  background: rgba(255,255,255,.04);
+  border: .5px solid rgba(255,255,255,.12);
+  border-radius: 14px;
+  color: #fff;
+  cursor: pointer;
+  transition: transform .12s, background .12s, border-color .12s;
+  min-height: 132px;
+}
+.state-card:hover{ background: rgba(168,140,255,.08); border-color: rgba(168,140,255,.32); }
+.state-card:active{ transform: scale(.97); }
+.state-card.active{
+  background: rgba(139,92,246,.18);
+  border-color: rgba(168,140,255,.65);
+  box-shadow: 0 0 0 1px rgba(168,140,255,.45);
+}
+.state-card.active::after{
+  content: "✓";
+  position: absolute; top: 10px; right: 12px;
+  color: #A88CFF; font-weight: 700; font-size: 14px;
+}
+.state-emo{ font-size: 30px; margin-bottom: 6px; }
+.state-name{ font-size: 16px; font-weight: 700; margin-bottom: 4px; letter-spacing: -.01em; }
+.state-desc{ font-size: 11.5px; color: rgba(255,255,255,.55); line-height: 1.4; }
+.state-foot{
+  padding: 12px 14px;
+  background: rgba(168,140,255,.08);
+  border: .5px solid rgba(168,140,255,.18);
+  border-radius: 12px;
+  font-size: 12px;
+  color: rgba(255,255,255,.75);
+  line-height: 1.5;
+}
+
+/* ───────────── Standort-Pill im Header (Snapchat-Style Toggle) ───────────── */
+.hdr-loc-pill{
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 32px; padding: 0 12px;
+  background: rgba(168,140,255,.12);
+  border: .5px solid rgba(168,140,255,.28);
+  border-radius: 999px;
+  color: #fff; font-size: 12px; font-weight: 500;
+  letter-spacing: .01em;
+  cursor: pointer;
+  margin-left: 10px;
+  transition: transform .15s, background .15s;
+  white-space: nowrap;
+  max-width: 180px; overflow: hidden; text-overflow: ellipsis;
+}
+.hdr-loc-pill:active{ transform: scale(.95); }
+.hdr-loc-pill.home{
+  background: rgba(255,157,110,.12);
+  border-color: rgba(255,157,110,.32);
+}
+.hdr-loc-pill.ghost{
+  background: rgba(255,255,255,.06);
+  border-color: rgba(255,255,255,.14);
+  color: rgba(255,255,255,.55);
+}
+.hdr-loc-icon{ font-size: 13px; }
+
 .hdr-pill{
   display: inline-flex;
   align-items: center;
@@ -740,8 +1184,8 @@ a{ color: var(--c-violet-3); text-decoration: none; }
 .spa-card{
   margin: 0 var(--s-4) var(--s-4);
   padding: var(--s-4);
-  background: linear-gradient(135deg, rgba(139,92,246,.18), rgba(99,102,241,.06));
-  border: .5px solid rgba(139,92,246,.4);
+  background: linear-gradient(135deg, rgba(45,212,191,.12), rgba(96,165,250,.05));
+  border: .5px solid rgba(45,212,191,.34);
   border-radius: var(--r-3);
   display: flex;
   align-items: center;
@@ -753,10 +1197,10 @@ a{ color: var(--c-violet-3); text-decoration: none; }
 .spa-card-ic{
   width: 48px; height: 48px;
   border-radius: var(--r-2);
-  background: linear-gradient(135deg, var(--c-violet), var(--c-violet-2));
+  background: linear-gradient(135deg, var(--c-safety), var(--c-safety-2));
   display: flex; align-items: center; justify-content: center;
   flex: none;
-  box-shadow: var(--shadow-violet);
+  box-shadow: 0 8px 22px rgba(45,212,191,.28);
 }
 .spa-card-ic svg{ width: 22px; height: 22px; color: #fff; }
 .spa-card-main{ flex: 1; min-width: 0; }
@@ -777,6 +1221,109 @@ a{ color: var(--c-violet-3); text-decoration: none; }
   background: var(--c-text-3);
   -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='9 18 15 12 9 6'/></svg>") no-repeat center/contain;
           mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='9 18 15 12 9 6'/></svg>") no-repeat center/contain;
+}
+
+/* Status-abhaengiger Primaermoment auf Home */
+.home-priority{
+  --hp-a: var(--c-safety);
+  --hp-b: var(--c-safety-2);
+  --hp-soft: rgba(45,212,191,.14);
+  --hp-line: rgba(45,212,191,.36);
+  --hp-glow: rgba(45,212,191,.28);
+  margin: 0 var(--s-4) var(--s-4);
+  padding: var(--s-4);
+  border-radius: var(--r-3);
+  border: .5px solid var(--hp-line);
+  background:
+    linear-gradient(135deg, var(--hp-soft), rgba(255,255,255,.035)),
+    rgba(255,255,255,.035);
+  box-shadow: 0 12px 28px rgba(0,0,0,.22);
+}
+.home-priority[data-state="homeway"],
+.home-priority[data-state="active"]{
+  --hp-a: var(--c-homeway);
+  --hp-b: var(--c-homeway-2);
+  --hp-soft: rgba(96,165,250,.14);
+  --hp-line: rgba(96,165,250,.34);
+  --hp-glow: rgba(96,165,250,.28);
+}
+.home-priority[data-state="crew"]{
+  --hp-a: var(--c-crew);
+  --hp-b: var(--c-crew-2);
+  --hp-soft: rgba(245,158,11,.14);
+  --hp-line: rgba(245,158,11,.34);
+  --hp-glow: rgba(245,158,11,.28);
+}
+.home-priority[data-state="sos"]{
+  --hp-a: var(--c-sos);
+  --hp-b: var(--c-sos-2);
+  --hp-soft: rgba(236,72,153,.14);
+  --hp-line: rgba(236,72,153,.36);
+  --hp-glow: rgba(236,72,153,.3);
+}
+.home-priority-kicker{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: var(--s-2);
+  color: var(--hp-a);
+  font-size: var(--t-6);
+  font-weight: 900;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.home-priority-kicker::before{
+  content: '';
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--hp-a);
+  box-shadow: 0 0 14px var(--hp-glow);
+}
+.home-priority-title{
+  margin: 0 0 4px;
+  color: #fff;
+  font-size: 21px;
+  font-weight: 900;
+  letter-spacing: -.015em;
+}
+.home-priority-sub{
+  margin: 0;
+  color: var(--c-text-2);
+  font-size: var(--t-4);
+  line-height: 1.45;
+}
+.home-priority-actions{
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--s-2);
+  margin-top: var(--s-4);
+}
+.home-priority-primary,
+.home-priority-secondary{
+  min-height: 44px;
+  padding: 0 var(--s-4);
+  border-radius: var(--r-2);
+  font-size: var(--t-4);
+  font-weight: 900;
+  letter-spacing: 0;
+}
+.home-priority-primary{
+  background: linear-gradient(135deg, var(--hp-a), var(--hp-b));
+  color: #fff;
+  box-shadow: 0 8px 20px var(--hp-glow);
+}
+.home-priority-secondary{
+  background: rgba(255,255,255,.055);
+  border: .5px solid rgba(255,255,255,.1);
+  color: var(--c-text-2);
+}
+.home-priority-primary:active,
+.home-priority-secondary:active{
+  transform: scale(.97);
+}
+@media (max-width: 360px){
+  .home-priority-actions{ grid-template-columns: 1fr; }
+  .home-priority-secondary{ min-height: 40px; }
 }
 
 /* Section Headers */
@@ -820,8 +1367,10 @@ a{ color: var(--c-violet-3); text-decoration: none; }
   transition: all .2s var(--ease);
 }
 .quick-c:active{ transform: scale(.94); }
-.quick-c.live{ background: linear-gradient(135deg, rgba(40,200,120,.18), rgba(40,200,120,.04)); border-color: rgba(40,200,120,.4); }
-.quick-c.urgent{ background: linear-gradient(135deg, rgba(236,72,153,.18), rgba(190,24,93,.04)); border-color: rgba(236,72,153,.4); }
+.quick-c.live{ background: linear-gradient(135deg, rgba(45,212,191,.14), rgba(45,212,191,.035)); border-color: rgba(45,212,191,.34); }
+.quick-c[data-action="home"]{ background: linear-gradient(135deg, rgba(96,165,250,.14), rgba(96,165,250,.035)); border-color: rgba(96,165,250,.32); }
+.quick-c[data-action="spot"]{ background: linear-gradient(135deg, rgba(245,158,11,.13), rgba(245,158,11,.035)); border-color: rgba(245,158,11,.32); }
+.quick-c.urgent{ background: linear-gradient(135deg, rgba(236,72,153,.18), rgba(190,24,93,.04)); border-color: rgba(236,72,153,.45); }
 .quick-c.on{
   background: linear-gradient(135deg, var(--c-violet), var(--c-violet-2));
   border-color: transparent;
@@ -833,7 +1382,9 @@ a{ color: var(--c-violet-3); text-decoration: none; }
   background: rgba(139,92,246,.2);
   display: flex; align-items: center; justify-content: center;
 }
-.quick-c.live .ic{ background: rgba(40,200,120,.25); }
+.quick-c.live .ic{ background: rgba(45,212,191,.22); }
+.quick-c[data-action="home"] .ic{ background: rgba(96,165,250,.2); }
+.quick-c[data-action="spot"] .ic{ background: rgba(245,158,11,.2); }
 .quick-c.urgent .ic{ background: rgba(236,72,153,.25); }
 .quick-c.on .ic{ background: rgba(255,255,255,.2); }
 .quick-c .ic svg{ width: 16px; height: 16px; color: #fff; }
@@ -4151,15 +4702,30 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
   <div class="auth-logo">crew<span class="dot">.</span></div>
   <p class="auth-tagline">Connection + Safety. Für deine Crew.</p>
   <div class="auth-card">
-    <div class="auth-tabs">
+
+    <!-- WEB-ONLY: App-Holen-Hero — nur sichtbar im Browser/PWA -->
+    <div class="auth-app-hero web-only">
+      <img class="auth-app-hero-emo" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Mobile%20phone/3D/mobile_phone_3d.png" alt=""/>
+      <h2 class="auth-app-hero-title">crew. gibt's nur als App.</h2>
+      <p class="auth-app-hero-sub">Den Login machen wir über dein iPhone — sicher, mit Face ID. Die Web-Version ist die Landing.</p>
+      <a class="auth-app-hero-cta" href="https://apps.apple.com/de/app/crew/id6759304649" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M16.365 1.43c0 1.14-.42 2.23-1.13 3.04-.85.99-2.24 1.76-3.4 1.66-.14-1.13.41-2.32 1.16-3.13.84-.93 2.34-1.65 3.37-1.57zm3.94 17.04c-.48 1.11-.71 1.6-1.33 2.59-.86 1.38-2.07 3.1-3.57 3.11-1.33.01-1.67-.86-3.48-.85-1.81.01-2.18.87-3.51.86-1.5-.01-2.65-1.55-3.51-2.93-2.4-3.86-2.65-8.39-1.17-10.81 1.05-1.71 2.7-2.71 4.26-2.71 1.59 0 2.59.87 3.91.87 1.28 0 2.06-.87 3.9-.87 1.39 0 2.86.76 3.9 2.06-3.43 1.88-2.87 6.78.6 8.68z"/></svg>
+        Hol dir die App
+      </a>
+      <div class="auth-app-hero-or">oder</div>
+      <p style="font-size:12.5px;color:rgba(255,255,255,.6);margin:0">Trag dich unten auf die Warteliste ein — wir melden uns sobald wir dich freigeben.</p>
+    </div>
+
+    <!-- APP-ONLY: Tabs (Login/Sign-Up). Auf Web hidden. Warteliste-Tab nur web-mode. -->
+    <div class="auth-tabs app-only">
       <button class="auth-tab on" data-mode="login">Login</button>
       <button class="auth-tab" data-mode="signup">Sign-Up</button>
-      <button class="auth-tab" data-mode="waitlist">Warteliste</button>
     </div>
+
     <div id="authError" class="auth-error"></div>
 
-    <!-- LOGIN + SIGNUP-PANEL (geteilte Felder) -->
-    <div id="authPanelAuth" class="auth-panel">
+    <!-- APP-ONLY: LOGIN + SIGNUP-PANEL -->
+    <div id="authPanelAuth" class="auth-panel app-only">
       <input class="auth-input" id="authEmail" type="email" placeholder="Email" autocomplete="email" />
       <input class="auth-input" id="authPass" type="password" placeholder="Passwort" autocomplete="current-password" />
       <!-- Sprint B.1: Invite-Code-Feld nur im Sign-Up-Mode sichtbar -->
@@ -4173,6 +4739,15 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
         Sign-Up nur für freigegebene Warteliste-Mitglieder oder Pionier-Code.
       </p>
       <button class="auth-btn" id="authSubmit">Login</button>
+
+      <!-- Sign in with Apple — nur native iOS App (per CSS .cap-ios sichtbar) -->
+      <div class="auth-divider auth-apple-only" aria-hidden="true">
+        <span>oder</span>
+      </div>
+      <button class="auth-btn auth-btn-apple auth-apple-only" id="authAppleBtn" type="button">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true" style="vertical-align:-3px;margin-right:6px"><path d="M16.365 1.43c0 1.14-.42 2.23-1.13 3.04-.85.99-2.24 1.76-3.4 1.66-.14-1.13.41-2.32 1.16-3.13.84-.93 2.34-1.65 3.37-1.57zm3.94 17.04c-.48 1.11-.71 1.6-1.33 2.59-.86 1.38-2.07 3.1-3.57 3.11-1.33.01-1.67-.86-3.48-.85-1.81.01-2.18.87-3.51.86-1.5-.01-2.65-1.55-3.51-2.93-2.4-3.86-2.65-8.39-1.17-10.81 1.05-1.71 2.7-2.71 4.26-2.71 1.59 0 2.59.87 3.91.87 1.28 0 2.06-.87 3.9-.87 1.39 0 2.86.76 3.9 2.06-3.43 1.88-2.87 6.78.6 8.68z"/></svg>
+        Mit Apple anmelden
+      </button>
     </div>
 
     <!-- WAITLIST-PANEL (Inline-Eintrag) -->
@@ -4217,11 +4792,158 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
   </div>
 </div>
 
+<!-- ONBOARDING — Welcome + 4 warme Steps. Erstmals sichtbar nach Erst-Login. -->
+<div id="onboarding" class="ob-screen" hidden>
+  <div class="ob-card">
+    <div id="obError" class="ob-error" hidden></div>
+
+    <!-- Step 0: WELCOME — Geborgenheit ab Sekunde 1 -->
+    <div class="ob-step ob-welcome" data-ob-step="0">
+      <img class="ob-stage-image" src="/img/onboarding/optimized/welcome.jpg" alt="" decoding="async" fetchpriority="high" onerror="if(this.src.includes('/optimized/')){this.src=this.src.replace('/optimized','');}else if(this.src.endsWith('.jpg')){this.src=this.src.replace(/\.jpg$/,'.png');}else{this.style.display='none';}"/>
+      <img class="ob-hero-emo" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Smiling%20face%20with%20open%20hands/3D/smiling_face_with_open_hands_3d.png" alt=""/>
+      <h1 class="ob-title">Schön, dass du da bist.</h1>
+      <p class="ob-welcome-promise">Du bist jetzt nicht mehr alleine unterwegs.<br/>Drei Atemzüge, dann sind wir drin.</p>
+      <div class="ob-trust-row">
+        <div class="ob-trust-pill"><span class="ob-trust-emo">🇪🇺</span><span>EU-Server</span></div>
+        <div class="ob-trust-pill"><span class="ob-trust-emo">🔒</span><span>Verschlüsselt</span></div>
+        <div class="ob-trust-pill"><span class="ob-trust-emo">📜</span><span>DSGVO</span></div>
+      </div>
+      <button class="ob-btn-pri" id="obStep0Next">Los geht's</button>
+      <p class="ob-fine">Deine Daten gehören dir. Niemand sonst.</p>
+    </div>
+
+    <!-- Step 1: Identität -->
+    <div class="ob-step" data-ob-step="1" hidden>
+      <img class="ob-stage-image" src="/img/onboarding/optimized/identity.jpg" alt="" loading="lazy" decoding="async" onerror="if(this.src.includes('/optimized/')){this.src=this.src.replace('/optimized','');}else if(this.src.endsWith('.jpg')){this.src=this.src.replace(/\.jpg$/,'.png');}else{this.style.display='none';}"/>
+      <div class="ob-step-num">1 von 4 · Wer bist du?</div>
+      <h2 class="ob-stage-title">Wie sollen wir dich nennen?</h2>
+      <p class="ob-stage-sub">Damit deine Crew dich erkennt — sonst sieht das niemand.</p>
+      <div class="ob-field">
+        <label>Vorname</label>
+        <input id="obName" type="text" maxlength="40" autocapitalize="words" autocomplete="given-name" placeholder="Lisa" />
+      </div>
+      <div class="ob-field">
+        <label>@-Handle (such dir einen aus)</label>
+        <div class="ob-handle-wrap">
+          <span class="ob-at">@</span>
+          <input id="obUsername" type="text" maxlength="20" autocapitalize="none" autocorrect="off" placeholder="dein_handle" />
+          <span class="ob-handle-status" id="obUsernameStatus"></span>
+        </div>
+        <div class="ob-hint">3 – 20 Zeichen, Buchstaben/Zahlen/Unterstrich.</div>
+      </div>
+      <button class="ob-btn-pri" id="obStep1Next">Weiter</button>
+    </div>
+
+    <!-- Step 2: Region + Demografie -->
+    <div class="ob-step" data-ob-step="2" hidden>
+      <img class="ob-stage-image" src="/img/onboarding/optimized/city.jpg" alt="" loading="lazy" decoding="async" onerror="if(this.src.includes('/optimized/')){this.src=this.src.replace('/optimized','');}else if(this.src.endsWith('.jpg')){this.src=this.src.replace(/\.jpg$/,'.png');}else{this.style.display='none';}"/>
+      <div class="ob-step-num">2 von 4 · Wo seid ihr unterwegs?</div>
+      <h2 class="ob-stage-title">Deine Stadt, deine Crew.</h2>
+      <p class="ob-stage-sub">Wir zeigen dir Hotspots und Pioneers in deiner Nähe.</p>
+      <div class="ob-field">
+        <label>Stadt</label>
+        <input id="obCity" type="text" maxlength="60" autocapitalize="words" placeholder="Stuttgart" />
+      </div>
+      <div class="ob-row">
+        <div class="ob-field">
+          <label>Alter etwa</label>
+          <select id="obAge">
+            <option value="">—</option>
+            <option value="16-20">16 – 20</option>
+            <option value="21-25">21 – 25</option>
+            <option value="26-30">26 – 30</option>
+            <option value="31-40">31 – 40</option>
+            <option value="40+">40+</option>
+          </select>
+        </div>
+        <div class="ob-field">
+          <label>Du fühlst dich</label>
+          <select id="obGender">
+            <option value="">—</option>
+            <option value="w">Weiblich</option>
+            <option value="m">Männlich</option>
+            <option value="d">Divers</option>
+            <option value="x">Keine Angabe</option>
+          </select>
+        </div>
+      </div>
+      <p class="ob-hint" style="margin-top:-4px">Niemand sieht dein exaktes Alter — nur die Spanne, fürs Crew-Match.</p>
+      <div class="ob-actions">
+        <button class="ob-btn-sec" id="obStep2Back">Zurück</button>
+        <button class="ob-btn-pri" id="obStep2Next">Weiter</button>
+      </div>
+    </div>
+
+    <!-- Step 3: Erste Crew-Person — Sofort-Sicherheit -->
+    <div class="ob-step" data-ob-step="3" hidden>
+      <img class="ob-stage-image" src="/img/onboarding/optimized/safety.jpg" alt="" loading="lazy" decoding="async" onerror="if(this.src.includes('/optimized/')){this.src=this.src.replace('/optimized','');}else if(this.src.endsWith('.jpg')){this.src=this.src.replace(/\.jpg$/,'.png');}else{this.style.display='none';}"/>
+      <div class="ob-step-num">3 von 4 · Deine erste Crew-Person</div>
+      <h2 class="ob-stage-title">Wer kriegt deinen Heimweg-Ping?</h2>
+      <p class="ob-stage-sub">Eine Person genügt. Wenn du nachts nicht ankommst — sie kriegt sofort eine Nachricht. Sonst niemand.</p>
+      <div class="ob-field">
+        <label>Name</label>
+        <input id="obSafetyName" type="text" maxlength="40" autocapitalize="words" placeholder="Mama" />
+      </div>
+      <div class="ob-field">
+        <label>Telefonnummer</label>
+        <input id="obSafetyPhone" type="tel" maxlength="30" autocomplete="tel" placeholder="+49 …" inputmode="tel" />
+      </div>
+      <div class="ob-field">
+        <label>Was ist sie für dich?</label>
+        <select id="obSafetyRel">
+          <option value="">—</option>
+          <option value="mom">Mama</option>
+          <option value="dad">Papa</option>
+          <option value="sibling">Geschwister</option>
+          <option value="friend">Beste Freundin / bester Freund</option>
+          <option value="partner">Partner:in</option>
+          <option value="roommate">Mitbewohner:in</option>
+          <option value="other">Andere</option>
+        </select>
+      </div>
+      <div class="ob-actions">
+        <button class="ob-btn-sec" id="obStep3Back">Zurück</button>
+        <button class="ob-btn-pri" id="obStep3Next">Weiter</button>
+      </div>
+      <button class="ob-skip" id="obStep3Skip" type="button">Mache ich später · überspringen</button>
+    </div>
+
+    <!-- Step 4: Spielregeln -->
+    <div class="ob-step" data-ob-step="4" hidden>
+      <img class="ob-stage-image" src="/img/onboarding/optimized/rules.jpg" alt="" loading="lazy" decoding="async" onerror="if(this.src.includes('/optimized/')){this.src=this.src.replace('/optimized','');}else if(this.src.endsWith('.jpg')){this.src=this.src.replace(/\.jpg$/,'.png');}else{this.style.display='none';}"/>
+      <div class="ob-step-num">4 von 4 · Spielregeln</div>
+      <h2 class="ob-stage-title">Drei kurze Regeln.</h2>
+      <p class="ob-stage-sub">Damit hier alle gut aufgehoben sind.</p>
+      <label class="ob-check">
+        <input type="checkbox" id="obAgreeTos" />
+        <span>Ich akzeptiere die <a href="https://partycrew.app/agb.html" target="_blank" rel="noopener">AGB</a> und die <a href="https://partycrew.app/datenschutz.html" target="_blank" rel="noopener">Datenschutzerklärung</a>.</span>
+      </label>
+      <label class="ob-check">
+        <input type="checkbox" id="obAgreeAge" />
+        <span>Ich bin <strong>mindestens 16 Jahre alt</strong>.</span>
+      </label>
+      <label class="ob-check">
+        <input type="checkbox" id="obAgreeRules" />
+        <span>Bei echter Notlage rufe ich <strong>112</strong> — crew. ist ein Crew-Tool, kein Notruf-Ersatz.</span>
+      </label>
+      <div class="ob-actions">
+        <button class="ob-btn-sec" id="obStep4Back">Zurück</button>
+        <button class="ob-btn-pri" id="obStep4Submit" disabled>Drin sein →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- APP -->
 <div id="app" hidden>
 
   <header id="header">
     <div class="brand">crew<span class="dot">.</span></div>
+    <!-- Standort-Pill: Toggle Echtzeit ↔ Heimatort. Tap = Switch. Long-press = Privacy-Hub. -->
+    <button class="hdr-loc-pill" id="locPill" aria-label="Standort-Modus wechseln">
+      <span class="hdr-loc-icon" id="locPillIcon">📍</span>
+      <span class="hdr-loc-text" id="locPillText">Hier</span>
+    </button>
     <div class="hdr-spacer"></div>
     <button class="hdr-pill live" id="liveBtn"><span class="dot"></span><span>Live</span></button>
     <button class="hdr-pill safe" id="safeBtn"><span class="dot"></span><span>Safe</span></button>
@@ -4259,6 +4981,15 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
           </button>
         </div>
         <div class="status"><span class="dot"></span><span id="fyStatus">Sicher · Crew online</span></div>
+      </div>
+      <div class="home-priority" id="homePriority" data-state="safety">
+        <div class="home-priority-kicker" id="homePriorityKicker">Nächster Schritt</div>
+        <h2 class="home-priority-title" id="homePriorityTitle">SafePlace einrichten</h2>
+        <p class="home-priority-sub" id="homePrioritySub">Leg eine Person fest, die bei SOS und Heimweg wirklich Bescheid bekommt.</p>
+        <div class="home-priority-actions">
+          <button class="home-priority-primary" id="homePriorityPrimary" type="button">Kontakt anlegen</button>
+          <button class="home-priority-secondary" id="homePrioritySecondary" type="button">Details</button>
+        </div>
       </div>
       <!-- Erste-Schritte-Card (verschwindet wenn alle 3 Steps erledigt) -->
       <div class="onboard-card" id="onboardCard" hidden>
@@ -5139,7 +5870,7 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     </div>
     <div class="lock-title" id="lockTitle">Tippe deine PIN</div>
     <div class="lock-dots" id="lockDots">
-      <span></span><span></span><span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span>
     </div>
     <div class="lock-error" id="lockError"></div>
     <div class="lock-pad">
@@ -5164,36 +5895,116 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
   </div>
 </div>
 
+<!-- SAG-HI-SHEET — kontextuelle Begegnung am Spot (v2 Sprint C) -->
+<div class="modal center" id="hiSheetModal">
+  <div class="modal-card" style="max-width:420px">
+    <button class="modal-close" data-close="hiSheetModal" aria-label="Schließen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <h2 class="modal-h" style="text-align:center;margin-top:6px;margin-bottom:6px">Sag „Hi"</h2>
+    <p class="modal-sub" style="text-align:center;margin-bottom:14px;font-size:13px;color:rgba(255,255,255,.6)">Drei Sätze. Such dir einen aus.</p>
+
+    <div class="hi-sheet-target" id="hiTargetRow">
+      <div class="crew-avatar" id="hiTargetAvatar">?</div>
+      <div class="hi-sheet-target-info">
+        <div class="hi-sheet-target-name" id="hiTargetName">—</div>
+        <div class="hi-sheet-target-dist" id="hiTargetDist">am gleichen Spot</div>
+      </div>
+    </div>
+
+    <div class="hi-icebreakers" id="hiIcebreakers">
+      <button class="hi-ib" data-code="here_too">
+        <div class="hi-ib-text">Hi, ich bin auch hier.</div>
+        <div class="hi-ib-mood">zurückhaltend</div>
+      </button>
+      <button class="hi-ib" data-code="who_knows">
+        <div class="hi-ib-text">Wer kennt sich hier aus?</div>
+        <div class="hi-ib-mood">neugierig</div>
+      </button>
+      <button class="hi-ib" data-code="first_time">
+        <div class="hi-ib-text">Erstes Mal hier — gut?</div>
+        <div class="hi-ib-mood">offen</div>
+      </button>
+    </div>
+
+    <p style="font-size:11px;color:rgba(255,255,255,.4);text-align:center;margin:0">Wenn er/sie antwortet, seid ihr automatisch befreundet.</p>
+  </div>
+</div>
+
+<!-- STATE-PICKER-SHEET — wer sieht dich wann (v2, ersetzt Privacy-Hub) -->
+<div class="modal center" id="stateSheetModal">
+  <div class="modal-card" style="max-width:440px">
+    <button class="modal-close" data-close="stateSheetModal" aria-label="Schließen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <h2 class="modal-h" style="text-align:center;margin-top:6px;margin-bottom:6px">Wie bist du gerade drauf?</h2>
+    <p class="modal-sub" style="text-align:center;margin-bottom:18px;font-size:13px;color:rgba(255,255,255,.6)">Einstellung gilt ab jetzt. Du kannst jederzeit wechseln.</p>
+
+    <div class="state-grid">
+      <button class="state-card" data-state="home">
+        <div class="state-emo">🏠</div>
+        <div class="state-name">Daheim</div>
+        <div class="state-desc">Crew sieht „daheim" — keine genaue Position. Default.</div>
+      </button>
+      <button class="state-card" data-state="out">
+        <div class="state-emo">🚶</div>
+        <div class="state-name">Unterwegs</div>
+        <div class="state-desc">Deine Crew sieht dich live. Friends nicht.</div>
+      </button>
+      <button class="state-card" data-state="open">
+        <div class="state-emo">💬</div>
+        <div class="state-name">Offen</div>
+        <div class="state-desc">Crew + Friends + Spot-Crew sehen dich. Andere können „Hi" sagen.</div>
+      </button>
+      <button class="state-card" data-state="private">
+        <div class="state-emo">🤫</div>
+        <div class="state-name">Privat</div>
+        <div class="state-desc">Niemand sieht dich. Du bist nicht auf der Karte.</div>
+      </button>
+    </div>
+
+    <div class="state-foot">
+      <strong style="color:#A88CFF">Heimweg läuft?</strong> Deine Safety-Person sieht dich automatisch — auch im Privat-Modus. Endet wenn du ankommst.
+    </div>
+  </div>
+</div>
+
 <!-- PIN-SETUP-MODAL — wird einmalig nach erstem Login angeboten (native only) -->
 <div class="modal center" id="pinSetupModal">
   <div class="modal-card">
     <button class="modal-close" data-close="pinSetupModal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     <div class="modal-hero-emo"><img class="emo3d sz-hero" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Locked%20with%20key/3D/locked_with_key_3d.png" alt=""/></div>
-    <h2 class="modal-h" style="text-align:center;margin-top:0">Schnell-Login einrichten</h2>
-    <p class="modal-sub" style="text-align:center" id="pinSetupSub">4–6 Ziffern, nur lokal auf deinem Gerät gespeichert. Kein Magic-Link mehr beim Öffnen.</p>
-    <div class="lock-dots" id="pinSetupDots" style="margin:18px auto">
-      <span></span><span></span><span></span><span></span><span></span><span></span>
+    <h2 class="modal-h" style="text-align:center;margin-top:0" id="pinSetupHead">Schnell-Login einrichten</h2>
+    <p class="modal-sub" style="text-align:center" id="pinSetupSub">4 Ziffern. Nur lokal auf deinem Gerät gespeichert.</p>
+    <!-- Stage 1: PIN-Pad -->
+    <div id="pinSetupStagePad">
+      <div class="lock-dots" id="pinSetupDots" style="margin:18px auto">
+        <span></span><span></span><span></span><span></span>
+      </div>
+      <div class="lock-error" id="pinSetupError"></div>
+      <div class="lock-pad" id="pinSetupPad" style="max-width:300px;margin:0 auto">
+        <button class="lock-key" data-key="1">1</button>
+        <button class="lock-key" data-key="2">2</button>
+        <button class="lock-key" data-key="3">3</button>
+        <button class="lock-key" data-key="4">4</button>
+        <button class="lock-key" data-key="5">5</button>
+        <button class="lock-key" data-key="6">6</button>
+        <button class="lock-key" data-key="7">7</button>
+        <button class="lock-key" data-key="8">8</button>
+        <button class="lock-key" data-key="9">9</button>
+        <span></span>
+        <button class="lock-key" data-key="0">0</button>
+        <button class="lock-key lock-key-del" data-key="del" type="button" aria-label="Löschen">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 5H7L3 12l4 7h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2z"/><line x1="18" y1="9" x2="12" y2="15"/><line x1="12" y1="9" x2="18" y2="15"/></svg>
+        </button>
+      </div>
+      <div class="modal-actions" style="margin-top:14px">
+        <button class="btn-sec" data-close="pinSetupModal" id="pinSetupSkip">Später</button>
+      </div>
     </div>
-    <div class="lock-error" id="pinSetupError"></div>
-    <div class="lock-pad" id="pinSetupPad" style="max-width:300px;margin:0 auto">
-      <button class="lock-key" data-key="1">1</button>
-      <button class="lock-key" data-key="2">2</button>
-      <button class="lock-key" data-key="3">3</button>
-      <button class="lock-key" data-key="4">4</button>
-      <button class="lock-key" data-key="5">5</button>
-      <button class="lock-key" data-key="6">6</button>
-      <button class="lock-key" data-key="7">7</button>
-      <button class="lock-key" data-key="8">8</button>
-      <button class="lock-key" data-key="9">9</button>
-      <span></span>
-      <button class="lock-key" data-key="0">0</button>
-      <button class="lock-key lock-key-del" data-key="del" type="button" aria-label="Löschen">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 5H7L3 12l4 7h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2z"/><line x1="18" y1="9" x2="12" y2="15"/><line x1="12" y1="9" x2="18" y2="15"/></svg>
-      </button>
-    </div>
-    <div class="modal-actions" style="margin-top:14px">
-      <button class="btn-sec" data-close="pinSetupModal" id="pinSetupSkip">Später</button>
-      <button class="btn-pri" id="pinSetupConfirm" disabled>Weiter</button>
+    <!-- Stage 2: Biometric-Frage (eingeblendet nach erfolgreichem PIN-Save) -->
+    <div id="pinSetupStageBio" style="display:none;text-align:center">
+      <p class="modal-sub" id="pinSetupBioSub" style="margin:6px 0 18px">Möchtest du auch <strong>Face ID</strong> nutzen? Geht noch schneller.</p>
+      <div class="modal-actions" style="display:flex;flex-direction:column;gap:10px">
+        <button class="btn-pri" id="pinSetupBioYes">Ja, mit Face ID</button>
+        <button class="btn-sec" id="pinSetupBioNo">Nur PIN</button>
+      </div>
     </div>
   </div>
 </div>
@@ -5939,6 +6750,9 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
   let detailChannel = null;
   let liveOn = localStorage.getItem('crew-live') === '1';
   let homeOn = localStorage.getItem('crew-home') === '1';
+  let emergencyContactCount = 0;
+  let safetyCircleCount = 0;
+  let totalCrewCount = 0;
 
   /* ============= MODUL-IMPORTS (siehe src/) =============
      Sprint 1.1: FX, HS_*, hsFx, hsLabel, hsLabelHtml, hsShortCode, emo3d
@@ -6022,6 +6836,16 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
       showAuthPanel(authMode.current);
     });
   });
+
+  /* App-Only-Cut: auf Web öffnen wir direkt das Warteliste-Panel —
+     Login + Sign-Up sind ohnehin per CSS .app-only versteckt. */
+  (function initAuthDefaultMode(){
+    const isApp = !!(window.crew && window.crew.native && window.crew.native.isApp);
+    if (!isApp) {
+      authMode.current = 'waitlist';
+      showAuthPanel('waitlist');
+    }
+  })();
   /* Bekannte Trigger-Errors → freundliche Texte */
   function translateAuthError(msg){
     if (!msg) return 'Unbekannter Fehler';
@@ -6044,6 +6868,214 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     }
     return m;
   }
+
+  /* ============= ONBOARDING-SCREEN (für Erst-User nach Apple/Email Login) =============
+     Im IIFE damit Variablen nicht mit anderem Onboarding-Code (App-Tour weiter unten)
+     kollidieren. Public API: window.showSignupOnboarding(u). */
+  (function(){
+  let obStep = 1;
+  let obUsernameTimer = null;
+  let obUsernameOk = false;
+
+  function obShowError(msg){
+    const e = $('obError');
+    e.textContent = msg;
+    e.hidden = !msg;
+  }
+  function obSetStep(n){
+    obStep = n;
+    document.querySelectorAll('#onboarding [data-ob-step]').forEach(el => {
+      el.hidden = parseInt(el.dataset.obStep, 10) !== n;
+    });
+    obShowError('');
+  }
+
+  async function checkUsernameAvailable(handle){
+    /* RLS-policy: profiles.username ist UNIQUE — nutze count() statt RPC.
+       Wenn schon vergeben, bekommen wir count >= 1. */
+    try {
+      const r = await sb.from('profiles').select('user_id', { count: 'exact', head: true }).eq('username', handle);
+      const count = r && typeof r.count === 'number' ? r.count : 0;
+      return count === 0;
+    } catch(e) { return null; /* unsicher → nicht blockieren */ }
+  }
+
+  function showOnboardingScreen(u){
+    const ob = $('onboarding');
+    if (!ob) return;
+    ob.hidden = false;
+
+    /* Felder mit Apple/Email-Daten vorbefüllen */
+    let nameDefault = '';
+    try { nameDefault = sessionStorage.getItem('crew_apple_name') || ''; } catch(_){}
+    if (nameDefault) nameDefault = nameDefault.split(' ')[0]; // nur Vorname
+    if (!nameDefault && profile && profile.name) nameDefault = profile.name;
+    if (!nameDefault && u && u.email) nameDefault = u.email.split('@')[0];
+    $('obName').value = nameDefault || '';
+    $('obUsername').value = profile && profile.username || '';
+    $('obCity').value = profile && profile.home_city || '';
+    if (profile && profile.age_bracket) $('obAge').value = profile.age_bracket;
+    if (profile && profile.gender) $('obGender').value = profile.gender;
+
+    obSetStep(0); /* Welcome zuerst */
+
+    /* Username live-check */
+    const inp = $('obUsername');
+    const status = $('obUsernameStatus');
+    inp.addEventListener('input', () => {
+      let v = inp.value.trim().toLowerCase().replace(/[^a-z0-9_]/g, '');
+      if (v !== inp.value) inp.value = v;
+      obUsernameOk = false;
+      if (v.length < 3) {
+        status.textContent = '';
+        status.removeAttribute('data-state');
+        return;
+      }
+      status.textContent = '…';
+      status.dataset.state = 'check';
+      clearTimeout(obUsernameTimer);
+      obUsernameTimer = setTimeout(async () => {
+        const ok = await checkUsernameAvailable(v);
+        if (ok === true) { status.textContent = '✓'; status.dataset.state = 'ok'; obUsernameOk = true; }
+        else if (ok === false) { status.textContent = 'belegt'; status.dataset.state = 'bad'; obUsernameOk = false; }
+        else { status.textContent = ''; status.removeAttribute('data-state'); }
+      }, 350);
+    });
+
+    /* Stage 0 → 1 (Welcome → Identität) */
+    $('obStep0Next').onclick = () => {
+      try { window.crew && window.crew.native && window.crew.native.haptic('medium'); } catch(_){}
+      obSetStep(1);
+    };
+
+    /* Stage 1 → 2 */
+    $('obStep1Next').onclick = () => {
+      const name = $('obName').value.trim();
+      const handle = $('obUsername').value.trim();
+      if (!name || name.length < 2) { obShowError('Bitte trag deinen Vornamen ein.'); return; }
+      if (!/^[a-z0-9_]{3,20}$/.test(handle)) { obShowError('@-Handle: 3 – 20 Zeichen, Buchstaben/Zahlen/Unterstrich.'); return; }
+      if (!obUsernameOk) { obShowError('Der @-Handle ist nicht verfügbar oder noch nicht geprüft.'); return; }
+      obSetStep(2);
+    };
+
+    /* Stage 2 ↔ 3 */
+    $('obStep2Back').onclick = () => obSetStep(1);
+    $('obStep2Next').onclick = () => {
+      const city = $('obCity').value.trim();
+      const age = $('obAge').value;
+      const gender = $('obGender').value;
+      if (!city) { obShowError('Trag deine Stadt ein — wir zeigen dir nur Crews aus deiner Region.'); return; }
+      if (!age) { obShowError('Wähl deine Alters-Spanne.'); return; }
+      if (!gender) { obShowError('Wähl wie du dich fühlst.'); return; }
+      obSetStep(3);
+    };
+
+    /* Stage 3 (Crew-Person) ↔ 4 — skippable */
+    $('obStep3Back').onclick = () => obSetStep(2);
+    $('obStep3Next').onclick = () => {
+      const sName = $('obSafetyName').value.trim();
+      const sPhone = $('obSafetyPhone').value.trim();
+      if (!sName || sName.length < 2) { obShowError('Trag den Namen ein — z.B. "Mama" oder einen Vornamen.'); return; }
+      if (!sPhone || sPhone.length < 6) { obShowError('Trag die Telefonnummer ein, an die der Heimweg-Ping geht.'); return; }
+      obSetStep(4);
+    };
+    $('obStep3Skip').onclick = () => {
+      /* skip-flag setzen damit Submit weiß: keine Crew-Person speichern */
+      try { $('obSafetyName').value = ''; $('obSafetyPhone').value = ''; $('obSafetyRel').value = ''; } catch(_){}
+      obSetStep(4);
+    };
+
+    /* Stage 4: Spielregeln + Submit */
+    const ck = ['obAgreeTos','obAgreeAge','obAgreeRules'];
+    function refreshObSubmitBtn(){
+      const all = ck.every(id => $(id).checked);
+      $('obStep4Submit').disabled = !all;
+    }
+    ck.forEach(id => $(id).onchange = refreshObSubmitBtn);
+    $('obStep4Back').onclick = () => obSetStep(3);
+
+    $('obStep4Submit').onclick = async () => {
+      $('obStep4Submit').disabled = true;
+      $('obStep4Submit').textContent = 'Speichere …';
+      try {
+        /* Empty-String → null damit CHECK-Constraints (gender / age_bracket) NULL erlauben */
+        const ageVal = ($('obAge').value || '').trim() || null;
+        const genderVal = ($('obGender').value || '').trim() || null;
+        const cityVal = ($('obCity').value || '').trim() || null;
+
+        /* PROFILE — robuster Try-Stack: voll → slim → minimal */
+        const tryPayloads = [
+          {
+            name: $('obName').value.trim(),
+            username: $('obUsername').value.trim(),
+            home_city_name: cityVal,
+            age_bracket: ageVal,
+            gender: genderVal,
+            tos_accepted_at: new Date().toISOString(),
+          },
+          {
+            name: $('obName').value.trim(),
+            username: $('obUsername').value.trim(),
+            home_city_name: cityVal,
+          },
+          {
+            name: $('obName').value.trim(),
+            username: $('obUsername').value.trim(),
+          },
+        ];
+        let saved = false, lastErr = null;
+        for (const payload of tryPayloads) {
+          const r = await sb.from('profiles').update(payload).eq('user_id', u.id);
+          if (!r.error) { saved = true; break; }
+          lastErr = r.error;
+          if (!/column .* does not exist|invalid input value/i.test(r.error.message || '')) {
+            obShowError('Speichern fehlgeschlagen: ' + r.error.message);
+            return;
+          }
+        }
+        if (!saved) {
+          obShowError('Konnte Profil nicht speichern: ' + (lastErr && lastErr.message || 'unbekannt'));
+          return;
+        }
+
+        /* SAFETY-CIRCLE — falls in Stage 3 ausgefüllt, jetzt speichern.
+           Tabelle: crew_safety_contacts (user_id, name, phone, relation).
+           Bei Schema-Fail still überspringen — Onboarding darf nicht blocken. */
+        const sName = ($('obSafetyName').value || '').trim();
+        const sPhone = ($('obSafetyPhone').value || '').trim();
+        const sRel = ($('obSafetyRel').value || '').trim() || null;
+        if (sName && sPhone) {
+          try {
+            const sc = await sb.from('crew_safety_contacts').insert({
+              user_id: u.id,
+              name: sName,
+              phone: sPhone,
+              relation: sRel,
+            });
+            if (sc.error) console.warn('[safety-contact]', sc.error);
+          } catch(scErr) { console.warn('[safety-contact]', scErr); }
+        }
+
+        /* Onboarding fertig → Apple-Cache löschen, App zeigen */
+        try { sessionStorage.removeItem('crew_apple_name'); sessionStorage.removeItem('crew_apple_email'); } catch(_){}
+        $('onboarding').hidden = true;
+        if (window.crewTelemetry) window.crewTelemetry.captureEvent('onboarding:done', { hasSafetyContact: !!(sName && sPhone) });
+        try { window.crew && window.crew.native && window.crew.native.haptic('success'); } catch(_){}
+        await onAuth(u);
+      } catch(e) {
+        console.warn('[onboarding]', e);
+        obShowError('Fehler: ' + (e && e.message ? e.message : 'unbekannt'));
+      } finally {
+        $('obStep4Submit').disabled = false;
+        $('obStep4Submit').textContent = 'Drin sein →';
+      }
+    };
+  }
+
+  /* IIFE-Public-API: vom onAuth aufrufbar als window.showSignupOnboarding(user) */
+  window.showSignupOnboarding = showOnboardingScreen;
+  })();
+
   /* Sign-Up-Tor-Status pollen + Sign-Up-Tab visuell sperren wenn zu */
   let signupOpen = false;
   async function refreshSignupGate(){
@@ -6182,6 +7214,64 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
       $('authSubmit').textContent = origLabel;
     }
   });
+
+  /* ============= SIGN IN WITH APPLE — Native iOS only ============= */
+  /* Flow:
+     1) crew.native.signInWithApple() → liefert {identityToken, rawNonce, email, …}
+     2) supabase.auth.signInWithIdToken({provider:'apple', token, nonce}) → Session
+     3) onAuth(user) übernimmt wie bei E-Mail-Login
+     Apple-User: Email kommt nur beim ALLERERSTEN Sign-in. Daher cachen wir
+     givenName/email lokal, falls onAuth ein Profil-Anlegen braucht. */
+  const appleBtn = document.getElementById('authAppleBtn');
+  if (appleBtn) {
+    appleBtn.addEventListener('click', async () => {
+      if (!window.crew || !window.crew.native || !window.crew.native.isApp) {
+        setAuthError('Apple-Anmeldung ist aktuell nur in der iOS-App verfügbar.');
+        return;
+      }
+      setAuthError('');
+      const orig = appleBtn.textContent;
+      appleBtn.disabled = true;
+      appleBtn.textContent = 'Apple-Sheet wird geladen …';
+      try {
+        const result = await window.crew.native.signInWithApple({
+          clientId: 'com.butterbread.synclulu',
+          scopes: 'email name'
+        });
+        if (!result || !result.identityToken) {
+          setAuthError('Apple-Anmeldung wurde abgebrochen.');
+          return;
+        }
+        /* Ersten Apple-Sign-in cachen — Email + Name kommen nur einmal! */
+        try {
+          if (result.email) sessionStorage.setItem('crew_apple_email', result.email);
+          if (result.givenName || result.familyName) {
+            const fullName = [result.givenName, result.familyName].filter(Boolean).join(' ');
+            if (fullName) sessionStorage.setItem('crew_apple_name', fullName);
+          }
+        } catch(_){}
+        const { data, error } = await sb.auth.signInWithIdToken({
+          provider: 'apple',
+          token: result.identityToken,
+          nonce: result.rawNonce
+        });
+        if (error) {
+          console.warn('[apple]', error);
+          setAuthError(translateAuthError(error.message) || 'Apple-Anmeldung fehlgeschlagen.');
+          return;
+        }
+        if (data && data.session && data.session.user) {
+          await onAuth(data.session.user);
+        }
+      } catch(e) {
+        console.warn('[apple]', e);
+        setAuthError('Apple-Anmeldung fehlgeschlagen: ' + (e && e.message ? e.message : 'unbekannter Fehler'));
+      } finally {
+        appleBtn.disabled = false;
+        appleBtn.textContent = orig;
+      }
+    });
+  }
 
   /* ============= PARTNER ONBOARDING ============= */
   const PARTNER_KINDS = [
@@ -6353,16 +7443,30 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
       return;
     }
     $('auth').classList.add('gone');
-    $('app').hidden = false;
     /* Profile laden */
     const r = await sb.from('profiles').select('*').eq('user_id', u.id).maybeSingle();
     profile = (r && r.data) || {};
-    /* Falls noch keine row, eine anlegen */
+    /* Falls noch keine row, eine anlegen — bei Apple-Sign-in vorbefüllen */
     if (!profile.user_id){
-      const ins = await sb.from('profiles').insert({ user_id: u.id, name: u.email.split('@')[0] });
+      let nameDefault = '';
+      try {
+        const cachedName = sessionStorage.getItem('crew_apple_name');
+        if (cachedName) nameDefault = cachedName.split(' ')[0];
+      } catch(_){}
+      if (!nameDefault && u.email) nameDefault = u.email.split('@')[0];
+      await sb.from('profiles').insert({ user_id: u.id, name: nameDefault });
       const r2 = await sb.from('profiles').select('*').eq('user_id', u.id).maybeSingle();
       profile = (r2 && r2.data) || {};
     }
+    /* ---- Onboarding-Gate: wenn @-handle fehlt, Onboarding-Modal vor App ---- */
+    if (!profile.username) {
+      $('app').hidden = true;
+      if (typeof window.showSignupOnboarding === 'function') {
+        window.showSignupOnboarding(u);
+      }
+      return;
+    }
+    $('app').hidden = false;
     /* Sprint 2.3: Suspend-Check nach Login. Wenn account gesperrt → App ausblenden,
        Sperr-Banner zeigen. */
     if (profile.suspended_until && new Date(profile.suspended_until) > new Date()) {
@@ -6460,7 +7564,6 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
         },
         { enableHighAccuracy: true, timeout: 8000, maximumAge: 60000 }
       );
-      /* Backup-Timeout falls Browser nichts liefert: probiere LastKnown / HomeCity */
       setTimeout(() => {
         if (!resolved){
           if (tryLastKnown() || tryHomeCity()){ refreshAll(); }
@@ -6471,6 +7574,166 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
       if (tryLastKnown() || tryHomeCity()){ refreshAll(); }
       else refreshAll();
     }
+
+    /* ─── Echtzeit-Standort-Service starten + Pill wiren (v2: state-basiert) ─── */
+    if (window.crew && window.crew.location) {
+      window.crew.location.start(sb);
+      /* Hydrate State aus DB-Profile */
+      if (profile && profile.state) {
+        window.crew.location.hydrateFromProfile(profile);
+      }
+      /* Live-Updates: fix → userLat/Lng updaten, state-change → Pill rerender */
+      window.crew.location.onChange((evt) => {
+        if (evt.kind === 'fix') {
+          userLat = evt.lat; userLng = evt.lng;
+          renderLocPill();
+          refreshAll();
+        } else if (evt.kind === 'state') {
+          if (profile) profile.state = evt.state;
+          renderLocPill();
+        }
+      });
+      renderLocPill();
+    }
+
+    /* ─── Header-Pill UI (v2: zeigt State-Emoji + Label) ─── */
+    const STATE_META = {
+      home:    { emoji: '🏠', label: 'Daheim',    cls: 'state-home' },
+      out:     { emoji: '🚶', label: 'Unterwegs', cls: 'state-out'  },
+      open:    { emoji: '💬', label: 'Offen',     cls: 'state-open' },
+      private: { emoji: '🤫', label: 'Privat',    cls: 'state-priv' },
+    };
+    function renderLocPill(){
+      const pill = document.getElementById('locPill');
+      if (!pill) return;
+      const state = (window.crew && window.crew.location)
+        ? window.crew.location.getState() : 'home';
+      const meta = STATE_META[state] || STATE_META.home;
+      pill.classList.remove('home','ghost','state-home','state-out','state-open','state-priv');
+      pill.classList.add(meta.cls);
+      const icon = document.getElementById('locPillIcon');
+      const text = document.getElementById('locPillText');
+      if (icon) icon.textContent = meta.emoji;
+      if (text) text.textContent = meta.label;
+      /* State-Cards im Sheet markieren */
+      document.querySelectorAll('.state-card').forEach(c => {
+        c.classList.toggle('active', c.dataset.state === state);
+      });
+    }
+    /* ─── State-Picker-Sheet Wiring (v2) ─── */
+    /* Pill-Click → Sheet öffnen. Sheet-Card-Click → State setzen + zumachen. */
+    const _pillEl = document.getElementById('locPill');
+    if (_pillEl){
+      _pillEl.addEventListener('click', () => {
+        try { openModal('stateSheetModal'); } catch(_){}
+        if (window.crew.native && window.crew.native.haptic) window.crew.native.haptic('light');
+        /* Active-Card markieren beim Öffnen */
+        renderLocPill();
+      });
+    }
+    document.querySelectorAll('.state-card').forEach(card => {
+      card.addEventListener('click', async () => {
+        const newState = card.dataset.state;
+        if (!newState || !window.crew || !window.crew.location) return;
+        const ok = await window.crew.location.setState(newState);
+        if (window.crew.native && window.crew.native.haptic) {
+          window.crew.native.haptic(ok ? 'medium' : 'warning');
+        }
+        if (ok) {
+          setTimeout(() => { try { closeModal('stateSheetModal'); } catch(_){} }, 280);
+        }
+      });
+    });
+
+    /* ─── Sprint C: Avatar-Helper + Sag-Hi-Sheet ─── */
+
+    /** Render einen Crew-Avatar als HTML-String.
+     *  Nutzt Initialen aus Name. State-Badge unten rechts. */
+    window.renderCrewAvatar = function(person /* {name, state} */, size /* 32|44|56 */){
+      const name = (person && person.name) || '?';
+      const initials = name.split(/\s+/).map(s => s[0]).filter(Boolean).slice(0,2).join('').toUpperCase() || '?';
+      const state = (person && person.state) || 'home';
+      const STATE_EMO = { home:'🏠', out:'🚶', open:'💬', private:'🤫' };
+      const badge = STATE_EMO[state] || '🏠';
+      const sizeCls = size === 32 ? ' size-32' : (size === 56 ? ' size-56' : '');
+      return '<div class="crew-avatar state-' + state + sizeCls + '">'
+           + esc(initials)
+           + '<span class="crew-avatar-badge" title="' + state + '">' + badge + '</span>'
+           + '</div>';
+    };
+
+    /* Hi-Sheet öffnen mit Target-Daten */
+    window.openHiSheet = function(target /* {user_id, name, state, distance_m, hotspot_id} */){
+      if (!target || !target.user_id) return;
+      const avatar = document.getElementById('hiTargetAvatar');
+      const nameEl = document.getElementById('hiTargetName');
+      const distEl = document.getElementById('hiTargetDist');
+      if (avatar){
+        avatar.outerHTML = renderCrewAvatar(target);
+      }
+      if (nameEl) nameEl.textContent = target.name || 'Person am Spot';
+      if (distEl) {
+        const d = target.distance_m;
+        distEl.textContent = (typeof d === 'number')
+          ? (d < 50 ? 'direkt hier' : Math.round(d) + ' m entfernt')
+          : 'am gleichen Spot';
+      }
+      /* Target-Daten für Send merken */
+      window._hiTarget = target;
+      try { openModal('hiSheetModal'); } catch(_){}
+    };
+
+    /* Ice-Breaker-Buttons */
+    document.querySelectorAll('#hiIcebreakers .hi-ib').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const code = btn.dataset.code;
+        const target = window._hiTarget;
+        if (!code || !target || !target.user_id) return;
+        btn.disabled = true;
+        try {
+          const r = await sb.from('spot_hi_messages').insert({
+            from_user: user.id,
+            to_user: target.user_id,
+            hotspot_id: target.hotspot_id || null,
+            message_code: code,
+          });
+          if (r.error) throw r.error;
+          if (window.crew.native && window.crew.native.haptic) window.crew.native.haptic('success');
+          toast && toast('Gesendet 💜 — du kriegst Bescheid wenn jemand antwortet', null, null, 'success');
+          try { closeModal('hiSheetModal'); } catch(_){}
+        } catch(e) {
+          console.warn('[hi.send]', e);
+          toast && toast('Konnte nicht senden: ' + (e.message || ''), null, null, 'error');
+        } finally {
+          btn.disabled = false;
+        }
+      });
+    });
+
+    /* ─── Sprint D: Karten-Layer-Pill ─── */
+    /* Wir fügen die Pill als Overlay zu jeder Karte hinzu wo wir sie wollen.
+       Für jetzt: nur visuelle Komponente. Layer-Wechsel-Wiring kommt mit Crew-/Friends-RPC. */
+    window.crewMapLayer = 'crew'; // global state
+    window.addMapLayerPill = function(containerEl){
+      if (!containerEl || containerEl.querySelector('.map-layer-pill')) return;
+      const pill = document.createElement('div');
+      pill.className = 'map-layer-pill';
+      pill.innerHTML = ''
+        + '<button class="map-layer-tab active" data-layer="crew">🫶 Crew</button>'
+        + '<button class="map-layer-tab" data-layer="friends">👋 Friends</button>'
+        + '<button class="map-layer-tab" data-layer="here">🔥 Hier los</button>';
+      containerEl.appendChild(pill);
+      pill.querySelectorAll('.map-layer-tab').forEach(t => {
+        t.addEventListener('click', () => {
+          pill.querySelectorAll('.map-layer-tab').forEach(x => x.classList.remove('active'));
+          t.classList.add('active');
+          window.crewMapLayer = t.dataset.layer;
+          if (window.crew.native && window.crew.native.haptic) window.crew.native.haptic('light');
+          /* Trigger event damit andere Module reagieren können */
+          window.dispatchEvent(new CustomEvent('crew:mapLayerChange', { detail: { layer: t.dataset.layer } }));
+        });
+      });
+    };
     /* Initial UI */
     renderHome();
     renderProfile();
@@ -6624,7 +7887,105 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     refreshSafeplaceState();
     refreshMoodBubble();
     renderOnboardCard();
+    renderHomePriority();
   }
+
+  function formatHomeEta(){
+    const eta = parseInt(localStorage.getItem('crew-home-eta') || '0', 10);
+    if (!eta) return 'Deine Crew ist im Heimweg-Modus aufmerksam.';
+    const left = Math.max(0, Math.ceil((eta - Date.now()) / 60000));
+    if (left <= 0) return 'ETA überschritten. Deine Safety-Personen sollen aufmerksam sein.';
+    if (left === 1) return 'Noch etwa 1 Minute bis zur geplanten Ankunft.';
+    return 'Noch etwa ' + left + ' Minuten bis zur geplanten Ankunft.';
+  }
+
+  function getHomePriority(){
+    if (homeOn || localStorage.getItem('crew-home') === '1'){
+      return {
+        state: 'active',
+        kicker: 'Heimweg aktiv',
+        title: 'Bist du gut angekommen?',
+        sub: formatHomeEta(),
+        primary: 'Bin da',
+        primaryAction: 'arrived',
+        secondary: 'SafePlace',
+        secondaryAction: 'safeplace'
+      };
+    }
+    if (emergencyContactCount < 1){
+      return {
+        state: 'safety',
+        kicker: 'Erst Sicherheit',
+        title: 'SafePlace einrichten',
+        sub: 'Leg eine echte Kontaktperson fest. Erst dann haben SOS und Heimweg Rückhalt.',
+        primary: 'Kontakt anlegen',
+        primaryAction: 'contacts',
+        secondary: 'Details',
+        secondaryAction: 'safeplace'
+      };
+    }
+    if (safetyCircleCount < 1 || totalCrewCount < 1){
+      return {
+        state: 'crew',
+        kicker: 'Crew aufbauen',
+        title: 'Hol deine erste Person rein',
+        sub: 'crew. wird stark, sobald jemand dich wirklich kennt und im Notfall reagieren kann.',
+        primary: 'Crew einladen',
+        primaryAction: 'invite',
+        secondary: 'Crew ansehen',
+        secondaryAction: 'crew'
+      };
+    }
+    return {
+      state: 'homeway',
+      kicker: 'Heute Abend',
+      title: 'Heimweg startklar',
+        sub: 'Ein Tap startet Countdown, Standort und Push-Absicherung für deine Safety-Personen.',
+      primary: 'Heimweg starten',
+      primaryAction: 'homeway',
+      secondary: 'Live teilen',
+      secondaryAction: 'live'
+    };
+  }
+
+  function renderHomePriority(){
+    const card = $('homePriority');
+    if (!card) return;
+    const cfg = getHomePriority();
+    card.dataset.state = cfg.state;
+    $('homePriorityKicker').textContent = cfg.kicker;
+    $('homePriorityTitle').textContent = cfg.title;
+    $('homePrioritySub').textContent = cfg.sub;
+    const primary = $('homePriorityPrimary');
+    const secondary = $('homePrioritySecondary');
+    primary.textContent = cfg.primary;
+    primary.dataset.action = cfg.primaryAction;
+    secondary.textContent = cfg.secondary;
+    secondary.dataset.action = cfg.secondaryAction;
+  }
+
+  function runHomePriorityAction(action){
+    if (action === 'arrived'){
+      if (homeOn || localStorage.getItem('crew-home') === '1') toggleHome();
+      return;
+    }
+    if (action === 'contacts'){
+      if (typeof openEcModal === 'function') openEcModal();
+      else openModal('ecModal');
+      return;
+    }
+    if (action === 'safeplace'){ openModal('safeplaceModal'); return; }
+    if (action === 'invite'){
+      if (typeof openInvite === 'function') openInvite();
+      else openModal('inviteModal');
+      return;
+    }
+    if (action === 'crew'){ switchTab('crew'); return; }
+    if (action === 'homeway'){ toggleHome(); return; }
+    if (action === 'live'){ toggleLive(); return; }
+  }
+  $('homePriorityPrimary')?.addEventListener('click', e => runHomePriorityAction(e.currentTarget.dataset.action));
+  $('homePrioritySecondary')?.addEventListener('click', e => runHomePriorityAction(e.currentTarget.dataset.action));
 
   /* Crew-Counts (Hero-Badge + Summary-Cards + Tab-Badges) */
   async function refreshCrewCounts(){
@@ -6635,6 +7996,8 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
       const circle = all.filter(m => m.is_in_safety_circle);
       const trustVals = all.map(m => parseFloat(m.trust_avg)).filter(v => v > 0);
       const trustAvg = trustVals.length ? (trustVals.reduce((a,b) => a+b, 0) / trustVals.length) : 0;
+      totalCrewCount = all.length;
+      safetyCircleCount = circle.length;
 
       const setNum = (id, n) => { const el = $(id); if (el) el.textContent = n; };
       const setBadge = (id, n) => {
@@ -6656,6 +8019,7 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
       /* Tab-Badges */
       setBadge('cwBadgeCircle', circle.length);
       setBadge('cwBadgeAll', all.length);
+      renderHomePriority();
     }catch(e){ /* silent — counts sind Bonus, dürfen scheitern */ }
   }
 
@@ -6665,6 +8029,7 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     try{
       const r = await sb.from('emergency_contacts').select('id', { count: 'exact', head: true }).eq('user_id', user.id);
       const count = (r && r.count) || 0;
+      emergencyContactCount = count;
       const isSetUp = count > 0;
       const safeBtn = $('fySafeBtn');
       const spaCard = $('spaCard');
@@ -6689,6 +8054,7 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
         sCont.textContent = String(count);
         sCont.closest('.sp-status-card')?.classList.toggle('on', count > 0);
       }
+      renderHomePriority();
     }catch(e){ /* silent */ }
   }
 
@@ -6846,10 +8212,13 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
           localStorage.setItem('crew-home-eta', String(eta.getTime()));
           await sb.from('home_routes').insert({
             user_id: user.id,
-            dest_lat: profile.home_city_lat, dest_lng: profile.home_city_lng,
-            dest_name: profile.home_city_name || profile.home_address || 'Zuhause',
+            destination_lat: profile.home_city_lat, destination_lng: profile.home_city_lng,
+            destination_label: (profile.home_city_name || profile.home_address || 'Zuhause').slice(0, 200),
+            start_lat: userLat, start_lng: userLng,
             started_at: new Date().toISOString(),
             expected_arrival_at: eta.toISOString(),
+            eta_minutes: minutes,
+            alert_threshold_minutes: 5,
             status: 'active'
           });
           toast('Heimweg läuft · ' + minutes + ' min', 'Stop', toggleHome);
@@ -6867,7 +8236,7 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     } else {
       localStorage.removeItem('crew-home');
       localStorage.removeItem('crew-home-eta');
-      try{ await sb.from('home_routes').update({ status: 'arrived', arrived_at: new Date().toISOString() }).eq('user_id', user.id).eq('status', 'active'); }catch(_){}
+      try{ await sb.from('home_routes').update({ status: 'arrived', completed_at: new Date().toISOString() }).eq('user_id', user.id).eq('status', 'active'); }catch(_){}
       toast('Heimweg beendet');
       if (typeof loadCrewLive === 'function') loadCrewLive();
     }
@@ -6883,6 +8252,7 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     } else {
       $('safeBtn').querySelector('span:last-child').textContent = 'Safe';
     }
+    renderHomePriority();
   }
   $('liveBtn').addEventListener('click', toggleLive);
   $('safeBtn').addEventListener('click', () => homeOn ? toggleHome() : toast('Du bist sicher · Crew online'));
@@ -10015,6 +11385,7 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
   function openModal(id){
     if (id === 'hsWizard') renderWizardPills();
     if (id === 'safeplaceModal') loadSpContacts();
+    if (id === 'pinSetupModal') { try { window.dispatchEvent(new Event('crew:pinSetupReset')); } catch(_){} }
     const m = $(id);
     if (!m) return;
     /* CSS macht display: none → .on → display: flex. Inline-Style löschen falls
@@ -10027,6 +11398,7 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
     const m = $(id);
     if (!m) return;
     m.classList.remove('on');
+    if (id === 'pinSetupModal') { try { window.dispatchEvent(new Event('crew:pinSetupReset')); } catch(_){} }
     /* display:none kommt automatisch via CSS-Regel — kein style.display manipulieren */
   }
   /* Backdrop click */
@@ -10905,16 +12277,16 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
       lsClear();
     }
 
-    /* PIN-Pad clicks */
+    /* PIN-Pad clicks (Lock-Screen — strikt 4 Ziffern) */
     ls.querySelectorAll('.lock-key[data-key]').forEach(btn => {
       btn.addEventListener('click', () => {
         const k = btn.dataset.key;
-        if (lsBuf.length >= 6) return;
+        if (lsBuf.length >= 4) return;
         lsBuf += k;
         lsRenderDots(lsBuf, lsDots);
         window.crew.native.haptic('light');
-        if (lsBuf.length >= 4) {
-          /* Auto-verify ab 4 Stellen, weil typische PIN-Länge */
+        if (lsBuf.length === 4) {
+          /* Auto-verify bei 4 Ziffern */
           tryPin(lsBuf);
         }
       });
@@ -10931,70 +12303,143 @@ body.light .leaflet-container{ background: #E5E7EB !important; }
       location.reload();
     });
 
-    /* ---- PIN-Setup-Modal logic (Pad-Eingabe + Bestätigen-Schritt) ---- */
+    /* ---- PIN-Setup-Modal logic (Pad-Eingabe + Auto-Advance + Bio-Sheet) ---- */
     const psDots = $('pinSetupDots');
     const psErr = $('pinSetupError');
     const psSub = $('pinSetupSub');
-    const psConfirmBtn = $('pinSetupConfirm');
+    const psHead = $('pinSetupHead');
     const psPad = $('pinSetupPad');
+    const psStagePad = $('pinSetupStagePad');
+    const psStageBio = $('pinSetupStageBio');
+    const psBioSub = $('pinSetupBioSub');
+    const PIN_LEN = 4;
     let psBuf = '';
-    let psFirst = ''; /* erste Eingabe für Confirm-Schritt */
+    let psFirst = '';   /* erste Eingabe für Confirm-Schritt */
+    let psBusy = false; /* blocks input while async pinSetup runs */
 
     function psSetSub(text){ psSub.textContent = text; }
-    function psError(msg){ psErr.textContent = msg || ''; psErr.classList.toggle('shake', !!msg); window.crew.native.haptic('warning'); }
-    function psClear(){ psBuf = ''; lsRenderDots(psBuf, psDots); psConfirmBtn.disabled = true; }
+    function psSetHead(text){ psHead.textContent = text; }
+    function psError(msg){
+      psErr.textContent = msg || '';
+      psErr.classList.toggle('shake', !!msg);
+      if (msg) window.crew.native.haptic('warning');
+    }
+    function psResetToStep1(){
+      psFirst = '';
+      psBuf = '';
+      lsRenderDots(psBuf, psDots);
+      psSetHead('Schnell-Login einrichten');
+      psSetSub('4 Ziffern. Nur lokal auf deinem Gerät gespeichert.');
+    }
+
+    async function psSubmitFinal(){
+      psBusy = true;
+      try {
+        await window.crew.native.pinSetup(psFirst);
+        /* PIN gespeichert → Bio-Frage zeigen oder direkt schließen */
+        const bio = await window.crew.native.biometricAvailable();
+        if (bio.available){
+          psStagePad.style.display = 'none';
+          psStageBio.style.display = '';
+          psSetHead('Noch schneller?');
+          psSetSub('');
+          psBioSub.innerHTML = 'Möchtest du auch <strong>' + (bio.biometryType || 'Face ID') + '</strong> nutzen? Geht noch schneller — ohne PIN tippen.';
+          window.crew.native.haptic('success');
+        } else {
+          psFinish();
+        }
+      } catch(e){
+        psError(e.message || 'Konnte nicht speichern');
+        psResetToStep1();
+        psBusy = false;
+      }
+    }
+
+    function psFinish(){
+      try { document.querySelector('[data-close="pinSetupModal"]').click(); } catch(_){}
+      try { toast && toast('Schnell-Login eingerichtet', null, null, 'success'); } catch(_){}
+      psBusy = false;
+      /* Reset für nächstes Öffnen (falls user später nochmal einrichten will) */
+      psResetToStep1();
+      psStagePad.style.display = '';
+      psStageBio.style.display = 'none';
+    }
 
     psPad.querySelectorAll('.lock-key[data-key]').forEach(btn => {
       btn.addEventListener('click', () => {
+        if (psBusy) return;
         const k = btn.dataset.key;
-        if (k === 'del'){ psBuf = psBuf.slice(0, -1); }
-        else if (psBuf.length < 6){ psBuf += k; }
+        if (k === 'del'){
+          psBuf = psBuf.slice(0, -1);
+        } else if (psBuf.length < PIN_LEN){
+          psBuf += k;
+        }
         lsRenderDots(psBuf, psDots);
         psErr.textContent = '';
-        psConfirmBtn.disabled = psBuf.length < 4;
         window.crew.native.haptic('light');
+
+        /* Auto-Advance: sobald 4 Ziffern eingegeben → automatisch weiter */
+        if (psBuf.length === PIN_LEN){
+          if (!psFirst){
+            /* Schritt 1 erledigt → Schritt 2 vorbereiten (mit Mini-Delay damit User Dots-Füllung sieht) */
+            psBusy = true;
+            setTimeout(() => {
+              psFirst = psBuf;
+              psBuf = '';
+              lsRenderDots(psBuf, psDots);
+              psSetHead('Nochmal zur Bestätigung');
+              psSetSub('Tippe denselben Code nochmal.');
+              psBusy = false;
+            }, 220);
+          } else {
+            /* Schritt 2 erledigt → Match check */
+            if (psBuf !== psFirst){
+              setTimeout(() => {
+                psError('Stimmt nicht überein. Nochmal.');
+                psResetToStep1();
+              }, 200);
+              return;
+            }
+            /* Match → speichern (Auto-Submit) */
+            setTimeout(() => { psSubmitFinal(); }, 220);
+          }
+        }
       });
     });
 
-    psConfirmBtn.addEventListener('click', async () => {
-      if (!psFirst){
-        /* Schritt 1 → speichern + zur Bestätigung */
-        psFirst = psBuf;
-        psBuf = '';
-        lsRenderDots(psBuf, psDots);
-        psSetSub('Nochmal zur Bestätigung');
-        psConfirmBtn.disabled = true;
-        return;
-      }
-      /* Schritt 2 → match check */
-      if (psBuf !== psFirst){
-        psError('Stimmt nicht überein. Nochmal von vorn.');
-        psFirst = '';
-        psBuf = '';
-        lsRenderDots(psBuf, psDots);
-        psSetSub('4–6 Ziffern, nur lokal auf deinem Gerät gespeichert.');
-        psConfirmBtn.disabled = true;
-        return;
-      }
-      /* Match → speichern + Biometric anbieten */
+    /* Stage-2 Buttons: Face ID Ja / Nur PIN */
+    $('pinSetupBioYes').addEventListener('click', async () => {
       try {
-        await window.crew.native.pinSetup(psFirst);
-        const bio = await window.crew.native.biometricAvailable();
-        if (bio.available){
-          /* Biometric-Permission anbieten */
-          if (confirm('Möchtest du auch ' + (bio.biometryType || 'Face ID') + ' nutzen?')){
-            await window.crew.native.biometricEnable();
-          }
+        const ok = await window.crew.native.biometricEnable();
+        if (!ok) {
+          /* Face ID nicht verfügbar/erlaubt — trotzdem clean schließen, PIN bleibt */
+          toast && toast('Face ID nicht verfügbar — PIN ist eingerichtet', null, null, 'info');
+        } else {
+          toast && toast('Face ID + PIN aktiv', null, null, 'success');
         }
-        document.querySelector('[data-close="pinSetupModal"]').click();
-        toast && toast('Schnell-Login eingerichtet', null, null, 'success');
-      } catch(e){
-        psError(e.message || 'Konnte nicht speichern');
-        psFirst = '';
-        psBuf = '';
-        lsRenderDots(psBuf, psDots);
+      } catch(_){
+        /* user cancelled or unsupported — fail silently */
       }
+      psFinish();
     });
+    $('pinSetupBioNo').addEventListener('click', () => {
+      psFinish();
+    });
+
+    /* HARTER Reset: bei jedem Open/Close des Modals — egal wodurch (Skip/X/Backdrop/Esc/programmatisch) */
+    function psResetHard(){
+      psBusy = false;
+      psFirst = '';
+      psBuf = '';
+      lsRenderDots(psBuf, psDots);
+      psErr.textContent = '';
+      psErr.classList.remove('shake');
+      psSetHead('Schnell-Login einrichten');
+      psSetSub('4 Ziffern. Nur lokal auf deinem Gerät gespeichert.');
+      psStagePad.style.display = '';
+      psStageBio.style.display = 'none';
+    }
+    window.addEventListener('crew:pinSetupReset', psResetHard);
 
     /* ---- App-State: Bei Background → Lock aktivieren (wenn PIN an) ---- */
     let lastBackgroundAt = 0;

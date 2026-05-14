@@ -1,27 +1,36 @@
-# crew. — Landing Page
+# crew. — Aktive Web-App
 
 Production-Build für [partycrew.app](https://partycrew.app).
 
 ## Stack
 
-- Vanilla HTML5 + CSS + JavaScript (kein Framework, kein Build-Step)
+- Vanilla HTML5 + CSS + JavaScript (kein Framework)
 - [Supabase](https://supabase.com) für Beta-Waitlist (`beta_signups` Tabelle, EU-Region)
 - [GitHub Pages](https://pages.github.com/) als Hosting
-- [Unsplash](https://unsplash.com/) für lizenzfreie Hintergründe (whitelisted in CSP)
 - [Inter](https://fonts.google.com/specimen/Inter) via Google Fonts
 
 ## Files
 
 | File | Zweck |
 |------|-------|
-| `index.html` | Landing-Page mit Hero, Drei-Gründe, Roadmap, Mission, Member-Milestones |
+| `clean.html` | Aktive App-Quelle: Web-Warteliste, Native Login, App-Shell |
+| `src/` | Helper-Module für Native Bridge, Telemetry, Trust, FX, Utilities |
+| `app.html` | Redirect auf `clean.html` |
+| `index.html` | Landing/Warteliste |
 | `datenschutz.html` | DSGVO-Datenschutzerklärung |
 | `impressum.html` | Impressum (§5 TMG) |
-| `og.jpg` | 1200×630 Open-Graph-Image für Social-Sharing |
 | `CNAME` | GitHub Pages Custom-Domain-Mapping |
 | `.nojekyll` | Verhindert Jekyll-Filtering der Files |
 | `robots.txt` | SEO-Crawler-Anweisungen |
 | `sitemap.xml` | Sitemap für Suchmaschinen |
+
+## Aktiver Pfad
+
+Neue App-Arbeit passiert in `clean.html` und `src/`. Historische Backups (`_backup-*`) sind nur Recovery-Material. Die iOS-App bekommt diesen Stand über:
+
+```bash
+bash ../native/scripts/sync-web.sh
+```
 
 ## Vor dem ersten Live-Schalten
 

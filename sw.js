@@ -1,6 +1,12 @@
-/* crew. Service Worker v3 — PWA + Push (QW-N2: Icon-Pfade auf /img/brand/) */
-const CACHE = 'crew-v4-' + Date.now();
-const ASSETS = ['/clean.html', '/manifest.json', '/img/brand/icon-192.png', '/img/brand/icon-512.png'];
+/* crew. Service Worker v5 — PWA + Push */
+const CACHE = 'crew-v5';
+const ASSETS = [
+  '/clean.html',
+  '/manifest.json',
+  '/img/brand/icon-192.png',
+  '/img/brand/icon-512.png',
+  '/img/onboarding/optimized/welcome.jpg'
+];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS).catch(() => null)).then(() => self.skipWaiting()));
