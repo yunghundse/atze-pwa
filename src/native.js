@@ -39,6 +39,7 @@
   const Share = Plugins.Share;
   const Preferences = Plugins.Preferences;
   const BiometricAuth = Plugins.BiometricAuth;
+  const SignInWithApple = Plugins.SignInWithApple;
 
   /* -------------------------------------------------------------------- */
   /* Haptics — silent no-op on web                                        */
@@ -207,7 +208,7 @@
   }
 
   async function pinSetup(pin) {
-    if (!/^\d{4,6}$/.test(pin)) throw new Error('PIN muss 4–6 Ziffern haben');
+    if (!/^\d{4}$/.test(pin)) throw new Error('PIN muss genau 4 Ziffern haben');
     const salt = randomSalt();
     const hash = await hashPin(pin, salt);
     await prefSet('crew_pin_salt', salt);
@@ -217,7 +218,7 @@
   }
 
   async function pinVerify(pin) {
-    if (!/^\d{4,6}$/.test(pin)) return false;
+    if (!/^\d{4}$/.test(pin)) return false;
     const salt = await prefGet('crew_pin_salt');
     const expected = await prefGet('crew_pin_hash');
     if (!salt || !expected) return false;
@@ -233,14 +234,28 @@
   }
 
   // ----- Biometric (Face ID / Touch ID, native-only) -----
+  /* @aparajita/capacitor-biometric-auth liefert biometryType als enum Number:
+     0=none, 1=touchId, 2=faceId, 3=fingerprint, 4=faceAuth, 5=iris.
+     Wir mappen auf einen lesbaren String für die UI. */
+  const BIO_LABELS = {
+    0: null,
+    1: 'Touch ID',
+    2: 'Face ID',
+    3: 'Fingerabdruck',
+    4: 'Face Unlock',
+    5: 'Iris-Scan',
+  };
   async function biometricAvailable() {
     if (!isApp || !BiometricAuth) return { available: false, reason: 'not-native' };
     try {
       const r = await BiometricAuth.checkBiometry();
-      // r: { isAvailable, biometryType, reason }
+      // r: { isAvailable, biometryType (enum), reason, deviceIsSecure, ... }
+      const typeNum = r && typeof r.biometryType === 'number' ? r.biometryType : 0;
       return {
         available: !!(r && r.isAvailable),
-        biometryType: r && r.biometryType,
+        biometryType: BIO_LABELS[typeNum] || null,
+        biometryTypeRaw: typeNum,
+        deviceIsSecure: !!(r && r.deviceIsSecure),
         reason: r && r.reason,
       };
     } catch (e) {
@@ -281,6 +296,83 @@
     } catch (e) {
       // user-cancelled, biometry-not-enrolled, biometry-locked, etc.
       return false;
+    }
+  }
+
+  /* -------------------------------------------------------------------- */
+  /* Sign in with Apple — gibt identityToken + rawNonce für Supabase     */
+  /*                                                                      */
+  /* Flow:                                                                */
+  /*   1. Erzeuge zufälligen rawNonce (32 Bytes hex)                      */
+  /*   2. SHA-256-Hash davon → an Apple schicken                          */
+  /*   3. Apple liefert identityToken (JWT) — das enthält den hashedNonce */
+  /*   4. Wir geben {identityToken, rawNonce} zurück                      */
+  /*   5. Caller ruft supabase.auth.signInWithIdToken({                  */
+  /*        provider:'apple', token:identityToken, nonce:rawNonce })      */
+  /*                                                                      */
+  /* Bundle-ID + redirectURI sind im native-iOS-Flow nicht relevant       */
+  /* (Apple validiert gegen App-Entitlements), aber das Plugin braucht    */
+  /* sie als Parameter. Für die Web-PWA muss eine echte Service-ID +      */
+  /* Return-URL bei Apple registriert sein.                               */
+  /* -------------------------------------------------------------------- */
+  function _hexFromBytes(bytes) {
+    return Array.from(bytes).map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+  async function _sha256Hex(text) {
+    const enc = new TextEncoder().encode(text);
+    const buf = await global.crypto.subtle.digest('SHA-256', enc);
+    return _hexFromBytes(new Uint8Array(buf));
+  }
+  function _randomNonce(byteLen) {
+    const a = new Uint8Array(byteLen || 32);
+    if (global.crypto && global.crypto.getRandomValues) global.crypto.getRandomValues(a);
+    else for (let i = 0; i < a.length; i++) a[i] = Math.floor(Math.random() * 256);
+    return _hexFromBytes(a);
+  }
+
+  async function appleSignInAvailable() {
+    return !!SignInWithApple;
+  }
+
+  /**
+   * Trigger the native "Sign in with Apple" sheet.
+   * Returns null on user-cancel or unavailable, otherwise:
+   *   { identityToken, rawNonce, email, givenName, familyName, user }
+   *
+   * @param {Object} opts
+   * @param {string} opts.clientId    iOS: Bundle-ID; Web: Service-ID
+   * @param {string} opts.redirectURI Web only — must match Apple Service config
+   */
+  async function signInWithApple(opts) {
+    if (!SignInWithApple) {
+      throw new Error('Sign in with Apple plugin not available');
+    }
+    opts = opts || {};
+    const rawNonce = _randomNonce(32);
+    const hashedNonce = await _sha256Hex(rawNonce);
+    try {
+      const r = await SignInWithApple.authorize({
+        clientId: opts.clientId || 'com.butterbread.synclulu',
+        redirectURI: opts.redirectURI || '',
+        scopes: opts.scopes || 'email name',
+        state: opts.state || _randomNonce(8),
+        nonce: hashedNonce,
+      });
+      const res = (r && r.response) || {};
+      if (!res.identityToken) return null;
+      return {
+        identityToken: res.identityToken,
+        authorizationCode: res.authorizationCode || null,
+        rawNonce: rawNonce,
+        email: res.email || null,
+        givenName: res.givenName || null,
+        familyName: res.familyName || null,
+        user: res.user || null,
+      };
+    } catch (e) {
+      // user cancelled or system error — surface as null, not throw
+      console.warn('[apple-sign-in]', e);
+      return null;
     }
   }
 
@@ -360,6 +452,7 @@
   if (isApp) {
     applyClass('cap-app');
     applyClass(`cap-${platform}`);
+    applyClass('mode-native');
     setStatusBarStyle('dark');
     injectNativeStyles();
     wireAutoHaptics();
@@ -369,6 +462,10 @@
     } else {
       global.addEventListener('load', () => setTimeout(hideSplash, 800));
     }
+  } else {
+    /* Default für Web/PWA: mode-web. Stellt sicher dass die App-Auth-UI
+       sauber gegated ist (siehe clean.html .web-only / .app-only CSS). */
+    applyClass('mode-web');
   }
 
   /* -------------------------------------------------------------------- */
@@ -381,6 +478,192 @@
   /* This silently no-ops on web — only fires Push-Permission and saves   */
   /* the device-token to Supabase device_tokens when running native.      */
   /* -------------------------------------------------------------------- */
+
+  /* -------------------------------------------------------------------- */
+  /* Location-Service v2 — Single-State-Model                             */
+  /*                                                                      */
+  /* States (matched mit DB profiles.state):                              */
+  /*   'home'    🏠 Daheim — Crew sieht "daheim", keine genaue Pos        */
+  /*   'out'     🚶 Unterwegs — Crew sieht live position                  */
+  /*   'open'    💬 Offen — Friends sehen + Spot-Crew sieht + Sag-Hi geht */
+  /*   'private' 🤫 Privat — niemand sieht, nicht auf Karte               */
+  /*                                                                      */
+  /* API:                                                                 */
+  /*   crew.location.start(supabase)         → watch + DB-sync starten   */
+  /*   crew.location.stop()                                              */
+  /*   crew.location.getCurrent()            → {lat,lng,accuracy} | null */
+  /*   crew.location.getState()              → 'home'|'out'|'open'|'private' */
+  /*   crew.location.setState(newState)      → schreibt via write_my_state RPC */
+  /*   crew.location.onChange(handler)       → fixes + state-changes     */
+  /*   crew.location.boostForHeimweg(true)   → 10s-Sync statt 30s        */
+  /* -------------------------------------------------------------------- */
+  const VALID_STATES = ['home', 'out', 'open', 'private'];
+  let locState = {
+    watchId: null,
+    lastLat: null,
+    lastLng: null,
+    lastAccuracy: null,
+    lastFix: 0,
+    lastDbWrite: 0,
+    state: 'home',              // sync mit DB profiles.state
+    boosted: false,             // 10s-DB-Write im Heimweg-Mode
+    sb: null,
+    handlers: new Set(),
+    onAppStateUnsub: null,
+  };
+
+  function _locFireChange(payload) {
+    locState.handlers.forEach(fn => {
+      try { fn(payload); } catch (e) { console.warn('[location.onChange]', e); }
+    });
+  }
+
+  function _locDist(lat1, lng1, lat2, lng2) {
+    if (lat1 == null || lat2 == null) return Infinity;
+    const R = 6371000;
+    const toRad = d => d * Math.PI / 180;
+    const dLat = toRad(lat2 - lat1), dLng = toRad(lng2 - lng1);
+    const a = Math.sin(dLat / 2) ** 2 +
+              Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
+    return 2 * R * Math.asin(Math.sqrt(a));
+  }
+
+  async function _locSyncToDb() {
+    if (!locState.sb || locState.lastLat == null) return;
+    const now = Date.now();
+    const minInterval = locState.boosted ? 10000 : 30000;
+    if (now - locState.lastDbWrite < minInterval) return;
+    try {
+      await locState.sb.rpc('write_my_location', {
+        p_lat: locState.lastLat,
+        p_lng: locState.lastLng,
+        p_accuracy: locState.lastAccuracy || 0,
+      });
+      locState.lastDbWrite = now;
+    } catch (e) {
+      console.warn('[location.dbSync]', e);
+    }
+  }
+
+  function locStart(supabase) {
+    if (!global.navigator || !global.navigator.geolocation) {
+      console.warn('[location.start] geolocation not available');
+      return;
+    }
+    if (locState.watchId !== null) return; // bereits aktiv
+    locState.sb = supabase || locState.sb;
+
+    locState.watchId = global.navigator.geolocation.watchPosition(
+      (p) => {
+        const lat = p.coords.latitude;
+        const lng = p.coords.longitude;
+        const accuracy = p.coords.accuracy;
+        const moved = _locDist(locState.lastLat, locState.lastLng, lat, lng);
+
+        const significantMove = moved > 50; // 50m threshold
+        locState.lastLat = lat;
+        locState.lastLng = lng;
+        locState.lastAccuracy = accuracy;
+        locState.lastFix = Date.now();
+
+        // localStorage Cache (TTL via clean.html lese-logik)
+        try {
+          localStorage.setItem('crew_last_loc', JSON.stringify({
+            lat, lng, source: 'gps', t: Date.now()
+          }));
+        } catch (_) {}
+
+        if (significantMove || moved === Infinity /* first fix */) {
+          _locFireChange({ lat, lng, accuracy, mode: locState.mode, kind: 'fix' });
+        }
+        _locSyncToDb();
+      },
+      (err) => {
+        console.warn('[location.watchPosition error]', err && err.message);
+      },
+      {
+        enableHighAccuracy: true,
+        maximumAge: 5000,
+        timeout: 15000,
+      }
+    );
+
+    // Sync stop bei Background, start bei Foreground (Battery-Spar)
+    if (!locState.onAppStateUnsub) {
+      locState.onAppStateUnsub = onAppState((isActive) => {
+        if (isActive && locState.watchId === null) {
+          locStart(locState.sb); // re-start nach Foreground
+        } else if (!isActive && locState.watchId !== null) {
+          // Bei Background pausieren — Heimweg-Modus überschreibt das per backround-task
+          if (!locState.boosted) locStop();
+        }
+      });
+    }
+  }
+
+  function locStop() {
+    if (locState.watchId !== null && global.navigator && global.navigator.geolocation) {
+      global.navigator.geolocation.clearWatch(locState.watchId);
+    }
+    locState.watchId = null;
+  }
+
+  function locGetCurrent() {
+    if (locState.lastLat == null) return null;
+    return {
+      lat: locState.lastLat,
+      lng: locState.lastLng,
+      accuracy: locState.lastAccuracy,
+      fixAge: Date.now() - locState.lastFix,
+    };
+  }
+
+  function locGetState() { return locState.state; }
+
+  /** State im DB + Lokal setzen. Fired onChange event. */
+  async function locSetState(newState) {
+    if (!VALID_STATES.includes(newState)) {
+      console.warn('[location.setState] invalid:', newState);
+      return false;
+    }
+    if (locState.state === newState) return true;
+    const prev = locState.state;
+    locState.state = newState;
+    try { localStorage.setItem('crew_loc_state', newState); } catch (_) {}
+    // DB-Write (best-effort, fail-soft)
+    if (locState.sb) {
+      try {
+        await locState.sb.rpc('write_my_state', { p_state: newState });
+      } catch (e) {
+        console.warn('[location.setState DB]', e);
+      }
+    }
+    _locFireChange({ state: newState, prev, kind: 'state' });
+    return true;
+  }
+
+  /** Initial-State aus dem geladenen Profile übernehmen. */
+  function locHydrateFromProfile(profile) {
+    if (profile && VALID_STATES.includes(profile.state)) {
+      locState.state = profile.state;
+      _locFireChange({ state: profile.state, kind: 'state' });
+    }
+  }
+
+  function locOnChange(fn) {
+    locState.handlers.add(fn);
+    return () => locState.handlers.delete(fn);
+  }
+
+  function locBoost(on) {
+    locState.boosted = !!on;
+  }
+
+  // State-Preference aus localStorage als sofortiger Fallback (vor Profile-Load)
+  try {
+    const savedState = localStorage.getItem('crew_loc_state');
+    if (VALID_STATES.includes(savedState)) locState.state = savedState;
+  } catch (_) {}
 
   /* -------------------------------------------------------------------- */
   /* Public namespace                                                     */
@@ -409,6 +692,22 @@
     biometricDisable: biometricDisable,
     biometricIsOptedIn: biometricIsOptedIn,
     biometricVerify: biometricVerify,
+    // Sign in with Apple
+    appleSignInAvailable: appleSignInAvailable,
+    signInWithApple: signInWithApple,
+  };
+
+  /* Location-Service v2 (state-based, kein Mode-Toggle mehr) */
+  global.crew.location = {
+    start: locStart,
+    stop: locStop,
+    getCurrent: locGetCurrent,
+    getState: locGetState,
+    setState: locSetState,
+    hydrateFromProfile: locHydrateFromProfile,
+    onChange: locOnChange,
+    boostForHeimweg: locBoost,
+    STATES: VALID_STATES,
   };
 
   if (isApp) {

@@ -1,0 +1,829 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<meta name="theme-color" content="#0A0A14" />
+<title>crew. Staff</title>
+<link rel="icon" href="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='80' font-size='80'%3E%F0%9F%9A%80%3C/text%3E%3C/svg%3E">
+<style>
+/* ============================================================
+   crew. Staff Dashboard — cosmic violet brand
+   ============================================================ */
+:root{
+  --t-1: 22px; --t-2: 18px; --t-3: 15px; --t-4: 13px; --t-5: 11px;
+  --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px; --s-5: 24px; --s-6: 32px;
+  --c-violet: #8B5CF6;
+  --c-violet-2: #6366F1;
+  --c-violet-3: #A855F7;
+  --c-violet-soft: rgba(139,92,246,.06);
+  --c-violet-line: rgba(139,92,246,.18);
+  --c-violet-glow: rgba(139,92,246,.4);
+  --c-amber: #FF9D6E;
+  --c-green: #28C878;
+  --c-bg: #0A0A14;
+  --c-surface: rgba(255,255,255,.04);
+  --c-surface-2: rgba(139,92,246,.06);
+  --c-text-1: #FAFAFA;
+  --c-text-2: rgba(255,255,255,.72);
+  --c-text-3: rgba(255,255,255,.5);
+  --c-line: rgba(255,255,255,.08);
+  --r-1: 8px; --r-2: 12px; --r-3: 16px; --r-4: 20px; --r-5: 999px;
+  --shadow-1: 0 4px 14px rgba(0,0,0,.3);
+  --shadow-2: 0 8px 24px rgba(0,0,0,.4);
+  --shadow-violet: 0 8px 22px rgba(139,92,246,.45);
+  --ease: cubic-bezier(.2,.7,.2,1);
+}
+*,*::before,*::after{ box-sizing:border-box }
+html,body{ margin:0; padding:0; height:100%; }
+body{
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  font-size:var(--t-3); line-height:1.5; color:var(--c-text-1);
+  background:var(--c-bg);
+  background-image:
+    radial-gradient(ellipse at 30% 0%, rgba(139,92,246,.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 100%, rgba(99,102,241,.1) 0%, transparent 50%);
+  -webkit-font-smoothing:antialiased;
+}
+button,input{ font-family:inherit; font-size:inherit; color:inherit }
+button{ background:none; border:0; cursor:pointer; padding:0 }
+[hidden]{ display:none !important }
+::-webkit-scrollbar{ width:0; height:0 }
+*{ scrollbar-width:none }
+
+/* ============================================================
+   AUTH SCREEN
+   ============================================================ */
+#auth{
+  position:fixed; inset:0;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  padding:var(--s-5);
+  background:var(--c-bg);
+  background-image:
+    radial-gradient(ellipse at 30% 20%, rgba(139,92,246,.25) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 80%, rgba(99,102,241,.18) 0%, transparent 50%);
+  z-index:100;
+}
+.auth-emoji{ font-size:64px; margin-bottom:var(--s-3); animation: float 4s ease-in-out infinite }
+@keyframes float{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+.auth-logo{ font-size:48px; font-weight:900; letter-spacing:-.04em; color:#F5F3FF; line-height:1 }
+.auth-logo .dot{ color:var(--c-violet) }
+.auth-tagline{ font-size:var(--t-3); color:var(--c-text-2); margin-top:var(--s-2); margin-bottom:var(--s-6) }
+.auth-card{
+  width:100%; max-width:360px;
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--c-violet-line);
+  border-radius:var(--r-3);
+  padding:var(--s-5);
+  backdrop-filter:blur(12px);
+}
+.auth-card h2{ margin:0 0 var(--s-2); font-size:var(--t-2); font-weight:700 }
+.auth-card p{ margin:0 0 var(--s-4); color:var(--c-text-2); font-size:var(--t-4) }
+.auth-input{
+  width:100%; padding:14px 16px;
+  background:rgba(255,255,255,.06);
+  border:1px solid var(--c-line);
+  border-radius:var(--r-2);
+  color:var(--c-text-1);
+  outline:none;
+  margin-bottom:var(--s-3);
+  transition:border .2s var(--ease);
+}
+.auth-input:focus{ border-color:var(--c-violet) }
+.btn-primary{
+  width:100%; padding:14px;
+  background:linear-gradient(135deg, var(--c-violet), var(--c-violet-2));
+  color:#fff; font-weight:600;
+  border-radius:var(--r-2);
+  box-shadow:var(--shadow-violet);
+  transition:transform .2s var(--ease), opacity .2s var(--ease);
+}
+.btn-primary:hover{ transform:translateY(-1px) }
+.btn-primary:disabled{ opacity:.5; cursor:wait }
+.auth-msg{ margin-top:var(--s-3); padding:var(--s-3); border-radius:var(--r-2); font-size:var(--t-4); text-align:center }
+.auth-msg.ok{ background:rgba(40,200,120,.1); color:var(--c-green); border:1px solid rgba(40,200,120,.3) }
+.auth-msg.err{ background:rgba(236,72,153,.1); color:#FCA5A5; border:1px solid rgba(236,72,153,.3) }
+.auth-hint{ margin-top:var(--s-4); color:var(--c-text-3); font-size:var(--t-5); text-align:center }
+
+/* ============================================================
+   APP SHELL
+   ============================================================ */
+#app{ display:none; min-height:100vh; padding-bottom:60px }
+#app.on{ display:block }
+
+.topbar{
+  position:sticky; top:0; z-index:10;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:var(--s-3) var(--s-4);
+  background:rgba(10,10,20,.85);
+  border-bottom:1px solid var(--c-line);
+  backdrop-filter:blur(16px);
+}
+.brand{ display:flex; align-items:center; gap:var(--s-2) }
+.brand-mark{ font-size:24px; font-weight:900; letter-spacing:-.04em; color:#F5F3FF }
+.brand-mark .dot{ color:var(--c-violet) }
+.brand-tag{ font-size:var(--t-5); color:var(--c-text-3); padding:2px 8px; background:var(--c-violet-soft); border:1px solid var(--c-violet-line); border-radius:var(--r-5) }
+.who{ display:flex; align-items:center; gap:var(--s-3) }
+.who-name{ font-size:var(--t-4); color:var(--c-text-2) }
+.who-avatar{
+  width:32px; height:32px; border-radius:50%;
+  display:grid; place-items:center;
+  background:linear-gradient(135deg, var(--c-violet), var(--c-violet-2));
+  font-weight:700; font-size:var(--t-4); color:#fff;
+}
+.btn-icon{
+  width:32px; height:32px; border-radius:50%;
+  display:grid; place-items:center;
+  color:var(--c-text-2);
+  transition:background .2s var(--ease);
+}
+.btn-icon:hover{ background:rgba(255,255,255,.06); color:var(--c-text-1) }
+
+/* ============================================================
+   DASHBOARD
+   ============================================================ */
+.wrap{ max-width:1200px; margin:0 auto; padding:var(--s-5) var(--s-4) }
+.section-h{
+  display:flex; align-items:center; justify-content:space-between;
+  margin:var(--s-6) 0 var(--s-4);
+}
+.section-h:first-child{ margin-top:var(--s-3) }
+.section-h h2{ margin:0; font-size:var(--t-2); font-weight:700 }
+.section-h .meta{ color:var(--c-text-3); font-size:var(--t-5) }
+
+.kpi-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));
+  gap:var(--s-3);
+}
+.kpi{
+  padding:var(--s-4);
+  background:var(--c-surface);
+  border:1px solid var(--c-line);
+  border-radius:var(--r-3);
+  transition:border .2s var(--ease), transform .2s var(--ease);
+}
+.kpi:hover{ border-color:var(--c-violet-line); transform:translateY(-2px) }
+.kpi-label{ display:flex; align-items:center; gap:6px; font-size:var(--t-5); color:var(--c-text-3); text-transform:uppercase; letter-spacing:.05em }
+.kpi-icon{ font-size:14px }
+.kpi-value{ font-size:32px; font-weight:800; letter-spacing:-.02em; margin-top:var(--s-2); color:var(--c-text-1) }
+.kpi-sub{ font-size:var(--t-5); color:var(--c-text-3); margin-top:var(--s-1) }
+.kpi.accent .kpi-value{
+  background:linear-gradient(135deg, var(--c-violet-3), var(--c-amber));
+  -webkit-background-clip:text; background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.two-col{ display:grid; grid-template-columns:repeat(auto-fit, minmax(320px,1fr)); gap:var(--s-4) }
+.panel{
+  padding:var(--s-4);
+  background:var(--c-surface);
+  border:1px solid var(--c-line);
+  border-radius:var(--r-3);
+}
+.panel h3{ margin:0 0 var(--s-3); font-size:var(--t-3); font-weight:700; display:flex; align-items:center; gap:6px }
+.panel-row{
+  display:flex; align-items:center; gap:var(--s-3);
+  padding:var(--s-3) 0;
+  border-bottom:1px solid var(--c-line);
+}
+.panel-row:last-child{ border-bottom:0 }
+.row-avatar{
+  width:32px; height:32px; border-radius:50%;
+  background:linear-gradient(135deg, var(--c-violet-2), var(--c-violet-3));
+  display:grid; place-items:center; font-size:var(--t-4); font-weight:700; color:#fff; flex-shrink:0;
+}
+.row-main{ flex:1; min-width:0 }
+.row-title{ font-size:var(--t-4); font-weight:600; color:var(--c-text-1); white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
+.row-sub{ font-size:var(--t-5); color:var(--c-text-3); margin-top:2px }
+.row-meta{ font-size:var(--t-5); color:var(--c-text-3); flex-shrink:0 }
+.badge{ display:inline-block; padding:2px 8px; border-radius:var(--r-5); font-size:var(--t-5); font-weight:600; line-height:1.4 }
+.b-pioneer{ background:rgba(255,157,110,.12); color:var(--c-amber); border:1px solid rgba(255,157,110,.3) }
+.b-active{ background:rgba(40,200,120,.12); color:var(--c-green); border:1px solid rgba(40,200,120,.3) }
+.b-overdue{ background:rgba(236,72,153,.12); color:#F472B6; border:1px solid rgba(236,72,153,.3) }
+.b-arrived{ background:var(--c-violet-soft); color:var(--c-violet-3); border:1px solid var(--c-violet-line) }
+
+.empty{ text-align:center; padding:var(--s-5); color:var(--c-text-3); font-size:var(--t-4) }
+
+/* Tasks-Card */
+.task-card{
+  display:block;
+  padding:var(--s-3);
+  background:var(--c-surface-2);
+  border:1px solid var(--c-violet-line);
+  border-radius:var(--r-2);
+  margin-bottom:var(--s-2);
+  transition:transform .2s var(--ease);
+}
+.task-card:hover{ transform:translateX(2px) }
+.task-card .t-title{ font-size:var(--t-4); font-weight:600; color:var(--c-text-1) }
+.task-card .t-meta{ font-size:var(--t-5); color:var(--c-text-3); margin-top:4px }
+
+.footer{
+  text-align:center; padding:var(--s-5) var(--s-4);
+  color:var(--c-text-3); font-size:var(--t-5);
+}
+
+.spinner{
+  display:inline-block; width:14px; height:14px;
+  border:2px solid var(--c-violet-line);
+  border-top-color:var(--c-violet);
+  border-radius:50%;
+  animation:spin .8s linear infinite;
+  vertical-align:middle; margin-right:6px;
+}
+@keyframes spin{ to{ transform:rotate(360deg) } }
+
+/* Buttons + Modals */
+.btn-small{
+  padding:6px 12px; font-size:var(--t-5); font-weight:600;
+  background:var(--c-violet-soft); color:var(--c-violet-3);
+  border:1px solid var(--c-violet-line); border-radius:var(--r-5);
+  transition:background .2s var(--ease), transform .2s var(--ease);
+}
+.btn-small:hover{ background:var(--c-violet-line); transform:translateY(-1px) }
+
+.modal{
+  position:fixed; inset:0; z-index:200;
+  display:flex; align-items:center; justify-content:center;
+  padding:var(--s-4);
+  background:rgba(0,0,0,.6);
+  backdrop-filter:blur(8px);
+  animation:fadeIn .15s var(--ease);
+}
+.modal[hidden]{ display:none }
+@keyframes fadeIn{ from{opacity:0} to{opacity:1} }
+.modal-card{
+  width:100%; max-width:480px;
+  background:#11111c;
+  border:1px solid var(--c-violet-line);
+  border-radius:var(--r-3);
+  padding:var(--s-5);
+  box-shadow:var(--shadow-2);
+}
+.modal-h{
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:var(--s-4);
+}
+.modal-h h3{ margin:0; font-size:var(--t-2); font-weight:700 }
+.form-row{
+  display:block; margin-bottom:var(--s-3);
+}
+.form-row span{
+  display:block; margin-bottom:6px;
+  font-size:var(--t-5); color:var(--c-text-3); text-transform:uppercase; letter-spacing:.05em;
+}
+.form-row input, .form-row select, .form-row textarea{
+  width:100%; padding:10px 12px;
+  background:rgba(255,255,255,.06);
+  border:1px solid var(--c-line);
+  border-radius:var(--r-2);
+  color:var(--c-text-1);
+  outline:none;
+  font-family:inherit;
+  resize:vertical;
+}
+.form-row input:focus, .form-row select:focus, .form-row textarea:focus{ border-color:var(--c-violet) }
+.form-msg{ margin-top:var(--s-3); padding:var(--s-3); border-radius:var(--r-2); font-size:var(--t-4); text-align:center }
+.form-msg.ok{ background:rgba(40,200,120,.1); color:var(--c-green); border:1px solid rgba(40,200,120,.3) }
+.form-msg.err{ background:rgba(236,72,153,.1); color:#FCA5A5; border:1px solid rgba(236,72,153,.3) }
+
+/* Partner-Cards */
+.partner-row{ display:grid; grid-template-columns:1fr auto; gap:var(--s-3); padding:var(--s-3) 0; border-bottom:1px solid var(--c-line) }
+.partner-row:last-child{ border-bottom:0 }
+.partner-main{ min-width:0 }
+.partner-title{ font-size:var(--t-3); font-weight:600; color:var(--c-text-1); display:flex; align-items:center; gap:8px; flex-wrap:wrap }
+.partner-sub{ font-size:var(--t-5); color:var(--c-text-3); margin-top:4px }
+.partner-stats{ text-align:right; flex-shrink:0 }
+.partner-big{ font-size:24px; font-weight:800; color:var(--c-violet-3); line-height:1 }
+.partner-week{ font-size:var(--t-5); color:var(--c-text-3); margin-top:4px }
+.b-type{ background:var(--c-violet-soft); color:var(--c-violet-3); border:1px solid var(--c-violet-line); padding:2px 8px; border-radius:var(--r-5); font-size:var(--t-5); font-weight:600; text-transform:uppercase; letter-spacing:.05em }
+.b-active2{ background:rgba(40,200,120,.12); color:var(--c-green); border:1px solid rgba(40,200,120,.3); padding:2px 8px; border-radius:var(--r-5); font-size:var(--t-5); font-weight:600 }
+.b-prospect{ background:rgba(255,214,10,.1); color:#FBBF24; border:1px solid rgba(255,214,10,.3); padding:2px 8px; border-radius:var(--r-5); font-size:var(--t-5); font-weight:600 }
+.b-paused{ background:rgba(255,255,255,.05); color:var(--c-text-3); border:1px solid var(--c-line); padding:2px 8px; border-radius:var(--r-5); font-size:var(--t-5); font-weight:600 }
+.b-lost{ background:rgba(236,72,153,.1); color:#F472B6; border:1px solid rgba(236,72,153,.3); padding:2px 8px; border-radius:var(--r-5); font-size:var(--t-5); font-weight:600 }
+
+/* Briefing-Cards */
+.briefing-card{
+  padding:var(--s-3) var(--s-4);
+  border-left:3px solid var(--c-violet);
+  background:var(--c-surface-2);
+  border-radius:0 var(--r-2) var(--r-2) 0;
+  margin-bottom:var(--s-3);
+  display:flex; gap:var(--s-3); align-items:start;
+}
+.briefing-card:last-child{ margin-bottom:0 }
+.briefing-card.p-urgent{ border-left-color:#EC4899 }
+.briefing-card.p-high{ border-left-color:#FF9D6E }
+.briefing-card.p-medium{ border-left-color:var(--c-violet) }
+.briefing-card.p-low{ border-left-color:var(--c-text-3) }
+.briefing-main{ flex:1; min-width:0 }
+.briefing-title{ font-size:var(--t-3); font-weight:700; color:var(--c-text-1); display:flex; align-items:center; gap:8px; flex-wrap:wrap }
+.briefing-body{ font-size:var(--t-4); color:var(--c-text-2); margin-top:6px; line-height:1.5 }
+.briefing-meta{ font-size:var(--t-5); color:var(--c-text-3); margin-top:8px }
+.b-urgent{ background:rgba(236,72,153,.15); color:#F472B6; border:1px solid rgba(236,72,153,.4); padding:2px 8px; border-radius:var(--r-5); font-size:var(--t-5); font-weight:700; text-transform:uppercase; letter-spacing:.05em }
+.b-high{ background:rgba(255,157,110,.15); color:#FBA868; border:1px solid rgba(255,157,110,.4); padding:2px 8px; border-radius:var(--r-5); font-size:var(--t-5); font-weight:700; text-transform:uppercase; letter-spacing:.05em }
+.b-medium{ background:var(--c-violet-soft); color:var(--c-violet-3); border:1px solid var(--c-violet-line); padding:2px 8px; border-radius:var(--r-5); font-size:var(--t-5); font-weight:700; text-transform:uppercase; letter-spacing:.05em }
+.b-low{ background:rgba(255,255,255,.04); color:var(--c-text-3); border:1px solid var(--c-line); padding:2px 8px; border-radius:var(--r-5); font-size:var(--t-5); font-weight:700; text-transform:uppercase; letter-spacing:.05em }
+.btn-done{
+  width:32px; height:32px; border-radius:50%;
+  background:rgba(40,200,120,.1); color:var(--c-green);
+  display:grid; place-items:center; flex-shrink:0;
+  transition:background .2s var(--ease);
+}
+.btn-done:hover{ background:rgba(40,200,120,.25) }
+
+/* Mobile fine-tune */
+@media (max-width:480px){
+  .wrap{ padding:var(--s-4) var(--s-3) }
+  .kpi-value{ font-size:26px }
+  .who-name{ display:none }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================== AUTH ============================== -->
+<div id="auth">
+  <div class="auth-emoji">🚀</div>
+  <div class="auth-logo">crew<span class="dot">.</span></div>
+  <div class="auth-tagline">Staff-Dashboard</div>
+
+  <form id="authForm" class="auth-card" onsubmit="return false">
+    <h2 id="authH2">Staff-Login</h2>
+    <p id="authP">Email rein. Wir schicken einen Login-Link an deine Inbox — wer keinen Zugriff hat, kommt nicht rein.</p>
+
+    <div id="step1">
+      <input id="authEmail" class="auth-input" type="email" placeholder="dein@email.com" autocomplete="email" required />
+      <button id="authBtn" type="submit" class="btn-primary">Login-Link senden</button>
+    </div>
+
+    <div id="step2" hidden></div>
+
+    <div id="authMsg" hidden></div>
+    <div class="auth-hint">Nur für autorisiertes Team. Allowlist im Backend, keine Passwörter.</div>
+  </form>
+</div>
+
+<!-- ============================== APP ============================== -->
+<div id="app">
+  <div class="topbar">
+    <div class="brand">
+      <span class="brand-mark">crew<span class="dot">.</span></span>
+      <span class="brand-tag">staff</span>
+    </div>
+    <div class="who">
+      <div class="who-name" id="whoName">…</div>
+      <div class="who-avatar" id="whoAvatar">·</div>
+      <button class="btn-icon" id="btnRefresh" title="Aktualisieren" aria-label="Aktualisieren">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-3.5-7M21 4v6h-6"/></svg>
+      </button>
+      <button class="btn-icon" id="btnLogout" title="Logout" aria-label="Logout">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="section-h">
+      <h2>Übersicht</h2>
+      <div class="meta" id="metaUpdate">…</div>
+    </div>
+    <div class="kpi-grid" id="kpiGrid">
+      <div class="kpi"><div class="kpi-label"><span class="spinner"></span>Lade…</div></div>
+    </div>
+
+    <div class="section-h">
+      <h2>Aktivität</h2>
+    </div>
+    <div class="two-col">
+      <div class="panel">
+        <h3>👋 Neue Sign-Ups</h3>
+        <div id="signupsList"><div class="empty">Lade…</div></div>
+      </div>
+      <div class="panel">
+        <h3>🏠 Letzte Heimwege</h3>
+        <div id="heimwegeList"><div class="empty">Lade…</div></div>
+      </div>
+    </div>
+
+    <div class="section-h">
+      <h2>📢 Team-Briefings</h2>
+      <button class="btn-small" id="btnAddBriefing">+ Neue Anweisung</button>
+    </div>
+    <div class="panel">
+      <div id="briefingsList"><div class="empty">Lade…</div></div>
+    </div>
+
+    <div class="section-h">
+      <h2>🤝 Partner</h2>
+      <button class="btn-small" id="btnAddPartner">+ Partner anlegen</button>
+    </div>
+    <div class="panel">
+      <div id="partnersList"><div class="empty">Lade…</div></div>
+    </div>
+
+    <div class="section-h">
+      <h2>📋 Tasks (Notion)</h2>
+      <a class="meta" id="notionLink" href="https://www.notion.so/crew-Founder-Hub-35f03d9d96a0802b8c1cc933ece881f1" target="_blank">In Notion öffnen →</a>
+    </div>
+    <div class="panel">
+      <a class="task-card" href="https://www.notion.so/crew-Founder-Hub-35f03d9d96a0802b8c1cc933ece881f1" target="_blank">
+        <div class="t-title">📋 Tasks in Notion verwalten</div>
+        <div class="t-meta">Klick öffnet die Datenbank im neuen Tab</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- Add Partner Modal -->
+  <div class="modal" id="modalPartner" hidden>
+    <div class="modal-card">
+      <div class="modal-h"><h3>Partner anlegen</h3><button class="btn-icon" data-close>✕</button></div>
+      <form id="formPartner">
+        <label class="form-row"><span>Name *</span><input name="name" required placeholder="z.B. Club ABC Stuttgart" /></label>
+        <label class="form-row"><span>Invite-Code *</span><input name="invite_code" required placeholder="z.B. CLUBABC — wird kleingeschrieben" pattern="[A-Za-z0-9_-]{3,30}" /></label>
+        <label class="form-row"><span>Typ</span>
+          <select name="type">
+            <option value="partner">Partner</option>
+            <option value="bar">Bar</option>
+            <option value="club" selected>Club</option>
+            <option value="brand">Brand</option>
+            <option value="event">Event</option>
+            <option value="influencer">Influencer</option>
+            <option value="press">Press</option>
+          </select>
+        </label>
+        <label class="form-row"><span>Stadt</span><input name="city" placeholder="Stuttgart" /></label>
+        <label class="form-row"><span>Kontakt-Name</span><input name="contact_name" placeholder="z.B. Max Müller" /></label>
+        <label class="form-row"><span>Kontakt-Email</span><input name="contact_email" type="email" placeholder="hi@partner.de" /></label>
+        <button type="submit" class="btn-primary">Anlegen</button>
+        <div class="form-msg" id="partnerMsg" hidden></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add Briefing Modal -->
+  <div class="modal" id="modalBriefing" hidden>
+    <div class="modal-card">
+      <div class="modal-h"><h3>Anweisung schreiben</h3><button class="btn-icon" data-close>✕</button></div>
+      <form id="formBriefing">
+        <label class="form-row"><span>Titel *</span><input name="title" required placeholder="kurz + klar" /></label>
+        <label class="form-row"><span>Details</span><textarea name="body" rows="4" placeholder="was genau, bis wann, Kontext"></textarea></label>
+        <label class="form-row"><span>Priorität</span>
+          <select name="priority">
+            <option value="low">Niedrig</option>
+            <option value="medium" selected>Normal</option>
+            <option value="high">Hoch</option>
+            <option value="urgent">Dringend</option>
+          </select>
+        </label>
+        <label class="form-row"><span>Adressaten</span>
+          <select name="audience">
+            <option value="all" selected>Alle</option>
+            <option value="founders">Founder</option>
+            <option value="staff">Staff</option>
+            <option value="partners">Partner</option>
+          </select>
+        </label>
+        <button type="submit" class="btn-primary">Anweisung speichern</button>
+        <div class="form-msg" id="briefingMsg" hidden></div>
+      </form>
+    </div>
+  </div>
+
+  <div class="footer">
+    crew. Staff-Dashboard · Phase 1 · <a href="https://github.com/" id="repoLink" target="_blank">Code</a>
+  </div>
+</div>
+
+<!-- ============================== JS ============================== -->
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.0';
+
+const SUPA_URL = 'https://mzggdhowhyoytnvwtvpc.supabase.co';
+const SUPA_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im16Z2dkaG93aHlveXRudnd0dnBjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNzc0NTUsImV4cCI6MjA5MTc1MzQ1NX0.eHZNiXtG6xO5occz2oA2U271trclqwmA-t3R3JkGOU8';
+
+const sb = createClient(SUPA_URL, SUPA_ANON, {
+  auth: { persistSession: true, storageKey: 'crew_team_auth' }
+});
+
+// === DOM
+const $ = (id) => document.getElementById(id);
+const authDiv = $('auth'), appDiv = $('app');
+const authForm = $('authForm'), authBtn = $('authBtn'), authMsg = $('authMsg'), authEmail = $('authEmail');
+
+function showMsg(text, kind = 'ok') {
+  authMsg.hidden = false;
+  authMsg.className = 'auth-msg ' + kind;
+  authMsg.textContent = text;
+}
+function clearMsg() { authMsg.hidden = true; }
+
+function fmtTime(iso) {
+  if (!iso) return '–';
+  const d = new Date(iso); const now = new Date();
+  const min = Math.floor((now - d) / 60000);
+  if (min < 1) return 'gerade eben';
+  if (min < 60) return `vor ${min}min`;
+  const hr = Math.floor(min / 60);
+  if (hr < 24) return `vor ${hr}h`;
+  const day = Math.floor(hr / 24);
+  if (day < 7) return `vor ${day}d`;
+  return d.toLocaleDateString('de-DE', { day: '2-digit', month: 'short' });
+}
+function initials(name) {
+  if (!name) return '·';
+  const parts = name.trim().split(/\s+/);
+  return (parts[0]?.[0] || '') + (parts[1]?.[0] || parts[0]?.[1] || '');
+}
+
+// === AUTH FLOW — Magic-Link via Email (Email-Faktor)
+// Sicher: User muss Zugriff auf die Inbox haben. Allowlist-Check passiert beim Dashboard-Load.
+authForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = authEmail.value.trim().toLowerCase();
+  if (!email) return;
+  authBtn.disabled = true;
+  authBtn.innerHTML = '<span class="spinner"></span>Sende…';
+  clearMsg();
+  const { error } = await sb.auth.signInWithOtp({
+    email,
+    options: {
+      emailRedirectTo: location.origin + location.pathname,
+      shouldCreateUser: true
+    }
+  });
+  authBtn.disabled = false;
+  authBtn.textContent = 'Login-Link senden';
+  if (error) { showMsg('Fehler: ' + error.message, 'err'); return; }
+  showMsg('Login-Link wurde an ' + email + ' geschickt. Inbox checken + Link klicken.', 'ok');
+});
+
+// Step2 wird nicht mehr genutzt — Login passiert direkt nach Email-Submit
+
+$('btnLogout').addEventListener('click', async () => {
+  await sb.auth.signOut();
+  location.reload();
+});
+$('btnRefresh').addEventListener('click', () => loadDashboard());
+
+// === DASHBOARD — direct fetch statt sb.rpc (umgeht Client-Hänger)
+async function loadDashboard() {
+  $('metaUpdate').innerHTML = '<span class="spinner"></span>aktualisiere…';
+  try {
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session) { authDiv.style.display = 'flex'; appDiv.classList.remove('on'); return; }
+    const r = await fetch(`${SUPA_URL}/rest/v1/rpc/get_team_dashboard`, {
+      method: 'POST',
+      headers: {
+        'apikey': SUPA_ANON,
+        'authorization': 'Bearer ' + session.access_token,
+        'content-type': 'application/json'
+      },
+      body: '{}'
+    });
+    if (!r.ok) {
+      const j = await r.json().catch(() => ({}));
+      if (r.status === 401 || r.status === 403 || j?.code === '42501') {
+        await sb.auth.signOut();
+        authDiv.style.display = 'flex';
+        appDiv.classList.remove('on');
+        showMsg('Account nicht im Staff-Allowlist.', 'err');
+        return;
+      }
+      $('metaUpdate').textContent = 'Fehler: ' + (j?.message || r.status);
+      return;
+    }
+    const data = await r.json();
+    renderDashboard(data);
+  } catch (e) {
+    $('metaUpdate').textContent = 'Netzwerk-Fehler: ' + e.message;
+  }
+}
+
+function renderDashboard(d) {
+  const me = d.me || {};
+  const k = d.kpis || {};
+
+  // Topbar
+  $('whoName').textContent = me.name || me.email || '';
+  $('whoAvatar').textContent = (initials(me.name || me.email || '·') + '').toUpperCase();
+  $('whoAvatar').title = me.email + ' · ' + (me.role || 'staff');
+
+  // KPI-Grid
+  const kpis = [
+    { label: 'Users gesamt', value: k.users_total, sub: `${k.users_pioneer} Pioneers`, icon: '👥', accent: true },
+    { label: 'Aktiv heute', value: k.active_today, sub: '24h Fenster', icon: '🟢' },
+    { label: 'Neu (24h)', value: k.signups_today, sub: `${k.signups_week} diese Woche`, icon: '✨' },
+    { label: 'Heimwege heute', value: k.heimwege_today, sub: `${k.heimwege_active} aktiv · ${k.heimwege_overdue} overdue 7d`, icon: '🏠', accent: k.heimwege_overdue > 0 },
+    { label: 'Partner', value: k.partners_active, sub: `${k.partners_total} gesamt`, icon: '🤝', accent: true },
+    { label: 'Briefings', value: k.briefings_open, sub: 'offene Anweisungen', icon: '📢' },
+    { label: 'Push-Tokens', value: k.device_tokens, sub: 'iOS-Geräte registriert', icon: '📱' },
+    { label: 'Safety-Relations', value: k.safety_relations, sub: `${k.crew_relations} Crew-Relations`, icon: '🛡️' },
+  ];
+  $('kpiGrid').innerHTML = kpis.map(k => `
+    <div class="kpi ${k.accent ? 'accent' : ''}">
+      <div class="kpi-label"><span class="kpi-icon">${k.icon}</span>${k.label}</div>
+      <div class="kpi-value">${k.value ?? 0}</div>
+      <div class="kpi-sub">${k.sub}</div>
+    </div>
+  `).join('');
+
+  // Recent Sign-Ups
+  const signups = d.recent_signups || [];
+  $('signupsList').innerHTML = signups.length === 0
+    ? '<div class="empty">Noch keine Sign-Ups</div>'
+    : signups.map(s => `
+        <div class="panel-row">
+          <div class="row-avatar">${(initials(s.name) + '').toUpperCase()}</div>
+          <div class="row-main">
+            <div class="row-title">${escapeHtml(s.name || 'Anonym')} ${s.is_pioneer ? '<span class="badge b-pioneer">Pioneer</span>' : ''}</div>
+            <div class="row-sub">${s.username ? '@' + escapeHtml(s.username) : ''}${s.city ? ' · ' + escapeHtml(s.city) : ''}</div>
+          </div>
+          <div class="row-meta">${fmtTime(s.created_at)}</div>
+        </div>
+      `).join('');
+
+  // Recent Heimwege
+  const h = d.recent_heimwege || [];
+  $('heimwegeList').innerHTML = h.length === 0
+    ? '<div class="empty">Noch keine Heimwege</div>'
+    : h.map(r => {
+        const statusBadge = r.status === 'overdue' ? '<span class="badge b-overdue">Overdue</span>'
+                          : r.status === 'active' ? '<span class="badge b-active">Aktiv</span>'
+                          : r.status === 'arrived' ? '<span class="badge b-arrived">Angekommen</span>'
+                          : `<span class="badge">${escapeHtml(r.status)}</span>`;
+        return `
+          <div class="panel-row">
+            <div class="row-avatar">${(initials(r.user_name) + '').toUpperCase()}</div>
+            <div class="row-main">
+              <div class="row-title">${escapeHtml(r.user_name || 'Unbekannt')} ${statusBadge}</div>
+              <div class="row-sub">${escapeHtml(r.destination || 'Zuhause')}${r.alerted ? ' · 🚨 Push gesendet' : ''}</div>
+            </div>
+            <div class="row-meta">${fmtTime(r.created_at)}</div>
+          </div>
+        `;
+      }).join('');
+
+  // Briefings
+  const briefings = d.briefings || [];
+  $('briefingsList').innerHTML = briefings.length === 0
+    ? '<div class="empty">Keine offenen Anweisungen — klick "+ Neue Anweisung" um zu starten.</div>'
+    : briefings.map(b => `
+        <div class="briefing-card p-${b.priority}">
+          <div class="briefing-main">
+            <div class="briefing-title">
+              <span class="b-${b.priority}">${b.priority}</span>
+              ${escapeHtml(b.title)}
+            </div>
+            ${b.body ? `<div class="briefing-body">${escapeHtml(b.body)}</div>` : ''}
+            <div class="briefing-meta">${b.author_email || 'team'} · ${fmtTime(b.created_at)} · für ${escapeHtml(b.audience)}</div>
+          </div>
+          <button class="btn-done" title="Erledigt" data-complete="${b.id}">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          </button>
+        </div>
+      `).join('');
+
+  // Briefing complete-Handler
+  $('briefingsList').querySelectorAll('[data-complete]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const id = btn.dataset.complete;
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span>';
+      const { error } = await sb.rpc('complete_briefing', { p_id: id });
+      if (error) { alert('Fehler: ' + error.message); btn.disabled = false; return; }
+      loadDashboard();
+    });
+  });
+
+  // Partners
+  const partners = d.partners || [];
+  $('partnersList').innerHTML = partners.length === 0
+    ? '<div class="empty">Noch keine Partner — klick "+ Partner anlegen" um zu starten.</div>'
+    : partners.map(p => {
+        const statusClass = p.status === 'active' ? 'b-active2'
+                         : p.status === 'prospect' ? 'b-prospect'
+                         : p.status === 'lost' ? 'b-lost'
+                         : 'b-paused';
+        return `
+          <div class="partner-row">
+            <div class="partner-main">
+              <div class="partner-title">
+                ${escapeHtml(p.name)}
+                <span class="b-type">${escapeHtml(p.type || 'partner')}</span>
+                <span class="${statusClass}">${escapeHtml(p.status)}</span>
+              </div>
+              <div class="partner-sub">
+                Code: <code style="background:rgba(255,255,255,.06); padding:2px 6px; border-radius:4px">${escapeHtml(p.invite_code || '—')}</code>
+                ${p.city ? ' · ' + escapeHtml(p.city) : ''}
+                ${p.contact_name ? ' · ' + escapeHtml(p.contact_name) : ''}
+              </div>
+            </div>
+            <div class="partner-stats">
+              <div class="partner-big">${p.users_brought}</div>
+              <div class="partner-week">${p.users_brought_week > 0 ? '+' + p.users_brought_week + ' diese Woche' : 'User-Sign-Ups'}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+  $('metaUpdate').textContent = 'aktualisiert ' + fmtTime(d.generated_at);
+}
+
+function escapeHtml(s) {
+  if (s == null) return '';
+  return String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+}
+
+// === MODALS — Add Partner + Add Briefing
+function openModal(id) {
+  const m = $(id);
+  m.hidden = false;
+  m.querySelector('input,textarea,select')?.focus();
+}
+function closeModal(id) {
+  const m = $(id);
+  m.hidden = true;
+  m.querySelector('form')?.reset();
+  m.querySelector('.form-msg')?.setAttribute('hidden', '');
+}
+document.querySelectorAll('[data-close]').forEach(b =>
+  b.addEventListener('click', () => b.closest('.modal').hidden = true)
+);
+document.querySelectorAll('.modal').forEach(m =>
+  m.addEventListener('click', e => { if (e.target === m) m.hidden = true; })
+);
+$('btnAddPartner').addEventListener('click', () => openModal('modalPartner'));
+$('btnAddBriefing').addEventListener('click', () => openModal('modalBriefing'));
+
+$('formPartner').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const f = new FormData(e.target);
+  const msg = $('partnerMsg');
+  msg.hidden = true;
+  const { data, error } = await sb.rpc('add_partner', {
+    p_name: f.get('name'),
+    p_invite_code: f.get('invite_code'),
+    p_type: f.get('type'),
+    p_city: f.get('city') || null,
+    p_contact_name: f.get('contact_name') || null,
+    p_contact_email: f.get('contact_email') || null,
+  });
+  if (error) {
+    msg.hidden = false; msg.className = 'form-msg err';
+    msg.textContent = error.message.includes('duplicate') ? 'Invite-Code existiert schon — wähl einen anderen.' : error.message;
+    return;
+  }
+  msg.hidden = false; msg.className = 'form-msg ok';
+  msg.textContent = 'Partner angelegt ✓';
+  setTimeout(() => { closeModal('modalPartner'); loadDashboard(); }, 600);
+});
+
+$('formBriefing').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const f = new FormData(e.target);
+  const msg = $('briefingMsg');
+  msg.hidden = true;
+  const { data, error } = await sb.rpc('add_briefing', {
+    p_title: f.get('title'),
+    p_body: f.get('body') || null,
+    p_priority: f.get('priority'),
+    p_audience: f.get('audience'),
+  });
+  if (error) {
+    msg.hidden = false; msg.className = 'form-msg err';
+    msg.textContent = error.message;
+    return;
+  }
+  msg.hidden = false; msg.className = 'form-msg ok';
+  msg.textContent = 'Anweisung gespeichert ✓';
+  setTimeout(() => { closeModal('modalBriefing'); loadDashboard(); }, 600);
+});
+
+// === BOOTSTRAP
+async function init() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) {
+    authDiv.style.display = 'none';
+    appDiv.classList.add('on');
+    await loadDashboard();
+  }
+}
+
+sb.auth.onAuthStateChange(async (event, session) => {
+  if (event === 'SIGNED_IN' && session) {
+    authDiv.style.display = 'none';
+    appDiv.classList.add('on');
+    await loadDashboard();
+  } else if (event === 'SIGNED_OUT') {
+    authDiv.style.display = 'flex';
+    appDiv.classList.remove('on');
+  }
+});
+
+init();
+</script>
+</body>
+</html>
