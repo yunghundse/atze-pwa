@@ -524,11 +524,138 @@ button{ background:none; border:0; cursor:pointer; padding:0 }
 .feed-action{ color:var(--c-text-2) }
 .feed-target{ color:var(--c-text-1); font-weight:500 }
 
+/* === HERO BANNER (Day-Counter + Daily Quote) === */
+.hero-banner{
+  position:relative; overflow:hidden;
+  margin:0 0 var(--s-5);
+  padding:var(--s-5) var(--s-5);
+  background:linear-gradient(135deg, rgba(139,92,246,.16), rgba(255,157,110,.08));
+  border:1px solid var(--c-violet-line);
+  border-radius:var(--r-4);
+  box-shadow:var(--shadow-1), 0 0 60px rgba(139,92,246,.08) inset;
+}
+.hero-banner::before{
+  content:''; position:absolute; top:-40%; right:-10%; width:340px; height:340px;
+  background:radial-gradient(circle, rgba(168,140,255,.25) 0%, transparent 65%);
+  pointer-events:none; filter:blur(8px);
+}
+.hb-head{
+  display:flex; align-items:center; gap:var(--s-3); flex-wrap:wrap;
+  position:relative; z-index:1; margin-bottom:var(--s-3);
+}
+.hb-day{
+  display:inline-flex; align-items:center; gap:6px;
+  padding:6px 14px;
+  background:rgba(139,92,246,.22);
+  border:1px solid var(--c-violet-line);
+  border-radius:var(--r-5);
+  font-size:var(--t-5); font-weight:700; color:var(--c-violet-3);
+  letter-spacing:.04em; text-transform:uppercase;
+}
+.hb-day strong{ color:#F5F3FF; font-weight:800; font-size:13px }
+.hb-date{ font-size:var(--t-5); color:var(--c-text-3); letter-spacing:.04em; text-transform:uppercase }
+.hb-streak{ display:inline-flex; align-items:center; gap:4px; font-size:var(--t-5); color:var(--c-amber); font-weight:700 }
+.hb-quote{
+  position:relative; z-index:1;
+  font-size:21px; line-height:1.4; font-weight:500;
+  color:var(--c-text-1);
+  letter-spacing:-.01em;
+  font-family:'Georgia',serif; font-style:italic;
+  margin:0;
+}
+.hb-quote::before{
+  content:'„'; color:var(--c-violet-3); font-size:34px; line-height:0; margin-right:4px; vertical-align:-12px;
+}
+.hb-author{
+  position:relative; z-index:1;
+  margin-top:var(--s-3);
+  font-size:var(--t-4); color:var(--c-text-3); font-style:normal;
+}
+.hb-author span{ color:var(--c-violet-3); font-weight:600 }
+
+/* === MISSION CONTROL (Goals) === */
+.mc-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+  gap:var(--s-3);
+}
+.goal-card{
+  position:relative; overflow:hidden;
+  padding:var(--s-4);
+  background:var(--c-surface);
+  border:1px solid var(--c-line);
+  border-radius:var(--r-3);
+  transition:border .2s var(--ease), transform .2s var(--ease);
+  cursor:default;
+}
+.goal-card:hover{ border-color:var(--c-violet-line); transform:translateY(-2px) }
+.goal-card.is-done{
+  background:linear-gradient(135deg, rgba(40,200,120,.08), rgba(139,92,246,.06));
+  border-color:rgba(40,200,120,.35);
+}
+.goal-card.is-done::after{
+  content:'✓'; position:absolute; top:12px; right:12px;
+  width:24px; height:24px; border-radius:50%;
+  background:var(--c-green); color:#0A0A14;
+  font-weight:900; font-size:14px;
+  display:grid; place-items:center;
+  box-shadow:0 0 18px rgba(40,200,120,.6);
+  animation:pop .4s var(--ease);
+}
+@keyframes pop{ 0%{transform:scale(0)} 60%{transform:scale(1.15)} 100%{transform:scale(1)} }
+.goal-h{ display:flex; align-items:flex-start; gap:var(--s-2); margin-bottom:var(--s-3) }
+.goal-ico{ font-size:24px; flex-shrink:0; line-height:1 }
+.goal-title{ font-size:var(--t-3); font-weight:700; line-height:1.3 }
+.goal-desc{ font-size:var(--t-5); color:var(--c-text-3); margin-top:2px; line-height:1.4 }
+.goal-progress{
+  height:8px; background:rgba(255,255,255,.06);
+  border-radius:var(--r-5); overflow:hidden;
+  margin-bottom:var(--s-2);
+}
+.goal-progress-fill{
+  height:100%; background:linear-gradient(90deg, var(--c-violet), var(--c-violet-3), var(--c-amber));
+  border-radius:var(--r-5); transition:width .6s var(--ease);
+  position:relative;
+}
+.goal-progress-fill::after{
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,.4), transparent);
+  animation:shimmer 2.4s infinite linear;
+}
+.goal-card.is-done .goal-progress-fill{ background:var(--c-green) }
+.goal-card.is-done .goal-progress-fill::after{ animation:none }
+@keyframes shimmer{ 0%{transform:translateX(-100%)} 100%{transform:translateX(100%)} }
+.goal-stats{
+  display:flex; align-items:flex-end; justify-content:space-between; gap:8px;
+}
+.goal-current{
+  font-size:24px; font-weight:800; letter-spacing:-.02em;
+  background:linear-gradient(135deg, var(--c-violet-3), var(--c-amber));
+  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+  line-height:1;
+}
+.goal-target{ font-size:var(--t-4); color:var(--c-text-3); font-weight:500 }
+.goal-pct{ font-size:var(--t-5); color:var(--c-violet-3); font-weight:700; letter-spacing:.02em }
+.goal-card.is-done .goal-pct{ color:var(--c-green) }
+.goal-actions{ display:flex; gap:6px; margin-top:var(--s-3); align-items:center }
+.goal-bump{ padding:4px 10px; background:rgba(255,255,255,.04); border:1px solid var(--c-line); border-radius:var(--r-5); color:var(--c-text-2); font-size:var(--t-5); font-weight:600 }
+.goal-bump:hover{ background:var(--c-violet-soft); border-color:var(--c-violet-line); color:var(--c-violet-3) }
+.goal-edit{ margin-left:auto; padding:4px 8px; color:var(--c-text-3); font-size:var(--t-5) }
+.goal-edit:hover{ color:var(--c-violet-3) }
+
+/* Mission Control header — etwas größer */
+.mc-header h2{ display:flex; align-items:center; gap:8px }
+.mc-stats{ display:flex; gap:12px; align-items:center; font-size:var(--t-5); color:var(--c-text-3) }
+.mc-stats strong{ color:var(--c-violet-3); font-weight:700 }
+
 /* Mobile fine-tune */
 @media (max-width:480px){
   .wrap{ padding:var(--s-4) var(--s-3) }
   .kpi-value{ font-size:26px }
   .who-name{ display:none }
+  .hero-banner{ padding:var(--s-4) }
+  .hb-quote{ font-size:17px }
+  .hb-day strong{ font-size:12px }
 }
 </style>
 </head>
@@ -604,6 +731,26 @@ button{ background:none; border:0; cursor:pointer; padding:0 }
   <div class="wrap">
     <!-- ===== PAGE: HOME ===== -->
     <section class="page" data-page="home">
+      <!-- HERO BANNER: Tag-Counter + Daily Quote -->
+      <div class="hero-banner" id="heroBanner">
+        <div class="hb-head">
+          <span class="hb-day">Tag <strong id="projectDay">—</strong> · im Aufbau</span>
+          <span class="hb-date" id="hbDate"></span>
+        </div>
+        <div class="hb-quote" id="quoteText">Lade…</div>
+        <div class="hb-author">— <span id="quoteAuthor">—</span></div>
+      </div>
+
+      <!-- MISSION CONTROL: Goals mit Progress -->
+      <div class="section-h mc-header">
+        <h2>🎯 Mission Control</h2>
+        <span class="mc-stats" id="mcStats">—</span>
+      </div>
+      <div class="mc-grid" id="goalsGrid"><div class="empty">Lade Ziele…</div></div>
+      <div style="text-align:right; margin-top:var(--s-2)">
+        <button class="btn-small" id="btnAddGoal">+ Neues Ziel</button>
+      </div>
+
       <div class="section-h"><h2>🎯 Mein Workspace</h2><span class="meta" id="myWorkspaceMeta">—</span></div>
       <div class="panel" id="myWorkspacePanel">
         <div class="empty">Lade…</div>
@@ -855,6 +1002,52 @@ button{ background:none; border:0; cursor:pointer; padding:0 }
     </div>
   </div>
 
+  <!-- Add/Edit Goal Modal -->
+  <div class="modal" id="modalGoal" hidden>
+    <div class="modal-card">
+      <div class="modal-h"><h3 id="goalModalTitle">Neues Ziel</h3><button class="btn-icon" data-close>✕</button></div>
+      <form id="formGoal">
+        <input type="hidden" name="id" />
+        <label class="form-row"><span>Titel *</span><input name="title" required placeholder="z.B. 100 Pioneere an Bord" /></label>
+        <label class="form-row"><span>Beschreibung</span><textarea name="description" rows="2" placeholder="Warum ist das wichtig?"></textarea></label>
+        <label class="form-row"><span>Icon</span><input name="icon" placeholder="🎯" maxlength="4" value="🎯" /></label>
+        <label class="form-row"><span>Kategorie</span>
+          <select name="category">
+            <option value="growth" selected>Wachstum</option>
+            <option value="launch">Launch</option>
+            <option value="partners">Partner</option>
+            <option value="community">Community</option>
+            <option value="safety">Safety</option>
+            <option value="tech">Tech</option>
+            <option value="team">Team</option>
+          </select>
+        </label>
+        <label class="form-row"><span>Datenquelle</span>
+          <select name="kpi_source">
+            <option value="">Manuell (selber tracken)</option>
+            <option value="users_total">User gesamt</option>
+            <option value="users_pioneer">Pioneer-User</option>
+            <option value="active_today">Aktive (24h)</option>
+            <option value="partners_active">Partner aktiv</option>
+            <option value="partners_total">Partner gesamt</option>
+            <option value="crew_relations">Crew-Beziehungen</option>
+            <option value="safety_relations">Safety-Kontakte</option>
+            <option value="device_tokens">Device-Tokens (Installs)</option>
+            <option value="heimwege_total">Heimwege gesamt</option>
+            <option value="cities_covered">Städte abgedeckt</option>
+            <option value="news_published">News veröffentlicht</option>
+          </select>
+        </label>
+        <label class="form-row"><span>Zielwert *</span><input name="target_value" type="number" min="1" required value="100" /></label>
+        <label class="form-row"><span>Einheit</span><input name="unit" placeholder="z.B. User, Partner, Städte" /></label>
+        <label class="form-row"><span>Deadline</span><input name="target_date" type="date" /></label>
+        <label class="form-row"><span>Owner</span><input name="owner_email" type="email" placeholder="optional" /></label>
+        <button type="submit" class="btn-primary">Speichern</button>
+        <div class="form-msg" id="goalMsg" hidden></div>
+      </form>
+    </div>
+  </div>
+
   <!-- FLOATING ACTION BUTTON -->
   <div class="fab-wrap">
     <button class="fab" id="fabMain" title="Quick-Actions">+</button>
@@ -1076,6 +1269,18 @@ async function loadDashboard() {
 function renderDashboard(d) {
   const me = d.me || {};
   const k = d.kpis || {};
+
+  // === HERO BANNER: Tag-Counter + Daily Quote
+  if ($('projectDay')) {
+    $('projectDay').textContent = d.project_day || '1';
+    $('hbDate').textContent = new Date().toLocaleDateString('de-DE', { weekday: 'long', day: '2-digit', month: 'long' });
+    const q = d.daily_quote || {};
+    $('quoteText').textContent = q.text || 'Lass uns was bauen.';
+    $('quoteAuthor').textContent = q.author || 'crew.';
+  }
+
+  // === MISSION CONTROL: Goals
+  renderGoals(d.goals || []);
 
   // Sidebar User-Card
   $('whoName').textContent = me.name || me.email?.split('@')[0] || '';
@@ -1453,6 +1658,118 @@ function renderDashboard(d) {
 
   $('metaUpdate').textContent = 'aktualisiert ' + fmtTime(d.generated_at);
 }
+
+// ============================================================
+// MISSION CONTROL — Goals
+// ============================================================
+function renderGoals(goals) {
+  const el = $('goalsGrid');
+  if (!el) return;
+  const active = goals.filter(g => g.status === 'active');
+  const done = goals.filter(g => g.status === 'completed');
+  $('mcStats').innerHTML = `<strong>${done.length}</strong>/${goals.length} erledigt · <strong>${active.length}</strong> aktiv`;
+  if (goals.length === 0) {
+    el.innerHTML = '<div class="empty">Noch keine Ziele — leg dir was vor.</div>';
+    return;
+  }
+  el.innerHTML = goals.map(g => {
+    const cur = Number(g.current_value || 0);
+    const tgt = Math.max(1, Number(g.target_value || 1));
+    const pct = Math.min(100, Math.round((cur / tgt) * 100));
+    const isDone = g.status === 'completed' || cur >= tgt;
+    const isManual = !g.kpi_source;
+    return `
+      <div class="goal-card ${isDone ? 'is-done' : ''}" data-goal-id="${g.id}">
+        <div class="goal-h">
+          <div class="goal-ico">${g.icon || '🎯'}</div>
+          <div>
+            <div class="goal-title">${escapeHtml(g.title)}</div>
+            ${g.description ? `<div class="goal-desc">${escapeHtml(g.description)}</div>` : ''}
+          </div>
+        </div>
+        <div class="goal-progress"><div class="goal-progress-fill" style="width:${pct}%"></div></div>
+        <div class="goal-stats">
+          <div>
+            <span class="goal-current">${cur}</span>
+            <span class="goal-target">/ ${tgt}${g.unit ? ' ' + escapeHtml(g.unit) : ''}</span>
+          </div>
+          <div class="goal-pct">${pct}%</div>
+        </div>
+        <div class="goal-actions">
+          ${isManual && !isDone ? `<button class="goal-bump" data-bump="${g.id}" data-delta="1">+1</button>
+            <button class="goal-bump" data-bump="${g.id}" data-delta="-1">−</button>` : ''}
+          ${isDone ? `<span class="goal-pct" style="font-size:11px">${g.completed_at ? '✓ ' + fmtTime(g.completed_at) : 'erreicht'}</span>` : ''}
+          <button class="goal-edit" data-edit-goal="${g.id}" title="Bearbeiten">✎</button>
+          ${isDone ? `<button class="goal-edit" data-archive-goal="${g.id}" title="Archivieren">📁</button>` : ''}
+        </div>
+      </div>
+    `;
+  }).join('');
+  // Bump-Handler (manuelle Ziele +/-1)
+  el.querySelectorAll('[data-bump]').forEach(b => b.addEventListener('click', async () => {
+    const { error } = await sb.rpc('bump_goal_manual', { p_id: b.dataset.bump, p_delta: parseInt(b.dataset.delta, 10) });
+    if (error) alert(error.message); else loadDashboard();
+  }));
+  // Edit-Handler (öffnet Modal mit pre-filled values)
+  el.querySelectorAll('[data-edit-goal]').forEach(b => b.addEventListener('click', () => {
+    const g = goals.find(x => x.id === b.dataset.editGoal);
+    if (!g) return;
+    const f = $('formGoal');
+    f.id.value = g.id;
+    f.title.value = g.title || '';
+    f.description.value = g.description || '';
+    f.icon.value = g.icon || '🎯';
+    f.category.value = g.category || 'growth';
+    f.kpi_source.value = g.kpi_source || '';
+    f.target_value.value = g.target_value || 1;
+    f.unit.value = g.unit || '';
+    f.target_date.value = g.target_date || '';
+    f.owner_email.value = g.owner_email || '';
+    $('goalModalTitle').textContent = 'Ziel bearbeiten';
+    openModal('modalGoal');
+  }));
+  // Archive-Handler
+  el.querySelectorAll('[data-archive-goal]').forEach(b => b.addEventListener('click', async () => {
+    if (!confirm('Ziel ins Archiv verschieben?')) return;
+    const { error } = await sb.rpc('set_goal_status', { p_id: b.dataset.archiveGoal, p_status: 'archived' });
+    if (error) alert(error.message); else loadDashboard();
+  }));
+  // Auto-Complete-Check (Background, ignore errors)
+  if (active.some(g => Number(g.current_value || 0) >= Number(g.target_value || 1))) {
+    sb.rpc('auto_complete_goals').then(({ data }) => { if (data && data > 0) loadDashboard(); }).catch(() => {});
+  }
+}
+
+$('btnAddGoal')?.addEventListener('click', () => {
+  const f = $('formGoal');
+  f.reset();
+  f.id.value = '';
+  f.icon.value = '🎯';
+  f.target_value.value = 100;
+  $('goalModalTitle').textContent = 'Neues Ziel';
+  openModal('modalGoal');
+});
+
+$('formGoal')?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const f = new FormData(e.target);
+  const msg = $('goalMsg'); msg.hidden = true;
+  const { error } = await sb.rpc('upsert_team_goal', {
+    p_id: f.get('id') || null,
+    p_title: f.get('title'),
+    p_description: f.get('description') || null,
+    p_category: f.get('category'),
+    p_kpi_source: f.get('kpi_source') || null,
+    p_target_value: parseInt(f.get('target_value'), 10) || 1,
+    p_unit: f.get('unit') || '',
+    p_icon: f.get('icon') || '🎯',
+    p_target_date: f.get('target_date') || null,
+    p_owner_email: f.get('owner_email') || null,
+  });
+  if (error) { msg.hidden = false; msg.className = 'form-msg err'; msg.textContent = error.message; return; }
+  msg.hidden = false; msg.className = 'form-msg ok'; msg.textContent = 'Gespeichert ✓';
+  setTimeout(() => { closeModal('modalGoal'); loadDashboard(); }, 500);
+});
 
 // ============================================================
 // CHAT — Realtime
