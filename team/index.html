@@ -334,6 +334,32 @@ button{ background:none; border:0; cursor:pointer; padding:0 }
 }
 .btn-done:hover{ background:rgba(40,200,120,.25) }
 
+/* Team-Members + Audit-Log */
+.team-row{ display:flex; align-items:center; gap:var(--s-3); padding:var(--s-3) 0; border-bottom:1px solid var(--c-line) }
+.team-row:last-child{ border-bottom:0 }
+.team-av{ width:40px; height:40px; border-radius:50%; display:grid; place-items:center; background:linear-gradient(135deg, var(--c-violet), var(--c-violet-2)); font-weight:700; color:#fff; flex-shrink:0; font-size:var(--t-3) }
+.team-av.r-founder{ background:linear-gradient(135deg, var(--c-amber), #FF6B3D); box-shadow:0 0 0 2px rgba(255,157,110,.3) }
+.team-av.r-admin{ background:linear-gradient(135deg, var(--c-violet-3), var(--c-violet)); box-shadow:0 0 0 2px var(--c-violet-line) }
+.team-av.r-partner{ background:linear-gradient(135deg, var(--c-green), #1B9D5C) }
+.team-main{ flex:1; min-width:0 }
+.team-name{ font-size:var(--t-3); font-weight:600; color:var(--c-text-1); display:flex; align-items:center; gap:6px; flex-wrap:wrap }
+.team-meta{ font-size:var(--t-5); color:var(--c-text-3); margin-top:4px }
+.b-founder{ background:rgba(255,157,110,.15); color:var(--c-amber); border:1px solid rgba(255,157,110,.4); padding:2px 8px; border-radius:var(--r-5); font-size:var(--t-5); font-weight:700; text-transform:uppercase; letter-spacing:.05em }
+.b-admin{ background:var(--c-violet-soft); color:var(--c-violet-3); border:1px solid var(--c-violet-line); padding:2px 8px; border-radius:var(--r-5); font-size:var(--t-5); font-weight:700; text-transform:uppercase; letter-spacing:.05em }
+.b-staff{ background:rgba(255,255,255,.06); color:var(--c-text-2); border:1px solid var(--c-line); padding:2px 8px; border-radius:var(--r-5); font-size:var(--t-5); font-weight:700; text-transform:uppercase; letter-spacing:.05em }
+.b-partner-role{ background:rgba(40,200,120,.12); color:var(--c-green); border:1px solid rgba(40,200,120,.3); padding:2px 8px; border-radius:var(--r-5); font-size:var(--t-5); font-weight:700; text-transform:uppercase; letter-spacing:.05em }
+.team-stats{ text-align:right; flex-shrink:0; font-size:var(--t-5); color:var(--c-text-3) }
+.team-stats strong{ display:block; color:var(--c-violet-3); font-size:var(--t-3); font-weight:800 }
+.b-offline{ background:rgba(255,255,255,.04); color:var(--c-text-3); border:1px solid var(--c-line); padding:2px 8px; border-radius:var(--r-5); font-size:var(--t-5); font-weight:600 }
+.b-online{ background:rgba(40,200,120,.12); color:var(--c-green); border:1px solid rgba(40,200,120,.3); padding:2px 8px; border-radius:var(--r-5); font-size:var(--t-5); font-weight:600 }
+
+.audit-row{ display:flex; align-items:flex-start; gap:var(--s-3); padding:var(--s-2) 0; border-bottom:1px solid var(--c-line); font-size:var(--t-4) }
+.audit-row:last-child{ border-bottom:0 }
+.audit-time{ flex-shrink:0; color:var(--c-text-3); font-size:var(--t-5); width:80px; padding-top:2px }
+.audit-actor{ color:var(--c-violet-3); font-weight:600 }
+.audit-action{ color:var(--c-text-2) }
+.audit-target{ color:var(--c-text-1); font-weight:500 }
+
 /* Mobile fine-tune */
 @media (max-width:480px){
   .wrap{ padding:var(--s-4) var(--s-3) }
@@ -429,6 +455,22 @@ button{ background:none; border:0; cursor:pointer; padding:0 }
     </div>
 
     <div class="section-h">
+      <h2>👥 Team</h2>
+      <button class="btn-small" id="btnAddMember">+ Member einladen</button>
+    </div>
+    <div class="panel">
+      <div id="teamList"><div class="empty">Lade…</div></div>
+    </div>
+
+    <div class="section-h">
+      <h2>📜 Activity-Log</h2>
+      <span class="meta">letzte 15 Staff-Aktionen</span>
+    </div>
+    <div class="panel">
+      <div id="auditList"><div class="empty">Lade…</div></div>
+    </div>
+
+    <div class="section-h">
       <h2>📋 Tasks (Notion)</h2>
       <a class="meta" id="notionLink" href="https://www.notion.so/crew-Founder-Hub-35f03d9d96a0802b8c1cc933ece881f1" target="_blank">In Notion öffnen →</a>
     </div>
@@ -463,6 +505,27 @@ button{ background:none; border:0; cursor:pointer; padding:0 }
         <label class="form-row"><span>Kontakt-Email</span><input name="contact_email" type="email" placeholder="hi@partner.de" /></label>
         <button type="submit" class="btn-primary">Anlegen</button>
         <div class="form-msg" id="partnerMsg" hidden></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add Team-Member Modal -->
+  <div class="modal" id="modalMember" hidden>
+    <div class="modal-card">
+      <div class="modal-h"><h3>Team-Member einladen</h3><button class="btn-icon" data-close>✕</button></div>
+      <form id="formMember">
+        <label class="form-row"><span>Email *</span><input name="email" type="email" required placeholder="kollege@email.com" /></label>
+        <label class="form-row"><span>Anzeigename</span><input name="display_name" placeholder="Vorname für Avatar" /></label>
+        <label class="form-row"><span>Rolle</span>
+          <select name="role">
+            <option value="staff" selected>Staff</option>
+            <option value="admin">Admin</option>
+            <option value="partner">Partner</option>
+            <option value="founder">Founder</option>
+          </select>
+        </label>
+        <button type="submit" class="btn-primary">Einladen</button>
+        <div class="form-msg" id="memberMsg" hidden></div>
       </form>
     </div>
   </div>
@@ -791,6 +854,61 @@ function renderDashboard(d) {
         `;
       }).join('');
 
+  // Team-Members (Habbo-Style Hierarchy)
+  const team = d.team_members || [];
+  $('teamList').innerHTML = team.length === 0
+    ? '<div class="empty">Keine Members</div>'
+    : team.map(m => {
+        const role = m.role || 'staff';
+        const isOnline = m.last_sign_in_at && (Date.now() - new Date(m.last_sign_in_at).getTime() < 5*60*1000);
+        const roleBadge = role === 'founder' ? '<span class="b-founder">Founder</span>'
+                       : role === 'admin' ? '<span class="b-admin">Admin</span>'
+                       : role === 'partner' ? '<span class="b-partner-role">Partner</span>'
+                       : '<span class="b-staff">Staff</span>';
+        const statusBadge = !m.has_account ? '<span class="b-offline">eingeladen</span>'
+                         : isOnline ? '<span class="b-online">online</span>'
+                         : '';
+        return `
+          <div class="team-row">
+            <div class="team-av r-${role}">${(initials(m.display_name || m.email) + '').toUpperCase()}</div>
+            <div class="team-main">
+              <div class="team-name">${escapeHtml(m.display_name || m.email.split('@')[0])} ${roleBadge} ${statusBadge}</div>
+              <div class="team-meta">${escapeHtml(m.email)} · ${m.has_account ? 'letzter Login ' + fmtTime(m.last_sign_in_at) : 'noch nie eingeloggt'}</div>
+            </div>
+            <div class="team-stats">
+              <strong>${m.actions_week}</strong>
+              <span>Aktionen / 7d</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+  // Audit-Log
+  const audit = d.audit_log || [];
+  $('auditList').innerHTML = audit.length === 0
+    ? '<div class="empty">Noch keine Aktionen — wenn du z.B. einen Partner anlegst, erscheint das hier.</div>'
+    : audit.map(a => {
+        const actor = (a.actor_email || '').split('@')[0];
+        const labels = {
+          'partner.created': '🤝 Partner angelegt',
+          'briefing.created': '📢 Anweisung geschrieben',
+          'briefing.completed': '✓ Anweisung erledigt',
+          'team.member_added': '👥 Member hinzugefügt',
+        };
+        const label = labels[a.action] || a.action;
+        const target = a.payload?.title || a.payload?.name || a.payload?.email || '';
+        return `
+          <div class="audit-row">
+            <div class="audit-time">${fmtTime(a.created_at)}</div>
+            <div>
+              <span class="audit-actor">${escapeHtml(actor)}</span>
+              <span class="audit-action"> · ${label}</span>
+              ${target ? '<span class="audit-target"> → ' + escapeHtml(target) + '</span>' : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+
   $('metaUpdate').textContent = 'aktualisiert ' + fmtTime(d.generated_at);
 }
 
@@ -819,6 +937,27 @@ document.querySelectorAll('.modal').forEach(m =>
 );
 $('btnAddPartner').addEventListener('click', () => openModal('modalPartner'));
 $('btnAddBriefing').addEventListener('click', () => openModal('modalBriefing'));
+$('btnAddMember').addEventListener('click', () => openModal('modalMember'));
+
+$('formMember').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const f = new FormData(e.target);
+  const msg = $('memberMsg');
+  msg.hidden = true;
+  const { error } = await sb.rpc('add_team_member', {
+    p_email: f.get('email'),
+    p_role: f.get('role'),
+    p_display_name: f.get('display_name') || null,
+  });
+  if (error) {
+    msg.hidden = false; msg.className = 'form-msg err';
+    msg.textContent = error.message.includes('Only founders') ? 'Nur Founder dürfen Members hinzufügen.' : error.message;
+    return;
+  }
+  msg.hidden = false; msg.className = 'form-msg ok';
+  msg.textContent = 'Member eingeladen ✓';
+  setTimeout(() => { closeModal('modalMember'); loadDashboard(); }, 600);
+});
 
 $('formPartner').addEventListener('submit', async (e) => {
   e.preventDefault();
