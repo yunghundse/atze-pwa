@@ -424,18 +424,13 @@ button{ background:none; border:0; cursor:pointer; padding:0 }
 
   <form id="authForm" class="auth-card" onsubmit="return false">
     <h2 id="authH2">Staff-Login</h2>
-    <p id="authP">Email rein. Wir schicken dir einen 6-stelligen Code — wer keinen Inbox-Zugriff hat, kommt nicht rein.</p>
+    <p id="authP">Email rein, du bist drin. Nur Allowlist-Emails kommen durch.</p>
 
     <div id="step1">
       <input id="authEmail" class="auth-input" type="email" placeholder="dein@email.com" autocomplete="email" required />
-      <button id="authBtn" type="submit" class="btn-primary">Code senden</button>
+      <button id="authBtn" type="submit" class="btn-primary">Login</button>
     </div>
-
-    <div id="step2" hidden>
-      <input id="authCode" class="auth-input" type="text" inputmode="numeric" autocomplete="one-time-code" placeholder="6-stelliger Code aus Email" pattern="\d{6}" maxlength="6" style="letter-spacing:8px; text-align:center; font-size:24px; font-weight:700" />
-      <button id="authVerifyBtn" type="button" class="btn-primary">Einloggen</button>
-      <button id="authBackBtn" type="button" style="width:100%; margin-top:8px; color:var(--c-text-3); font-size:var(--t-5); text-align:center; padding:8px">← andere Email</button>
-    </div>
+    <div id="step2" hidden></div>
 
     <div id="authMsg" hidden></div>
     <div class="auth-hint">Nur für autorisiertes Team. Allowlist im Backend, keine Passwörter.</div>
@@ -738,76 +733,35 @@ function initials(name) {
   return (parts[0]?.[0] || '') + (parts[1]?.[0] || parts[0]?.[1] || '');
 }
 
-// === AUTH FLOW — 6-Code (Email-Faktor)
-const step1 = $('step1'), step2 = $('step2');
-const authVerifyBtn = $('authVerifyBtn'), authBackBtn = $('authBackBtn'), authCode = $('authCode');
-let pendingEmail = '';
-
+// === AUTH FLOW v5 — Direct Staff-Login (Allowlist + Rate-Limit, kein Email-Roundtrip)
 authForm.addEventListener('submit', async (e) => {
   e.preventDefault();
-  if (!step2.hidden) return;
   const email = authEmail.value.trim().toLowerCase();
   if (!email) return;
   authBtn.disabled = true;
-  authBtn.innerHTML = '<span class="spinner"></span>Sende…';
-  clearMsg();
-  const { error } = await sb.auth.signInWithOtp({
-    email,
-    options: { shouldCreateUser: true }
-  });
-  authBtn.disabled = false;
-  authBtn.textContent = 'Code senden';
-  if (error) { showMsg('Fehler: ' + error.message, 'err'); return; }
-  pendingEmail = email;
-  step1.hidden = true;
-  step2.hidden = false;
-  $('authH2').textContent = 'Code eingeben';
-  $('authP').textContent = 'Wir haben einen 6-stelligen Code an ' + email + ' geschickt.';
-  showMsg('Email versendet — Code gültig 1 Stunde.', 'ok');
-  setTimeout(() => authCode.focus(), 100);
-});
-
-authVerifyBtn.addEventListener('click', async () => {
-  const raw = authCode.value.trim();
-  if (!raw) { showMsg('Code eingeben.', 'err'); return; }
-  authVerifyBtn.disabled = true;
-  authVerifyBtn.innerHTML = '<span class="spinner"></span>Prüfe…';
+  authBtn.innerHTML = '<span class="spinner"></span>Prüfe…';
   clearMsg();
 
-  let result;
-  if (/^\d{6}$/.test(raw)) {
-    result = await sb.auth.verifyOtp({ email: pendingEmail, token: raw, type: 'email' });
-  } else if (raw.includes('://') || raw.length > 30) {
-    // Fallback: User pastet Magic-Link aus Email
-    try {
-      const u = new URL(raw);
-      const token = u.searchParams.get('token');
-      const type = u.searchParams.get('type') || 'magiclink';
-      if (!token) throw new Error('Kein Token in der URL');
-      result = await sb.auth.verifyOtp({ token_hash: token, type });
-    } catch (e) {
-      result = { error: { message: 'Format nicht erkannt: ' + e.message } };
-    }
-  } else {
-    result = { error: { message: '6 Ziffern eintippen oder Link einfügen.' } };
+  try {
+    const r = await fetch(`${SUPA_URL}/functions/v1/staff_signin`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', 'apikey': SUPA_ANON },
+      body: JSON.stringify({ email })
+    });
+    const j = await r.json();
+    if (!r.ok) throw new Error(j.error || 'Login fehlgeschlagen');
+
+    const { error: vErr } = await sb.auth.verifyOtp({
+      token_hash: j.token_hash, type: 'magiclink'
+    });
+    if (vErr) throw new Error(vErr.message);
+
+    showMsg('Willkommen, ' + (j.name || email) + '.', 'ok');
+  } catch (err) {
+    authBtn.disabled = false;
+    authBtn.textContent = 'Login';
+    showMsg('Login: ' + err.message, 'err');
   }
-
-  authVerifyBtn.disabled = false;
-  authVerifyBtn.textContent = 'Einloggen';
-  if (result.error) { showMsg('Login fehlgeschlagen: ' + result.error.message, 'err'); return; }
-});
-
-authBackBtn.addEventListener('click', () => {
-  step1.hidden = false;
-  step2.hidden = true;
-  $('authH2').textContent = 'Staff-Login';
-  $('authP').textContent = 'Email rein. Wir schicken dir einen 6-stelligen Code — wer keinen Inbox-Zugriff hat, kommt nicht rein.';
-  clearMsg();
-  authCode.value = '';
-});
-
-authCode.addEventListener('keypress', (e) => {
-  if (e.key === 'Enter') authVerifyBtn.click();
 });
 
 $('btnLogout').addEventListener('click', async () => {
