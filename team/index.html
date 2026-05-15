@@ -455,6 +455,17 @@ button{ background:none; border:0; cursor:pointer; padding:0 }
 .perm-toggle{ width:18px; height:18px; cursor:pointer; accent-color:var(--c-violet) }
 .perm-key{ font-family:'SF Mono', Menlo, monospace; font-size:var(--t-5); color:var(--c-text-2) }
 
+/* Mini-Select für Assign-Dropdown */
+.mini-select{
+  background:rgba(255,255,255,.06); border:1px solid var(--c-line);
+  color:var(--c-text-2); padding:2px 8px; border-radius:var(--r-5);
+  font-size:var(--t-5); cursor:pointer; margin-left:4px;
+  font-family:inherit;
+}
+.mini-select:hover{ border-color:var(--c-violet-line) }
+.is-mine{ box-shadow:0 0 0 1px var(--c-amber); border-left-color:var(--c-amber) !important }
+.b-mine{ background:rgba(255,157,110,.15); color:var(--c-amber); border:1px solid rgba(255,157,110,.4); padding:2px 8px; border-radius:var(--r-5); font-size:var(--t-5); font-weight:700; text-transform:uppercase; letter-spacing:.05em }
+
 /* Mobile fine-tune */
 @media (max-width:480px){
   .wrap{ padding:var(--s-4) var(--s-3) }
@@ -533,6 +544,12 @@ button{ background:none; border:0; cursor:pointer; padding:0 }
   <div class="wrap">
     <!-- ===== PAGE: HOME ===== -->
     <section class="page" data-page="home">
+      <div class="section-h"><h2>🎯 Mein Workspace</h2><span class="meta" id="myWorkspaceMeta">—</span></div>
+      <div class="panel" id="myWorkspacePanel">
+        <div class="empty">Lade…</div>
+      </div>
+
+      <div class="section-h"><h2>Übersicht</h2></div>
       <div class="kpi-grid" id="kpiGrid">
         <div class="kpi"><div class="kpi-label"><span class="spinner"></span>Lade…</div></div>
       </div>
@@ -944,10 +961,40 @@ function renderDashboard(d) {
   $('navTasksBadge').textContent = openBriefings > 0 ? openBriefings : '';
   const openReports = (d.reports || []).length;
   $('navReportsBadge').textContent = openReports > 0 ? openReports : '';
-  // Hi-Greeting auf Home-Page wenn aktiv
+  // Hi-Greeting auf Home-Page wenn aktiv + Personal Counter
   const activePage = document.querySelector('.nav-item.active')?.dataset.page || 'home';
+  const myItemCount = (d.my_workspace?.my_briefings?.length || 0) + (d.my_workspace?.my_partners?.length || 0) + (d.my_workspace?.my_reports?.length || 0);
   if (activePage === 'home') {
-    $('pageSubtitle').textContent = 'Hi ' + ($('whoName').textContent || 'Staff') + ' · ' + PAGE_META.home.sub;
+    const greeting = myItemCount > 0
+      ? `Hi ${$('whoName').textContent}. ${myItemCount} ${myItemCount === 1 ? 'Item wartet' : 'Items warten'} auf dich.`
+      : `Hi ${$('whoName').textContent}. Alles erledigt. Schöner Tag.`;
+    $('pageSubtitle').textContent = greeting;
+  }
+
+  // Mein Workspace
+  const ws = d.my_workspace || {};
+  const myEmail = ws.my_email;
+  const totalMine = (ws.my_briefings?.length || 0) + (ws.my_partners?.length || 0) + (ws.my_reports?.length || 0);
+  $('myWorkspaceMeta').textContent = totalMine > 0
+    ? totalMine + ' offene Items für dich · ' + (ws.my_actions_today || 0) + ' Aktionen heute'
+    : 'Nichts dir zugewiesen · ' + (ws.my_actions_today || 0) + ' Aktionen heute';
+  if (totalMine === 0) {
+    $('myWorkspacePanel').innerHTML = '<div class="empty">🎉 Alles erledigt. Schnapp dir was aus Aufgaben/Partner/Community wenn du Lust hast.</div>';
+  } else {
+    const blocks = [];
+    if (ws.my_briefings?.length) {
+      blocks.push('<div style="margin-bottom:var(--s-3)"><div style="font-size:var(--t-5);color:var(--c-text-3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:var(--s-2)">📢 Deine Anweisungen (' + ws.my_briefings.length + ')</div>' +
+        ws.my_briefings.map(b => `<div class="briefing-card p-${b.priority}" style="margin-bottom:6px"><div class="briefing-main"><div class="briefing-title"><span class="b-${b.priority}">${b.priority}</span>${escapeHtml(b.title)}</div>${b.body ? '<div class="briefing-body">' + escapeHtml(b.body.slice(0,150)) + '</div>' : ''}</div></div>`).join('') + '</div>');
+    }
+    if (ws.my_partners?.length) {
+      blocks.push('<div style="margin-bottom:var(--s-3)"><div style="font-size:var(--t-5);color:var(--c-text-3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:var(--s-2)">🤝 Deine Partner (' + ws.my_partners.length + ')</div>' +
+        ws.my_partners.map(p => `<div class="partner-row"><div class="partner-main"><div class="partner-title">${escapeHtml(p.name)} <span class="b-type">${escapeHtml(p.type || 'partner')}</span></div><div class="partner-sub">Code: <code style="background:rgba(255,255,255,.06);padding:2px 6px;border-radius:4px">${escapeHtml(p.invite_code || '—')}</code>${p.city ? ' · ' + escapeHtml(p.city) : ''}</div></div><div class="partner-stats"><div class="partner-big">${p.users_brought}</div><div class="partner-week">User</div></div></div>`).join('') + '</div>');
+    }
+    if (ws.my_reports?.length) {
+      blocks.push('<div><div style="font-size:var(--t-5);color:var(--c-text-3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:var(--s-2)">🚨 Deine Reports (' + ws.my_reports.length + ')</div>' +
+        ws.my_reports.map(r => `<div class="report-card"><div class="report-title">🚨 ${escapeHtml(r.reason)} <span class="b-cat-${r.category || 'general'}">${escapeHtml(r.category || 'other')}</span></div></div>`).join('') + '</div>');
+    }
+    $('myWorkspacePanel').innerHTML = blocks.join('');
   }
 
   // KPI-Grid
@@ -1005,25 +1052,36 @@ function renderDashboard(d) {
         `;
       }).join('');
 
-  // Briefings
+  // Briefings — mit Assign-Dropdown
   const briefings = d.briefings || [];
+  const teamEmails = (d.team_members || []).map(m => m.email);
+  function assignSelect(currentEmail, kind, id) {
+    return `<select class="mini-select" data-assign-${kind}="${id}"><option value="">— unzugewiesen —</option>${teamEmails.map(e => `<option value="${e}" ${e === currentEmail ? 'selected' : ''}>${escapeHtml(e.split('@')[0])}</option>`).join('')}</select>`;
+  }
   $('briefingsList').innerHTML = briefings.length === 0
     ? '<div class="empty">Keine offenen Anweisungen — klick "+ Neue Anweisung" um zu starten.</div>'
-    : briefings.map(b => `
-        <div class="briefing-card p-${b.priority}">
+    : briefings.map(b => {
+        const mine = b.assignee_email === myEmail;
+        return `
+        <div class="briefing-card p-${b.priority} ${mine ? 'is-mine' : ''}">
           <div class="briefing-main">
             <div class="briefing-title">
               <span class="b-${b.priority}">${b.priority}</span>
               ${escapeHtml(b.title)}
+              ${mine ? '<span class="b-mine">DEIN</span>' : ''}
             </div>
             ${b.body ? `<div class="briefing-body">${escapeHtml(b.body)}</div>` : ''}
-            <div class="briefing-meta">${b.author_email || 'team'} · ${fmtTime(b.created_at)} · für ${escapeHtml(b.audience)}</div>
+            <div class="briefing-meta">${b.author_email || 'team'} · ${fmtTime(b.created_at)} · für ${escapeHtml(b.audience)} · zugewiesen: ${assignSelect(b.assignee_email, 'briefing', b.id)}</div>
           </div>
           <button class="btn-done" title="Erledigt" data-complete="${b.id}">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
           </button>
         </div>
-      `).join('');
+      `;}).join('');
+  $('briefingsList').querySelectorAll('[data-assign-briefing]').forEach(s => s.addEventListener('change', async () => {
+    const { error } = await sb.rpc('assign_briefing', { p_id: s.dataset.assignBriefing, p_assignee: s.value });
+    if (error) alert(error.message); else loadDashboard();
+  }));
 
   // Briefing complete-Handler
   $('briefingsList').querySelectorAll('[data-complete]').forEach(btn => {
