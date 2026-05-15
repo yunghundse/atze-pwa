@@ -6,6 +6,7 @@
 <meta name="theme-color" content="#0A0A14" />
 <title>crew. Staff</title>
 <link rel="icon" href="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='80' font-size='80'%3E%F0%9F%9A%80%3C/text%3E%3C/svg%3E">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 /* ============================================================
    crew. Staff Dashboard — cosmic violet brand
@@ -360,6 +361,51 @@ button{ background:none; border:0; cursor:pointer; padding:0 }
 .audit-action{ color:var(--c-text-2) }
 .audit-target{ color:var(--c-text-1); font-weight:500 }
 
+/* News-Cards */
+.news-card{ padding:var(--s-3) var(--s-4); border-left:3px solid var(--c-violet); background:var(--c-surface-2); border-radius:0 var(--r-2) var(--r-2) 0; margin-bottom:var(--s-3); display:flex; align-items:flex-start; gap:var(--s-3) }
+.news-card.s-draft{ border-left-color:var(--c-text-3); opacity:.7 }
+.news-card.s-published{ border-left-color:var(--c-green) }
+.news-card .news-main{ flex:1; min-width:0 }
+.news-card .news-title{ font-size:var(--t-3); font-weight:700; color:var(--c-text-1); display:flex; align-items:center; gap:8px; flex-wrap:wrap }
+.news-card .news-body{ font-size:var(--t-4); color:var(--c-text-2); margin-top:6px; line-height:1.5 }
+.news-card .news-meta{ font-size:var(--t-5); color:var(--c-text-3); margin-top:8px }
+.b-cat-update{ background:rgba(99,102,241,.12); color:#A5B4FC; border:1px solid rgba(99,102,241,.3) }
+.b-cat-feature{ background:rgba(40,200,120,.12); color:var(--c-green); border:1px solid rgba(40,200,120,.3) }
+.b-cat-event{ background:rgba(255,157,110,.12); color:var(--c-amber); border:1px solid rgba(255,157,110,.3) }
+.b-cat-warning{ background:rgba(236,72,153,.12); color:#F472B6; border:1px solid rgba(236,72,153,.3) }
+.b-cat-general{ background:var(--c-violet-soft); color:var(--c-violet-3); border:1px solid var(--c-violet-line) }
+.b-cat-update, .b-cat-feature, .b-cat-event, .b-cat-warning, .b-cat-general{ padding:2px 8px; border-radius:var(--r-5); font-size:var(--t-5); font-weight:600 }
+.b-draft{ background:rgba(255,255,255,.04); color:var(--c-text-3); border:1px solid var(--c-line); padding:2px 8px; border-radius:var(--r-5); font-size:var(--t-5); font-weight:600 }
+.b-published{ background:rgba(40,200,120,.12); color:var(--c-green); border:1px solid rgba(40,200,120,.3); padding:2px 8px; border-radius:var(--r-5); font-size:var(--t-5); font-weight:600 }
+
+/* Reports */
+.report-card{ padding:var(--s-3) var(--s-4); border-left:3px solid #F472B6; background:rgba(236,72,153,.05); border-radius:0 var(--r-2) var(--r-2) 0; margin-bottom:var(--s-3) }
+.report-title{ font-size:var(--t-3); font-weight:700; display:flex; align-items:center; gap:8px; flex-wrap:wrap }
+.report-meta{ font-size:var(--t-5); color:var(--c-text-3); margin-top:6px }
+.report-actions{ display:flex; gap:8px; margin-top:var(--s-3) }
+.btn-handle{ padding:6px 12px; font-size:var(--t-5); font-weight:600; border-radius:var(--r-5); background:rgba(40,200,120,.12); color:var(--c-green); border:1px solid rgba(40,200,120,.3) }
+.btn-dismiss{ padding:6px 12px; font-size:var(--t-5); font-weight:600; border-radius:var(--r-5); background:rgba(255,255,255,.04); color:var(--c-text-2); border:1px solid var(--c-line) }
+
+/* User-Suche */
+.user-result{ display:flex; align-items:center; gap:var(--s-3); padding:var(--s-3) 0; border-bottom:1px solid var(--c-line) }
+.user-result:last-child{ border-bottom:0 }
+.user-av-sm{ width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg, var(--c-violet-2), var(--c-violet-3)); display:grid; place-items:center; font-weight:700; color:#fff; font-size:var(--t-5); flex-shrink:0 }
+.user-result.suspended .user-av-sm{ background:linear-gradient(135deg, #EC4899, #BE185D); }
+.user-main{ flex:1; min-width:0 }
+.user-name{ font-size:var(--t-4); font-weight:600; display:flex; align-items:center; gap:6px; flex-wrap:wrap }
+.user-meta{ font-size:var(--t-5); color:var(--c-text-3); margin-top:2px }
+.btn-suspend{ padding:6px 12px; font-size:var(--t-5); font-weight:600; border-radius:var(--r-5); background:rgba(236,72,153,.1); color:#F472B6; border:1px solid rgba(236,72,153,.3); flex-shrink:0 }
+.btn-unsuspend{ padding:6px 12px; font-size:var(--t-5); font-weight:600; border-radius:var(--r-5); background:rgba(40,200,120,.1); color:var(--c-green); border:1px solid rgba(40,200,120,.3); flex-shrink:0 }
+.b-suspended{ background:rgba(236,72,153,.12); color:#F472B6; border:1px solid rgba(236,72,153,.3); padding:2px 8px; border-radius:var(--r-5); font-size:var(--t-5); font-weight:600 }
+
+/* Permissions-Matrix */
+.perm-table{ width:100%; border-collapse:collapse; font-size:var(--t-4) }
+.perm-table th, .perm-table td{ padding:8px 10px; text-align:left; border-bottom:1px solid var(--c-line) }
+.perm-table th{ color:var(--c-text-3); font-weight:600; font-size:var(--t-5); text-transform:uppercase; letter-spacing:.05em }
+.perm-table th.center, .perm-table td.center{ text-align:center }
+.perm-toggle{ width:18px; height:18px; cursor:pointer; accent-color:var(--c-violet) }
+.perm-key{ font-family:'SF Mono', Menlo, monospace; font-size:var(--t-5); color:var(--c-text-2) }
+
 /* Mobile fine-tune */
 @media (max-width:480px){
   .wrap{ padding:var(--s-4) var(--s-3) }
@@ -455,11 +501,52 @@ button{ background:none; border:0; cursor:pointer; padding:0 }
     </div>
 
     <div class="section-h">
+      <h2>📈 Wachstum · 14 Tage</h2>
+      <span class="meta" id="growthMeta">—</span>
+    </div>
+    <div class="panel">
+      <div style="position:relative; height:240px"><canvas id="growthChart"></canvas></div>
+    </div>
+
+    <div class="section-h">
+      <h2>👤 User-Suche</h2>
+      <span class="meta">Name · @username · Email</span>
+    </div>
+    <div class="panel">
+      <input id="userSearchInput" class="auth-input" placeholder="Tippen zum Suchen…" style="margin-bottom:var(--s-3)" />
+      <div id="userSearchResults"></div>
+    </div>
+
+    <div class="section-h">
+      <h2>📰 News</h2>
+      <button class="btn-small" id="btnAddNews">+ News verfassen</button>
+    </div>
+    <div class="panel">
+      <div id="newsList"><div class="empty">Lade…</div></div>
+    </div>
+
+    <div class="section-h">
+      <h2>🚨 Safety-Reports</h2>
+      <span class="meta" id="reportsMeta">offene Meldungen</span>
+    </div>
+    <div class="panel">
+      <div id="reportsList"><div class="empty">Lade…</div></div>
+    </div>
+
+    <div class="section-h">
       <h2>👥 Team</h2>
       <button class="btn-small" id="btnAddMember">+ Member einladen</button>
     </div>
     <div class="panel">
       <div id="teamList"><div class="empty">Lade…</div></div>
+    </div>
+
+    <div class="section-h">
+      <h2>🔐 Permissions · Rollen-Matrix</h2>
+      <span class="meta" id="permsMeta">Founder-only</span>
+    </div>
+    <div class="panel">
+      <div id="permsList"><div class="empty">Lade…</div></div>
     </div>
 
     <div class="section-h">
@@ -505,6 +592,52 @@ button{ background:none; border:0; cursor:pointer; padding:0 }
         <label class="form-row"><span>Kontakt-Email</span><input name="contact_email" type="email" placeholder="hi@partner.de" /></label>
         <button type="submit" class="btn-primary">Anlegen</button>
         <div class="form-msg" id="partnerMsg" hidden></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add News Modal -->
+  <div class="modal" id="modalNews" hidden>
+    <div class="modal-card">
+      <div class="modal-h"><h3>News verfassen</h3><button class="btn-icon" data-close>✕</button></div>
+      <form id="formNews">
+        <label class="form-row"><span>Titel *</span><input name="title" required placeholder="z.B. Neue Heimweg-Funktion live" /></label>
+        <label class="form-row"><span>Body</span><textarea name="body" rows="5" placeholder="Was gibt's Neues?"></textarea></label>
+        <label class="form-row"><span>Kategorie</span>
+          <select name="category">
+            <option value="general">Allgemein</option>
+            <option value="update">Update</option>
+            <option value="feature">Feature</option>
+            <option value="event">Event</option>
+            <option value="warning">Warnung</option>
+          </select>
+        </label>
+        <label class="form-row" style="display:flex; align-items:center; gap:8px"><input type="checkbox" name="publish" /><span style="margin:0">Sofort veröffentlichen (sonst Draft)</span></label>
+        <button type="submit" class="btn-primary">Speichern</button>
+        <div class="form-msg" id="newsMsg" hidden></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Suspend User Modal -->
+  <div class="modal" id="modalSuspend" hidden>
+    <div class="modal-card">
+      <div class="modal-h"><h3>User suspendieren</h3><button class="btn-icon" data-close>✕</button></div>
+      <form id="formSuspend">
+        <input type="hidden" name="user_id" />
+        <div style="margin-bottom:var(--s-3); color:var(--c-text-2); font-size:var(--t-4)" id="suspendTarget"></div>
+        <label class="form-row"><span>Grund *</span><input name="reason" required placeholder="z.B. wiederholtes Spam-Verhalten" /></label>
+        <label class="form-row"><span>Dauer (Stunden)</span>
+          <select name="hours">
+            <option value="1">1 Stunde</option>
+            <option value="24" selected>24 Stunden</option>
+            <option value="72">3 Tage</option>
+            <option value="168">7 Tage</option>
+            <option value="720">30 Tage</option>
+          </select>
+        </label>
+        <button type="submit" class="btn-primary">Suspendieren</button>
+        <div class="form-msg" id="suspendMsg" hidden></div>
       </form>
     </div>
   </div>
@@ -909,8 +1042,165 @@ function renderDashboard(d) {
         `;
       }).join('');
 
+  // Growth-Chart (Chart.js)
+  renderGrowthChart(d.growth);
+
+  // News
+  const news = d.news || [];
+  $('newsList').innerHTML = news.length === 0
+    ? '<div class="empty">Noch keine News — „+ News verfassen" um zu starten.</div>'
+    : news.map(n => {
+        const sBadge = n.status === 'published' ? '<span class="b-published">live</span>' : '<span class="b-draft">draft</span>';
+        const cBadge = '<span class="b-cat-' + (n.category || 'general') + '">' + escapeHtml(n.category || 'general') + '</span>';
+        const pubBtn = n.status === 'draft' ? `<button class="btn-handle" data-publish="${n.id}">Publish</button>` : '';
+        return `
+          <div class="news-card s-${n.status}">
+            <div class="news-main">
+              <div class="news-title">${escapeHtml(n.title)} ${cBadge} ${sBadge}</div>
+              ${n.body ? `<div class="news-body">${escapeHtml(n.body.slice(0,200))}${n.body.length>200?'…':''}</div>` : ''}
+              <div class="news-meta">${n.author_email || 'team'} · ${fmtTime(n.created_at)} ${n.status === 'published' ? '· ' + (n.views_count || 0) + ' views' : ''} ${pubBtn ? '<span style="margin-left:12px"></span>' + pubBtn : ''}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+  $('newsList').querySelectorAll('[data-publish]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      btn.disabled = true;
+      const { error } = await sb.rpc('publish_news', { p_id: btn.dataset.publish });
+      if (error) { alert(error.message); btn.disabled = false; return; }
+      loadDashboard();
+    });
+  });
+
+  // Reports
+  const reports = d.reports || [];
+  $('reportsMeta').textContent = reports.length + ' offen';
+  $('reportsList').innerHTML = reports.length === 0
+    ? '<div class="empty">Keine offenen Reports 👌</div>'
+    : reports.map(r => `
+        <div class="report-card">
+          <div class="report-title">🚨 ${escapeHtml(r.reason)} <span class="b-cat-${r.category || 'general'}">${escapeHtml(r.category || 'other')}</span></div>
+          <div class="report-meta">${r.reporter_email || 'anon'} → ${r.reported_email || 'unknown'} · ${fmtTime(r.created_at)}</div>
+          <div class="report-actions">
+            <button class="btn-handle" data-handle="${r.id}">✓ Erledigt</button>
+            <button class="btn-dismiss" data-dismiss="${r.id}">verwerfen</button>
+          </div>
+        </div>
+      `).join('');
+  $('reportsList').querySelectorAll('[data-handle]').forEach(b => b.addEventListener('click', async () => {
+    const res = prompt('Resolution-Note (optional):');
+    const { error } = await sb.rpc('handle_report', { p_id: b.dataset.handle, p_action: 'handled', p_resolution: res || null });
+    if (error) alert(error.message); else loadDashboard();
+  }));
+  $('reportsList').querySelectorAll('[data-dismiss]').forEach(b => b.addEventListener('click', async () => {
+    const { error } = await sb.rpc('handle_report', { p_id: b.dataset.dismiss, p_action: 'dismissed', p_resolution: null });
+    if (error) alert(error.message); else loadDashboard();
+  }));
+
+  // Permissions-Matrix — nur sichtbar für Founder
+  const myPerms = d.my_permissions || {};
+  const canManagePerms = myPerms['permissions.manage'] || myPerms['admin.full'];
+  if (canManagePerms) {
+    const perms = d.permissions || [];
+    const roles = ['founder','admin','staff','partner'];
+    const keys = Array.from(new Set(perms.map(p => p.permission_key))).sort();
+    const lookup = {};
+    perms.forEach(p => { lookup[p.role + '|' + p.permission_key] = p.granted; });
+    const headerRow = '<th>Permission</th>' + roles.map(r => `<th class="center">${r}</th>`).join('');
+    const bodyRows = keys.map(k => `
+      <tr>
+        <td><span class="perm-key">${escapeHtml(k)}</span></td>
+        ${roles.map(r => `<td class="center"><input type="checkbox" class="perm-toggle" ${lookup[r+'|'+k] ? 'checked' : ''} data-role="${r}" data-key="${k}" /></td>`).join('')}
+      </tr>
+    `).join('');
+    $('permsList').innerHTML = `<table class="perm-table"><thead><tr>${headerRow}</tr></thead><tbody>${bodyRows}</tbody></table>`;
+    $('permsList').querySelectorAll('.perm-toggle').forEach(cb => cb.addEventListener('change', async () => {
+      const { error } = await sb.rpc('set_team_permission', {
+        p_role: cb.dataset.role, p_key: cb.dataset.key, p_granted: cb.checked
+      });
+      if (error) { alert(error.message); cb.checked = !cb.checked; }
+    }));
+  } else {
+    $('permsList').innerHTML = '<div class="empty">Permissions-Matrix nur für Founder sichtbar.</div>';
+  }
+
   $('metaUpdate').textContent = 'aktualisiert ' + fmtTime(d.generated_at);
 }
+
+// Growth-Chart
+let growthChartInstance = null;
+function renderGrowthChart(growth) {
+  if (!growth || !growth.days) return;
+  $('growthMeta').textContent = growth.days.length + ' Tage · Sign-Ups + Heimwege + Active';
+  const ctx = document.getElementById('growthChart');
+  if (!ctx) return;
+  if (growthChartInstance) growthChartInstance.destroy();
+  const labels = growth.days.map(d => d.slice(5));
+  growthChartInstance = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        { label: 'Sign-Ups', data: growth.signups || [], borderColor: '#8B5CF6', backgroundColor: 'rgba(139,92,246,.12)', tension: .3, fill: true, pointRadius: 3 },
+        { label: 'Heimwege', data: growth.heimwege || [], borderColor: '#FF9D6E', backgroundColor: 'rgba(255,157,110,.08)', tension: .3, fill: false, pointRadius: 3 },
+        { label: 'Active', data: growth.active || [], borderColor: '#28C878', backgroundColor: 'rgba(40,200,120,.08)', tension: .3, fill: false, pointRadius: 3, borderDash: [4,4] },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { labels: { color: 'rgba(255,255,255,.72)', font: { size: 11 } } },
+        tooltip: { backgroundColor: 'rgba(17,17,28,.95)', titleColor: '#fff', bodyColor: 'rgba(255,255,255,.72)', borderColor: 'rgba(139,92,246,.3)', borderWidth: 1 }
+      },
+      scales: {
+        x: { ticks: { color: 'rgba(255,255,255,.5)', font: { size: 10 } }, grid: { color: 'rgba(255,255,255,.05)' } },
+        y: { ticks: { color: 'rgba(255,255,255,.5)', font: { size: 10 }, precision: 0 }, grid: { color: 'rgba(255,255,255,.05)' }, beginAtZero: true }
+      }
+    }
+  });
+}
+
+// User-Suche (mit Debounce)
+let userSearchTimer = null;
+$('userSearchInput').addEventListener('input', (e) => {
+  clearTimeout(userSearchTimer);
+  const q = e.target.value.trim();
+  if (q.length < 2) { $('userSearchResults').innerHTML = ''; return; }
+  userSearchTimer = setTimeout(async () => {
+    const { data, error } = await sb.rpc('staff_search_users', { p_query: q, p_limit: 20 });
+    if (error) { $('userSearchResults').innerHTML = '<div class="empty">Fehler: ' + escapeHtml(error.message) + '</div>'; return; }
+    if (!data || data.length === 0) { $('userSearchResults').innerHTML = '<div class="empty">Keine Treffer für "' + escapeHtml(q) + '"</div>'; return; }
+    $('userSearchResults').innerHTML = data.map(u => {
+      const isSuspended = u.suspended_until && new Date(u.suspended_until) > new Date();
+      const sBadge = isSuspended ? '<span class="b-suspended">suspended bis ' + fmtTime(u.suspended_until) + '</span>' : '';
+      const pBadge = u.is_pioneer ? '<span class="b-pioneer">Pioneer</span>' : '';
+      const btn = isSuspended
+        ? `<button class="btn-unsuspend" data-unsuspend="${u.user_id}">Unsuspend</button>`
+        : `<button class="btn-suspend" data-suspend="${u.user_id}" data-name="${escapeHtml(u.name || u.email || '')}">Suspend</button>`;
+      return `
+        <div class="user-result ${isSuspended ? 'suspended' : ''}">
+          <div class="user-av-sm">${(initials(u.name || u.email || '·') + '').toUpperCase()}</div>
+          <div class="user-main">
+            <div class="user-name">${escapeHtml(u.name || 'Anonym')} ${pBadge} ${sBadge}</div>
+            <div class="user-meta">${u.username ? '@' + escapeHtml(u.username) : ''}${u.email ? ' · ' + escapeHtml(u.email) : ''}${u.home_city_name ? ' · ' + escapeHtml(u.home_city_name) : ''} · letzter Online ${fmtTime(u.last_seen_at)}</div>
+          </div>
+          ${btn}
+        </div>
+      `;
+    }).join('');
+    $('userSearchResults').querySelectorAll('[data-suspend]').forEach(b => b.addEventListener('click', () => {
+      const form = $('formSuspend');
+      form.elements.user_id.value = b.dataset.suspend;
+      $('suspendTarget').textContent = 'User: ' + b.dataset.name;
+      openModal('modalSuspend');
+    }));
+    $('userSearchResults').querySelectorAll('[data-unsuspend]').forEach(b => b.addEventListener('click', async () => {
+      if (!confirm('Suspend aufheben?')) return;
+      const { error } = await sb.rpc('staff_unsuspend_user', { p_user_id: b.dataset.unsuspend });
+      if (error) alert(error.message); else $('userSearchInput').dispatchEvent(new Event('input'));
+    }));
+  }, 350);
+});
 
 function escapeHtml(s) {
   if (s == null) return '';
@@ -938,6 +1228,48 @@ document.querySelectorAll('.modal').forEach(m =>
 $('btnAddPartner').addEventListener('click', () => openModal('modalPartner'));
 $('btnAddBriefing').addEventListener('click', () => openModal('modalBriefing'));
 $('btnAddMember').addEventListener('click', () => openModal('modalMember'));
+$('btnAddNews').addEventListener('click', () => openModal('modalNews'));
+
+$('formNews').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const f = new FormData(e.target);
+  const msg = $('newsMsg');
+  msg.hidden = true;
+  const { error } = await sb.rpc('add_news', {
+    p_title: f.get('title'),
+    p_body: f.get('body') || null,
+    p_category: f.get('category'),
+    p_publish: f.get('publish') === 'on',
+  });
+  if (error) {
+    msg.hidden = false; msg.className = 'form-msg err'; msg.textContent = error.message;
+    return;
+  }
+  msg.hidden = false; msg.className = 'form-msg ok'; msg.textContent = 'News gespeichert ✓';
+  setTimeout(() => { closeModal('modalNews'); loadDashboard(); }, 600);
+});
+
+$('formSuspend').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const f = new FormData(e.target);
+  const msg = $('suspendMsg');
+  msg.hidden = true;
+  const { error } = await sb.rpc('staff_suspend_user', {
+    p_user_id: f.get('user_id'),
+    p_reason: f.get('reason'),
+    p_hours: parseInt(f.get('hours')),
+  });
+  if (error) {
+    msg.hidden = false; msg.className = 'form-msg err'; msg.textContent = error.message;
+    return;
+  }
+  msg.hidden = false; msg.className = 'form-msg ok'; msg.textContent = 'User suspendiert ✓';
+  setTimeout(() => {
+    closeModal('modalSuspend');
+    $('userSearchInput').dispatchEvent(new Event('input'));
+    loadDashboard();
+  }, 600);
+});
 
 $('formMember').addEventListener('submit', async (e) => {
   e.preventDefault();
