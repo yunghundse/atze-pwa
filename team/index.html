@@ -620,17 +620,26 @@ $('btnLogout').addEventListener('click', async () => {
 });
 $('btnRefresh').addEventListener('click', () => loadDashboard());
 
-// === DASHBOARD — direct fetch statt sb.rpc (umgeht Client-Hänger)
+// === DASHBOARD — direct fetch + Token aus localStorage (umgeht SDK-Hänger)
+function getStoredAccessToken() {
+  try {
+    const key = Object.keys(localStorage).find(k => k.includes('crew_team_auth'));
+    if (!key) return null;
+    const obj = JSON.parse(localStorage.getItem(key));
+    return obj?.access_token || null;
+  } catch (e) { return null; }
+}
+
 async function loadDashboard() {
   $('metaUpdate').innerHTML = '<span class="spinner"></span>aktualisiere…';
   try {
-    const { data: { session } } = await sb.auth.getSession();
-    if (!session) { authDiv.style.display = 'flex'; appDiv.classList.remove('on'); return; }
+    const token = getStoredAccessToken();
+    if (!token) { authDiv.style.display = 'flex'; appDiv.classList.remove('on'); return; }
     const r = await fetch(`${SUPA_URL}/rest/v1/rpc/get_team_dashboard`, {
       method: 'POST',
       headers: {
         'apikey': SUPA_ANON,
-        'authorization': 'Bearer ' + session.access_token,
+        'authorization': 'Bearer ' + token,
         'content-type': 'application/json'
       },
       body: '{}'
@@ -638,10 +647,11 @@ async function loadDashboard() {
     if (!r.ok) {
       const j = await r.json().catch(() => ({}));
       if (r.status === 401 || r.status === 403 || j?.code === '42501') {
-        await sb.auth.signOut();
+        try { await sb.auth.signOut(); } catch {}
+        localStorage.clear();
         authDiv.style.display = 'flex';
         appDiv.classList.remove('on');
-        showMsg('Account nicht im Staff-Allowlist.', 'err');
+        showMsg('Account nicht im Staff-Allowlist oder Token abgelaufen.', 'err');
         return;
       }
       $('metaUpdate').textContent = 'Fehler: ' + (j?.message || r.status);
