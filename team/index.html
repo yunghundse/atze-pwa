@@ -466,6 +466,64 @@ button{ background:none; border:0; cursor:pointer; padding:0 }
 .is-mine{ box-shadow:0 0 0 1px var(--c-amber); border-left-color:var(--c-amber) !important }
 .b-mine{ background:rgba(255,157,110,.15); color:var(--c-amber); border:1px solid rgba(255,157,110,.4); padding:2px 8px; border-radius:var(--r-5); font-size:var(--t-5); font-weight:700; text-transform:uppercase; letter-spacing:.05em }
 
+/* === CHAT === */
+.chat-wrap{ display:flex; flex-direction:column; height:calc(100vh - 200px); background:var(--c-surface); border:1px solid var(--c-line); border-radius:var(--r-3); overflow:hidden }
+.chat-messages{ flex:1; overflow-y:auto; padding:var(--s-4); display:flex; flex-direction:column-reverse; gap:var(--s-3) }
+.chat-msg{ display:flex; gap:var(--s-2); max-width:75% }
+.chat-msg.is-mine{ align-self:flex-end; flex-direction:row-reverse }
+.chat-msg-av{ width:32px; height:32px; border-radius:50%; flex-shrink:0; background:linear-gradient(135deg, var(--c-violet-2), var(--c-violet-3)); display:grid; place-items:center; color:#fff; font-weight:700; font-size:var(--t-5) }
+.chat-msg.is-mine .chat-msg-av{ background:linear-gradient(135deg, var(--c-amber), #FF6B3D) }
+.chat-msg-bubble{ background:rgba(255,255,255,.05); padding:8px 12px; border-radius:var(--r-2); border:1px solid var(--c-line) }
+.chat-msg.is-mine .chat-msg-bubble{ background:var(--c-violet-soft); border-color:var(--c-violet-line) }
+.chat-msg-author{ font-size:var(--t-5); color:var(--c-text-3); margin-bottom:2px; font-weight:600 }
+.chat-msg-body{ font-size:var(--t-4); color:var(--c-text-1); line-height:1.4; white-space:pre-wrap; word-break:break-word }
+.chat-msg-time{ font-size:10px; color:var(--c-text-3); margin-top:4px }
+.chat-input{ display:flex; gap:var(--s-2); padding:var(--s-3); border-top:1px solid var(--c-line); background:rgba(0,0,0,.2) }
+.chat-input input{ flex:1; padding:10px 14px; background:rgba(255,255,255,.06); border:1px solid var(--c-line); border-radius:var(--r-5); color:var(--c-text-1); outline:none; font-family:inherit }
+.chat-input input:focus{ border-color:var(--c-violet) }
+
+/* === KALENDER === */
+.cal-event{ display:flex; gap:var(--s-3); padding:var(--s-3) 0; border-bottom:1px solid var(--c-line) }
+.cal-event:last-child{ border-bottom:0 }
+.cal-event-date{ flex-shrink:0; width:64px; text-align:center; padding:8px 0; background:var(--c-violet-soft); border:1px solid var(--c-violet-line); border-radius:var(--r-2) }
+.cal-event-date .d-day{ font-size:22px; font-weight:800; line-height:1; color:var(--c-violet-3) }
+.cal-event-date .d-mon{ font-size:var(--t-5); color:var(--c-text-3); text-transform:uppercase; letter-spacing:.05em; margin-top:2px }
+.cal-event-date .d-time{ font-size:var(--t-5); color:var(--c-text-2); margin-top:4px; font-weight:600 }
+.cal-event-main{ flex:1; min-width:0 }
+.cal-event-title{ font-size:var(--t-3); font-weight:700; display:flex; align-items:center; gap:8px; flex-wrap:wrap }
+.cal-event-meta{ font-size:var(--t-5); color:var(--c-text-3); margin-top:4px }
+.cal-event-actions{ display:flex; align-items:center; gap:6px; flex-shrink:0 }
+.b-cat-meeting{ background:var(--c-violet-soft); color:var(--c-violet-3); border:1px solid var(--c-violet-line) }
+.b-cat-deadline{ background:rgba(236,72,153,.12); color:#F472B6; border:1px solid rgba(236,72,153,.3) }
+.b-cat-launch{ background:rgba(40,200,120,.12); color:var(--c-green); border:1px solid rgba(40,200,120,.3) }
+.b-cat-partner{ background:rgba(255,157,110,.12); color:var(--c-amber); border:1px solid rgba(255,157,110,.3) }
+.b-cat-reminder{ background:rgba(255,214,10,.12); color:#FBBF24; border:1px solid rgba(255,214,10,.3) }
+.b-cat-meeting, .b-cat-deadline, .b-cat-launch, .b-cat-partner, .b-cat-reminder{ padding:2px 8px; border-radius:var(--r-5); font-size:var(--t-5); font-weight:600 }
+
+/* === FAB === */
+.fab-wrap{ position:fixed; bottom:24px; right:24px; z-index:50 }
+.fab{ width:56px; height:56px; border-radius:50%; background:linear-gradient(135deg, var(--c-violet), var(--c-violet-2)); color:#fff; font-size:28px; font-weight:300; box-shadow:var(--shadow-violet); cursor:pointer; transition:transform .2s var(--ease) }
+.fab:hover{ transform:scale(1.08) rotate(90deg) }
+.fab.on{ transform:rotate(45deg) }
+.fab-menu{ position:absolute; bottom:68px; right:0; display:flex; flex-direction:column; gap:8px; min-width:180px; animation:fadeIn .15s var(--ease) }
+.fab-menu[hidden]{ display:none }
+.fab-item{ text-align:right; padding:10px 16px; background:#11111c; border:1px solid var(--c-violet-line); border-radius:var(--r-2); color:var(--c-text-1); font-size:var(--t-4); font-weight:500; box-shadow:var(--shadow-1); transition:transform .15s var(--ease), background .15s var(--ease) }
+.fab-item:hover{ background:var(--c-violet-soft); transform:translateX(-4px) }
+
+/* === PINS === */
+.btn-pin{ background:none; border:0; color:var(--c-text-3); cursor:pointer; font-size:16px; padding:4px; margin-left:auto; transition:color .15s var(--ease), transform .15s var(--ease) }
+.btn-pin:hover{ color:var(--c-amber); transform:scale(1.2) }
+.btn-pin.pinned{ color:var(--c-amber) }
+
+/* === FEED === */
+.feed-item{ display:flex; gap:var(--s-3); padding:var(--s-2) 0; border-bottom:1px solid var(--c-line); font-size:var(--t-4); align-items:flex-start }
+.feed-item:last-child{ border-bottom:0 }
+.feed-ico{ font-size:18px; flex-shrink:0; width:24px; text-align:center }
+.feed-body{ flex:1; min-width:0 }
+.feed-time{ flex-shrink:0; color:var(--c-text-3); font-size:var(--t-5) }
+.feed-action{ color:var(--c-text-2) }
+.feed-target{ color:var(--c-text-1); font-weight:500 }
+
 /* Mobile fine-tune */
 @media (max-width:480px){
   .wrap{ padding:var(--s-4) var(--s-3) }
@@ -522,6 +580,8 @@ button{ background:none; border:0; cursor:pointer; padding:0 }
         <button class="nav-item" data-page="partners"><span class="ni-ico">🤝</span><span>Partner</span></button>
         <button class="nav-item" data-page="community"><span class="ni-ico">👥</span><span>Community</span><span class="ni-badge" id="navReportsBadge"></span></button>
         <button class="nav-item" data-page="team"><span class="ni-ico">👤</span><span>Team</span></button>
+        <button class="nav-item" data-page="chat"><span class="ni-ico">💬</span><span>Chat</span><span class="ni-badge" id="navChatBadge"></span></button>
+        <button class="nav-item" data-page="calendar"><span class="ni-ico">📅</span><span>Kalender</span><span class="ni-badge" id="navCalBadge"></span></button>
       </nav>
 
       <div class="side-foot">
@@ -548,6 +608,12 @@ button{ background:none; border:0; cursor:pointer; padding:0 }
       <div class="panel" id="myWorkspacePanel">
         <div class="empty">Lade…</div>
       </div>
+
+      <div class="section-h"><h2>📌 Pinned</h2><span class="meta">Klick auf ★ in Karten zum Pinnen</span></div>
+      <div class="panel" id="pinsPanel"><div class="empty">Noch nichts gepinnt.</div></div>
+
+      <div class="section-h"><h2>🌊 Mein Feed</h2><span class="meta">deine Aktionen + was dir zugewiesen ist</span></div>
+      <div class="panel" id="myFeedPanel"><div class="empty">Lade…</div></div>
 
       <div class="section-h"><h2>Übersicht</h2></div>
       <div class="kpi-grid" id="kpiGrid">
@@ -635,6 +701,28 @@ button{ background:none; border:0; cursor:pointer; padding:0 }
       </div>
       <div class="panel">
         <div id="reportsList"><div class="empty">Lade…</div></div>
+      </div>
+    </section>
+
+    <!-- ===== PAGE: CHAT ===== -->
+    <section class="page" data-page="chat" hidden>
+      <div class="chat-wrap">
+        <div class="chat-messages" id="chatMessages"><div class="empty">Lade…</div></div>
+        <form id="chatForm" class="chat-input">
+          <input id="chatBody" placeholder="Nachricht an das Team…" autocomplete="off" />
+          <button type="submit" class="btn-primary" style="width:auto; padding:10px 20px">↑</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ===== PAGE: KALENDER ===== -->
+    <section class="page" data-page="calendar" hidden>
+      <div class="section-h">
+        <h2>📅 Events · 14 Tage</h2>
+        <button class="btn-small" id="btnAddEvent">+ Event</button>
+      </div>
+      <div class="panel">
+        <div id="calendarList"><div class="empty">Lade…</div></div>
       </div>
     </section>
 
@@ -738,6 +826,44 @@ button{ background:none; border:0; cursor:pointer; padding:0 }
         <button type="submit" class="btn-primary">Suspendieren</button>
         <div class="form-msg" id="suspendMsg" hidden></div>
       </form>
+    </div>
+  </div>
+
+  <!-- Add Event Modal -->
+  <div class="modal" id="modalEvent" hidden>
+    <div class="modal-card">
+      <div class="modal-h"><h3>Event anlegen</h3><button class="btn-icon" data-close>✕</button></div>
+      <form id="formEvent">
+        <label class="form-row"><span>Titel *</span><input name="title" required placeholder="z.B. Brian-Sync · Build 30 Review" /></label>
+        <label class="form-row"><span>Start *</span><input name="starts_at" type="datetime-local" required /></label>
+        <label class="form-row"><span>Ende (optional)</span><input name="ends_at" type="datetime-local" /></label>
+        <label class="form-row"><span>Kategorie</span>
+          <select name="category">
+            <option value="meeting" selected>Meeting</option>
+            <option value="deadline">Deadline</option>
+            <option value="event">Event</option>
+            <option value="reminder">Reminder</option>
+            <option value="launch">Launch</option>
+            <option value="partner">Partner</option>
+          </select>
+        </label>
+        <label class="form-row"><span>Ort</span><input name="location" placeholder="Stuttgart, Zoom-Link…" /></label>
+        <label class="form-row"><span>Notiz</span><textarea name="description" rows="3"></textarea></label>
+        <button type="submit" class="btn-primary">Speichern</button>
+        <div class="form-msg" id="eventMsg" hidden></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- FLOATING ACTION BUTTON -->
+  <div class="fab-wrap">
+    <button class="fab" id="fabMain" title="Quick-Actions">+</button>
+    <div class="fab-menu" id="fabMenu" hidden>
+      <button class="fab-item" data-action="briefing">📢 Anweisung</button>
+      <button class="fab-item" data-action="partner">🤝 Partner</button>
+      <button class="fab-item" data-action="news">📰 News</button>
+      <button class="fab-item" data-action="event">📅 Event</button>
+      <button class="fab-item" data-action="email">📧 Email schreiben</button>
     </div>
   </div>
 
@@ -1263,8 +1389,156 @@ function renderDashboard(d) {
     $('permsList').innerHTML = '<div class="empty">Permissions-Matrix nur für Founder sichtbar.</div>';
   }
 
+  // Pins
+  const pins = d.my_pins || [];
+  const pinKeys = new Set(pins.map(p => p.item_type + ':' + p.item_id));
+  $('pinsPanel').innerHTML = pins.length === 0
+    ? '<div class="empty">Klick auf ★ neben einem Briefing / Partner um es hier zu pinnen.</div>'
+    : pins.map(p => `<div class="audit-row"><div class="audit-time">★</div><div><span class="audit-action">${escapeHtml(p.item_type)}</span> <span class="audit-target">${escapeHtml(p.label || p.item_id.slice(0,8))}</span></div></div>`).join('');
+
+  // Mein Feed
+  const feed = d.my_feed || [];
+  const feedIco = { 'partner.created': '🤝', 'briefing.created': '📢', 'briefing.completed': '✓', 'briefing.assigned': '↪', 'partner.assigned': '↪', 'news.published': '📰', 'news.drafted': '📝', 'report.handled': '✅', 'team.member_added': '👥', 'calendar.event_added': '📅', 'user.suspended': '🚫', 'user.unsuspended': '✓' };
+  $('myFeedPanel').innerHTML = feed.length === 0
+    ? '<div class="empty">Dein Feed füllt sich sobald du oder Brian was anpackt.</div>'
+    : feed.map(f => `<div class="feed-item"><div class="feed-ico">${feedIco[f.action] || '·'}</div><div class="feed-body"><span class="feed-action">${escapeHtml((f.actor_email||'').split('@')[0])} · ${escapeHtml(f.action)}</span>${f.payload?.title || f.payload?.name ? ' → <span class="feed-target">' + escapeHtml(f.payload.title || f.payload.name) + '</span>' : ''}</div><div class="feed-time">${fmtTime(f.created_at)}</div></div>`).join('');
+
+  // Chat (initial render)
+  renderChat(d.chat || []);
+
+  // Calendar
+  const events = d.calendar || [];
+  const upcoming = events.filter(e => new Date(e.starts_at) > new Date());
+  $('navCalBadge').textContent = upcoming.length > 0 ? upcoming.length : '';
+  $('calendarList').innerHTML = events.length === 0
+    ? '<div class="empty">Noch keine Events — „+ Event" für ersten.</div>'
+    : events.map(e => {
+        const dt = new Date(e.starts_at);
+        const isPast = dt < new Date();
+        return `
+          <div class="cal-event" style="opacity:${isPast ? '.5' : '1'}">
+            <div class="cal-event-date">
+              <div class="d-day">${dt.getDate()}</div>
+              <div class="d-mon">${dt.toLocaleString('de-DE',{month:'short'})}</div>
+              <div class="d-time">${dt.toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'})}</div>
+            </div>
+            <div class="cal-event-main">
+              <div class="cal-event-title">${escapeHtml(e.title)} <span class="b-cat-${e.category}">${escapeHtml(e.category)}</span></div>
+              <div class="cal-event-meta">${e.location ? '📍 ' + escapeHtml(e.location) + ' · ' : ''}${e.owner_email ? (e.owner_email.split('@')[0]) : 'team'}${e.description ? ' · ' + escapeHtml(e.description.slice(0,80)) : ''}</div>
+            </div>
+            <div class="cal-event-actions">
+              <button class="btn-pin ${pinKeys.has('event:'+e.id) ? 'pinned' : ''}" data-pin-type="event" data-pin-id="${e.id}" data-pin-label="${escapeHtml(e.title)}" title="Pin">★</button>
+              <button class="btn-dismiss" data-del-event="${e.id}" title="Löschen">✕</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+  $('calendarList').querySelectorAll('[data-del-event]').forEach(b => b.addEventListener('click', async () => {
+    if (!confirm('Event wirklich löschen?')) return;
+    const { error } = await sb.rpc('delete_calendar_event', { p_id: b.dataset.delEvent });
+    if (error) alert(error.message); else loadDashboard();
+  }));
+
+  // Pin-Buttons aktivieren (auch für Briefings + Partner)
+  document.querySelectorAll('.btn-pin').forEach(b => b.addEventListener('click', async () => {
+    const { data, error } = await sb.rpc('toggle_pin', {
+      p_item_type: b.dataset.pinType, p_item_id: b.dataset.pinId, p_label: b.dataset.pinLabel || null
+    });
+    if (error) { alert(error.message); return; }
+    b.classList.toggle('pinned', data === true);
+    loadDashboard();
+  }));
+
   $('metaUpdate').textContent = 'aktualisiert ' + fmtTime(d.generated_at);
 }
+
+// ============================================================
+// CHAT — Realtime
+// ============================================================
+function renderChat(messages) {
+  const myEmail = currentMyEmail();
+  $('chatMessages').innerHTML = messages.length === 0
+    ? '<div class="empty">Noch keine Nachrichten — schreib was!</div>'
+    : messages.map(m => {
+        const mine = m.author_email === myEmail;
+        const name = m.author_name || (m.author_email || '').split('@')[0];
+        return `
+          <div class="chat-msg ${mine ? 'is-mine' : ''}">
+            <div class="chat-msg-av">${(initials(name) + '').toUpperCase()}</div>
+            <div>
+              ${!mine ? '<div class="chat-msg-author">' + escapeHtml(name) + '</div>' : ''}
+              <div class="chat-msg-bubble"><div class="chat-msg-body">${escapeHtml(m.body)}</div><div class="chat-msg-time">${fmtTime(m.created_at)}</div></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+}
+function currentMyEmail() {
+  try {
+    const key = Object.keys(localStorage).find(k => k.includes('crew_team_auth'));
+    if (!key) return '';
+    return JSON.parse(localStorage.getItem(key))?.user?.email || '';
+  } catch { return ''; }
+}
+
+$('chatForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const body = $('chatBody').value.trim();
+  if (!body) return;
+  $('chatBody').value = '';
+  const { error } = await sb.rpc('send_chat_message', { p_body: body, p_reply_to: null });
+  if (error) { $('chatBody').value = body; alert(error.message); }
+});
+
+// Realtime subscribe to chat
+let chatChannel = null;
+function subscribeChat() {
+  if (chatChannel) return;
+  chatChannel = sb.channel('team_chat').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'team_chat_messages' }, () => loadDashboard()).subscribe();
+}
+
+// ============================================================
+// CALENDAR — Add Event
+// ============================================================
+$('btnAddEvent').addEventListener('click', () => openModal('modalEvent'));
+$('formEvent').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const f = new FormData(e.target);
+  const msg = $('eventMsg'); msg.hidden = true;
+  const { error } = await sb.rpc('add_calendar_event', {
+    p_title: f.get('title'),
+    p_starts_at: f.get('starts_at'),
+    p_ends_at: f.get('ends_at') || null,
+    p_category: f.get('category'),
+    p_location: f.get('location') || null,
+    p_description: f.get('description') || null,
+  });
+  if (error) { msg.hidden = false; msg.className = 'form-msg err'; msg.textContent = error.message; return; }
+  msg.hidden = false; msg.className = 'form-msg ok'; msg.textContent = 'Event gespeichert ✓';
+  setTimeout(() => { closeModal('modalEvent'); loadDashboard(); }, 600);
+});
+
+// ============================================================
+// FAB — Quick-Actions
+// ============================================================
+const fabMain = $('fabMain'), fabMenu = $('fabMenu');
+fabMain.addEventListener('click', () => {
+  const open = !fabMenu.hidden;
+  fabMenu.hidden = open;
+  fabMain.classList.toggle('on', !open);
+});
+document.querySelectorAll('.fab-item').forEach(b => b.addEventListener('click', () => {
+  fabMenu.hidden = true; fabMain.classList.remove('on');
+  const a = b.dataset.action;
+  if (a === 'briefing') openModal('modalBriefing');
+  else if (a === 'partner') openModal('modalPartner');
+  else if (a === 'news') openModal('modalNews');
+  else if (a === 'event') openModal('modalEvent');
+  else if (a === 'email') location.href = 'mailto:?subject=crew.%20%E2%80%94%20';
+}));
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.fab-wrap')) { fabMenu.hidden = true; fabMain.classList.remove('on'); }
+});
 
 // Growth-Chart
 let growthChartInstance = null;
@@ -1480,10 +1754,10 @@ async function init() {
   if (session) {
     authDiv.style.display = 'none';
     appDiv.classList.add('on');
-    // Initial Page aus URL-Hash ODER default 'home'
     const initialPage = (location.hash || '#home').slice(1);
     goToPage(initialPage);
     await loadDashboard();
+    subscribeChat();
   }
 }
 
@@ -1494,6 +1768,7 @@ sb.auth.onAuthStateChange(async (event, session) => {
     const initialPage = (location.hash || '#home').slice(1);
     goToPage(initialPage);
     await loadDashboard();
+    subscribeChat();
   } else if (event === 'SIGNED_OUT') {
     authDiv.style.display = 'flex';
     appDiv.classList.remove('on');
