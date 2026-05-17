@@ -17,7 +17,7 @@
 <meta property="og:locale" content="de_DE">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="crew. — Niemand geht alleine heim.">
-<meta name="twitter:description" content="Kein Swipen. Kein Dauer-Tracking. Nur deine Crew.">
+<meta name="twitter:description" content="Kein Swipen. Nur deine Crew.">
 <meta name="twitter:image" content="https://partycrew.app/img/brand/og-card.png">
 <link rel="icon" type="image/x-icon" href="/img/brand/favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="/img/brand/favicon-32.png">
@@ -147,8 +147,14 @@ img{display:block;max-width:100%}
 .bleed-cta:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(245,243,255,.25)}
 
 /* APP SECTION */
-.app-section{padding:120px 32px;max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1fr 380px;gap:80px;align-items:center}
-@media (max-width:880px){.app-section{grid-template-columns:1fr;gap:48px;text-align:center}}
+.app-section{padding:120px 32px;max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1.1fr 1fr;gap:80px;align-items:center}
+@media (max-width:880px){.app-section{grid-template-columns:1fr;gap:48px;text-align:center;padding:80px 24px}}
+.app-quote{position:relative;padding:36px 40px;background:linear-gradient(135deg,rgba(168,140,255,.07),rgba(255,157,110,.03));border:.5px solid rgba(168,140,255,.22);border-radius:24px;backdrop-filter:blur(14px)}
+.app-quote::before{content:'„';position:absolute;top:-12px;left:24px;font-family:var(--serif);font-size:90px;line-height:1;color:rgba(168,140,255,.4);font-style:italic}
+.app-quote blockquote{font-size:clamp(20px,2.4vw,26px);font-family:var(--serif);font-style:italic;font-weight:400;color:#F5F3FF;line-height:1.35;margin-bottom:18px;letter-spacing:-.01em}
+.app-quote blockquote em{font-style:italic;background:linear-gradient(135deg,#A88CFF,#FF9D6E);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.app-quote cite{font-style:normal;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.app-quote cite::before{content:'— '}
 .app-text .eyebrow{font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:rgba(168,140,255,.7);font-weight:700;margin-bottom:18px}
 .app-text h2{font-size:clamp(36px,5vw,64px);font-weight:900;letter-spacing:-.04em;line-height:.95;color:#F5F3FF;margin-bottom:18px}
 .app-text h2 em{font-style:normal;font-family:var(--serif);font-weight:400;background:linear-gradient(135deg,#A88CFF,#FF9D6E);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
@@ -162,29 +168,6 @@ img{display:block;max-width:100%}
 .app-store-btn .asb-eyebrow{display:block;font-size:10px;color:rgba(245,243,255,.65);letter-spacing:.02em}
 .app-store-btn .asb-name{display:block;font-size:18px;font-weight:700;color:#F5F3FF;letter-spacing:-.02em}
 .app-soon{display:inline-flex;align-items:center;gap:10px;padding:13px 22px;background:rgba(168,140,255,.08);border:1.5px solid rgba(168,140,255,.2);border-radius:14px;color:rgba(245,243,255,.7);font-size:13px;font-weight:600}
-.phone-tilt{justify-self:center;width:280px;position:relative}
-@media (max-width:880px){.phone-tilt{display:none}.app-section{grid-template-columns:1fr;gap:32px;padding:80px 24px}}
-.phone-tilt::before{content:'';position:absolute;inset:-40px;background:radial-gradient(circle,rgba(139,92,246,.25),transparent 70%);filter:blur(40px);z-index:0}
-.phone-shell{position:relative;background:linear-gradient(180deg,#1a0f3a,#0F0A1F);border-radius:44px;padding:10px;box-shadow:0 40px 100px rgba(0,0,0,.6),0 0 0 .5px rgba(168,140,255,.4) inset,0 0 0 10px rgba(0,0,0,.7);transform:rotate(-4deg);transition:transform .6s cubic-bezier(.2,.8,.2,1);z-index:1}
-.phone-tilt:hover .phone-shell{transform:rotate(0)}
-.phone-screen-l{background:#0A0610;border-radius:34px;padding:24px 20px;min-height:460px;display:flex;flex-direction:column;gap:14px;position:relative;overflow:hidden}
-.phone-screen-l::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:100px;height:24px;background:#000;border-radius:0 0 14px 14px;z-index:2}
-.phone-bar{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:rgba(245,243,255,.6);padding:4px 4px 0;font-weight:600}
-.phone-pill-st{display:inline-flex;align-items:center;gap:7px;padding:8px 16px;border-radius:999px;background:rgba(40,200,120,.13);border:.5px solid rgba(40,200,120,.4);color:var(--green);font-size:13px;font-weight:700;align-self:center;margin-top:24px;animation:pillBreath 3s ease-in-out infinite}
-.phone-pill-st .dot{width:7px;height:7px;border-radius:50%;background:currentColor}
-@keyframes pillBreath{0%,100%{transform:scale(1);box-shadow:0 0 22px rgba(40,200,120,.22)}50%{transform:scale(1.04);box-shadow:0 0 36px rgba(40,200,120,.45)}}
-.phone-map{flex:1;border-radius:18px;background:radial-gradient(circle at 30% 40%,#1a0f3a,#0A0610);border:.5px solid var(--line);position:relative;overflow:hidden;min-height:220px}
-.phone-map::after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(168,140,255,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(168,140,255,.08) 1px,transparent 1px);background-size:22px 22px;-webkit-mask-image:radial-gradient(ellipse at center,#000 30%,transparent 80%);mask-image:radial-gradient(ellipse at center,#000 30%,transparent 80%)}
-.phone-av{position:absolute;width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#A88CFF,#8B5CF6);display:grid;place-items:center;font-size:13px;font-weight:800;color:#fff;border:2px solid #0F0A1F;box-shadow:0 6px 14px rgba(139,92,246,.4);animation:avPop .6s cubic-bezier(.34,1.56,.64,1) forwards}
-.phone-av.amb{background:linear-gradient(135deg,#FF9D6E,#FF6B3D);color:#0F0A1F}
-.phone-av.c{left:50%;top:50%;width:44px;height:44px;animation:avPopC .6s cubic-bezier(.34,1.56,.64,1) .2s forwards,centerPulse 2s ease-in-out 1s infinite}
-.phone-av.l1{left:18%;top:25%;animation-delay:.5s}
-.phone-av.l2{right:18%;top:34%;animation-delay:.7s}
-.phone-av.l3{left:26%;bottom:22%;animation-delay:.9s}
-@keyframes avPop{from{opacity:0;transform:scale(0)}to{opacity:1;transform:scale(1)}}
-@keyframes avPopC{from{opacity:0;transform:translate(-50%,-50%) scale(0)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
-@keyframes centerPulse{0%,100%{box-shadow:0 0 0 0 rgba(139,92,246,.6),0 6px 14px rgba(139,92,246,.4)}50%{box-shadow:0 0 0 14px rgba(139,92,246,0),0 6px 14px rgba(139,92,246,.4)}}
-
 /* VISION */
 .vision{position:relative;padding:120px 24px;max-width:780px;margin:0 auto;text-align:center;overflow:hidden}
 .vision::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at center,rgba(139,92,246,.12) 0%,transparent 70%);pointer-events:none;z-index:0}
@@ -396,8 +379,8 @@ footer{padding:80px 32px 36px;border-top:.5px solid var(--line);background:linea
   <section class="bleed">
     <div class="bleed-bg"></div>
     <div class="bleed-inner">
-      <h2>Kein Swipen.<br><em>Kein Profil-Verkauf.</em><br>Nur deine Crew.</h2>
-      <p>crew. ist keine Dating-App. crew. ist keine Standort-App. crew. ist der dünne Faden zwischen dir und den drei Menschen, die zu dir gehören.</p>
+      <h2>Kein Swipen.<br><em>Nur deine Crew.</em></h2>
+      <p>crew. ist keine Dating-App. crew. ist der dünne Faden zwischen dir und den drei bis fünf Menschen, die zu dir gehören.</p>
       <a href="#cta" class="bleed-cta">Pioneer werden →</a>
     </div>
   </section>
@@ -425,20 +408,10 @@ footer{padding:80px 32px 36px;border-top:.5px solid var(--line);background:linea
         </a>
       </div>
     </div>
-    <div class="phone-tilt">
-      <div class="phone-shell">
-        <div class="phone-screen-l">
-          <div class="phone-bar"><span>23:47</span><span>·•· 5G</span></div>
-          <div class="phone-pill-st"><span class="dot"></span>Heimweg läuft</div>
-          <div class="phone-map">
-            <div class="phone-av c">J</div>
-            <div class="phone-av l1">L</div>
-            <div class="phone-av amb l2">M</div>
-            <div class="phone-av l3">B</div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <aside class="app-quote">
+      <blockquote>Du tippst <em>Heimweg starten</em> — und drei Menschen wachen mit, ohne dass du was schreiben musst.</blockquote>
+      <cite>crew. Mantra</cite>
+    </aside>
   </section>
 
   <section class="vision" id="vision">
@@ -446,7 +419,7 @@ footer{padding:80px 32px 36px;border-top:.5px solid var(--line);background:linea
       <span class="vision-eyebrow">Und später…</span>
       <h2 class="vision-title">crew<span class="vision-mark" aria-hidden="true"><span class="d">.</span><span class="p">+</span></span></h2>
       <p class="vision-tag">Wenn der Punkt nicht mehr reicht.</p>
-      <p class="vision-body">Wir bauen erst die Crew, die du wirklich kennst. Was danach kommt, deuten wir nicht auf Pitch-Decks an — aber: Crews könnten sich verbinden. Locations könnten zu Knoten werden. Heimwege könnten zu einem Netz, das aus echten Beziehungen besteht statt aus Algorithmus. Alles mutual, alles opt-in. Wir haben Zeit.</p>
+      <p class="vision-body">Erst die Crew, die du wirklich kennst. Was danach kommt, hat noch keinen Namen — nur eine Richtung.</p>
       <p class="vision-meta">Nicht jetzt. Wenn die Basis steht.</p>
     </div>
   </section>
