@@ -243,6 +243,13 @@ footer{padding:80px 32px 36px;border-top:.5px solid var(--line);background:linea
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none !important;transition:none !important}
 }
+
+/* === Anti-Copy-Guard v2 — Butterbread Technologies === */
+html,body{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
+input,textarea,select,[contenteditable="true"],[contenteditable=""]{-webkit-user-select:text;-moz-user-select:text;-ms-user-select:text;user-select:text}
+img,video{pointer-events:auto;-webkit-user-drag:none;-khtml-user-drag:none;-moz-user-drag:none;-o-user-drag:none;user-drag:none}
+::selection{background:transparent}
+::-moz-selection{background:transparent}
 </style>
 </head>
 <body>
@@ -274,7 +281,7 @@ footer{padding:80px 32px 36px;border-top:.5px solid var(--line);background:linea
         <img class="hero-lockup-sticker" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/People%20hugging/3D/people_hugging_3d.png" alt="" loading="eager" width="88" height="88" />
         <span class="hero-lockup-word">crew<span class="dot">.</span></span>
       </div>
-      <h1 class="hero-h">Niemand geht<br><span class="em">alleine</span> heim.<span class="tm">™</span></h1>
+      <h1 class="hero-h">Niemand geht<br><span class="em">alleine</span> heim.</h1>
       <p class="hero-sub">Du startest deinen Heimweg. Wenn du nicht ankommst, weckt crew. die drei wichtigsten Menschen. Sonst niemand.</p>
       <div class="hero-cta">
         <a href="#cta" class="btn-create">Auf die Warteliste</a>
@@ -501,6 +508,7 @@ footer{padding:80px 32px 36px;border-top:.5px solid var(--line);background:linea
           <li><a href="/impressum.html">Impressum</a></li>
           <li><a href="/datenschutz.html">Datenschutz</a></li>
           <li><a href="/agb.html">AGB</a></li>
+          <li><a href="/kontakt.html">Kontakt</a></li>
         </ul>
       </div>
     </div>
@@ -522,6 +530,23 @@ var nav = document.getElementById('nav');
 window.addEventListener('scroll', function(){
   nav.classList.toggle('scrolled', window.scrollY > 40);
 }, { passive: true });
+
+/* © Butterbread Technologies — anti-copy guard v2 */
+(function(){try{
+  var b = function(e){ if(e&&e.preventDefault)e.preventDefault(); if(e&&e.stopPropagation)e.stopPropagation(); return false; };
+  var allowText = function(t){ return t && (t.tagName==='INPUT'||t.tagName==='TEXTAREA'||t.tagName==='SELECT'||t.isContentEditable); };
+  document.addEventListener('contextmenu', function(e){ if(!allowText(e.target)) return b(e); }, true);
+  document.addEventListener('copy',        function(e){ if(!allowText(e.target)) return b(e); }, true);
+  document.addEventListener('cut',         function(e){ if(!allowText(e.target)) return b(e); }, true);
+  document.addEventListener('dragstart',   b, true);
+  document.addEventListener('selectstart', function(e){ if(!allowText(e.target)) return b(e); }, true);
+  document.addEventListener('keydown', function(e){
+    var k=(e.key||'').toLowerCase(), c=e.ctrlKey||e.metaKey, s=e.shiftKey;
+    if(k==='f12') return b(e);
+    if(c && !s && (k==='u'||k==='s'||k==='p'||k==='a')) return b(e);
+    if(c && s  && (k==='i'||k==='j'||k==='c'||k==='k')) return b(e);
+  }, true);
+}catch(_){ }})();
 
 // Supabase init
 var sb;
