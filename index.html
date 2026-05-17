@@ -1,1468 +1,424 @@
 <!doctype html><html lang="de"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https: data:; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' https: data:; connect-src 'self' https:; frame-ancestors 'none'">
 <meta http-equiv="X-Frame-Options" content="DENY">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>crew. — Niemand geht alleine heim.</title>
-<meta name="description" content="crew. — Connection + Safety für deinen Heimweg. Starte deinen Heimweg, setz eine Zielzeit und deine Crew wird gepingt, wenn du nicht ankommst.">
-<meta name="theme-color" content="#8B5CF6">
+<meta name="description" content="crew. — Connection + Safety für deinen Heimweg. Du startest, deine drei wichtigsten Menschen kriegen Ping wenn du nicht ankommst. Sonst niemand.">
+<meta name="theme-color" content="#0F0A1F">
 <meta property="og:title" content="crew. — Niemand geht alleine heim.">
-<meta property="og:description" content="Starte deinen Heimweg. Wenn du nicht ankommst, pingt crew. deine 3–5 wichtigsten Menschen. Sonst niemand.">
+<meta property="og:description" content="Du startest deinen Heimweg. Wenn du nicht ankommst, weckt crew. die drei wichtigsten Menschen. Sonst niemand.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://partycrew.app/img/brand/og-card.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta property="og:url" content="https://partycrew.app">
 <meta property="og:site_name" content="crew.">
 <meta property="og:locale" content="de_DE">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="crew. — Niemand geht alleine heim.">
-<meta name="twitter:description" content="Niemand geht alleine heim. Kein Swipen. Kein Dauertracking. Nur deine Crew.">
+<meta name="twitter:description" content="Kein Swipen. Kein Dauer-Tracking. Nur deine Crew.">
 <meta name="twitter:image" content="https://partycrew.app/img/brand/og-card.png">
 <link rel="icon" type="image/x-icon" href="/img/brand/favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="/img/brand/favicon-32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/img/brand/apple-touch-icon-180.png">
 <link rel="mask-icon" href="/img/brand/crew-symbol.svg" color="#8B5CF6">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
-body{background:#0F0A1F;color:#F5F3FF;font-family:'Inter',system-ui,sans-serif;font-weight:400;line-height:1.55;overflow-x:hidden}
-a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
-:root{--bg:#0F0A1F;--fg:#F5F3FF;--muted:#A88CFF;--o:#8B5CF6;--gold:linear-gradient(135deg,#8B5CF6,#A88CFF);--line:rgba(168,140,255,.12);--r:18px}
-.hp-trap{position:absolute !important;left:-9999px !important;top:-9999px !important;width:1px !important;height:1px !important;opacity:0 !important;pointer-events:none !important;}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body{background:#0F0A1F;color:#F5F3FF;font-family:'Inter',system-ui,sans-serif;font-weight:400;line-height:1.5;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+img{display:block;max-width:100%}
+:root{--bg:#0F0A1F;--fg:#F5F3FF;--muted:#A88CFF;--o:#8B5CF6;--o-2:#6366F1;--amber:#FF9D6E;--green:#28C878;--line:rgba(168,140,255,.12);--serif:'Instrument Serif',Georgia,serif}
+.hp-trap{position:absolute!important;left:-9999px!important;top:-9999px!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important}
 
 /* NAV */
-.nav{position:fixed;top:0;left:0;right:0;z-index:50;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);background:rgba(5,5,7,.65);border-bottom:1px solid var(--line)}
-.logo{font-size:28px;font-weight:900;letter-spacing:-1px;color:#F5F3FF}.logo .dot{color:#8B5CF6}
-.nav-links{display:flex;align-items:center;gap:18px;font-size:12px;font-weight:700;color:rgba(244,239,232,.66)}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;padding:18px 32px;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(24px) saturate(140%);-webkit-backdrop-filter:blur(24px) saturate(140%);background:rgba(15,10,31,.55);border-bottom:.5px solid var(--line);transition:padding .3s,background .3s}
+.nav.scrolled{padding:12px 32px;background:rgba(15,10,31,.92)}
+.nav-l{display:flex;align-items:center;gap:32px}
+.brand{font-size:28px;font-weight:900;letter-spacing:-.06em;color:#F5F3FF;line-height:1;display:flex;align-items:center}
+.brand .dot{color:var(--muted);text-shadow:0 0 14px rgba(168,140,255,.6);font-size:32px;line-height:0;margin-left:1px}
+.nav-links{display:flex;align-items:center;gap:28px;font-size:13px;font-weight:600;color:rgba(245,243,255,.78)}
 .nav-links a{transition:color .2s}
-.nav-links a:hover{color:#F4EFE8}
-.nav-pill{display:flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;border:1px solid rgba(255,157,110,.32);padding:8px 16px;border-radius:999px;color:var(--o);transition:all .2s}
-.nav-pill:hover{background:rgba(255,157,110,.08);border-color:rgba(255,157,110,.5)}
-.pulse-dot{width:7px;height:7px;background:var(--o);border-radius:999px;animation:pulse 1.6s infinite}
-@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(139,92,246,.5)}70%{box-shadow:0 0 0 12px rgba(139,92,246,0)}100%{box-shadow:0 0 0 0 rgba(139,92,246,0)}}
+.nav-links a:hover{color:#F5F3FF}
+@media (max-width:880px){.nav-links{display:none}}
+.nav-r{display:flex;align-items:center;gap:14px}
+.nav-locale{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;font-size:11.5px;font-weight:600;color:rgba(245,243,255,.65);transition:background .2s}
+.nav-locale:hover{background:rgba(255,255,255,.06)}
+.nav-locale svg{width:14px;height:14px;color:var(--muted)}
+.nav-cta{padding:10px 22px;background:transparent;border:1.5px solid rgba(168,140,255,.4);border-radius:999px;font-size:13px;font-weight:700;color:#F5F3FF;transition:background .2s,border-color .2s,transform .2s}
+.nav-cta:hover{background:rgba(168,140,255,.1);border-color:var(--muted);transform:translateY(-1px)}
+@media (max-width:680px){.nav{padding:14px 18px}.nav-locale{display:none}}
 
-/* HERO — fullscreen, centered (Schritt 2: 3D-Sticker + Aura statt Unsplash) */
-.hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:100px 24px 60px;overflow:hidden;background:#0F0A1F}
-.hero-bg{position:absolute;inset:0;z-index:0;background:linear-gradient(180deg,rgba(15,10,31,.86),rgba(15,10,31,.96)),url(/img/lifestyle/12_strasse_nachts_landscape.jpg) #0F0A1F;background-size:cover;background-position:center}
-.hero-bg::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%, rgba(139,92,246,.18) 0%, transparent 45%), radial-gradient(ellipse at 75% 70%, rgba(168,140,255,.12) 0%, transparent 50%);pointer-events:none}
-.hero::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 0%,rgba(15,10,31,.4) 70%,#0F0A1F 100%);z-index:1;pointer-events:none}
-.hero-inner{position:relative;z-index:2;max-width:680px;width:100%}
-.hero-sticker{display:block;width:120px;height:120px;margin:0 auto 28px;filter:drop-shadow(0 24px 50px rgba(168,140,255,.45));opacity:0;transform:translateY(30px);animation:rise .9s cubic-bezier(.2,.8,.2,1) .05s forwards}
-@media (max-width:520px){.hero-sticker{width:96px;height:96px;margin-bottom:22px}}
+/* HERO */
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 24px 80px;overflow:hidden}
+.hero-bg{position:absolute;inset:0;z-index:0;background:linear-gradient(180deg,rgba(15,10,31,.72),rgba(15,10,31,.95)),url(/img/lifestyle/12_strasse_nachts_landscape.jpg) #0F0A1F;background-size:cover;background-position:center;filter:saturate(1.05)}
+.hero-bg::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%,rgba(139,92,246,.22) 0%,transparent 50%),radial-gradient(ellipse at 75% 80%,rgba(168,140,255,.15) 0%,transparent 50%);pointer-events:none}
+.hero-inner{position:relative;z-index:1;max-width:1100px;width:100%}
+.hero-h{font-size:clamp(64px,13vw,200px);font-weight:900;letter-spacing:-.05em;line-height:.85;color:#F5F3FF;margin-bottom:24px;text-shadow:0 4px 32px rgba(15,10,31,.4);opacity:0;transform:translateY(30px);animation:fadeUp 1s cubic-bezier(.2,.8,.2,1) .15s forwards}
+.hero-h .em{font-family:var(--serif);font-style:italic;font-weight:400;background:linear-gradient(135deg,#A88CFF,#FF9D6E);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-.02em;display:inline-block;padding-right:.04em}
+.hero-h .tm{font-size:.18em;vertical-align:super;color:var(--muted);font-weight:500;letter-spacing:0;font-family:'Inter';font-style:normal;-webkit-text-fill-color:var(--muted);background:none}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+.hero-sub{font-size:clamp(15px,1.8vw,18px);color:rgba(245,243,255,.7);max-width:540px;margin:0 auto 36px;line-height:1.55;opacity:0;animation:fadeUp .9s ease .4s forwards}
+.hero-cta{display:inline-flex;gap:14px;align-items:center;justify-content:center;flex-wrap:wrap;opacity:0;animation:fadeUp .9s ease .6s forwards}
+.btn-create{padding:18px 44px;background:linear-gradient(135deg,#8B5CF6,#A88CFF);color:#fff;border-radius:999px;font-weight:800;font-size:16px;letter-spacing:.02em;box-shadow:0 16px 40px rgba(139,92,246,.5),0 0 0 .5px rgba(255,255,255,.12) inset;transition:transform .2s,box-shadow .2s;cursor:pointer}
+.btn-create:hover{transform:translateY(-2px);box-shadow:0 22px 56px rgba(139,92,246,.65),0 0 0 .5px rgba(255,255,255,.2) inset}
+.btn-login{padding:18px 36px;background:transparent;border:1.5px solid rgba(255,255,255,.3);color:#F5F3FF;border-radius:999px;font-weight:700;font-size:16px;transition:background .2s,border-color .2s,transform .2s}
+.btn-login:hover{background:rgba(255,255,255,.08);border-color:#F5F3FF;transform:translateY(-2px)}
+.app-badge-wrap{display:flex;justify-content:center;margin-top:36px;opacity:0;animation:fadeUp .9s ease .85s forwards}
+.app-badge{display:inline-flex;align-items:center;gap:14px;padding:12px 22px 12px 18px;background:rgba(0,0,0,.5);border:.5px solid rgba(255,255,255,.18);border-radius:14px;backdrop-filter:blur(14px);transition:background .2s,border-color .2s,transform .2s}
+.app-badge:hover{background:rgba(0,0,0,.65);border-color:rgba(168,140,255,.4);transform:translateY(-2px)}
+.app-badge svg{width:32px;height:32px;color:#F5F3FF;flex-shrink:0}
+.app-badge .ab-text{text-align:left;line-height:1.2}
+.app-badge .ab-eyebrow{display:block;font-size:10.5px;color:rgba(245,243,255,.7);letter-spacing:.02em;margin-bottom:1px}
+.app-badge .ab-name{display:block;font-size:17px;font-weight:700;color:#F5F3FF;letter-spacing:-.02em}
+.hero-mini{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);font-size:10px;color:rgba(168,140,255,.4);letter-spacing:.06em;font-weight:500;font-style:italic;text-align:center;opacity:0;animation:fadeUp 1s ease 1.2s forwards;padding:0 24px}
 
-/* Hero-Icon — echtes App-Icon im Squircle-Look (iOS-Style) */
-.hero-icon-wrap{display:flex;justify-content:center;margin:0 auto 22px;opacity:0;transform:translateY(30px);animation:rise .9s cubic-bezier(.2,.8,.2,1) .05s forwards}
-.hero-icon{width:160px;height:160px;border-radius:36px;box-shadow:0 24px 60px rgba(139,92,246,.45),0 0 0 .5px rgba(168,140,255,.4) inset;animation:iconFloat 5s ease-in-out infinite}
-@keyframes iconFloat{0%,100%{transform:translateY(0);box-shadow:0 24px 60px rgba(139,92,246,.45),0 0 0 .5px rgba(168,140,255,.4) inset}50%{transform:translateY(-6px);box-shadow:0 32px 80px rgba(139,92,246,.6),0 0 0 .5px rgba(168,140,255,.5) inset}}
-@media (max-width:520px){.hero-icon{width:120px;height:120px;border-radius:28px}}
-@media (prefers-reduced-motion:reduce){.hero-icon{animation:none}}
+/* STORIES */
+.stories{padding:120px 0 96px;position:relative}
+.stories-head{padding:0 32px;max-width:1180px;margin:0 auto 56px;display:flex;justify-content:space-between;align-items:flex-end;gap:32px}
+@media (max-width:880px){.stories-head{flex-direction:column;align-items:flex-start;text-align:left}}
+.stories-head-l{flex:1}
+.stories-eyebrow{font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:rgba(168,140,255,.7);font-weight:700;margin-bottom:18px}
+.stories-h{font-size:clamp(36px,5.5vw,72px);font-weight:900;letter-spacing:-.04em;line-height:.95;color:#F5F3FF;margin-bottom:14px}
+.stories-h .em{font-style:normal;font-family:var(--serif);font-weight:400;background:linear-gradient(135deg,#A88CFF,#FF9D6E);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.stories-sub{font-size:15px;color:rgba(245,243,255,.65);max-width:480px;line-height:1.6}
+.stories-cta{display:inline-flex;align-items:center;gap:8px;padding:13px 24px;background:rgba(168,140,255,.08);border:.5px solid rgba(168,140,255,.3);color:#F5F3FF;border-radius:999px;font-weight:700;font-size:13px;transition:background .2s,transform .2s;flex-shrink:0;align-self:flex-end}
+.stories-cta:hover{background:rgba(168,140,255,.15);transform:translateY(-1px)}
+.stories-cta .ar{transition:transform .3s}
+.stories-cta:hover .ar{transform:translateX(4px)}
+.stories-track{display:flex;gap:20px;padding:0 32px 24px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.stories-track::-webkit-scrollbar{display:none}
+.story{position:relative;flex-shrink:0;width:min(380px,80vw);min-height:520px;border-radius:24px;overflow:hidden;scroll-snap-align:start;background:#1a0f3a;box-shadow:0 32px 80px rgba(0,0,0,.4),0 0 0 .5px rgba(168,140,255,.18) inset;cursor:pointer;transition:transform .4s cubic-bezier(.2,.8,.2,1)}
+.story:hover{transform:translateY(-6px)}
+.story-bg{position:absolute;inset:0;background-size:cover;background-position:center;filter:saturate(1.05);transition:transform 8s ease-out}
+.story:hover .story-bg{transform:scale(1.08)}
+.story::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,10,31,.15) 0%,rgba(15,10,31,.4) 50%,rgba(15,10,31,.94) 100%);pointer-events:none}
+.story-content{position:absolute;left:0;right:0;bottom:0;padding:28px 26px 24px;z-index:1}
+.story-num{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:rgba(255,255,255,.12);backdrop-filter:blur(10px);border:.5px solid rgba(255,255,255,.2);border-radius:999px;font-size:10.5px;font-weight:700;color:rgba(255,255,255,.85);letter-spacing:.18em;text-transform:uppercase;margin-bottom:14px}
+.story h3{font-size:24px;font-weight:900;letter-spacing:-.03em;line-height:1.1;color:#F5F3FF;margin-bottom:12px;text-shadow:0 2px 16px rgba(15,10,31,.6)}
+.story p{font-size:14px;line-height:1.55;color:rgba(245,243,255,.78);margin-bottom:14px}
+.story p em{color:var(--muted);font-style:normal;font-weight:600}
 
-/* Wordmark unter dem Icon */
-.hero-wordmark{font-size:clamp(48px,9vw,88px);font-weight:900;letter-spacing:-3px;line-height:1;color:#F5F3FF;margin-bottom:8px;opacity:0;transform:translateY(20px);animation:rise .8s cubic-bezier(.2,.8,.2,1) .25s forwards}
-.hero-wordmark .dot{color:#8B5CF6;display:inline-block;margin-left:-2px}
-/* Legacy class kept for compat */
-.hero-logo{display:block;width:100%;max-width:520px;height:auto;margin:0 auto 18px}
+/* PILLAR */
+.section-block{padding:120px 32px;max-width:1180px;margin:0 auto}
+.section-block-head{margin-bottom:64px;max-width:760px}
+.section-block-head.center{margin-left:auto;margin-right:auto;text-align:center}
+.section-block-head .eyebrow{font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:rgba(168,140,255,.7);font-weight:700;margin-bottom:18px}
+.section-block-head h2{font-size:clamp(36px,5.5vw,72px);font-weight:900;letter-spacing:-.04em;line-height:.95;color:#F5F3FF;margin-bottom:14px}
+.section-block-head h2 em{font-style:normal;font-family:var(--serif);font-weight:400;background:linear-gradient(135deg,#A88CFF,#FF9D6E);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.section-block-head p{font-size:16px;color:rgba(245,243,255,.65);max-width:560px;line-height:1.6}
+.pillar-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media (max-width:880px){.pillar-grid{grid-template-columns:1fr}}
+.pillar{position:relative;padding:32px 28px;border-radius:22px;background:rgba(168,140,255,.04);border:.5px solid rgba(168,140,255,.16);overflow:hidden;min-height:300px;display:flex;flex-direction:column;justify-content:space-between;transition:transform .4s,border-color .3s,background .3s}
+.pillar:hover{transform:translateY(-4px);border-color:rgba(168,140,255,.35);background:rgba(168,140,255,.07)}
+.pillar-num{font-family:var(--serif);font-style:italic;font-weight:400;font-size:18px;color:rgba(168,140,255,.55);margin-bottom:auto;padding-bottom:18px}
+.pillar-h{font-size:28px;font-weight:900;letter-spacing:-.03em;color:#F5F3FF;margin-bottom:12px;line-height:1.1}
+.pillar p{font-size:14.5px;color:rgba(245,243,255,.7);line-height:1.55;margin-bottom:10px}
+.pillar-detail{font-size:14px;color:var(--muted);font-family:var(--serif);font-style:italic;line-height:1.4}
 
-/* Hero-Lockup: Hugging-Sticker + crew. Wortmark schweben zusammen */
-.hero-floating-lockup{display:inline-flex;align-items:center;gap:18px;margin:0 auto 18px;padding:14px 28px 14px 18px;background:rgba(168,140,255,.06);border:.5px solid rgba(168,140,255,.22);border-radius:999px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 16px 50px rgba(139,92,246,.28);opacity:0;transform:translateY(20px);animation:rise .9s cubic-bezier(.2,.8,.2,1) .05s forwards,lockupFloat 5s ease-in-out 1s infinite}
-.hero-hugging-sticker{display:block;width:108px;height:108px;filter:drop-shadow(0 12px 28px rgba(168,140,255,.55))}
-.hero-floating-word{font-size:64px;font-weight:900;letter-spacing:-2.5px;line-height:1;color:#F5F3FF}
-.hero-floating-word .dot{color:#A88CFF;display:inline-block;text-shadow:0 0 18px rgba(168,140,255,.7)}
-@keyframes lockupFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-@media (max-width:520px){
-  .hero-floating-lockup{gap:12px;padding:10px 22px 10px 12px}
-  .hero-hugging-sticker{width:80px;height:80px}
-  .hero-floating-word{font-size:44px;letter-spacing:-1.8px}
-}
-@media (prefers-reduced-motion:reduce){.hero-floating-lockup{animation:rise .9s cubic-bezier(.2,.8,.2,1) .05s forwards}}
+/* BLEED */
+.bleed{position:relative;padding:140px 32px;text-align:center;overflow:hidden;background:#0F0A1F}
+.bleed-bg{position:absolute;inset:0;z-index:0;background:linear-gradient(180deg,rgba(15,10,31,.5),rgba(15,10,31,.92)),url(/img/lifestyle/10_tuerrahmen_umarmung.jpg) #0F0A1F;background-size:cover;background-position:center 30%}
+.bleed-inner{position:relative;z-index:1;max-width:780px;margin:0 auto}
+.bleed h2{font-size:clamp(36px,6vw,80px);font-weight:900;letter-spacing:-.04em;line-height:.95;color:#F5F3FF;margin-bottom:18px;text-shadow:0 4px 28px rgba(15,10,31,.5)}
+.bleed h2 em{font-style:normal;font-family:var(--serif);font-weight:400;background:linear-gradient(135deg,#A88CFF,#FF9D6E);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.bleed p{font-size:17px;color:rgba(245,243,255,.82);max-width:520px;margin:0 auto 32px;line-height:1.6}
+.bleed-cta{display:inline-flex;align-items:center;gap:10px;padding:18px 36px;background:#F5F3FF;color:#0F0A1F;border-radius:999px;font-weight:800;font-size:15px;letter-spacing:.01em;transition:transform .2s,box-shadow .2s}
+.bleed-cta:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(245,243,255,.25)}
 
-/* Hero-Crew-Definition (kurzer Sub-Sub-Text) */
-.hero-crew-def{font-size:13px;color:#A88CFF;font-weight:600;letter-spacing:.2px;margin:8px 0 18px;opacity:0;animation:fade .8s ease 1.1s forwards}
+/* APP SECTION */
+.app-section{padding:120px 32px;max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1fr 380px;gap:80px;align-items:center}
+@media (max-width:880px){.app-section{grid-template-columns:1fr;gap:48px;text-align:center}}
+.app-text .eyebrow{font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:rgba(168,140,255,.7);font-weight:700;margin-bottom:18px}
+.app-text h2{font-size:clamp(36px,5vw,64px);font-weight:900;letter-spacing:-.04em;line-height:.95;color:#F5F3FF;margin-bottom:18px}
+.app-text h2 em{font-style:normal;font-family:var(--serif);font-weight:400;background:linear-gradient(135deg,#A88CFF,#FF9D6E);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.app-text p{font-size:16px;color:rgba(245,243,255,.72);max-width:480px;margin-bottom:28px;line-height:1.6}
+@media (max-width:880px){.app-text p{margin-left:auto;margin-right:auto}}
+.app-badges{display:inline-flex;gap:12px;flex-wrap:wrap}
+.app-store-btn{display:inline-flex;align-items:center;gap:14px;padding:14px 24px 14px 20px;background:#000;border:1.5px solid rgba(255,255,255,.2);border-radius:14px;transition:transform .2s,border-color .2s}
+.app-store-btn:hover{transform:translateY(-2px);border-color:rgba(168,140,255,.4)}
+.app-store-btn svg{width:30px;height:30px;color:#F5F3FF;flex-shrink:0}
+.app-store-btn .asb-text{text-align:left;line-height:1.15}
+.app-store-btn .asb-eyebrow{display:block;font-size:10px;color:rgba(245,243,255,.65);letter-spacing:.02em}
+.app-store-btn .asb-name{display:block;font-size:18px;font-weight:700;color:#F5F3FF;letter-spacing:-.02em}
+.app-soon{display:inline-flex;align-items:center;gap:10px;padding:13px 22px;background:rgba(168,140,255,.08);border:1.5px solid rgba(168,140,255,.2);border-radius:14px;color:rgba(245,243,255,.7);font-size:13px;font-weight:600}
+.phone-tilt{justify-self:center;width:280px;position:relative}
+@media (max-width:880px){.phone-tilt{width:240px}}
+.phone-tilt::before{content:'';position:absolute;inset:-40px;background:radial-gradient(circle,rgba(139,92,246,.25),transparent 70%);filter:blur(40px);z-index:0}
+.phone-shell{position:relative;background:linear-gradient(180deg,#1a0f3a,#0F0A1F);border-radius:44px;padding:10px;box-shadow:0 40px 100px rgba(0,0,0,.6),0 0 0 .5px rgba(168,140,255,.4) inset,0 0 0 10px rgba(0,0,0,.7);transform:rotate(-4deg);transition:transform .6s cubic-bezier(.2,.8,.2,1);z-index:1}
+.phone-tilt:hover .phone-shell{transform:rotate(0)}
+.phone-screen-l{background:#0A0610;border-radius:34px;padding:24px 20px;min-height:460px;display:flex;flex-direction:column;gap:14px;position:relative;overflow:hidden}
+.phone-screen-l::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:100px;height:24px;background:#000;border-radius:0 0 14px 14px;z-index:2}
+.phone-bar{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:rgba(245,243,255,.6);padding:4px 4px 0;font-weight:600}
+.phone-pill-st{display:inline-flex;align-items:center;gap:7px;padding:8px 16px;border-radius:999px;background:rgba(40,200,120,.13);border:.5px solid rgba(40,200,120,.4);color:var(--green);font-size:13px;font-weight:700;align-self:center;margin-top:24px;animation:pillBreath 3s ease-in-out infinite}
+.phone-pill-st .dot{width:7px;height:7px;border-radius:50%;background:currentColor}
+@keyframes pillBreath{0%,100%{transform:scale(1);box-shadow:0 0 22px rgba(40,200,120,.22)}50%{transform:scale(1.04);box-shadow:0 0 36px rgba(40,200,120,.45)}}
+.phone-map{flex:1;border-radius:18px;background:radial-gradient(circle at 30% 40%,#1a0f3a,#0A0610);border:.5px solid var(--line);position:relative;overflow:hidden;min-height:220px}
+.phone-map::after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(168,140,255,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(168,140,255,.08) 1px,transparent 1px);background-size:22px 22px;-webkit-mask-image:radial-gradient(ellipse at center,#000 30%,transparent 80%);mask-image:radial-gradient(ellipse at center,#000 30%,transparent 80%)}
+.phone-av{position:absolute;width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#A88CFF,#8B5CF6);display:grid;place-items:center;font-size:13px;font-weight:800;color:#fff;border:2px solid #0F0A1F;box-shadow:0 6px 14px rgba(139,92,246,.4);animation:avPop .6s cubic-bezier(.34,1.56,.64,1) forwards}
+.phone-av.amb{background:linear-gradient(135deg,#FF9D6E,#FF6B3D);color:#0F0A1F}
+.phone-av.c{left:50%;top:50%;width:44px;height:44px;animation:avPopC .6s cubic-bezier(.34,1.56,.64,1) .2s forwards,centerPulse 2s ease-in-out 1s infinite}
+.phone-av.l1{left:18%;top:25%;animation-delay:.5s}
+.phone-av.l2{right:18%;top:34%;animation-delay:.7s}
+.phone-av.l3{left:26%;bottom:22%;animation-delay:.9s}
+@keyframes avPop{from{opacity:0;transform:scale(0)}to{opacity:1;transform:scale(1)}}
+@keyframes avPopC{from{opacity:0;transform:translate(-50%,-50%) scale(0)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+@keyframes centerPulse{0%,100%{box-shadow:0 0 0 0 rgba(139,92,246,.6),0 6px 14px rgba(139,92,246,.4)}50%{box-shadow:0 0 0 14px rgba(139,92,246,0),0 6px 14px rgba(139,92,246,.4)}}
 
-/* Hero CTA-Buttons (Audit-Fix-2) */
-.hero-cta-row{display:flex;gap:14px;justify-content:center;align-items:center;flex-wrap:wrap;margin:18px auto 0;opacity:0;animation:fade .8s ease 1.3s forwards}
-.hero-cta-primary{display:inline-flex;flex-direction:column;align-items:center;gap:2px;padding:14px 32px;background:linear-gradient(135deg,#8B5CF6,#A88CFF);color:#fff;border-radius:14px;text-decoration:none;font-weight:800;letter-spacing:.2px;box-shadow:0 12px 36px rgba(139,92,246,.4);transition:transform .2s,box-shadow .2s}
-.hero-cta-primary:hover{transform:translateY(-2px);box-shadow:0 18px 48px rgba(139,92,246,.55)}
-.hero-cta-label{font-size:15px;line-height:1}
-.hero-cta-meta{font-size:11px;opacity:.85;font-weight:500;letter-spacing:.4px;text-transform:uppercase;margin-top:2px}
-.hero-cta-secondary{font-size:13px;color:#A88CFF;text-decoration:none;font-weight:500;letter-spacing:.2px;padding:14px 8px}
-.hero-cta-secondary:hover{color:#F5F3FF}
-
-/* Hero-Lockup — Squircle-App-Icon + Wortmark nebeneinander (kompakt, premium) */
-.hero-lockup{display:inline-flex;align-items:center;gap:18px;margin:0 auto 14px;padding:10px 22px 10px 12px;background:rgba(168,140,255,.06);border:.5px solid rgba(168,140,255,.22);border-radius:999px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);opacity:0;transform:translateY(20px);animation:rise .9s cubic-bezier(.2,.8,.2,1) .05s forwards}
-.hero-lockup-icon{width:64px;height:64px;border-radius:18px;box-shadow:0 8px 24px rgba(139,92,246,.35),0 0 0 .5px rgba(168,140,255,.5) inset;animation:logoBreath 6s ease-in-out infinite}
-.hero-lockup-word{font-size:54px;font-weight:900;letter-spacing:-2px;line-height:1;color:#F5F3FF}
-.hero-lockup-word .dot{color:#A88CFF;display:inline-block;text-shadow:0 0 18px rgba(168,140,255,.7)}
-@keyframes logoBreath{0%,100%{box-shadow:0 8px 24px rgba(139,92,246,.35),0 0 0 .5px rgba(168,140,255,.5) inset}50%{box-shadow:0 12px 36px rgba(139,92,246,.55),0 0 0 .5px rgba(168,140,255,.7) inset}}
-@media (max-width:520px){.hero-lockup{gap:12px;padding:8px 18px 8px 10px}.hero-lockup-icon{width:48px;height:48px;border-radius:14px}.hero-lockup-word{font-size:38px;letter-spacing:-1.5px}}
-@media (prefers-reduced-motion:reduce){.hero-lockup-icon{animation:none}}
-
-/* Partner-Toggle-Button (klappbares Akkordeon) */
-.partner-toggle-btn{display:inline-flex;align-items:center;gap:10px;padding:14px 26px;background:linear-gradient(135deg,#8B5CF6,#A88CFF);color:#fff;border:none;border-radius:999px;font-size:14px;font-weight:700;letter-spacing:.3px;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 8px 24px rgba(139,92,246,.35)}
-.partner-toggle-btn:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(139,92,246,.5)}
-.partner-toggle-btn .ptb-chevron{transition:transform .3s ease}
-.partner-toggle-btn[aria-expanded="true"] .ptb-chevron{transform:rotate(180deg)}
-/* Partner-Toggle Fix: höhere Spezifität gegen spätere display:flex Regeln */
-.partner-section .partner-form[hidden],
-form.partner-form[hidden]{display:none !important}
-.partner-form:not([hidden]){animation:fadeSlideIn .4s cubic-bezier(.2,.8,.2,1)}
-@keyframes fadeSlideIn{0%{opacity:0;transform:translateY(-10px)}100%{opacity:1;transform:translateY(0)}}
-
-/* Pillar-Cards mit Lifestyle-Bildern als Background */
-.pillar-card{overflow:hidden}
-.pillar-card-bg{position:absolute;inset:0;z-index:0;background-size:cover;background-position:center;opacity:.38;filter:saturate(.85) contrast(1.05);transition:opacity .4s,filter .4s}
-.pillar-card:hover .pillar-card-bg{opacity:.55;filter:saturate(1) contrast(1.1)}
-.pillar-card>*:not(.pillar-card-bg){position:relative;z-index:1}
-.pillar-card::after{content:"";position:absolute;inset:0;z-index:0;background:linear-gradient(180deg,rgba(15,10,31,.65) 0%,rgba(15,10,31,.92) 80%);pointer-events:none}
-/* Hero-Mission Wortspiel — 3 Sätze cyclen mit Crossfade (Grid-Stack-Trick: alle Lines occupy gleiche Grid-Zelle) */
-.hero-mission{display:grid;text-align:center;font-size:clamp(28px,5.5vw,52px);font-weight:900;line-height:1.1;letter-spacing:-1.5px;margin:0 0 14px;color:#F5F3FF}
-.hero-mission .mission-line{grid-area:1/1;display:block;opacity:0;transform:translateY(10px);transition:opacity .6s cubic-bezier(.4,0,.2,1),transform .6s cubic-bezier(.4,0,.2,1);will-change:opacity,transform}
-.hero-mission .mission-line.is-active{opacity:1;transform:translateY(0)}
-.hero-mission .mission-em{color:#A88CFF;text-shadow:0 0 24px rgba(168,140,255,.45)}
-@media (prefers-reduced-motion:reduce){
-  .hero-mission .mission-line{transition:none}
-}
-
-/* Fix-2: Hero Pioneer-Counter */
-.hero-pioneer-count{margin:14px auto 4px;padding:10px 18px;display:inline-block;background:rgba(168,140,255,.08);border:.5px solid rgba(168,140,255,.22);border-radius:999px;font-size:13px;color:rgba(245,243,255,.75);letter-spacing:.2px}
-.hero-pioneer-count strong{color:#F5F3FF;font-weight:700}
-.hero-sub,.hero-crew-def,.hero-cta-row,.hero-pioneer-count,.wl-card,.wl-count,.wl-milestone,.social-bar{opacity:1 !important;animation:none !important}
-
-/* Schritt 3: Drei-Pillar-Section — Crew / Safety-Circle / Heimweg */
-.pillars{position:relative;padding:80px 24px 60px;max-width:1080px;margin:0 auto}
-.pillars-head{text-align:center;margin-bottom:48px}
-.pillars-eyebrow{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:#A88CFF;font-weight:700;margin-bottom:14px}
-.pillars-title{font-size:clamp(28px,4.5vw,42px);font-weight:800;line-height:1.15;letter-spacing:-1px;color:#F5F3FF;margin-bottom:14px}
-.pillars-sub{font-size:clamp(14px,1.5vw,16px);color:rgba(245,243,255,.65);line-height:1.55;max-width:520px;margin:0 auto}
-.pillars-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-@media (max-width:880px){.pillars-grid{grid-template-columns:1fr;gap:14px;max-width:480px;margin:0 auto}}
-
-/* sr-only utility (Screen-Reader Accessibility) */
-.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-
-/* Vision-Strip — crew+ Netzwerk-Andeutung mit ". → +" Morph */
-.vision-strip{position:relative;padding:80px 24px 88px;max-width:720px;margin:0 auto;text-align:center;overflow:hidden}
-.vision-strip::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at center,rgba(139,92,246,.10) 0%,transparent 70%);pointer-events:none;z-index:0}
+/* VISION */
+.vision{position:relative;padding:120px 24px;max-width:780px;margin:0 auto;text-align:center;overflow:hidden}
+.vision::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at center,rgba(139,92,246,.12) 0%,transparent 70%);pointer-events:none;z-index:0}
 .vision-inner{position:relative;z-index:1}
-.vision-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:rgba(168,140,255,.7);font-weight:700;margin-bottom:22px;padding:6px 14px;background:rgba(139,92,246,.06);border:.5px solid rgba(168,140,255,.18);border-radius:999px}
-.vision-title{font-size:clamp(56px,10vw,96px);font-weight:900;letter-spacing:-3.5px;line-height:.95;color:#F5F3FF;margin:0 0 14px;display:inline-block}
+.vision-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:rgba(168,140,255,.7);font-weight:700;margin-bottom:22px;padding:6px 14px;background:rgba(168,140,255,.04);border:.5px solid rgba(168,140,255,.18);border-radius:999px}
+.vision-title{font-size:clamp(72px,14vw,140px);font-weight:900;letter-spacing:-.05em;line-height:.9;color:#F5F3FF;margin:0 0 18px;display:inline-block}
+.vision-mark{position:relative;display:inline-block;width:.5em;height:1em;vertical-align:baseline}
+.vision-mark .d,.vision-mark .p{position:absolute;left:0;right:0;bottom:0;display:flex;align-items:flex-end;justify-content:center;line-height:1;color:var(--muted);transition:opacity .8s,transform .8s cubic-bezier(.4,0,.2,1)}
+.vision-mark .d{opacity:1;transform:scale(1);text-shadow:0 0 28px rgba(168,140,255,.55);animation:dotB 9s ease-in-out infinite}
+.vision-mark .p{opacity:0;transform:scale(.6) rotate(-90deg);font-weight:300;text-shadow:0 0 36px rgba(168,140,255,.7);animation:plusR 9s ease-in-out infinite}
+@keyframes dotB{0%,55%,100%{opacity:1;transform:scale(1)}65%,90%{opacity:0;transform:scale(.5)}}
+@keyframes plusR{0%,55%,100%{opacity:0;transform:scale(.6) rotate(-90deg)}65%,90%{opacity:.88;transform:scale(1) rotate(0)}}
+.vision-tag{font-size:clamp(18px,2.4vw,24px);font-weight:400;font-family:var(--serif);font-style:italic;color:rgba(168,140,255,.8);margin:0 0 24px;line-height:1.3}
+.vision-body{font-size:16px;line-height:1.7;color:rgba(245,243,255,.72);max-width:560px;margin:0 auto 22px}
+.vision-meta{font-size:11.5px;letter-spacing:.22em;text-transform:uppercase;color:rgba(168,140,255,.45);font-weight:600}
 
-/* The "." → "+" Morph — geheimnisvoll, subtle Atmung statt aggressives Pulsen */
-.vision-mark{position:relative;display:inline-block;width:.55em;height:1em;vertical-align:baseline;margin-left:-.04em}
-.vision-mark .dot,.vision-mark .plus{position:absolute;left:0;right:0;bottom:0;display:flex;align-items:flex-end;justify-content:flex-start;line-height:1;color:#A88CFF;transition:opacity .8s ease,transform .8s cubic-bezier(.4,0,.2,1)}
-.vision-mark .dot{opacity:1;transform:scale(1);text-shadow:0 0 18px rgba(168,140,255,.45);animation:dotBreathe 9s ease-in-out infinite}
-.vision-mark .plus{opacity:0;transform:scale(.6) rotate(-90deg);font-weight:300;text-shadow:0 0 32px rgba(168,140,255,.6);animation:plusReveal 9s ease-in-out infinite}
-@keyframes dotBreathe{0%,55%,100%{opacity:1;transform:scale(1)}65%,90%{opacity:0;transform:scale(.5)}}
-@keyframes plusReveal{0%,55%,100%{opacity:0;transform:scale(.6) rotate(-90deg)}65%,90%{opacity:.85;transform:scale(1) rotate(0deg)}}
-
-.vision-tag{font-size:clamp(16px,2.2vw,20px);font-weight:600;letter-spacing:-.2px;color:rgba(168,140,255,.75);margin:0 0 22px;line-height:1.4;font-style:italic}
-.vision-body{font-size:14.5px;line-height:1.75;color:rgba(245,243,255,.7);max-width:560px;margin:0 auto 22px}
-.vision-meta{font-size:11.5px;letter-spacing:.22em;text-transform:uppercase;color:rgba(168,140,255,.45);font-weight:600;margin:0}
-@media (prefers-reduced-motion:reduce){
-  .vision-mark .dot,.vision-mark .plus{animation:none}
-  .vision-mark .dot{opacity:1}
-  .vision-mark .plus{opacity:.4}
-}
-@media (max-width:520px){.vision-strip{padding:60px 22px 68px}}
-
-/* Kontakt-Section — direkt an Admin-Dashboard */
-.contact-section{position:relative;padding:64px 24px 72px;max-width:600px;margin:0 auto;text-align:center}
-.contact-eyebrow{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:#A88CFF;font-weight:700;margin-bottom:10px}
-.contact-title{font-size:clamp(24px,3.4vw,34px);font-weight:900;letter-spacing:-1px;color:#F5F3FF;margin:0 0 12px}
-.contact-sub{font-size:14px;line-height:1.6;color:rgba(245,243,255,.7);max-width:460px;margin:0 auto 28px}
-.contact-form{display:flex;flex-direction:column;gap:14px;text-align:left}
-.contact-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-@media (max-width:520px){.contact-row{grid-template-columns:1fr}}
-.contact-field label{display:block;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(168,140,255,.75);margin-bottom:6px}
-.contact-field input,.contact-field textarea{width:100%;background:rgba(255,255,255,.06);color:#fff;border:1px solid rgba(168,140,255,.18);padding:13px 16px;border-radius:14px;font:inherit;font-size:14px;outline:none;transition:border-color .2s,background .2s;-webkit-appearance:none;appearance:none}
-.contact-field input:focus,.contact-field textarea:focus{border-color:#A88CFF;background:rgba(255,255,255,.08)}
-.contact-field input::placeholder,.contact-field textarea::placeholder{color:rgba(245,243,255,.35)}
-.contact-field textarea{resize:vertical;min-height:120px;line-height:1.5}
-.contact-btn{align-self:flex-end;background:linear-gradient(135deg,#8B5CF6,#A88CFF);color:#fff;border:0;padding:12px 28px;border-radius:14px;font-weight:800;font-size:14px;letter-spacing:.2px;cursor:pointer;box-shadow:0 8px 24px rgba(139,92,246,.32);transition:transform .2s,box-shadow .2s}
-.contact-btn:hover{transform:translateY(-1px);box-shadow:0 12px 32px rgba(139,92,246,.45)}
-.contact-btn:disabled{opacity:.5;cursor:not-allowed}
-.contact-success{font-size:13px;color:#A88CFF;text-align:center;margin:8px 0 0}
-
-/* Diff-Strip — "Aber WhatsApp macht das doch?" */
-.diff-strip{position:relative;padding:56px 24px 60px;max-width:920px;margin:0 auto;text-align:center}
-.diff-eyebrow{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:#A88CFF;font-weight:700;margin-bottom:10px}
-.diff-title{font-size:clamp(22px,3.4vw,32px);font-weight:800;line-height:1.2;letter-spacing:-.6px;color:#F5F3FF;margin:0 0 28px}
-.diff-title .em{color:#A88CFF}
-.diff-rows{display:flex;flex-direction:column;gap:12px;max-width:680px;margin:0 auto;text-align:left}
-.diff-row{display:grid;grid-template-columns:130px 1fr;gap:18px;align-items:start;padding:14px 18px;background:rgba(168,140,255,.04);border:.5px solid rgba(168,140,255,.14);border-radius:14px;transition:transform .25s cubic-bezier(.34,1.56,.64,1),background .25s,border-color .25s,box-shadow .25s}
-.diff-row:hover{transform:translateX(4px);background:rgba(168,140,255,.08);border-color:rgba(168,140,255,.32);box-shadow:0 8px 24px rgba(139,92,246,.18)}
-.diff-row-name{font-size:13px;font-weight:800;color:#A88CFF;letter-spacing:-.2px;line-height:1.4}
-.diff-row-text{font-size:14px;line-height:1.55;color:rgba(245,243,255,.78)}
-.diff-row-text strong{color:#F5F3FF;font-weight:700}
-@media (max-width:680px){
-  .diff-row{grid-template-columns:1fr;gap:6px;padding:14px 16px}
-  .diff-row-name{font-size:12px}
-  .diff-row-text{font-size:13px}
-}
-.pillar-card{position:relative;padding:32px 24px;background:linear-gradient(180deg,rgba(168,140,255,.05),rgba(168,140,255,.02));border:.5px solid rgba(168,140,255,.18);border-radius:22px;transition:transform .3s cubic-bezier(.2,.8,.2,1),border-color .3s,box-shadow .3s}
-.pillar-card:hover{transform:translateY(-4px);border-color:rgba(168,140,255,.35);box-shadow:0 20px 50px rgba(139,92,246,.18)}
-.pillar-icon{width:64px;height:64px;margin-bottom:18px;filter:drop-shadow(0 12px 24px rgba(168,140,255,.35))}
-.pillar-h{font-size:18px;font-weight:700;color:#F5F3FF;margin-bottom:10px;letter-spacing:-.3px}
-.pillar-desc{font-size:14px;line-height:1.55;color:rgba(245,243,255,.7);margin-bottom:14px}
-.pillar-detail{font-size:12.5px;line-height:1.5;color:#A88CFF;padding-top:14px;border-top:.5px solid rgba(168,140,255,.12)}
-
-/* Schritt 4: So funktioniert's Section */
-.howto{position:relative;padding:60px 24px 80px;max-width:1080px;margin:0 auto;border-top:.5px solid rgba(168,140,255,.08)}
-.howto-head{text-align:center;margin-bottom:48px}
-.howto-eyebrow{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:#A88CFF;font-weight:700;margin-bottom:14px}
-.howto-title{font-size:clamp(28px,4.5vw,42px);font-weight:800;line-height:1.15;letter-spacing:-1px;color:#F5F3FF}
-.howto-flow{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;align-items:stretch;max-width:980px;margin:0 auto}
-@media (max-width:980px){.howto-flow{grid-template-columns:repeat(2,1fr);gap:14px;max-width:620px}}
-@media (max-width:620px){.howto-flow{grid-template-columns:1fr;max-width:380px}}
-.howto-step{position:relative;padding:24px 20px;background:rgba(168,140,255,.04);border:.5px solid rgba(168,140,255,.16);border-radius:18px;text-align:center}
-.howto-num{display:inline-block;width:28px;height:28px;line-height:28px;background:rgba(139,92,246,.2);color:#A88CFF;border-radius:50%;font-size:13px;font-weight:700;margin-bottom:8px}
-.howto-step-icon{width:48px;height:48px;margin:0 auto 12px;display:block;filter:drop-shadow(0 8px 16px rgba(168,140,255,.3))}
-.howto-step-title{font-size:15px;font-weight:700;color:#F5F3FF;margin-bottom:6px}
-.howto-step-desc{font-size:13px;line-height:1.5;color:rgba(245,243,255,.65)}
-.howto-arrow{align-self:center;color:rgba(168,140,255,.4);font-size:22px;margin-top:60px}
-
-/* Roadmap v2 — 3 Phasen schlank statt alter Hype-Roadmap */
-.roadmap-v2{padding:80px 24px;text-align:center}
-.rmv2-inner{max-width:980px;margin:0 auto}
-.rmv2-eyebrow{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:#A88CFF;font-weight:700;margin-bottom:14px}
-.rmv2-title{font-size:clamp(28px,4.5vw,42px);font-weight:800;letter-spacing:-1px;color:#F5F3FF;margin-bottom:14px}
-.rmv2-sub{font-size:clamp(14px,1.5vw,16px);color:rgba(245,243,255,.65);line-height:1.55;max-width:520px;margin:0 auto 48px}
-.rmv2-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-@media (max-width:880px){.rmv2-grid{grid-template-columns:1fr;max-width:480px;margin:0 auto}}
-.rmv2-step{position:relative;padding:28px 22px;background:rgba(168,140,255,.05);border:.5px solid rgba(168,140,255,.18);border-radius:18px;text-align:left;transition:transform .3s,border-color .3s}
-.rmv2-step:hover{transform:translateY(-4px);border-color:rgba(168,140,255,.32)}
-.rmv2-step.rmv2-active{background:linear-gradient(135deg,rgba(139,92,246,.18),rgba(168,140,255,.06));border-color:rgba(168,140,255,.45);box-shadow:0 16px 40px rgba(139,92,246,.18)}
-.rmv2-here-badge{position:absolute;top:-12px;left:18px;display:inline-flex;align-items:center;gap:6px;padding:5px 12px;background:linear-gradient(135deg,#8B5CF6,#A88CFF);color:#fff;font-size:10px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;border-radius:999px;box-shadow:0 6px 18px rgba(139,92,246,.55);animation:hereFloat 3s ease-in-out infinite}
-.rmv2-here-dot{width:6px;height:6px;background:#fff;border-radius:999px;animation:pulse 1.4s infinite}
-@keyframes hereFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
-@media (prefers-reduced-motion:reduce){.rmv2-here-badge{animation:none}.rmv2-here-dot{animation:none}}
-.rmv2-num{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;background:rgba(139,92,246,.22);color:#A88CFF;font-size:14px;font-weight:700;margin-bottom:14px}
-.rmv2-step.rmv2-active .rmv2-num{background:#8B5CF6;color:#fff}
-.rmv2-h{font-size:17px;font-weight:700;color:#F5F3FF;margin-bottom:8px;letter-spacing:-.3px}
-.rmv2-d{font-size:13px;line-height:1.55;color:rgba(245,243,255,.7);margin-bottom:14px}
-.rmv2-status{font-size:11px;font-weight:600;color:#A88CFF;letter-spacing:.4px;text-transform:uppercase;padding-top:12px;border-top:.5px solid rgba(168,140,255,.14)}
-
-/* Klapp-Cards (details/summary) für How-to-Steps + Trust-Strip-Items */
-.expand-wrap{margin-top:12px;text-align:left}
-.expand-wrap summary{display:inline-flex;align-items:center;gap:6px;cursor:pointer;font-size:11.5px;font-weight:600;color:#A88CFF;letter-spacing:.3px;text-transform:uppercase;padding:6px 14px;border:.5px solid rgba(168,140,255,.22);border-radius:999px;transition:background .2s,border-color .2s,color .2s;list-style:none;-webkit-user-select:none;user-select:none}
-.expand-wrap summary::-webkit-details-marker{display:none}
-.expand-wrap summary::after{content:"+";font-weight:700;font-size:14px;transition:transform .25s;line-height:1}
-.expand-wrap[open] summary::after{content:"\2212"}
-.expand-wrap summary:hover{background:rgba(168,140,255,.1);border-color:rgba(168,140,255,.4)}
-.expand-wrap[open] summary{background:rgba(139,92,246,.18);border-color:rgba(139,92,246,.4);color:#F5F3FF}
-.expand-body{margin-top:10px;padding:12px 14px;background:rgba(168,140,255,.04);border-left:2px solid rgba(168,140,255,.4);border-radius:0 8px 8px 0;font-size:12.5px;line-height:1.6;color:rgba(245,243,255,.78)}
-
-/* Schritt 5: Trust-Strip + Footer-Polish */
-.anchor-target{display:block;position:relative;top:-90px;height:0;visibility:hidden}
-.trust-strip{position:relative;padding:64px 18px 56px;max-width:980px;margin:0 auto;border-top:.5px solid rgba(168,140,255,.08);text-align:center}
-.trust-head{max-width:620px;margin:0 auto 30px}
-.trust-eyebrow{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:#A88CFF;font-weight:700;margin-bottom:12px}
-.trust-title{font-size:clamp(26px,4vw,40px);font-weight:900;line-height:1.15;letter-spacing:-1px;color:#F4EFE8;margin:0 0 12px}
-.trust-sub{font-size:14px;line-height:1.65;color:rgba(244,239,232,.68);margin:0}
-.trust-strip-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:720px;margin:0 auto 22px}
-@media (max-width:680px){.trust-strip-grid{max-width:100%;gap:8px}}
-/* Trust-Item = Emoji-only Pille; Text + Details poppen nur bei Tap */
-.trust-item{position:relative;padding:14px 8px 12px;background:rgba(168,140,255,.04);border:.5px solid rgba(168,140,255,.14);border-radius:16px;display:flex;flex-direction:column;align-items:center;gap:0;cursor:pointer;transition:background .25s,border-color .25s,transform .25s cubic-bezier(.34,1.56,.64,1)}
-.trust-item:hover{background:rgba(168,140,255,.08);border-color:rgba(168,140,255,.28);transform:translateY(-2px)}
-.trust-item.is-open{background:rgba(168,140,255,.10);border-color:rgba(168,140,255,.38);grid-column:1/-1;padding:18px 16px 16px}
-/* Emoji */
-.trust-icon{width:52px;height:52px;filter:drop-shadow(0 8px 16px rgba(168,140,255,.3));transition:transform .35s cubic-bezier(.34,1.56,.64,1),filter .35s;opacity:0;transform:scale(.4) translateY(20px)}
-@media (max-width:680px){.trust-icon{width:42px;height:42px}}
-/* Pop on scroll-into-view, dann sanftes Idle-Wackeln (nur wenn Card nicht offen) */
-.trust-strip.is-visible > .trust-strip-grid > .trust-item:nth-child(1) .trust-icon{animation:emojiPop .7s cubic-bezier(.34,1.56,.64,1) .05s forwards,trustWiggle 6s ease-in-out 2s infinite}
-.trust-strip.is-visible > .trust-strip-grid > .trust-item:nth-child(2) .trust-icon{animation:emojiPop .7s cubic-bezier(.34,1.56,.64,1) .20s forwards,trustWiggle 6s ease-in-out 3.2s infinite}
-.trust-strip.is-visible > .trust-strip-grid > .trust-item:nth-child(3) .trust-icon{animation:emojiPop .7s cubic-bezier(.34,1.56,.64,1) .35s forwards,trustWiggle 6s ease-in-out 4.4s infinite}
-.trust-strip.is-visible > .trust-strip-grid > .trust-item.is-open .trust-icon{animation:emojiPop .7s cubic-bezier(.34,1.56,.64,1) forwards}
-.trust-item:hover .trust-icon{transform:translateY(-4px) scale(1.12);filter:drop-shadow(0 14px 24px rgba(168,140,255,.5))}
-@keyframes emojiPop{0%{opacity:0;transform:scale(.4) translateY(20px)}70%{opacity:1;transform:scale(1.15) translateY(-3px)}100%{opacity:1;transform:scale(1) translateY(0)}}
-@keyframes trustWiggle{0%,88%,100%{transform:rotate(0)}90%{transform:rotate(-7deg) scale(1.05)}94%{transform:rotate(6deg) scale(1.05)}97%{transform:rotate(-3deg) scale(1.03)}}
-/* Mini-Label unter Emoji (nur 1 Wort) — sichtbar im default state */
-.trust-mini{font-size:10px;font-weight:700;letter-spacing:.6px;color:#A88CFF;text-transform:uppercase;margin-top:4px;opacity:.75;transition:opacity .25s}
-.trust-item:hover .trust-mini{opacity:1}
-.trust-item.is-open .trust-mini{display:none}
-/* Details-Body (versteckt bis is-open) */
-.trust-reveal{display:none;width:100%;text-align:center;animation:revealIn .35s cubic-bezier(.2,.8,.2,1)}
-.trust-item.is-open .trust-reveal{display:block;margin-top:10px}
-@keyframes revealIn{0%{opacity:0;transform:translateY(-6px);max-height:0}100%{opacity:1;transform:translateY(0);max-height:300px}}
-@media (prefers-reduced-motion:reduce){.trust-icon{opacity:1;transform:none;animation:none}.trust-item:hover .trust-icon{transform:none}.trust-strip.is-visible .trust-item:not(.is-open) .trust-icon{animation:none}}
-
-/* Smooth Aufklappen für details (Trust + How-to) */
-.expand-wrap[open] .expand-body{animation:expandIn .35s cubic-bezier(.2,.8,.2,1)}
-@keyframes expandIn{0%{opacity:0;transform:translateY(-6px);max-height:0}100%{opacity:1;transform:translateY(0);max-height:500px}}
-.trust-h{font-size:15px;font-weight:800;color:#F5F3FF;letter-spacing:-.2px;margin-bottom:4px}
-.trust-d{font-size:13px;line-height:1.55;color:rgba(245,243,255,.78)}
-.trust-tap-hint{font-size:11px;color:rgba(168,140,255,.55);letter-spacing:.4px;text-transform:uppercase;margin:0 0 16px;font-weight:600}
-.trust-item button.trust-item, button.trust-item{font:inherit;color:inherit;border:0;cursor:pointer}
-button.trust-item{appearance:none;-webkit-appearance:none}
-.trust-badge{display:inline-block;margin:8px auto 18px;padding:8px 18px;background:rgba(139,92,246,.14);border:.5px solid rgba(168,140,255,.32);border-radius:999px;font-size:11.5px;font-weight:600;letter-spacing:.5px;color:#A88CFF;text-transform:uppercase}
-.trust-meta{font-size:12.5px;line-height:1.7;color:rgba(245,243,255,.55);max-width:560px;margin:0 auto}
-.trust-meta strong{color:#A88CFF;font-weight:600}
-
-/* FAQ */
-.faq-section{position:relative;padding:72px 24px 84px;max-width:860px;margin:0 auto;border-top:.5px solid rgba(168,140,255,.08)}
-.faq-head{text-align:center;max-width:620px;margin:0 auto 34px}
-.faq-eyebrow{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:#A88CFF;font-weight:700;margin-bottom:12px}
-.faq-title{font-size:clamp(28px,4.2vw,42px);font-weight:900;line-height:1.12;letter-spacing:-1px;color:#F4EFE8;margin:0 0 12px}
-.faq-sub{font-size:14px;line-height:1.65;color:rgba(244,239,232,.66);margin:0}
-.faq-list{display:flex;flex-direction:column;gap:12px}
-.faq-item{background:rgba(168,140,255,.045);border:.5px solid rgba(168,140,255,.18);border-radius:16px;overflow:hidden}
-.faq-item summary{list-style:none;cursor:pointer;padding:18px 20px;color:#F4EFE8;font-size:15px;font-weight:800;display:flex;align-items:center;justify-content:space-between;gap:18px}
-.faq-item summary::-webkit-details-marker{display:none}
-.faq-item summary::after{content:"+";color:#A88CFF;font-size:20px;line-height:1;transition:transform .2s}
-.faq-item[open] summary::after{content:"\2212"}
-.faq-item p{font-size:13.5px;line-height:1.7;color:rgba(244,239,232,.72);padding:0 20px 18px;margin:0}
-
-/* App-Store-Section "Bald verfügbar" */
-.app-stores{position:relative;padding:64px 24px 72px;max-width:980px;margin:0 auto;text-align:center}
-.app-stores-inner{position:relative;z-index:1}
-.stores-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:#A88CFF;font-weight:700;margin-bottom:14px;padding:6px 14px;background:rgba(139,92,246,.10);border:.5px solid rgba(168,140,255,.24);border-radius:999px}
-.stores-eyebrow .pulse-dot{width:6px;height:6px;background:#8B5CF6;border-radius:999px;animation:pulse 1.6s infinite}
-.stores-title{font-size:clamp(26px,4vw,38px);font-weight:900;letter-spacing:-1px;line-height:1.15;color:#F5F3FF;margin:0 0 12px}
-.stores-title .em{color:#A88CFF;text-shadow:0 0 24px rgba(168,140,255,.4)}
-.stores-sub{font-size:14px;line-height:1.6;color:rgba(245,243,255,.65);max-width:520px;margin:0 auto 28px}
-.stores-badges{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin:0 auto 22px}
-.store-badge{display:inline-flex;align-items:center;gap:12px;padding:11px 20px 11px 18px;background:rgba(15,10,31,.72);border:.5px solid rgba(168,140,255,.32);border-radius:14px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:#F5F3FF;cursor:pointer;transition:transform .25s cubic-bezier(.34,1.56,.64,1),border-color .25s,box-shadow .25s;text-decoration:none;position:relative}
-.store-badge:hover{transform:translateY(-2px);border-color:rgba(168,140,255,.55);box-shadow:0 12px 32px rgba(139,92,246,.32)}
-.store-badge .sb-icon{width:28px;height:28px;flex-shrink:0;color:#F5F3FF}
-.store-badge--google .sb-icon{color:#A88CFF}
-.store-badge .sb-text{display:flex;flex-direction:column;align-items:flex-start;line-height:1.1;text-align:left}
-.store-badge .sb-pre{font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:rgba(168,140,255,.85);font-weight:600}
-.store-badge .sb-name{font-size:17px;font-weight:800;color:#F5F3FF;letter-spacing:-.3px;margin-top:1px}
-.store-badge .sb-soon{position:absolute;top:-7px;right:-6px;background:linear-gradient(135deg,#8B5CF6,#A88CFF);color:#fff;font-size:9px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;padding:3px 8px;border-radius:999px;box-shadow:0 4px 14px rgba(139,92,246,.5);animation:pulse 2.2s infinite}
-.stores-fallback{display:inline-block;margin-top:6px;font-size:13px;color:#A88CFF;font-weight:600;text-decoration:none;padding:6px 4px;border-bottom:1px dashed rgba(168,140,255,.4);transition:color .2s,border-color .2s}
-.stores-fallback:hover{color:#F5F3FF;border-bottom-color:#F5F3FF}
-@media (max-width:520px){
-  .store-badge{padding:10px 16px;gap:10px}
-  .store-badge .sb-name{font-size:15px}
-  .stores-badges{gap:10px}
-}
-
-.hero-eyebrow{font-size:12px;letter-spacing:.35em;text-transform:uppercase;color:var(--o);font-weight:700;margin-bottom:20px;opacity:0;animation:fade .8s ease .3s forwards}
-.hook{display:flex;flex-wrap:wrap;justify-content:center;align-items:baseline;gap:.12em;font-weight:900;line-height:.88;letter-spacing:-2px}
-.word{display:inline-block;font-size:clamp(32px,7.5vw,78px);opacity:0;transform:translateY(30px);animation:rise .7s cubic-bezier(.2,.8,.2,1) forwards}
-.word:nth-child(1){animation-delay:.1s}.word:nth-child(2){animation-delay:.2s}
-.word.brand{font-size:clamp(72px,18vw,180px);background:var(--gold);-webkit-background-clip:text;background-clip:text;color:transparent;animation:rise .7s cubic-bezier(.2,.8,.2,1) .55s forwards;filter:drop-shadow(0 0 60px rgba(139,92,246,.4))}
-@keyframes rise{0%{opacity:0;transform:translateY(40px) scale(.96)}100%{opacity:1;transform:translateY(0) scale(1)}}
-@keyframes fade{to{opacity:1}}
-.hero-sub{margin-top:20px;font-size:clamp(13px,1.3vw,16px);color:#999;line-height:1.7;opacity:0;animation:fade .8s ease .9s forwards;max-width:440px;margin-left:auto;margin-right:auto}
-
-/* WAITLIST — card in hero */
-.wl-card{max-width:440px;margin:28px auto 0;padding:28px 24px;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:var(--r);opacity:0;animation:fade .8s ease 1.2s forwards}
-.wl-card h2{font-size:16px;font-weight:800;text-align:center;margin-bottom:18px}
-.wl-field{margin-bottom:12px}
-.wl-field label{display:block;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
-.wl-field input,.wl-field select{width:100%;background:rgba(255,255,255,.06);color:#fff;border:1px solid rgba(255,255,255,.1);padding:14px 16px;border-radius:14px;font:inherit;font-size:15px;outline:none;transition:border-color .2s;-webkit-appearance:none;appearance:none}
-.wl-field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;padding-right:40px}
-.wl-field select option{background:#1a1a1a;color:#fff}
-.wl-field input:focus,.wl-field select:focus{border-color:var(--o)}
-.wl-field input::placeholder{color:#555}
-.wl-row{display:flex;gap:12px}.wl-row .wl-field{flex:1}
-.wl-consent{display:flex;align-items:start;gap:10px;margin:14px 0 4px;text-align:left}
-.wl-consent input[type=checkbox]{width:18px;height:18px;margin-top:1px;accent-color:var(--o);flex-shrink:0;cursor:pointer}
-.wl-consent label{font-size:11px;color:var(--muted);line-height:1.5;cursor:pointer}
-.wl-consent label a{color:var(--o);text-decoration:underline}
-.wl-btn{width:100%;background:var(--gold);color:#000;padding:16px 28px;border-radius:999px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;transition:transform .2s,box-shadow .2s;box-shadow:0 8px 24px rgba(255,157,110,.15);margin-top:4px;border:0;cursor:pointer}
-.wl-btn:hover{transform:translateY(-1px);box-shadow:0 12px 30px rgba(255,157,110,.25)}
-.wl-note{margin-top:12px;font-size:11px;color:#444;text-align:center}
-.wl-success{margin-top:16px;padding:14px 18px;background:rgba(52,199,89,.08);border:1px solid rgba(52,199,89,.15);border-radius:14px;display:none;font-size:14px;color:#34C759;font-weight:600;text-align:center}
-.wl-count{margin-top:14px;font-size:13px;color:var(--muted);text-align:center;opacity:0;animation:fade .8s ease 1.5s forwards}.wl-count strong{color:var(--o);font-weight:800}
-.wl-milestone{margin-top:10px;text-align:center;opacity:0;animation:fade .8s ease 1.7s forwards}
-.wl-milestone-inner{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:14px;background:rgba(255,157,110,.06);border:1px solid rgba(255,157,110,.1);font-size:12px;color:var(--o);font-weight:600}
-.wl-milestone-inner .ms-emoji{font-size:16px}
-.wl-milestone-inner .ms-bar{width:60px;height:5px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden}
-.wl-milestone-inner .ms-fill{height:100%;background:var(--gold);border-radius:99px;transition:width .8s ease}
-
-/* REFERRAL SYSTEM */
-.ref-card{max-width:440px;margin:20px auto 0;padding:24px;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:var(--r);display:none}
-.ref-card.show{display:block;animation:fade .5s ease forwards}
-.ref-card h3{font-size:15px;font-weight:800;text-align:center;margin-bottom:4px}
-.ref-card .ref-sub{font-size:12px;color:var(--muted);text-align:center;margin-bottom:16px;line-height:1.5}
-.ref-link-box{display:flex;gap:8px;margin-bottom:18px}
-.ref-link-box input{flex:1;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:#fff;padding:12px 14px;border-radius:12px;font:inherit;font-size:13px;outline:none}
-.ref-link-box button{background:var(--gold);color:#000;padding:12px 18px;border-radius:12px;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;transition:transform .2s}
-.ref-link-box button:hover{transform:translateY(-1px)}
-.ref-progress{margin-bottom:8px}
-.ref-bar-bg{height:8px;background:rgba(255,255,255,.06);border-radius:99px;overflow:hidden;margin:10px 0 14px}
-.ref-bar{height:100%;background:var(--gold);border-radius:99px;transition:width .6s cubic-bezier(.2,.8,.2,1);min-width:2px}
-.ref-tiers{display:flex;flex-direction:column;gap:10px}
-.ref-tier{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.02);transition:all .3s}
-.ref-tier.unlocked{border-color:rgba(52,199,89,.3);background:rgba(52,199,89,.06)}
-.ref-tier.active{border-color:rgba(255,157,110,.3);background:rgba(255,157,110,.06)}
-.ref-tier .tier-icon{font-size:20px;width:28px;text-align:center;flex-shrink:0}
-.ref-tier .tier-info{flex:1}
-.ref-tier .tier-title{font-size:12px;font-weight:700;color:#fff}
-.ref-tier .tier-desc{font-size:11px;color:var(--muted)}
-.ref-tier .tier-check{font-size:14px;color:#34C759;font-weight:700;flex-shrink:0}
-.ref-count-display{text-align:center;font-size:13px;color:var(--muted);margin-bottom:12px}.ref-count-display strong{color:var(--o);font-weight:800;font-size:22px}
-.ref-share-btns{display:flex;gap:8px;margin-top:14px}
-.ref-share-btns a{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;border-radius:12px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;transition:all .2s;text-decoration:none}
-.ref-share-btns .share-wa{background:rgba(37,211,102,.12);color:#25D366;border:1px solid rgba(37,211,102,.2)}
-.ref-share-btns .share-wa:hover{background:rgba(37,211,102,.2)}
-.ref-share-btns .share-copy{background:rgba(255,255,255,.06);color:#fff;border:1px solid rgba(255,255,255,.1)}
-.ref-share-btns .share-copy:hover{background:rgba(255,255,255,.1)}
-
-/* CODE LOOKUP */
-.code-lookup{max-width:440px;margin:24px auto 0;padding:20px 24px;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:var(--r)}
-.cl-divider{text-align:center;font-size:12px;color:#555;margin-bottom:14px;position:relative}
-.cl-divider::before,.cl-divider::after{content:'';position:absolute;top:50%;width:38%;height:1px;background:var(--line)}
-.cl-divider::before{left:0}.cl-divider::after{right:0}
-.code-lookup h3{font-size:14px;font-weight:800;text-align:center;margin-bottom:4px}
-.cl-sub{font-size:12px;color:var(--muted);text-align:center;margin-bottom:14px;line-height:1.5}
-.cl-form{display:flex;gap:8px}
-.cl-form input{flex:1;background:rgba(255,255,255,.06);color:#fff;border:1px solid rgba(255,255,255,.1);padding:12px 14px;border-radius:12px;font:inherit;font-size:14px;outline:none;transition:border-color .2s}
-.cl-form input:focus{border-color:var(--o)}
-.cl-form input::placeholder{color:#555}
-.cl-form button{background:var(--gold);color:#000;padding:12px 18px;border-radius:12px;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;transition:transform .2s;cursor:pointer;border:0}
-.cl-form button:hover{transform:translateY(-1px)}
-.cl-result{margin-top:12px;display:none;padding:14px;border-radius:14px;font-size:13px;text-align:center;line-height:1.6}
-.cl-result.show{display:block}
-.cl-result.success{background:rgba(52,199,89,.08);border:1px solid rgba(52,199,89,.15);color:#34C759}
-.cl-result.error{background:rgba(255,59,48,.08);border:1px solid rgba(255,59,48,.15);color:#FFB87C}
-
-/* SOCIAL LINKS */
-.social-bar{display:flex;justify-content:center;align-items:center;gap:20px;margin-top:22px;opacity:0;animation:fade .8s ease 1.6s forwards}
-.social-link{display:flex;align-items:center;gap:8px;padding:10px 18px;border-radius:999px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);transition:all .25s;text-decoration:none;color:var(--fg)}
-.social-link:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.2);transform:translateY(-1px)}
-.social-link svg{width:20px;height:20px;flex-shrink:0}
-.social-link span{font-size:12px;font-weight:700;letter-spacing:.04em}
-
-/* FEATURES — small strip */
-.features-strip{border-top:1px solid var(--line);padding:48px 24px;text-align:center}
-.features-strip h3{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--o);font-weight:700;margin-bottom:24px}
-.feat-row{display:flex;justify-content:center;gap:32px;flex-wrap:wrap;max-width:700px;margin:0 auto}
-.feat-item{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--muted)}
-.feat-item span{font-size:18px}
+/* FINAL CTA + Waitlist Form */
+.final{padding:140px 24px 100px;text-align:center;position:relative;max-width:680px;margin:0 auto}
+.final::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(139,92,246,.2),transparent 65%);pointer-events:none;filter:blur(30px)}
+.final h2{position:relative;font-size:clamp(44px,7vw,96px);font-weight:900;letter-spacing:-.05em;line-height:.92;color:#F5F3FF;margin-bottom:18px}
+.final h2 em{font-style:normal;font-family:var(--serif);font-weight:400;background:linear-gradient(135deg,#A88CFF,#FF9D6E);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.final p{position:relative;font-size:16px;color:rgba(245,243,255,.7);max-width:480px;margin:0 auto 36px;line-height:1.6}
+.wl-form{position:relative;text-align:left;background:rgba(168,140,255,.05);border:.5px solid rgba(168,140,255,.22);border-radius:24px;padding:32px;backdrop-filter:blur(18px);box-shadow:0 24px 60px rgba(0,0,0,.3)}
+.wl-form h3{font-size:22px;font-weight:900;letter-spacing:-.02em;color:#F5F3FF;margin-bottom:18px;text-align:center}
+.wl-field{margin-bottom:14px}
+.wl-field label{display:block;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(168,140,255,.75);margin-bottom:6px}
+.wl-field input,.wl-field select{width:100%;background:rgba(255,255,255,.06);color:#fff;border:1px solid rgba(168,140,255,.18);padding:14px 16px;border-radius:12px;font:inherit;font-size:14px;outline:none;transition:border-color .2s,background .2s;-webkit-appearance:none;appearance:none}
+.wl-field input:focus,.wl-field select:focus{border-color:var(--muted);background:rgba(255,255,255,.08)}
+.wl-field input::placeholder{color:rgba(245,243,255,.35)}
+.wl-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:520px){.wl-row{grid-template-columns:1fr}}
+.wl-consent{display:flex;gap:10px;align-items:flex-start;font-size:12px;color:rgba(245,243,255,.65);line-height:1.5;margin:14px 0 18px}
+.wl-consent input{width:18px;height:18px;flex-shrink:0;margin-top:2px;accent-color:var(--muted)}
+.wl-consent a{color:var(--muted);border-bottom:.5px solid currentColor}
+.wl-btn{width:100%;padding:18px;background:linear-gradient(135deg,#8B5CF6,#A88CFF);color:#fff;border-radius:14px;font-weight:800;font-size:16px;letter-spacing:.01em;box-shadow:0 16px 40px rgba(139,92,246,.45),0 0 0 .5px rgba(255,255,255,.1) inset;transition:transform .2s,box-shadow .2s;cursor:pointer}
+.wl-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 22px 56px rgba(139,92,246,.6),0 0 0 .5px rgba(255,255,255,.2) inset}
+.wl-btn:disabled{opacity:.6;cursor:not-allowed}
+.wl-note{font-size:12px;color:rgba(168,140,255,.55);text-align:center;margin-top:14px;font-style:italic}
+.wl-msg{margin-top:14px;padding:12px 14px;border-radius:10px;font-size:13px;line-height:1.5;display:none}
+.wl-msg.ok{display:block;background:rgba(40,200,120,.12);border:.5px solid rgba(40,200,120,.4);color:var(--green)}
+.wl-msg.err{display:block;background:rgba(236,72,153,.12);border:.5px solid rgba(236,72,153,.35);color:#F472B6}
+.final-meta{font-size:12px;color:rgba(245,243,255,.5);display:inline-flex;align-items:center;gap:8px;margin-top:24px}
+.final-meta .d{width:4px;height:4px;border-radius:50%;background:var(--green);animation:greenPulse 2s ease-in-out infinite}
+@keyframes greenPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.85)}}
 
 /* FOOTER */
-footer{padding:32px 24px;border-top:1px solid var(--line);text-align:center}
-.foot-brand{font-size:24px;font-weight:900;letter-spacing:-1px;margin-bottom:8px}
-.foot-brand .dot{background:var(--gold);-webkit-background-clip:text;background-clip:text;color:transparent}
-.foot-links{display:flex;justify-content:center;gap:20px;font-size:12px;color:#444;margin-bottom:12px;flex-wrap:wrap}
-.foot-links a{transition:color .2s;cursor:pointer}.foot-links a:hover{color:var(--o)}
-.foot-copy{font-size:11px;color:#333}
+footer{padding:80px 32px 36px;border-top:.5px solid var(--line);background:linear-gradient(180deg,transparent,rgba(168,140,255,.02))}
+.foot-grid{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:54px}
+@media (max-width:880px){.foot-grid{grid-template-columns:1fr 1fr;gap:32px}}
+@media (max-width:520px){.foot-grid{grid-template-columns:1fr}}
+.foot-brand .crew-name{font-size:32px;font-weight:900;letter-spacing:-.06em;color:#F5F3FF;line-height:1;margin-bottom:14px}
+.foot-brand .crew-name .dot{color:var(--muted);text-shadow:0 0 14px rgba(168,140,255,.6)}
+.foot-brand p{font-size:13.5px;color:rgba(245,243,255,.55);max-width:280px;line-height:1.6;margin-bottom:18px}
+.foot-brand .made{display:inline-flex;align-items:center;gap:8px;padding:5px 12px;background:rgba(168,140,255,.05);border:.5px solid var(--line);border-radius:999px;font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(168,140,255,.65)}
+.foot-brand .made .flag{width:11px;height:8px;border-radius:1.5px;overflow:hidden;display:inline-grid;grid-template-rows:1fr 1fr 1fr}
+.foot-brand .made .flag span:nth-child(1){background:#0c0c0c}
+.foot-brand .made .flag span:nth-child(2){background:#DD0000}
+.foot-brand .made .flag span:nth-child(3){background:#FFCE00}
+.foot-col h4{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#F5F3FF;font-weight:700;margin-bottom:18px}
+.foot-col ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+.foot-col li a{font-size:13.5px;color:rgba(245,243,255,.6);transition:color .2s}
+.foot-col li a:hover{color:#F5F3FF}
+.foot-bottom{max-width:1180px;margin:0 auto;padding-top:24px;border-top:.5px solid var(--line);display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:rgba(245,243,255,.4);flex-wrap:wrap;gap:14px}
+.foot-social{display:flex;gap:12px}
+.foot-social a{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:rgba(168,140,255,.05);border:.5px solid var(--line);transition:background .2s,transform .2s}
+.foot-social a:hover{background:rgba(168,140,255,.12);transform:translateY(-2px)}
+.foot-social svg{width:14px;height:14px;color:rgba(245,243,255,.6)}
 
-/* LEGAL MODAL */
-.legal-overlay{display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);overflow-y:auto;padding:60px 16px}
-.legal-overlay.show{display:block}
-.legal-box{max-width:640px;margin:0 auto;background:#111;border:1px solid var(--line);border-radius:20px;padding:32px 28px;position:relative}
-.legal-close{position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;transition:background .2s;border:none;color:#fff}
-.legal-close:hover{background:rgba(255,255,255,.12)}
-.legal-box h2{font-size:20px;font-weight:800;margin-bottom:20px;padding-right:40px}
-.legal-box p,.legal-box li{font-size:12px;line-height:1.7;color:#bbb;margin-bottom:10px}
-.legal-box strong{color:#fff;font-weight:700}
-.legal-box h3{font-size:14px;font-weight:700;color:#fff;margin:20px 0 8px}
-
-/* ADMIN */
-.admin-section{padding:24px;text-align:center}
-.admin-toggle{font-size:10px;color:#1a1a1a;cursor:pointer;letter-spacing:.1em;transition:color .2s;user-select:none}
-.admin-toggle:hover{color:var(--muted)}
-.admin-form{display:none;max-width:320px;margin:14px auto 0;padding:20px;border-radius:16px;background:rgba(255,255,255,.02);border:1px solid var(--line)}
-.admin-form.show{display:block}
-.admin-form input{width:100%;padding:13px 16px;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);color:#fff;font:inherit;font-size:14px;margin-bottom:8px;outline:none}
-.admin-form input:focus{border-color:var(--o)}
-.admin-form button{width:100%;padding:13px;border-radius:12px;background:var(--o);color:#fff;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;transition:transform .2s}
-.admin-form button:hover{transform:translateY(-1px)}
-.admin-msg{margin-top:8px;font-size:12px;min-height:18px}
-
-/* FEATURE SHOWCASE */
-.feat-showcase{padding:80px 24px;border-top:1px solid var(--line)}
-.feat-showcase-inner{max-width:640px;margin:0 auto}
-.feat-showcase .section-tag{font-size:11px;letter-spacing:.35em;text-transform:uppercase;color:var(--o);font-weight:700;margin-bottom:20px;text-align:center}
-.feat-showcase h2{font-size:clamp(20px,3.5vw,32px);font-weight:900;letter-spacing:-1px;text-align:center;margin-bottom:36px}
-.feat-card{padding:28px 24px;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:var(--r);margin-bottom:16px;transition:border-color .3s}
-.feat-card:hover{border-color:rgba(255,157,110,.15)}
-.feat-card-head{display:flex;align-items:center;gap:14px;margin-bottom:10px}
-.feat-card-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
-.feat-card-icon.orange{background:rgba(255,157,110,.1);border:1px solid rgba(255,157,110,.15)}
-.feat-card-icon.blue{background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.15)}
-.feat-card-icon.green{background:rgba(52,199,89,.1);border:1px solid rgba(52,199,89,.15)}
-.feat-card h3{font-size:17px;font-weight:800;color:#fff}
-.feat-card p{font-size:13px;color:#999;line-height:1.7}
-.feat-card .feat-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
-.feat-card .feat-tag{font-size:10px;font-weight:700;letter-spacing:.06em;padding:4px 10px;border-radius:99px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);color:#777}
-.feat-more{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:24px;padding-top:24px;border-top:1px solid var(--line)}
-.feat-more-item{font-size:12px;font-weight:600;color:#555;display:flex;align-items:center;gap:5px}
-.feat-more-item span{font-size:15px}
-
-/* SOCIAL FOLLOW CTA */
-.social-follow{padding:48px 24px;text-align:center;background:rgba(255,157,110,.02);border-top:1px solid rgba(255,157,110,.06);border-bottom:1px solid rgba(255,157,110,.06)}
-.social-follow-inner{max-width:500px;margin:0 auto}
-.social-follow h3{font-size:16px;font-weight:800;margin-bottom:6px}
-.social-follow p{font-size:13px;color:#888;line-height:1.6;margin-bottom:18px}
-.social-follow-btns{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
-.sf-btn{display:flex;align-items:center;gap:8px;padding:14px 24px;border-radius:14px;font-size:13px;font-weight:700;transition:all .25s;text-decoration:none;background:rgba(168,140,255,.08);color:#A88CFF;border:.5px solid rgba(168,140,255,.25)}
-.sf-btn.wa,.sf-btn.ig{background:rgba(168,140,255,.08);color:#A88CFF;border:.5px solid rgba(168,140,255,.25)}
-.sf-btn.wa:hover,.sf-btn.ig:hover{background:rgba(168,140,255,.18);border-color:rgba(168,140,255,.45);color:#F5F3FF;transform:translateY(-2px)}
-.sf-btn svg{width:20px;height:20px}
-
-/* FEEDBACK */
-.feedback-section{padding:48px 24px;text-align:center;border-top:1px solid var(--line)}
-.feedback-inner{max-width:500px;margin:0 auto}
-.feedback-section h3{font-size:16px;font-weight:800;margin-bottom:6px}
-.feedback-section .fb-sub{font-size:13px;color:#888;line-height:1.6;margin-bottom:18px}
-.fb-form{display:flex;flex-direction:column;gap:12px}
-.fb-form textarea{width:100%;min-height:100px;background:rgba(255,255,255,.06);color:#fff;border:1px solid rgba(255,255,255,.1);padding:14px 16px;border-radius:14px;font:inherit;font-size:14px;outline:none;transition:border-color .2s;resize:vertical}
-.fb-form textarea:focus{border-color:var(--o)}
-.fb-form textarea::placeholder{color:#555}
-.fb-row{display:flex;gap:10px}
-.fb-row input{flex:1;background:rgba(255,255,255,.06);color:#fff;border:1px solid rgba(255,255,255,.1);padding:12px 14px;border-radius:14px;font:inherit;font-size:13px;outline:none;transition:border-color .2s}
-.fb-row input:focus{border-color:var(--o)}
-.fb-row input::placeholder{color:#555}
-.fb-btn{width:100%;background:var(--gold);color:#000;padding:14px 24px;border-radius:999px;font-size:13px;letter-spacing:.1em;text-transform:uppercase;font-weight:800;transition:transform .2s,box-shadow .2s;box-shadow:0 6px 20px rgba(255,157,110,.12);border:0;cursor:pointer}
-.fb-btn:hover{transform:translateY(-1px);box-shadow:0 10px 28px rgba(255,157,110,.2)}
-.fb-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
-.fb-success{margin-top:12px;padding:14px;background:rgba(52,199,89,.08);border:1px solid rgba(52,199,89,.15);border-radius:14px;display:none;font-size:14px;color:#34C759;font-weight:600}
-
-/* MANIFESTO */
-.manifesto{padding:80px 24px;text-align:center;border-top:1px solid var(--line);position:relative;overflow:hidden}
-.manifesto::before{content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);width:300px;height:300px;background:radial-gradient(circle,rgba(255,157,110,.06),transparent 70%);pointer-events:none}
-.manifesto-inner{max-width:600px;margin:0 auto;position:relative}
-.manifesto .section-tag{font-size:11px;letter-spacing:.35em;text-transform:uppercase;color:var(--o);font-weight:700;margin-bottom:20px}
-.manifesto h2{font-size:clamp(22px,4vw,36px);font-weight:900;line-height:1.15;letter-spacing:-1px;margin-bottom:20px}
-.manifesto h2 .hl{background:var(--gold);-webkit-background-clip:text;background-clip:text;color:transparent}
-.manifesto p{font-size:clamp(13px,1.2vw,15px);color:#999;line-height:1.8;margin-bottom:14px}
-.manifesto .sig{margin-top:24px;font-size:13px;font-weight:700;color:#ccc;letter-spacing:.02em}
-.manifesto .sig span{color:var(--o)}
-
-/* ROADMAP */
-.roadmap{padding:80px 24px;border-top:1px solid var(--line);position:relative}
-.roadmap-inner{max-width:560px;margin:0 auto}
-.roadmap .section-tag{font-size:11px;letter-spacing:.35em;text-transform:uppercase;color:var(--o);font-weight:700;margin-bottom:8px;text-align:center}
-.roadmap h2{font-size:clamp(20px,3.5vw,32px);font-weight:900;letter-spacing:-1px;text-align:center;margin-bottom:8px}
-.roadmap .roadmap-sub{font-size:13px;color:#666;text-align:center;margin-bottom:36px;line-height:1.6}
-.roadmap-progress{display:flex;align-items:center;gap:0;margin-bottom:32px;padding:0 8px}
-.roadmap-progress-bar{flex:1;height:6px;background:rgba(255,255,255,.06);border-radius:99px;overflow:hidden;position:relative}
-.roadmap-progress-fill{height:100%;background:var(--gold);border-radius:99px;transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
-.roadmap-progress-label{font-size:12px;font-weight:700;color:var(--o);white-space:nowrap;margin-left:12px}
-.rm-timeline{position:relative;padding-left:28px}
-.rm-timeline::before{content:"";position:absolute;left:9px;top:8px;bottom:8px;width:2px;background:rgba(255,255,255,.06)}
-.rm-step{position:relative;margin-bottom:28px}
-.rm-step:last-child{margin-bottom:0}
-.rm-dot{position:absolute;left:-28px;top:2px;width:20px;height:20px;border-radius:50%;border:2px solid rgba(255,255,255,.1);background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:10px;transition:all .3s;z-index:1}
-.rm-step.done .rm-dot{border-color:rgba(52,199,89,.4);background:rgba(52,199,89,.12);color:#34C759}
-.rm-step.active .rm-dot{border-color:rgba(255,157,110,.5);background:rgba(255,157,110,.12);box-shadow:0 0 12px rgba(255,157,110,.2);animation:pulse 1.6s infinite}
-.rm-step.locked .rm-dot{border-color:rgba(255,255,255,.06);color:#333}
-.rm-head{display:flex;align-items:center;gap:10px;margin-bottom:4px}
-.rm-members{font-size:11px;font-weight:800;color:var(--o);background:rgba(255,157,110,.08);padding:3px 10px;border-radius:99px;letter-spacing:.04em}
-.rm-step.done .rm-members{color:#34C759;background:rgba(52,199,89,.08)}
-.rm-step.locked .rm-members{color:#444;background:rgba(255,255,255,.03)}
-.rm-title{font-size:15px;font-weight:800;color:#fff}
-.rm-step.locked .rm-title{color:#555}
-.rm-desc{font-size:12px;color:#777;line-height:1.6;margin-top:2px}
-.rm-step.locked .rm-desc{color:#444}
-.rm-badge{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:99px;margin-top:8px}
-.rm-step.done .rm-badge{background:rgba(52,199,89,.1);color:#34C759;border:1px solid rgba(52,199,89,.2)}
-.rm-step.active .rm-badge{background:rgba(255,157,110,.1);color:var(--o);border:1px solid rgba(255,157,110,.2)}
-
-/* PARTNER PROGRAM */
-.partner-section{padding:80px 24px;border-top:1px solid var(--line);position:relative;overflow:hidden}
-.partner-section::before{content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);width:400px;height:400px;background:radial-gradient(circle,rgba(255,157,110,.05),transparent 70%);pointer-events:none}
-.partner-inner{max-width:560px;margin:0 auto;position:relative}
-.partner-form{display:flex;flex-direction:column;gap:14px}
-.pf-row{display:flex;gap:12px}
-@media(max-width:599px){.pf-row{flex-direction:column;gap:14px}}
-.pf-field{flex:1;display:flex;flex-direction:column;gap:6px}
-.pf-field label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
-.pf-field input,.pf-field select,.pf-field textarea{width:100%;background:rgba(255,255,255,.06);color:#fff;border:1px solid rgba(255,255,255,.1);padding:14px 16px;border-radius:14px;font:inherit;font-size:14px;outline:none;transition:border-color .2s;-webkit-appearance:none;appearance:none}
-.pf-field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;padding-right:40px}
-.pf-field select option{background:#1a1a1a;color:#fff}
-.pf-field textarea{resize:vertical;min-height:80px}
-.pf-field input:focus,.pf-field select:focus,.pf-field textarea:focus{border-color:var(--o)}
-.pf-field input::placeholder,.pf-field textarea::placeholder{color:#555}
-.pf-btn{width:100%;background:var(--gold);color:#000;padding:16px 28px;border-radius:999px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;transition:transform .2s,box-shadow .2s;box-shadow:0 8px 24px rgba(255,157,110,.15);margin-top:8px;border:0;cursor:pointer}
-.pf-btn:hover{transform:translateY(-1px);box-shadow:0 12px 30px rgba(255,157,110,.25)}
-.pf-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
-.pf-success{margin-top:12px;padding:14px;background:rgba(52,199,89,.08);border:1px solid rgba(52,199,89,.15);border-radius:14px;display:none;font-size:14px;color:#34C759;font-weight:600;text-align:center}
-
-/* COMMUNITY CTA */
-.community-cta{padding:60px 24px;border-top:1px solid var(--line);text-align:center}
-.community-cta-inner{max-width:500px;margin:0 auto}
-.community-cta h3{font-size:18px;font-weight:900;margin-bottom:8px}
-.community-cta p{font-size:13px;color:#888;margin-bottom:20px;line-height:1.6}
-.community-socials{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
-.csocial{display:flex;align-items:center;gap:8px;padding:12px 20px;border-radius:14px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);font-size:12px;font-weight:700;color:#ccc;transition:all .25s;text-decoration:none}
-.csocial:hover{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.15);transform:translateY(-2px)}
-.csocial svg{width:18px;height:18px;flex-shrink:0}
-.csocial.wa,.csocial.ig{border-color:rgba(168,140,255,.25);color:#A88CFF;background:rgba(168,140,255,.06)}
-.csocial.wa:hover,.csocial.ig:hover{background:rgba(168,140,255,.16);border-color:rgba(168,140,255,.45);color:#F5F3FF}
-
-/* MOBILE */
-@media(max-width:599px){
-  .nav{padding:12px 16px;overflow:hidden}
-  .nav-links{display:none !important}
-  .nav-pill{display:none}
-  .hero{padding:90px 16px 50px;min-height:100svh}
-  .hero-inner{max-width:100%;min-width:0}
-  .hero-floating-lockup{max-width:100%;gap:10px}
-  .hero-floating-word{font-size:40px;letter-spacing:0}
-  .hero-eyebrow{font-size:10px;letter-spacing:.18em;max-width:310px;margin-left:auto;margin-right:auto}
-  .hero-mission{font-size:34px;letter-spacing:0;line-height:1.08}
-  .hero-mission .mission-line{white-space:normal;overflow-wrap:break-word}
-  .hero-sub{max-width:310px}
-  .hero-crew-def{max-width:310px;margin-left:auto;margin-right:auto}
-  .hero-cta-row{flex-direction:column;gap:8px;width:100%;max-width:286px}
-  .hero-cta-primary{width:100%;max-width:286px}
-  .hero-cta-secondary{padding:8px}
-  .hero-pioneer-count{max-width:310px;line-height:1.45;white-space:normal}
-  .hero-sub,.hero-crew-def,.hero-cta-row,.hero-pioneer-count,.wl-card,.wl-count,.wl-milestone,.social-bar{opacity:1 !important;animation:none !important}
-  .wl-row{flex-direction:column;gap:0}
-  .hook{letter-spacing:-1px;gap:.08em}
-  .feat-row{gap:16px 24px}
-  .feat-item{font-size:12px}
-  .social-bar{flex-direction:column;gap:10px}
-  .legal-overlay{padding:40px 12px}
-  .legal-box{padding:24px 18px}
-}
-/* DESKTOP */
-@media(min-width:900px){
-  .nav{padding:16px 40px}
-  .hero{padding:140px 40px 100px}
-  .hero-eyebrow{font-size:13px;letter-spacing:.4em}
-  .feat-row{gap:40px}
-}
-
-/* ═══════════════════════════════════════════════════════
-   v2-POLISH-LAYER · Glassmorphism · Photos · Apple-Headlines
-   ═══════════════════════════════════════════════════════ */
-
-/* — Brand-Tokens (Schritt 2: alte Akzente zu Brand-Violet) — */
-:root{
-  --pink2: #8B5CF6;
-  --grad-hero: linear-gradient(135deg, #8B5CF6 0%, #A88CFF 100%);
-  --grad-soft: linear-gradient(135deg, rgba(139,92,246,.14), rgba(168,140,255,.06));
-  --glass-bg: rgba(255,255,255,.04);
-  --glass-bd: rgba(255,255,255,.08);
-  --glass-bd-hover: rgba(255,255,255,.18);
-  --ease-cubic: cubic-bezier(.2,.7,.2,1);
-}
-
-/* — Background-Glow body-wide — */
-body::after{
-  content:'';
-  position: fixed;
-  inset: 0;
-  background:
-    radial-gradient(60% 50% at 80% 0%, rgba(139,92,246,.10), transparent 60%),
-    radial-gradient(50% 40% at 0% 30%, rgba(255,157,110,.08), transparent 70%);
-  pointer-events: none;
-  z-index: 0;
-}
-.hero, .feat-showcase, .roadmap, .partner-section, .community-cta, .manifesto { position: relative; z-index: 1; }
-
-/* Schritt 2: Hero ohne Unsplash-Foto — pure Brand-Aura statt Stadt-Bild */
-.hero-bg{
-  background:
-    radial-gradient(ellipse at 30% 20%, rgba(139,92,246,.20) 0%, transparent 45%),
-    radial-gradient(ellipse at 75% 70%, rgba(168,140,255,.14) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 100%, rgba(139,92,246,.10) 0%, transparent 60%),
-    var(--bg) !important;
-}
-
-/* — Violet-Em-Akzent für Headlines (.hook .word, h2, h3) — */
-.hook .word.brand{
-  background: var(--grad-hero) !important;
-  -webkit-background-clip: text !important;
-  background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
-  color: transparent !important;
-}
-.hook .word.brand .dot{
-  background: var(--gold) !important;
-  -webkit-background-clip: text !important;
-  background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
-}
-
-/* — Section-Tags glühen schöner — */
-.section-tag{
-  background: var(--grad-hero);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent !important;
-}
-
-/* — Waitlist-Form als Glas-Card — */
-.wl-card{
-  background: var(--glass-bg) !important;
-  backdrop-filter: blur(28px) saturate(170%) !important;
-  -webkit-backdrop-filter: blur(28px) saturate(170%) !important;
-  border: 1px solid var(--glass-bd) !important;
-  box-shadow: 0 12px 48px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.06) !important;
-}
-
-.wl-card input, .wl-card select{
-  background: rgba(255,255,255,.04) !important;
-  border: 1px solid var(--glass-bd) !important;
-  transition: border-color .2s var(--ease-cubic), background .2s var(--ease-cubic) !important;
-}
-.wl-card input:focus, .wl-card select:focus{
-  border-color: var(--pink2) !important;
-  background: rgba(255,255,255,.06) !important;
-  outline: none !important;
-}
-
-/* — Feature-Cards (Drei Gründe) als Glas — */
-.feat-card{
-  background: var(--glass-bg) !important;
-  backdrop-filter: blur(24px) saturate(160%) !important;
-  -webkit-backdrop-filter: blur(24px) saturate(160%) !important;
-  border: 1px solid var(--glass-bd) !important;
-  box-shadow: 0 8px 32px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.05) !important;
-  transition: transform .3s var(--ease-cubic), border-color .3s var(--ease-cubic) !important;
-  position: relative;
-  overflow: hidden;
-}
-.feat-card::before{
-  content:'';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  background: var(--grad-hero);
-  opacity: 0;
-  transition: opacity .3s var(--ease-cubic);
-}
-.feat-card:hover{
-  transform: translateY(-6px) !important;
-  border-color: var(--glass-bd-hover) !important;
-}
-.feat-card:hover::before{ opacity: 1; }
-
-.feat-card-icon{
-  background: var(--grad-soft) !important;
-  border: 1px solid rgba(255,157,110,.2) !important;
-  border-radius: 16px;
-}
-
-/* — Feature-Tags (Smart Matching, Echtzeit-Standort, etc.) — */
-.feat-tag{
-  background: rgba(255,214,10,.08) !important;
-  border: 1px solid rgba(255,214,10,.22) !important;
-  color: var(--gold) !important;
-  letter-spacing: -0.005em !important;
-}
-
-/* — "In Planung" Card-Variante (gestempelt) — */
-.feat-card.feat-soon{
-  border-style: dashed !important;
-  border-color: rgba(255,214,10,.32) !important;
-  background: rgba(255,214,10,.025) !important;
-}
-.feat-card.feat-soon .feat-card-icon{
-  filter: saturate(.7);
-}
-.soon-badge{
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  font-size: 9px;
-  font-weight: 800;
-  letter-spacing: .22em;
-  text-transform: uppercase;
-  padding: 5px 10px;
-  border-radius: 999px;
-  color: var(--gold);
-  background: rgba(255,214,10,.10);
-  border: 1px solid rgba(255,214,10,.32);
-  z-index: 2;
-}
-
-/* — Mini-Features-Header über der Pill-Reihe — */
-.feat-more-head{
-  margin-top: 32px;
-  padding-top: 24px;
-  border-top: 1px solid var(--line);
-  text-align: center;
-}
-.feat-more-head .feat-more-tag{
-  display: inline-block;
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: .22em;
-  text-transform: uppercase;
-  color: var(--gold);
-  background: rgba(255,214,10,.08);
-  border: 1px solid rgba(255,214,10,.28);
-  padding: 5px 12px;
-  border-radius: 999px;
-  margin-bottom: 10px;
-}
-.feat-more-head p{
-  font-size: 13px;
-  color: var(--muted, #888);
-  max-width: 460px;
-  margin: 0 auto;
-  line-height: 1.55;
-}
-.feat-more{
-  margin-top: 16px !important;
-  padding-top: 0 !important;
-  border-top: 0 !important;
-  display: grid !important;
-  grid-template-columns: repeat(6, 1fr) !important;
-  gap: 12px !important;
-  justify-content: center !important;
-}
-@media (max-width: 980px){ .feat-more{ grid-template-columns: repeat(3, 1fr) !important; } }
-@media (max-width: 600px){ .feat-more{ grid-template-columns: repeat(2, 1fr) !important; } }
-
-/* Mini-Feature als richtige Karte */
-.feat-more-item{
-  position: relative !important;
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  justify-content: center !important;
-  text-align: center !important;
-  gap: 8px !important;
-  padding: 22px 14px 16px !important;
-  font-size: 13px !important;
-  font-weight: 700 !important;
-  color: var(--fg, #FAFAFA) !important;
-  background: rgba(255,255,255,.03) !important;
-  border: 1px dashed rgba(255,214,10,.22) !important;
-  border-radius: 16px !important;
-  overflow: hidden;
-}
-.feat-more-item::after{
-  content: '🔒';
-  position: absolute;
-  top: 8px;
-  right: 10px;
-  font-size: 10px;
-  opacity: .35;
-  margin: 0 !important;
-  transition: opacity .3s var(--ease-cubic);
-}
-.feat-more-item:hover::after{ opacity: .8; }
-.feat-more-item .fmi-emoji{
-  font-size: 26px !important;
-  line-height: 1;
-  filter: saturate(.65);
-  transition: filter .3s var(--ease-cubic), transform .3s var(--ease-cubic);
-}
-.feat-more-item:hover .fmi-emoji{
-  filter: saturate(1);
-  transform: scale(1.08);
-}
-.feat-more-item .fmi-name{
-  font-size: 12.5px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  white-space: nowrap;
-}
-.feat-more-item .fmi-status{
-  font-size: 9px;
-  font-weight: 800;
-  letter-spacing: .18em;
-  text-transform: uppercase;
-  color: var(--gold);
-  background: rgba(255,214,10,.10);
-  border: 1px solid rgba(255,214,10,.24);
-  padding: 3px 8px;
-  border-radius: 999px;
-  margin-top: 2px;
-}
-
-/* Mystery-Card (Challenges) — extra cryptisch */
-.feat-card.feat-mystery{
-  background:
-    repeating-linear-gradient(135deg, rgba(255,214,10,.025) 0, rgba(255,214,10,.025) 8px, transparent 8px, transparent 16px),
-    rgba(255,214,10,.025) !important;
-}
-.feat-mystery .mystery-dots{
-  background: var(--grad-hero);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-left: 2px;
-  letter-spacing: 1px;
-  animation: mysteryDots 2s var(--ease-cubic) infinite;
-}
-@keyframes mysteryDots{
-  0%, 100%{ opacity: .4; letter-spacing: 1px; }
-  50%    { opacity: 1; letter-spacing: 4px; }
-}
-.feat-tag.mystery-tag{
-  background: rgba(255,214,10,.06) !important;
-  border: 1px dashed rgba(255,214,10,.4) !important;
-  color: var(--gold) !important;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  letter-spacing: 2px !important;
-}
-
-/* ═══════════════════════════════════════════
-   PARTNER-SECTION — Trust-Polish
-   ═══════════════════════════════════════════ */
-.partner-section{
-  position: relative !important;
-  padding: 100px 24px 120px !important;
-  isolation: isolate;
-}
-.partner-section::before{
-  content:'';
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(60% 40% at 20% 0%, rgba(255,157,110,.10), transparent 60%),
-    radial-gradient(50% 40% at 80% 100%, rgba(139,92,246,.08), transparent 70%);
-  z-index: 0;
-  pointer-events: none;
-}
-.partner-section .partner-inner{
-  position: relative;
-  z-index: 1;
-}
-.partner-section .section-tag{
-  display: block;
-  text-align: center !important;
-  margin-bottom: 14px !important;
-  background: var(--grad-hero) !important;
-  -webkit-background-clip: text !important;
-  background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
-  color: transparent !important;
-}
-.partner-section h2{
-  font-size: clamp(28px, 4vw, 44px) !important;
-  font-weight: 900 !important;
-  letter-spacing: -1px !important;
-  line-height: 1.1 !important;
-  text-align: center !important;
-  margin-bottom: 14px !important;
-}
-.partner-section h2 em,
-.partner-section h2 strong{
-  font-style: normal;
-  background: var(--grad-hero);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-.partner-section > .partner-inner > p{
-  font-size: 16px !important;
-  color: var(--fg-2, #C8C8D4) !important;
-  text-align: center !important;
-  max-width: 540px !important;
-  margin: 0 auto 48px !important;
-  line-height: 1.6 !important;
-}
-
-/* Partner-Form als großzügigere Glas-Card */
-.partner-form{
-  max-width: 760px;
-  margin: 0 auto !important;
-  padding: 36px !important;
-  border-radius: 24px !important;
-}
-.pf-row{
-  display: grid !important;
-  grid-template-columns: 1fr 1fr !important;
-  gap: 14px !important;
-  margin-bottom: 14px !important;
-}
-@media (max-width: 700px){ .pf-row{ grid-template-columns: 1fr !important; } }
-
-.pf-field label{
-  display: block !important;
-  font-size: 11px !important;
-  font-weight: 800 !important;
-  letter-spacing: .14em !important;
-  text-transform: uppercase !important;
-  color: var(--muted, #888) !important;
-  margin-bottom: 6px !important;
-}
-.pf-field input,
-.pf-field select,
-.pf-field textarea{
-  width: 100% !important;
-  padding: 12px 14px !important;
-  border-radius: 12px !important;
-  font-size: 14px !important;
-  color: var(--fg, #FAFAFA) !important;
-}
-.partner-form button[type="submit"]{
-  margin-top: 6px !important;
-  padding: 14px 28px !important;
-  background: var(--grad-hero) !important;
-  color: #fff !important;
-  border: 0 !important;
-  border-radius: 999px !important;
-  font-weight: 800 !important;
-  font-size: 14px !important;
-  letter-spacing: -0.005em !important;
-  box-shadow: 0 12px 32px rgba(139,92,246,.3), inset 0 1px 0 rgba(255,255,255,.15) !important;
-  transition: transform .2s var(--ease-cubic) !important;
-  cursor: pointer;
-}
-.partner-form button[type="submit"]:hover{ transform: translateY(-2px); }
-
-/* — Mini-Feature-Strip Pills — */
-.feat-more-item{
-  background: var(--glass-bg) !important;
-  backdrop-filter: blur(20px) saturate(160%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(160%) !important;
-  border: 1px solid var(--glass-bd) !important;
-  transition: background .2s var(--ease-cubic), transform .2s var(--ease-cubic) !important;
-}
-.feat-more-item:hover{
-  background: rgba(139,92,246,.10) !important;
-  transform: translateY(-2px);
-  border-color: rgba(139,92,246,.3) !important;
-}
-
-/* — Roadmap-Steps als Glas-Cards mit Status-Glow — */
-.rm-step{
-  background: var(--glass-bg) !important;
-  backdrop-filter: blur(24px) saturate(160%) !important;
-  -webkit-backdrop-filter: blur(24px) saturate(160%) !important;
-  border: 1px solid var(--glass-bd) !important;
-  box-shadow: 0 8px 32px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.05) !important;
-  transition: transform .3s var(--ease-cubic), border-color .3s var(--ease-cubic) !important;
-}
-.rm-step:hover{
-  transform: translateY(-4px) !important;
-  border-color: rgba(139,92,246,.35) !important;
-}
-
-/* (Active-Milestone wird vom JS via .active-Klasse markiert — siehe weiter unten) */
-
-/* — Roadmap-Progress-Bar Shimmer — */
-.roadmap-progress-fill{
-  background: var(--grad-hero) !important;
-  box-shadow: 0 0 16px rgba(139,92,246,.5) !important;
-  position: relative;
-  overflow: hidden;
-}
-.roadmap-progress-fill::after{
-  content:'';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,.4), transparent);
-  background-size: 200% 100%;
-  animation: rmShimmer 2.5s linear infinite;
-}
-@keyframes rmShimmer{
-  0%{ background-position: 200% 0; }
-  100%{ background-position: -200% 0; }
-}
-
-/* — Manifesto-Section editorial mit Photo-Background — */
-.manifesto{
-  position: relative !important;
-  overflow: hidden !important;
-  isolation: isolate;
-}
-.manifesto::before{
-  content:'' !important;
-  position: absolute !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  transform: none !important;
-  background:
-    radial-gradient(60% 60% at 50% 30%, rgba(139,92,246,.18), transparent 70%),
-    linear-gradient(180deg, rgba(5,5,7,.65) 0%, rgba(5,5,7,.92) 60%, var(--bg) 100%),
-    url('https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?w=2000&q=70&auto=format&fit=crop') !important;
-  background-size: cover, cover, cover !important;
-  background-position: center, center, center !important;
-  background-repeat: no-repeat !important;
-  z-index: 0 !important;
-  pointer-events: none !important;
-}
-.manifesto > .manifesto-inner{
-  position: relative;
-  z-index: 1;
-}
-
-/* — Community-CTA Section — */
-.community-cta{
-  position: relative !important;
-  overflow: hidden !important;
-  isolation: isolate;
-}
-.community-cta::before{
-  content:'';
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(180deg, rgba(5,5,7,.6) 0%, rgba(5,5,7,.9) 70%, var(--bg) 100%),
-    url('https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=2000&q=70&auto=format&fit=crop');
-  background-size: cover;
-  background-position: center;
-  z-index: 0;
-  pointer-events: none;
-}
-.community-cta > .community-cta-inner{
-  position: relative;
-  z-index: 1;
-}
-
-/* — Social-Buttons (WhatsApp, Insta) glasiger — */
-.social-link{
-  background: var(--glass-bg) !important;
-  backdrop-filter: blur(24px) saturate(170%) !important;
-  -webkit-backdrop-filter: blur(24px) saturate(170%) !important;
-  border: 1px solid var(--glass-bd) !important;
-  box-shadow: 0 8px 32px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.05) !important;
-  transition: transform .3s var(--ease-cubic), border-color .3s var(--ease-cubic), background .3s var(--ease-cubic) !important;
-}
-.social-link:hover{
-  transform: translateY(-3px) !important;
-  border-color: var(--glass-bd-hover) !important;
-}
-.social-link.wa:hover{ border-color: rgba(37,211,102,.4) !important; background: rgba(37,211,102,.06) !important; }
-.social-link.ig:hover{ border-color: rgba(139,92,246,.4) !important; background: rgba(139,92,246,.06) !important; }
-
-/* — Partner-Form glasig — */
-.partner-form{
-  background: var(--glass-bg) !important;
-  backdrop-filter: blur(28px) saturate(170%) !important;
-  -webkit-backdrop-filter: blur(28px) saturate(170%) !important;
-  border: 1px solid var(--glass-bd) !important;
-  box-shadow: 0 12px 48px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.06) !important;
-}
-.pf-field input, .pf-field select, .pf-field textarea{
-  background: rgba(255,255,255,.04) !important;
-  border: 1px solid var(--glass-bd) !important;
-  transition: border-color .2s var(--ease-cubic), background .2s var(--ease-cubic) !important;
-}
-.pf-field input:focus, .pf-field select:focus, .pf-field textarea:focus{
-  border-color: var(--pink2) !important;
-  background: rgba(255,255,255,.06) !important;
-  outline: none !important;
-}
-
-/* — Pulse-Dot in Nav etwas fancier — */
-.nav-pill{
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  background: rgba(255,157,110,.06) !important;
-}
-
-/* — Reveal-Animation on scroll-in — */
-.feat-card, .rm-step, .feat-more-item, .social-link{
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity .8s var(--ease-cubic), transform .8s var(--ease-cubic), border-color .3s var(--ease-cubic), background .3s var(--ease-cubic);
-}
-.feat-card.is-visible, .rm-step.is-visible, .feat-more-item.is-visible, .social-link.is-visible{
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* — prefers-reduced-motion respect — */
-@media (prefers-reduced-motion: reduce){
-  *, *::before, *::after{
-    animation-duration: 0.001ms !important;
-    transition-duration: 0.001ms !important;
-  }
-  .feat-card, .rm-step, .feat-more-item, .social-link{ opacity: 1 !important; transform: none !important; }
-}
-
-/* — Mobile-Tweak: weniger blur damit's nicht laggt — */
-@media (max-width: 700px){
-  .wl-card, .feat-card, .rm-step, .partner-form, .social-link, .feat-more-item{
-    backdrop-filter: blur(16px) saturate(150%) !important;
-    -webkit-backdrop-filter: blur(16px) saturate(150%) !important;
-  }
-}
-
-/* ═══════════════════════════════════════════
-   ROADMAP — Polish-Layer Pass 2
-   ═══════════════════════════════════════════ */
-
-/* — Section-Container & Headlines — */
-.roadmap{
-  padding: 100px 24px 120px;
-}
-/* Wichtig: Original-Site hat roadmap-inner auf 560px begrenzt — wir brauchen volle Breite für 3-Spalten-Grid */
-.roadmap-inner{
-  max-width: 1200px !important;
-  margin: 0 auto !important;
-  width: 100% !important;
-}
-.roadmap .section-tag{
-  display: block;
-  text-align: center;
-  margin-bottom: 14px;
-}
-.roadmap-sub{
-  text-align: center;
-  font-size: 18px;
-  color: var(--fg-2, #C8C8D4);
-  max-width: 640px;
-  margin: 0 auto 50px;
-  line-height: 1.5;
-}
-.roadmap > .roadmap-inner > h2{
-  text-align: center;
-  font-size: clamp(28px, 4.5vw, 48px) !important;
-  font-weight: 900 !important;
-  letter-spacing: -1.5px !important;
-  line-height: 1.05 !important;
-  margin-bottom: 16px !important;
-}
-/* Violet-Em in der Roadmap-Headline */
-.roadmap > .roadmap-inner > h2 em,
-.roadmap > .roadmap-inner > h2 strong{
-  font-style: normal;
-  background: var(--grad-hero);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-/* — Big Counter (56 / 50.000) als Glas-Hero — */
-.roadmap-progress{
-  max-width: 720px;
-  margin: 0 auto 60px;
-  padding: 28px 32px;
-  background: var(--glass-bg) !important;
-  backdrop-filter: blur(28px) saturate(170%) !important;
-  -webkit-backdrop-filter: blur(28px) saturate(170%) !important;
-  border: 1px solid var(--glass-bd) !important;
-  border-radius: 24px !important;
-  box-shadow: 0 12px 48px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.06) !important;
-}
-.roadmap-progress-label{
-  font-size: clamp(28px, 3.4vw, 40px) !important;
-  font-weight: 900 !important;
-  letter-spacing: -1px !important;
-  background: var(--grad-hero);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-bottom: 16px !important;
-  display: block;
-  text-align: left;
-}
-.roadmap-progress-bar{
-  height: 12px !important;
-  background: rgba(255,255,255,.06) !important;
-  border: 1px solid rgba(255,255,255,.06) !important;
-  border-radius: 999px !important;
-  overflow: hidden;
-}
-
-/* — Timeline-Container — */
-.rm-timeline{
-  display: grid !important;
-  grid-template-columns: repeat(3, 1fr) !important;
-  gap: 18px !important;
-  max-width: 1200px;
-  margin: 0 auto;
-  position: relative;
-}
-@media (max-width: 980px){
-  .rm-timeline{ grid-template-columns: repeat(2, 1fr) !important; }
-}
-@media (max-width: 600px){
-  .rm-timeline{ grid-template-columns: 1fr !important; gap: 14px !important; }
-}
-
-/* — Milestone-Step: Glas-Card mit Layout-Reset — */
-.rm-step{
-  position: relative !important;
-  padding: 60px 24px 24px !important;
-  border-radius: 18px !important;
-  text-align: center;
-  display: flex !important;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-}
-
-/* — Emoji-Kreis (Dot) prominent oben — */
-.rm-step .rm-dot{
-  position: absolute !important;
-  top: -22px !important;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 56px !important;
-  height: 56px !important;
-  border-radius: 50% !important;
-  background: linear-gradient(135deg, #1a1a26, #0B0B14) !important;
-  border: 2px solid var(--glass-bd) !important;
-  display: flex !important;
-  align-items: center;
-  justify-content: center;
-  font-size: 26px !important;
-  box-shadow: 0 8px 24px rgba(0,0,0,.4);
-  z-index: 2;
-}
-
-/* — Member-Zahl als Hero-Statement — */
-.rm-step .rm-members{
-  font-size: clamp(28px, 3.5vw, 40px) !important;
-  font-weight: 900 !important;
-  letter-spacing: -1.5px !important;
-  background: var(--grad-hero);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  line-height: 1 !important;
-  margin-bottom: 8px !important;
-}
-
-.rm-step .rm-title{
-  font-size: 16px !important;
-  font-weight: 800 !important;
-  letter-spacing: -0.01em !important;
-  margin-bottom: 8px !important;
-  color: var(--fg, #FAFAFA) !important;
-}
-
-.rm-step .rm-desc{
-  font-size: 13px !important;
-  line-height: 1.55 !important;
-  color: var(--muted, #888) !important;
-  margin-bottom: 14px !important;
-  flex: 1;
-}
-
-/* — rm-head Container (enthält die Member-Zahl) — */
-.rm-step .rm-head{
-  display: block !important;
-  background: transparent !important;
-  border: 0 !important;
-  padding: 0 !important;
-  margin: 0 !important;
-}
-
-/* — Badge: dynamisch via JS gesetzt mit "Noch X bis hierhin" / "Erreicht ✓" — */
-.rm-step .rm-badge{
-  display: inline-block;
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  padding: 6px 12px;
-  border-radius: 999px;
-  background: rgba(255,255,255,.06);
-  color: var(--muted, #888);
-  border: 1px solid rgba(255,255,255,.08);
-  margin-top: 14px;
-}
-.rm-step.active .rm-badge{
-  background: rgba(139,92,246,.16);
-  color: var(--pink2, #8B5CF6);
-  border-color: rgba(139,92,246,.3);
-}
-.rm-step.done .rm-badge{
-  background: rgba(74,222,128,.15);
-  color: #4ADE80;
-  border-color: rgba(74,222,128,.3);
-}
-
-/* — Done-State: grüne Card — */
-.rm-step.done{
-  border-color: rgba(74,222,128,.4) !important;
-  background: linear-gradient(135deg, rgba(74,222,128,.05), rgba(74,222,128,.02)) !important;
-}
-.rm-step.done .rm-dot{
-  background: linear-gradient(135deg, #4ADE80, #22C55E) !important;
-  border-color: rgba(74,222,128,.5) !important;
-}
-.rm-step.done .rm-members{
-  background: linear-gradient(135deg, #4ADE80, #22C55E) !important;
-  -webkit-background-clip: text !important;
-  background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
-}
-
-/* — Locked-State: leicht entsättigt — */
-.rm-step.locked{
-  opacity: .68;
-}
-.rm-step.locked .rm-dot{
-  filter: saturate(.4);
-}
-
-/* — Active-Milestone (vom JS via .active markiert — der nächste der erreicht werden muss) — */
-.rm-step.active{
-  border-color: rgba(139,92,246,.45) !important;
-  background: linear-gradient(135deg, rgba(139,92,246,.04), rgba(255,157,110,.02)) !important;
-  box-shadow:
-    0 16px 56px rgba(139,92,246,.22),
-    inset 0 1px 0 rgba(255,255,255,.08),
-    0 0 0 1px rgba(139,92,246,.25) !important;
-  animation: rmActivePulse 3.2s var(--ease-cubic) infinite;
-}
-@keyframes rmActivePulse{
-  0%, 100%{ box-shadow: 0 16px 56px rgba(139,92,246,.22), inset 0 1px 0 rgba(255,255,255,.08), 0 0 0 1px rgba(139,92,246,.25); }
-  50%    { box-shadow: 0 20px 64px rgba(139,92,246,.35), inset 0 1px 0 rgba(255,255,255,.10), 0 0 0 2px rgba(139,92,246,.45); }
-}
-.rm-step.active .rm-dot{
-  background: var(--grad-hero) !important;
-  border-color: rgba(139,92,246,.5) !important;
-  box-shadow: 0 8px 24px rgba(139,92,246,.4), 0 0 0 4px rgba(139,92,246,.12);
-}
-
-/* — Reduced motion — */
-@media (prefers-reduced-motion: reduce){
-  .rm-step.active{ animation: none; }
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none !important;transition:none !important}
 }
 </style>
-<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/img/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="192x192" href="/img/icon-192.png">
 </head>
 <body>
 
-<!-- NAV -->
-<header class="nav">
-  <a href="#" class="logo">crew<span class="dot">.</span></a>
-  <nav class="nav-links" aria-label="Hauptnavigation">
-    <a href="#how">So funktioniert's</a>
-    <a href="#sicherheit">Sicherheit</a>
-    <a href="#faq">FAQ</a>
-  </nav>
-  <a href="#wl" class="nav-pill"><span class="pulse-dot"></span>Auf Warteliste</a>
-</header>
+<nav class="nav" id="nav">
+  <div class="nav-l">
+    <a href="#" class="brand">crew<span class="dot">.</span></a>
+    <div class="nav-links">
+      <a href="#stories">Was es kann</a>
+      <a href="#app">App</a>
+      <a href="#vision">crew+</a>
+    </div>
+  </div>
+  <div class="nav-r">
+    <a href="#" class="nav-locale" aria-label="Sprache">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/></svg>
+      DE
+    </a>
+    <a href="#cta" class="nav-cta">Auf Warteliste</a>
+  </div>
+</nav>
 
-<!-- HERO + WAITLIST (rebuild: Logo als Hero-Element, Hook als Sub-Tagline) -->
-<section class="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-inner">
-    <!-- Hero-Lockup: Sticker + Wortmark schweben zusammen -->
-    <div class="hero-floating-lockup">
-      <img class="hero-hugging-sticker"
-           src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/People%20hugging/3D/people_hugging_3d.png"
-           alt="" loading="eager" width="108" height="108"/>
-      <span class="hero-floating-word">crew<span class="dot">.</span></span>
+<main>
+
+  <section class="hero" id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-inner">
+      <h1 class="hero-h">Niemand geht<br><span class="em">alleine</span> heim.<span class="tm">™</span></h1>
+      <p class="hero-sub">Du startest deinen Heimweg. Wenn du nicht ankommst, weckt crew. die drei wichtigsten Menschen. Sonst niemand.</p>
+      <div class="hero-cta">
+        <a href="#cta" class="btn-create">Auf die Warteliste</a>
+        <a href="#stories" class="btn-login">Mehr erfahren</a>
+      </div>
+      <div class="app-badge-wrap">
+        <a href="#app" class="app-badge">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
+          <span class="ab-text"><span class="ab-eyebrow">Download im</span><span class="ab-name">App Store</span></span>
+        </a>
+      </div>
     </div>
-    <div class="hero-eyebrow">Connection + Safety für DACH</div>
-    <h1 class="hero-mission" aria-label="Niemand geht alleine heim. Heim geht alleine niemand. Alleine geht niemand heim.">
-      <span class="mission-line is-active">Niemand geht<br>alleine <span class="mission-em">heim.</span></span>
-      <span class="mission-line">Heim geht<br>alleine <span class="mission-em">niemand.</span></span>
-      <span class="mission-line">Alleine geht<br>niemand <span class="mission-em">heim.</span></span>
-    </h1>
-    <p class="hero-sub"><strong style="color:#F5F3FF">Starte deinen Heimweg.</strong> Wenn du nicht ankommst, pingt crew. deine 3–5 wichtigsten Menschen. Sonst niemand.</p>
-    <p class="hero-crew-def">Kein Swipen. Kein Dauertracking. Nur deine Crew.</p>
-    <!-- Audit-Fix-2: Primary CTA-Button mit Pioneer-Counter -->
-    <div class="hero-cta-row">
-      <a href="#wl" class="hero-cta-primary">
-        <span class="hero-cta-label">Auf Warteliste</span>
-        <span class="hero-cta-meta" id="heroCtaMeta">Pioneer-Zugang</span>
-      </a>
-      <a href="#how" class="hero-cta-secondary">So funktioniert's</a>
+    <div class="hero-mini">Alle Personen auf den Bildern sind Models, nur zur Veranschaulichung.</div>
+  </section>
+
+  <section class="stories" id="stories">
+    <div class="stories-head">
+      <div class="stories-head-l">
+        <div class="stories-eyebrow">Vier Momente</div>
+        <h2 class="stories-h">Es gibt Nächte,<br>in denen <span class="em">jemand wachen</span> sollte.</h2>
+        <p class="stories-sub">Real-Life-Szenarien, für die crew. gebaut wurde. Vielleicht erkennst du dich in einem davon wieder.</p>
+      </div>
+      <a href="#cta" class="stories-cta">Auf Warteliste <span class="ar">→</span></a>
     </div>
-    <!-- Fix-2: Live Pioneer-Counter (Social Proof + Scarcity) -->
-    <div class="hero-pioneer-count" id="heroPioneerCount" style="opacity:0;transition:opacity .8s ease 1.4s">Lade …</div>
-    <span id="wl" class="anchor-target" aria-hidden="true"></span>
-    <form class="wl-card" id="wlForm" novalidate>
+    <div class="stories-track">
+      <div class="story">
+        <div class="story-bg" style="background-image:url(/img/lifestyle/03_heimweg_frau.jpg)"></div>
+        <div class="story-content">
+          <span class="story-num">01 · Heimweg</span>
+          <h3>Nach der 2-Uhr-Bahn.</h3>
+          <p>Letzte 15 Minuten allein durch leere Straßen. <em>Mama schläft, deine Crew auch.</em> Du tippst „Heimweg starten" — wenn du nicht ankommst, weckt crew. die drei wichtigsten Menschen. Sonst niemand.</p>
+        </div>
+      </div>
+      <div class="story">
+        <div class="story-bg" style="background-image:url(/img/lifestyle/05_wg_kueche.jpg)"></div>
+        <div class="story-content">
+          <span class="story-num">02 · Crew</span>
+          <h3>Auf der WG-Party.</h3>
+          <p>Deine Freundin geht mit dem Typen mit den sie heute kennengelernt hat. <em>Du bist Safety-Kontakt.</em> Du siehst nicht wo sie ist — du siehst dass sie ankommt. Mehr brauchst du nicht.</p>
+        </div>
+      </div>
+      <div class="story">
+        <div class="story-bg" style="background-image:url(/img/lifestyle/12_strasse_nachts_landscape.jpg)"></div>
+        <div class="story-content">
+          <span class="story-num">03 · Ping</span>
+          <h3>Spät noch joggen.</h3>
+          <p>Stadtpark, 22 Uhr, kaum jemand da. Du startest dein Run-Tracking — und parallel deinen Heimweg-Wächter. <em>Wenn du in 45 Minuten nicht zuhause bist, ploppt das bei deinem Mitbewohner.</em></p>
+        </div>
+      </div>
+      <div class="story">
+        <div class="story-bg" style="background-image:url(/img/lifestyle/11_stammtisch_kneipe.jpg)"></div>
+        <div class="story-content">
+          <span class="story-num">04 · Spot</span>
+          <h3>Drei Bars, eine Stadt.</h3>
+          <p>Berlin, ihr verliert euch. Über crew. siehst du dass Lisa in der Bar Lo & Slo ist — <em>andere Spot-Crew-Gäste auch.</em> Du gehst hin, schreibst nicht erst „Wo seid ihr?".</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-block" id="pillars">
+    <div class="section-block-head">
+      <div class="eyebrow">Was es kann</div>
+      <h2>Drei bis fünf Menschen <em>reichen.</em></h2>
+      <p>Nicht dein ganzer Freundeskreis. Nicht deine ganze Familie. Nur die Menschen, die wirklich wissen sollen, wenn dein Heimweg nicht endet wie geplant.</p>
+    </div>
+    <div class="pillar-grid">
+      <div class="pillar">
+        <span class="pillar-num">i.</span>
+        <div>
+          <div class="pillar-h">Dein Heimweg.</div>
+          <p>Du startest den Weg, setzt eine Zielzeit und bestätigst, wenn du angekommen bist.</p>
+          <div class="pillar-detail">Bist du da, bleibt alles ruhig.</div>
+        </div>
+      </div>
+      <div class="pillar">
+        <span class="pillar-num">ii.</span>
+        <div>
+          <div class="pillar-h">Deine Crew.</div>
+          <p>Drei bis fünf Menschen, denen du vertraust. Beide Seiten sagen bewusst ja.</p>
+          <div class="pillar-detail">Nicht alle müssen alles wissen.</div>
+        </div>
+      </div>
+      <div class="pillar">
+        <span class="pillar-num">iii.</span>
+        <div>
+          <div class="pillar-h">Der Ping.</div>
+          <p>Wenn du nicht ankommst, bekommen deine ausgewählten Menschen einen Hinweis.</p>
+          <div class="pillar-detail">Sonst niemand. Bei akuter Gefahr: 112.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bleed">
+    <div class="bleed-bg"></div>
+    <div class="bleed-inner">
+      <h2>Kein Swipen.<br><em>Kein Profil-Verkauf.</em><br>Nur deine Crew.</h2>
+      <p>crew. ist keine Dating-App. crew. ist keine Standort-App. crew. ist der dünne Faden zwischen dir und den drei Menschen, die zu dir gehören.</p>
+      <a href="#cta" class="bleed-cta">Pioneer werden →</a>
+    </div>
+  </section>
+
+  <section class="app-section" id="app">
+    <div class="app-text">
+      <div class="eyebrow">Synclulu für iOS</div>
+      <h2>Lad sie runter. <em>Probier sie aus.</em></h2>
+      <p>iOS-Beta läuft auf TestFlight. Android folgt 2027. Pioneere kriegen direkten Zugang — schreib dich auf die Warteliste, du bekommst innerhalb 48h einen Beta-Invite.</p>
+      <div class="app-badges">
+        <a href="#cta" class="app-store-btn">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
+          <span class="asb-text"><span class="asb-eyebrow">Download im</span><span class="asb-name">App Store</span></span>
+        </a>
+        <span class="app-soon">Play Store · 2027</span>
+      </div>
+    </div>
+    <div class="phone-tilt">
+      <div class="phone-shell">
+        <div class="phone-screen-l">
+          <div class="phone-bar"><span>23:47</span><span>·•· 5G</span></div>
+          <div class="phone-pill-st"><span class="dot"></span>Heimweg läuft</div>
+          <div class="phone-map">
+            <div class="phone-av c">J</div>
+            <div class="phone-av l1">L</div>
+            <div class="phone-av amb l2">M</div>
+            <div class="phone-av l3">B</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="vision" id="vision">
+    <div class="vision-inner">
+      <span class="vision-eyebrow">Und später…</span>
+      <h2 class="vision-title">crew<span class="vision-mark" aria-hidden="true"><span class="d">.</span><span class="p">+</span></span></h2>
+      <p class="vision-tag">Wenn der Punkt nicht mehr reicht.</p>
+      <p class="vision-body">Wir bauen erst die Crew, die du wirklich kennst. Was danach kommt, deuten wir nicht auf Pitch-Decks an — aber: Crews könnten sich verbinden. Locations könnten zu Knoten werden. Heimwege könnten zu einem Netz, das aus echten Beziehungen besteht statt aus Algorithmus. Alles mutual, alles opt-in. Wir haben Zeit.</p>
+      <p class="vision-meta">Nicht jetzt. Wenn die Basis steht.</p>
+    </div>
+  </section>
+
+  <section class="final" id="cta">
+    <h2>Sei früh dabei.<br><em>Hilf uns das richtig zu bauen.</em></h2>
+    <p>Pioneere kriegen Early-Zugang zur App, direkten Draht zu Jan + Brian, und Mitsprache bei jedem neuen Feature.</p>
+
+    <form class="wl-form" id="wlForm" novalidate>
       <input type="text" name="website" id="wlHp" class="hp-trap" tabindex="-1" autocomplete="off" aria-hidden="true">
-      <h2>Werde Pioneer.</h2>
+      <h3>Werde Pioneer.</h3>
       <div class="wl-field">
         <label for="wlName">Vorname</label>
         <input type="text" id="wlName" placeholder="Dein Vorname" required>
@@ -1471,13 +427,13 @@ body::after{
         <label for="wlEmail">E-Mail</label>
         <input type="email" id="wlEmail" placeholder="deine@email.com" required>
       </div>
-      <div class="wl-field">
-        <label for="wlCity">Stadt</label>
-        <input type="text" id="wlCity" placeholder="z.B. Stuttgart" required>
-      </div>
       <div class="wl-row">
         <div class="wl-field">
-          <label for="wlAge">Altersspanne</label>
+          <label for="wlCity">Stadt</label>
+          <input type="text" id="wlCity" placeholder="z.B. Stuttgart" required>
+        </div>
+        <div class="wl-field">
+          <label for="wlAge">Alter</label>
           <select id="wlAge" required>
             <option value="" disabled selected>Wählen</option>
             <option value="18-21">18–21</option>
@@ -1486,966 +442,112 @@ body::after{
             <option value="29+">29+</option>
           </select>
         </div>
-        <div class="wl-field">
-          <label for="wlGender">Geschlecht optional</label>
-          <select id="wlGender">
-            <option value="" selected>Keine Angabe</option>
-            <option value="männlich">Männlich</option>
-            <option value="weiblich">Weiblich</option>
-            <option value="divers">Divers</option>
-          </select>
-        </div>
       </div>
       <div class="wl-consent">
-        <input type="checkbox" id="wlConsent">
-        <label for="wlConsent">Ich habe die <a href="#" onclick="openLegalPage('datenschutz');return false">Datenschutzerklärung</a> gelesen und stimme der Verarbeitung meiner Daten zum Zweck der Warteliste zu.</label>
+        <input type="checkbox" id="wlConsent" required>
+        <label for="wlConsent">Ich stimme der Verarbeitung meiner Daten zum Zweck der Warteliste zu. Mehr in der <a href="/datenschutz.html">Datenschutzerklärung</a>.</label>
       </div>
-      <button type="submit" class="wl-btn">Auf Warteliste</button>
-      <p class="wl-note">crew. startet bewusst mit kleinen Gruppen. Wir melden uns, sobald wir neue Pioneers freischalten.</p>
+      <button type="submit" class="wl-btn" id="wlBtn">Auf die Warteliste</button>
+      <p class="wl-note">Wir starten bewusst klein. Du hörst von uns innerhalb 48h.</p>
+      <div class="wl-msg" id="wlMsg"></div>
     </form>
-    <div class="wl-success" id="wlSuccess">Du stehst auf der Liste. Wir melden uns, sobald wir neue Pioneers freischalten.</div>
-    <div class="ref-card" id="refCard">
-      <h3>Lade deine Crew ein.</h3>
-      <p class="ref-sub">Teile deinen persönlichen Link mit den Menschen, die wirklich wissen sollen, dass du gut angekommen bist.</p>
-      <div class="ref-count-display">Einladungen: <strong id="refCountNum">0</strong></div>
-      <div class="ref-progress">
-        <div class="ref-bar-bg"><div class="ref-bar" id="refBar" style="width:0%"></div></div>
-      </div>
-      <div class="ref-tiers">
-        <div class="ref-tier" id="tier1"><span class="tier-icon">1</span><div class="tier-info"><div class="tier-title">Eine Person einladen</div><div class="tier-desc">Der erste Mensch im Hintergrund.</div></div><span class="tier-check" id="tier1Check"></span></div>
-        <div class="ref-tier" id="tier2"><span class="tier-icon">3</span><div class="tier-info"><div class="tier-title">Drei Menschen einladen</div><div class="tier-desc">Eine kleine Crew reicht.</div></div><span class="tier-check" id="tier2Check"></span></div>
-        <div class="ref-tier" id="tier3"><span class="tier-icon">5</span><div class="tier-info"><div class="tier-title">Fünf Menschen einladen</div><div class="tier-desc">Dein leises Netz für den Heimweg.</div></div><span class="tier-check" id="tier3Check"></span></div>
-      </div>
-      <div class="ref-link-box" style="margin-top:16px">
-        <input type="text" id="refLink" readonly>
-        <button onclick="copyRefLink()">Kopieren</button>
-      </div>
-      <div class="ref-share-btns">
-        <a href="#" id="refShareWA" target="_blank" rel="noopener" class="share-wa">WhatsApp</a>
-        <a href="#" onclick="copyRefLink();return false" class="share-copy">Link kopieren</a>
-      </div>
-    </div>
-    <div class="code-lookup" id="codeLookup">
-      <div class="cl-divider">oder</div>
-      <h3>Schon auf der Liste? Code abrufen</h3>
-      <p class="cl-sub">Gib deine E-Mail ein, um deinen Referral-Code abzurufen oder einen neuen zu generieren.</p>
-      <div class="cl-form">
-        <input type="text" id="clHp" class="hp-trap" tabindex="-1" autocomplete="off" aria-hidden="true">
-        <input type="email" id="clEmail" placeholder="Deine E-Mail-Adresse" maxlength="120">
-        <button type="button" onclick="lookupCode()">Code abrufen</button>
-      </div>
-      <div class="cl-result" id="clResult"></div>
-    </div>
-    <div class="wl-count" id="wlCount"></div>
-    <div class="wl-milestone" id="wlMilestone"></div>
-    <div class="social-bar">
-      <a href="https://whatsapp.com/channel/0029VbD10Vg3GJOtfhXJDG2e" target="_blank" rel="noopener" class="social-link">
-        <svg viewBox="0 0 24 24" fill="none"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" fill="#fff"/><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.832-1.438A9.955 9.955 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a7.96 7.96 0 01-4.107-1.138l-.293-.176-2.862.852.852-2.862-.176-.293A7.96 7.96 0 014 12c0-4.411 3.589-8 8-8s8 3.589 8 8-3.589 8-8 8z" fill="#fff"/></svg>
-        <span>WhatsApp</span>
-      </a>
-      <a href="https://www.instagram.com/playa.crew" target="_blank" rel="noopener" class="social-link">
-        <svg viewBox="0 0 24 24" fill="none"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.17.054 1.97.24 2.43.403a4.088 4.088 0 011.523.99 4.088 4.088 0 01.99 1.524c.163.46.349 1.26.403 2.43.058 1.265.07 1.645.07 4.849s-.012 3.584-.07 4.85c-.054 1.17-.24 1.97-.403 2.43a4.088 4.088 0 01-.99 1.523 4.088 4.088 0 01-1.524.99c-.46.163-1.26.349-2.43.403-1.265.058-1.645.07-4.849.07s-3.584-.012-4.85-.07c-1.17-.054-1.97-.24-2.43-.403a4.088 4.088 0 01-1.523-.99 4.088 4.088 0 01-.99-1.524c-.163-.46-.349-1.26-.403-2.43C2.175 15.584 2.163 15.204 2.163 12s.012-3.584.07-4.85c.054-1.17.24-1.97.403-2.43a4.088 4.088 0 01.99-1.523A4.088 4.088 0 015.15 2.207c.46-.163 1.26-.349 2.43-.403C8.845 1.746 9.225 1.734 12 1.734" stroke="#fff" stroke-width="1.5"/><circle cx="12" cy="12" r="3.5" stroke="#fff" stroke-width="1.5"/><circle cx="17.5" cy="6.5" r="1" fill="#fff"/></svg>
-        <span>Instagram</span>
-      </a>
-    </div>
-  </div>
-</section>
 
-<!-- App-Stores: "Bald verfügbar" — Pre-Launch-Indikation, direkt nach Hero -->
-<section class="app-stores" aria-labelledby="storesTitle">
-  <div class="app-stores-inner">
-    <div class="stores-eyebrow"><span class="pulse-dot"></span>Pioneer-Phase</div>
-    <h2 class="stores-title" id="storesTitle">crew. startet bewusst <span class="em">klein</span>.</h2>
-    <p class="stores-sub">Erst mit echten Crews, echten Heimwegen und ruhigem Feedback. App Store und Google Play folgen, wenn die Pioneer-Gruppen stabil laufen.</p>
-    <div class="stores-badges">
-      <a href="#wl" class="store-badge store-badge--apple" aria-label="Bald im App Store verfügbar — auf die Warteliste">
-        <svg class="sb-icon" viewBox="0 0 384 512" xmlns="http://www.w3.org/2000/svg" fill="currentColor" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>
-        <div class="sb-text">
-          <span class="sb-pre">Bald im</span>
-          <span class="sb-name">App Store</span>
-        </div>
-        <span class="sb-soon">Soon</span>
-      </a>
-      <a href="#wl" class="store-badge store-badge--google" aria-label="Bald auf Google Play verfügbar — auf die Warteliste">
-        <svg class="sb-icon" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <defs>
-            <linearGradient id="gp-grad" x1="0" x2="1" y1="0" y2="1">
-              <stop offset="0%" stop-color="#A88CFF"/>
-              <stop offset="100%" stop-color="#8B5CF6"/>
-            </linearGradient>
-          </defs>
-          <path d="M48 32L304 256 48 480c-8 4-16 0-16-12V44c0-12 8-16 16-12z" fill="url(#gp-grad)"/>
-          <path d="M304 256l112-64c12-7 12-25 0-32L304 96l-48 48 48 112z" fill="#F5F3FF" opacity=".88"/>
-          <path d="M304 256L256 304l48 112 112-64c12-7 12-25 0-32l-112-64z" fill="url(#gp-grad)" opacity=".75"/>
-        </svg>
-        <div class="sb-text">
-          <span class="sb-pre">Bald auf</span>
-          <span class="sb-name">Google Play</span>
-        </div>
-        <span class="sb-soon">Soon</span>
-      </a>
-    </div>
-    <a href="#wl" class="stores-fallback">Pioneer werden</a>
-  </div>
-</section>
+    <div class="final-meta"><span class="d"></span>noch 84 von 100 Plätzen · erste Welle</div>
+  </section>
 
-<!-- Schritt 3: Drei-Pillar-Section (Brand-konsistent zu Onboarding-Slide-1) -->
-<section class="pillars">
-  <div class="pillars-head">
-    <div class="pillars-eyebrow">Was es kann</div>
-    <h2 class="pillars-title">Drei bis fünf Menschen reichen.</h2>
-    <p class="pillars-sub">Nicht dein ganzer Freundeskreis. Nicht deine ganze Familie. Nur die Menschen, die wirklich wissen sollen, wenn dein Heimweg nicht endet wie geplant.</p>
-  </div>
-  <div class="pillars-grid">
-    <div class="pillar-card">
-      <div class="pillar-card-bg" style="background-image:url(/img/lifestyle/01_sbahn_hoodie.jpg)"></div>
-      <img class="pillar-icon" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Shield/3D/shield_3d.png" alt="" loading="lazy"/>
-      <div class="pillar-h">Dein Heimweg</div>
-      <p class="pillar-desc">Du startest den Weg, setzt eine Zielzeit und bestätigst, wenn du angekommen bist.</p>
-      <div class="pillar-detail">Bist du da, bleibt alles ruhig. Keine Nachricht, kein Drama, kein Nachfassen.</div>
+  <footer>
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <div class="crew-name">crew<span class="dot">.</span></div>
+        <p>Connection + Safety für 18-28-Jährige in DACH. Niemand geht alleine heim.</p>
+        <span class="made"><span class="flag"><span></span><span></span><span></span></span>Made in Stuttgart</span>
+      </div>
+      <div class="foot-col">
+        <h4>Produkt</h4>
+        <ul>
+          <li><a href="#stories">Wofür</a></li>
+          <li><a href="#pillars">Was es kann</a></li>
+          <li><a href="#app">App laden</a></li>
+          <li><a href="#vision">crew+</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>Crew</h4>
+        <ul>
+          <li><a href="mailto:hi@partycrew.app">hi@partycrew.app</a></li>
+          <li><a href="https://www.instagram.com/playa.crew" target="_blank" rel="noopener">Instagram</a></li>
+          <li><a href="https://whatsapp.com/channel/0029VbD10Vg3GJOtfhXJDG2e" target="_blank" rel="noopener">WhatsApp</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>Rechtliches</h4>
+        <ul>
+          <li><a href="/impressum.html">Impressum</a></li>
+          <li><a href="/datenschutz.html">Datenschutz</a></li>
+          <li><a href="/agb.html">AGB</a></li>
+        </ul>
+      </div>
     </div>
-    <div class="pillar-card">
-      <div class="pillar-card-bg" style="background-image:url(/img/lifestyle/02_speti_crew.jpg)"></div>
-      <img class="pillar-icon" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Busts%20in%20silhouette/3D/busts_in_silhouette_3d.png" alt="" loading="lazy"/>
-      <div class="pillar-h">Deine Crew</div>
-      <p class="pillar-desc">Drei bis fünf Menschen, denen du vertraust. Beide Seiten sagen bewusst ja.</p>
-      <div class="pillar-detail">Nicht alle müssen alles wissen. Nur deine Crew.</div>
+    <div class="foot-bottom">
+      <span>© 2026 crew. · Alle Rechte vorbehalten.</span>
+      <div class="foot-social">
+        <a href="https://www.instagram.com/playa.crew" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37zM17.5 6.5h.01"/></svg></a>
+        <a href="https://whatsapp.com/channel/0029VbD10Vg3GJOtfhXJDG2e" target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.832-1.438A9.955 9.955 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a7.96 7.96 0 01-4.107-1.138l-.293-.176-2.862.852.852-2.862-.176-.293A7.96 7.96 0 014 12c0-4.411 3.589-8 8-8s8 3.589 8 8-3.589 8-8 8z"/></svg></a>
+        <a href="mailto:hi@partycrew.app" aria-label="Mail"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></a>
+      </div>
     </div>
-    <div class="pillar-card">
-      <div class="pillar-card-bg" style="background-image:url(/img/lifestyle/03_heimweg_frau.jpg)"></div>
-      <img class="pillar-icon" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Person%20walking/Default/3D/person_walking_3d_default.png" alt="" loading="lazy"/>
-      <div class="pillar-h">Der Ping</div>
-      <p class="pillar-desc">Wenn du nicht ankommst, bekommen deine ausgewählten Menschen einen Hinweis.</p>
-      <div class="pillar-detail">Sonst niemand. Bei akuter Gefahr gilt immer: 112.</div>
-    </div>
-  </div>
-</section>
+  </footer>
 
-<!-- Differenzierung: Warum nicht WhatsApp / Find My / Snapchat Map -->
-<section class="diff-strip" aria-labelledby="diffTitle">
-  <div class="diff-eyebrow">Aber das gibt's doch schon?</div>
-  <h2 class="diff-title" id="diffTitle">Nicht <span class="em">so</span>.</h2>
-  <div class="diff-rows">
-    <div class="diff-row">
-      <div class="diff-row-name">WhatsApp Live-Standort</div>
-      <div class="diff-row-text">Ist praktisch, fühlt sich aber schnell nach Dauerblick an. <strong>Bei crew.: ein Ping, wenn du nicht ankommst. Sonst Ruhe.</strong></div>
-    </div>
-    <div class="diff-row">
-      <div class="diff-row-name">Find My / Wo ist?</div>
-      <div class="diff-row-text">Zeigt oft Standort als Normalzustand. <strong>crew. denkt vom aktiven Heimweg aus: Start, Zielzeit, Ankommen.</strong></div>
-    </div>
-    <div class="diff-row">
-      <div class="diff-row-name">Snapchat Map</div>
-      <div class="diff-row-text">Ist sozial und laut. <strong>crew. bleibt klein: deine Menschen, dein Heimweg, dein Netz.</strong></div>
-    </div>
-    <div class="diff-row">
-      <div class="diff-row-name">Life360</div>
-      <div class="diff-row-text">Wirkt für viele wie Familienkontrolle. <strong>crew. ist für junge Erwachsene und Safety-Contacts auf Augenhöhe.</strong></div>
-    </div>
-  </div>
-</section>
-
-<!-- Fix-1: Trust-Strip direkt nach Hero (war ganz unten) — Trust early statt spät -->
-<section class="trust-strip" id="sicherheit" style="background:linear-gradient(180deg,rgba(15,10,31,.78),rgba(15,10,31,.92)),url(/img/lifestyle/07_haende_tuerklinke.jpg) #0F0A1F;background-size:cover;background-position:center">
-  <div class="trust-head">
-    <div class="trust-eyebrow">Sicherheit</div>
-    <h2 class="trust-title">Sicherheit ohne Dauerblick.</h2>
-    <p class="trust-sub">crew. ist kein Dating, kein Eltern-Tracking und kein Notruf-Ersatz. Es ist dein zusätzliches Sicherheitsnetz davor.</p>
-  </div>
-  <div class="trust-strip-grid">
-    <button type="button" class="trust-item" data-trust-toggle aria-expanded="false">
-      <img class="trust-icon" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Locked%20with%20key/3D/locked_with_key_3d.png" alt="Opt-in"/>
-      <div class="trust-mini">Opt-in</div>
-      <div class="trust-reveal">
-        <div class="trust-h">Du entscheidest</div>
-        <div class="trust-d">Du legst fest, wer zu deiner Crew gehört und wann ein Heimweg aktiv ist.</div>
-        <div class="expand-body" style="margin-top:8px;font-size:11.5px;line-height:1.55;color:rgba(245,243,255,.6)">Keine Fremden-Crew, kein heimliches Mitlesen. Verbindung entsteht nur, wenn sie gewollt ist.</div>
-      </div>
-    </button>
-    <button type="button" class="trust-item" data-trust-toggle aria-expanded="false">
-      <img class="trust-icon" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Hourglass%20not%20done/3D/hourglass_not_done_3d.png" alt="Auto-Löschung"/>
-      <div class="trust-mini">Kurz</div>
-      <div class="trust-reveal">
-        <div class="trust-h">Kein Dauertracking</div>
-        <div class="trust-d">Dein Heimweg ist ein aktiver Modus, nicht ein 24/7-Blick auf dein Leben.</div>
-        <div class="expand-body" style="margin-top:8px;font-size:11.5px;line-height:1.55;color:rgba(245,243,255,.6)">Die App soll nur sichtbar machen, was deine Crew für diesen Heimweg wirklich wissen muss.</div>
-      </div>
-    </button>
-    <button type="button" class="trust-item" data-trust-toggle aria-expanded="false">
-      <img class="trust-icon" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Folded%20hands/Default/3D/folded_hands_3d_default.png" alt="Du bestimmst"/>
-      <div class="trust-mini">Crew</div>
-      <div class="trust-reveal">
-        <div class="trust-h">Nur deine Menschen</div>
-        <div class="trust-d">Deine Crew sieht nur, was sie sehen muss. Nicht alle, nicht immer.</div>
-        <div class="expand-body" style="margin-top:8px;font-size:11.5px;line-height:1.55;color:rgba(245,243,255,.6)">Drei bis fünf Kontakte reichen für ein Netz, das sich menschlich anfühlt.</div>
-      </div>
-    </button>
-    <button type="button" class="trust-item" data-trust-toggle aria-expanded="false">
-      <img class="trust-icon" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/No%20entry/3D/no_entry_3d.png" alt="Kein Dating"/>
-      <div class="trust-mini">Dating</div>
-      <div class="trust-reveal">
-        <div class="trust-h">Kein Dating</div>
-        <div class="trust-d">Keine Swipes, keine fremden Matches, keine Dating-Mechanik.</div>
-        <div class="expand-body" style="margin-top:8px;font-size:11.5px;line-height:1.55;color:rgba(245,243,255,.6)">crew. ist für Heimwege, Safety-Contacts und kleine Crews.</div>
-      </div>
-    </button>
-    <button type="button" class="trust-item" data-trust-toggle aria-expanded="false">
-      <img class="trust-icon" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Telephone/3D/telephone_3d.png" alt="Kein Notruf"/>
-      <div class="trust-mini">Notruf</div>
-      <div class="trust-reveal">
-        <div class="trust-h">Kein Notruf-Ersatz</div>
-        <div class="trust-d">Bei akuter Gefahr ruf immer 112.</div>
-        <div class="expand-body" style="margin-top:8px;font-size:11.5px;line-height:1.55;color:rgba(245,243,255,.6)">crew. ist das zusätzliche Sicherheitsnetz davor, nicht die Stelle für echte Notfälle.</div>
-      </div>
-    </button>
-    <button type="button" class="trust-item" data-trust-toggle aria-expanded="false">
-      <img class="trust-icon" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/House/3D/house_3d.png" alt="Ankommen"/>
-      <div class="trust-mini">Daheim</div>
-      <div class="trust-reveal">
-        <div class="trust-h">Ankommen reicht</div>
-        <div class="trust-d">Du musst nicht jedes Mal schreiben. Du musst nur ankommen.</div>
-        <div class="expand-body" style="margin-top:8px;font-size:11.5px;line-height:1.55;color:rgba(245,243,255,.6)">Wenn alles gut ist, bleibt crew. leise.</div>
-      </div>
-    </button>
-  </div>
-  <p class="trust-tap-hint">Tippen für Details</p>
-  <div class="trust-badge">Kein Swipen &middot; Kein Dauertracking &middot; Kein Notruf-Ersatz</div>
-  <p class="trust-meta">crew. wird in Baden-Württemberg gebaut und mit kleinen Pioneer-Gruppen getestet. Sicherheit muss sich nicht laut anfühlen.</p>
-</section>
-
-<!-- Schritt 4: So funktioniert's — 4-Step-Flow -->
-<section class="howto" id="how">
-  <div class="howto-head">
-    <div class="howto-eyebrow">So funktioniert's</div>
-    <h2 class="howto-title">So läuft dein Heimweg mit crew.</h2>
-  </div>
-  <div class="howto-flow">
-    <div class="howto-step">
-      <div class="howto-num">1</div>
-      <img class="howto-step-icon" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Person%20walking/Default/3D/person_walking_3d_default.png" alt=""/>
-      <div class="howto-step-title">Heimweg starten</div>
-      <p class="howto-step-desc">Du sagst crew., dass du unterwegs bist.</p>
-      <details class="expand-wrap">
-        <summary>Wie genau?</summary>
-        <div class="expand-body">Ein kurzer Startmoment, wenn du losgehst. Deine Crew muss nicht aktiv nachfragen.</div>
-      </details>
-    </div>
-    <div class="howto-step">
-      <div class="howto-num">2</div>
-      <img class="howto-step-icon" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Alarm%20clock/3D/alarm_clock_3d.png" alt=""/>
-      <div class="howto-step-title">Zielzeit setzen</div>
-      <p class="howto-step-desc">Du legst fest, wann du ungefähr ankommen solltest.</p>
-      <details class="expand-wrap">
-        <summary>Wie genau?</summary>
-        <div class="expand-body">Zum Beispiel: 30 Minuten. Das reicht als ruhige Erwartung im Hintergrund.</div>
-      </details>
-    </div>
-    <div class="howto-step">
-      <div class="howto-num">3</div>
-      <img class="howto-step-icon" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/House/3D/house_3d.png" alt=""/>
-      <div class="howto-step-title">Ankommen bestätigen</div>
-      <p class="howto-step-desc">Bist du da, ist alles ruhig.</p>
-      <details class="expand-wrap">
-        <summary>Wie genau?</summary>
-        <div class="expand-body">Ein Check-in genügt. Deine Crew bekommt dann keinen unnötigen Ping.</div>
-      </details>
-    </div>
-    <div class="howto-step">
-      <div class="howto-num">4</div>
-      <img class="howto-step-icon" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Bell/3D/bell_3d.png" alt=""/>
-      <div class="howto-step-title">Crew wird gepingt</div>
-      <p class="howto-step-desc">Wenn du nicht ankommst, bekommen deine ausgewählten Menschen einen Hinweis.</p>
-      <details class="expand-wrap">
-        <summary>Wichtig</summary>
-        <div class="expand-body">crew. ersetzt keinen Notruf. Bei akuter Gefahr immer 112.</div>
-      </details>
-    </div>
-  </div>
-</section>
-
-<!-- MANIFESTO — Warum wir das bauen -->
-<section class="manifesto" style="background:linear-gradient(180deg,rgba(15,10,31,.82),rgba(15,10,31,.94)),url(/img/lifestyle/09_taxi_nachts.jpg) #0F0A1F;background-size:cover;background-position:center">
-  <div class="manifesto-inner">
-    <div class="section-tag" style="color:#A88CFF">Warum wir das bauen</div>
-    <h2 style="color:#F5F3FF">Niemand sollte allein heim&shy;gehen.<br/>Auch <span class="hl">du nicht.</span></h2>
-    <p>Wir kennen das Gefühl, wenn der Heimweg um 3 Uhr leiser ist als die Nacht zwei Stunden vorher. Wenn die Crew weg ist und das Handy zu hell. Wenn man eigentlich schon fast da ist — aber eben nur fast.</p>
-    <p>crew. ist keine App, die mit dir reich werden will. Es ist ein Push, der ankommt wenn du nicht zu Hause bist. Mehr nicht. Du wählst, wer ihn bekommt. Wir verkaufen niemandem deine Daten. Niemals.</p>
-    <p style="color:#A88CFF">Gemacht in Stuttgart, getestet auf echten Heimwegen.</p>
-    <div style="margin-top:32px;padding:22px 26px;background:rgba(168,140,255,.05);border:.5px solid rgba(168,140,255,.16);border-radius:14px;max-width:560px;margin-left:auto;margin-right:auto;text-align:left">
-      <div style="font-size:10.5px;letter-spacing:.32em;text-transform:uppercase;color:rgba(168,140,255,.7);font-weight:700;margin-bottom:8px">Wer baut das?</div>
-      <p style="font-size:13.5px;line-height:1.65;color:rgba(245,243,255,.85);margin:0">Wir — Jan und ein junges Team aus Baden-Württemberg. Haben selber zu oft den Heimweg um 3 Uhr alleine gemacht und uns gefragt, warum es dafür keine App gibt, die nicht nach Dauerblick klingt. Keine fremden Interessen. Nur die Frage: kann man eine App bauen, die der Crew vertraut — statt einem Algorithmus?</p>
-      <p style="font-size:12px;line-height:1.5;color:rgba(168,140,255,.7);margin:12px 0 0">Folg uns auf <a href="https://www.instagram.com/playa.crew" target="_blank" rel="noopener" style="color:#A88CFF;text-decoration:underline;text-underline-offset:2px">@playa.crew</a> &middot; <a href="#kontakt" style="color:#A88CFF;text-decoration:underline;text-underline-offset:2px">Schreib uns direkt &rarr;</a></p>
-    </div>
-    <div class="sig" style="margin-top:24px"><span style="color:#F5F3FF">crew<span style="color:#8B5CF6">.</span></span></div>
-  </div>
-</section>
-
-<!-- ROADMAP — 3 Phasen (gekürzt von alter Hype-Roadmap) -->
-<section class="roadmap roadmap-v2" id="roadmap" style="background:linear-gradient(180deg,rgba(15,10,31,.78),rgba(15,10,31,.92)),url(/img/lifestyle/08_buehne_silhouette.jpg) #0F0A1F;background-size:cover;background-position:center">
-  <div class="rmv2-inner">
-    <div class="rmv2-eyebrow">Roadmap</div>
-    <h2 class="rmv2-title">In drei Phasen.</h2>
-    <p class="rmv2-sub">Wir gehen langsam — damit es richtig wird. Pioneer-Phase zuerst, dann öffnen wir Stück für Stück.</p>
-    <div class="rmv2-grid">
-      <div class="rmv2-step rmv2-active">
-        <div class="rmv2-here-badge"><span class="rmv2-here-dot"></span>Du bist hier</div>
-        <div class="rmv2-num">1</div>
-        <div class="rmv2-h">Pioneer-Phase Stuttgart</div>
-        <div class="rmv2-d">Eine handverlesene Crew testet die App. Persönlich angesprochen, Bug-Reports per WhatsApp. Wir gehen jeden Heimweg mit.</div>
-        <div class="rmv2-status">Live · jetzt</div>
-      </div>
-      <div class="rmv2-step">
-        <div class="rmv2-num">2</div>
-        <div class="rmv2-h">Welle 2 — DACH</div>
-        <div class="rmv2-d">Berlin, Wien, Hamburg, München. Pro Stadt 100 Pioniere — gleicher Prozess, gleiche Sorgfalt.</div>
-        <div class="rmv2-status">Wenn Welle 1 stabil</div>
-      </div>
-      <div class="rmv2-step">
-        <div class="rmv2-num">3</div>
-        <div class="rmv2-h">Public Launch</div>
-        <div class="rmv2-d">Apple App Store + Google Play. Erst wenn die Pioniere sagen: jetzt ist sie bereit.</div>
-        <div class="rmv2-status">Wenn ihr sagt: jetzt</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- VISION — crew+ Netzwerk-Erweiterung als Andeutung -->
-<section class="vision-strip" aria-labelledby="visionTitle">
-  <div class="vision-inner">
-    <div class="vision-eyebrow">Und später&hellip;</div>
-    <h2 class="vision-title" id="visionTitle">crew<span class="vision-mark" aria-hidden="true"><span class="dot">.</span><span class="plus">+</span></span><span class="sr-only">crew. wird zu crew+</span></h2>
-    <p class="vision-tag">Wenn der Punkt nicht mehr reicht.</p>
-    <p class="vision-body">Wir bauen erst die Crew, die du wirklich kennst. Was danach kommt, deuten wir nicht auf Pitch-Decks an — aber: Crews könnten sich verbinden. Locations könnten zu Knoten werden. Heimwege könnten zu einem Netz, das aus echten Beziehungen besteht statt aus Algorithmus. Alles mutual, alles opt-in. Wir haben Zeit.</p>
-    <p class="vision-meta">Nicht jetzt. Wenn die Basis steht.</p>
-  </div>
-</section>
-
-<!-- COMMUNITY CTA — neue Brand-Voice + Doppel-Portrait-BG -->
-<section class="community-cta" style="background:linear-gradient(180deg,rgba(15,10,31,.78),rgba(15,10,31,.92)),url(/img/lifestyle/06_doppel_portrait_couch.jpg) #0F0A1F;background-size:cover;background-position:center">
-  <div class="community-cta-inner">
-    <h3>Wir bauen das öffentlich.</h3>
-    <p>Jede Woche siehst du, was reinkommt — Features, Bug-Fixes, was die ersten Pioniere gefunden haben. Auf WhatsApp und Instagram, ohne Marketing-Blabla.</p>
-    <div class="community-socials">
-      <a href="https://whatsapp.com/channel/0029VbD10Vg3GJOtfhXJDG2e" target="_blank" rel="noopener" class="csocial wa">
-        <svg viewBox="0 0 24 24" fill="none"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" fill="currentColor"/><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.832-1.438A9.955 9.955 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a7.96 7.96 0 01-4.107-1.138l-.293-.176-2.862.852.852-2.862-.176-.293A7.96 7.96 0 014 12c0-4.411 3.589-8 8-8s8 3.589 8 8-3.589 8-8 8z" fill="currentColor"/></svg>
-        WhatsApp-Kanal
-      </a>
-      <a href="https://www.instagram.com/playa.crew" target="_blank" rel="noopener" class="csocial ig">
-        <svg viewBox="0 0 24 24" fill="none"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.17.054 1.97.24 2.43.403a4.088 4.088 0 011.523.99 4.088 4.088 0 01.99 1.524c.163.46.349 1.26.403 2.43.058 1.265.07 1.645.07 4.849s-.012 3.584-.07 4.85c-.054 1.17-.24 1.97-.403 2.43a4.088 4.088 0 01-.99 1.523 4.088 4.088 0 01-1.524.99c-.46.163-1.26.349-2.43.403-1.265.058-1.645.07-4.849.07s-3.584-.012-4.85-.07c-1.17-.054-1.97-.24-2.43-.403a4.088 4.088 0 01-1.523-.99 4.088 4.088 0 01-.99-1.524c-.163-.46-.349-1.26-.403-2.43C2.175 15.584 2.163 15.204 2.163 12s.012-3.584.07-4.85c.054-1.17.24-1.97.403-2.43a4.088 4.088 0 01.99-1.523A4.088 4.088 0 015.15 2.207c.46-.163 1.26-.349 2.43-.403C8.845 1.746 9.225 1.734 12 1.734" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="3.5" stroke="currentColor" stroke-width="1.5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
-        Instagram
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- FAQ -->
-<section class="faq-section" id="faq" aria-labelledby="faqTitle">
-  <div class="faq-head">
-    <div class="faq-eyebrow">FAQ</div>
-    <h2 class="faq-title" id="faqTitle">Kurz gefragt.</h2>
-    <p class="faq-sub">Die wichtigsten Grenzen und Antworten, bevor du dich einträgst.</p>
-  </div>
-  <div class="faq-list">
-    <details class="faq-item">
-      <summary>Ist crew. eine Dating-App?</summary>
-      <p>Nein. crew. ist für Heimwege, Safety-Contacts und kleine Crews. Keine Swipes, keine fremden Matches.</p>
-    </details>
-    <details class="faq-item">
-      <summary>Sieht meine Crew immer meinen Standort?</summary>
-      <p>Nein. crew. soll kein Dauertracking sein. Deine Crew ist für aktive Heimwege da, nicht für 24/7-Kontrolle.</p>
-    </details>
-    <details class="faq-item">
-      <summary>Ist crew. ein Notruf?</summary>
-      <p>Nein. Bei akuter Gefahr ruf immer 112. crew. ist dein zusätzliches Sicherheitsnetz davor.</p>
-    </details>
-    <details class="faq-item">
-      <summary>Für wen ist crew. gedacht?</summary>
-      <p>Für junge Erwachsene, die nachts unterwegs sind, und für die Menschen, die wissen wollen, dass sie gut angekommen sind.</p>
-    </details>
-    <details class="faq-item">
-      <summary>Warum Warteliste?</summary>
-      <p>Weil crew. bewusst mit kleinen Pioneer-Gruppen startet. Qualität, Vertrauen und echte Crews sind wichtiger als schnelle Masse.</p>
-    </details>
-  </div>
-</section>
-
-<!-- PARTNER PROGRAM (klappbar — per default zu, mit Stammtisch-BG) -->
-<section class="partner-section" id="partner" style="background:linear-gradient(180deg,rgba(15,10,31,.82),rgba(15,10,31,.94)),url(/img/lifestyle/11_stammtisch_kneipe.jpg) #0F0A1F;background-size:cover;background-position:center">
-  <div class="partner-inner">
-    <div class="section-tag" style="font-size:11px;letter-spacing:.35em;text-transform:uppercase;color:#A88CFF;font-weight:700;margin-bottom:8px;text-align:center">Für Locations + Events</div>
-    <h2 style="font-size:clamp(20px,3.5vw,32px);font-weight:900;letter-spacing:-1px;text-align:center;margin-bottom:8px;color:#F5F3FF">Du machst Nightlife.<br>Wir machen Heimweg.</h2>
-    <p style="font-size:13px;color:rgba(245,243,255,.7);text-align:center;margin-bottom:14px;line-height:1.6;max-width:520px;margin-left:auto;margin-right:auto">Baden-Württemberg zuerst, dann DACH. Wenn du eine Location, Veranstaltung, Hochschule oder ein Hotel im Raum Stuttgart, Karlsruhe oder Heidelberg betreust — lass uns reden.</p>
-    <p style="font-size:12px;color:rgba(168,140,255,.7);text-align:center;margin-bottom:24px;line-height:1.7;max-width:560px;margin-left:auto;margin-right:auto">Was du bekommst: Pioneer-Crew als Test-Gruppe vor Ort · QR-Code an der Tür der zur App führt · Co-Branding für Heimweg-Sicherheit · Aggregierte Heimweg-Daten anonym (nur wenn du willst)</p>
-    <div style="text-align:center;margin-bottom:18px">
-      <button type="button" id="partnerToggle" class="partner-toggle-btn" aria-expanded="false" aria-controls="partnerForm">
-        <span class="ptb-label">Partner-Anfrage öffnen</span>
-        <svg class="ptb-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-      </button>
-    </div>
-    <form class="partner-form" id="partnerForm" novalidate hidden>
-      <input type="text" id="pfHp" class="hp-trap" tabindex="-1" autocomplete="off" aria-hidden="true">
-      <div class="pf-row">
-        <div class="pf-field"><label>Firmenname *</label><input type="text" id="pfBusiness" placeholder="z.B. Location, Hochschule, Hotel..." required maxlength="120"></div>
-        <div class="pf-field"><label>Art der Location *</label><select id="pfType" required><option value="">Bitte wählen</option><option value="Location">Location</option><option value="Bar / Venue">Bar / Venue</option><option value="Hochschule">Hochschule</option><option value="Hotel / Hostel">Hotel / Hostel</option><option value="Veranstalter">Veranstalter</option><option value="Sonstiges">Sonstiges</option></select></div>
-      </div>
-      <div class="pf-row">
-        <div class="pf-field"><label>Ansprechpartner *</label><input type="text" id="pfContact" placeholder="Vor- und Nachname" required></div>
-        <div class="pf-field"><label>E-Mail *</label><input type="email" id="pfEmail" placeholder="partner@beispiel.com" required></div>
-      </div>
-      <div class="pf-row">
-        <div class="pf-field"><label>Telefon</label><input type="tel" id="pfPhone" placeholder="+49 ..."></div>
-        <div class="pf-field"><label>Standort / Stadt</label><input type="text" id="pfLocation" placeholder="z.B. Stuttgart, Wien, Berlin"></div>
-      </div>
-      <div class="pf-field"><label>Website</label><input type="url" id="pfWebsite" placeholder="https://..."></div>
-      <div class="pf-field"><label>Beschreibung</label><textarea id="pfDesc" placeholder="Erzähl uns kurz von deiner Location oder deinem Event..." rows="3"></textarea></div>
-      <button type="submit" class="pf-btn">Partner-Anfrage senden</button>
-      <div class="pf-success" id="pfSuccess">Danke für deine Anfrage. Wir melden uns innerhalb von 48 Stunden bei dir.</div>
-    </form>
-  </div>
-</section>
-
-<!-- KONTAKT-Section: schreibt zu Supabase feedback -> Admin-Dashboard -->
-<section id="kontakt" class="contact-section">
-  <div class="contact-inner">
-    <div class="contact-eyebrow">Schreib uns</div>
-    <h2 class="contact-title">Direkt an's Team.</h2>
-    <p class="contact-sub">Presse, Partner-Anfragen, Investoren, Bug-Reports oder ein Daumen hoch — alles kommt direkt bei uns im Dashboard an. Keine Helpdesk-Maschine, kein Marketing-Filter.</p>
-    <form class="contact-form" id="contactForm" novalidate>
-      <input type="text" name="website" id="ctHp" class="hp-trap" tabindex="-1" autocomplete="off" aria-hidden="true">
-      <div class="contact-row">
-        <div class="contact-field"><label>Name</label><input type="text" id="ctName" placeholder="Wer schreibt?" maxlength="80"></div>
-        <div class="contact-field"><label>E-Mail (optional)</label><input type="email" id="ctEmail" placeholder="für eine Antwort"></div>
-      </div>
-      <div class="contact-field">
-        <label>Nachricht *</label>
-        <textarea id="ctMessage" placeholder="Was hast du auf dem Herzen?" required maxlength="2000" rows="5"></textarea>
-      </div>
-      <button type="submit" class="contact-btn" id="ctBtn">Senden →</button>
-      <p class="contact-success" id="ctSuccess" style="display:none">Angekommen. Wir lesen jede Nachricht — und melden uns wenn nötig.</p>
-    </form>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <div class="foot-brand">crew<span class="dot">.</span></div>
-  <div class="foot-tagline" style="font-size:12px;color:rgba(168,140,255,.7);margin-bottom:14px">Niemand geht alleine heim.</div>
-  <div class="foot-links">
-    <a href="#how">So funktioniert's</a>
-    <a href="#sicherheit">Sicherheit</a>
-    <a href="#wl">Warteliste</a>
-    <a href="#faq">FAQ</a>
-    <a href="#kontakt">Kontakt</a>
-    <a onclick="openLegalPage('datenschutz')">Datenschutz</a>
-    <a onclick="openLegalPage('impressum')">Impressum</a>
-  </div>
-  <div class="foot-copy">&copy; 2026 crew. · Bei akuter Gefahr immer 112.</div>
-</footer>
-
-<!-- LEGAL MODALS -->
-<div class="legal-overlay" id="legalOverlay">
-  <div class="legal-box">
-    <button class="legal-close" onclick="closeLegalPage()">&times;</button>
-    <div id="legalContent"></div>
-  </div>
-</div>
+</main>
 
 <script>
+// Nav scrolled state
+var nav = document.getElementById('nav');
+window.addEventListener('scroll', function(){
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+}, { passive: true });
+
+// Supabase init
 var sb;
-try { sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY); } catch(e){}
+try { sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY); } catch(e) {}
 
-// Get referral param from URL
-var urlParams = new URLSearchParams(window.location.search);
-var referredBy = urlParams.get('ref') || '';
-
-/* ===== Sicherheits-Härtungen (Honeypot, Rate-Limit, strenge Email-Validation) ===== */
-var EMAIL_RE = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,24}$/;
-var SUBMIT_COOLDOWN_MS = 8000;
-var lastSubmitAt = {};
-
-function isHoneypotTriggered(formId) {
-  var hpMap = { wlForm: 'wlHp', clEmail: 'clHp', fbForm: 'fbHp', partnerForm: 'pfHp', contactForm: 'ctHp' };
-  var hpId = hpMap[formId];
-  if (!hpId) return false;
-  var hp = document.getElementById(hpId);
-  return !!(hp && hp.value);
-}
-
-function isRateLimited(formId) {
-  var now = Date.now();
-  var last = lastSubmitAt[formId] || 0;
-  if (now - last < SUBMIT_COOLDOWN_MS) {
-    var wait = Math.ceil((SUBMIT_COOLDOWN_MS - (now - last)) / 1000);
-    alert('Bitte kurz warten (' + wait + 's), dann nochmal probieren.');
-    return true;
-  }
-  lastSubmitAt[formId] = now;
-  return false;
-}
-
-function isValidEmail(e) {
-  return typeof e === 'string' && e.length > 0 && e.length <= 120 && EMAIL_RE.test(e);
-}
-
-// Waitlist
+// Waitlist form submit
 document.getElementById('wlForm').addEventListener('submit', async function(e){
   e.preventDefault();
-  // Honeypot: Bot füllt verstecktes Feld aus → still verwerfen
-  if (isHoneypotTriggered('wlForm')) { return; }
-  if (isRateLimited('wlForm')) { return; }
-  var name = document.getElementById('wlName').value.trim().substring(0,80);
+  var hp = document.getElementById('wlHp');
+  if (hp && hp.value) { return; } // honeypot triggered
+  var btn = document.getElementById('wlBtn');
+  var msg = document.getElementById('wlMsg');
+  msg.className = 'wl-msg';
+  var name = document.getElementById('wlName').value.trim();
   var email = document.getElementById('wlEmail').value.trim().toLowerCase();
-  var city = document.getElementById('wlCity').value.trim().substring(0,80);
+  var city = document.getElementById('wlCity').value.trim();
   var age = document.getElementById('wlAge').value;
-  var gender = document.getElementById('wlGender').value;
   var consent = document.getElementById('wlConsent').checked;
-  if(!name){alert('Bitte gib deinen Namen ein.');return}
-  if(!isValidEmail(email)){alert('Bitte eine gültige E-Mail eingeben.');return}
-  if(!city){alert('Bitte gib deinen Wohnort ein.');return}
-  if(!age){alert('Bitte wähle deine Altersgruppe.');return}
-  if(!consent){alert('Bitte stimme der Datenschutzerklärung zu.');return}
-  var btn = this.querySelector('button');
-  btn.textContent = 'Laden...';btn.disabled = true;
+  if (!name || !email || !city || !age) { msg.className = 'wl-msg err'; msg.textContent = 'Bitte fülle alle Felder aus.'; return; }
+  if (!consent) { msg.className = 'wl-msg err'; msg.textContent = 'Bitte stimme der Datenverarbeitung zu.'; return; }
+  if (!email.match(/^[^@\s]+@[^@\s]+\.[^@\s]+$/)) { msg.className = 'wl-msg err'; msg.textContent = 'Bitte gib eine gültige E-Mail-Adresse ein.'; return; }
+  if (!sb) { msg.className = 'wl-msg err'; msg.textContent = 'Verbindungsfehler. Versuch es nochmal.'; return; }
+  btn.disabled = true; btn.textContent = 'Senden …';
   try {
-    var insertData = {email:email, name:name, city:city, age_range:age};
-    if(gender) insertData.gender = gender;
-    if(referredBy) insertData.referred_by = referredBy;
-    var {error} = await sb.from('waitlist').insert(insertData);
-    if(error && error.code === '23505'){
-      document.getElementById('wlSuccess').textContent = 'Du stehst schon auf der Liste. Wir melden uns, sobald wir neue Pioneers freischalten.';
-    } else if(error) throw error;
-    // Fetch referral code via RPC (no SELECT policy needed)
-    var {data:myRefCode} = await sb.rpc('get_my_referral_code', {user_email: email});
-    document.getElementById('wlForm').style.display = 'none';
-    document.getElementById('wlSuccess').style.display = 'block';
-    if(myRefCode) showReferralCard(myRefCode);
-    loadWaitlistCount();
-  } catch(err){
-    btn.textContent = 'Auf Warteliste';btn.disabled = false;
-    alert('Fehler: ' + (err.message || 'Versuche es erneut.'));
-  }
-});
-
-// Referral system
-async function showReferralCard(code){
-  var refCard = document.getElementById('refCard');
-  var refLink = 'https://partycrew.app/?ref=' + code;
-  document.getElementById('refLink').value = refLink;
-  // WhatsApp share
-  var waText = encodeURIComponent('Ich hab mich bei crew. eingetragen. Das ist die App für Heimwege und kleine Safety-Crews. Trag dich auch ein: ' + refLink);
-  document.getElementById('refShareWA').href = 'https://wa.me/?text=' + waText;
-  refCard.classList.add('show');
-  // Load referral count
-  try {
-    var {data:count} = await sb.rpc('get_referral_count', {ref_code: code});
-    var c = count || 0;
-    updateRefProgress(c);
-  } catch(e){ updateRefProgress(0); }
-}
-
-function updateRefProgress(count){
-  document.getElementById('refCountNum').textContent = count;
-  // Progress bar (max at 5)
-  var pct = Math.min((count / 5) * 100, 100);
-  document.getElementById('refBar').style.width = pct + '%';
-  // Tier states
-  var t1 = document.getElementById('tier1');
-  var t2 = document.getElementById('tier2');
-  var t3 = document.getElementById('tier3');
-  t1.className = 'ref-tier' + (count >= 1 ? ' unlocked' : '');
-  t2.className = 'ref-tier' + (count >= 3 ? ' unlocked' : (count >= 1 ? ' active' : ''));
-  t3.className = 'ref-tier' + (count >= 5 ? ' unlocked' : (count >= 3 ? ' active' : ''));
-  document.getElementById('tier1Check').textContent = count >= 1 ? '✓' : (count + '/1');
-  document.getElementById('tier2Check').textContent = count >= 3 ? '✓' : (count + '/3');
-  document.getElementById('tier3Check').textContent = count >= 5 ? '✓' : (count + '/5');
-}
-
-function updateMilestoneTrigger(count){
-  var milestones = [
-    {target:250, label:'erste Pioneer-Gruppe'},
-    {target:1000, label:'nächste Städte in DACH'},
-    {target:5000, label:'breitere Beta'},
-    {target:10000, label:'öffentlicher Launch'}
-  ];
-  var next = milestones.find(function(m){ return count < m.target; });
-  var el = document.getElementById('wlMilestone');
-  if(!next || count === 0){ el.innerHTML = ''; return; }
-  var remaining = next.target - count;
-  var pct = Math.round((count / next.target) * 100);
-  el.innerHTML = '<div class="wl-milestone-inner">'
-    + '<span class="ms-emoji">·</span>'
-    + '<span>Noch <strong>' + remaining.toLocaleString('de-DE') + '</strong> bis: ' + next.label + '</span>'
-    + '<div class="ms-bar"><div class="ms-fill" style="width:' + pct + '%"></div></div>'
-    + '</div>';
-}
-
-function copyRefLink(){
-  var input = document.getElementById('refLink');
-  input.select();
-  navigator.clipboard.writeText(input.value).then(function(){
-    var btn = input.nextElementSibling;
-    btn.textContent = 'Kopiert!';
-    setTimeout(function(){ btn.textContent = 'Kopieren'; }, 2000);
-  });
-}
-
-// Feedback form (entfernt — Section wurde aus Landing rausgenommen, Block bleibt als no-op falls #fbForm fehlt)
-(function(){
-  var fbForm = document.getElementById('fbForm');
-  if (!fbForm) return;
-  fbForm.addEventListener('submit', async function(e){
-    e.preventDefault();
-    if (isHoneypotTriggered('fbForm')) { return; }
-    if (isRateLimited('fbForm')) { return; }
-    var message = document.getElementById('fbMessage').value.trim().substring(0,2000);
-    var name = document.getElementById('fbName').value.trim().substring(0,80);
-    var email = document.getElementById('fbEmail').value.trim().toLowerCase();
-    if(!message){alert('Bitte schreib uns was du dir wünschst.');return}
-    if(email && !isValidEmail(email)){alert('Die E-Mail-Adresse ist ungültig.');return}
-    var btn = document.getElementById('fbBtn');
-    btn.textContent = 'Senden...';btn.disabled = true;
-    try {
-      var insertData = {message: message};
-      if(name) insertData.name = name;
-      if(email) insertData.email = email;
-      var {error} = await sb.from('feedback').insert(insertData);
-      if(error) throw error;
-      document.getElementById('fbForm').style.display = 'none';
-      document.getElementById('fbSuccess').style.display = 'block';
-    } catch(err){
-      btn.textContent = 'Feedback senden →';btn.disabled = false;
-      alert('Fehler: ' + (err.message || 'Versuche es erneut.'));
-    }
-  });
-})();
-
-// Kontakt-Form (schreibt in feedback table, sichtbar im Admin-Dashboard)
-(function(){
-  var ctForm = document.getElementById('contactForm');
-  if (!ctForm) return;
-  ctForm.addEventListener('submit', async function(e){
-    e.preventDefault();
-    if (isHoneypotTriggered('contactForm')) { return; }
-    if (isRateLimited('contactForm')) { return; }
-    var msgEl = document.getElementById('ctMessage');
-    var nameEl = document.getElementById('ctName');
-    var emailEl = document.getElementById('ctEmail');
-    var btn = document.getElementById('ctBtn');
-    var success = document.getElementById('ctSuccess');
-    var message = (msgEl.value || '').trim().substring(0,2000);
-    var name = (nameEl.value || '').trim().substring(0,80);
-    var email = (emailEl.value || '').trim().toLowerCase();
-    if (!message) { alert('Bitte schreib uns kurz was los ist.'); return; }
-    if (email && !isValidEmail(email)) { alert('Die E-Mail-Adresse ist ungültig.'); return; }
-    btn.textContent = 'Wird gesendet …'; btn.disabled = true;
-    try {
-      var insertData = { message: message + '\n\n[Kontakt-Form Landing]' };
-      if (name) insertData.name = name;
-      if (email) insertData.email = email;
-      var { error } = await sb.from('feedback').insert(insertData);
-      if (error) throw error;
-      ctForm.style.display = 'none';
-      success.style.display = 'block';
-    } catch(err){
-      btn.textContent = 'Senden →'; btn.disabled = false;
-      alert('Fehler: ' + (err.message || 'Versuche es erneut.'));
-    }
-  });
-})();
-
-// Code lookup
-async function lookupCode(){
-  if (isHoneypotTriggered('clEmail')) { return; }
-  if (isRateLimited('clEmail')) { return; }
-  var email = document.getElementById('clEmail').value.trim().toLowerCase();
-  var res = document.getElementById('clResult');
-  if(!isValidEmail(email)){
-    res.className = 'cl-result show error';
-    res.textContent = 'Bitte eine gültige E-Mail eingeben.';
-    return;
-  }
-  try {
-    var {data:code, error} = await sb.rpc('lookup_or_create_referral_code', {lookup_email: email});
-    if(error) throw error;
-    if(!code){
-      res.className = 'cl-result show error';
-      res.textContent = 'Diese E-Mail ist nicht auf der Warteliste. Trag dich oben ein!';
-    } else {
-      var link = 'https://partycrew.app/?ref=' + code;
-      res.className = 'cl-result show success';
-      res.innerHTML = '🎉 Dein Code: <strong>' + code + '</strong><br><span style="font-size:11px;color:#aaa">Teile diesen Link: </span><br><input type="text" value="' + link + '" readonly onclick="this.select();navigator.clipboard.writeText(this.value)" style="width:100%;margin-top:6px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:#fff;padding:10px 12px;border-radius:10px;font:inherit;font-size:12px;outline:none;cursor:pointer">';
-      // Also show the full referral card
-      showReferralCard(code);
-    }
-  } catch(err){
-    res.className = 'cl-result show error';
-    res.textContent = 'Fehler: ' + (err.message || 'Versuche es erneut.');
-  }
-}
-
-// Partner form
-document.getElementById('partnerForm').addEventListener('submit', async function(e){
-  e.preventDefault();
-  if (isHoneypotTriggered('partnerForm')) { return; }
-  if (isRateLimited('partnerForm')) { return; }
-  var biz = document.getElementById('pfBusiness').value.trim().substring(0,120);
-  var type = document.getElementById('pfType').value;
-  var contact = document.getElementById('pfContact').value.trim().substring(0,80);
-  var email = document.getElementById('pfEmail').value.trim().toLowerCase();
-  var phone = document.getElementById('pfPhone').value.trim().substring(0,40);
-  var loc = document.getElementById('pfLocation').value.trim().substring(0,120);
-  var web = document.getElementById('pfWebsite').value.trim().substring(0,200);
-  var desc = document.getElementById('pfDesc').value.trim().substring(0,2000);
-  if(!biz){alert('Bitte gib den Firmennamen ein.');return}
-  if(!type){alert('Bitte wähle die Art der Location.');return}
-  if(!contact){alert('Bitte gib einen Ansprechpartner ein.');return}
-  if(!isValidEmail(email)){alert('Bitte eine gültige E-Mail eingeben.');return}
-  var btn = this.querySelector('button[type=submit]');
-  btn.textContent = 'Senden...';btn.disabled = true;
-  try {
-    var insertData = {business_name:biz, business_type:type, contact_name:contact, email:email};
-    if(phone) insertData.phone = phone;
-    if(loc) insertData.location = loc;
-    if(web) insertData.website = web;
-    if(desc) insertData.description = desc;
-    var {error} = await sb.from('partner_applications').insert(insertData);
-    if(error) throw error;
-    document.getElementById('partnerForm').style.display = 'none';
-    document.getElementById('pfSuccess').style.display = 'block';
-  } catch(err){
-    btn.textContent = 'Partner-Anfrage senden';btn.disabled = false;
-    alert('Fehler: ' + (err.message || 'Versuche es erneut.'));
-  }
-});
-
-async function loadWaitlistCount(){
-  try {
-    var {data, error} = await sb.rpc('get_waitlist_count');
-    var c = (error || data == null) ? 0 : data;
-    if(c > 0){
-      document.getElementById('wlCount').innerHTML = '<strong>' + c + '</strong> ' + (c === 1 ? 'Person' : 'Personen') + ' auf der Warteliste';
-    }
-    updateRoadmap(c);
-    updateMilestoneTrigger(c);
-  } catch(e){}
-}
-loadWaitlistCount();
-
-/* Fix-2: Pioneer-Stats live in Hero + Nav-Pill (Social Proof + Scarcity) */
-async function loadPioneerStats(){
-  try {
-    var {data} = await sb.rpc('get_pioneer_stats_public');
-    if (!data) return;
-    var total = data.total || 0;
-    var remaining = data.remaining || 0;
-    var used = total - remaining;
-    /* Hero-Counter */
-    var hc = document.getElementById('heroPioneerCount');
-    if (hc) {
-      if (remaining > 0) {
-        hc.innerHTML = '<strong>' + used + '</strong> Pioneers bestätigt &middot; <strong style="color:#A88CFF">' + remaining + '</strong> Plätze für die nächste kleine Gruppe';
+    var result = await sb.from('waitlist').insert({ email: email, name: name, city: city, age_range: age });
+    if (result.error) {
+      if (String(result.error.message).toLowerCase().indexOf('duplicate') >= 0 || result.error.code === '23505') {
+        msg.className = 'wl-msg ok'; msg.textContent = 'Du stehst schon auf der Liste. Wir melden uns!';
       } else {
-        hc.innerHTML = '<strong>Alle ' + total + ' Pioneer-Codes vergeben.</strong> Komm auf die Warteliste für Welle 2.';
+        throw result.error;
       }
-      hc.style.opacity = '1';
-    }
-    /* Nav-Pill Scarcity-Text */
-    var np = document.querySelector('.nav-pill');
-    if (np && remaining > 0) {
-      np.innerHTML = '<span class="pulse-dot"></span>Warteliste · ' + remaining + ' Plätze';
-    }
-    /* Hero CTA-Meta */
-    var hcm = document.getElementById('heroCtaMeta');
-    if (hcm) {
-      if (remaining > 0) hcm.textContent = remaining + ' Plätze in der nächsten Gruppe';
-      else hcm.textContent = 'Welle 2 — auf Warteliste';
-    }
-  } catch(e){}
-}
-loadPioneerStats();
-
-/* Trust-Strip — Tap-to-Reveal (single-open accordion + spielerischer Bounce beim Öffnen) */
-(function(){
-  var items = document.querySelectorAll('.trust-strip [data-trust-toggle]');
-  if (!items.length) return;
-  items.forEach(function(item){
-    item.addEventListener('click', function(){
-      var willOpen = !item.classList.contains('is-open');
-      // close all
-      items.forEach(function(other){
-        other.classList.remove('is-open');
-        other.setAttribute('aria-expanded', 'false');
-      });
-      if (willOpen){
-        item.classList.add('is-open');
-        item.setAttribute('aria-expanded', 'true');
-      }
-    });
-  });
-})();
-
-/* Hero-Wortspiel — cyclen 3 Sätze (Niemand geht alleine heim. → Heim geht alleine niemand. → Alleine geht niemand heim.) */
-(function(){
-  var lines = document.querySelectorAll('.hero-mission .mission-line');
-  if (lines.length < 2) return;
-  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  var i = 0;
-  setInterval(function(){
-    lines[i].classList.remove('is-active');
-    i = (i + 1) % lines.length;
-    lines[i].classList.add('is-active');
-  }, 3200);
-})();
-
-/* Partner-Form Toggle (klappbares Akkordeon) */
-(function(){
-  var btn = document.getElementById('partnerToggle');
-  var form = document.getElementById('partnerForm');
-  var label = btn && btn.querySelector('.ptb-label');
-  if (!btn || !form) return;
-  btn.addEventListener('click', function(){
-    var open = form.hasAttribute('hidden') === false;
-    if (open) {
-      form.setAttribute('hidden', '');
-      btn.setAttribute('aria-expanded', 'false');
-      if (label) label.textContent = 'Partner-Anfrage öffnen';
     } else {
-      form.removeAttribute('hidden');
-      btn.setAttribute('aria-expanded', 'true');
-      if (label) label.textContent = 'Schließen';
-      setTimeout(function(){
-        form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }, 100);
+      msg.className = 'wl-msg ok'; msg.textContent = 'Willkommen, ' + name + '. Du stehst auf der Liste. Wir melden uns innerhalb 48h.';
+      document.getElementById('wlForm').reset();
     }
-  });
-})();
-
-// Scroll-Reveal — fügt is-visible Klasse zu Cards beim Scroll-In
-(function(){
-  var els = document.querySelectorAll('.feat-card, .rm-step, .feat-more-item, .social-link, .trust-strip');
-  if (!('IntersectionObserver' in window)) {
-    els.forEach(function(el){ el.classList.add('is-visible'); });
-    return;
+  } catch (err) {
+    msg.className = 'wl-msg err'; msg.textContent = 'Fehler: ' + (err.message || 'Versuch es nochmal.');
+  } finally {
+    btn.disabled = false; btn.textContent = 'Auf die Warteliste';
   }
-  var io = new IntersectionObserver(function(entries){
-    entries.forEach(function(e){
-      if (e.isIntersecting){
-        e.target.classList.add('is-visible');
-        io.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
-  els.forEach(function(el){ io.observe(el); });
-})();
-
-// Roadmap updater
-function updateRoadmap(count){
-  var targets = [250, 1000, 5000, 10000, 25000, 50000];
-  var maxTarget = 50000;
-  // Progress bar
-  var pct = Math.min((count / maxTarget) * 100, 100);
-  document.getElementById('rmProgressFill').style.width = pct + '%';
-  document.getElementById('rmProgressLabel').textContent = count.toLocaleString('de-DE') + ' / 50.000';
-  // Steps
-  for(var i = 0; i < targets.length; i++){
-    var step = document.getElementById('rmStep' + (i + 1));
-    if(!step) continue;
-    var target = targets[i];
-    if(count >= target){
-      step.className = 'rm-step done';
-      var badge = step.querySelector('.rm-badge');
-      if(!badge){ badge = document.createElement('div'); badge.className = 'rm-badge'; step.appendChild(badge); }
-      badge.textContent = 'Erreicht ✓';
-    } else {
-      // Find which step is currently active (first not-done)
-      var isActive = true;
-      for(var j = 0; j < i; j++){
-        if(count < targets[j]){ isActive = false; break; }
-      }
-      if(isActive && (i === 0 || count >= targets[i-1])){
-        step.className = 'rm-step active';
-        var badge = step.querySelector('.rm-badge');
-        if(!badge){ badge = document.createElement('div'); badge.className = 'rm-badge'; step.appendChild(badge); }
-        badge.textContent = 'Noch ' + (target - count).toLocaleString('de-DE') + ' bis hierhin';
-      } else {
-        step.className = 'rm-step locked';
-      }
-    }
-  }
-}
-
-// Legal pages
-function openLegalPage(type){
-  var c = document.getElementById('legalContent');
-  if(type==='impressum'){
-    c.innerHTML = '<h2>Impressum</h2>'
-    +'<h3>Angaben gemäß § 5 TMG</h3>'
-    +'<p>Butterbread Technologies<br>Jan Hundsdorff<br>Sudetenstraße 27<br>72474 Winterlingen<br>Deutschland</p>'
-    +'<h3>Kontakt</h3>'
-    +'<p>Telefon: +49 176 63447217<br>E-Mail: info@butterbread-tech.com</p>'
-    +'<h3>Umsatzsteuer-ID</h3>'
-    +'<p>Umsatzsteuer-Identifikationsnummer gemäß § 27a UStG: Wird bei Bedarf beantragt.</p>'
-    +'<h3>Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</h3>'
-    +'<p>Jan Hundsdorff<br>Sudetenstraße 27<br>72474 Winterlingen</p>'
-    +'<h3>Haftung für Inhalte</h3>'
-    +'<p>Die Inhalte unserer Seiten wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte können wir jedoch keine Gewähr übernehmen. Als Diensteanbieter sind wir gemäß § 7 Abs. 1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen.</p>'
-    +'<h3>Haftung für Links</h3>'
-    +'<p>Unser Angebot enthält Links zu externen Webseiten Dritter, auf deren Inhalte wir keinen Einfluss haben. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter verantwortlich.</p>'
-    +'<h3>Urheberrecht</h3>'
-    +'<p>Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers.</p>'
-    +'<p><strong>Stand: April 2026</strong></p>';
-  } else if(type==='datenschutz'){
-    c.innerHTML = '<h2>Datenschutzerklärung</h2>'
-    +'<h3>1. Datenschutz auf einen Blick</h3>'
-    +'<p>Die folgenden Hinweise geben einen Überblick darüber, was mit deinen personenbezogenen Daten passiert, wenn du diese Website bzw. die crew.-App nutzt.</p>'
-    +'<h3>2. Verantwortliche Stelle</h3>'
-    +'<p>Butterbread Technologies<br>Jan Hundsdorff<br>Sudetenstraße 27, 72474 Winterlingen<br>E-Mail: info@butterbread-tech.com</p>'
-    +'<h3>3. Hosting & Datenverarbeitung</h3>'
-    +'<p>Diese Website wird über GitHub Pages (GitHub Inc.) gehostet. App- und Wartelisten-Daten werden über Supabase verarbeitet. Bitte beachte die jeweils aktuelle Datenschutzerklärung, bevor du personenbezogene Daten einträgst.</p>'
-    +'<h3>4. Externe Dienste</h3>'
-    +'<p><strong>Google Fonts:</strong> Diese Seite nutzt Google Fonts zur einheitlichen Darstellung von Schriftarten. Beim Aufruf wird eine Verbindung zu Servern von Google (Google LLC, USA) hergestellt, wobei deine IP-Adresse an Google übertragen wird. Rechtsgrundlage: Art. 6 Abs. 1 f DSGVO (berechtigtes Interesse an einheitlicher Darstellung). Google Datenschutzerklärung: https://policies.google.com/privacy</p>'
-    +'<p><strong>Unsplash:</strong> Für Hintergrundbilder werden Bilder von Unsplash Inc. geladen. Dabei wird deine IP-Adresse an Unsplash-Server übertragen.</p>'
-    +'<p><strong>jsDelivr CDN:</strong> Für technische Bibliotheken wird das jsDelivr Content Delivery Network genutzt. Dabei wird deine IP-Adresse an jsDelivr-Server übertragen.</p>'
-    +'<h3>5. Warteliste — Datenerfassung</h3>'
-    +'<p>Wenn du dich für die Warteliste einträgst, erfassen wir folgende Daten:</p>'
-    +'<p><strong>Pflichtangaben:</strong> Vorname, E-Mail-Adresse, Stadt, Altersgruppe. Geschlecht ist optional.</p>'
-    +'<p><strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 a DSGVO (deine ausdrückliche Einwilligung per Checkbox)</p>'
-    +'<p><strong>Zweck:</strong> Dich über den Start der crew.-App zu informieren und die Zielgruppe besser zu verstehen.</p>'
-    +'<p><strong>Speicherdauer:</strong> Bis du deine Einwilligung widerrufst oder die Warteliste aufgelöst wird, spätestens jedoch 12 Monate nach Eintragung.</p>'
-    +'<p><strong>Referral-System:</strong> Nach der Eintragung kann ein individueller Empfehlungslink erstellt werden. Wenn Menschen sich über diesen Link eintragen, wird die Zuordnung gespeichert, damit Pioneer-Einladungen nachvollziehbar bleiben.</p>'
-    +'<p><strong>Weitergabe:</strong> Keine Weitergabe an Werbenetzwerke. Technische Dienstleister verarbeiten Daten nur, soweit dies für Betrieb und Warteliste erforderlich ist.</p>'
-    +'<h3>6. Cookies & Tracking</h3>'
-    +'<p>Diese Website verwendet keine Tracking-Cookies, keine Werbe-Cookies und keine Drittanbieter-Analytics. Es werden lediglich technisch notwendige Session-Tokens für die Admin-Authentifizierung im lokalen Speicher (localStorage) abgelegt.</p>'
-    +'<h3>7. Deine Rechte (Art. 15–22 DSGVO)</h3>'
-    +'<p>Du hast jederzeit das Recht auf:</p>'
-    +'<p>• <strong>Auskunft</strong> (Art. 15) — welche Daten wir über dich speichern<br>'
-    +'• <strong>Berichtigung</strong> (Art. 16) — fehlerhafte Daten korrigieren lassen<br>'
-    +'• <strong>Löschung</strong> (Art. 17) — deine Daten löschen lassen<br>'
-    +'• <strong>Einschränkung</strong> (Art. 18) — Verarbeitung einschränken<br>'
-    +'• <strong>Datenübertragbarkeit</strong> (Art. 20) — Daten in maschinenlesbarem Format erhalten<br>'
-    +'• <strong>Widerspruch</strong> (Art. 21) — der Verarbeitung widersprechen<br>'
-    +'• <strong>Widerruf der Einwilligung</strong> — jederzeit per E-Mail an info@butterbread-tech.com</p>'
-    +'<h3>8. Beschwerderecht</h3>'
-    +'<p>Dir steht ein Beschwerderecht bei der zuständigen Aufsichtsbehörde zu:<br><br>Landesbeauftragter für den Datenschutz und die Informationsfreiheit Baden-Württemberg (LfDI BaWü)<br>Lautenschlagerstraße 20, 70173 Stuttgart<br>https://www.baden-wuerttemberg.datenschutz.de</p>'
-    +'<h3>9. Mindestalter</h3>'
-    +'<p>Die Nutzung der Warteliste und der crew.-App ist erst ab 18 Jahren gestattet. Wir erheben wissentlich keine Daten von Minderjährigen.</p>'
-    +'<p><strong>Stand: April 2026</strong></p>';
-  }
-  document.getElementById('legalOverlay').classList.add('show');
-  document.body.style.overflow = 'hidden';
-}
-function closeLegalPage(){
-  document.getElementById('legalOverlay').classList.remove('show');
-  document.body.style.overflow = '';
-}
-document.getElementById('legalOverlay').addEventListener('click', function(e){
-  if(e.target === this) closeLegalPage();
 });
-
-// Schritt 1: Admin-Login + Auto-Redirect entfernt — Marketing-Landing
-// soll Marketing sein, Login passiert in /clean.html (App).
 </script>
-<style id="bb-protect-css">html,body{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}input,textarea,select,[contenteditable="true"],[contenteditable=""]{-webkit-user-select:text;-moz-user-select:text;-ms-user-select:text;user-select:text}img,video{pointer-events:auto;-webkit-user-drag:none;-khtml-user-drag:none;-moz-user-drag:none;-o-user-drag:none;user-drag:none}::selection{background:transparent}::-moz-selection{background:transparent}</style>
-<script id="bb-protect-js">/* © Butterbread Technologies — anti-copy guard v1 */(function(){try{var b=function(e){if(e&&e.preventDefault)e.preventDefault();if(e&&e.stopPropagation)e.stopPropagation();return false};var allowText=function(t){return t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA'||t.tagName==='SELECT'||t.isContentEditable)};document.addEventListener('contextmenu',function(e){if(!allowText(e.target))return b(e)},true);document.addEventListener('copy',function(e){if(!allowText(e.target))return b(e)},true);document.addEventListener('cut',function(e){if(!allowText(e.target))return b(e)},true);document.addEventListener('dragstart',b,true);document.addEventListener('selectstart',function(e){if(!allowText(e.target))return b(e)},true);document.addEventListener('keydown',function(e){var k=(e.key||'').toLowerCase(),c=e.ctrlKey||e.metaKey,s=e.shiftKey;if(k==='f12')return b(e);if(c&&!s&&(k==='u'||k==='s'||k==='p'||k==='a'))return b(e);if(c&&s&&(k==='i'||k==='j'||k==='c'||k==='k'))return b(e)},true);}catch(_){}})();</script>
-<style id="bb-legal-landing">.cookie-banner{position:fixed;left:14px;right:14px;bottom:14px;z-index:9999;max-width:560px;margin:0 auto;padding:14px 18px;background:linear-gradient(180deg,rgba(20,18,26,.92),rgba(12,10,18,.94));-webkit-backdrop-filter:blur(28px) saturate(170%);backdrop-filter:blur(28px) saturate(170%);border-radius:16px;border:.5px solid rgba(255,255,255,.10);box-shadow:0 18px 60px rgba(0,0,0,.55);display:flex;align-items:center;gap:14px;color:#fff;font-family:-apple-system,system-ui,sans-serif;transform:translateY(120%);transition:transform .42s cubic-bezier(.34,1.56,.64,1)}.cookie-banner.show{transform:translateY(0)}.cookie-banner-icon{flex:none;font-size:20px}.cookie-banner-text{flex:1;min-width:0;font-size:12.5px;line-height:1.45;color:rgba(255,255,255,.78)}.cookie-banner-text a{color:#A88CFF;text-decoration:none;font-weight:600}.cookie-banner-btn{flex:none;padding:8px 14px;border:0;border-radius:999px;background:linear-gradient(135deg,#8B5CF6,#A88CFF);color:#fff;font-size:12px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;cursor:pointer;font-family:inherit}</style><script id="bb-legal-landing-js">(function(){if(localStorage.getItem("crew_cookie_disclosure_v1")==="1")return;function show(){if(document.getElementById("cookieBanner"))return;var b=document.createElement("div");b.id="cookieBanner";b.className="cookie-banner";b.innerHTML='<div class="cookie-banner-icon">🍪</div><div class="cookie-banner-text">crew. nutzt nur <strong>technisch notwendiges localStorage</strong>. Keine Tracking-Cookies, keine Drittanbieter-Analytics. <a href="/datenschutz.html">Mehr erfahren</a></div><button class="cookie-banner-btn" id="cbOk">Verstanden</button>';document.body.appendChild(b);setTimeout(function(){b.classList.add("show")},150);document.getElementById("cbOk").addEventListener("click",function(){try{localStorage.setItem("crew_cookie_disclosure_v1","1")}catch(_){};b.classList.remove("show");setTimeout(function(){b.remove()},500)})}if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",function(){setTimeout(show,1200)})}else{setTimeout(show,1200)}})();</script></body></html>
+
+</body>
+</html>
